@@ -1,0 +1,65 @@
+.TH HIME 1 "2 FEB 2008" "HIME 0.8" "hime input method platform"
+.SH NAME
+hime \- an input method server
+.SH SYNOPSIS
+.B hime
+.B [\fB-h\fP|\fB-v\fP|\fB--version\fP]
+.br
+.SH DESCRIPTION
+.B hime
+is an input method(IM) server, which focused mainly on Traditional Chinese. It is also very useful for Simplified Chinese, Japanese, and many other languages. IM table format of hime is almost as same as those of scim and xcin. Users may append their IMs to hime very easily. The "g" of hime means that it features a better GTK+ user interface.
+
+If you are looking for configuration tool of hime, please see the manpage of \fBhime-setup\fP.
+.SH OPTIONS
+.TP
+.B \-h, \-v, \-\-version
+Show version of hime.
+.SH FILES
+.IP /usr/share/hime/table/gtab.list
+Input methods available for hime. You may copy it to $HOME/.config/hime/ and edit it as you like. If you have no $HOME/.config/hime/gtab.list, /usr/share/hime/table/gtab.list will be used.
+.IP /usr/share/hime/script/html-browser
+A file helps hime finding html browsers when needed. You may add any compatible html browser to it.
+.IP /usr/share/hime/script/utf8-edit
+A file helps hime finding text editors when needed. You may add any UTF-8 compatible text editor to it.
+.SH ENVIRONMENT VARIABLES
+.IP LC_CTYPE
+For bash: export LC_CTYPE=zh_TW.UTF-8
+.br
+For csh: setenv LC_CTYPE zh_TW.UTF-8
+.IP XMODIFIERS
+For bash: export XMODIFIERS=@im=hime
+.br
+For csh: setenv XMODIFIERS @im=hime
+.IP GTK_IM_MODULE
+For bash: export GTK_IM_MODULE=hime
+.br
+For csh: setenv GTK_IM_MODULE hime
+.IP QT_IM_MODULE
+For bash: export QT_IM_MODULE=hime
+.br
+For csh: setenv QT_IM_MODULE hime
+.IP HIME_CONNECT_MSG_ON
+Display messages for socket connections.
+.IP HIME_DBG_TMP
+Display additional debug messages.
+.IP HIME_ERR_COREDUMP
+Option for debugging.
+.IP HIME_IM_CLIENT_NO_AUTO_EXEC
+Disable auto-evoke in hime protocol.
+.IP HIME_OUTPUT_FILTER
+Assign output filter to process data before the IM server send them to clients.
+.IP HIME_TABLE_DIR
+Assign directory for IM tables other then /usr/share/hime/table.
+.SH SEE ALSO
+.BR hime-setup (1),
+.BR cin2gtab (1),
+.BR hime-phoa2d (1),
+.BR hime-juyin-learn (1),
+.BR hime-message (1)
+.SH AUTHORS
+.IP "Edward Der-Hua Liu"
+Wrote hime and associated tools.
+.IP "Friend of Chanjei IM, Malaysia <www.chinesecj.com>"
+Author of original Chanjei IM version 5 table.
+.IP "Dayi Co., Ltd. <http://www.dayi.com>"
+Author of Dayi IM.

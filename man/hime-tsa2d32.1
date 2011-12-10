@@ -1,0 +1,38 @@
+.TH HIME 1 "21 JAN 2008" "HIME 0.8" "hime input method platform"
+.SH NAME
+hime-tsa2d32, hime-tsd2a32, hime-tsd2a, hime-tsin2gtab-phrase \- hime's Tsin tools
+.SH SYNOPSIS
+.B hime-tsa2d32
+.br
+.B hime-tsd2a32
+.B [\fB-nousecount\fP]     
+.br
+.B hime-tsd2a
+.B [\fB-nousecount\fP]     
+.br
+.B hime-tsin2gtab-phrase
+src.gtab
+outfile
+.SH DESCRIPTION
+.B hime-tsa2d32
+is a tool to import Tsin input method phrase database.
+.PP
+.B hime-tsd2a32
+is a tool to export Tsin input method phrase database.
+.PP
+.B hime-tsd2a
+is an old tool only for back-compatibility.
+.B hime-tsin2gtab-phrase
+is a tool to extract phrases from gtab file.
+.SH OPTIONS
+.TP
+.B \-nousecount
+Do not record usecount when exporting phrase database of Tsin input method.
+.SH ENVIRONMENT VARIABLES
+.IP HIME_NO_RELOAD
+Tell hime server do not reload data after execution of hime-tsa2d32.
+.SH SEE ALSO
+.BR hime (1),
+.BR hime-tslearn.
+.SH AUTHOR
+hime-tsa2d32, hime-tsd2a32, hime-tsd2a and hime-tsin2gtab-phrase were written by Edward Der-Hua Liu <cp76@csie.nctu.edu.tw>.

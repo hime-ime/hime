@@ -1,0 +1,38 @@
+#!/bin/bash
+
+if [ -z "$1" -o -z "$2" ]; then
+  echo "please specify hime_table_dir hime_bin_dir"
+  exit 0
+fi
+
+cd
+
+if [ ! -d .config/hime/config ]; then
+  mkdir -p .config/hime/config
+fi
+
+cd $1 || echo "$1 is not a hime table dir"
+
+for i in pho.tab2 pho-huge.tab2 s-pho.tab2 s-pho-huge.tab2 tsin* s-tsin* symbol-table phrase.table
+do
+  if [ ! -f ~/.config/hime/$i ]; then
+     cp $i ~/.config/hime
+  fi
+done
+
+
+cd ~/.config/hime
+
+diff1=''
+diff tsin-1.src $1/tsin-1.src >& /dev/null
+if [ $? != 0 ]; then
+diff1='Y'
+fi
+
+if [ ! -f tsin-1.src -o -n "$diff1" ]; then
+  echo "merge tsin-1.src"
+  cp $1/tsin-1.src .
+  $2/hime-tsd2a32 tsin32 > tmpfile
+  cat tsin-1.src >> tmpfile
+  $2/hime-tsa2d32 tmpfile
+fi

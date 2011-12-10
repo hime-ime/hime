@@ -1,0 +1,297 @@
+##!/bin/bash
+
+
+if [ "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]; then
+    echo "** valid options:"
+    echo "  --use_xim=N    : disable the support of XIM"
+    echo "  --prefix=dir_name : install prefix(e.g. /usr)"
+    echo "  --use_tray=N   : disable system tray"
+    echo "  --use_i18n=Y   : enable i18n"
+    echo "  --use_tsin=N   : disable Tsin input method"
+    echo "  --use_anthy=N  : disable Anthy input method"
+    echo "  --use_chewing=N: disable Chewing input method"
+    echo "  --use_qt3=N    : disable Qt3 immodule"
+    echo "  --use_qt4=N    : disable Qt4 immodule"
+    echo "  --use_gtk3=N   : disable GTK+ 3.x immodule"
+    exit
+fi
+
+
+MAKE=make
+which gmake > /dev/null 2> /dev/null
+if [ $? = 0 ]; then
+  MAKE=gmake
+fi
+
+FREEBSD=0
+uname | grep FreeBSD > /dev/null 2> /dev/null
+if [ $? = 0 ]; then
+  FREEBSD=1
+fi
+
+uname | grep OpenBSD > /dev/null 2> /dev/null
+if [ $? = 0 ]; then
+  FREEBSD=1
+fi
+
+SO_FLAGS="-shared"
+MAC_OS=0
+uname | grep Darwin > /dev/null 2> /dev/null
+if [ $? = 0 ]; then
+  FREEBSD=1
+  MAC_OS=1
+  SO_FLAGS="-dynamic -bundle -undefined suppress -flat_namespace"
+fi
+
+prefix="/usr/local"
+use_xim='Y'
+use_tray='Y'
+use_i18n='N'
+use_tsin='Y'
+use_anthy='Y'
+use_chewing='Y'
+use_qt3='N'
+use_qt4='Y'
+use_gtk3='Y'
+
+if [ "$HIME_USE_XIM" ]; then
+  use_xim=$HIME_USE_XIM
+fi
+
+for opt do
+  case "$opt" in
+  --prefix=*) prefix=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --use_xim=*) use_xim=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --use_tray=*) use_tray=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --use_i18n=*) use_i18n=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --use_tsin=*) use_tsin=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --use_anthy*) use_anthy=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --use_chewing*) use_chewing=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --use_qt3*) use_qt3=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --use_qt4*) use_qt4=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --use_gtk3*) use_gtk3=`echo $opt | cut -d '=' -f 2`
+  esac
+done
+
+echo "prefix: $prefix"
+
+
+GTK=gtk+-2.0
+
+echo -n ".... Testing $GTK : "
+
+GTKINC=`pkg-config --cflags $GTK`
+
+if [ $? != 0 ]; then
+  echo "$GTK or above required --cflags"
+  rm -f config.mak
+  exit -1;
+fi
+
+## problem in MacOS, by candyz
+if [ $MAC_OS = 1 ]; then
+  GTKINC="-I/sw/include `pkg-config --cflags $GTK`"
+fi
+
+if [ ! -x /bin/bash ]; then
+  for i in /usr/bin/bash /usr/local/bin/bash
+  do
+    [ -x $i ] || continue
+    echo "/bin/bash -> $i"
+    for i in scripts/*
+    do
+      sed -e "s~/bin/bash~$i~" < $i > $i.tmp
+      mv $i.tmp $i
+    done
+  done
+fi
+
+
+GTKLDFLAGS=`pkg-config --libs $GTK`
+
+if [ $? != 0 ]; then
+  echo "$GTK or above required --libs"
+  echo "please install rpm/package libgtk+2.0_0-devel"
+  rm -f config.mak
+  exit -1;
+else
+  echo " found."
+fi
+
+echo -n ".... Testing anthy    :  "
+USE_ANTHY=`pkg-config --libs anthy`
+if [ $? != 0 ]; then
+  USE_ANTHY=N
+  echo "It's ok if you don't want anthy support."
+else
+  if [ $use_anthy = "N" ]; then
+    USE_ANTHY='N'
+    echo "disabled."
+  else
+    USE_ANTHY='Y'
+    echo "found."
+  fi
+fi
+
+echo -n ".... Testing chewing  :  "
+USE_CHEWING=`pkg-config --libs chewing`
+if [ $? != 0 ]; then
+  USE_CHEWING=N
+  echo "It's ok if you don't want libchewing support."
+else
+  if [ $use_chewing = "N" ]; then
+    USE_CHEWING='N'
+    echo "disabled."
+  else
+    USE_CHEWING='Y'
+    echo "found."
+  fi
+fi
+
+
+LIB='lib'
+if [ -d /usr/lib64 -a -d /lib64 ]; then
+LIB='lib64'
+fi
+
+QT_IM='N'
+QT_IM_DIR=/usr/$LIB/qt3/plugins/inputmethods
+echo "testing if you have qt3 support"
+pkg-config --libs qt-mt > /dev/null 2> /dev/null
+if [ $? = 0 ]; then
+  QT_IM='Y'
+fi
+
+if [ $QT_IM = "Y" ]; then
+    if [ $use_qt3 = "N" ]; then
+        QT_IM='N'
+        echo "-> Yes, but disabled."
+    else
+        echo "-> Yes, you have Qt3 support."
+    fi
+else
+    echo "-> No, you don't have. It's ok if you don't want Qt3 immodule."
+fi
+
+
+QT4_IM='N'
+QT4_IM_DIR=/usr/$LIB/qt4/plugins/inputmethods
+echo "testing if you have qt4 support"
+pkg-config --libs QtCore QtGui > /dev/null 2> /dev/null
+if [ $? = 0 ]; then
+  QT4_IM='Y'
+fi
+
+if [ $QT4_IM = "Y" ]; then
+    if [ $use_qt4 = "N" ]; then
+        QT4_IM='N'
+        echo "-> Yes, but disabled."
+    else
+        echo "-> Yes, you have Qt4 support."
+    fi
+else
+    echo "-> No, you don't have. It's ok if you don't want Qt4 immodule."
+fi
+
+GTK3_IM='N'
+echo "testing if you have GTK+ 3.x support"
+pkg-config --libs gtk+-3.0 > /dev/null 2> /dev/null
+if [ $? = 0 ]; then
+  GTK3_IM='Y'
+fi
+
+if [ $GTK3_IM = "Y" ]; then
+    if [ $use_gtk3 = "N" ]; then
+        GTK3_IM='N'
+        echo "-> Yes, but disabled."
+    else
+        echo "-> Yes, you have GTK+ 3.x support."
+    fi
+else
+    echo "-> No, you don't have. It's ok if you don't want GTK+ 3.x immodule."
+fi
+
+bindir=$prefix/bin
+datadir=$prefix/share
+mandir=$datadir/man
+libdir=$prefix/$LIB
+includedir=$prefix/include
+optdir=/opt
+HIME_VERSION=`cat VERSION.hime`
+
+BUILD_MODULE='N'
+if [ $USE_ANTHY = 'Y' ] || [ $USE_CHEWING = 'Y' ]; then
+  BUILD_MODULE='Y'
+fi
+
+OPTFLAGS="-O"
+
+if [ -z $CC ]; then
+  CC=gcc
+fi
+
+echo "CC=$CC" > config.mak
+echo "CCX=$CC -x c" >> config.mak
+echo "CXX=$CC" >> config.mak
+echo "CCLD=$CC" >> config.mak
+echo "MAKE=$MAKE" >> config.mak
+echo "GTKINC=$GTKINC" >> config.mak
+echo "prefix=$prefix" >> config.mak
+echo "bindir=\$(DESTDIR)$bindir" >> config.mak
+echo "mandir=\$(DESTDIR)$mandir" >> config.mak
+echo "man1dir=\$(mandir)/man1" >> config.mak
+echo "bindir_r=$bindir" >> config.mak
+echo "datadir=\$(DESTDIR)$datadir" >> config.mak
+echo "datadir_r=$datadir" >> config.mak
+echo "libdir=\$(DESTDIR)$libdir" >> config.mak
+echo "himelibdir=\$(libdir)/hime" >> config.mak
+echo "includedir=\$(DESTDIR)$includedir" >> config.mak
+echo "LDFLAGS=-Wl,--as-needed -lX11 -lm" >> config.mak
+echo "LDFLAGS+=$GTKLDFLAGS -lX11 -ldl" >> config.mak
+echo "HIME_VERSION=$HIME_VERSION" >> config.mak
+echo "HIME_TABLE_DIR=\$(datadir_r)/hime/table" >> config.mak
+echo "HIME_OGG_DIR=\$(datadir_r)/hime/ogg" >> config.mak
+echo "HIME_TABLE_DIR_i=\$(datadir)/hime/table" >> config.mak
+echo "HIME_SCRIPT_DIR=\$(datadir_r)/hime/script" >> config.mak
+echo "HIME_SCRIPT_DIR_i=\$(datadir)/hime/script" >> config.mak
+echo "OPTFLAGS=$OPTFLAGS" >> config.mak
+echo "DOC_DIR=\$(datadir_r)/doc/hime" >> config.mak
+echo "DOC_DIR_i=\$(datadir)/doc/hime" >> config.mak
+echo "HIME_ICON_DIR=\$(datadir_r)/pixmaps/hime" >> config.mak
+echo "SYS_ICON_DIR=\$(datadir_r)/pixmaps" >> config.mak
+echo "HIME_ICON_DIR_i=\$(datadir)/pixmaps/hime" >> config.mak
+echo "HIME_BIN_DIR=\$(bindir_r)" >> config.mak
+echo "FREEBSD=$FREEBSD" >> config.mak
+echo "QT_IM=$QT_IM" >> config.mak
+echo "QT_IM_DIR=$QT_IM_DIR" >> config.mak
+echo "QT4_IM=$QT4_IM" >> config.mak
+echo "QT4_IM_DIR=$QT4_IM_DIR" >> config.mak
+echo "GTK3_IM=$GTK3_IM" >> config.mak
+echo "USE_XIM=$use_xim" >> config.mak
+echo "LIB=$LIB" >> config.mak
+echo "MAC_OS=$MAC_OS" >> config.mak
+echo "SO_FLAGS=$SO_FLAGS" >> config.mak
+echo "USE_TRAY=$use_tray" >> config.mak
+echo "USE_I18N=$use_i18n" >> config.mak
+echo "USE_TSIN=$use_tsin" >> config.mak
+echo "USE_ANTHY=$USE_ANTHY" >> config.mak
+echo "USE_CHEWING=$USE_CHEWING" >> config.mak
+echo "BUILD_MODULE=$BUILD_MODULE" >> config.mak
+
+if [ $prefix = /usr/local ]; then
+  echo "hime_ld_run_path=$PWD:\$(himelibdir)" >> config.mak
+  echo "HIME_DEBUG=0" >> config.mak
+else
+  echo "hime_ld_run_path=\$(himelibdir)" >> config.mak
+fi
+
+echo "gcc_ld_run_path=-Wl,-rpath,\$(hime_ld_run_path)" >> config.mak

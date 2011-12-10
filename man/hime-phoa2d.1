@@ -1,0 +1,20 @@
+.TH HIME 1 "21 JAN 2008" "HIME 0.8" "hime input method platform"
+.SH NAME
+hime-phoa2d, hime-phod2a \- hime's Bopomofo tools
+.SH SYNOPSIS
+.B hime-phoa2d
+.br
+.B hime-phod2a
+.SH DESCRIPTION
+.B hime-phoa2d
+converts $HOME/.config/hime/pho.tab.src to $HOME/.config/hime/pho.tab, which is used by Bopomofo and Tsin input methods.
+.PP
+.B hime-phod2a
+converts $HOME/.config/hime/pho.tab to $HOME/.config/hime/pho.tab.src, which may be edited by users.
+.SH ENVIRONMENT VARIABLES
+.IP HIME_NO_RELOAD
+Tell hime server do not reload data after execution of hime-phoa2d.
+.SH SEE ALSO
+.BR hime (1).
+.SH AUTHOR
+hime-phoa2d and hime-phod2a were written by Edward Der-Hua Liu <cp76@csie.nctu.edu.tw>.

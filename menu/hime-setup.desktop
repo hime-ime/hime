@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=hime Setup
+Name[ja]=hime入力メソッドの設定
+Name[zh_CN]=hime 输入法设置
+Name[zh_TW]=hime 輸入法設定
+Comment=Setup utility for hime input method
+Comment[ja]= hime
+Comment[zh_CN]= hime 设置工具
+Comment[zh_TW]= hime 設定工具
+Exec=hime-setup
+Icon=hime
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Settings;

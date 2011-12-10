@@ -1,0 +1,19 @@
+#!/bin/bash
+
+cd ~/.config/hime
+f=$1.append.gtab.tsin-db
+echo $f
+if [ ! -f $f ]; then
+  f=$1.tsin-db
+  echo $f
+  if [ ! -f $f ]; then
+    echo "No $1.*.gtab.tsin-db exist"
+    exit 0
+  fi
+fi
+
+fsrc=$f.src
+
+$HIME_BIN_DIR/hime-tsd2a32 $f > $fsrc
+cat $2 >> $fsrc
+$HIME_BIN_DIR/hime-tsa2d32 $fsrc $f

@@ -1,0 +1,575 @@
+.TH HIME-SETUP 1 "2 FEB 2009" "HIME 0.8" "hime input method platform"
+.SH NAME
+hime-setup \- configuration tools of hime
+.SH SYNOPSIS
+.B hime-setup
+.SH DESCRIPTION
+.B hime-setup
+is the default configuration tool of hime. Another configuring method is writing conffiles in $HOME/.config/hime/config. See CONFFILES section for further information.
+.SH CONFFILES
+Those conffiles below will be created automatically by hime-setup, except hime-bell-volume and hime-sound-play-overlap.
+.PP
+If you want to write conffiles by yourself, please make sure you have the config directory:
+.PP
+        mkdir \-p $HOME/.config/hime/config
+.PP
+After that, you may try:
+.PP
+        echo zo > $HOME/.config/hime/config/phonetic-keyboard
+.PP
+Thus you make a \fBphonetic-keyboard\fP file with its content \fBzo\fP, which means you select the standard style with 1234 selection method.
+.PP
+All available conffiles are listed, and default options are showed \fBbold\fP.
+.IP "\fB$HOME/.config/hime/config/default-input-method\fP \fInumber\fP"
+Default input method when hime is called.
+.PP
+OPTIONS     MEANINGS
+.br
+1           Chanjei input method, version 3
+.br
+2           Chanjei input method, version 5
+.br
+3           Bopomofo input method
+.br
+4           Symbols virtual keyboard
+.br
+5           Pinyin input method
+.br
+\fB6           Tsin intelligent Bopomofo input method\fP
+.br
+7           Dayi input method
+.br
+8           Array input method, 30 keys version
+.br
+9           Boshiamy input method, aka Liu's input method
+.br
+10          Direct input for UTF-32 (U+) or Big-5 characters
+.br
+11          Simple Chanjei input method
+.br
+12          Japanese anthy input method
+.br
+13          Greek letters input method
+.br
+14          Latin letters input method
+.br
+15          Jyutping input method
+.br
+16          NewCJ3 input method
+.IP "\fB$HOME/.config/hime/config/gcb-position\fP \fInumber\fP"
+Disable or enable gcb clipboard manager.
+.PP
+OPTIONS     MEANINGS
+.br
+0           Disable
+.br
+1           Enable, at lower left corner
+.br
+2           Enable, at upper left corner
+.br
+3           Enable, at lower right corner
+.br
+\fB4           Enable, at upper right corner\fP
+.IP "\fB$HOME/.config/hime/config/gcb-position-x\fP \fInumber\fP"
+The X-axis padding of gcb clipboard manager. Default is \fB0\fP.
+.IP "\fB$HOME/.config/hime/config/gcb-position-y\fP \fInumber\fP"
+The Y-axis padding of gcb clipboard manager. Default is \fB0\fP.
+.IP "\fB$HOME/.config/hime/config/hime-bell-volume\fP \fInumber\fP"
+Volume of bell ring, between \-100 to 100. Default is \fB-97\fP.
+.IP "\fB$HOME/.config/hime/config/hime-capslock-lower\fP \fIboolean\fP"
+Input lower-case letters when Caps Lock key is ON.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/hime-eng-phrase-enabled\fP \fIboolean\fP"
+Enable Alt-Shift phrases in alphabet-numeric mode.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/hime-flags-im-enabled\fP \fInumber\fP"
+Available input methods to be cyclic selected by Control-Shift.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB2147483647  All input methods are enabled.\fP
+.br
+.PP
+         2  Ctrl\-Alt\-1 Chanjei input method, version 3
+.br
+         4  Ctrl\-Alt\-2 Chanjei input method, version 5
+.br
+         8  Ctrl\-Alt\-3 Bopomofo input method
+.br
+        16  Ctrl\-Alt\-4 Symbols virtual keyboard
+.br
+        32  Ctrl\-Alt\-5 Pinyin input method
+.br
+        64  Ctrl\-Alt\-6 Tsin intelligent Bopomofo input method
+.br
+       128  Ctrl\-Alt\-7 Dayi input method
+.br
+       256  Ctrl\-Alt\-8 Array input method, 30 keys version
+.br
+       512  Ctrl\-Alt\-9 Boshiamy input method, aka Liu's input method
+.br
+      1024  Ctrl\-Alt\-0 Direct input for UTF-32 (U+) or Big-5 characters
+.br
+      2048  Ctrl\-Alt\-\- Simple Chanjei input method
+.br
+      4096  Ctrl\-Alt\-= Japanese anthy input method
+.br
+      8192  Ctrl\-Alt\-` Greek letters input method
+.br
+     16384  Ctrl\-Alt\-[ Latin letters input method
+.br
+     32768  Ctrl\-Alt\-\] Jyutping input method
+.br
+     65536  Ctrl\-Alt\-\\ NewCJ3 input method
+.PP
+2147483647 minus numbers of input methods, then you get the configuration number. For example, to disable Greek and Latin letters, calculate 2147483647 - 8192 - 16384 = 2147459071.
+.PP
+        echo 2147459071 > $HOME/.config/hime/config/hime-flags-im-enabled
+.PP
+Then you get it.
+.IP "\fB$HOME/.config/hime/config/hime-font-name\fP \fIstring\fP"
+Default font.
+.PP
+OPTIONS     MEANINGS
+.br
+\fBsans        Sans-serif\fP
+.br
+serif       Serif
+.IP "\fB$HOME/.config/hime/config/hime-font-size\fP \fInumber\fP"
+Font size of character-selection area. Default is \fB16\fP.
+.IP "\fB$HOME/.config/hime/config/hime-font-size-gtab-in\fP \fInumber\fP"
+Font size of key codes input area in gtab input methods (Chanjei IM, Array IM, etc.). Default is \fB10\fP.
+.IP "\fB$HOME/.config/hime/config/hime-font-size-pho-near\fP \fInumber\fP"
+Font size of similar-phonetic character selection in Tsin IM. Default is \fB14\fP.
+.IP "\fB$HOME/.config/hime/config/hime-font-size-symbol\fP \fInumber\fP"
+Font size of symbol-selection window. Default is \fB12\fP.
+.IP "\fB$HOME/.config/hime/config/hime-font-size-tsin-pho-in\fP \fInumber\fP"
+Font size of phonetic input area in Bopomofo and Tsin IM. Default is \fB10\fP.
+.IP "\fB$HOME/.config/hime/config/hime-font-size-tsin-presel\fP \fInumber\fP"
+Font size of phrase pre-selection window in Tsin IM. Default is \fB16\fP.
+.IP "\fB$HOME/.config/hime/config/hime-im-toggle-keys\fP \fInumber\fP"
+Toggle Key for IM window ON/OFF.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB0           Control-Space\fP
+.br
+1           Shift-Space
+.br
+2           Alt-Space
+.br
+3           Windows-Space
+.IP "\fB$HOME/.config/hime/config/hime-init-im-enabled\fP \fIboolean\fP"
+Enable input method mode without pressing toggle keys. This option is not available in XIM mode.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/hime-inner-frame\fP \fIboolean\fP"
+Show frame border in hime window.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/hime-input-style\fP \fInumber\fP"
+Window style of hime.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           OverTheSpot (Follow the cursor)\fP
+.br
+2           Root (Fixed index window)
+.IP "\fB$HOME/.config/hime/config/hime-pop-up-win\fP \fIboolean\fP"
+Dynamic pop up window.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/hime-remote-client\fP \fIboolean\fP"
+Use hime in remote applications.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/hime-root-x\fP \fInumber\fP"
+Window position in X-axis when window style is Root (Fixed index window). Default is \fB1600\fP.
+.IP "\fB$HOME/.config/hime/config/hime-root-y\fP \fInumber\fP"
+Window position in Y-axis when window style is Root (Fixed index window). Default is \fB1200\fP.
+.IP "\fB$HOME/.config/hime/config/hime-sel-key-color\fP \fIhex\fP"
+Color of selection Key.
+.PP
+OPTIONS     MEANINGS
+.br
+#FF0000     Red
+.br
+#00FF00     Green
+.br
+\fB#0000FF     Blue\fP
+.br
+#FFFF00     Yellow
+.br
+#FF00FF     Magenta
+.br
+#00FFFF     Cyan
+.IP "\fB$HOME/.config/hime/config/hime-shift-space-eng-full\fP \fIboolean\fP"
+Toggle to double-wide English character mode with Shift-Space.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/hime-sound-play-overlap\fP \fIboolean\fP"
+Play all sound when text-to-speech is enabled.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/hime-status-tray\fP \fIboolean\fP"
+Show hime status in system tray.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/hime-win-color-bg\fP \fIhex\fP"
+Background color of hime window. Default is \fB#005BFF\fP.
+.IP "\fB$HOME/.config/hime/config/hime-win-color-fg\fP \fIhex\fP"
+Foreground color of hime window.
+.PP
+OPTIONS     MEANINGS
+.br
+#FF0000     Red
+.br
+#00FF00     Green
+.br
+#0000FF     Blue
+.br
+#FFFF00     Yellow
+.br
+#FF00FF     Magenta
+.br
+\fB#FFFFFF     White\fP
+.IP "\fB$HOME/.config/hime/config/hime-win-color-use\fP \fIboolean\fP"
+Customized colors in hime window.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/hime-win-sym-click-close\fP \fIboolean\fP"
+Close symbol-selection window after choosing a symbol.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/gtab-auto-select-by_phrase\fP \fIboolean\fP"
+Auto-select according to Tsin phrase database in gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/gtab-disp-im-name\fP \fIboolean\fP"
+Display input method name in gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/gtab-disp-key-codes\fP \fIboolean\fP"
+Show all possible key codes of character in gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/gtab-disp-partial-match\fP \fIboolean\fP"
+Display partial matched characters in gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/gtab-dup-select-bell\fP \fIboolean\fP"
+Bell ring when multiple selections are available in gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/gtab-hide-row2\fP \fIboolean\fP"
+Hide second row of window in gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/gtab-in-row1\fP \fIboolean\fP"
+Show key codes in first row of window in gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/gtab-invalid-key-in\fP \fIboolean\fP"
+Clear key codes input area when invalid key and Space key are pressed.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/gtab-pre-select\fP \fIboolean\fP"
+Show candidate characters before pressing endkey (Space key). For gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/gtab-press-full-auto-send\fP \fIboolean\fP"
+Auto-send character when key codes input area is filled in gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/gtab-que-wild-card\fP \fIboolean\fP"
+Use ? as wildcard.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/gtab-shift-phrase-key\fP \fIboolean\fP"
+Use single Shift key to input Alt-Shift phrases in gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/gtab-space-auto-first\fP \fInumber\fP"
+Function of Space Key in gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB0           Auto-selected by definition in .gtab file.\fP
+.br
+1           Send first character in Boshiamy input method.
+.br
+2           Send first character in character-selection area.
+.br
+4           Does not send first character. (For Array input method.)
+.IP "\fB$HOME/.config/hime/config/gtab-unique-auto-send\fP \fIboolean\fP"
+Auto send characters when there is only one choice in gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/gtab-vertical-select\fP \fIboolean\fP"
+Vertical selection window in gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/left-right-button-tips\fP \fIboolean\fP"
+Show button tips when mouse cursor stays on hime window. Default is ON, but it will be turned OFF after \fBhime-setup\fP is executed.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/pho-hide-row2\fP \fIboolean\fP"
+Hide second row of window in Bopomofo and Tsin IM.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/pho-in-row1\fP \fIboolean\fP"
+Show key codes in first row of window in Bopomofo IM.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/phonetic-char-dynamic-sequence\fP \fIboolean\fP"
+Dynamic character sequence adjustment in Bopomofo and Tsin IM.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/phonetic-huge-tab\fP \fIboolean\fP"
+Input all Traditional Chinese, Simplified Chinese, and Japanese characters provided by pho-huge.tab in Bopomofo and Tsin IM.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/phonetic-keyboard\fP \fIstring\fP"
+Key codes arrangement style in Bopomofo, Tsin, and Japanese anthy IM.
+.PP
+OPTIONS     MEANINGS
+.br
+zo          Standard style with 1234 selection method
+.br
+\fBzo-asdf     Standard style with asdf selection method\fP
+.br
+et          Eten style with 1234 selection method
+.br
+et-asdf     Eten style with asdf selection method
+.br
+et26        Eten 26 keys style with 1234 selection method
+.br
+et26-asdf   Eten 26 keys style with asdf selection method
+.br
+hsu         Mr. Hsu's style (Kuo-Yin IM, Natural Bopomofo IM)
+.br
+pinyin      Phonetic Pinyin style with 1234 selection method
+.br
+pinyin-asdf Phonetic Pinyin style with asdf selection method
+.br
+dvorak      Dvorak style
+.br
+ibm         IBM style
+.br
+mitac       Mitac style
+.IP "\fB$HOME/.config/hime/config/phonetic-speak\fP \fIboolean\fP"
+Enable text-to-speech. You have to install speech data for this feature.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/phonetic-speak-sel\fP \fIstring\fP"
+Speech data filename for text-to-speech.
+.IP "\fB$HOME/.config/hime/config/tsin-buffer-editing-mode\fP \fIboolean\fP"
+VI-like editing mode in Tsin IM.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/tsin-buffer-size\fP \fInumber\fP"
+Size of buffer (editing area) in Tsin IM. Default is \fB40\fP.
+.IP "\fB$HOME/.config/hime/config/tsin-chinese-english-toggle_key\fP \fInumber\fP"
+Toggle key for Chinese/English mode in Tsin IM.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           Caps Lock key\fP
+.br
+2           Tab key
+.br
+4           Shift key (Not available in XIM mode).
+.br
+8           Left Shift key (Not available in XIM mode).
+.br
+16          Right Shift key (Not available in XIM mode).
+.IP "\fB$HOME/.config/hime/config/tsin-cursor-color\fP \fIhex\fP"
+Color of cursor in Tsin IM.
+.PP
+OPTIONS     MEANINGS
+.br
+#FF0000     Red
+.br
+#00FF00     Green
+.br
+\fB#0000FF     Blue\fP
+.br
+#FFFF00     Yellow
+.br
+#FF00FF     Magenta
+.br
+#00FFFF     Cyan
+.IP "\fB$HOME/.config/hime/config/tsin-phrase-line-color\fP \fIhex\fP"
+Color of phrase-underline in Tsin IM. Default is \fB#0000FF\fP.
+.IP "\fB$HOME/.config/hime/config/tsin-phrase-pre-select\fP \fIboolean\fP"
+Show phrase pre-selection window in Tsin IM.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/tsin-space-opt\fP \fInumber\fP"
+Function of Space key in Tsin IM.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           Select other same phonetic characters.\fP
+.br
+2           Send space to buffer of Tsin IM.
+.IP "\fB$HOME/.config/hime/config/tsin-tab-phrase-end\fP \fIboolean\fP"
+Use Escape key or Tab key to stop phrase-auto-selection in Tsin IM.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/tsin-tail-select-key\fP \fIboolean\fP"
+Show selection keys follows choices in Tsin IM.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/tsin-tone-char-input\fP \fIboolean\fP"
+Input tone sympols of Bopomofo in Tsin IM.
+.PP
+OPTIONS     MEANINGS
+.br
+1           ON
+.br
+\fB0           OFF\fP
+.SH SEE ALSO
+.BR hime (1)

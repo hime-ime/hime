@@ -1,0 +1,690 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-03-04 22:11+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../hime-setup-gtab.c:131
+msgid "空白鍵選項"
+msgstr "Behavior of Space key"
+
+#: ../hime-setup-gtab.c:171 ../hime-setup.c:632
+msgid "倉頡/行列/嘸蝦米/大易設定"
+msgstr "Settings for gtab input methods"
+
+#: ../hime-setup-gtab.c:188
+msgid "重複字選擇鈴聲"
+msgstr "Bell ring for multiple choices"
+
+#: ../hime-setup-gtab.c:200
+msgid "由詞庫自動選擇字"
+msgstr "Auto-select by Tsin's database"
+
+#: ../hime-setup-gtab.c:211
+msgid "預覽/預選 字"
+msgstr "Preview choices"
+
+#: ../hime-setup-gtab.c:222
+msgid "按滿自動送字"
+msgstr "Auto-send when keycodes are filled"
+
+#: ../hime-setup-gtab.c:233
+msgid "預選列中顯示部份符合的字"
+msgstr "Preview keycode-partial-matched choices"
+
+#: ../hime-setup-gtab.c:255
+msgid "顯示拆字"
+msgstr "Show keycodes"
+
+#: ../hime-setup-gtab.c:266
+msgid "顯示輸入法名稱"
+msgstr "Show input method names"
+
+#: ../hime-setup-gtab.c:277
+msgid "允許錯誤鍵進入(傳統)"
+msgstr "Tolerate wrong keycodes"
+
+#: ../hime-setup-gtab.c:288
+msgid "Shift 用來輸入片語(Alt-Shift)"
+msgstr "Single Shift key to input Alt-Shift-phrases"
+
+#: ../hime-setup-gtab.c:299
+msgid "隱藏第二列(輸入鍵…)"
+msgstr "Hide second row of input window"
+
+#: ../hime-setup-gtab.c:310
+msgid "輸入鍵顯示移至第一列"
+msgstr "Move keycodes to first row of input window"
+
+msgid "\t用小寫字母"
+msgstr "\tUse lower case letters"
+
+#: ../hime-setup-gtab.c:331
+msgid "垂直選擇"
+msgstr "Vertical selection window"
+
+#: ../hime-setup-gtab.c:341
+msgid "唯一選擇時自動送出"
+msgstr "Auto-send when only one choice matched"
+
+#: ../hime-setup-gtab.c:366
+msgid "使用？萬用字元"
+msgstr "Use ? as wildcard"
+
+#: ../hime-setup-gtab.c:349
+msgid "編輯內定輸入法的使用者外加字詞"
+msgstr "Add definitions for default input method"
+
+#: ../hime-setup-list.c:250
+msgid "名稱"
+msgstr "Name"
+
+#: ../hime-setup-list.c:268
+msgid "Ctrl-Alt-鍵"
+msgstr "Ctrl-Alt-Toggle Key"
+
+#: ../hime-setup-list.c:277
+msgid "檔案名"
+msgstr "Filename"
+
+#: ../hime-setup-list.c:289
+msgid "Ctrl-Shift 循環"
+msgstr "Ctrl-Shift selections"
+
+#: ../hime-setup-list.c:302
+msgid "第一次內定"
+msgstr "Default"
+
+#: ../hime-setup-list.c:347
+msgid "輸入視窗(開啟/關閉)切換"
+msgstr "Toggle input window"
+
+#: ../hime-setup-list.c:381
+msgid "輸入法選擇"
+msgstr "Select input methods"
+
+#: ../hime-setup-list.c:394
+msgid "hime 輸入法選擇"
+msgstr "Select input methods for hime"
+
+#: ../hime-setup-list.c:425
+msgid "遠端 client 程式支援 (port 9999-)"
+msgstr "Remote client support (port 9999-)"
+
+#: ../hime-setup-list.c:435
+msgid "shift-space 進入全形英文模式"
+msgstr "Toggle half-/double-width with Shift-Space"
+
+#: ../hime-setup-list.c:483
+msgid "英數狀態使用 alt-shift 片語"
+msgstr "Enable Alt-Shift phrases in alphabet-numeric mode"
+
+#: ../hime-setup-pho.c:205 ../hime-setup-pho.c:477
+msgid "詞音標示詞的底線顏色"
+msgstr "Underline color of selected phrases"
+
+#: ../hime-setup-pho.c:244 ../hime-setup-pho.c:490
+msgid "詞音游標的顏色"
+msgstr "Tsin's cursor color"
+
+#: ../hime-setup-pho.c:314 ../hime-setup.c:622
+msgid "hime 注音/詞音設定"
+msgstr "Settings for Bopomofo and Tsin"
+
+#: ../hime-setup-pho.c:320
+msgid "鍵盤排列方式/選擇鍵/選單每列字數"
+msgstr "Keymap/Selection keys/Candidates per line"
+
+#: ../hime-setup-pho.c:327
+msgid "詞音輸入[中/英]切換"
+msgstr "Toggle alphabet-numeric mode in Tsin"
+
+#: ../hime-setup-pho.c:354
+msgid "詞音輸入空白鍵選項"
+msgstr "Behavior of Space key in Tsin"
+
+#: ../hime-setup-pho.c:382
+msgid "詞音輸入預選詞視窗"
+msgstr "Enable preselection window in Tsin"
+
+#: ../hime-setup-pho.c:392
+msgid "依使用頻率調整字的順序"
+msgstr "Resorting choices by user's usage frequency"
+
+#: ../hime-setup-pho.c:412
+msgid "注音隱藏第二列(按鍵顯示)"
+msgstr "Hide second row of Bopomofo's window"
+
+#: ../hime-setup-pho.c:422
+msgid "注音輸入顯示移至第一列"
+msgstr "Move keycodes to first row of Bopomofo's window"
+
+#: ../hime-setup-pho.c:432
+msgid "使用巨大 UTF-8 字集"
+msgstr "Enable more UTF-8 characters"
+
+#: ../hime-setup-pho.c:442
+msgid "詞音輸入注音聲調符號"
+msgstr "Enable tone symbols in Tsin"
+
+#: ../hime-setup-pho.c:452
+msgid "詞音/Escape Tab 斷詞"
+msgstr "Break sentence with Escape/Tab key"
+
+msgid "Capslock英數用小寫"
+msgstr "Alphabet-numeric mode uses lower case letters"
+
+#: ../hime-setup-pho.c:533
+msgid "輸入時念出發音"
+msgstr "Enable text-to-speech"
+
+#: ../hime-setup-pho.c:557
+msgid "發音選擇"
+msgstr "speaker"
+
+#: ../hime-setup-pho.c:468
+msgid "詞音編輯緩衝區大小"
+msgstr "Tsin's buffer size"
+
+#: ../hime-setup.c:98
+msgid "請輸入要匯出的檔案名稱"
+msgstr "Please input filename for exporting data"
+
+#: ../hime-setup.c:138
+msgid "請輸入要匯入的檔案名稱"
+msgstr "Please input filename for importing data"
+
+#: ../hime-setup.c:366
+msgid "輸入視窗外觀設定"
+msgstr "Settings for input windows"
+
+#: ../hime-setup.c:374
+msgid "字型大小"
+msgstr "Font size"
+
+#: ../hime-setup.c:384
+msgid "符號選擇視窗字型大小"
+msgstr "Font size of symbols window"
+
+msgid "詞音注音輸入區字型大小"
+msgstr "Font size of keycodes for Bopomofo and Tsin"
+
+#: ../hime-setup.c:414
+msgid "詞音近似音顯示字型大小"
+msgstr "Font size of similar phonetic choices"
+
+#: ../hime-setup.c:424
+msgid "gtab(倉頡…)輸入區字型大小"
+msgstr "Font size of keycodes for gtab"
+
+#: ../hime-setup.c:440
+msgid "彈出式輸入視窗"
+msgstr "Dynamic pop-up input window"
+
+#: ../hime-setup.c:447
+msgid "固定 hime 視窗位置"
+msgstr "Fixed input window"
+
+#: ../hime-setup.c:455 ../hime-setup.c:505
+msgid "使用"
+msgstr "Enable"
+
+#: ../hime-setup.c:479
+msgid "顯示內框"
+msgstr "Show frame of input window"
+
+#: ../hime-setup.c:489
+msgid "面板狀態(tray)"
+msgstr "System tray support"
+
+#: ../hime-setup.c:497
+msgid "顏色選擇"
+msgstr "Color selection"
+
+#: ../hime-setup.c:517
+msgid "前景顏色"
+msgstr "Foreground color"
+
+#: ../hime-setup.c:527
+msgid "背景顏色"
+msgstr "Background color"
+
+#: ../hime-setup.c:627
+msgid "外觀設定"
+msgstr "Appearance Settings"
+
+#: ../hime-setup.c:638
+msgid "內定輸入法 & 開啟/關閉"
+msgstr "Default input method and toggle key"
+
+#: ../hime-setup.c:645
+msgid "alt-shift 片語編輯"
+msgstr "Edit Alt-Shift phrases"
+
+#: ../hime-setup.c:650
+msgid "符號表編輯"
+msgstr "Edit symbols"
+
+msgid "剪貼區 簡體字->正體字"
+msgstr "Convert clipboard's Simplified Chinese to Traditional Chinese"
+
+#: ../hime-setup.c:665
+msgid "剪貼區 注音查詢"
+msgstr "Lookup phonations of words in clipboard"
+
+#: ../hime-setup.c:671
+msgid "詞庫選項"
+msgstr "Options for Tsin's database"
+
+#: ../hime-setup.c:680
+msgid "詞庫匯出"
+msgstr "Export phrase database"
+
+#: ../hime-setup.c:685
+msgid "詞庫匯入"
+msgstr "Import phrase database"
+
+#: ../hime-setup.c:690
+msgid "詞庫編輯"
+msgstr "Edit phrase database"
+
+#: ../hime-setup.c:695
+msgid "讓詞音從文章學習詞"
+msgstr "Learn phrases in articles"
+
+#: ../hime-setup.c:700
+msgid "匯入系統的詞庫"
+msgstr "Import global database"
+
+#: ../hime-setup.c:705 ../about.c:39
+msgid "關於 hime"
+msgstr "About hime"
+
+#: ../hime-setup.c:719
+msgid "結束 hime"
+msgstr "Disable hime server"
+
+#: ../about.c:83
+msgid "關閉"
+msgstr "Close"
+
+#: ../hime-juyin-learn.c:172 ../hime-sim2trad.c:135
+msgid "自剪貼區更新"
+msgstr "Update data from clipboard"
+
+#: ../hime-juyin-learn.c:177 ../hime-sim2trad.c:140
+msgid "離開"
+msgstr "Exit"
+
+#: ../hime-tslearn.c:336
+msgid "按滑鼠中鍵, 貼上你要 hime-tslearn 學習的文章。"
+msgstr "Click middle button to paste data you want Tslearn to learn."
+
+#: ../hime-tslearn.c:349
+msgid "標示已知詞"
+msgstr "Label known phrases"
+
+#: ../hime-tslearn.c:354
+msgid "新增詞"
+msgstr "Add phrases"
+
+#: ../hime-tslearn.c:360
+msgid "離開 hime-tslearn"
+msgstr "Exit"
+
+#: ../win-gtab.c:340 ../win-gtab.c:447 ../win-pho.c:182 ../win-pho.c:258
+#: ../win0.c:601
+msgid "左鍵符號，右鍵設定"
+msgstr "Left: Symbol selection tables\nRight: Preferences"
+
+#: ../hime-setup-gtab.c:188
+msgid "外觀"
+msgstr "Appearance Settings"
+
+#: ../hime-setup-gtab.c:196
+msgid "行為"
+msgstr "Behavior Settings"
+
+#: ../hime-setup-list.c:477 ../hime-setup-tab.c:1468
+msgid "直接進入中文輸入狀態(限非XIM)"
+msgstr "Toggle On inputing mode by default (non-XIM only)"
+
+#: ../hime-setup-list.c:520
+msgid "符號視窗點選後自動關閉"
+msgstr "Close symbols window after selection"
+
+#: ../hime-setup-tab.c:510 ../hime-setup-tab.c:1587 ../hime-setup.c:370
+#: ../hime-setup.c:577
+msgid "選擇鍵的顏色"
+msgstr "Color of selection key"
+
+#: ../hime-setup-gtab.c:27 ../hime-setup-tab.c:129
+msgid "由 .gtab 指定"
+msgstr "Assigned by .gtab"
+
+#: ../hime-setup-gtab.c:28 ../hime-setup-tab.c:130
+msgid "按空白立即送出第一字(嘸蝦米、大易)"
+msgstr "Send first character within Liu's IM"
+
+#: ../hime-setup-gtab.c:29 ../hime-setup-tab.c:131
+msgid "按滿按空白送出第一字"
+msgstr "Send first character within character-selection area"
+
+#: ../hime-setup-gtab.c:30 ../hime-setup-tab.c:132
+msgid "按滿按空白不送出第一字(倉頡, 行列)"
+msgstr "Does not send first character"
+
+#: ../hime-setup-pho.c:9 ../hime-setup-tab.c:584
+msgid "標準"
+msgstr "Standard"
+
+#: ../hime-setup-pho.c:11 ../hime-setup-tab.c:586
+msgid "倚天"
+msgstr "Eten"
+
+#: ../hime-setup-pho.c:13 ../hime-setup-tab.c:588
+msgid "倚天 26 鍵"
+msgstr "Eten, 26 keys"
+
+#: ../hime-setup-pho.c:15 ../hime-setup-tab.c:590
+msgid "許氏(國音,自然)"
+msgstr "Mr. Hsu's"
+
+#: ../hime-setup-pho.c:16 ../hime-setup-tab.c:591
+msgid "拼音"
+msgstr "Pinyin"
+
+#: ../hime-setup-pho.c:20 ../hime-setup-tab.c:595
+msgid "神通"
+msgstr "Mitac"
+
+msgid "選擇同音字"
+msgstr "Select other same phonetic characters"
+
+#: ../hime-setup-pho.c:58 ../hime-setup-tab.c:102
+msgid "輸入空白"
+msgstr "Send space to Tsin buffer"
+
+#: ../hime-setup-tab.c:779 ../hime-setup.c:63
+msgid "結果失敗"
+msgstr "Failed"
+
+#: ../hime-setup-tab.c:779 ../hime-setup.c:63
+msgid "結果成功"
+msgstr "Success"
+
+#: ../tray.c:177
+msgid "設定"
+msgstr "Configuration"
+
+#: ../tray.c:178
+msgid "念出發音"
+msgstr "Text-to-speech"
+
+#: ../tray.c:179
+msgid "正→簡體"
+msgstr "Traditional Chinese -> Simplified Chinese"
+
+#: ../tray.c:180
+msgid "簡→正體"
+msgstr "Simplified Chinese -> Traditional Chinese"
+
+#: ../tray.c:181
+msgid "小鍵盤"
+msgstr "Virtual keyboard"
+
+#: ../hime-setup-list.c:570 ../hime-setup-tab.c:1652
+msgid "剪貼區管理視窗位置&開關"
+msgstr "gcb clipboard manager"
+
+#: ../hime-setup-list.c:17 ../hime-setup-tab.c:9
+msgid "左下"
+msgstr "Lower left"
+
+#: ../hime-setup-list.c:17 ../hime-setup-tab.c:9
+msgid "左上"
+msgstr "Upper left"
+
+#: ../hime-setup-list.c:17 ../hime-setup-tab.c:9
+msgid "右下"
+msgstr "Lower right"
+
+#: ../hime-setup-list.c:17 ../hime-setup-tab.c:9
+msgid "右上"
+msgstr "Upper right"
+
+#: ../tray.c:197
+msgid "重新執行hime"
+msgstr "Restart hime"
+
+#: ../hime-setup.c:36
+msgid "hime視窗"
+msgstr "on hime window"
+
+#: ../hime-setup.c:37
+msgid "應用程式編輯區"
+msgstr "on application window"
+
+#: ../hime-setup.c:38
+msgid "同時顯示"
+msgstr "on both windows"
+
+#: ../hime-setup.c:424
+msgid "編輯區顯示"
+msgstr "Editing area"
+
+#: ../tray.c:206
+msgid "gcb(剪貼區暫存)"
+msgstr "gcb clipboard manager"
+
+#: ../hime-setup-gtab.c:37
+msgid "由.gtab指定開啟"
+msgstr "Assigned by .gtab"
+
+#: ../hime-setup-gtab.c:38
+msgid "全部開啟"
+msgstr "Enable all"
+
+#: ../hime-setup-gtab.c:39
+msgid "全部關閉"
+msgstr "Disable all"
+
+#: ../tray.c:218
+msgid "简体输出"
+msgstr "Simplified Chinese output"
+
+#: ../tray.cpp:255 ../tray.cpp:258
+msgid "左:中英切換 中:小鍵盤 右:選項"
+msgstr "Left: Toggle alphabet-numeric mode\nMiddle: Virtual Keyboard\nRight: Preferences"
+
+#: ../about.cpp:79
+msgid "討論區"
+msgstr "Forum"
+
+#: ../hime-setup-list.cpp:364
+msgid "Ctrl-Shift 循環(必須關閉Windows按鍵"
+msgstr "Ctrl-Shift selections(Should turn off Windows key)"
+
+#: ../hime-setup-list.cpp:656
+msgid "關閉鈴聲"
+msgstr "Turn off bell"
+
+#: ../win-int.cpp:179
+msgid "內碼"
+msgstr "Encoding"
+
+#: ../gtab.cpp:1524
+msgid "輸入要查的同音字，接著在注音視窗選字"
+msgstr "Look up same phonetic characters"
+
+#: ../tray-win32.cpp:295
+msgid "全形/簡體輸出"
+msgstr "Double-width / Simplified Chinese output"
+
+#: ../tray-win32.cpp:299
+msgid "全形/正體輸出"
+msgstr "Double-width / Traditional Chinese output"
+
+#: ../tray-win32.cpp:304
+msgid "半形/簡體輸出"
+msgstr "Half-width / Simplified Chinese output"
+
+#: ../tray-win32.cpp:308
+msgid "半形/正體輸出"
+msgstr "Half-width / Traditional Chinese output"
+
+#: ../win-save-phrase.cpp:70
+msgid "加片語到詞庫"
+msgstr "Add phrase to Tsin's database"
+
+msgid ""
+"按鍵顯示於\n"
+"應用程式"
+msgstr ""
+"Show keycodes on\n"
+"application window"
+
+#: ../win-save-phrase.cpp:104
+msgid "%d 秒後自動加入"
+msgstr "Auto-append after %d second(s)"
+
+#: ../about.cpp:104
+msgid "hime改變記錄"
+msgstr "Changelog of hime"
+
+#: ../hime-setup.cpp:690
+msgid "小鍵盤字型大小"
+msgstr "Font size of virtual keyboard"
+
+#: ../hime-tslearn.cpp:368
+msgid "按 ctrl-V, 貼上你要 hime-tslearn 學習的文章。"
+msgstr "Press Ctrl-V to paste data you want Tslearn to learn."
+
+#: ../hime-setup.cpp:696
+msgid "英數"
+msgstr "Alphabet-numeric"
+
+#: ../tray-win32.cpp:128
+msgid "送字到剪貼區"
+msgstr "Send data to clipboard"
+
+#: ../tray-win32.cpp:111 ../tray.cpp:272
+msgid "選擇輸入法"
+msgstr "Select input methods"
+
+msgid "\\ 鍵切換jkx鍵編輯模式"
+msgstr "\\ key to toggle jkx keys editing mode"
+
+msgid "取代主題顏色"
+msgstr "Replace colors of theme"
+
+#: ../hime-setup.cpp:820
+msgid "選擇鍵顏色"
+msgstr "Color of selection key"
+
+#: ../hime-setup.cpp:491
+msgid ""
+"<span foreground=\"%s\" font=\"%d\">7</span><span font=\"%d\">測試</span>"
+msgstr ""
+"<span foreground=\"%s\" font=\"%d\">7</span><span font=\"%d\">test</span>"
+
+#: ../hime-setup.cpp:495
+msgid ""
+"<span foreground=\"%S\" font=\"%d\">7</span><span font=\"%d\">測試</span>"
+msgstr ""
+"<span foreground=\"%S\" font=\"%d\">7</span><span font=\"%d\">test</span>"
+
+msgid "[中/英]切換"
+msgstr "Toggle alphabet-numeric mode"
+
+msgid "詞音&gtab預選詞視窗字型大小"
+msgstr "Font size of Tsin's and gtab's preselection window"
+
+msgid "hime 注音/詞音/拼音 設定"
+msgstr "Settings for Bopomofo, Tsin, and Pinyin"
+
+msgid "選擇鍵顯示於候選字(詞)後方"
+msgstr "Show selection key behind choices"
+
+msgid "hime也有 Windows版"
+msgstr "Windows version of hime"
+
+msgid "使用預選詞"
+msgstr "Enable preselection"
+
+msgid "雙圖示"
+msgstr "Dual icons"
+
+msgid ""
+"1,3,5分鐘\n"
+"%d,%d,%d/分"
+msgstr ""
+"1,3,5 min\n"
+"%d,%d,%d/min"
+
+msgid ""
+"全半形左鍵\n"
+"切換小鍵盤"
+msgstr ""
+"Left-click half-/double-width icon\n"
+"to toggle virtual keyboard"
+
+msgid "左Shift"
+msgstr "Left Shift"
+
+msgid "右Shift"
+msgstr "Right Shift"
+
+msgid "打字速度"
+msgstr "Typing Speed"
+
+msgid "使用詞音輸入標點符號"
+msgstr "Input punctuation marks in Tsin"
+
+msgid "hime 新酷音設定"
+msgstr "Settings for Chewing"
+
+msgid "空白鍵選字"
+msgstr "Space key to select candidates"
+
+msgid "推薦使用26鍵的注音鍵盤"
+msgstr "26 keys Bopomofo layout"
+
+msgid "--- 加到詞庫 ---"
+msgstr "--- Add phrase to Tsin's database ---"
+
+msgid "每頁候選字數"
+msgstr "Candidates per page"
+
+msgid "ESC 鍵清空緩衝區"
+msgstr "Esc key to clear buffer"
+
+msgid "選字完畢自動跳字"
+msgstr "Move cursor automatically after selections"
+
+msgid "向後加詞"
+msgstr "Add phrase backwards"
+
+msgid "前往 hime 討論區"
+msgstr "Forum of hime"
+
+msgid "如何新增詞"
+msgstr "How to append phrases"
+
+msgid "拼音無聲調"
+msgstr "Pinyin, toneless"
+
+msgid "關於hime/常見問題"
+msgstr "About hime / FAQ"

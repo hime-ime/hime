@@ -1,0 +1,23 @@
+#!/bin/bash
+
+PATH=$PATH:/opt/gnome/bin:/usr/local/bin
+
+for i in madedit gedit leafpad l3afpad kedit kate gvim
+do
+  which $i >& /dev/null
+  if [ $? = 0 ]; then
+    UTF8ED=$i
+    break
+  fi
+done
+
+export LC_CTYPE=zh_TW.UTF-8
+export LC_ALL=zh_TW.UTF-8
+
+if [ "$UTF8ED" = "gvim" ]; then
+  UTF8ED='gvim -f'
+fi
+
+if [ -n "$UTF8ED" ]; then
+  $UTF8ED $1
+fi
