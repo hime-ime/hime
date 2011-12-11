@@ -41,6 +41,12 @@
 #define GDK_DISPLAY() GDK_DISPLAY_XDISPLAY(gdk_display_get_default())
 #endif
 
+#if GTK_CHECK_VERSION(2,24,0)
+#define gtk_combo_box_new_text gtk_combo_box_text_new
+#define gtk_combo_box_append_text gtk_combo_box_text_append_text
+#define gtk_widget_hide_all gtk_widget_hide
+#endif
+
 #if GTK_CHECK_VERSION(2,90,0)
 #undef GTK_CHECK_CAST
 #define GTK_CHECK_CAST G_TYPE_CHECK_INSTANCE_CAST
@@ -86,12 +92,6 @@
 
 #ifndef GTK_COMBO_BOX_TEXT
 #define GTK_COMBO_BOX_TEXT GTK_COMBO_BOX
-#endif
-
-#if GTK_CHECK_VERSION(2,24,0)
-#define gtk_combo_box_new_text gtk_combo_box_text_new
-#define gtk_combo_box_append_text gtk_combo_box_text_append_text
-#define gtk_widget_hide_all gtk_widget_hide
 #endif
 
 #if !GTK_CHECK_VERSION(2,91,6)
