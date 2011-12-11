@@ -1,1 +1,1 @@
-#define HIME_VERSION "0.9~rc1"
+#define HIME_VERSION "0.9~rc2"
