@@ -233,7 +233,8 @@ if [ $USE_ANTHY = 'Y' ] || [ $USE_CHEWING = 'Y' ]; then
   BUILD_MODULE='Y'
 fi
 
-OPTFLAGS="-O"
+OPTFLAGS=${CFLAGS:--O}
+HIME_DEBUG=${HIME_DEBUG:-0}
 
 if [ -z $CC ]; then
   CC=gcc
@@ -289,7 +290,7 @@ echo "BUILD_MODULE=$BUILD_MODULE" >> config.mak
 
 if [ $prefix = /usr/local ]; then
   echo "hime_ld_run_path=$PWD:\$(himelibdir)" >> config.mak
-  echo "HIME_DEBUG=0" >> config.mak
+  echo "HIME_DEBUG=${HIME_DEBUG}" >> config.mak
 else
   echo "hime_ld_run_path=\$(himelibdir)" >> config.mak
 fi

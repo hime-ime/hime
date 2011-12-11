@@ -12,7 +12,7 @@
 	$(CCX) $(CFLAGS) -E -o $@ $<
 
 
-CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I./IMdkit/include -I./im-client -DDEBUG="0$(HIME_DEBUG)" \
+CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I./IMdkit/include -I./im-client \
         -DHIME_TABLE_DIR=\"$(HIME_TABLE_DIR)\" \
         -DHIME_OGG_DIR=\"$(HIME_OGG_DIR)\" \
         -DDOC_DIR=\"$(DOC_DIR)\" \
