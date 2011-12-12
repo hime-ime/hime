@@ -7,7 +7,7 @@ SOFILEVER=libhime-im-client.so.1.2.4
 WALL=-Wall
 CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) -I. -I.. -I../IMdkit/include $(GTKINC) \
         -DCLIENT_LIB=1 -DHIME_BIN_DIR=\"$(HIME_BIN_DIR)\" -DUNIX=1 \
-        -DDEBUG="0$(HIME_DEBUG)" -DHIME_TABLE_DIR=\"$(HIME_TABLE_DIR)\" \
+        -DHIME_TABLE_DIR=\"$(HIME_TABLE_DIR)\" \
         -DFREEBSD=$(FREEBSD) -fPIC
 OBJS = hime-im-client.o im-addr.o hime-conf.o util.o hime-crypt-fpic.o
 
