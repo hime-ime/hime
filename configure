@@ -3,8 +3,9 @@
 
 if [ "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]; then
     echo "** valid options:"
+    echo "  --with_gtk3     : compile with GTK+ 3.x"
     echo "  --use_xim=N     : disable the support of XIM"
-    echo "  --prefix=path   : install prefix(e.g. /usr)"
+    echo "  --prefix=path   : install prefix (e.g. /usr)"
     echo "  --use_tray=N    : disable system tray"
     echo "  --use_i18n=N    : disable i18n"
     echo "  --use_tsin=N    : disable Tsin input method"
@@ -12,6 +13,7 @@ if [ "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]; then
     echo "  --use_chewing=N : disable Chewing input method"
     echo "  --use_qt3=N     : disable Qt 3.x immodule"
     echo "  --use_qt4=N     : disable Qt 4.x immodule"
+    echo "  --use_gtk=N     : disable GTK+ 2.x immodule"
     echo "  --use_gtk3=N    : disable GTK+ 3.x immodule"
     exit
 fi
@@ -52,6 +54,7 @@ use_anthy='Y'
 use_chewing='Y'
 use_qt3='Y'
 use_qt4='Y'
+use_gtk='Y'
 use_gtk3='Y'
 
 if [ "$HIME_USE_XIM" ]; then
@@ -60,6 +63,8 @@ fi
 
 for opt do
   case "$opt" in
+  --with_gtk3) GTK=gtk+-3.0
+  ;;
   --prefix=*) prefix=`echo $opt | cut -d '=' -f 2`
   ;;
   --use_xim=*) use_xim=`echo $opt | cut -d '=' -f 2`
@@ -70,31 +75,42 @@ for opt do
   ;;
   --use_tsin=*) use_tsin=`echo $opt | cut -d '=' -f 2`
   ;;
-  --use_anthy*) use_anthy=`echo $opt | cut -d '=' -f 2`
+  --use_anthy=*) use_anthy=`echo $opt | cut -d '=' -f 2`
   ;;
-  --use_chewing*) use_chewing=`echo $opt | cut -d '=' -f 2`
+  --use_chewing=*) use_chewing=`echo $opt | cut -d '=' -f 2`
   ;;
-  --use_qt3*) use_qt3=`echo $opt | cut -d '=' -f 2`
+  --use_qt3=*) use_qt3=`echo $opt | cut -d '=' -f 2`
   ;;
-  --use_qt4*) use_qt4=`echo $opt | cut -d '=' -f 2`
+  --use_qt4=*) use_qt4=`echo $opt | cut -d '=' -f 2`
   ;;
-  --use_gtk3*) use_gtk3=`echo $opt | cut -d '=' -f 2`
+  --use_gtk=*) use_gtk=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --use_gtk3=*) use_gtk3=`echo $opt | cut -d '=' -f 2`
+  ;;
   esac
 done
 
 echo "prefix: $prefix"
 
-
-GTK=gtk+-2.0
+if [ -z "$GTK" ]; then
+  GTK=gtk+-2.0
+fi
 
 echo -n ".... Testing $GTK : "
 
 GTKINC=`pkg-config --cflags $GTK`
 
 if [ $? != 0 ]; then
-  echo "$GTK or above required --cflags"
-  rm -f config.mak
-  exit -1;
+  GTK=gtk+-3.0
+  echo -n ".... Testing $GTK : "
+  
+  GTKINC=`pkg-config --cflags $GTK`
+  
+  if [ $? != 0 ]; then
+    echo "$GTK or above required --cflags"
+    rm -f config.mak
+    exit -1;
+  fi
 fi
 
 ## problem in MacOS, by candyz
@@ -202,6 +218,26 @@ else
     echo "-> No, you don't have. It's ok if you don't want Qt4 immodule."
 fi
 
+if [ "$GTK"=gtk+-3.0 ]; then
+  GTK_IM='N'
+  echo "testing if you have GTK+ 2.x support"
+  pkg-config --libs gtk+-2.0 > /dev/null 2> /dev/null
+  if [ $? = 0 ]; then
+    GTK_IM='Y'
+  fi
+  
+  if [ $GTK_IM = "Y" ]; then
+      if [ $use_gtk = "N" ]; then
+          GTK_IM='N'
+          echo "-> Yes, but disabled."
+      else
+          echo "-> Yes, you have GTK+ 2.x support."
+      fi
+  else
+      echo "-> No, you don't have. It's ok if you don't want GTK+ 2.x immodule."
+  fi
+fi
+
 GTK3_IM='N'
 echo "testing if you have GTK+ 3.x support"
 pkg-config --libs gtk+-3.0 > /dev/null 2> /dev/null
@@ -233,7 +269,11 @@ if [ $USE_ANTHY = 'Y' ] || [ $USE_CHEWING = 'Y' ]; then
   BUILD_MODULE='Y'
 fi
 
-OPTFLAGS="-O"
+if [ -z "$CFLAGS" ]; then
+  OPTFLAGS="-Wall -Os"
+else
+  OPTFLAGS="$CFLAGS"
+fi
 
 if [ -z $CC ]; then
   CC=gcc
@@ -275,6 +315,7 @@ echo "QT_IM=$QT_IM" >> config.mak
 echo "QT_IM_DIR=$QT_IM_DIR" >> config.mak
 echo "QT4_IM=$QT4_IM" >> config.mak
 echo "QT4_IM_DIR=$QT4_IM_DIR" >> config.mak
+echo "GTK_IM=$GTK_IM" >> config.mak
 echo "GTK3_IM=$GTK3_IM" >> config.mak
 echo "USE_XIM=$use_xim" >> config.mak
 echo "LIB=$LIB" >> config.mak

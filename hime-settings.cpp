@@ -183,8 +183,8 @@ void load_setttings()
   eng_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_full_str));
   cht_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(cht_full_str));
 
-  get_hime_conf_str(HIME_WIN_COLOR_FG, &hime_win_color_fg, "white");
-  get_hime_conf_str(HIME_WIN_COLOR_BG, &hime_win_color_bg, "#005BFF");
+  get_hime_conf_str(HIME_WIN_COLOR_FG, &hime_win_color_fg, "black");
+  get_hime_conf_str(HIME_WIN_COLOR_BG, &hime_win_color_bg, "#DADCD5");
   hime_win_color_use = get_hime_conf_int(HIME_WIN_COLOR_USE, 0);
   hime_bell_off = get_hime_conf_int(HIME_BELL_OFF, 0);
 
