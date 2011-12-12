@@ -85,9 +85,9 @@ PROGS_CV=kbmcv pin-juyin
 
 all:	$(PROGS) hime-trad2sim $(HIME_SO) $(DATA) $(PROGS_CV) hime-fedora.spec
 	$(MAKE) -C data
-	$(MAKE) -C gtk-im
 	if [ $(BUILD_MODULE) = 'Y' ]; then $(MAKE) -C modules; fi
 	if [ $(USE_I18N) = 'Y' ]; then $(MAKE) -C po; fi
+	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im; fi
 	if [ $(QT_IM) = 'Y' ]; then $(MAKE) -C qt-im; fi
 	if [ $(QT4_IM) = 'Y' ]; then $(MAKE) -C qt4-im; fi
@@ -201,8 +201,8 @@ install:
 	install -d $(bindir)
 	$(MAKE) -C data install
 	$(MAKE) -C im-client install
-	$(MAKE) -C gtk-im install
 	if [ $(BUILD_MODULE) = 'Y' ]; then $(MAKE) -C modules install; fi
+	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im install; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im install; fi
 	if [ $(QT_IM) = 'Y' ]; then $(MAKE) -C qt-im install; fi
 	if [ $(QT4_IM) = 'Y' ]; then $(MAKE) -C qt4-im install; fi
@@ -228,8 +228,8 @@ clean:
 	$(MAKE) -C data clean
 	$(MAKE) -C scripts clean
 	$(MAKE) -C im-client clean
-	$(MAKE) -C gtk-im clean
 	$(MAKE) -C modules clean
+	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im clean; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im clean; fi
 	$(MAKE) -C qt-im clean
 	$(MAKE) -C qt4-im clean
