@@ -372,11 +372,26 @@ void message_cb(char *message)
 {
 //   dbg("message '%s'\n", message);
 
+   /* TODO: rewrite the mess with case() ? */
    if (!strcmp(message, CHANGE_FONT_SIZE)) {
      change_font_size();
    } else
    if (!strcmp(message, GB_OUTPUT_TOGGLE)) {
      cb_trad_sim_toggle();
+     update_item_active_all();
+   } else
+   if (!strcmp(message, SIM_OUTPUT_TOGGLE)) {
+     sim_output();
+#if TRAY_ENABLED
+     disp_tray_icon();
+#endif
+     update_item_active_all();
+   } else
+   if (!strcmp(message, TRAD_OUTPUT_TOGGLE)) {
+     trad_output();
+#if TRAY_ENABLED
+     disp_tray_icon();
+#endif
      update_item_active_all();
    } else
    if (!strcmp(message, KBM_TOGGLE)) {

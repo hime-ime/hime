@@ -1,5 +1,7 @@
 #define CHANGE_FONT_SIZE "change font size"
 #define GB_OUTPUT_TOGGLE "gb output toggle"
+#define SIM_OUTPUT_TOGGLE "gb output sim"
+#define TRAD_OUTPUT_TOGGLE "gb output trad"
 #define KBM_TOGGLE "kbm toggle"
 #define RELOAD_TSIN_DB "reload tsin db"
 #define HIME_EXIT_MESSAGE "hime exit"

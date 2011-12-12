@@ -20,7 +20,10 @@
 #include "win-sym.h"
 #include "gst.h"
 
-#if GTK_CHECK_VERSION(2,91,0)
+/* "destroy_window = FALSE" should be ok with both GTK+ 2.x and 3.x
+ * gcin use TRUE for GTK+ 3.x, but caleb- always patch it to FALSE
+ */
+#if 0
 int destroy_window = TRUE;
 #else
 int destroy_window = FALSE;
