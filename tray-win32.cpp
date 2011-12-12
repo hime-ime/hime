@@ -134,7 +134,7 @@ extern int win_kbm_on;
 
 static MITEM mitems_main[] = {
   {N_(_L("關於hime/常見問題")), GTK_STOCK_ABOUT, cb_about_window},
-  {N_(_L("設定")), GTK_STOCK_PREFERENCES, exec_hime_setup_},
+  {N_(_L("設定/工具")), GTK_STOCK_PREFERENCES, exec_hime_setup_},
 #if 0
   {N_(_L("gcb(剪貼區暫存)")), NULL, cb_tog_gcb, &gcb_enabled},
 #endif

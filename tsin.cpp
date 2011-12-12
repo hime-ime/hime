@@ -1247,7 +1247,6 @@ static gboolean pre_punctuation_sub(KeySym xkey, char shift_punc[], unich_t *cha
 
   if ((p=strchr(shift_punc, xkey))) {
     int c = p - shift_punc;
-    phokey_t key=0;
     char *pchar = _(chars[c]);
 
     if (current_method_type() == method_type_PHO) {
@@ -1255,7 +1254,10 @@ static gboolean pre_punctuation_sub(KeySym xkey, char shift_punc[], unich_t *cha
       utf8cpy(tt, pchar);
       send_text(tt);
     } else {
-      add_to_tsin_buf(pchar, &key, 1);
+      phokey_t keys[64];
+      keys[0]=0;
+      utf8_pho_keys(pchar, keys);
+      add_to_tsin_buf(pchar, &keys[0], 1);
       if (tsin_cursor_end())
         flush_tsin_buffer();
     }

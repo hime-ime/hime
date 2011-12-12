@@ -36,6 +36,10 @@
 #define HIME_CHEWING_CONFIG "/.config/hime/config/chewing_conf.dat"
 #define HIME_KB_CONFIG "/.config/hime/config/phonetic-keyboard2"
 
+#define HIME_CHEWING_DEFAULT_SELECT_KEYS { '1', '2', '3', '4', \
+                                           '5', '6', '7', '8', \
+                                           '9', '0' }
+
 typedef struct _SEGMENT {
     GtkWidget *label;
     unsigned char selidx, selN;
