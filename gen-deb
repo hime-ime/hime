@@ -118,7 +118,7 @@ exec dpkg-buildpackage -b
 +        # Set up default
 +        ua_inst all_ALL hime  0
 +        ua_inst zh_CN   hime 30
-+        ua_inst zh_TW   hime 50
++        ua_inst zh_TW   hime 70
 +    ;;
 +
 +    abort-upgrade|abort-remove|abort-deconfigure)
