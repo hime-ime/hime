@@ -1,6 +1,20 @@
-/*
-	Copyright (C) 2004-2009	Edward Der-Hua Liu, Hsin-Chu, Taiwan
-*/
+/* Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 #include <string.h>
 
 #include "hime.h"
@@ -1233,7 +1247,6 @@ static gboolean pre_punctuation_sub(KeySym xkey, char shift_punc[], unich_t *cha
 
   if ((p=strchr(shift_punc, xkey))) {
     int c = p - shift_punc;
-    phokey_t key=0;
     char *pchar = _(chars[c]);
 
     if (current_method_type() == method_type_PHO) {
@@ -1241,7 +1254,10 @@ static gboolean pre_punctuation_sub(KeySym xkey, char shift_punc[], unich_t *cha
       utf8cpy(tt, pchar);
       send_text(tt);
     } else {
-      add_to_tsin_buf(pchar, &key, 1);
+      phokey_t keys[64];
+      keys[0]=0;
+      utf8_pho_keys(pchar, keys);
+      add_to_tsin_buf(pchar, &keys[0], 1);
       if (tsin_cursor_end())
         flush_tsin_buffer();
     }

@@ -1,0 +1,14 @@
+HIME Input Method Editor
+
+License: LGPLv2.1 (Qt immodules are GPLv2)
+
+ * Forked from gcin 2.5.1, inherits all the functionality and stability.
+   Thanks to Edward Der-Hua Liu
+
+ * No centralized version control
+   Current release is based on caleb-'s branch, https://github.com/caleb-/hime
+   Feel free to fork your own! :-)
+
+ * IRC channel: #hime at irc.freenode.net
+
+ * Further information, please see Changelog.html

@@ -37,6 +37,7 @@ OBJS_kbmcv=kbmcv.o pho-sym.o util.o locale.o
 OBJS_hime-tsd2a32=hime-tsd2a32.o pho-sym.o pho-dbg.o locale.o util.o gtab-dbg.o pho2pinyin.o \
 	hime-conf.o pinyin.o
 OBJS_cin2gtab=cin2gtab.o gtab-util.o util.o locale.o
+OBJS_gtab2cin=gtab2cin.o gtab-util.o util.o locale.o
 OBJS_gtab_merge=hime-gtab-merge.o gtab-util.o util.o locale.o
 OBJS_hime_setup=hime-setup.o hime-conf.o util.o hime-send.o hime-settings.o html-browser.o \
 	hime-setup-list.o locale.o hime-setup-pho.o about.o lang.o \
@@ -75,7 +76,7 @@ endif
 
 OBJ_IMSRV=im-addr.o im-dispatch.o im-srv.o hime-crypt.o
 
-PROGS=hime hime-tsd2a32 hime-tsa2d32 hime-phoa2d hime-phod2a hime-tslearn hime-setup cin2gtab \
+PROGS=hime hime-tsd2a32 hime-tsa2d32 hime-phoa2d hime-phod2a hime-tslearn hime-setup cin2gtab gtab2cin \
 	hime-juyin-learn hime-sim2trad hime-gb-toggle hime-message hime-gtab-merge \
 	hime-kbm-toggle hime-tsin2gtab-phrase hime-exit hime-ts-edit
 PROGS_SYM=hime-trad2sim
@@ -84,9 +85,9 @@ PROGS_CV=kbmcv pin-juyin
 
 all:	$(PROGS) hime-trad2sim $(HIME_SO) $(DATA) $(PROGS_CV) hime-fedora.spec
 	$(MAKE) -C data
-	$(MAKE) -C gtk-im
 	if [ $(BUILD_MODULE) = 'Y' ]; then $(MAKE) -C modules; fi
 	if [ $(USE_I18N) = 'Y' ]; then $(MAKE) -C po; fi
+	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im; fi
 	if [ $(QT_IM) = 'Y' ]; then $(MAKE) -C qt-im; fi
 	if [ $(QT4_IM) = 'Y' ]; then $(MAKE) -C qt4-im; fi
@@ -138,6 +139,9 @@ hime-tsd2a32:  $(OBJS_hime-tsd2a32)
 cin2gtab:  $(OBJS_cin2gtab)
 	$(CCLD) -o $@ $(OBJS_cin2gtab) $(LDFLAGS)
 	rm -f data/*.gtab
+
+gtab2cin:  $(OBJS_gtab2cin)
+	$(CCLD) -o $@ $(OBJS_gtab2cin) $(LDFLAGS)
 
 hime-gtab-merge:  $(OBJS_gtab_merge)
 	$(CCLD) -o $@ $(OBJS_gtab_merge) $(LDFLAGS)
@@ -197,8 +201,8 @@ install:
 	install -d $(bindir)
 	$(MAKE) -C data install
 	$(MAKE) -C im-client install
-	$(MAKE) -C gtk-im install
 	if [ $(BUILD_MODULE) = 'Y' ]; then $(MAKE) -C modules install; fi
+	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im install; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im install; fi
 	if [ $(QT_IM) = 'Y' ]; then $(MAKE) -C qt-im install; fi
 	if [ $(QT4_IM) = 'Y' ]; then $(MAKE) -C qt4-im install; fi
@@ -224,8 +228,8 @@ clean:
 	$(MAKE) -C data clean
 	$(MAKE) -C scripts clean
 	$(MAKE) -C im-client clean
-	$(MAKE) -C gtk-im clean
 	$(MAKE) -C modules clean
+	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im clean; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im clean; fi
 	$(MAKE) -C qt-im clean
 	$(MAKE) -C qt4-im clean

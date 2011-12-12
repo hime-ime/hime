@@ -1,3 +1,20 @@
+/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 #include "hime.h"
 #include "gtab.h"
 
@@ -249,7 +266,7 @@ void create_gtab_conf_window()
                     G_CALLBACK (close_gtab_conf_window),
                     NULL);
 
-  gtk_window_set_title (GTK_WINDOW (hime_gtab_conf_window), _(_L("倉頡/行列/嘸蝦米/大易設定")));
+  gtk_window_set_title (GTK_WINDOW (hime_gtab_conf_window), _(_L("倉頡/行列/大易設定")));
   gtk_container_set_border_width (GTK_CONTAINER (hime_gtab_conf_window), 3);
 
   GtkWidget *vbox_top = gtk_vbox_new (FALSE, 10);
@@ -281,9 +298,7 @@ void create_gtab_conf_window()
 
   GtkWidget *hbox_gtab_pre_select = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_pre_select, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_pre_select = gtk_label_new(_(_L("預覽/預選 字")));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_pre_select), label_gtab_pre_select,  FALSE, FALSE, 0);
-  check_button_gtab_pre_select = gtk_check_button_new ();
+  check_button_gtab_pre_select = gtk_check_button_new_with_label (_(_L("預覽/預選 字")));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_pre_select),check_button_gtab_pre_select,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_pre_select),
      gtab_pre_select);
@@ -291,9 +306,7 @@ void create_gtab_conf_window()
 
   GtkWidget *hbox_gtab_disp_partial_match = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_disp_partial_match, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_gtab_disp_partial_match = gtk_label_new(_(_L("預選列中顯示部份符合的字")));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_partial_match), label_gtab_gtab_disp_partial_match,  FALSE, FALSE, 0);
-  check_button_gtab_disp_partial_match = gtk_check_button_new ();
+  check_button_gtab_disp_partial_match = gtk_check_button_new_with_label (_(_L("預選列中顯示部份符合的字")));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_partial_match), check_button_gtab_disp_partial_match,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_disp_partial_match),
      gtab_disp_partial_match);
@@ -301,9 +314,7 @@ void create_gtab_conf_window()
 
   GtkWidget *hbox_gtab_disp_key_codes = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_disp_key_codes, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_gtab_disp_key_codes = gtk_label_new(_(_L("顯示拆字")));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_key_codes), label_gtab_gtab_disp_key_codes,  FALSE, FALSE, 0);
-  check_button_gtab_disp_key_codes = gtk_check_button_new ();
+  check_button_gtab_disp_key_codes = gtk_check_button_new_with_label (_(_L("顯示字根")));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_key_codes), check_button_gtab_disp_key_codes,  FALSE, FALSE, 0);
 
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_disp_key_codes),
@@ -312,9 +323,7 @@ void create_gtab_conf_window()
 
   GtkWidget *hbox_gtab_disp_im_name = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_disp_im_name, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_gtab_disp_im_name = gtk_label_new(_(_L("顯示輸入法名稱")));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_im_name), label_gtab_gtab_disp_im_name,  FALSE, FALSE, 0);
-  check_button_gtab_disp_im_name = gtk_check_button_new ();
+  check_button_gtab_disp_im_name = gtk_check_button_new_with_label (_(_L("顯示輸入法名稱")));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_im_name), check_button_gtab_disp_im_name,  FALSE, FALSE, 0);
 
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_disp_im_name),
@@ -322,9 +331,7 @@ void create_gtab_conf_window()
 
   GtkWidget *hbox_gtab_hide_row2 = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_hide_row2, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_hide_row2 = gtk_label_new(_(_L("隱藏第二列(輸入鍵…)")));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_hide_row2), label_gtab_hide_row2,  FALSE, FALSE, 0);
-  check_button_gtab_hide_row2 = gtk_check_button_new ();
+  check_button_gtab_hide_row2 = gtk_check_button_new_with_label (_(_L("隱藏第二列 (輸入鍵…)")));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_hide_row2), check_button_gtab_hide_row2,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_hide_row2),
      gtab_hide_row2);
@@ -332,27 +339,21 @@ void create_gtab_conf_window()
 
   GtkWidget *hbox_gtab_in_row1 = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_in_row1, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_in_row1 = gtk_label_new(_(_L("輸入鍵顯示移至第一列")));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_in_row1), label_gtab_in_row1,  FALSE, FALSE, 0);
-  check_button_gtab_in_row1 = gtk_check_button_new ();
+  check_button_gtab_in_row1 = gtk_check_button_new_with_label (_(_L("將字根移至第一列")));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_in_row1), check_button_gtab_in_row1,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_in_row1),
      gtab_in_row1);
 
   GtkWidget *hbox_gtab_vertical_select = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_vertical_select, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_vertical_select = gtk_label_new(_(_L("垂直選擇")));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_vertical_select), label_gtab_vertical_select,  FALSE, FALSE, 0);
-  check_button_gtab_vertical_select = gtk_check_button_new ();
+  check_button_gtab_vertical_select = gtk_check_button_new_with_label (_(_L("垂直選擇")));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_vertical_select), check_button_gtab_vertical_select,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_vertical_select),
      gtab_vertical_select);
 
   GtkWidget *hbox_gtab_press_full_auto_send = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_press_full_auto_send, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_gtab_press_full_auto_send = gtk_label_new(_(_L("按滿自動送字")));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_press_full_auto_send), label_gtab_gtab_press_full_auto_send,  FALSE, FALSE, 0);
-  check_button_gtab_press_full_auto_send = gtk_check_button_new ();
+  check_button_gtab_press_full_auto_send = gtk_check_button_new_with_label (_(_L("按滿字根自動送字")));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_press_full_auto_send), check_button_gtab_press_full_auto_send,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_press_full_auto_send),
      gtab_press_full_auto_send);
@@ -360,21 +361,17 @@ void create_gtab_conf_window()
 
   GtkWidget *hbox_gtab_auto_select_by_phrase = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_auto_select_by_phrase, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_auto_select = gtk_label_new(_(_L("由詞庫自動選擇字")));
+  GtkWidget *label_gtab_auto_select = gtk_label_new(_(_L("由詞庫自動選字")));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_auto_select_by_phrase), label_gtab_auto_select,  FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (hbox_gtab_auto_select_by_phrase), create_auto_select_by_phrase_opts(),  FALSE, FALSE, 0);
-  GtkWidget *label_gtab_phrase_pre_select = gtk_label_new(_(_L("使用預選詞")));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_auto_select_by_phrase), label_gtab_phrase_pre_select,  FALSE, FALSE, 0);
-  check_button_gtab_phrase_pre_select = gtk_check_button_new ();
+  check_button_gtab_phrase_pre_select = gtk_check_button_new_with_label (_(_L("使用預選詞")));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_auto_select_by_phrase), check_button_gtab_phrase_pre_select,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_phrase_pre_select), gtab_phrase_pre_select);
 
 
   GtkWidget *hbox_gtab_dup_select_bell = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_dup_select_bell, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_sele = gtk_label_new(_(_L("重複字選擇鈴聲")));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_dup_select_bell), label_gtab_sele,  FALSE, FALSE, 0);
-  check_button_gtab_dup_select_bell = gtk_check_button_new ();
+  check_button_gtab_dup_select_bell = gtk_check_button_new_with_label (_(_L("有重複字時，發出嗶聲")));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_dup_select_bell),check_button_gtab_dup_select_bell,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_dup_select_bell),
      gtab_dup_select_bell);
@@ -383,9 +380,7 @@ void create_gtab_conf_window()
 
   GtkWidget *hbox_gtab_invalid_key_in = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_invalid_key_in, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_gtab_invalid_key_in = gtk_label_new(_(_L("允許錯誤鍵進入(傳統)")));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_invalid_key_in), label_gtab_gtab_invalid_key_in,  FALSE, FALSE, 0);
-  check_button_gtab_invalid_key_in = gtk_check_button_new ();
+  check_button_gtab_invalid_key_in = gtk_check_button_new_with_label (_(_L("可鍵入錯誤字根 (傳統)")));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_invalid_key_in), check_button_gtab_invalid_key_in,  FALSE, FALSE, 0);
 
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_invalid_key_in),
@@ -394,21 +389,17 @@ void create_gtab_conf_window()
 
   GtkWidget *hbox_gtab_shift_phrase_key = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_shift_phrase_key, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_gtab_shift_phrase_key = gtk_label_new(_(_L("Shift 用來輸入片語(Alt-Shift)")));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_shift_phrase_key), label_gtab_gtab_shift_phrase_key,  FALSE, FALSE, 0);
-  check_button_gtab_shift_phrase_key = gtk_check_button_new ();
+  check_button_gtab_shift_phrase_key = gtk_check_button_new_with_label (_(_L("可用 Shift 輸入片語 (預設為 Alt-Shift)")));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_shift_phrase_key), check_button_gtab_shift_phrase_key,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_shift_phrase_key),
      gtab_shift_phrase_key);
 
-  gtk_box_pack_start (GTK_BOX (vbox_gtab_r), create_en_pho_key_sel(_(_L("[中/英]切換"))), FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox_gtab_r), create_en_pho_key_sel(_(_L("切換[中/英]打"))), FALSE, FALSE, 0);
 
 #if 0
   GtkWidget *hbox_hime_capslock_lower = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_hime_capslock_lower, FALSE, FALSE, 0);
-  GtkWidget *label_hime_capslock_lower = gtk_label_new(_(_L("\t用小寫字母")));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_capslock_lower), label_hime_capslock_lower,  FALSE, FALSE, 0);
-  check_button_hime_capslock_lower = gtk_check_button_new ();
+  check_button_hime_capslock_lower = gtk_check_button_new_with_label (_(_L("\t用小寫字母")));
   gtk_box_pack_start (GTK_BOX (hbox_hime_capslock_lower), check_button_hime_capslock_lower,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_capslock_lower),
      hime_capslock_lower);
@@ -416,9 +407,7 @@ void create_gtab_conf_window()
 
   GtkWidget *hbox_gtab_unique_auto_send = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_unique_auto_send, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_unique_auto_send = gtk_label_new(_(_L("唯一選擇時自動送出")));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_unique_auto_send), label_gtab_unique_auto_send,  FALSE, FALSE, 0);
-  check_button_gtab_unique_auto_send = gtk_check_button_new ();
+  check_button_gtab_unique_auto_send = gtk_check_button_new_with_label (_(_L("唯一選擇時自動送出")));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_unique_auto_send), check_button_gtab_unique_auto_send,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_unique_auto_send),
      gtab_unique_auto_send);
@@ -426,15 +415,13 @@ void create_gtab_conf_window()
 
   GtkWidget *hbox_gtab_que_wild_card = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_que_wild_card, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_que_wild_card = gtk_label_new(_(_L("使用？萬用字元")));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_que_wild_card), label_gtab_que_wild_card,  FALSE, FALSE, 0);
-  check_button_gtab_que_wild_card = gtk_check_button_new ();
+  check_button_gtab_que_wild_card = gtk_check_button_new_with_label (_(_L("使用？萬用字元")));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_que_wild_card), check_button_gtab_que_wild_card,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_que_wild_card),
      gtab_que_wild_card);
 
 
-  GtkWidget *button_edit_append = gtk_button_new_with_label(_(_L("編輯內定輸入法的使用者外加字詞")));
+  GtkWidget *button_edit_append = gtk_button_new_with_label(_(_L("編輯預設輸入法的使用者外加字詞")));
   gtk_box_pack_start (GTK_BOX (vbox_gtab_r), button_edit_append, FALSE, FALSE, 0);
 
   g_signal_connect_swapped (G_OBJECT (button_edit_append), "clicked",

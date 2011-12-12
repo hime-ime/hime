@@ -1,3 +1,20 @@
+/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 #include "hime.h"
 #include "gtab.h"
 #if UNIX
@@ -171,6 +188,18 @@ void toggle_gb_output()
   gb_output = !gb_output;
 }
 
+/* Force to output Simplified Chinese */
+void sim_output()
+{
+  gb_output = TRUE;
+}
+
+/* Force to output original string, usually are Traditional Chinese */
+void trad_output()
+{
+  gb_output = FALSE;
+}
+
 static void append_str(char **buf, int *bufN, char *text, int len)
 {
   int requiredN = len + 1 + *bufN;
@@ -180,7 +209,7 @@ static void append_str(char **buf, int *bufN, char *text, int len)
   *bufN += len;
 }
 
-int hime_trad2sim(char *str, int strN, char **out);
+int trad2sim(char *str, int strN, char **out);
 void add_ch_time_str(char *s);
 
 void send_text(char *text)
@@ -203,7 +232,7 @@ void send_text(char *text)
   char *utf8_gbtext = NULL;
 
   if (gb_output) {
-    len = hime_trad2sim(text, len, &utf8_gbtext);
+    len = trad2sim(text, len, &utf8_gbtext);
     text = utf8_gbtext;
   }
 
@@ -274,7 +303,7 @@ void set_output_buffer_bak_to_clipboard()
   char *text, *utf8_gbtext=NULL;
 
   if (gb_output) {
-    hime_trad2sim(output_buffer_raw_bak, strlen(output_buffer_raw_bak),
+    trad2sim(output_buffer_raw_bak, strlen(output_buffer_raw_bak),
       &utf8_gbtext);
     text = utf8_gbtext;
   } else

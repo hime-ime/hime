@@ -1,3 +1,20 @@
+/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 #include "hime.h"
 #include "gtab.h"
 #include "config.h"
@@ -632,10 +649,7 @@ static GtkWidget *create_hime_edit_display()
 #endif
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_hime_edit_display), current_idx);
 
-  label = gtk_label_new(_(_L("按鍵顯示於\n應用程式")));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-
-  check_button_hime_on_the_spot_key = gtk_check_button_new ();
+  check_button_hime_on_the_spot_key = gtk_check_button_new_with_label (_(_L("顯示字根於應用程式中\n(OnTheSpot)")));
   g_signal_connect (G_OBJECT (check_button_hime_on_the_spot_key), "toggled",
                     G_CALLBACK (cb_button_hime_on_the_spot_key), NULL);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_on_the_spot_key),
@@ -768,9 +782,7 @@ void create_appearance_conf_window()
 
   GtkWidget *hbox_hime_pop_up_win = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX(vbox_top), hbox_hime_pop_up_win, FALSE, FALSE, 0);
-  GtkWidget *label_hime_pop_up_win = gtk_label_new(_(_L("彈出式輸入視窗")));
-  gtk_box_pack_start (GTK_BOX(hbox_hime_pop_up_win), label_hime_pop_up_win, FALSE, FALSE, 0);
-  check_button_hime_pop_up_win = gtk_check_button_new ();
+  check_button_hime_pop_up_win = gtk_check_button_new_with_label (_(_L("在有輸入字根時才會彈出輸入視窗")));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_pop_up_win),
        hime_pop_up_win);
   gtk_box_pack_start (GTK_BOX(hbox_hime_pop_up_win), check_button_hime_pop_up_win, FALSE, FALSE, 0);
@@ -784,9 +796,7 @@ void create_appearance_conf_window()
 
   GtkWidget *hbox_root_style_use = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX(vbox_root_style), hbox_root_style_use, FALSE, FALSE, 0);
-  GtkWidget *label_root_style_use = gtk_label_new(_(_L("使用")));
-  gtk_box_pack_start (GTK_BOX(hbox_root_style_use), label_root_style_use, FALSE, FALSE, 0);
-  check_button_root_style_use = gtk_check_button_new ();
+  check_button_root_style_use = gtk_check_button_new_with_label (_(_L("啟用")));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_root_style_use),
        hime_input_style == InputStyleRoot);
   gtk_box_pack_start (GTK_BOX(hbox_root_style_use), check_button_root_style_use, FALSE, FALSE, 0);
@@ -812,9 +822,7 @@ void create_appearance_conf_window()
 
   GtkWidget *hbox_hime_inner_frame = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX(vbox_top), hbox_hime_inner_frame, FALSE, FALSE, 0);
-  GtkWidget *label_hime_inner_frame = gtk_label_new(_(_L("顯示內框")));
-  gtk_box_pack_start (GTK_BOX(hbox_hime_inner_frame), label_hime_inner_frame, FALSE, FALSE, 0);
-  check_button_hime_inner_frame = gtk_check_button_new ();
+  check_button_hime_inner_frame = gtk_check_button_new_with_label (_(_L("字根區顯示內框")));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_inner_frame),
        hime_inner_frame);
   gtk_box_pack_start (GTK_BOX(hbox_hime_inner_frame), check_button_hime_inner_frame, FALSE, FALSE, 0);
@@ -822,23 +830,17 @@ void create_appearance_conf_window()
 #if TRAY_ENABLED
   GtkWidget *hbox_hime_status_tray = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX(vbox_top), hbox_hime_status_tray, FALSE, FALSE, 0);
-  GtkWidget *label_hime_status_tray = gtk_label_new(_(_L("面板狀態(tray)")));
-  gtk_box_pack_start (GTK_BOX(hbox_hime_status_tray), label_hime_status_tray, FALSE, FALSE, 0);
-  check_button_hime_status_tray = gtk_check_button_new ();
+  check_button_hime_status_tray = gtk_check_button_new_with_label (_(_L("啟用 System Tray Icon")));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_status_tray),
        hime_status_tray);
   gtk_box_pack_start (GTK_BOX(hbox_hime_status_tray), check_button_hime_status_tray, FALSE, FALSE, 0);
 #if UNIX
-  GtkWidget *label_hime_status_tray_windows_style = gtk_label_new(_(_L("雙圖示")));
-  gtk_box_pack_start (GTK_BOX(hbox_hime_status_tray), label_hime_status_tray_windows_style, FALSE, FALSE, 0);
-  check_button_hime_win32_icon = gtk_check_button_new ();
+  check_button_hime_win32_icon = gtk_check_button_new_with_label (_(_L("使用雙圖示")));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_win32_icon),
        hime_win32_icon);
   gtk_box_pack_start (GTK_BOX(hbox_hime_status_tray), check_button_hime_win32_icon, FALSE, FALSE, 0);
 #endif
-  GtkWidget *label_hime_tray_hf_win_kbm = gtk_label_new(_(_L("全半形左鍵\n切換小鍵盤")));
-  gtk_box_pack_start (GTK_BOX(hbox_hime_status_tray), label_hime_tray_hf_win_kbm, FALSE, FALSE, 0);
-  check_button_hime_tray_hf_win_kbm = gtk_check_button_new ();
+  check_button_hime_tray_hf_win_kbm = gtk_check_button_new_with_label (_(_L("全半形左鍵\n切換小鍵盤")));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_tray_hf_win_kbm),
        hime_tray_hf_win_kbm);
   gtk_box_pack_start (GTK_BOX(hbox_hime_status_tray), check_button_hime_tray_hf_win_kbm, FALSE, FALSE, 0);
@@ -853,9 +855,7 @@ void create_appearance_conf_window()
 
   GtkWidget *hbox_win_color_use = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX(vbox_win_color), hbox_win_color_use, FALSE, FALSE, 0);
-  GtkWidget *label_win_color_use = gtk_label_new(_(_L("取代主題顏色")));
-  gtk_box_pack_start (GTK_BOX(hbox_win_color_use), label_win_color_use, FALSE, FALSE, 0);
-  check_button_hime_win_color_use = gtk_check_button_new ();
+  check_button_hime_win_color_use = gtk_check_button_new_with_label (_(_L("自訂顏色主題")));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_win_color_use),
        hime_win_color_use);
 
@@ -1052,17 +1052,22 @@ static void create_main_win()
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (main_window), vbox);
 
-  GtkWidget *button_kbm = gtk_button_new_with_label(_(_L("hime 注音/詞音/拼音 設定")));
-  gtk_box_pack_start (GTK_BOX (vbox), button_kbm, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_kbm), "clicked",
-                    G_CALLBACK (cb_kbm), NULL);
+  GtkWidget *button_default_input_method = gtk_button_new_with_label(_(_L("內定輸入法 & 開啟/關閉")));
+  gtk_box_pack_start (GTK_BOX (vbox), button_default_input_method, TRUE, TRUE, 0);
+  g_signal_connect (G_OBJECT (button_default_input_method), "clicked",
+                    G_CALLBACK (cb_default_input_method), NULL);
 
   GtkWidget *button_appearance_conf = gtk_button_new_with_label(_(_L("外觀設定")));
   gtk_box_pack_start (GTK_BOX (vbox), button_appearance_conf, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (button_appearance_conf), "clicked",
                     G_CALLBACK (cb_appearance_conf), NULL);
 
-  GtkWidget *button_gtab_conf = gtk_button_new_with_label(_(_L("倉頡/行列/嘸蝦米/大易設定")));
+  GtkWidget *button_kbm = gtk_button_new_with_label(_(_L("注音/詞音/拼音設定")));
+  gtk_box_pack_start (GTK_BOX (vbox), button_kbm, TRUE, TRUE, 0);
+  g_signal_connect (G_OBJECT (button_kbm), "clicked",
+                    G_CALLBACK (cb_kbm), NULL);
+
+  GtkWidget *button_gtab_conf = gtk_button_new_with_label(_(_L("倉頡/行列/大易設定")));
   gtk_box_pack_start (GTK_BOX (vbox), button_gtab_conf, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (button_gtab_conf), "clicked",
                     G_CALLBACK (cb_gtab_conf), NULL);
@@ -1090,11 +1095,6 @@ static void create_main_win()
     g_signal_connect (G_OBJECT (button_chewing_input_method), "clicked",
                     G_CALLBACK (f->module_setup_window_create), NULL);
   }
-
-  GtkWidget *button_default_input_method = gtk_button_new_with_label(_(_L("內定輸入法 & 開啟/關閉")));
-  gtk_box_pack_start (GTK_BOX (vbox), button_default_input_method, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_default_input_method), "clicked",
-                    G_CALLBACK (cb_default_input_method), NULL);
 
 
   GtkWidget *button_alt_shift = gtk_button_new_with_label(_(_L("alt-shift 片語編輯")));

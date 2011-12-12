@@ -3,7 +3,7 @@
 #標點倉頡 4 cj-punc.gtab cj-punc.png
 #輕鬆 2 ez7.gtab
 倉五 2 cj5.gtab cj5.png
-五四三倉頡 2 cj543.gtab cj5.png
+#五四三倉頡 2 cj543.gtab cj5.png
 注音 3 !PHO juyin.png
 小鍵盤 , symbols.gtab symbols.png
 # ↓↓↓ ~/.config/hime/symbol-table

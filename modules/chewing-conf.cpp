@@ -1,3 +1,20 @@
+/* Copyright (C) 2011 cwlin <https://github.com/cwlin>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 #include "chewing.h"
 
 static ChewingConfigData g_chewingConfig;
@@ -18,7 +35,7 @@ static kbmapping_t g_kbMappingTable[] =
     {NULL,        NULL},
 };
 
-static void hime_kb_config_set (ChewingContext *pChewingCtx);
+static gboolean hime_kb_config_set (ChewingContext *pChewingCtx);
 
 void
 chewing_config_open (gboolean bWrite)
@@ -55,9 +72,7 @@ chewing_config_load (ChewingConfigData *pChewingConfig)
 
     if (g_bUseDefault)
     {
-        int nDefaultSelKey[MAX_SELKEY] = {'a', 's', 'd', 'f',
-                                          'g', 'h', 'j', 'k',
-                                          'l', ';'};
+        int nDefaultSelKey[MAX_SELKEY] = HIME_CHEWING_DEFAULT_SELECT_KEYS;
 
         g_chewingConfig.candPerPage           = 10;
         g_chewingConfig.maxChiSymbolLen       = 16;
@@ -79,7 +94,16 @@ chewing_config_load (ChewingConfigData *pChewingConfig)
 void
 chewing_config_set (ChewingContext *pChewingCtx)
 {
-    hime_kb_config_set (pChewingCtx);
+    if (!hime_kb_config_set (pChewingCtx))
+    {
+        int nDefaultSelKey[MAX_SELKEY] = HIME_CHEWING_DEFAULT_SELECT_KEYS;
+        memcpy (&g_chewingConfig.selKey,
+                &nDefaultSelKey,
+                sizeof (g_chewingConfig.selKey));
+        chewing_set_selKey (pChewingCtx, 
+                            g_chewingConfig.selKey, 
+                            strlen (g_chewingConfig.selKey));
+    }
 
     chewing_set_candPerPage (pChewingCtx, g_chewingConfig.candPerPage);
     chewing_set_maxChiSymbolLen (pChewingCtx, g_chewingConfig.maxChiSymbolLen);
@@ -123,7 +147,7 @@ chewing_config_close (void)
     memset (&g_chewingConfig, 0x00, sizeof (g_chewingConfig));
 }
 
-static void
+static gboolean
 hime_kb_config_set (ChewingContext *pChewingCtx)
 {
     char *pszHome;
@@ -154,16 +178,16 @@ hime_kb_config_set (ChewingContext *pChewingCtx)
     free (pszHimeKBConfig);
 
     if (nFd == -1)
-        return;
+        return FALSE;
 
     nRead = read (nFd, szBuf, 32);
     if (nRead == -1)
-        return;
+        return FALSE;
     
     sscanf (szBuf, "%s %s ", szKbType, szKbSelKey);
 
     if (!strlen (szKbType) || !strlen (szKbSelKey))
-        return;
+        return FALSE;
 
     for (nIdx = 0; nIdx < strlen (szKbSelKey); nIdx++)
         g_chewingConfig.selKey[nIdx] = szKbSelKey[nIdx];
@@ -182,6 +206,8 @@ hime_kb_config_set (ChewingContext *pChewingCtx)
 	}
         nIdx++;
     }
+
+    return TRUE;
 }
 
 gboolean

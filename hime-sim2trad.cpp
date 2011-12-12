@@ -1,3 +1,20 @@
+/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 #include "hime.h"
 #include "pho.h"
 #include "config.h"
@@ -27,10 +44,10 @@ void all_wrap()
   gtk_text_buffer_apply_tag_by_name (buffer, "char_wrap", &mstart, &mend);
 }
 
-gboolean b_hime_trad2sim = FALSE;
+gboolean b_trad2sim = FALSE;
 
-int hime_trad2sim(char *str, int strN, char **out);
-int hime_sim2trad(char *str, int strN, char **out);
+int trad2sim(char *str, int strN, char **out);
+int sim2trad(char *str, int strN, char **out);
 static void selection_received(GtkClipboard *pclip, const char *text, gpointer data)
 {
   if (!text) {
@@ -39,10 +56,10 @@ static void selection_received(GtkClipboard *pclip, const char *text, gpointer d
   }
 
   char *out;
-  if (b_hime_trad2sim)
-    hime_trad2sim((char *)text, strlen(text), &out);
+  if (b_trad2sim)
+    trad2sim((char *)text, strlen(text), &out);
   else
-    hime_sim2trad((char *)text, strlen(text), &out);
+    sim2trad((char *)text, strlen(text), &out);
 
   gtk_text_buffer_set_text (buffer, out, -1);
   free(out);
@@ -82,7 +99,7 @@ int main(int argc, char **argv)
 #endif
 
   if (strstr(argv[0],"hime-trad2sim")) {
-    b_hime_trad2sim= TRUE;
+    b_trad2sim= TRUE;
     dbg("hime-trad2sim\n");
   }
 

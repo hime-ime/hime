@@ -1,3 +1,20 @@
+/* Copyright (C) 2011 cwlin <https://github.com/cwlin>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 #include "chewing.h"
 
 // TODO:
@@ -113,36 +130,28 @@ void module_setup_window_create ()
     // space as selection
     g_pHBoxSpaceAsSelection = gtk_hbox_new (FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), g_pHBoxSpaceAsSelection, TRUE, TRUE, 1);
-    g_pLabelSpaceAsSelection = gtk_label_new (_(_L("空白鍵選字")));
-    gtk_box_pack_start (GTK_BOX (g_pHBoxSpaceAsSelection), g_pLabelSpaceAsSelection, TRUE, TRUE, 0);
-    g_pCheckButtonSpaceAsSelection = gtk_check_button_new ();
+    g_pCheckButtonSpaceAsSelection = gtk_check_button_new_with_label(_(_L("空白鍵選字")));
     gtk_box_pack_start (GTK_BOX (g_pHBoxSpaceAsSelection), g_pCheckButtonSpaceAsSelection, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (g_pCheckButtonSpaceAsSelection), g_chewingConfig.bSpaceAsSelection);
 
     // esc clean buf
     g_pHBoxEscCleanAllBuf = gtk_hbox_new (FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), g_pHBoxEscCleanAllBuf, TRUE, TRUE, 1);
-    g_pLabelEscCleanAllBuf = gtk_label_new (_(_L("ESC 鍵清空緩衝區")));
-    gtk_box_pack_start (GTK_BOX (g_pHBoxEscCleanAllBuf), g_pLabelEscCleanAllBuf, TRUE, TRUE, 0);
-    g_pCheckButtonEscCleanAllBuf = gtk_check_button_new ();
+    g_pCheckButtonEscCleanAllBuf = gtk_check_button_new_with_label (_(_L("ESC 鍵清空緩衝區")));
     gtk_box_pack_start (GTK_BOX (g_pHBoxEscCleanAllBuf), g_pCheckButtonEscCleanAllBuf, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (g_pCheckButtonEscCleanAllBuf), g_chewingConfig.bEscCleanAllBuf);
 
     // auto shift cursor
     g_pHBoxAutoShiftCur = gtk_hbox_new (FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), g_pHBoxAutoShiftCur, TRUE, TRUE, 1);
-    g_pLabelAutoShiftCur = gtk_label_new (_(_L("選字完畢自動跳字")));
-    gtk_box_pack_start (GTK_BOX (g_pHBoxAutoShiftCur), g_pLabelAutoShiftCur, TRUE, TRUE, 0);
-    g_pCheckButtonAutoShiftCur = gtk_check_button_new ();
+    g_pCheckButtonAutoShiftCur = gtk_check_button_new_with_label (_(_L("選字完畢自動跳字")));
     gtk_box_pack_start (GTK_BOX (g_pHBoxAutoShiftCur), g_pCheckButtonAutoShiftCur, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (g_pCheckButtonAutoShiftCur), g_chewingConfig.bAutoShiftCur);
 
     // add phrase forward
     g_pHBoxAddPhraseForward = gtk_hbox_new (FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), g_pHBoxAddPhraseForward, TRUE, TRUE, 1);
-    g_pLabelAddPhraseForward = gtk_label_new (_(_L("向後加詞")));
-    gtk_box_pack_start (GTK_BOX (g_pHBoxAddPhraseForward), g_pLabelAddPhraseForward, TRUE, TRUE, 0);
-    g_pCheckButtonAddPhraseForward = gtk_check_button_new ();
+    g_pCheckButtonAddPhraseForward = gtk_check_button_new_with_label (_(_L("向後加詞")));
     gtk_box_pack_start (GTK_BOX (g_pHBoxAddPhraseForward), g_pCheckButtonAddPhraseForward, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (g_pCheckButtonAddPhraseForward), g_chewingConfig.bAddPhraseForward);
 

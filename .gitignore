@@ -1,13 +1,10 @@
-<<<<<<< HEAD
 SHA1SUMS
-=======
 hime-*
 *.o
 *.a
 *.so
 *.so.*
 *.pico
->>>>>>> 5b086c99ecd0f8ddbbf01ccbe60ac90680ef0e78
 config.mak
 .depend
 hime

@@ -1,3 +1,20 @@
+/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 #include "hime.h"
 #include "pho.h"
 #include "gtab.h"
@@ -117,7 +134,7 @@ extern int win_kbm_on;
 
 static MITEM mitems_main[] = {
   {N_(_L("關於hime/常見問題")), GTK_STOCK_ABOUT, cb_about_window},
-  {N_(_L("設定")), GTK_STOCK_PREFERENCES, exec_hime_setup_},
+  {N_(_L("設定/工具")), GTK_STOCK_PREFERENCES, exec_hime_setup_},
 #if 0
   {N_(_L("gcb(剪貼區暫存)")), NULL, cb_tog_gcb, &gcb_enabled},
 #endif

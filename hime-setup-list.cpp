@@ -1,3 +1,20 @@
+/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 #include "hime.h"
 #include "hime-conf.h"
 #include "gtab.h"
@@ -417,7 +434,7 @@ add_columns (GtkTreeView *treeview)
   renderer = gtk_cell_renderer_pixbuf_new();
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)COLUMN_ICON);
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
-                                               -1, "icon", renderer,
+                                               -1, "圖示", renderer,
                                                "pixbuf", COLUMN_ICON,
 //                                               "editable", COLUMN_EDITABLE,
                                                NULL);
@@ -435,7 +452,7 @@ add_columns (GtkTreeView *treeview)
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)COLUMN_FILE);
 
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
-                                               -1, _(_L("檔案名")), renderer,
+                                               -1, _(_L("檔案名稱")), renderer,
                                                "text", COLUMN_FILE,
                                                "editable", COLUMN_EDITABLE,
                                                NULL);
@@ -449,7 +466,7 @@ add_columns (GtkTreeView *treeview)
 
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),-1,
 #if UNIX
-	  _(_L("Ctrl-Shift 循環")),
+	  _(_L("在 Ctrl-Shift 中循環")),
 #else
 	  _(_L("Ctrl-Shift 循環(必須關閉Windows按鍵")),
 #endif
@@ -465,7 +482,7 @@ add_columns (GtkTreeView *treeview)
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
 
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
-                                               -1, _(_L("第一次內定")),
+                                               -1, _(_L("預設")),
 
                                                renderer,
                                                "active", COLUMN_DEFAULT_INMD,
@@ -479,7 +496,7 @@ add_columns (GtkTreeView *treeview)
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
 
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
-                                               -1, _(_L("使用")),
+                                               -1, _(_L("啟用")),
                                                renderer,
                                                "active", COLUMN_USE,
                                                NULL);
@@ -695,9 +712,7 @@ void create_gtablist_window (void)
 #if UNIX
   GtkWidget *hbox_hime_remote_client = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_remote_client, FALSE, FALSE, 0);
-  GtkWidget *label_hime_remote_client = gtk_label_new(_(_L("遠端 client 程式支援 (port 9999-)")));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_remote_client), label_hime_remote_client,  FALSE, FALSE, 0);
-  check_button_hime_remote_client = gtk_check_button_new ();
+  check_button_hime_remote_client = gtk_check_button_new_with_label (_(_L("支援遠端用戶端程式 (port 9999-)")));
   gtk_box_pack_start (GTK_BOX (hbox_hime_remote_client),check_button_hime_remote_client,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_remote_client),
      hime_remote_client);
@@ -705,9 +720,7 @@ void create_gtablist_window (void)
 
   GtkWidget *hbox_hime_init_im_enabled = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_init_im_enabled, FALSE, FALSE, 0);
-  GtkWidget *label_hime_init_im_enabled = gtk_label_new(_(_L("直接進入中文輸入狀態(限非XIM)")));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_init_im_enabled), label_hime_init_im_enabled,  FALSE, FALSE, 0);
-  check_button_hime_init_im_enabled = gtk_check_button_new ();
+  check_button_hime_init_im_enabled = gtk_check_button_new_with_label (_(_L("直接進入中文輸入狀態 (限非XIM)")));
   gtk_box_pack_start (GTK_BOX (hbox_hime_init_im_enabled),check_button_hime_init_im_enabled,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_init_im_enabled),
      hime_init_im_enabled);
@@ -716,9 +729,7 @@ void create_gtablist_window (void)
 
   GtkWidget *hbox_hime_shift_space_eng_full = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_shift_space_eng_full, FALSE, FALSE, 0);
-  GtkWidget *label_hime_shift_space_eng_full = gtk_label_new(_(_L("shift-space 進入全形英文模式")));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_shift_space_eng_full), label_hime_shift_space_eng_full,  FALSE, FALSE, 0);
-  check_button_hime_shift_space_eng_full = gtk_check_button_new ();
+  check_button_hime_shift_space_eng_full = gtk_check_button_new_with_label (_(_L("按下 shift-space 進入全形英文模式")));
   gtk_box_pack_start (GTK_BOX (hbox_hime_shift_space_eng_full),check_button_hime_shift_space_eng_full,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_shift_space_eng_full),
      hime_shift_space_eng_full);
@@ -726,9 +737,7 @@ void create_gtablist_window (void)
 #if UNIX
   GtkWidget *hbox_hime_single_state = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_single_state, FALSE, FALSE, 0);
-  GtkWidget *label_hime_single_state = gtk_label_new(_(_L("不記憶個別程式的輸入法狀態")));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_single_state), label_hime_single_state,  FALSE, FALSE, 0);
-  check_button_hime_single_state = gtk_check_button_new ();
+  check_button_hime_single_state = gtk_check_button_new_with_label (_(_L("所有程式共用相同的輸入法狀態")));
   gtk_box_pack_start (GTK_BOX (hbox_hime_single_state),check_button_hime_single_state,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_single_state),
      hime_single_state);
@@ -736,18 +745,14 @@ void create_gtablist_window (void)
 
   GtkWidget *hbox_hime_eng_phrase_enabled = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_eng_phrase_enabled, FALSE, FALSE, 0);
-  GtkWidget *label_hime_eng_phrase_enabled = gtk_label_new(_(_L("英數狀態使用 alt-shift 片語")));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_eng_phrase_enabled), label_hime_eng_phrase_enabled,  FALSE, FALSE, 0);
-  check_button_hime_eng_phrase_enabled = gtk_check_button_new ();
+  check_button_hime_eng_phrase_enabled = gtk_check_button_new_with_label (_(_L("英數狀態下可使用 alt-shift 片語")));
   gtk_box_pack_start (GTK_BOX (hbox_hime_eng_phrase_enabled),check_button_hime_eng_phrase_enabled,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_eng_phrase_enabled),
      hime_eng_phrase_enabled);
 
   GtkWidget *hbox_phonetic_speak = gtk_hbox_new(FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox), hbox_phonetic_speak , FALSE, FALSE, 0);
-  GtkWidget *label_phonetic_speak = gtk_label_new(_(_L("輸入時念出發音")));
-  gtk_box_pack_start (GTK_BOX (hbox_phonetic_speak), label_phonetic_speak , FALSE, FALSE, 0);
-  check_button_phonetic_speak = gtk_check_button_new ();
+  check_button_phonetic_speak = gtk_check_button_new_with_label (_(_L("輸入的同時念出發音")));
   gtk_box_pack_start (GTK_BOX (hbox_phonetic_speak), check_button_phonetic_speak, FALSE, FALSE, 0);
   gtk_toggle_button_set_active(
      GTK_TOGGLE_BUTTON(check_button_phonetic_speak), phonetic_speak);
@@ -755,16 +760,12 @@ void create_gtablist_window (void)
 
   GtkWidget *hbox_hime_win_sym_click_close = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_win_sym_click_close, FALSE, FALSE, 0);
-  GtkWidget *label_hime_win_sym_click_close = gtk_label_new(_(_L("符號視窗點選後自動關閉")));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_win_sym_click_close), label_hime_win_sym_click_close,  FALSE, FALSE, 0);
-  check_button_hime_win_sym_click_close = gtk_check_button_new ();
+  check_button_hime_win_sym_click_close = gtk_check_button_new_with_label (_(_L("符號視窗點選後自動關閉")));
   gtk_box_pack_start (GTK_BOX (hbox_hime_win_sym_click_close),check_button_hime_win_sym_click_close,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_win_sym_click_close),
      hime_win_sym_click_close);
 
-  GtkWidget *label_hime_bell_off = gtk_label_new(_(_L("關閉鈴聲")));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_win_sym_click_close), label_hime_bell_off,  FALSE, FALSE, 0);
-  check_button_hime_bell_off = gtk_check_button_new ();
+  check_button_hime_bell_off = gtk_check_button_new_with_label (_(_L("關閉嗶聲")));
   gtk_box_pack_start (GTK_BOX (hbox_hime_win_sym_click_close),check_button_hime_bell_off,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_bell_off),
      hime_bell_off);
@@ -773,10 +774,7 @@ void create_gtablist_window (void)
 #if 0
   GtkWidget *hbox_gcb_pos = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox), hbox_gcb_pos, FALSE, FALSE, 0);
-  GtkWidget *label_gcb_pos = gtk_label_new(_(_L("剪貼區管理視窗位置&開關")));
-  gtk_box_pack_start (GTK_BOX (hbox_gcb_pos), label_gcb_pos,  FALSE, FALSE, 0);
-
-  check_button_gcb_enabled = gtk_check_button_new ();
+  check_button_gcb_enabled = gtk_check_button_new_with_label (_(_L("剪貼區管理視窗位置&開關")));
   gtk_box_pack_start (GTK_BOX (hbox_gcb_pos), check_button_gcb_enabled,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gcb_enabled),
      gcb_enabled);

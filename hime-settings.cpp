@@ -1,3 +1,20 @@
+/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 #include "hime.h"
 #include "gtab.h"
 
@@ -166,8 +183,8 @@ void load_setttings()
   eng_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_full_str));
   cht_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(cht_full_str));
 
-  get_hime_conf_str(HIME_WIN_COLOR_FG, &hime_win_color_fg, "white");
-  get_hime_conf_str(HIME_WIN_COLOR_BG, &hime_win_color_bg, "#005BFF");
+  get_hime_conf_str(HIME_WIN_COLOR_FG, &hime_win_color_fg, "black");
+  get_hime_conf_str(HIME_WIN_COLOR_BG, &hime_win_color_bg, "#DADCD5");
   hime_win_color_use = get_hime_conf_int(HIME_WIN_COLOR_USE, 0);
   hime_bell_off = get_hime_conf_int(HIME_BELL_OFF, 0);
 
