@@ -530,7 +530,6 @@ void create_win_sym()
 
   gtk_widget_realize (gwin_sym);
 #if UNIX
-  GdkWindow *gdkwin_sym = gtk_widget_get_window(gwin_sym);
   set_no_focus(gwin_sym);
 #else
   win32_init_win(gwin_sym);

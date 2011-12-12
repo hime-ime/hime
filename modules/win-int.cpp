@@ -172,7 +172,6 @@ void create_win_intcode()
 //  gtk_window_set_default_size(GTK_WINDOW (gwin_int), 1, 1);
   gtk_container_set_border_width (GTK_CONTAINER (gwin_int), 0);
 
-  GdkWindow *gdkwin = gtk_widget_get_window(gwin_int);
 
   GtkWidget *frame = gtk_frame_new(NULL);
   gtk_container_set_border_width (GTK_CONTAINER (frame), 0);

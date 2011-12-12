@@ -29,7 +29,7 @@ int main()
 #if UNIX
   Display *dpy = GDK_DISPLAY();
   if (find_hime_window(dpy)==None)
-    return;
+    return 0;
   send_hime_message(dpy, HIME_EXIT_MESSAGE);
 #else
   if (!find_hime_window())

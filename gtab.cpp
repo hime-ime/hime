@@ -983,7 +983,7 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
   char seltab_phrase[MAX_SELKEY];
   gboolean is_keypad = FALSE;
   gboolean shift_m = (kbstate & ShiftMask) > 0;
-  gboolean ctrl_m = (kbstate & ControlMask) > 0;
+//  gboolean ctrl_m = (kbstate & ControlMask) > 0;
   int caps_eng_tog = tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock;
   gboolean capslock_on = (kbstate&LockMask);
   gboolean is_dayi = !strncmp(cur_inmd->filename, "dayi", 4);
@@ -1698,7 +1698,7 @@ YYYY:
     return 1;
   }
 
-refill:
+//refill:
 
   j=ggg.S1;
   while(CONVT2(cur_inmd, j)==ggg.kval && j<oE1)

@@ -101,7 +101,6 @@ gtk_window_set_has_resize_grip(GTK_WINDOW(gwin_pho_near), FALSE);
 #endif
   gtk_widget_realize (gwin_pho_near);
 #if UNIX
-  GdkWindow *gdkwin = gtk_widget_get_window(gwin_pho_near);
   set_no_focus(gwin_pho_near);
 #else
   win32_init_win(gwin_pho_near);

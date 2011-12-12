@@ -35,7 +35,7 @@ static int tsin_hash_shift;
 
 char *current_tsin_fname;
 int ts_gtabN;
-static int *ts_gtab_hash;
+//static int *ts_gtab_hash;
 #define HASHN 256
 
 static int a_phcount;
@@ -604,9 +604,10 @@ void inc_dec_tsin_use_count(void *pho, char *ch, int N)
     return;
 
   int idx;
-  int tlen = strlen(ch);
 
 #if 0
+  int tlen = strlen(ch);
+
   dbg("otlen %d  ", tlen);
   int i;
   for(i=0; i < tlen; i++)

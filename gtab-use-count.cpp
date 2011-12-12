@@ -64,7 +64,7 @@ void inc_gtab_use_count(char *s)
     if (memcmp(tt, s, bytes))
       continue;
 
-    long ofs = ftell(fp_gtab_use_count);
+//    long ofs = ftell(fp_gtab_use_count);
 //    dbg("aa %d ofs:%d sz:%d\n", c.use_count, ofs, sizeof(c));
     fseek(fp_gtab_use_count, - (sizeof(c)+bytes) , SEEK_CUR);
 //    dbg("bb %d ofs:%d\n", c.use_count, ftell(fp_gtab_use_count));
@@ -75,7 +75,7 @@ void inc_gtab_use_count(char *s)
     return;
   }
 
-  int fofs = ftell(fp_gtab_use_count);
+//  int fofs = ftell(fp_gtab_use_count);
 //  dbg("fofs: %d\n", fofs);
 
 #if 0
