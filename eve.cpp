@@ -188,6 +188,18 @@ void toggle_gb_output()
   gb_output = !gb_output;
 }
 
+/* Force to output Simplified Chinese */
+void sim_output()
+{
+  gb_output = TRUE;
+}
+
+/* Force to output original string, usually are Traditional Chinese */
+void trad_output()
+{
+  gb_output = FALSE;
+}
+
 static void append_str(char **buf, int *bufN, char *text, int len)
 {
   int requiredN = len + 1 + *bufN;
@@ -197,7 +209,7 @@ static void append_str(char **buf, int *bufN, char *text, int len)
   *bufN += len;
 }
 
-int hime_trad2sim(char *str, int strN, char **out);
+int trad2sim(char *str, int strN, char **out);
 void add_ch_time_str(char *s);
 
 void send_text(char *text)
@@ -220,7 +232,7 @@ void send_text(char *text)
   char *utf8_gbtext = NULL;
 
   if (gb_output) {
-    len = hime_trad2sim(text, len, &utf8_gbtext);
+    len = trad2sim(text, len, &utf8_gbtext);
     text = utf8_gbtext;
   }
 
@@ -291,7 +303,7 @@ void set_output_buffer_bak_to_clipboard()
   char *text, *utf8_gbtext=NULL;
 
   if (gb_output) {
-    hime_trad2sim(output_buffer_raw_bak, strlen(output_buffer_raw_bak),
+    trad2sim(output_buffer_raw_bak, strlen(output_buffer_raw_bak),
       &utf8_gbtext);
     text = utf8_gbtext;
   } else

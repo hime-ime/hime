@@ -81,13 +81,13 @@ static int translate(char *fname, char *str, int strN, char **out)
   return opN;
 }
 
-int hime_trad2sim(char *str, int strN, char **out)
+int trad2sim(char *str, int strN, char **out)
 {
   return translate("t2s.dat", str, strN, out);
 }
 
 
-int hime_sim2trad(char *str, int strN, char **out)
+int sim2trad(char *str, int strN, char **out)
 {
   puts(str);
   return translate("s2t.dat", str, strN, out);
