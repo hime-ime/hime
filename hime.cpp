@@ -370,6 +370,8 @@ void do_exit();
 
 void message_cb(char *message)
 {
+	void sim_output();  // FIXME
+	void trad_output(); // FIXME
 //   dbg("message '%s'\n", message);
 
    /* TODO: rewrite the mess with case() ? */
@@ -644,7 +646,7 @@ static char button_rc[]="style \"button\"\n"
 #endif
 
   if (argc == 2 && (!strcmp(argv[1], "-v") || !strcmp(argv[1], "--version") || !strcmp(argv[1], "-h")) ) {
-    setenv("NO_GTK_INIT", NULL, TRUE);
+    setenv("NO_GTK_INIT", "", TRUE);
     p_err(" version %s\n", HIME_VERSION);
   }
 

@@ -357,7 +357,6 @@ void create_win_gtab()
   gtk_widget_realize (gwin_gtab);
 
 #if UNIX
-  GdkWindow *gdkwin = gtk_widget_get_window(gwin_gtab);
   set_no_focus(gwin_gtab);
 #else
   win32_init_win(gwin_gtab);
@@ -853,6 +852,8 @@ char *get_full_str()
         return eng_color_full_str;
       else
         return _(eng_full_str);
+    default:
+      break;
   }
   return ("");
 }

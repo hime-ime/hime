@@ -35,7 +35,6 @@ static void create_win_message(char *icon, char *text, int duration)
   gtk_window_set_has_resize_grip(GTK_WINDOW(gwin_message), FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (gwin_message), 0);
   gtk_widget_realize (gwin_message);
-  GdkWindow *gdkwin = gtk_widget_get_window(gwin_message);
   set_no_focus(gwin_message);
 
   GtkWidget *hbox = gtk_hbox_new (FALSE, 0);

@@ -74,17 +74,17 @@ int main(int argc, char **argv)
   struct TableHead *th;
   char *kname;
   char *keymap;
-  int chno;
-  gtab_idx1_t idx1[256];
-  char def1[256];
+//  int chno;
+//  gtab_idx1_t idx1[256];
+//  char def1[256];
   int quick_def = 0;
-  int *phridx=NULL, phr_cou=0;
-  char *phrbuf = NULL;
-  int prbf_cou=0;
+//  int *phridx=NULL, phr_cou=0;
+//  char *phrbuf = NULL;
+//  int prbf_cou=0;
   char *gtabbuf = NULL;
   long gtablen = 0;
-  char utf8_tmp[128];
-  int utf8_len;
+//  char utf8_tmp[128];
+//  int utf8_len;
   int key_idx, key_idx2, i, key_seq;
   QUICK_KEYS qkeys;
 

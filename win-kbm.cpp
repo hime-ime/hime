@@ -263,7 +263,6 @@ static void create_win_kbm()
 #if WIN32
   win32_init_win(gwin_kbm);
 #else
-  GdkWindow *gdkwin_kbm = gtk_widget_get_window(gwin_kbm);
   set_no_focus(gwin_kbm);
 #endif
 }
@@ -355,7 +354,7 @@ static KEY *get_keys_ent(KeySym keysym)
       if (keysym >='A' && keysym<='Z')
         keysym += 0x20;
       else
-      if (p=strchr(shift_chars, keysym)) {
+      if ((p=strchr(shift_chars, keysym))) {
         keysym = shift_chars_o[p - shift_chars];
       }
 

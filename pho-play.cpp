@@ -29,7 +29,7 @@ int pho_play(phokey_t key)
   if (!phonetic_speak)
     return 0;
   if (test_mode)
-    return;
+    return 0;
 
   static int pid;
   static time_t last_time;
@@ -47,7 +47,7 @@ int pho_play(phokey_t key)
   if (access(tt, R_OK))
     return 0;
 
-  if (pid = fork()) {
+  if ((pid = fork())) {
     if (pid < 0)
       dbg("cannot fork ?");
     return 1;

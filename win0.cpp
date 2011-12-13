@@ -517,7 +517,6 @@ void create_win0()
   gtk_container_set_border_width (GTK_CONTAINER (gwin0), 0);
   gtk_widget_realize (gwin0);
 #if UNIX
-  GdkWindow *gdkwin0 = gtk_widget_get_window(gwin0);
   set_no_focus(gwin0);
 #else
   win32_init_win(gwin0);
