@@ -101,6 +101,8 @@ gtk_im_context_hime_register_type (GTypeModule *type_module)
                                  &im_context_hime_info, 0);
 }
 
+#if 0
+/* unused */
 static void
 reinitialize_all_ics (GtkHIMEInfo *info)
 {
@@ -108,6 +110,7 @@ reinitialize_all_ics (GtkHIMEInfo *info)
   puts("reinitialize_all_ics");
 #endif
 }
+#endif
 
 #if 0
 static void hime_display_closed (GdkDisplay *display,
@@ -300,12 +303,12 @@ gtk_im_context_hime_filter_keypress (GtkIMContext *context,
   GtkIMContextHIME *context_xim = GTK_IM_CONTEXT_HIME (context);
 
   gchar static_buffer[256];
-  unsigned char *buffer = static_buffer;
+  char *buffer = static_buffer;
 //  char *buffer = static_buffer;
   gint buffer_size = sizeof(static_buffer) - 1;
   gsize num_bytes = 0;
   KeySym keysym = 0;
-  Status status;
+//  Status status;
   gboolean result = FALSE;
 #if !GTK_CHECK_VERSION(3,0,0)
   GdkWindow *root_window = gdk_screen_get_root_window (gdk_drawable_get_screen (event->window));

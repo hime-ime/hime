@@ -207,6 +207,7 @@ int main(int argc, char **argv)
 
   char *p;
   if(p=strstr(fname, ".cin"))
+  if((p=strstr(fname, ".cin")))
     *p = 0;
 
   strcpy(fname_cin,fname);

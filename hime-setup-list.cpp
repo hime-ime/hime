@@ -92,12 +92,15 @@ enum
 static GArray *articles = NULL;
 int hime_switch_keys_lookup(int key);
 
+#if 0
+/* unused */
 static int qcmp_key(const void *aa, const void *bb)
 {
   Item *a=(Item *)aa, *b=(Item *)bb;
 
   return hime_switch_keys_lookup(a->key[0]) - hime_switch_keys_lookup(b->key[0]);
 }
+#endif
 
 extern char *TableDir;
 void get_icon_path(char *iconame, char fname[]);
@@ -322,7 +325,7 @@ static gboolean toggled (GtkCellRendererToggle *cell, gchar *path_string, gpoint
 
   dbg("i %d\n", i);
 
-  char *key=g_array_index (articles, Item, i).key;
+//  char *key=g_array_index (articles, Item, i).key;
   int in_no = i;
 
   if (in_no < 0)
@@ -792,11 +795,11 @@ void create_gtablist_window (void)
 
 #if UNIX
   DIR *dir;
-  if (dir=opendir(HIME_OGG_DIR"/ㄧ")) {
+  if ((dir=opendir(HIME_OGG_DIR"/ㄧ"))) {
     struct dirent *dire;
 
     pho_speakerN = 0;
-    while (dire=readdir(dir)) {
+    while ((dire=readdir(dir))) {
       char *name = dire->d_name;
 
       if (name[0]=='.')

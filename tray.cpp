@@ -51,6 +51,7 @@ static void get_text_w_h(char *s, int *w, int *h)
 
 static void draw_icon()
 {
+  gboolean tsin_pho_mode();
 //  dbg("draw_icon\n");
 #if 0
   return;

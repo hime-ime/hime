@@ -236,7 +236,7 @@ void send_text(char *text)
     text = utf8_gbtext;
   }
 
-direct:
+//direct:
 #if UNIX
   filter = getenv("HIME_OUTPUT_FILTER");
   char filter_text[512];
@@ -1543,7 +1543,7 @@ int hime_get_preedit(ClientState *cs, char *str, HIME_PREEDIT_ATTR attr[], int *
 {
 //  dbg("hime_get_preedit %x\n", current_CS);
   if (!current_CS) {
-empty:
+//empty:
 //    dbg("empty\n");
     str[0]=0;
     *cursor=0;

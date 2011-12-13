@@ -225,7 +225,7 @@ next:
       short smatch_phr_N, sno_match_ch_N;
       int uc;
 
-      if (pca = cache_lookup(next)) {
+      if ((pca = cache_lookup(next))) {
         uc = pca->usecount;
         smatch_phr_N = pca->match_phr_N;
         sno_match_ch_N = pca->no_match_ch_N;
