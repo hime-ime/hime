@@ -10,6 +10,7 @@ config.mak
 hime
 tmp/
 cin2gtab
+gtab2cin
 data/NewCJ3.gtab
 data/ar30-big.gtab
 data/ar30.gtab

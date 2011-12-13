@@ -370,8 +370,8 @@ void do_exit();
 
 void message_cb(char *message)
 {
-	void sim_output();  // FIXME
-	void trad_output(); // FIXME
+   void sim_output();  // FIXME
+   void trad_output(); // FIXME
 //   dbg("message '%s'\n", message);
 
    /* TODO: rewrite the mess with case() ? */

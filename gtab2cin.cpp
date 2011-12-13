@@ -1,3 +1,20 @@
+/* Copyright (C) 2011 Huang, Kai-Chang (Solomon Huang) <kaichanh@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <sys/types.h>
@@ -11,11 +28,6 @@
 #include "hime-endian.h"
 #include "hime-version.h"
 
-//FILE *fr, *fw;
-//int lineno;
-//char tt[1024];
-
-const char CIN_HEADER[] = "#\n# cin file created via gtab2cin\n#\n";
 
 int futf8cpy_bytes(FILE *fp, char *s, int n)
 {
@@ -66,7 +78,7 @@ u_int64_t convert_key64(unsigned char *key64)
 
 int main(int argc, char **argv)
 {
-#define KEYMAP_SIZE 128
+  const char CIN_HEADER[] = "#\n# cin file created via gtab2cin\n#\n";
   FILE *fr, *fw;
   char fname[64];
   char fname_cin[64];
@@ -74,17 +86,9 @@ int main(int argc, char **argv)
   struct TableHead *th;
   char *kname;
   char *keymap;
-//  int chno;
-//  gtab_idx1_t idx1[256];
-//  char def1[256];
   int quick_def = 0;
-//  int *phridx=NULL, phr_cou=0;
-//  char *phrbuf = NULL;
-//  int prbf_cou=0;
   char *gtabbuf = NULL;
   long gtablen = 0;
-//  char utf8_tmp[128];
-//  int utf8_len;
   int key_idx, key_idx2, i, key_seq;
   QUICK_KEYS qkeys;
 
@@ -122,13 +126,7 @@ int main(int argc, char **argv)
   fprintf(fw, "%s", CIN_HEADER);
   fprintf(fw, "%%gen_inp\n");
   fprintf(fw, "%%ename %s\n", fname);
-#if 1
   fprintf(fw, "%%cname %s\n", th->cname);
-#else
-  fprintf(fw, "%%cname ");
-  futf8cpy_bytes(fw, th->cname, 32);
-  fprintf(fw, "\n");
-#endif
   fprintf(fw, "%%selkey ");
   if (th->selkey[sizeof(th->selkey)-1] == 0) {
     fprintf(fw, "%s\n", th->selkey);
@@ -206,7 +204,7 @@ int main(int argc, char **argv)
       th->keybits = 7;
   }
 
-  if ((th->keybits == 6 && th->MaxPress <= 5) || (th->keybits * th->MaxPress <= 32)) {
+  if (th->keybits * th->MaxPress <= 32) {
     ITEM *item = (ITEM *)(kname + (CH_SZ * th->KeyS) + (sizeof(gtab_idx1_t) * (th->KeyS + 1)));
     u_int key;
     u_int mask = (1 << th->keybits) - 1;
@@ -221,12 +219,12 @@ int main(int argc, char **argv)
         fprintf(fw, "%c", *(keymap + key_idx));
       }
       fprintf(fw, " ");
-      futf8cpy_bytes(fw, item->ch, CH_SZ);
+      futf8cpy_bytes(fw, (char *)item->ch, CH_SZ);
       fprintf(fw, "\n");
       item++;
     }
   }
-  else if (th->keybits == 7 || (th->keybits * th->MaxPress <= 64)) {
+  else if (th->keybits * th->MaxPress <= 64) {
     ITEM64 *item = (ITEM64 *)(kname + (CH_SZ * th->KeyS) + (sizeof(gtab_idx1_t) * (th->KeyS + 1)));
     u_int key;
     u_int mask = (1 << th->keybits) - 1;
@@ -241,7 +239,7 @@ int main(int argc, char **argv)
         fprintf(fw, "%c", *(keymap + key_idx));
       }
       fprintf(fw, " ");
-      futf8cpy_bytes(fw, item->ch, CH_SZ);
+      futf8cpy_bytes(fw, (char *)item->ch, CH_SZ);
       fprintf(fw, "\n");
       item++;
     }

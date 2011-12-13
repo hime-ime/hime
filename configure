@@ -270,7 +270,7 @@ if [ $USE_ANTHY = 'Y' ] || [ $USE_CHEWING = 'Y' ]; then
   BUILD_MODULE='Y'
 fi
 
-OPTFLAGS=${CFLAGS:--O}
+OPTFLAGS=${CFLAGS:--Wall -Os}
 HIME_DEBUG=${HIME_DEBUG:-0}
 
 if [ -z $CC ]; then
