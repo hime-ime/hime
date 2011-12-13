@@ -18,19 +18,23 @@ all:	$(HIME_MODULE)
 
 anthy_module_so = anthy.pico
 anthy-module.so: $(anthy_module_so)
-	$(CCLD) $(SO_FLAGS) -o $@ $(anthy_module_so) $(LDFLAGS) -lanthy
+	@echo "linking $@ ..."
+	@$(CCLD) $(SO_FLAGS) -o $@ $(anthy_module_so) $(LDFLAGS) -lanthy
 
 intcode_module_so = intcode.pico win-int.pico
 intcode-module.so: $(intcode_module_so)
-	$(CCLD) $(SO_FLAGS) -o $@ $(intcode_module_so) $(LDFLAGS)
+	@echo "linking $@ ..."
+	@$(CCLD) $(SO_FLAGS) -o $@ $(intcode_module_so) $(LDFLAGS)
 
 chewing_module_obj = chewing-conf.pico
 chewing_module_so = chewing.pico hime-setup-chewing.pico
 chewing-module.so: $(chewing_module_obj) $(chewing_module_so)
-	$(CCLD) $(SO_FLAGS) -o $@ $(chewing_module_obj) $(chewing_module_so) $(LDFLAGS) $(shell pkg-config --cflags --libs chewing)
+	@echo "linking $@ ..."
+	@$(CCLD) $(SO_FLAGS) -o $@ $(chewing_module_obj) $(chewing_module_so) $(LDFLAGS) $(shell pkg-config --cflags --libs chewing)
 
 install:
 	install $(HIME_MODULE) $(himelibdir)
 
 clean:
-	rm -f *.pico *.so *.o
+	@echo "clean up"
+	@rm -f *.pico *.so *.o

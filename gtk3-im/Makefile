@@ -17,23 +17,28 @@ CFLAGS = $(OPTFLAGS) $(EXTRA_INC) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
 -I../IMdkit/include -DCLIENT_LIB=1 -DMAC_OS=$(MAC_OS) -DFREEBSD=$(FREEBSD)
 
 .c.o:
-	$(CC) -c -fPIC $(CFLAGS) -o $@ $<
+	@echo "  $< -> $@"
+	@$(CC) -c -fPIC $(CFLAGS) -o $@ $<
 
 .c.E:
-	$(CC) -E $(CFLAGS) -o $@ $<
+	@echo "  $< -> $@"
+	@$(CC) -E $(CFLAGS) -o $@ $<
 
 all:	im-hime.so im-hime-cur.so
 
 im-hime.so:     $(OBJS) ../im-client/libhime-im-client.so
-	$(CC) $(gcc_ld_run_path) $(SO_FLAGS) $(OBJS) -L../im-client -lhime-im-client -o $@ $(LDFLAGS)
-	rm -f core.*
+	@echo "linking $@ ..."
+	@$(CC) $(gcc_ld_run_path) $(SO_FLAGS) $(OBJS) -L../im-client -lhime-im-client -o $@ $(LDFLAGS)
+	@rm -f core.*
 
 im-hime-cur.so:     $(OBJS) ../im-client/libhime-im-client.so
-	$(CC) $(SO_FLAGS) $(OBJS) -L../im-client -lhime-im-client -o $@ $(LDFLAGS)
-	rm -f core.*
+	@echo "linking $@ ..."
+	@$(CC) $(SO_FLAGS) $(OBJS) -L../im-client -lhime-im-client -o $@ $(LDFLAGS)
+	@rm -f core.*
 
 clean:
-	rm -f *.o *.so *~ core.* .depend *.E
+	@echo "clean up"
+	@rm -f *.o *.so *~ core.* .depend *.E
 
 install:
 	if [ $(prefix) = /usr/local ]; then \
@@ -46,6 +51,7 @@ install:
 	fi
 
 .depend:
-	$(CC) $(CFLAGS) -MM *.c > $@
+	@echo "building $@ ..."
+	@$(CC) $(CFLAGS) -MM *.c > $@
 
 include .depend
