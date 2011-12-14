@@ -1,4 +1,4 @@
-include ../config.mak
+include ../../config.mak
 
 SOFILE=libhime-im-client.so
 SOFILEVER=libhime-im-client.so.1.2.4
@@ -56,7 +56,7 @@ hime-crypt-fpic.o: ../hime-crypt.cpp
 
 clean:
 	@echo "clean up"
-	@rm -f *.o *.so *.so.* *~ *.E *.db config.mak tags core.* .depend
+	@rm -f *.o *.so *.so.* *~ *.E *.db tags core.* .depend
 
 .depend:
 	@echo "building $@ ..."

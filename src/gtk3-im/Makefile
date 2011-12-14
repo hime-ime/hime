@@ -1,4 +1,4 @@
-include ../config.mak
+include ../../config.mak
 
 OBJS = imhime.o gtkimcontexthime.o
 GTK3IM=gtk-3.0/immodules

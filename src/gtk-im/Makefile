@@ -1,4 +1,4 @@
-include ../config.mak
+include ../../config.mak
 
 OBJS = imhime.o gtkimcontexthime.o
 GTK2IM=gtk-2.0/immodules

@@ -1,4 +1,4 @@
-include ../config.mak
+include ../../config.mak
 QT=qt4
 QTIM=$(QT)/plugins/inputmethods
 IMMODULES=$(libdir)/$(QTIM)

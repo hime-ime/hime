@@ -1,4 +1,4 @@
-include ../config.mak
+include ../../config.mak
 include ../suffixes-rule
 
 CFLAGS+=-I.. -I../IMdkit/include
