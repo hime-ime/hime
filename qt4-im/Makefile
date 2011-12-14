@@ -12,15 +12,23 @@ LDFLAGS=-L../im-client -lhime-im-client `pkg-config QtCore QtGui --libs`
 all:    im-hime.so
 
 .cpp.E:
-	$(CXX) -E $(CFLAGS) $(INCS) $< > $@
+	@echo "  $< -> $@"
+	@$(CXX) -E $(CFLAGS) $(INCS) $< > $@
+
+.cpp.o:
+	@echo "  $< -> $@"
+	@$(CXX) -c -o $@ $(CXXFLAGS) $(INCS) $<
 
 moc_hime-qt.cpp:	hime-qt.h
-	/usr/$(LIB)/$(QT)/bin/moc $< -o moc_hime-qt.cpp
+	@echo "  $< -> $@"
+	@/usr/$(LIB)/$(QT)/bin/moc $< -o moc_hime-qt.cpp
 
 im-hime.so: $(OBJS)
-	export LD_RUN_PATH=$(himelibdir) ;\
-	$(CXX) $(gcc_ld_run_path) -fno-exceptions -shared -o $@ $(OBJS) $(LDFLAGS)
-	rm -f core.*
+	@echo "linking $@ ..."
+	@export LD_RUN_PATH=$(himelibdir) ;\
+		$(CXX) $(gcc_ld_run_path) -fno-exceptions -shared -o $@ $(OBJS) $(LDFLAGS)
+	@rm -f core.*
+
 install:
 	if [ $(prefix) = /usr/local ]; then \
 		install -d $(DESTDIR)/$(QT4_IM_DIR); \
@@ -29,10 +37,13 @@ install:
 		install -d $(IMMODULES); \
                 install -m 755 im-hime.so $(IMMODULES); \
 	fi
+
 clean:
-	rm -f $(OBJS) im-hime.so *~ core.* *moc*.cpp *.E .depend
+	@echo "clean up"
+	@rm -f $(OBJS) im-hime.so *~ core.* *moc*.cpp *.E .depend
 
 .depend:
-	$(CXX) $(CXXFLAGS) -MM *.cpp > $@
+	@echo "building $@ ..."
+	@$(CXX) $(CXXFLAGS) -MM *.cpp > $@
 
 include .depend

@@ -10,14 +10,19 @@ LDFLAGS=-L../im-client -lhime-im-client -Wl,-rpath,$(himelibdir) `pkg-config qt-
 all:	im-hime.so
 
 .cpp.E:
-	$(CXX) -E $(CFLAGS) $(INCS) $< > $@
+	@echo "  $< -> $@"
+	@$(CXX) -E $(CFLAGS) $(INCS) $< > $@
+
 .h.o:
+	@echo "  $< -> $@"
 	/usr/lib/$(QT)/bin/moc $< -o $<_moc.cpp
 	$(CXX) -c -pipe $(CXXFLAGS) $(INCS) $<_moc.cpp -o $@
 
 im-hime.so: $(OBJS)
-	$(CXX) $(gcc_ld_run_path) -fno-exceptions -shared -o $@ $(OBJS) $(LDFLAGS)
-	rm -f core.*
+	@echo "linking $@ ..."
+	@$(CXX) $(gcc_ld_run_path) -fno-exceptions -shared -o $@ $(OBJS) $(LDFLAGS)
+	@rm -f core.*
+
 install:
 	if [ $(prefix) = /usr/local ]; then \
 		install -d $(DESTDIR)/$(QT_IM_DIR); \
@@ -26,5 +31,8 @@ install:
 		install -d $(IMMODULES); \
                 install -m 755 im-hime.so $(IMMODULES); \
 	fi
+
 clean:
-	rm -f $(OBJS) im-hime.so *~ core.* *moc*.cpp *.E
+	@echo "clean up"
+	@rm -f $(OBJS) im-hime.so *~ core.* *moc*.cpp *.E
+
