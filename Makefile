@@ -25,11 +25,10 @@ hime_pho_o  = win-pho.o pho.o pho-util.o pho-sym.o table-update.o pho-dbg.o
 hime_gtab_o = gtab.o win-gtab.o gtab-util.o gtab-list.o gtab-buf.o
 
 
-HIME_SO   = hime1.so hime2.so
 
 OBJS      = hime.o eve.o util.o hime-conf.o hime-settings.o locale.o \
 	hime-icon.o about.o html-browser.o \
-	hime-exec-script.o $(HIME_SO) pho-play.o cache.o gtk_bug_fix.o \
+	hime-exec-script.o pho-play.o cache.o gtk_bug_fix.o \
 	phrase-save-menu.o \
 	$(hime_pho_o) $(hime_gtab_o) \
 	hime-common.o phrase.o t2s-lookup.o gtab-use-count.o \
@@ -116,7 +115,7 @@ EXTRA_LDFLAGS=-bind_at_load
 endif
 
 
-#HIME_SO   = hime1.so hime2.so
+HIME_SO   = hime1.so hime2.so
 
 PROGS     = hime \
 	hime-tsd2a32 hime-tsa2d32 hime-phoa2d hime-phod2a \
@@ -153,7 +152,7 @@ PROGS_CV  = kbmcv pin-juyin
 	@$(CCX) $(CFLAGS) -E -o $@ $<
 
 
-all: $(PROGS) $(ROGS_SYM) $(HIME_SO) $(DATA) $(PROGS_CV) hime-fedora.spec
+all: $(PROGS) $(ROGS_SYM) $(DATA) $(PROGS_CV) hime-fedora.spec
 	$(MAKE) -C data
 	if [ $(BUILD_MODULE) = 'Y' ]; then $(MAKE) -C modules; fi
 	if [ $(USE_I18N) = 'Y' ]; then $(MAKE) -C po; fi
@@ -178,12 +177,12 @@ im-client/libhime-im-client.so:
 	@echo "building $@ ..."
 	$(MAKE) -C im-client
 
-hime: $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
+hime: $(HIME_SO) $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
 	@echo "linking $@ ..."
 	@$(CCLD) $(EXTRA_LDFLAGS) -o $@ $^ -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
 	@rm -f core.* vgcore.*
 
-hime-nocur: $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
+hime-nocur: $(HIME_SO) $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
 	@echo "linking $@ ..."
 	@$(CCLD) -Wl,-rpath,$(himelibdir) $(EXTRA_LDFLAGS) -o $@ $^ -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
 	@rm -f core.*
@@ -274,10 +273,11 @@ hime-tsin2gtab-phrase: $(OBJS_tsin2gtab_phrase)
 	@echo "linking $@ ..."
 	@$(CCLD) -o $@ $^ $(LDFLAGS)
 
-########
+
 
 ime-version.h: VERSION.hime
-	echo '#define HIME_VERSION "'`cat VERSION.hime`'"' > hime-version.h
+	@echo "building $@ ... current version is '"`cat VERSION.hime`"'"
+	@echo '#define HIME_VERSION "'`cat VERSION.hime`'"' > hime-version.h
 
 ibin: hime-nocur
 	install $(PROGS) $(bindir); \
@@ -317,6 +317,7 @@ install:
 	if [ $(USE_I18N) = 'Y' ]; then $(MAKE) -C po install; fi
 
 clean:
+	@echo "clean up"
 	$(MAKE) -C IMdkit clean
 	$(MAKE) -C data clean
 	$(MAKE) -C scripts clean
@@ -329,19 +330,21 @@ clean:
 	$(MAKE) -C man clean
 	$(MAKE) -C menu clean
 	$(MAKE) -C po clean
-	rm -f *.o *.E *.db *.pico *.so config.mak tags $(PROGS) hime-nocur $(PROGS_CV) \
-	$(DATA) .depend hime-trad2sim hime.log hime-fedora.spec
-	find . '(' -name '.ted*' -o -name '*~' -o -name 'core.*' -o -name 'vgcore.*' ')' -exec rm {} \;
+	@rm -f *.o *.E *.db *.pico *.so tags $(PROGS) hime-nocur $(PROGS_CV) \
+		$(DATA) .depend hime-trad2sim hime.log hime-fedora.spec
+	@find . '(' -name '.ted*' -o -name '*~' -o -name 'core.*' -o -name 'vgcore.*' ')' -exec rm {} \;
 
 .depend:
-	$(CCX) $(CFLAGS) -MM *.cpp > $@
+	@echo "building $@ ..."
+	@$(CCX) $(CFLAGS) -MM *.cpp > $@
 
 config.mak: VERSION.hime configure
 	./configure
 
 hime-fedora.spec: hime-fedora.spec.in
-	rm -f $@
-	sed -e "s/__hime_version__/$(HIME_VERSION)/" < $< > $@
+	@echo "building $@ ..."
+	@rm -f $@
+	@sed -e "s/__hime_version__/$(HIME_VERSION)/" < $< > $@
 
 include .depend
 
