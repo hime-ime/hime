@@ -47,10 +47,12 @@ pin-juyin.xlt:	../pin-juyin pin-juyin.src
 	../pin-juyin
 
 extr1:	extr1.c
-	$(CC) $(CFLAGS) $< ../util.o ../locale.o -o $@ $(LDFLAGS)
+	@echo "building $@ ..."
+	@$(CC) $(CFLAGS) $< ../util.o ../locale.o -o $@ $(LDFLAGS)
 
 t2s-file:	t2s-file.c
-	$(CC) $(CFLAGS) $< ../util.o ../locale.o -o $@ $(LDFLAGS)
+	@echo "building $@ ..."
+	@$(CC) $(CFLAGS) $< ../util.o ../locale.o -o $@ $(LDFLAGS)
 
 tsin-1.src:	extr1
 	./extr1 > $@
@@ -65,5 +67,7 @@ install:
 	install -d $(HIME_TABLE_DIR_i)
 	install -m 644 $(DATA) $(DATAKEEP) $(HIME_TABLE_DIR_i)
 #	cd $(HIME_TABLE_DIR_i); bzip2 -f *.gtab
+
 clean:
-	rm -f *~ tags core.* $(DATA) *.gtab extr1 t2s-file tsin-1.src tsin-gtabidx* tsin-ch-idx
+	@echo "clean up"
+	@rm -f *~ tags core.* $(DATA) *.gtab extr1 t2s-file tsin-1.src tsin-gtabidx* tsin-ch-idx
