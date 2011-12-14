@@ -152,7 +152,7 @@ PROGS_CV  = kbmcv pin-juyin
 	@$(CCX) $(CFLAGS) -E -o $@ $<
 
 
-all: $(PROGS) $(ROGS_SYM) $(DATA) $(PROGS_CV) hime-fedora.spec
+all: $(PROGS) $(PROGS_SYM) $(DATA) $(PROGS_CV) hime-fedora.spec
 	$(MAKE) -C data
 	if [ $(BUILD_MODULE) = 'Y' ]; then $(MAKE) -C modules; fi
 	if [ $(USE_I18N) = 'Y' ]; then $(MAKE) -C po; fi
