@@ -179,7 +179,7 @@ im-client/libhime-im-client.so:
 
 hime: $(HIME_SO) $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
 	@echo "linking $@ ..."
-	@$(CCLD) $(EXTRA_LDFLAGS) -o $@ $^ -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
+	@$(CCLD) $(EXTRA_LDFLAGS) $(gcc_ld_run_path) -o $@ $^ -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
 	@rm -f core.* vgcore.*
 
 hime-nocur: $(HIME_SO) $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
@@ -189,11 +189,11 @@ hime-nocur: $(HIME_SO) $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
 
 hime-tslearn: $(OBJS_TSLEARN)
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 hime-ts-edit: $(OBJS_TS_EDIT)
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 hime-juyin-learn: $(OBJS_JUYIN_LEARN)
 	@echo "linking $@ ..."
@@ -202,7 +202,7 @@ hime-juyin-learn: $(OBJS_JUYIN_LEARN)
 
 hime-sim2trad: $(OBJS_hime-sim2trad)
 	@echo "linking $@ ..."
-	@$(CC) -o $@ $^ $(LDFLAGS)
+	@$(CC) $(gcc_ld_run_path) -o $@ $^ $(LDFLAGS)
 	@rm -f core.*
 
 hime-trad2sim:  hime-sim2trad
@@ -211,11 +211,11 @@ hime-trad2sim:  hime-sim2trad
 hime-setup: $(OBJS_hime_setup) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
 	@rm -f core.*
-	@$(CCLD) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 hime-phoa2d: $(OBJS_hime-phoa2d) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 hime-phod2a: $(OBJS_hime-phod2a)
 	@echo "linking $@ ..."
@@ -223,7 +223,7 @@ hime-phod2a: $(OBJS_hime-phod2a)
 
 hime-tsa2d32:  $(OBJS_hime-tsa2d32) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 #hime-tsd2a:
 #	$(CCLD) -o $@ $(LDFLAGS)
@@ -251,19 +251,19 @@ kbmcv: $(OBJS_kbmcv)
 
 hime-gb-toggle: $(OBJS_hime_gb_toggle)
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 hime-kbm-toggle: $(OBJS_hime_kbm_toggle)
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 hime-exit: $(OBJS_hime_exit)
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 hime-message: $(OBJS_hime_message)
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 pin-juyin: $(OBJS_pin_juyin)
 	@echo "linking $@ ..."
