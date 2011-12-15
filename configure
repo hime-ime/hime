@@ -275,10 +275,12 @@ if [ -z "$CFLAGS" ]; then
 else
   OPTFLAGS="$CFLAGS"
 fi
-# TODO handle the merging conflict here
-# OPTFLAGS=${CFLAGS:--O}
 
-HIME_DEBUG=${HIME_DEBUG:-0}
+if [ -z "$HIME_DEBUG" ]; then
+  HIME_DEBUG='0'
+else
+  HIME_DEBUG=$HIME_DEBUG
+fi
 
 if [ -z $CC ]; then
   CC=gcc
