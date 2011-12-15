@@ -41,9 +41,5 @@ config.mak: $(VERSION_FILE) configure
 	@echo "regenerate $@ ..."
 	./configure
 
-hime-fedora.spec: hime-fedora.spec.in
-	@echo "building $@ ..."
-	@rm -f $@
-	@sed -e "s/__hime_version__/$(HIME_VERSION)/" < $< > $@
 
 
