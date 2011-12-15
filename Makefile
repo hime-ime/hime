@@ -1,6 +1,6 @@
 include config.mak
 
-HIME_VERSION = VERSION.hime
+VERSION_FILE = VERSION.hime
 
 DIR    = src data scripts icons man menu
 
