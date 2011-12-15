@@ -22,7 +22,7 @@
 
 GtkWidget *gwin1;
 static GtkWidget *frame;
-static char *wselkey;
+static char wselkey[16];
 static int wselkeyN;
 //Window xwin1;
 
@@ -454,12 +454,11 @@ void recreate_win1_if_nessary()
 
 void set_wselkey(char *s)
 {
-  if (!wselkey || strcmp(wselkey, s)) {
-    if (wselkey)
-      free(wselkey);
-    wselkey = strdup(s);
-    wselkeyN = strlen(s);
-    recreate_win1_if_nessary();
-//    dbg("set_wselkey %s\n", s);
+  if (strcmp (wselkey, s))
+  {
+    memset (wselkey, 0x00, 16);
+    memcpy (wselkey, s, strlen (s));
+    wselkeyN = strlen (s);
+    recreate_win1_if_nessary ();
   }
 }
