@@ -108,7 +108,7 @@ if [ $1 -eq 0 ]; then
 fi
 
 %files
-%doc AUTHORS gpl-2.0.txt lgpl-2.1.txt Changelog.html README.html
+%doc AUTHORS gpl-2.0.txt lgpl-2.1.txt ChangeLog README.html
 %config %{_sysconfdir}/X11/xinit/xinput.d/hime.conf
 %{_bindir}/hime*
 %{_bindir}/gtab*
