@@ -91,6 +91,8 @@ int main(int argc, char **argv)
   long gtablen = 0;
   int key_idx, key_idx2, i, key_seq;
   QUICK_KEYS qkeys;
+  int *phridx;
+  char *phrbuf;
 
   if (!getenv("NO_GTK_INIT"))
     gtk_init(&argc, &argv);
@@ -208,39 +210,74 @@ int main(int argc, char **argv)
     ITEM *item = (ITEM *)(kname + (CH_SZ * th->KeyS) + (sizeof(gtab_idx1_t) * (th->KeyS + 1)));
     u_int key;
     u_int mask = (1 << th->keybits) - 1;
+    phridx = (int *)(item + th->DefC);
+    phrbuf = (char *)(phridx + *phridx + 1);
     for (i = 0; i < th->DefC; i++) {
       key = convert_key32((unsigned char *)item->key);
       for (key_seq = 0; key_seq < th->MaxPress; key_seq++) {
         key_idx =
           ((key >> (th->keybits * ((32 / th->keybits) - key_seq - 1))) & mask);
-        //prevent leading #
+        /* prevent leading # */
         if (key_seq == 0 && (*(keymap + key_idx) == '#'))
           fprintf(fw, "%c", ' ');
         fprintf(fw, "%c", *(keymap + key_idx));
       }
       fprintf(fw, " ");
-      futf8cpy_bytes(fw, (char *)item->ch, CH_SZ);
-      fprintf(fw, "\n");
+      if (item->ch[0] == 0) { /* assume total phrases is less than 65535 */
+        /* phrases define */
+        int idx = 0, phr_len;
+        char phr_str[MAX_CIN_PHR + 1];
+        idx |= item->ch[0] << 16;
+        idx |= item->ch[1] << 8;
+        idx |= item->ch[2];
+        memset(phr_str, 0, MAX_CIN_PHR + 1);
+        phr_len = *(phridx + idx + 2) - *(phridx + idx + 1);
+        memcpy(phr_str, phrbuf + *(phridx + idx + 1), phr_len);
+        fprintf(fw, "%s\n", phr_str);
+      }
+      else {
+        /* characters define */
+        futf8cpy_bytes(fw, (char *)item->ch, CH_SZ);
+        fprintf(fw, "\n");
+      }
       item++;
     }
   }
   else if (th->keybits * th->MaxPress <= 64) {
     ITEM64 *item = (ITEM64 *)(kname + (CH_SZ * th->KeyS) + (sizeof(gtab_idx1_t) * (th->KeyS + 1)));
-    u_int key;
-    u_int mask = (1 << th->keybits) - 1;
+    u_int64_t key;
+    u_int mask = (1L << th->keybits) - 1;
+    phridx = (int *)(item + th->DefC);
+    phrbuf = (char *)(phridx + *phridx + 1);
     for (i = 0; i < th->DefC; i++) {
       key = convert_key64((unsigned char *)item->key);
       for (key_seq = 0; key_seq < th->MaxPress; key_seq++) {
         key_idx =
           ((key >> (th->keybits * ((64 / th->keybits) - key_seq - 1))) & mask);
-        //prevent leading #
+        /* prevent leading # */
         if (key_seq == 0 && (*(keymap + key_idx) == '#'))
           fprintf(fw, "%c", ' ');
         fprintf(fw, "%c", *(keymap + key_idx));
       }
       fprintf(fw, " ");
-      futf8cpy_bytes(fw, (char *)item->ch, CH_SZ);
-      fprintf(fw, "\n");
+      if (item->ch[0] == 0) { /* assume total phrases is less than 65535 */
+        /* phrases define */
+        int idx = 0, phr_len;
+        char phr_str[MAX_CIN_PHR + 1];
+        idx |= item->ch[0] << 16;
+        idx |= item->ch[1] << 8;
+        idx |= item->ch[2];
+        memset(phr_str, 0, MAX_CIN_PHR + 1);
+        phr_len = *(phridx + idx + 2) - *(phridx + idx + 1);
+        memcpy(phr_str, phrbuf + *(phridx + idx + 1), phr_len);
+        fprintf(fw, "%s\n", phr_str);
+        printf("%s\n", phr_str);
+      }
+      else {
+        /* characters define */
+        futf8cpy_bytes(fw, (char *)item->ch, CH_SZ);
+        fprintf(fw, "\n");
+      }
       item++;
     }
   }
@@ -257,5 +294,6 @@ int main(int argc, char **argv)
   fprintf(fw, "#\n");
   free(gtabbuf);
   fclose(fw);
+  printf("gtab2cin done\n");
   return 0;
 }
