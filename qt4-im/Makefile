@@ -15,7 +15,7 @@ all:    im-hime.so
 	$(CXX) -E $(CFLAGS) $(INCS) $< > $@
 
 moc_hime-qt.cpp:	hime-qt.h
-	/usr/$(LIB)/$(QT)/bin/moc $< -o moc_hime-qt.cpp
+	$(QT4_MOC_PATH) $< -o moc_hime-qt.cpp
 
 im-hime.so: $(OBJS)
 	export LD_RUN_PATH=$(himelibdir) ;\
