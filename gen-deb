@@ -2,7 +2,7 @@
 rm -fr debian
 patch -p1 < $0
 chmod 755 debian/rules
-sed -i "s#9-9#`cat VERSION.hime | sed -e 's/.pre/~pre/' -e 's/$/-0/'`#" debian/changelog
+sed -i "s#9-9#`cat VERSION.hime | sed -e 's/.pre/~pre/' -e 's/$/-0/' -e 's/UNRELEASED/0UNRELEASED/'`#" debian/changelog
 exec dpkg-buildpackage -b
 --- a/debian/changelog
 +++ b/debian/changelog
@@ -176,7 +176,7 @@ exec dpkg-buildpackage -b
 +	sed -i 's~/usr/lib/~/usr/share/~' qt-im/Makefile
 +	sed -i 's~/usr/$$(LIB)/~/usr/share/~' qt4-im/Makefile
 +	sed -i 's~lib64~lib64foo~' configure
-+	./configure --prefix=/usr --use_i18n=Y --use_qt3=Y
++	./configure --prefix=/usr --use_i18n=Y --use_qt3=Y --qt3-moc-path=/usr/share/qt3/bin/moc --qt4-moc-path=/usr/share/qt4/bin/moc
 +
 +override_dh_auto_clean:
 +	$(MAKE) clean

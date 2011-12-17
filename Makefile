@@ -209,12 +209,12 @@ install:
 	if [ $(prefix) = /usr/local ]; then \
 	   install -m 644 hime.png /usr/share/pixmaps; \
 	   install -d $(DOC_DIR); \
-	   install -m 644 README.html Changelog.html $(DOC_DIR); \
+	   install -m 644 README.html ChangeLog $(DOC_DIR); \
 	   install $(PROGS) $(bindir); \
 	   rm -f $(bindir)/hime-trad2sim; ln -sf hime-sim2trad $(bindir)/hime-trad2sim; \
 	else \
 	   install -d $(DOC_DIR_i); \
-	   install -m 644 README.html Changelog.html $(DOC_DIR_i); \
+	   install -m 644 README.html ChangeLog $(DOC_DIR_i); \
 	   install $(PROGS) $(bindir); \
 	   rm -f $(bindir)/hime-trad2sim; ln -sf hime-sim2trad $(bindir)/hime-trad2sim; \
 	fi
