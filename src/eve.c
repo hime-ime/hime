@@ -774,6 +774,10 @@ void toggle_im_enabled()
         flush_tsin_buffer();
 #endif
       }
+      else if (current_method_type () == method_type_MODULE)
+      {
+          module_cb ()->module_flush_input ();
+      }
       else {
         output_gbuf();
         reset_gtab_all();

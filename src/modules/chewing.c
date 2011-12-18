@@ -603,14 +603,21 @@ module_flush_input (void)
 {
     char *pszTmp;
 
-    if (chewing_commit_Check (g_pChewingCtx))
+    if (chewing_buffer_Check (g_pChewingCtx))
     {
-        pszTmp = chewing_commit_String (g_pChewingCtx);
+        pszTmp = chewing_buffer_String (g_pChewingCtx);
         g_himeModMainFuncs.mf_send_text (pszTmp);
         free (pszTmp);
     }
 
     chewing_Reset (g_pChewingCtx);
+
+    // FIXME: dirty workaround to reset the libchewing internal data
+    //        it may impact the bEscCleanAllBuf setting
+    chewing_handle_Esc (g_pChewingCtx);
+
+    hime_label_clear (MAX_SEG_NUM);
+
     return 0;
 }
 
