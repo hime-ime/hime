@@ -309,7 +309,7 @@ clean:
 
 .depend:
 	@echo "building $@ ..."
-	@$(CCX) $(CFLAGS) -MM *.cpp > $@
+	@$(CCX) $(CFLAGS) -MM *.c > $@
 
 
 include .depend

@@ -38,19 +38,19 @@ install:
 	cd $(himelibdir); rm -f $(SOFILE); ln -s $(SOFILEVER) $(SOFILE); \
 	ln -sf $(SOFILEVER) $(SOFILE).1
 
-hime-conf.o: ../hime-conf.cpp
+hime-conf.o: ../hime-conf.c
 	@echo "  $^ -> $@"
 	@$(CCX) -c $(CFLAGS) -o $@ $<
 
-util.o: ../util.cpp
+util.o: ../util.c
 	@echo "  $^ -> $@"
 	@$(CCX) -c $(CFLAGS) -o $@ $<
 
-im-addr.o: ../im-addr.cpp
+im-addr.o: ../im-addr.c
 	@echo "  $^ -> $@"
 	@$(CCX) -c $(CFLAGS) -o $@ $<
 
-hime-crypt-fpic.o: ../hime-crypt.cpp
+hime-crypt-fpic.o: ../hime-crypt.c
 	@echo "  $^ -> $@"
 	@$(CCX) -c $(CFLAGS) -o $@ $<
 
@@ -60,6 +60,6 @@ clean:
 
 .depend:
 	@echo "building $@ ..."
-	@$(CCX) $(CFLAGS) -MM *.cpp > $@
+	@$(CCX) $(CFLAGS) -MM *.c > $@
 
 include .depend
