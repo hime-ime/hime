@@ -348,9 +348,13 @@ if [ -z $CC ]; then
   CC=gcc
 fi
 
+if [ -z $CXX ]; then
+  CXX=g++
+fi
+
 echo "CC=$CC" > config.mak
 echo "CCX=$CC" >> config.mak
-echo "CXX=$CC" >> config.mak
+echo "CXX=$CXX" >> config.mak
 echo "CCLD=$CC" >> config.mak
 echo "MAKE=$MAKE" >> config.mak
 echo "GTKINC=$GTKINC" >> config.mak
