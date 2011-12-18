@@ -1,15 +1,23 @@
 .SUFFIXES:	.c .o .E .pico .cpp
 
 .cpp.o:
-	$(CCX) $(CFLAGS) -c $<
+	@echo "  $< -> $@"
+	@$(CCX) $(CFLAGS) -c $<
+.c.o:
+	@echo "  $< -> $@"
+	@$(CC) $(CFLAGS) -c $<
 .c.pico:
-	$(CC) $(CFLAGS) -c -fpic -o $@ $<
+	@echo "  $< -> $@"
+	@$(CC) $(CFLAGS) -c -fpic -o $@ $<
 .cpp.pico:
-	$(CCX) $(CFLAGS) -c -fpic -o $@ $<
+	@echo "  $< -> $@"
+	@$(CCX) $(CFLAGS) -c -fpic -o $@ $<
 .c.E:
-	$(CC) $(CFLAGS) -E -o $@ $<
+	@echo "  $< -> $@"
+	@$(CC) $(CFLAGS) -E -o $@ $<
 .cpp.E:
-	$(CCX) $(CFLAGS) -E -o $@ $<
+	@echo "  $< -> $@"
+	@$(CCX) $(CFLAGS) -E -o $@ $<
 
 
 CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I./IMdkit/include -I./im-client \
