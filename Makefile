@@ -12,12 +12,12 @@ endif
 
 
 all:
-	@for d in $(DIR); do ${ECHO} -e "\x1b[1;33m** processing $$d\x1b[0m"; \
+	@for d in $(DIR); do $(ECHO) -e "\x1b[1;33m** processing $$d\x1b[0m"; \
 	   $(MAKE) -C $$d; \
 	done
 
 install:
-	@for d in $(DIR); do ${ECHO} -e "\x1b[1;32m** installing $$d\x1b[0m"; \
+	@for d in $(DIR); do $(ECHO) -e "\x1b[1;32m** installing $$d\x1b[0m"; \
 	   $(MAKE) -C $$d install; \
 	done
 	@if [ $(prefix) = /usr/local ]; then \
@@ -31,7 +31,7 @@ install:
 
 clean:
 	@touch src/.depend
-	@for d in $(DIR); do ${ECHO} -e "\x1b[1;31m** cleanup $$d\x1b[0m"; \
+	@for d in $(DIR); do $(ECHO) -e "\x1b[1;31m** cleanup $$d\x1b[0m"; \
 	   $(MAKE) -C $$d clean; \
 	done
 
@@ -40,7 +40,7 @@ distclean:
 	@rm -f config.mak
 
 config.mak: $(VERSION_FILE) configure
-	@${ECHO} "regenerate $@ ..."
+	@$(ECHO) "regenerate $@ ..."
 	./configure
 
 
