@@ -77,7 +77,7 @@ function find_in_path_list_to_variable() {
 
 qt4_moc_path_list=(
 	 "/usr/bin/moc"			# arch
-	 "/usr/local/bin/moc"	# slackware
+	 "/usr/local/bin/moc           # slackware
 )
 
 qt3_moc_path_list=(
