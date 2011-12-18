@@ -1,0 +1,4 @@
+src/im-client/hime-im-client.h usr/include
+src/im-client/hime-im-client-attr.h usr/include
+debian/im-switch/hime etc/X11/xinit/xinput.d
+debian/hime.immodules usr/lib/gtk-2.0/2.10.0/immodule-files.d

@@ -17,7 +17,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "../util.h"
+#include "util.h"
 int utf8_str_N(char *str);
 
 

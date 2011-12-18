@@ -349,7 +349,7 @@ if [ -z $CC ]; then
 fi
 
 echo "CC=$CC" > config.mak
-echo "CCX=$CC -x c" >> config.mak
+echo "CCX=$CC" >> config.mak
 echo "CXX=$CC" >> config.mak
 echo "CCLD=$CC" >> config.mak
 echo "MAKE=$MAKE" >> config.mak
@@ -399,11 +399,11 @@ echo "USE_ANTHY=$USE_ANTHY" >> config.mak
 echo "USE_CHEWING=$USE_CHEWING" >> config.mak
 echo "BUILD_MODULE=$BUILD_MODULE" >> config.mak
 
-if [ $prefix = /usr/local ]; then
-  echo "hime_ld_run_path=$PWD:\$(himelibdir)" >> config.mak
-  echo "HIME_DEBUG=${HIME_DEBUG}" >> config.mak
-else
+#if [ $prefix = /usr/local ]; then
+#  echo "hime_ld_run_path=$PWD:\$(himelibdir)" >> config.mak
+#  echo "HIME_DEBUG=${HIME_DEBUG}" >> config.mak
+#else
   echo "hime_ld_run_path=\$(himelibdir)" >> config.mak
-fi
+#fi
 
 echo "gcc_ld_run_path=-Wl,-rpath,\$(hime_ld_run_path)" >> config.mak
