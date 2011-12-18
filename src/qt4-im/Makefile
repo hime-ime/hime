@@ -21,7 +21,7 @@ all:    im-hime.so
 
 moc_hime-qt.cpp:	hime-qt.h
 	@echo "  $< -> $@"
-	@/usr/$(LIB)/$(QT)/bin/moc $< -o moc_hime-qt.cpp
+	$(QT4_MOC_PATH) $< -o moc_hime-qt.cpp
 
 im-hime.so: $(OBJS)
 	@echo "linking $@ ..."

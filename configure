@@ -12,8 +12,10 @@ if [ "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]; then
 #   echo "  --use_tsin=N    : disable Tsin input method"
     echo "  --use_anthy=N   : disable Anthy input method"
     echo "  --use_chewing=N : disable Chewing input method"
-    echo "  --use_qt3=N     : disable Qt 3.x immodule"
+    echo "  --use_qt3=Y     : enable Qt 3.x immodule"
     echo "  --use_qt4=N     : disable Qt 4.x immodule"
+	 echo "  --qt3-moc-path  : specify the path of \"moc\" tool for Qt3."
+	 echo "  --qt4-moc-path  : specify the path of \"moc\" tool for Qt4."
     echo "  --use_gtk=N     : disable GTK+ 2.x immodule"
     echo "  --use_gtk3=N    : disable GTK+ 3.x immodule"
     exit
@@ -53,10 +55,34 @@ use_i18n='Y'
 use_tsin='Y'
 use_anthy='Y'
 use_chewing='Y'
-use_qt3='Y'
+use_qt3='N'
 use_qt4='Y'
 use_gtk='Y'
 use_gtk3='Y'
+
+function find_in_path_list_to_variable() {
+    # find_in_path_list_to_variable() will find all elements in the array name stored in $1
+    # if found, set the found path to variable name in $2 and return 0
+    # otherwise return 1.
+	 
+	 eval "L=(\${"${1}"[@]})"
+	 for path in ${L[@]}; do
+		  if [ -x "$path" ]; then
+				eval $2=\"$path\"
+				return 0
+		  fi
+	 done
+	 return 1
+}
+
+qt4_moc_path_list=(
+	 "/usr/bin/moc"			# arch
+	 "/usr/local/bin/moc"	# slackware
+)
+
+qt3_moc_path_list=(
+	 "/opt/qt/bin/moc"
+)
 
 if [ "$HIME_USE_XIM" ]; then
   use_xim=$HIME_USE_XIM
@@ -87,6 +113,10 @@ for opt do
   --use_gtk=*) use_gtk=`echo $opt | cut -d '=' -f 2`
   ;;
   --use_gtk3=*) use_gtk3=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --qt3-moc-path=*) QT3_MOC_PATH=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --qt4-moc-path=*) QT4_MOC_PATH=`echo $opt | cut -d '=' -f 2`
   ;;
   esac
 done
@@ -180,6 +210,7 @@ if [ -d /usr/lib64 -a -d /lib64 ]; then
 LIB='lib64'
 fi
 
+# --- QT3 START ---
 QT_IM='N'
 QT_IM_DIR=/usr/$LIB/qt3/plugins/inputmethods
 echo "testing if you have qt3 support"
@@ -188,18 +219,28 @@ if [ $? = 0 ]; then
   QT_IM='Y'
 fi
 
+if [ ! -x "$QT3_MOC_PATH" ]; then
+	 find_in_path_list_to_variable "qt3_moc_path_list" "QT3_MOC_PATH"
+fi
+
 if [ $QT_IM = "Y" ]; then
     if [ $use_qt3 = "N" ]; then
         QT_IM='N'
         echo "-> Yes, but disabled."
     else
+		  if [ ! -x "$QT3_MOC_PATH" ]; then
+				echo "-> Fail, cannot find \"moc\" tool for Qt3."
+				echo "Hint: use the --qt3-moc-path option."
+				exit 1
+		  fi
         echo "-> Yes, you have Qt3 support."
     fi
 else
     echo "-> No, you don't have. It's ok if you don't want Qt3 immodule."
 fi
+# --- QT3 END ---
 
-
+# --- QT4 START ---
 QT4_IM='N'
 QT4_IM_DIR=/usr/$LIB/qt4/plugins/inputmethods
 echo "testing if you have qt4 support"
@@ -208,16 +249,37 @@ if [ $? = 0 ]; then
   QT4_IM='Y'
 fi
 
+if [ ! -x "${QT4_MOC_PATH}" ]; then
+	 find_in_path_list_to_variable "qt4_moc_path_list" "QT4_MOC_PATH"
+fi
+
 if [ $QT4_IM = "Y" ]; then
     if [ $use_qt4 = "N" ]; then
         QT4_IM='N'
         echo "-> Yes, but disabled."
     else
+		  if [ ! -x "$QT4_MOC_PATH" ]; then
+				echo "-> Fail, cannot find \"moc\" tool for Qt4."
+				echo "Hint: use the --qt4-moc-path option."
+				exit 1
+		  fi		  
         echo "-> Yes, you have Qt4 support."
     fi
 else
     echo "-> No, you don't have. It's ok if you don't want Qt4 immodule."
 fi
+# --- QT4 END ---
+
+# --- MOC INFO START ---
+
+echo
+echo ========================================
+if [ $QT_IM = "Y" ]; then echo -e "Qt3 moc = ${QT3_MOC_PATH}"; fi
+if [ $QT4_IM = "Y" ]; then echo -e "Qt4 moc = ${QT4_MOC_PATH}"; fi
+echo ========================================
+echo
+
+# --- MOC INFO END ---
 
 if [ "$GTK"=gtk+-3.0 ]; then
   GTK_IM='N'
@@ -287,7 +349,7 @@ if [ -z $CC ]; then
 fi
 
 echo "CC=$CC" > config.mak
-echo "CCX=$CC -x c" >> config.mak
+echo "CCX=$CC" >> config.mak
 echo "CXX=$CC" >> config.mak
 echo "CCLD=$CC" >> config.mak
 echo "MAKE=$MAKE" >> config.mak
@@ -322,6 +384,8 @@ echo "QT_IM=$QT_IM" >> config.mak
 echo "QT_IM_DIR=$QT_IM_DIR" >> config.mak
 echo "QT4_IM=$QT4_IM" >> config.mak
 echo "QT4_IM_DIR=$QT4_IM_DIR" >> config.mak
+echo "QT3_MOC_PATH=$QT3_MOC_PATH" >> config.mak
+echo "QT4_MOC_PATH=$QT4_MOC_PATH" >> config.mak
 echo "GTK_IM=$GTK_IM" >> config.mak
 echo "GTK3_IM=$GTK3_IM" >> config.mak
 echo "USE_XIM=$use_xim" >> config.mak
