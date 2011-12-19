@@ -126,9 +126,6 @@ PROGS_SYM = hime-trad2sim
 
 PROGS_CV  = kbmcv pin-juyin
 
-
-
-
 .SUFFIXES:  .c .o .E .pico .cpp
 
 .cpp.o:
@@ -184,11 +181,11 @@ hime-nocur: $(HIME_SO) $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
 	@$(CCLD) -Wl,-rpath,$(himelibdir) $(EXTRA_LDFLAGS) -o $@ $^ -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
 	@rm -f core.*
 
-hime-tslearn: $(OBJS_TSLEARN)
+hime-tslearn: $(OBJS_TSLEARN) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
 	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
-hime-ts-edit: $(OBJS_TS_EDIT)
+hime-ts-edit: $(OBJS_TS_EDIT) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
 	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
@@ -229,6 +226,7 @@ hime-tsd2a32: $(OBJS_hime-tsd2a32)
 	@echo "linking $@ ..."
 	@$(CCLD) -o $@ $^ $(LDFLAGS)
 
+
 cin2gtab: $(OBJS_cin2gtab)
 	@echo "linking $@ ..."
 	@$(CCLD) -o $@ $^ $(LDFLAGS)
@@ -246,19 +244,19 @@ kbmcv: $(OBJS_kbmcv)
 	@echo "linking $@ ..."
 	@$(CCLD) -o $@ $^ $(LDFLAGS)
 
-hime-gb-toggle: $(OBJS_hime_gb_toggle)
+hime-gb-toggle: $(OBJS_hime_gb_toggle) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
 	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
-hime-kbm-toggle: $(OBJS_hime_kbm_toggle)
+hime-kbm-toggle: $(OBJS_hime_kbm_toggle) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
 	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
-hime-exit: $(OBJS_hime_exit)
+hime-exit: $(OBJS_hime_exit) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
 	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
-hime-message: $(OBJS_hime_message)
+hime-message: $(OBJS_hime_message) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
 	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
@@ -310,6 +308,7 @@ clean:
 .depend:
 	@echo "building $@ ..."
 	@$(CCX) $(CFLAGS) -MM *.c > $@
+
 
 
 include .depend
