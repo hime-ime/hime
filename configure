@@ -12,7 +12,7 @@ if [ "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]; then
 #   echo "  --use_tsin=N    : disable Tsin input method"
     echo "  --use_anthy=N   : disable Anthy input method"
     echo "  --use_chewing=N : disable Chewing input method"
-    echo "  --use_qt3=Y     : enable Qt 3.x immodule"
+    echo "  --use_qt3=N     : disable Qt 3.x immodule"
     echo "  --use_qt4=N     : disable Qt 4.x immodule"
 	 echo "  --qt3-moc-path  : specify the path of \"moc\" tool for Qt3."
 	 echo "  --qt4-moc-path  : specify the path of \"moc\" tool for Qt4."
@@ -55,7 +55,7 @@ use_i18n='Y'
 use_tsin='Y'
 use_anthy='Y'
 use_chewing='Y'
-use_qt3='N'
+use_qt3='Y'
 use_qt4='Y'
 use_gtk='Y'
 use_gtk3='Y'
