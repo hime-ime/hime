@@ -1,0 +1,36 @@
+.SUFFIXES:	.c .o .E .pico .cpp
+
+.cpp.o:
+	@echo "  $< -> $@"
+	@$(CCX) $(CFLAGS) -c $<
+.c.o:
+	@echo "  $< -> $@"
+	@$(CC) $(CFLAGS) -c $<
+.c.pico:
+	@echo "  $< -> $@"
+	@$(CC) $(CFLAGS) -c -fpic -o $@ $<
+.cpp.pico:
+	@echo "  $< -> $@"
+	@$(CCX) $(CFLAGS) -c -fpic -o $@ $<
+.c.E:
+	@echo "  $< -> $@"
+	@$(CC) $(CFLAGS) -E -o $@ $<
+.cpp.E:
+	@echo "  $< -> $@"
+	@$(CCX) $(CFLAGS) -E -o $@ $<
+
+
+CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I./IMdkit/include -I./im-client \
+        -DHIME_TABLE_DIR=\"$(HIME_TABLE_DIR)\" \
+        -DHIME_OGG_DIR=\"$(HIME_OGG_DIR)\" \
+        -DDOC_DIR=\"$(DOC_DIR)\" \
+        -DHIME_ICON_DIR=\"$(HIME_ICON_DIR)\" \
+        -DHIME_SCRIPT_DIR=\"$(HIME_SCRIPT_DIR)\" -DHIME_BIN_DIR=\"$(HIME_BIN_DIR)\" \
+        -DSYS_ICON_DIR=\"$(SYS_ICON_DIR)\" -DFREEBSD=$(FREEBSD) -DMAC_OS=$(MAC_OS) \
+        -DG_DISABLE_SINGLE_INCLUDES -DG_DISABLE_DEPRECATED \
+        -DGDK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED \
+        -DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED
+
+ifeq ($(MAC_OS),1)
+EXTRA_LDFLAGS=-bind_at_load
+endif

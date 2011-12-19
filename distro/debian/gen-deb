@@ -1,0 +1,6 @@
+#!/bin/sh
+[ ! -e distro/debian ] && exec echo Please execute '"[1m[32mdistro/debian/gen-deb[0m"' under hime directory, thanks.
+rm -fr debian
+cp -r distro/debian .
+sed -i "s#9-9#`cat VERSION.hime | sed -e 's/$/-0/' -e 's/UNRELEASED/0UNRELEASED/'`#" debian/changelog
+dpkg-buildpackage -b

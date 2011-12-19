@@ -12,7 +12,7 @@ if [ "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]; then
 #   echo "  --use_tsin=N    : disable Tsin input method"
     echo "  --use_anthy=N   : disable Anthy input method"
     echo "  --use_chewing=N : disable Chewing input method"
-    echo "  --use_qt3=Y     : enable Qt 3.x immodule"
+    echo "  --use_qt3=N     : disable Qt 3.x immodule"
     echo "  --use_qt4=N     : disable Qt 4.x immodule"
 	 echo "  --qt3-moc-path  : specify the path of \"moc\" tool for Qt3."
 	 echo "  --qt4-moc-path  : specify the path of \"moc\" tool for Qt4."
@@ -55,7 +55,7 @@ use_i18n='Y'
 use_tsin='Y'
 use_anthy='Y'
 use_chewing='Y'
-use_qt3='N'
+use_qt3='Y'
 use_qt4='Y'
 use_gtk='Y'
 use_gtk3='Y'
@@ -76,12 +76,16 @@ function find_in_path_list_to_variable() {
 }
 
 qt4_moc_path_list=(
-	 "/usr/bin/moc"			# arch
-	 "/usr/local/bin/moc"	# slackware
+	 "/usr/share/qt4/bin/moc"	#debian (Thanks to medicalwei)
+	 "/usr/lib/qt4/bin/moc"	# fedora (Thanks to petercommand)
+	 "/usr/bin/moc-qt4"	# fedora (Thanks to petercommand)
+	 "/usr/local/bin/moc"	# slackware	# always keep generic name with lower priority
+	 "/usr/bin/moc"			# arch	# always keep generic name with lower priority
 )
 
 qt3_moc_path_list=(
-	 "/opt/qt/bin/moc"
+	 "/usr/share/qt3/bin/moc"	#debian
+	 "/opt/qt/bin/moc"			# always keep generic name with lower priority
 )
 
 if [ "$HIME_USE_XIM" ]; then
@@ -348,9 +352,13 @@ if [ -z $CC ]; then
   CC=gcc
 fi
 
+if [ -z $CXX ]; then
+  CXX=g++
+fi
+
 echo "CC=$CC" > config.mak
-echo "CCX=$CC -x c" >> config.mak
-echo "CXX=$CC" >> config.mak
+echo "CCX=$CC" >> config.mak
+echo "CXX=$CXX" >> config.mak
 echo "CCLD=$CC" >> config.mak
 echo "MAKE=$MAKE" >> config.mak
 echo "GTKINC=$GTKINC" >> config.mak
@@ -361,6 +369,7 @@ echo "man1dir=\$(mandir)/man1" >> config.mak
 echo "bindir_r=$bindir" >> config.mak
 echo "datadir=\$(DESTDIR)$datadir" >> config.mak
 echo "datadir_r=$datadir" >> config.mak
+echo "filterdir=\$(datadir_r)/hime/filter" >> config.mak
 echo "libdir=\$(DESTDIR)$libdir" >> config.mak
 echo "himelibdir=\$(libdir)/hime" >> config.mak
 echo "includedir=\$(DESTDIR)$includedir" >> config.mak
@@ -399,11 +408,11 @@ echo "USE_ANTHY=$USE_ANTHY" >> config.mak
 echo "USE_CHEWING=$USE_CHEWING" >> config.mak
 echo "BUILD_MODULE=$BUILD_MODULE" >> config.mak
 
-if [ $prefix = /usr/local ]; then
-  echo "hime_ld_run_path=$PWD:\$(himelibdir)" >> config.mak
-  echo "HIME_DEBUG=${HIME_DEBUG}" >> config.mak
-else
+#if [ $prefix = /usr/local ]; then
+#  echo "hime_ld_run_path=$PWD:\$(himelibdir)" >> config.mak
+#  echo "HIME_DEBUG=${HIME_DEBUG}" >> config.mak
+#else
   echo "hime_ld_run_path=\$(himelibdir)" >> config.mak
-fi
+#fi
 
 echo "gcc_ld_run_path=-Wl,-rpath,\$(hime_ld_run_path)" >> config.mak
