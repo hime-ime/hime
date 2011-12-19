@@ -27,6 +27,9 @@ PIN_JUYIN  = ../src/pin-juyin
 
 all:	$(DATA)
 
+cin2gtab:
+	cd ../src && make cin2gtab
+
 tsin32:	tsin.src  $(TS_A2D)
 	export LD_LIBRARY_PATH=$(IM_CLIENT_DIR); $(TS_A2D) $<
 tsin32.idx:	tsin32
@@ -67,7 +70,7 @@ t2s-file:	t2s-file.c
 tsin-1.src:	extr1
 	./extr1 > $@
 
-.cin.gtab: $(CIN2GTAB)
+.cin.gtab: cin2gtab
 	$(CIN2GTAB) $<
 
 .kbmsrc.kbm: $(KBMCV)
