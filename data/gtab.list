@@ -1,29 +1,26 @@
 內碼 0  intcode-module.so intcode.png
 倉頡 1 cj.gtab cj.png
-#標點倉頡 4 cj-punc.gtab cj-punc.png
-#輕鬆 2 ez7.gtab
-倉五 2 cj5.gtab cj5.png
 #五四三倉頡 2 cj543.gtab cj5.png
+倉五 2 cj5.gtab cj5.png
 注音 3 !PHO juyin.png
 小鍵盤 , symbols.gtab symbols.png
-# ↓↓↓ ~/.config/hime/symbol-table
+#標點倉頡 4 cj-punc.gtab cj-punc.png
+# You can copy 符號表 from system symbol-table and put your own version in $HOME/.config/hime/
 符號表 4 !SYMBOL_TABLE symbols.png
-# gtab 拼音現在不用了，改用詞音的拼音
+# 5 現在居然沒人用耶？
 #拼音 5 pinyin.gtab pinyin.png
-詞音/拼音 6 !TSIN tsin.png
+詞音 6 !TSIN tsin.png
 大易 7 dayi3.gtab dayi3.png
-#大易 7 gdayi3.gtab dayi3.png
-小行列 8 ar30.gtab ar30.png
-行列 8 ar30-big.gtab ar30.png
+行列 8 ar30.gtab ar30.png
+#行列大字集 8 ar30-big.gtab ar30.png
 嘸蝦米 9 noseeing.gtab noseeing.png
+#標點簡易 - simplex-punc.gtab simplex.png
 簡易 - simplex.gtab simplex.png
-標點簡易 - simplex-punc.gtab simplex.png
 日本anthy = anthy-module.so kana-nippon.png
 greek ` greek.gtab greek.png
-latin-letters [ latin-letters.gtab latin-letters.png
-### russian by yuriy
+latin-letters \ latin-letters.gtab latin-letters.png
+# russian table is provided by yuriy
 russian ? russian.gtab latin-letters.png
 新酷音 [ chewing-module.so chewing.png
 韓拼 / hangul.gtab latin-letters.png
 帶調粵拼 ] jyutping.gtab jyutping.png
-亂倉打鳥 \ NewCJ3.gtab NewCJ3.png
