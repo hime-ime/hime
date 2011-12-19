@@ -369,6 +369,7 @@ echo "man1dir=\$(mandir)/man1" >> config.mak
 echo "bindir_r=$bindir" >> config.mak
 echo "datadir=\$(DESTDIR)$datadir" >> config.mak
 echo "datadir_r=$datadir" >> config.mak
+echo "filterdir=\$(datadir_r)/hime/filter" >> config.mak
 echo "libdir=\$(DESTDIR)$libdir" >> config.mak
 echo "himelibdir=\$(libdir)/hime" >> config.mak
 echo "includedir=\$(DESTDIR)$includedir" >> config.mak
