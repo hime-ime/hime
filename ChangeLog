@@ -47,7 +47,7 @@ UNRELEASED
  * No centralized version control, feel free to fork your own! :-)
    Current release is based on caleb-'s branch, https://github.com/caleb-/hime
  * Apply some patches from http://debian.luna.com.tw/wheezy/
-   Thanks to Tetralet &lttetralet AT gmail DOT com&gt
+   Thanks to Tetralet <tetralet AT gmail DOT com>
 
  [ Additional Information ]
  * gcb clipboard manager has been removed
