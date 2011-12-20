@@ -8,7 +8,7 @@ CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I$(SRC_DIR)
 export NO_GTK_INIT=
 export HIME_NO_RELOAD=
 
-DATA=pho.tab2 tsin32.idx NewCJ3.gtab \
+DATA=pho.tab2 tsin32.idx \
      cj.gtab ar30.gtab ar30-big.gtab dayi3.gtab pinyin.gtab jyutping.gtab cj5.gtab \
      et.kbm et26.kbm zo.kbm pinyin.kbm dvorak.kbm mitac.kbm colemak.kbm \
      ibm.kbm tsin32 hsu.kbm pho-huge.tab2 simplex.gtab symbols.gtab russian.gtab \
@@ -26,6 +26,9 @@ PIN_JUYIN  = ../src/pin-juyin
 
 
 all:	$(DATA)
+
+cin2gtab:
+	cd ../src && make cin2gtab
 
 tsin32:	tsin.src  $(TS_A2D)
 	export LD_LIBRARY_PATH=$(IM_CLIENT_DIR); $(TS_A2D) $<
@@ -67,7 +70,7 @@ t2s-file:	t2s-file.c
 tsin-1.src:	extr1
 	./extr1 > $@
 
-.cin.gtab: $(CIN2GTAB)
+.cin.gtab: cin2gtab
 	$(CIN2GTAB) $<
 
 .kbmsrc.kbm: $(KBMCV)

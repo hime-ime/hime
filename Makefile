@@ -4,7 +4,7 @@ ECHO = /bin/echo
 
 VERSION_FILE = VERSION.hime
 
-DIR    = src data scripts icons man menu
+DIR    = src data filter scripts icons man menu
 
 ifeq ($(USE_I18N),Y)
 DIR   += po

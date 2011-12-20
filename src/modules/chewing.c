@@ -373,30 +373,42 @@ module_feedkey (int nKeyVal, int nKeyState)
 
         case XK_Delete:
         case XK_KP_Delete:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
             chewing_handle_Del (g_pChewingCtx);
             break;
 
         case XK_BackSpace:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
             chewing_handle_Backspace (g_pChewingCtx);
             break;
 
         case XK_Up:
         case XK_KP_Up:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
             chewing_handle_Up (g_pChewingCtx);
             break;
 
         case XK_Down:
         case XK_KP_Down:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
             chewing_handle_Down (g_pChewingCtx);
             break;
 
         case XK_Left:
         case XK_KP_Left:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
             chewing_handle_Left (g_pChewingCtx);
             break;
 
         case XK_Right:
         case XK_KP_Right:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
             chewing_handle_Right (g_pChewingCtx);
             break;
 
@@ -413,6 +425,32 @@ module_feedkey (int nKeyVal, int nKeyState)
         case XK_Tab:
             chewing_handle_Tab (g_pChewingCtx);
             break;
+
+        case XK_Home:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_Home (g_pChewingCtx);
+            break;
+
+        case XK_End:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_End (g_pChewingCtx);
+            break;
+
+#if 0
+        case XK_Page_Up:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_PageUp (g_pChewingCtx);
+            break;
+
+        case XK_Page_Down:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_PageDown (g_pChewingCtx);
+            break;
+#endif
 
         default:
             if (nKeyVal > 32 && nKeyVal < 127)
@@ -603,14 +641,21 @@ module_flush_input (void)
 {
     char *pszTmp;
 
-    if (chewing_commit_Check (g_pChewingCtx))
+    if (chewing_buffer_Check (g_pChewingCtx))
     {
-        pszTmp = chewing_commit_String (g_pChewingCtx);
+        pszTmp = chewing_buffer_String (g_pChewingCtx);
         g_himeModMainFuncs.mf_send_text (pszTmp);
         free (pszTmp);
     }
 
     chewing_Reset (g_pChewingCtx);
+
+    // FIXME: dirty workaround to reset the libchewing internal data
+    //        it may impact the bEscCleanAllBuf setting
+    chewing_handle_Esc (g_pChewingCtx);
+
+    hime_label_clear (MAX_SEG_NUM);
+
     return 0;
 }
 

@@ -7,6 +7,17 @@ UNRELEASED
  * If you find some changes or contributions can not be seem in git commit log,
    Please write them here so we will not miss anyone's effort.
 
+ [ Enhancement ]
+ * blah blah (Issue #9999) [ contributor ]
+
+ [ Bug fix ]
+ * blah blah (Issue #9999) [ contributor ]
+
+ [ Additional Information ]
+ * Default settings in gtab.list has been changed in this release
+
+
+
 0.9
 
  The "Hime (姫) is the Japanese word for princess." Release
@@ -47,7 +58,7 @@ UNRELEASED
  * No centralized version control, feel free to fork your own! :-)
    Current release is based on caleb-'s branch, https://github.com/caleb-/hime
  * Apply some patches from http://debian.luna.com.tw/wheezy/
-   Thanks to Tetralet &lttetralet AT gmail DOT com&gt
+   Thanks to Tetralet <tetralet AT gmail DOT com>
 
  [ Additional Information ]
  * gcb clipboard manager has been removed

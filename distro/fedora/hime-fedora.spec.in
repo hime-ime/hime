@@ -5,9 +5,10 @@ Summary:        Input method for Traditional Chinese
 
 Group:          System Environment/Libraries
 License:        LGPLv2
-#URL:            TODO
+URL:            http://hime.luna.com.tw
 ##Got a request to get new hime source from the following link
 ##original source url is not opening since last few months.
+Source0:        http://hime.luna.com.tw/%{name}-%{version}.tar.xz
 #Source0:        %{name}-%{version}.tar.xz
 Source1:        hime.conf
 
@@ -19,7 +20,7 @@ Requires(post): %{_sbindir}/alternatives
 Requires(preun): %{_sbindir}/alternatives
 
 %description
-Hime is an input method for Traditional Chinese with a GTK user interface.
+Hime is an input method server
 
 %package gtk2
 Summary: Gtk2 support for hime
@@ -134,7 +135,7 @@ fi
 %{_libdir}/qt4/plugins/inputmethods/im-hime.so
 
 %changelog
-* Tue Dec 10 2011 caleb - 0.9~rc1
+* Tue Dec 10 2011 HIME - 0.9
 * Tue Dec 12 2011 Edward Liu - 2.5.1
 * Tue Dec 06 2011 Adam Jackson <ajax@redhat.com> - 1.6.1-2
 - Rebuild for new libpng
