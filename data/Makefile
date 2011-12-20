@@ -1,7 +1,7 @@
 include ../config.mak
 
 SRC_DIR       = ../src
-IM_CLIENT_DIR = ../src/im-client
+IM_CLIENT_DIR = $(SRC_DIR)/im-client
 
 .SUFFIXES:	.kbmsrc .kbm .cin .gtab
 CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I$(SRC_DIR)
@@ -18,17 +18,29 @@ DATA=pho.tab2 tsin32.idx \
 
 DATAKEEP = symbol-table gtab.list phrase.table phrase-ctrl.table
 
-PHO_A2D    = ../src/hime-phoa2d
-TS_A2D     = ../src/hime-tsa2d32
-CIN2GTAB   = ../src/cin2gtab
-KBMCV      = ../src/kbmcv
-PIN_JUYIN  = ../src/pin-juyin
+PHO_A2D    = $(SRC_DIR)/hime-phoa2d
+TS_A2D     = $(SRC_DIR)/hime-tsa2d32
+CIN2GTAB   = $(SRC_DIR)/cin2gtab
+KBMCV      = $(SRC_DIR)/kbmcv
+PIN_JUYIN  = $(SRC_DIR)/pin-juyin
 
 
 all:	$(DATA)
 
-cin2gtab:
-	cd ../src && make cin2gtab
+$(PHO_A2D):
+	$(MAKE) -C $(SRC_DIR) hime-phoa2d
+
+$(TS_A2D):
+	$(MAKE) -C $(SRC_DIR) hime-tsa2d32
+
+$(CIN2GTAB):
+	$(MAKE) -C $(SRC_DIR) cin2gtab
+
+$(KBMCV):
+	$(MAKE) -C $(SRC_DIR) kbmcv
+
+$(PIN_JUYIN):
+	$(MAKE) -C $(SRC_DIR) pin-juyin
 
 tsin32:	tsin.src  $(TS_A2D)
 	export LD_LIBRARY_PATH=$(IM_CLIENT_DIR); $(TS_A2D) $<
@@ -70,7 +82,7 @@ t2s-file:	t2s-file.c
 tsin-1.src:	extr1
 	./extr1 > $@
 
-.cin.gtab: cin2gtab
+.cin.gtab: $(CIN2GTAB)
 	$(CIN2GTAB) $<
 
 .kbmsrc.kbm: $(KBMCV)
