@@ -4,7 +4,7 @@
 
 override_dh_auto_configure:
 	sed -i 's~lib64~lib64foo~' configure
-	dh_auto_configure
+	dh_auto_configure -- --use_qt3=Y
 
 override_dh_auto_clean:
 	sed -i 's~lib64foo~lib64~' configure
