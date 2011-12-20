@@ -173,7 +173,7 @@ im-client/libhime-im-client.so:
 
 hime: $(HIME_SO) $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
 	@echo "linking $@ ..."
-	@$(CCLD) $(EXTRA_LDFLAGS) $(gcc_ld_run_path) -o $@ $^ -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
+	@$(CCLD) $(EXTRA_LDFLAGS) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) $(HIME_SO) -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
 	@rm -f core.* vgcore.*
 
 hime-nocur: $(HIME_SO) $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
