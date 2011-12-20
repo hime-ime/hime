@@ -373,30 +373,42 @@ module_feedkey (int nKeyVal, int nKeyState)
 
         case XK_Delete:
         case XK_KP_Delete:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
             chewing_handle_Del (g_pChewingCtx);
             break;
 
         case XK_BackSpace:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
             chewing_handle_Backspace (g_pChewingCtx);
             break;
 
         case XK_Up:
         case XK_KP_Up:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
             chewing_handle_Up (g_pChewingCtx);
             break;
 
         case XK_Down:
         case XK_KP_Down:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
             chewing_handle_Down (g_pChewingCtx);
             break;
 
         case XK_Left:
         case XK_KP_Left:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
             chewing_handle_Left (g_pChewingCtx);
             break;
 
         case XK_Right:
         case XK_KP_Right:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
             chewing_handle_Right (g_pChewingCtx);
             break;
 
@@ -413,6 +425,32 @@ module_feedkey (int nKeyVal, int nKeyState)
         case XK_Tab:
             chewing_handle_Tab (g_pChewingCtx);
             break;
+
+        case XK_Home:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_Home (g_pChewingCtx);
+            break;
+
+        case XK_End:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_End (g_pChewingCtx);
+            break;
+
+#if 0
+        case XK_Page_Up:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_PageUp (g_pChewingCtx);
+            break;
+
+        case XK_Page_Down:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_PageDown (g_pChewingCtx);
+            break;
+#endif
 
         default:
             if (nKeyVal > 32 && nKeyVal < 127)
