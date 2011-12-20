@@ -79,7 +79,6 @@ function find_in_path_list_to_variable() {
 }
 
 qt4_moc_path_list=(
-<<<<<<< HEAD
 	 "/usr/share/qt4/bin/moc"	#debian (Thanks to medicalwei)
 	 "/usr/lib/qt4/bin/moc"	# fedora (Thanks to petercommand)
 	 "/usr/bin/moc-qt4"	# fedora (Thanks to petercommand)
