@@ -1,0 +1,31 @@
+diff -aur hime-org/configure hime-0.9/configure
+--- hime-org/configure	2011-12-20 02:49:30.262248220 -0800
++++ hime-0.9/configure	2011-12-20 02:50:44.175577222 -0800
+@@ -201,7 +201,7 @@
+ 
+ 
+ QT4_IM='N'
+-QT4_IM_DIR=/usr/$LIB/qt4/plugins/inputmethods
++QT4_IM_DIR=/usr/$LIB/qt/plugins/inputmethods
+ echo "testing if you have qt4 support"
+ pkg-config --libs QtCore QtGui > /dev/null 2> /dev/null
+ if [ $? = 0 ]; then
+diff -aur hime-org/qt4-im/Makefile hime-0.9/qt4-im/Makefile
+--- hime-org/qt4-im/Makefile	2011-12-20 02:49:30.245581554 -0800
++++ hime-0.9/qt4-im/Makefile	2011-12-20 03:09:32.222183133 -0800
+@@ -1,5 +1,5 @@
+ include ../config.mak
+-QT=qt4
++QT=qt
+ QTIM=$(QT)/plugins/inputmethods
+ IMMODULES=$(libdir)/$(QTIM)
+ 
+@@ -15,7 +15,7 @@
+ 	$(CXX) -E $(CFLAGS) $(INCS) $< > $@
+ 
+ moc_hime-qt.cpp:	hime-qt.h
+-	/usr/$(LIB)/$(QT)/bin/moc $< -o moc_hime-qt.cpp
++	/usr/bin/moc $< -o moc_hime-qt.cpp
+ 
+ im-hime.so: $(OBJS)
+ 	export LD_RUN_PATH=$(himelibdir) ;\
