@@ -1,8 +1,9 @@
 # $Id$
 # Maintainer: taylorchu <tailinchu@gmail.com>
+# arch PKGBUILD template
 
 pkgname=hime
-pkgver=0.9
+pkgver=next
 pkgrel=1
 pkgdesc='An universal input method platform'
 url='http://hime.luna.com.tw'
@@ -14,21 +15,21 @@ optdepends=('qt: support for qt4 input method'
             'gtk3: support for gtk3 input method'
             'anthy: support for anthy input method'
             'libchewing: support for chewing input method')
-source=("https://github.com/downloads/caleb-/${pkgname}/${pkgname}-${pkgver}.tar.xz"
+source=("https://github.com/caleb-/hime/zipball/master"
 		'qt4-lib64.patch')
-sha1sums=('4d6f195460fccae69dba751f3e8ac75d77b3d9c3'
-		'07a927874de7fd62d69387ef53b6dba7eab01ed8')
 
 install=install
 
 build() {
-	cd "${srcdir}/${pkgname}-${pkgver}"
+	dir="$(ls ${srcdir} | grep ${pkgname})"
+	cd "${srcdir}/${dir}"
 	patch -p1 -i ../qt4-lib64.patch
-	./configure --prefix=/usr --use_qt3=N
+	./configure --prefix=/usr --qt4-moc-path=/usr/bin/moc
 	make
 }
 
 package() {
-	cd "${srcdir}/${pkgname}-${pkgver}"
+	dir="$(ls ${srcdir} | grep ${pkgname})"
+	cd "${srcdir}/${dir}"
 	make DESTDIR="${pkgdir}" install
 }
