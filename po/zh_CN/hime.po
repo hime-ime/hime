@@ -634,6 +634,3 @@ msgstr "如何新增词"
 
 msgid "拼音無聲調"
 msgstr "拼音无声调"
-
-msgid "關於hime/常見問題"
-msgstr "关于hime/常见问题"
