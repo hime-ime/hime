@@ -581,7 +581,7 @@ static void cb_save_hime_sel_key_color(GtkWidget *widget, gpointer user_data)
 
 static gboolean cb_hime_sel_key_color( GtkWidget *widget, gpointer data)
 {
-   GtkWidget *color_selector = gtk_color_selection_dialog_new (_(_L("選擇鍵的顏色")));
+   GtkWidget *color_selector = gtk_color_selection_dialog_new (_(_L("選擇鍵顏色")));
 
    gtk_color_selection_set_current_color(
            GTK_COLOR_SELECTION(gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(color_selector))),
@@ -835,7 +835,7 @@ void create_appearance_conf_window()
        hime_status_tray);
   gtk_box_pack_start (GTK_BOX(hbox_hime_status_tray), check_button_hime_status_tray, FALSE, FALSE, 0);
 #if UNIX
-  check_button_hime_win32_icon = gtk_check_button_new_with_label (_(_L("使用雙圖示")));
+  check_button_hime_win32_icon = gtk_check_button_new_with_label (_(_L("雙圖示")));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_win32_icon),
        hime_win32_icon);
   gtk_box_pack_start (GTK_BOX(hbox_hime_status_tray), check_button_hime_win32_icon, FALSE, FALSE, 0);
@@ -1067,7 +1067,7 @@ static void create_main_win()
   g_signal_connect (G_OBJECT (button_kbm), "clicked",
                     G_CALLBACK (cb_kbm), NULL);
 
-  GtkWidget *button_gtab_conf = gtk_button_new_with_label(_(_L("倉頡/行列/大易設定")));
+  GtkWidget *button_gtab_conf = gtk_button_new_with_label(_(_L("倉頡/行列/嘸蝦米/大易設定")));
   gtk_box_pack_start (GTK_BOX (vbox), button_gtab_conf, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (button_gtab_conf), "clicked",
                     G_CALLBACK (cb_gtab_conf), NULL);

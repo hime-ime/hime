@@ -455,7 +455,7 @@ add_columns (GtkTreeView *treeview)
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)COLUMN_FILE);
 
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
-                                               -1, _(_L("檔案名稱")), renderer,
+                                               -1, _(_L("檔案名")), renderer,
                                                "text", COLUMN_FILE,
                                                "editable", COLUMN_EDITABLE,
                                                NULL);
@@ -471,7 +471,7 @@ add_columns (GtkTreeView *treeview)
 #if UNIX
 	  _(_L("在 Ctrl-Shift 中循環")),
 #else
-	  _(_L("Ctrl-Shift 循環(必須關閉Windows按鍵")),
+	  _(_L("Ctrl-Shift 循環(必須關閉Windows按鍵)")),
 #endif
 	  renderer, "active", COLUMN_CYCLE,
                                                NULL);
@@ -755,7 +755,7 @@ void create_gtablist_window (void)
 
   GtkWidget *hbox_phonetic_speak = gtk_hbox_new(FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox), hbox_phonetic_speak , FALSE, FALSE, 0);
-  check_button_phonetic_speak = gtk_check_button_new_with_label (_(_L("輸入的同時念出發音")));
+  check_button_phonetic_speak = gtk_check_button_new_with_label (_(_L("輸入時念出發音")));
   gtk_box_pack_start (GTK_BOX (hbox_phonetic_speak), check_button_phonetic_speak, FALSE, FALSE, 0);
   gtk_toggle_button_set_active(
      GTK_TOGGLE_BUTTON(check_button_phonetic_speak), phonetic_speak);

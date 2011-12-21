@@ -25,7 +25,7 @@ msgid "倉頡/行列/嘸蝦米/大易設定"
 msgstr "Settings for gtab input methods"
 
 #: ../hime-setup-gtab.c:188
-msgid "重複字選擇鈴聲"
+msgid "重複字選擇嗶聲"
 msgstr "Bell ring for multiple choices"
 
 #: ../hime-setup-gtab.c:200
@@ -100,11 +100,11 @@ msgid "檔案名"
 msgstr "Filename"
 
 #: ../hime-setup-list.c:289
-msgid "Ctrl-Shift 循環"
+msgid "在 Ctrl-Shift 中循環"
 msgstr "Ctrl-Shift selections"
 
 #: ../hime-setup-list.c:302
-msgid "第一次內定"
+msgid "預設"
 msgstr "Default"
 
 #: ../hime-setup-list.c:347
@@ -120,15 +120,15 @@ msgid "hime 輸入法選擇"
 msgstr "Select input methods for hime"
 
 #: ../hime-setup-list.c:425
-msgid "遠端 client 程式支援 (port 9999-)"
+msgid "支援遠端用戶端程式 (port 9999-)"
 msgstr "Remote client support (port 9999-)"
 
 #: ../hime-setup-list.c:435
-msgid "shift-space 進入全形英文模式"
+msgid "按下 shift-space 進入全形英文模式"
 msgstr "Toggle half-/double-width with Shift-Space"
 
 #: ../hime-setup-list.c:483
-msgid "英數狀態使用 alt-shift 片語"
+msgid "英數狀態下可使用 alt-shift 片語"
 msgstr "Enable Alt-Shift phrases in alphabet-numeric mode"
 
 #: ../hime-setup-pho.c:205 ../hime-setup-pho.c:477
@@ -138,10 +138,6 @@ msgstr "Underline color of selected phrases"
 #: ../hime-setup-pho.c:244 ../hime-setup-pho.c:490
 msgid "詞音游標的顏色"
 msgstr "Tsin's cursor color"
-
-#: ../hime-setup-pho.c:314 ../hime-setup.c:622
-msgid "hime 注音/詞音設定"
-msgstr "Settings for Bopomofo and Tsin"
 
 #: ../hime-setup-pho.c:320
 msgid "鍵盤排列方式/選擇鍵/選單每列字數"
@@ -238,11 +234,11 @@ msgid "固定 hime 視窗位置"
 msgstr "Fixed input window"
 
 #: ../hime-setup.c:455 ../hime-setup.c:505
-msgid "使用"
+msgid "啟用"
 msgstr "Enable"
 
 #: ../hime-setup.c:479
-msgid "顯示內框"
+msgid "字根區顯示內框"
 msgstr "Show frame of input window"
 
 #: ../hime-setup.c:489
@@ -358,17 +354,12 @@ msgid "行為"
 msgstr "Behavior Settings"
 
 #: ../hime-setup-list.c:477 ../hime-setup-tab.c:1468
-msgid "直接進入中文輸入狀態(限非XIM)"
+msgid "直接進入中文輸入狀態 (限非XIM)"
 msgstr "Toggle On inputing mode by default (non-XIM only)"
 
 #: ../hime-setup-list.c:520
 msgid "符號視窗點選後自動關閉"
 msgstr "Close symbols window after selection"
-
-#: ../hime-setup-tab.c:510 ../hime-setup-tab.c:1587 ../hime-setup.c:370
-#: ../hime-setup.c:577
-msgid "選擇鍵的顏色"
-msgstr "Color of selection key"
 
 #: ../hime-setup-gtab.c:27 ../hime-setup-tab.c:129
 msgid "由 .gtab 指定"
@@ -510,11 +501,11 @@ msgid "左:中英切換 中:小鍵盤 右:選項"
 msgstr "Left: Toggle alphabet-numeric mode\nMiddle: Virtual Keyboard\nRight: Preferences"
 
 #: ../hime-setup-list.cpp:364
-msgid "Ctrl-Shift 循環(必須關閉Windows按鍵"
+msgid "Ctrl-Shift 循環(必須關閉Windows按鍵)"
 msgstr "Ctrl-Shift selections(Should turn off Windows key)"
 
 #: ../hime-setup-list.cpp:656
-msgid "關閉鈴聲"
+msgid "關閉嗶聲"
 msgstr "Turn off bell"
 
 #: ../win-int.cpp:179
@@ -558,7 +549,7 @@ msgstr "Auto-append after %d second(s)"
 
 #: ../about.cpp:104
 msgid "hime改變記錄"
-msgstr "Changelog of hime"
+msgstr "hime changelog"
 
 #: ../hime-setup.cpp:690
 msgid "小鍵盤字型大小"
@@ -608,7 +599,7 @@ msgstr "Toggle alphabet-numeric mode"
 msgid "詞音&gtab預選詞視窗字型大小"
 msgstr "Font size of Tsin's and gtab's preselection window"
 
-msgid "hime 注音/詞音/拼音 設定"
+msgid "注音/詞音/拼音設定"
 msgstr "Settings for Bopomofo, Tsin, and Pinyin"
 
 msgid "選擇鍵顯示於候選字(詞)後方"
