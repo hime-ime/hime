@@ -509,10 +509,6 @@ msgstr "Simplified Chinese output"
 msgid "左:中英切換 中:小鍵盤 右:選項"
 msgstr "Left: Toggle alphabet-numeric mode\nMiddle: Virtual Keyboard\nRight: Preferences"
 
-#: ../about.cpp:79
-msgid "討論區"
-msgstr "Forum"
-
 #: ../hime-setup-list.cpp:364
 msgid "Ctrl-Shift 循環(必須關閉Windows按鍵"
 msgstr "Ctrl-Shift selections(Should turn off Windows key)"
@@ -618,9 +614,6 @@ msgstr "Settings for Bopomofo, Tsin, and Pinyin"
 msgid "選擇鍵顯示於候選字(詞)後方"
 msgstr "Show selection key behind choices"
 
-msgid "hime也有 Windows版"
-msgstr "Windows version of hime"
-
 msgid "使用預選詞"
 msgstr "Enable preselection"
 
@@ -650,17 +643,11 @@ msgstr "Right Shift"
 msgid "打字速度"
 msgstr "Typing Speed"
 
-msgid "使用詞音輸入標點符號"
-msgstr "Input punctuation marks in Tsin"
-
 msgid "hime 新酷音設定"
 msgstr "Settings for Chewing"
 
 msgid "空白鍵選字"
 msgstr "Space key to select candidates"
-
-msgid "推薦使用26鍵的注音鍵盤"
-msgstr "26 keys Bopomofo layout"
 
 msgid "--- 加到詞庫 ---"
 msgstr "--- Add phrase to Tsin's database ---"
@@ -677,11 +664,8 @@ msgstr "Move cursor automatically after selections"
 msgid "向後加詞"
 msgstr "Add phrase backwards"
 
-msgid "前往 hime 討論區"
-msgstr "Forum of hime"
-
-msgid "如何新增詞"
-msgstr "How to append phrases"
+msgid "hime主頁"
+msgstr "hime home"
 
 msgid "拼音無聲調"
 msgstr "Pinyin, toneless"

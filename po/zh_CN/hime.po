@@ -470,10 +470,6 @@ msgstr "hime 输入法"
 msgid "左:中英切換 中:小鍵盤 右:選項"
 msgstr "左:中英切换 中:小键盘 右:选项"
 
-#: ../about.cpp:79
-msgid "討論區"
-msgstr "讨论区"
-
 #: ../hime-setup-list.cpp:364
 msgid "Ctrl-Shift 循環(必須關閉Windows按鍵"
 msgstr "Ctrl-Shift 循环(必须关闭Windows按键"
@@ -596,9 +592,6 @@ msgstr ""
 "全半角左键\n"
 "切换小键盘"
 
-msgid "使用詞音輸入標點符號"
-msgstr "使用拼音输入标点符号"
-
 msgid "\\ 鍵切換jkx鍵編輯模式"
 msgstr "\\ 键切换jkx键编辑模态"
 
@@ -607,9 +600,6 @@ msgstr "hime 新酷音设置"
 
 msgid "空白鍵選字"
 msgstr "空格键选字"
-
-msgid "推薦使用26鍵的注音鍵盤"
-msgstr "推荐使用26键的注音键盘"
 
 msgid "--- 加到詞庫 ---"
 msgstr "--- 加到词库 ---"
@@ -626,11 +616,8 @@ msgstr "选字完毕自动跳字"
 msgid "向後加詞"
 msgstr "向后加词"
 
-msgid "前往 hime 討論區"
-msgstr "前往 hime 讨论区"
-
-msgid "如何新增詞"
-msgstr "如何新增词"
+msgid "hime主頁"
+msgstr "hime主页"
 
 msgid "拼音無聲調"
 msgstr "拼音无声调"
