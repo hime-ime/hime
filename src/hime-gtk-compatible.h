@@ -69,7 +69,7 @@
 #define gdk_drawable_get_screen gdk_window_get_screen
 #endif
 
-#ifndef gtk_window_set_has_resize_grip
+#if !defined(gtk_window_set_has_resize_grip) && !GTK_CHECK_VERSION(2,91,1)
 #define gtk_window_set_has_resize_grip(x,y);
 #endif
 
