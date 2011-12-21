@@ -216,6 +216,10 @@ LIB='lib'
 if [ -d /usr/lib64 -a -d /lib64 ]; then
 LIB='lib64'
 fi
+DEBIAN_LD=`ld -v 2>&1 | grep -i debian`
+UBUNTU_LD=`ld -v 2>&1 | grep -i ubuntu`
+[ "$DEBIAN_LD" != "" ] && LIB='lib'
+[ "$UBUNTU_LD" != "" ] && LIB='lib'
 
 # --- QT3 START ---
 QT_IM='N'
