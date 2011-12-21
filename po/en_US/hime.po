@@ -688,3 +688,6 @@ msgstr "Pinyin, toneless"
 
 msgid "關於hime/常見問題"
 msgstr "About hime / FAQ"
+
+msgid "設定/工具"
+msgstr "Settings"
