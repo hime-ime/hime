@@ -19,7 +19,7 @@
 #include "pho.h"
 #include "pho-kbm-name.h"
 
-/* "5849302-67" is Dvorak Simplified Keyboard remapped under QWERTY kerboard
+/* "5849302-67" is Dvorak Simplified Keyboard remapped under QWERTY keyboard
  * Please see: http://en.wikipedia.org/wiki/Dvorak_Simplified_Keyboard
  *             https://github.com/caleb-/hime/issues/62
  */
