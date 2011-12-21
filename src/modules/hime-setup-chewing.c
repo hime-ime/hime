@@ -19,31 +19,27 @@
 
 // TODO:
 //     the hbox/label could be moved to local func
-static GtkWidget *hime_chewing_window = NULL;
-static GtkWidget *vbox_top = NULL;
-static GtkWidget *hbox_cancel_ok = NULL;
-static GtkWidget *button_cancel = NULL;
-static GtkWidget *button_ok = NULL;
+static GtkWidget *hime_chewing_window            = NULL;
+static GtkWidget *vbox_top                       = NULL;
+static GtkWidget *hbox_cancel_ok                 = NULL;
+static GtkWidget *button_cancel                  = NULL;
+static GtkWidget *button_ok                      = NULL;
 
-static GtkWidget *g_pHBoxCandPerPage = NULL;
-static GtkWidget *g_pLabelCandPerPage = NULL;
-static GtkAdjustment *g_pGtkAdj = NULL;
-static GtkWidget *g_pSpinButtonCandPerPage = NULL;
+static GtkWidget *g_pHBoxCandPerPage             = NULL;
+static GtkWidget *g_pLabelCandPerPage            = NULL;
+static GtkAdjustment *g_pGtkAdj                  = NULL;
+static GtkWidget *g_pSpinButtonCandPerPage       = NULL;
 
-static GtkWidget *g_pHBoxSpaceAsSelection = NULL;
-static GtkWidget *g_pLabelSpaceAsSelection = NULL;
+static GtkWidget *g_pHBoxSpaceAsSelection        = NULL;
 static GtkWidget *g_pCheckButtonSpaceAsSelection = NULL;
 
-static GtkWidget *g_pHBoxEscCleanAllBuf = NULL;
-static GtkWidget *g_pLabelEscCleanAllBuf = NULL;
-static GtkWidget *g_pCheckButtonEscCleanAllBuf = NULL;
+static GtkWidget *g_pHBoxEscCleanAllBuf          = NULL;
+static GtkWidget *g_pCheckButtonEscCleanAllBuf   = NULL;
 
-static GtkWidget *g_pHBoxAutoShiftCur = NULL;
-static GtkWidget *g_pLabelAutoShiftCur = NULL;
-static GtkWidget *g_pCheckButtonAutoShiftCur = NULL;
+static GtkWidget *g_pHBoxAutoShiftCur            = NULL;
+static GtkWidget *g_pCheckButtonAutoShiftCur     = NULL;
 
-static GtkWidget *g_pHBoxAddPhraseForward = NULL;
-static GtkWidget *g_pLabelAddPhraseForward = NULL;
+static GtkWidget *g_pHBoxAddPhraseForward        = NULL;
 static GtkWidget *g_pCheckButtonAddPhraseForward = NULL;
 
 static ChewingConfigData g_chewingConfig;

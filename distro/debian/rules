@@ -3,12 +3,7 @@
 	dh $@
 
 override_dh_auto_configure:
-	sed -i 's~lib64~lib64foo~' configure
-	dh_auto_configure
-
-override_dh_auto_clean:
-	sed -i 's~lib64foo~lib64~' configure
-	dh_auto_clean
+	dh_auto_configure -- --use_qt3=Y
 
 override_dh_shlibdeps:
 	dh_shlibdeps --exclude=im-hime.so --exclude=anthy-module.so --exclude=chewing-module.so

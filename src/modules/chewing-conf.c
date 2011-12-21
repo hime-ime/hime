@@ -102,7 +102,7 @@ chewing_config_set (ChewingContext *pChewingCtx)
                 sizeof (g_chewingConfig.selKey));
         chewing_set_selKey (pChewingCtx, 
                             g_chewingConfig.selKey, 
-                            strlen (g_chewingConfig.selKey));
+                            MAX_SELKEY);
     }
 
     chewing_set_candPerPage (pChewingCtx, g_chewingConfig.candPerPage);

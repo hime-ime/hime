@@ -19,12 +19,17 @@
 #include "pho.h"
 #include "pho-kbm-name.h"
 
+/* "5849302-67" is Dvorak Simplified Keyboard remapped under QWERTY keyboard
+ * Please see: http://en.wikipedia.org/wiki/Dvorak_Simplified_Keyboard
+ *             https://github.com/caleb-/hime/issues/62
+ */
 struct {
   char *kstr;
   int RL;
 } selkeys[]={
 {"123456789",0}, {"asdfghjkl;",0}, {"asdfzxcv",0},
 {"fdsavcxz",1}, {"rewfdsvcx",1}, {"fdsvcxrew",1}, {"3825416790", 1},
+{"5849302-67", 1},
 {NULL}
 };
 
