@@ -1,0 +1,35 @@
+# $Id$
+# Maintainer: taylorchu <tailinchu@gmail.com>
+# arch PKGBUILD template
+
+pkgname=hime
+pkgver=next
+pkgrel=1
+pkgdesc='An universal input method platform'
+url='http://hime.luna.com.tw'
+license=('LGPL')
+arch=('i686' 'x86_64')
+depends=('gtk2' 'libxtst')
+makedepends=('qt' 'gtk3' 'anthy' 'libchewing')
+optdepends=('qt: support for qt4 input method'
+            'gtk3: support for gtk3 input method'
+            'anthy: support for anthy input method'
+            'libchewing: support for chewing input method')
+source=("https://github.com/caleb-/hime/tarball/master"
+		'qt4-lib64.patch')
+
+install=install
+
+build() {
+	dir="$(ls ${srcdir} | grep ${pkgname})"
+	cd "${srcdir}/${dir}"
+	patch -p1 -i ../qt4-lib64.patch
+	./configure --prefix=/usr --qt4-moc-path=/usr/bin/moc
+	make
+}
+
+package() {
+	dir="$(ls ${srcdir} | grep ${pkgname})"
+	cd "${srcdir}/${dir}"
+	make DESTDIR="${pkgdir}" install
+}
