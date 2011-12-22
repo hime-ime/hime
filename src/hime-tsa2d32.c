@@ -347,7 +347,7 @@ int main(int argc, char **argv)
       charN++;
     }
 
-    while (i < len && s[i]==' ' || s[i]=='\t')
+    while ((i < len && s[i]==' ') || s[i]=='\t')
       i++;
 
     int phbufN=0;

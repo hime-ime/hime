@@ -410,7 +410,7 @@ gtk_im_context_hime_filter_keypress (GtkIMContext *context,
 
     int attsz = sizeof(HIME_PREEDIT_ATTR)*attN;
     if (context_xim->pe_attN != attN ||
-      context_xim->pe_att && memcmp(context_xim->pe_att, att, attsz)) {
+      (context_xim->pe_att && memcmp(context_xim->pe_att, att, attsz))) {
 //      printf("att changed pe_att:%x:%d %d\n", context_xim->pe_att, context_xim->pe_attN, attN);
       context_xim->pe_attN = attN;
       if (context_xim->pe_att)

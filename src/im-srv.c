@@ -83,7 +83,7 @@ static gboolean cb_new_hime_client(GIOChannel *source, GIOCondition condition, g
 #if 0
   dbg("im-srv: cb_new_hime_client %s\n", type==Connection_type_unix ? "unix":"tcp");
 #endif
-  unsigned int newsockfd;
+  int newsockfd;
   socklen_t clilen;
 
   if (type==Connection_type_unix) {
