@@ -1051,10 +1051,8 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
   }
 
 
-  int lcase;
-  lcase = tolower(key);
-  int ucase;
-  ucase = toupper(key);
+  int lcase = tolower(key);
+  int ucase = toupper(key);
   if (key < 127 && cur_inmd->keymap[key]) {
      if (key < 'A' || key > 'z' || key > 'Z'  && key < 'a' )
        goto shift_proc;
@@ -1607,8 +1605,7 @@ keypad_proc:
   }
 
   ggg.invalid_spc = FALSE;
-  char *pendkey = NULL;
-  pendkey = strchr(cur_inmd->endkey, key);
+  char *pendkey = strchr(cur_inmd->endkey, key);
 
   DispInArea();
 
