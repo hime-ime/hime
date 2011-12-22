@@ -2,7 +2,7 @@ include ../config.mak
 
 ECHO   = /bin/echo
 
-DIR    = blue gray
+DIR    = blue gray kurohime
 
 all:
 
