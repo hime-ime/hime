@@ -2,7 +2,7 @@ include ../config.mak
 
 ECHO   = /bin/echo
 
-DIR    = taylorchu
+DIR    = blue gray
 
 all:
 
