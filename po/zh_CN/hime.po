@@ -25,7 +25,7 @@ msgid "倉頡/行列/嘸蝦米/大易設定"
 msgstr "仓颉/行列/呒虾米/大易设置"
 
 #: ../hime-setup-gtab.c:188
-msgid "重複字選擇鈴聲"
+msgid "重複字選擇嗶聲"
 msgstr "重复字选择铃声"
 
 #: ../hime-setup-gtab.c:200
@@ -100,12 +100,12 @@ msgid "檔案名"
 msgstr "文件名"
 
 #: ../hime-setup-list.c:289
-msgid "Ctrl-Shift 循環"
+msgid "在 Ctrl-Shift 中循環"
 msgstr "Ctrl-Shift 循环"
 
 #: ../hime-setup-list.c:302
-msgid "第一次內定"
-msgstr "第一次默认"
+msgid "預設"
+msgstr "默认"
 
 #: ../hime-setup-list.c:347
 msgid "輸入視窗(開啟/關閉)切換"
@@ -120,15 +120,15 @@ msgid "hime 輸入法選擇"
 msgstr "hime 输入法选择"
 
 #: ../hime-setup-list.c:425
-msgid "遠端 client 程式支援 (port 9999-)"
-msgstr "远端 client 程序支持 (port 9999-)"
+msgid "支援遠端用戶端程式 (port 9999-)"
+msgstr "支持远端用戶端程序 (port 9999-)"
 
 #: ../hime-setup-list.c:435
-msgid "shift-space 進入全形英文模式"
+msgid "按下 shift-space 進入全形英文模式"
 msgstr "shift-space 进入全角英文模态"
 
 #: ../hime-setup-list.c:483
-msgid "英數狀態使用 alt-shift 片語"
+msgid "英數狀態下可使用 alt-shift 片語"
 msgstr "半角英文模态使用 Alt-Shift 片语"
 
 #: ../hime-setup-pho.c:205 ../hime-setup-pho.c:477
@@ -138,10 +138,6 @@ msgstr "拼音标示词的底线颜色"
 #: ../hime-setup-pho.c:244 ../hime-setup-pho.c:490
 msgid "詞音游標的顏色"
 msgstr "拼音游标的颜色"
-
-#: ../hime-setup-pho.c:314 ../hime-setup.c:622
-msgid "hime 注音/詞音設定"
-msgstr "hime 注音/拼音设置"
 
 #: ../hime-setup-pho.c:320
 msgid "鍵盤排列方式/選擇鍵/選單每列字數"
@@ -234,7 +230,7 @@ msgid "固定 hime 視窗位置"
 msgstr "固定 hime 视窗位置"
 
 #: ../hime-setup.c:479
-msgid "顯示內框"
+msgid "字根區顯示內框"
 msgstr "显示内框"
 
 #: ../hime-setup.c:489
@@ -350,17 +346,12 @@ msgid "行為"
 msgstr "行为"
 
 #: ../hime-setup-list.c:477 ../hime-setup-tab.c:1468
-msgid "直接進入中文輸入狀態(限非XIM)"
-msgstr "直接进入中文输入模态(限非XIM)"
+msgid "直接進入中文輸入狀態 (限非XIM)"
+msgstr "直接进入中文输入模态 (限非XIM)"
 
 #: ../hime-setup-list.c:520
 msgid "符號視窗點選後自動關閉"
 msgstr "符号视窗点击后自动关闭"
-
-#: ../hime-setup-tab.c:510 ../hime-setup-tab.c:1587 ../hime-setup.c:370
-#: ../hime-setup.c:577
-msgid "選擇鍵的顏色"
-msgstr "选择键的颜色"
 
 #: ../hime-setup-gtab.c:28 ../hime-setup-tab.c:130
 msgid "按空白立即送出第一字(嘸蝦米、大易)"
@@ -470,17 +461,13 @@ msgstr "hime 输入法"
 msgid "左:中英切換 中:小鍵盤 右:選項"
 msgstr "左:中英切换 中:小键盘 右:选项"
 
-#: ../about.cpp:79
-msgid "討論區"
-msgstr "讨论区"
-
 #: ../hime-setup-list.cpp:364
-msgid "Ctrl-Shift 循環(必須關閉Windows按鍵"
-msgstr "Ctrl-Shift 循环(必须关闭Windows按键"
+msgid "Ctrl-Shift 循環(必須關閉Windows按鍵)"
+msgstr "Ctrl-Shift 循环(必须关闭Windows按键)"
 
 #: ../hime-setup-list.cpp:656
-msgid "關閉鈴聲"
-msgstr "关闭铃声"
+msgid "關閉嗶聲"
+msgstr "关闭嗶声"
 
 #: ../win-int.cpp:179
 msgid "內碼"
@@ -570,8 +557,8 @@ msgstr "[中/英]切换"
 msgid "詞音&gtab預選詞視窗字型大小"
 msgstr "拼音&gtab预选词视窗字体大小"
 
-msgid "hime 注音/詞音/拼音 設定"
-msgstr "hime 注音/词音/拼音 设置"
+msgid "注音/詞音/拼音設定"
+msgstr "注音/词音/拼音 设置"
 
 msgid "選擇鍵顯示於候選字(詞)後方"
 msgstr "选择键显示于候选字(词)后方"
@@ -596,9 +583,6 @@ msgstr ""
 "全半角左键\n"
 "切换小键盘"
 
-msgid "使用詞音輸入標點符號"
-msgstr "使用拼音输入标点符号"
-
 msgid "\\ 鍵切換jkx鍵編輯模式"
 msgstr "\\ 键切换jkx键编辑模态"
 
@@ -607,9 +591,6 @@ msgstr "hime 新酷音设置"
 
 msgid "空白鍵選字"
 msgstr "空格键选字"
-
-msgid "推薦使用26鍵的注音鍵盤"
-msgstr "推荐使用26键的注音键盘"
 
 msgid "--- 加到詞庫 ---"
 msgstr "--- 加到词库 ---"
@@ -626,14 +607,8 @@ msgstr "选字完毕自动跳字"
 msgid "向後加詞"
 msgstr "向后加词"
 
-msgid "前往 hime 討論區"
-msgstr "前往 hime 讨论区"
-
-msgid "如何新增詞"
-msgstr "如何新增词"
+msgid "hime主頁"
+msgstr "hime主页"
 
 msgid "拼音無聲調"
 msgstr "拼音无声调"
-
-msgid "關於hime/常見問題"
-msgstr "关于hime/常见问题"

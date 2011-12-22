@@ -266,7 +266,7 @@ void create_gtab_conf_window()
                     G_CALLBACK (close_gtab_conf_window),
                     NULL);
 
-  gtk_window_set_title (GTK_WINDOW (hime_gtab_conf_window), _(_L("倉頡/行列/大易設定")));
+  gtk_window_set_title (GTK_WINDOW (hime_gtab_conf_window), _(_L("倉頡/行列/嘸蝦米/大易設定")));
   gtk_container_set_border_width (GTK_CONTAINER (hime_gtab_conf_window), 3);
 
   GtkWidget *vbox_top = gtk_vbox_new (FALSE, 10);

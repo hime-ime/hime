@@ -31,6 +31,26 @@ static void callback_close( GtkWidget *widget, gpointer   data )
 void align_with_ui_window(GtkWidget *win);
 int html_browser(char *fname);
 
+#define HOME_URL "http://hime.luna.com.tw"
+static void callback_home( GtkWidget *widget, gpointer   data)
+{
+#if WIN32
+	ShellExecuteA(NULL, "open", HOME_URL, NULL, NULL, SW_SHOWNORMAL);
+#else
+	html_browser(HOME_URL);
+#endif
+}
+
+#define LOG_URL "https://github.com/caleb-/hime/issues"
+static void callback_changelog( GtkWidget *widget, gpointer   data)
+{
+#if WIN32
+	ShellExecuteA(NULL, "open", LOG_URL, NULL, NULL, SW_SHOWNORMAL);
+#else
+	html_browser(LOG_URL);
+#endif
+}
+
 void sys_icon_fname(char *iconame, char fname[]);
 void create_about_window()
 {
@@ -73,6 +93,31 @@ void create_about_window()
 
     GtkWidget *separator = gtk_hseparator_new ();
     gtk_box_pack_start(GTK_BOX(vbox), separator, FALSE, FALSE, 3);
+    
+// this doesn't work on win32
+#if GTK_CHECK_VERSION(2,18,9) && UNIX
+   char tmp[256];
+   sprintf(tmp, "<a href='"HOME_URL"'>%s</a>\n"
+                "<a href='"LOG_URL"'>%s</a>\n"
+                ,
+                _(_L("hime主頁")),
+                _(_L("hime改變記錄"))
+          );
+   GtkWidget *label = gtk_label_new(tmp);
+   gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+    gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
+#else
+    GtkWidget *button_home = gtk_button_new_with_label(_(_L("hime主頁")));
+    gtk_box_pack_start(GTK_BOX(vbox), button_home, FALSE, FALSE, 0);
+    g_signal_connect (G_OBJECT (button_home), "clicked",
+		      G_CALLBACK (callback_home), NULL);
+    GtkWidget *button_changelog = gtk_button_new_with_label(_(_L("hime改變記錄")));
+    gtk_box_pack_start(GTK_BOX(vbox), button_changelog, FALSE, FALSE, 0);
+    g_signal_connect (G_OBJECT (button_changelog), "clicked",
+		      G_CALLBACK (callback_changelog), NULL);
+
+#endif
+
 
 #if UNIX
     image = gtk_image_new_from_file (SYS_ICON_DIR"/hime.png");
