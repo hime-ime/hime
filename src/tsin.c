@@ -718,7 +718,7 @@ static void get_sel_phrase0(int selidx, gboolean eqlen)
     load_tsin_entry(sti, (char *)&len, &usecount, stk, stch);
     mask_tone(stk, mlen, pinyin_s);
 
-    if (eqlen && len!=mlen || (!eqlen && len > mlen) || len==1) {
+    if ((eqlen && len!=mlen) || (!eqlen && len > mlen) || len==1) {
       sti++;
       continue;
     }
@@ -1924,8 +1924,8 @@ other_keys:
    if (key_pad && !tss.c_len && !tss.tsin_half_full)
      return 0;
 
-   if (!tsin_pho_mode() || poo.typ_pho[0]!=BACK_QUOTE_NO && (shift_m || key_pad ||
-       (!phkbm.phokbm[xkey][0].num && !phkbm.phokbm[xkey][0].typ))) {
+   if (!tsin_pho_mode() || (poo.typ_pho[0]!=BACK_QUOTE_NO && (shift_m || key_pad ||
+       (!phkbm.phokbm[xkey][0].num && !phkbm.phokbm[xkey][0].typ)))) {
        if (tsin_pho_mode() && !shift_m && strchr(hsu_punc, xkey) && !phkbm.phokbm[xkey][0].num) {
          if (pre_punctuation_hsu(xkey))
            return 1;
@@ -2077,7 +2077,7 @@ llll2:
        return 1;
      }
 
-     if (poo.typ_pho[0]==L_BRACKET_NO||poo.typ_pho[0]==R_BRACKET_NO || poo.typ_pho[0]==BACK_QUOTE_NO && poo.typ_pho[1])
+     if (poo.typ_pho[0]==L_BRACKET_NO||poo.typ_pho[0]==R_BRACKET_NO || (poo.typ_pho[0]==BACK_QUOTE_NO && poo.typ_pho[1]))
        poo.ityp3_pho = 1;
 
      if (key==0 || !poo.ityp3_pho) {

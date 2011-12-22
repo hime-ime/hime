@@ -106,11 +106,11 @@ static void draw_icon()
   }
 
   if (current_CS) {
-    if (current_CS->b_half_full_char ||
+    if (current_CS->b_half_full_char || (
 #if USE_TSIN
         current_method_type()==method_type_TSIN && tss.tsin_half_full &&
 #endif
-        current_CS->im_state == HIME_STATE_CHINESE) {
+        current_CS->im_state == HIME_STATE_CHINESE)) {
       static char full[] = "全";
       get_text_w_h(full,  &w, &h);
 #if !GTK_CHECK_VERSION(2,90,6)
