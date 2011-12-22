@@ -228,7 +228,7 @@ void disp_page()
   int li;
   for(li=0;li<PAGE_LEN;li++) {
     char line[256];
-    line[0];
+    /*line[0];*/
     int ts_row = page_ofs + li;
     if (ts_row >= tsN) {
       gtk_label_set_text(GTK_LABEL(labels[li]), "-");
