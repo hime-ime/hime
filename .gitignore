@@ -1,5 +1,6 @@
 SHA1SUMS
-hime-*
+*.pot
+*.po~
 *.o
 *.a
 *.so
