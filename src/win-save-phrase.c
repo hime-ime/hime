@@ -86,7 +86,7 @@ static gboolean cb_ok(GtkWidget *widget, gpointer data)
   u_int pho32[MAX_PHRASE_LEN];
   u_int64_t pho64[MAX_PHRASE_LEN];
   char tt[512];
-  void *dat;
+  void *dat = NULL;
   wsp_str(sess->mywsp, sess->mywspN, tt);
 
   if (ph_key_sz==2) {
