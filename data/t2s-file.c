@@ -19,8 +19,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
-#include "../t2s-file.h"
-#include "../util.h"
+#include "t2s-file.h"
+#include "util.h"
 
 T2S t2s[3000],s2t[3000];
 int t2sn;
@@ -57,6 +57,13 @@ void gen(T2S *t, char *name)
 
 int main()
 {
+  /* This data file is maintained by caleb-, ONLY for conversion
+   * from Traditional Chinese to Simplified Chinese.
+   * (Single Chinese glyph, one to one conversion.)
+   *
+   * However, "hime-sim2trad" also use this file to do "S to T"
+   * conversion, so the conversion result is not very ideal.
+   */
   char *fname="t2s-file.table";
   FILE *fp=fopen(fname, "r");
 

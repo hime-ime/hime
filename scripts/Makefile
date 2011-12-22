@@ -7,5 +7,8 @@ all:	$(SCRIPTS)
 install:
 	install -d $(HIME_SCRIPT_DIR_i)
 	install -m 755 $(SCRIPTS) $(HIME_SCRIPT_DIR_i)
+
 clean:
-	rm -f *~ tags core.*
+	@echo "clean up"
+	@rm -f *~ tags core.*
+

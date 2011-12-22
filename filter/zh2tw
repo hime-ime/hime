@@ -1,0 +1,10 @@
+#!/bin/bash
+# hime filter zh2tw version 0.0.3
+  read -r -t 1 aa
+  U2S=`echo -n $aa | iconv -f UTF-8 -t GB2312 -c`
+  S2U=`echo -n $U2S | iconv -f GB2312 -t UTF-8 -c`
+  if [ "$S2U" = "$aa" ]; then
+    echo -n $U2S | iconv -f GB2312 -t CP950 -c | iconv -f CP950 -t UTF-8 -c
+  else
+    echo -n $aa
+  fi

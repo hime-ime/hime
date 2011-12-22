@@ -1,0 +1,17 @@
+Source: hime
+Section: utils
+Priority: optional
+Maintainer: Kan-Ru Chen <koster@debian.org>
+Build-Depends: debhelper (>= 7.0.50~), libgtk2.0-dev (>= 2.10.0), libxtst-dev, dpkg | libgtk-3-dev | libqt4-dev | libqt3-mt-dev | libanthy-dev | libchewing3-dev
+Standards-Version: 3.9.1
+
+Package: hime
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: im-switch | im-config, anthy, libchewing3
+Suggests: kasumi
+Conflicts: hime-dev, hime-qt4-immodule, hime-qt3-immodule
+Replaces: hime-dev, hime-qt4-immodule, hime-qt3-immodule
+Provides: hime-dev, hime-qt4-immodule, hime-qt3-immodule
+Description: input method server
+ Hime is an input method server, supports GTK+ / Qt immodules and XIM.

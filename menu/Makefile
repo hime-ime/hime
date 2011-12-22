@@ -10,5 +10,8 @@ install:
 	   install -d $(datadir)/applications; \
 	   install -m 644 hime-setup.desktop $(datadir)/applications; \
 	fi
+
 clean:
-	rm -f $(MENUS) *~
+	@echo "clean up"
+	@rm -f $(MENUS) *~
+

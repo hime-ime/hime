@@ -1,0 +1,67 @@
+UNRELEASED
+
+ The "You can provide a pretty sentence here for next tarball release." Release
+
+ * Changelog will be generated from something like "git shortlog" before
+   tarball release
+ * If you find some changes or contributions can not be seem in git commit log,
+   Please write them here so we will not miss anyone's effort.
+
+ [ Enhancement ]
+ * blah blah (Issue #9999) [ contributor ]
+
+ [ Bug fix ]
+ * blah blah (Issue #9999) [ contributor ]
+
+ [ Additional Information ]
+ * Default settings in gtab.list has been changed in this release
+
+
+
+0.9
+
+ The "Hime (姫) is the Japanese word for princess." Release
+
+ [ Tetralet ]
+ * Improve GTK+ 3.x support
+ * Improve strings for better usability
+ * Code clean up
+
+ [ solomonhuang ]
+ * Provide gtab2cin, table converter
+
+ [ eliu ]
+ * Sync with gcin 2.5.3
+   - fix database corruption when using Eten 26 keys and adding phrases to Tsin
+
+ [ cwlin ]
+ * Fixed chewing selection key if the kb config is not available
+
+ [ caleb- ]
+ * Update copyright and license headers
+
+ [ Additional Information ]
+ * New Icon WANTED!
+   Temporary icon modified from Wikipe-tan, licensed with GNU FDL version 1.2.
+ * IRC channel:
+   #hime at irc.freenode.net
+ * All conffiles in $HOME/.config/hime, XDG_CONFIG_HOME will be supported later
+ * Default icon path has changed to */pixmaps
+ * Some default settings are different with gcin
+
+
+
+0.9~rc1
+
+ * Initial commit, co-installable with gcin
+   Forked from gcin 2.5.1 and synced with 2.5.2, thanks to Edward Der-Hua Liu
+ * No centralized version control, feel free to fork your own! :-)
+   Current release is based on caleb-'s branch, https://github.com/caleb-/hime
+ * Apply some patches from http://debian.luna.com.tw/wheezy/
+   Thanks to Tetralet <tetralet AT gmail DOT com>
+
+ [ Additional Information ]
+ * gcb clipboard manager has been removed
+ * win32 port will not be maintained due to limited manpower.
+   Feel free to help if you need it.
+ * You can find older changes in tarball of gcin 2.5.1
