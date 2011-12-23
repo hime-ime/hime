@@ -429,8 +429,8 @@ void load_tray_icon_win32()
 //  dbg("%d %d\n",current_CS->im_state,current_CS->b_half_full_char);
 
   if (current_CS && (current_CS->im_state == HIME_STATE_ENG_FULL ||
-      current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char ||
-      current_method_type()==method_type_TSIN && tss.tsin_half_full)) {
+      (current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char) ||
+      (current_method_type()==method_type_TSIN && tss.tsin_half_full))) {
       if (gb_output) {
         icon_st="full-simp.png";
         tip = _L("全形/簡體輸出");
