@@ -20,8 +20,8 @@
 
 export LC_ALL=zh_TW.UTF8
 
-CONVERT=`whereis -b convert | tr -d '\n' | sed 's/^convert: //g'`
-if [ "$CONVERT" == '' ]; then
+CONVERT=`whereis -b convert | tr -d '\n' | sed 's/^convert: *//g'`
+if [ -z "$CONVERT" ]; then
 	echo "Command 'convert' is not find. Please install imagemagick package and try again!"
 	exit 0
 fi
@@ -108,13 +108,13 @@ convert_word()
 		echo "Trying to draw '$WORD' (Size $SIZE) on $SOURCE_IMAGE to $FILE.png ..."
 		case $SIZE in
 			1)
-				FONT_SIZE=17
-				DRAW_STR="text +0+0 '$WORD'"
+				FONT_SIZE=18
+				DRAW_STR="text +0-1 '$WORD'"
 				TEMP_FILE=""
 			;;
 			2)
-				FONT_SIZE=17
-				DRAW_STR="text +0+0 '$WORD'"
+				FONT_SIZE=18
+				DRAW_STR="text +0-1 '$WORD'"
 				TEMP_FILE=""
 			;;
 			3|4)
@@ -199,12 +199,14 @@ convert_word 'hime-tray' 'En' \
 	     'tsou' '鄒' \
 	     'wm2' '象' \
 	     'wubi' '五' \
+	     'russian' 'Э' \
+	     'hangul' '한' \
 	     'cj5' '倉五' \
 	     'cj-punc' '倉；' \
 	     'en-kana-nippon' 'あＥ' \
 	     'en-tsin' '詞Ｅ' \
 	     'half-simp' '　简' \
-	     'half-trad' '　半' \
+	     'half-trad' '　 ' \
 	     'full-simp' '　简' \
-	     'full-trad' '　全' \
+	     'full-trad' '　　' \
 	     'gdayi3' '易三'
