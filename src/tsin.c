@@ -1924,8 +1924,8 @@ other_keys:
    if (key_pad && !tss.c_len && !tss.tsin_half_full)
      return 0;
 
-   if (!tsin_pho_mode() || poo.typ_pho[0]!=BACK_QUOTE_NO && (shift_m || key_pad ||
-       (!phkbm.phokbm[xkey][0].num && !phkbm.phokbm[xkey][0].typ))) {
+   if (!tsin_pho_mode() || (poo.typ_pho[0]!=BACK_QUOTE_NO && (shift_m || key_pad ||
+       (!phkbm.phokbm[xkey][0].num && !phkbm.phokbm[xkey][0].typ)))) {
        if (tsin_pho_mode() && !shift_m && strchr(hsu_punc, xkey) && !phkbm.phokbm[xkey][0].num) {
          if (pre_punctuation_hsu(xkey))
            return 1;
