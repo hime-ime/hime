@@ -2077,7 +2077,7 @@ llll2:
        return 1;
      }
 
-     if (poo.typ_pho[0]==L_BRACKET_NO||poo.typ_pho[0]==R_BRACKET_NO || poo.typ_pho[0]==BACK_QUOTE_NO && poo.typ_pho[1])
+     if (poo.typ_pho[0]==L_BRACKET_NO||poo.typ_pho[0]==R_BRACKET_NO || (poo.typ_pho[0]==BACK_QUOTE_NO && poo.typ_pho[1]))
        poo.ityp3_pho = 1;
 
      if (key==0 || !poo.ityp3_pho) {
