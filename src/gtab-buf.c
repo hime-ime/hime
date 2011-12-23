@@ -107,7 +107,7 @@ int en_word_len(char *bf)
   for(s=bf;*s;) {
     int sz = utf8_sz(s);
     if (sz==1) {
-      if (!(*s >= 'A' && *s<='Z' || *s >= 'a' && *s<='z' || strchr("-_'", *s)))
+      if (!((*s >= 'A' && *s<='Z') || (*s >= 'a' && *s<='z') || strchr("-_'", *s)))
         break;
     } else
     if (sz==2) {
