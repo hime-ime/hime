@@ -90,49 +90,6 @@ OPTIONS     MEANINGS
 \fB1           ON\fP
 .br
 0           OFF
-.IP "\fB$HOME/.config/hime/config/hime-flags-im-enabled\fP \fInumber\fP"
-Available input methods to be cyclic selected by Control-Shift.
-.PP
-OPTIONS     MEANINGS
-.br
-\fB2147483647  All input methods are enabled.\fP
-.br
-.PP
-         2  Ctrl\-Alt\-1 Chanjei input method, version 3
-.br
-         4  Ctrl\-Alt\-2 Chanjei input method, version 5
-.br
-         8  Ctrl\-Alt\-3 Bopomofo input method
-.br
-        16  Ctrl\-Alt\-4 Symbols virtual keyboard
-.br
-        32  Ctrl\-Alt\-5 Pinyin input method
-.br
-        64  Ctrl\-Alt\-6 Tsin intelligent Bopomofo input method
-.br
-       128  Ctrl\-Alt\-7 Dayi input method
-.br
-       256  Ctrl\-Alt\-8 Array input method, 30 keys version
-.br
-       512  Ctrl\-Alt\-9 Boshiamy input method, aka Liu's input method
-.br
-      1024  Ctrl\-Alt\-0 Direct input for UTF-32 (U+) or Big-5 characters
-.br
-      2048  Ctrl\-Alt\-\- Simple Chanjei input method
-.br
-      4096  Ctrl\-Alt\-= Japanese anthy input method
-.br
-      8192  Ctrl\-Alt\-` Greek letters input method
-.br
-     16384  Ctrl\-Alt\-[ Latin letters input method
-.br
-     32768  Ctrl\-Alt\-\] Jyutping input method
-.PP
-2147483647 minus numbers of input methods, then you get the configuration number. For example, to disable Greek and Latin letters, calculate 2147483647 - 8192 - 16384 = 2147459071.
-.PP
-        echo 2147459071 > $HOME/.config/hime/config/hime-flags-im-enabled
-.PP
-Then you get it.
 .IP "\fB$HOME/.config/hime/config/hime-font-name\fP \fIstring\fP"
 Default font.
 .PP

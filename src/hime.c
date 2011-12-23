@@ -260,7 +260,7 @@ void open_xim()
           IMFilterEventMask,      KeyPressMask|KeyReleaseMask,
           IMOnKeysList, &triggerKeys,
           NULL)) == NULL) {
-          setenv("NO_GTK_INIT", NULL, TRUE);
+          setenv("NO_GTK_INIT", "", TRUE);
           p_err("IMOpenIM '%s' failed. Maybe another XIM server is running.\n",
           xim_arr[0].xim_server_name);
   }

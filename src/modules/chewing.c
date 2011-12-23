@@ -368,6 +368,8 @@ module_feedkey (int nKeyVal, int nKeyState)
 
         case XK_Return:
         case XK_KP_Enter:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
             chewing_handle_Enter (g_pChewingCtx);
             break;
 

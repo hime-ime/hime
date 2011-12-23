@@ -436,14 +436,14 @@ static void destroy_if_necessary()
 //  dbg("zzz %d %d\n", gtab_in_row1, new_need_label_edit);
 
   if (!top_bin ||
-      current_hime_inner_frame == hime_inner_frame &&
+      (current_hime_inner_frame == hime_inner_frame &&
       current_gtab_in_row1 == gtab_in_row1 &&
           new_last_cursor_off == last_cursor_off &&
       current_gtab_vertical_select == gtab_vertical_select &&
       current_gtab_phrase_pre_select == gtab_phrase_pre_select &&
       current_hime_on_the_spot_key == hime_on_the_spot_key &&
       current_gtab_disp_im_name == gtab_disp_im_name &&
-      (new_need_label_edit && label_edit || !new_need_label_edit && !label_edit)
+      ((new_need_label_edit && label_edit) || (!new_need_label_edit && !label_edit)))
       )
     return;
 #if 0

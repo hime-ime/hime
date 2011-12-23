@@ -437,7 +437,7 @@ void hide_win_kbm();
 
 void hide_row2_if_necessary()
 {
-  if (!ggg.wild_mode && gtab_hide_row2 || !gtab_disp_key_codes) {
+  if ((!ggg.wild_mode && gtab_hide_row2) || !gtab_disp_key_codes) {
     set_key_codes_label(NULL, 0);
   }
 }
@@ -459,7 +459,7 @@ static void putstr_inp(char *p)
   int to_tsin = (cur_inmd->flag & FLAG_GTAB_SYM_KBM) && inmd[default_input_method].method_type==method_type_TSIN && tss.c_len;
 
   if (utf8_str_N(p) > 1  || !(p[0]&128)) {
-    if (gtab_disp_key_codes && !gtab_hide_row2 || ggg.wild_mode)
+    if ((gtab_disp_key_codes && !gtab_hide_row2) || ggg.wild_mode)
       lookup_gtabn(p, NULL);
 #if USE_TSIN
     if (to_tsin) {
@@ -479,7 +479,7 @@ static void putstr_inp(char *p)
       return;
     }
 
-    if (gtab_disp_key_codes && !gtab_hide_row2 || ggg.wild_mode)
+    if ((gtab_disp_key_codes && !gtab_hide_row2) || ggg.wild_mode)
       lookup_gtab(p);
 
     if (to_tsin)
@@ -1056,7 +1056,7 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
   int ucase;
   ucase = toupper(key);
   if (key < 127 && cur_inmd->keymap[key]) {
-     if (key < 'A' || key > 'z' || key > 'Z'  && key < 'a' )
+     if (key < 'A' || key > 'z' || (key > 'Z'  && key < 'a') )
        goto shift_proc;
      if (cur_inmd->keymap[lcase] != cur_inmd->keymap[ucase])
        goto next;
@@ -1066,7 +1066,7 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
 
 shift_proc:
   if (shift_m && !strchr(cur_inmd->selkey, key) && !ggg.more_pg && key>=' ' && key < 0x7e &&
-       key!='*' && (key!='?' || gtab_shift_phrase_key && !ggg.ci)) {
+       key!='*' && (key!='?' || (gtab_shift_phrase_key && !ggg.ci))) {
     dbg("uuuuuuuuuu\n");
     if (gtab_shift_phrase_key) {
       if (tss.pre_selN && shift_char_proc(key, kbstate))
@@ -1711,7 +1711,7 @@ YYYY:
   ggg.more_pg = 0;
   if (ggg.total_matchN > page_len()) {
     if ((_gtab_space_auto_first & GTAB_space_auto_first_any) || ggg.spc_pressed || pendkey ||
-      ggg.ci==cur_inmd->MaxPress && (_gtab_space_auto_first & GTAB_space_auto_first_full))
+      (ggg.ci==cur_inmd->MaxPress && (_gtab_space_auto_first & GTAB_space_auto_first_full)))
       ggg.more_pg = 1;
   }
 
@@ -1845,7 +1845,7 @@ next_pg:
     } else
     if (!ggg.more_pg) {
       if (gtab_dup_select_bell && (disp_partial_match_on() || gtab_pre_select_on())) {
-        if (ggg.spc_pressed || gtab_full_space_auto_first || ggg.last_full && gtab_press_full_auto_send)
+        if (ggg.spc_pressed || gtab_full_space_auto_first || (ggg.last_full && gtab_press_full_auto_send))
           bell();
       }
     }

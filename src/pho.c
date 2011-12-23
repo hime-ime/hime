@@ -727,7 +727,7 @@ proc_state:
 
 //  dbg("poo.start_idx: %d %d\n", poo.start_idx, poo.stop_idx);
 
-  if (poo.typ_pho[0]==L_BRACKET_NO||poo.typ_pho[0]==R_BRACKET_NO || poo.typ_pho[0]==BACK_QUOTE_NO && poo.typ_pho[1])
+  if (poo.typ_pho[0]==L_BRACKET_NO||poo.typ_pho[0]==R_BRACKET_NO || (poo.typ_pho[0]==BACK_QUOTE_NO && poo.typ_pho[1]))
      poo.ityp3_pho = 1;
 
   ii+=poo.cpg;
