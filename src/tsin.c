@@ -718,7 +718,7 @@ static void get_sel_phrase0(int selidx, gboolean eqlen)
     load_tsin_entry(sti, (char *)&len, &usecount, stk, stch);
     mask_tone(stk, mlen, pinyin_s);
 
-    if (eqlen && len!=mlen || (!eqlen && len > mlen) || len==1) {
+    if ((eqlen && len!=mlen) || (!eqlen && len > mlen) || len==1) {
       sti++;
       continue;
     }
