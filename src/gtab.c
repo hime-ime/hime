@@ -479,7 +479,7 @@ static void putstr_inp(char *p)
       return;
     }
 
-    if (gtab_disp_key_codes && !gtab_hide_row2 || ggg.wild_mode)
+    if ((gtab_disp_key_codes && !gtab_hide_row2) || ggg.wild_mode)
       lookup_gtab(p);
 
     if (to_tsin)
