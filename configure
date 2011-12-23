@@ -355,11 +355,11 @@ else
   HIME_DEBUG=$HIME_DEBUG
 fi
 
-if [ -z $CC ]; then
+if [ -z "$CC" ]; then
   CC=gcc
 fi
 
-if [ -z $CXX ]; then
+if [ -z "$CXX" ]; then
   CXX=g++
 fi
 
