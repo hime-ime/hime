@@ -3,7 +3,7 @@
 %cname 簡易
 %selkey 123456789
 %space_style 2
-%flag_auto_select_by_phrase
+#%flag_auto_select_by_phrase
 %keyname begin
 a 日
 b 月
