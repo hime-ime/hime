@@ -437,7 +437,7 @@ void hide_win_kbm();
 
 void hide_row2_if_necessary()
 {
-  if (!ggg.wild_mode && gtab_hide_row2 || !gtab_disp_key_codes) {
+  if ((!ggg.wild_mode && gtab_hide_row2) || !gtab_disp_key_codes) {
     set_key_codes_label(NULL, 0);
   }
 }
