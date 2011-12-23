@@ -498,7 +498,7 @@ gboolean tsin_seek(void *pho, int plen, int *r_sti, int *r_edi, char *tone_mask)
 #endif
 
     if ((!tone_mask && !v && len>=plen) ||
-        (tone_mask && v>0 || !v && len >= plen))
+        ((tone_mask && v>0) || (!v && len >= plen)))
       continue;
     break;
   }
