@@ -1711,7 +1711,7 @@ YYYY:
   ggg.more_pg = 0;
   if (ggg.total_matchN > page_len()) {
     if ((_gtab_space_auto_first & GTAB_space_auto_first_any) || ggg.spc_pressed || pendkey ||
-      ggg.ci==cur_inmd->MaxPress && (_gtab_space_auto_first & GTAB_space_auto_first_full))
+      (ggg.ci==cur_inmd->MaxPress && (_gtab_space_auto_first & GTAB_space_auto_first_full)))
       ggg.more_pg = 1;
   }
 
