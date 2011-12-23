@@ -1056,7 +1056,7 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
   int ucase;
   ucase = toupper(key);
   if (key < 127 && cur_inmd->keymap[key]) {
-     if (key < 'A' || key > 'z' || key > 'Z'  && key < 'a' )
+     if (key < 'A' || key > 'z' || (key > 'Z'  && key < 'a') )
        goto shift_proc;
      if (cur_inmd->keymap[lcase] != cur_inmd->keymap[ucase])
        goto next;
