@@ -459,7 +459,7 @@ static void putstr_inp(char *p)
   int to_tsin = (cur_inmd->flag & FLAG_GTAB_SYM_KBM) && inmd[default_input_method].method_type==method_type_TSIN && tss.c_len;
 
   if (utf8_str_N(p) > 1  || !(p[0]&128)) {
-    if (gtab_disp_key_codes && !gtab_hide_row2 || ggg.wild_mode)
+    if ((gtab_disp_key_codes && !gtab_hide_row2) || ggg.wild_mode)
       lookup_gtabn(p, NULL);
 #if USE_TSIN
     if (to_tsin) {
