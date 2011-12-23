@@ -1845,7 +1845,7 @@ next_pg:
     } else
     if (!ggg.more_pg) {
       if (gtab_dup_select_bell && (disp_partial_match_on() || gtab_pre_select_on())) {
-        if (ggg.spc_pressed || gtab_full_space_auto_first || ggg.last_full && gtab_press_full_auto_send)
+        if (ggg.spc_pressed || gtab_full_space_auto_first || (ggg.last_full && gtab_press_full_auto_send))
           bell();
       }
     }
