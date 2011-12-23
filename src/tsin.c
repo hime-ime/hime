@@ -1022,17 +1022,15 @@ void set_chpho_ch(CHPHO *pchpho, char *utf8, int len, gboolean is_pho_phrase)
   int i;
 
   for(i=0; i < len; i++) {
-    int u8len;
     if (is_pho_phrase) {
       pchpho[i].ch = utf8;
 	  pchpho[i].flag |= FLAG_CHPHO_PHO_PHRASE;
 	} else {
-      u8len = utf8cpy(pchpho[i].cha, utf8);
+      int u8len = utf8cpy(pchpho[i].cha, utf8);
+      utf8+=u8len;
       pchpho[i].ch = pchpho[i].cha;
 	  pchpho[i].flag &= ~FLAG_CHPHO_PHO_PHRASE;
     }
-
-    utf8+=u8len;
   }
 }
 

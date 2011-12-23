@@ -55,15 +55,12 @@ u_char scanphr_e(int chpho_idx, int plen, gboolean pho_incr, int *rselN)
   if (chpho_idx < 0)
     goto empty;
 
-  phokey_t tailpho;
+  phokey_t tailpho = pho2key(poo.typ_pho);
 
   if (pho_incr) {
-    if (ph_key_sz==2) {
-      tailpho = pho2key(poo.typ_pho);
-      if (!tailpho)
+    if (ph_key_sz == 2 && !tailpho) {
         pho_incr = FALSE;
-    } else {
-      if (!ggg.kval)
+    } else if (!ggg.kval) {
         pho_incr = FALSE;
     }
   }
