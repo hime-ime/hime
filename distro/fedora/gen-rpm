@@ -1,0 +1,45 @@
+#!/bin/sh
+
+#
+#   prerequisite:
+#       # yum install rpm-build rpmdevtools libchewing-devel
+#       $ rpmdev-setuptree
+#
+#   build:
+#       $ cd <src>/
+#       $ ./distro/fedora/gen-rpm
+#
+#   files located at ~/rpmbuild/{,S}RPMS
+#
+#   install:
+#       # rpm -ivh hime-[0gq]*
+#       $ imsettings-switch hime
+#   
+
+[ ! -e distro/fedora ] && exec echo Please execute '"[1m[32mdistro/fedora/gen-rpm[0m"' under hime directory, thanks.
+
+VERSION_FILE=VERSION.hime
+VERSION=`cat ${VERSION_FILE}`
+SPEC_FILE=hime-fedora.spec
+SRC_FILE=hime-${VERSION}.tar.xz
+DISTRODIR=distro/fedora
+DISTROROOT=`basename ${DISTRODIR}`
+SRCDIR=`rpm --eval "%{_sourcedir}"`
+SPECDIR=`rpm --eval "%{_specdir}"`
+
+rm -fr ${DISTROROOT}
+cp -r ${DISTRODIR} ${DISTROROOT}
+
+echo "building ${SPEC_FILE} ..."
+if [[ -d '.git' ]] ; then
+    git archive --format=tar --prefix=hime-${VERSION}/ HEAD | xz > ${SRCDIR}/${SRC_FILE}
+#else
+#    #tar cf - "`basename $(pwd)`/*" | xz > ${SRCDIR}/${SRC_FILE}
+fi
+
+cd ${DISTROROOT}
+[ -f ${SPEC_FILE} ] && rm -f ${SPEC_FILE}
+sed -e "s/__hime_version__/${VERSION}/" < "${SPEC_FILE}.in" > ${SPEC_FILE}
+cp -f ${SPEC_FILE} ${SPECDIR}/${SPEC_FILE}
+cp -f hime.conf ${SRCDIR}
+rpmbuild -ba ${SPEC_FILE}
