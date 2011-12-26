@@ -19,7 +19,6 @@
 日本anthy = anthy-module.so kana-nippon.png
 greek ` greek.gtab greek.png
 latin-letters \ latin-letters.gtab latin-letters.png
-# russian table is provided by yuriy
 russian ? russian.gtab russian.png
 新酷音 [ chewing-module.so chewing.png
 韓拼 / hangul.gtab hangul.png
