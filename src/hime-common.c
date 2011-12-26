@@ -18,10 +18,6 @@
 #include "hime.h"
 #include "pho.h"
 
-#if USE_TSIN
-void flush_tsin_buffer();
-#endif
-
 PIN_JUYIN *pin_juyin;
 
 int text_pho_N=3;
@@ -178,22 +174,14 @@ void set_no_focus(GtkWidget *win)
 }
 
 #if !USE_TSIN
-void add_to_tsin_buf(){}
-void add_to_tsin_buf_str(){}
-void build_ts_gtab(){}
 void change_tsin_color(){}
 void change_tsin_font_size(){}
 void change_win0_style(){}
-void clear_ch_buf_sel_area(){}
-void clear_tsin_buffer(){}
 void destroy_win0(){}
 void destroy_win1(){}
 void free_tsin(){}
-void load_ts_gtab(){}
 void load_tsin_db(){}
-void putbuf(){}
-void tsin_remove_last(){}
 void tsin_reset_in_pho(){}
-void tsin_set_eng_ch(){}
+void tsin_reset_in_pho0(){}
 void tsin_toggle_half_full(){}
 #endif

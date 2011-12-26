@@ -388,14 +388,12 @@ gboolean output_gbuf()
 
     if (!gbuf[i].plen)
       i++;
-#if USE_TSIN
     else {
       u_int64_t kk[MAX_PHRASE_LEN];
 	  extract_gtab_key(i, gbuf[i].plen, kk);
 	  inc_dec_tsin_use_count(kk, t, gbuf[i].plen);
       i+=gbuf[i].plen;
     }
-#endif
   }
 
 

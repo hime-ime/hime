@@ -461,12 +461,10 @@ static void putstr_inp(char *p)
   if (utf8_str_N(p) > 1  || !(p[0]&128)) {
     if ((gtab_disp_key_codes && !gtab_hide_row2) || ggg.wild_mode)
       lookup_gtabn(p, NULL);
-#if USE_TSIN
     if (to_tsin) {
       add_to_tsin_buf_str(p);
     }
     else
-#endif
       send_text(p);
   }
   else {
