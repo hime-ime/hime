@@ -36,13 +36,13 @@ OBJS      = hime.o eve.o util.o hime-conf.o hime-settings.o locale.o \
 	hime-module-cb.o gtab-init.o fullchar.o gtab-tsin-fname.o
 
 OBJS_TSLEARN = hime-tslearn.o util.o hime-conf.o pho-util.o tsin-util.o \
-	hime-send.o pho-sym.o table-update.o locale.o \
+	pho-sym.o table-update.o locale.o \
 	hime-settings.o hime-common.o hime-icon.o pho-dbg.o \
 	pho2pinyin.o pinyin.o lang.o gtab-list.o gtab-init.o fullchar.o \
 	gtab-tsin-fname.o unix-exec.o gtab-util.o
 
 OBJS_TS_EDIT = hime-ts-edit.o util.o hime-conf.o pho-util.o tsin-util.o \
-	hime-send.o pho-sym.o table-update.o locale.o \
+	pho-sym.o table-update.o locale.o \
 	hime-settings.o hime-common.o hime-icon.o pho-dbg.o \
 	pho2pinyin.o pinyin.o lang.o gtab-list.o gtab-init.o fullchar.o \
 	gtab-tsin-fname.o unix-exec.o gtab-util.o
@@ -56,10 +56,10 @@ OBJS_hime-sim2trad = hime-sim2trad.o util.o hime2.so locale.o hime-conf.o hime-i
 OBJS_hime-phod2a = hime-phod2a.o pho-util.o hime-conf.o pho-sym.o table-update.o \
 	pho-dbg.o locale.o hime-settings.o util.o
 
-OBJS_hime-tsa2d32 = hime-tsa2d32.o hime-send.o util.o pho-sym.o hime-conf.o \
+OBJS_hime-tsa2d32 = hime-tsa2d32.o util.o pho-sym.o hime-conf.o \
 	locale.o pho-lookup.o pinyin.o pho2pinyin.o pho-dbg.o
 
-OBJS_hime-phoa2d = hime-phoa2d.o pho-sym.o hime-send.o hime-conf.o locale.o \
+OBJS_hime-phoa2d = hime-phoa2d.o pho-sym.o hime-conf.o locale.o \
 	pho-lookup.o util.o pho-dbg.o
 
 OBJS_kbmcv = kbmcv.o pho-sym.o util.o locale.o
@@ -70,15 +70,15 @@ OBJS_hime-tsd2a32 = hime-tsd2a32.o pho-sym.o pho-dbg.o locale.o util.o \
 OBJS_cin2gtab     = cin2gtab.o gtab-util.o util.o locale.o
 OBJS_gtab2cin     = gtab2cin.o gtab-util.o util.o locale.o
 OBJS_gtab_merge   = hime-gtab-merge.o gtab-util.o util.o locale.o
-OBJS_hime_setup   = hime-setup.o hime-conf.o util.o hime-send.o hime-settings.o \
+OBJS_hime_setup   = hime-setup.o hime-conf.o util.o hime-settings.o \
 	html-browser.o hime-setup-list.o locale.o hime-setup-pho.o about.o \
 	lang.o hime-icon.o hime-setup-gtab.o gtab-list.o hime-exec-script.o \
 	pho-kbm-name.o hime-module-cb.o
 
-OBJS_hime_gb_toggle  = hime-gb-toggle.o  hime-conf.o util.o hime-send.o
-OBJS_hime_kbm_toggle = hime-kbm-toggle.o hime-conf.o util.o hime-send.o
-OBJS_hime_exit       = hime-exit.o       hime-conf.o util.o hime-send.o
-OBJS_hime_message    = hime-message.o    hime-conf.o util.o hime-send.o
+OBJS_hime_gb_toggle  = hime-gb-toggle.o  hime-conf.o util.o
+OBJS_hime_kbm_toggle = hime-kbm-toggle.o hime-conf.o util.o
+OBJS_hime_exit       = hime-exit.o       hime-conf.o util.o
+OBJS_hime_message    = hime-message.o    hime-conf.o util.o
 
 OBJS_pin_juyin       = pin-juyin.o util.o pho-lookup.o locale.o pho-sym.o
 
