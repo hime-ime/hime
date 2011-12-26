@@ -30,7 +30,7 @@
 #define HIME_ON_THE_SPOT_KEY "hime-on-the-spot-key"
 #define HIME_TRAY_HF_WIN_KBM "hime-tray-hf-win-kbm"
 #define HIME_SINGLE_STATE "hime-single-state"
-
+#define HIME_PUNC_AUTO_SEND "hime-punc-auto-send"
 
 #define HIME_IM_TOGGLE_KEYS "hime-im-toggle-keys"
 #define DEFAULT_INPUT_METHOD "default-input-method"
@@ -121,6 +121,7 @@ extern int gtab_vertical_select, gtab_unique_auto_send;
 extern int tsin_buffer_size;
 extern int hime_input_style, hime_root_x, hime_root_y, hime_pop_up_win;
 extern int hime_status_tray, hime_tray_hf_win_kbm;
+extern int hime_punc_auto_send;
 
 extern int tsin_phrase_pre_select;
 extern int tsin_chinese_english_toggle_key;

@@ -157,8 +157,7 @@ restart:
 }
 #endif
 
-
-
+int is_special_user;
 
 static HIME_client_handle *hime_im_client_reopen(HIME_client_handle *hime_ch, Display *dpy)
 {
@@ -179,6 +178,11 @@ static HIME_client_handle *hime_im_client_reopen(HIME_client_handle *hime_ch, Di
   char *addr;
   Server_IP_port srv_ip_port;
   u_char *pp;
+
+  int uid = getuid();
+  if (uid > 0 && uid < 500) {
+    is_special_user = TRUE;
+  }
 #else
   HANDLE sockfd;
 #endif
@@ -200,6 +204,8 @@ static HIME_client_handle *hime_im_client_reopen(HIME_client_handle *hime_ch, Di
 
 #define MAX_TRY 3
   int loop;
+
+  if (!is_special_user)
   for(loop=0; loop < MAX_TRY; loop++) {
     if ((hime_win=find_hime_window(dpy))!=None || getenv("HIME_IM_CLIENT_NO_AUTO_EXEC"))
       break;
@@ -391,6 +397,10 @@ static void validate_handle(HIME_client_handle *hime_ch)
 {
   if (hime_ch->fd > 0)
     return;
+#if UNIX
+  if (is_special_user)
+    return;
+#endif
 
   hime_im_client_reopen(hime_ch, hime_ch->disp);
 }
@@ -595,7 +605,11 @@ static int handle_write(HIME_client_handle *handle, void *ptr, int n)
 void hime_im_client_focus_in(HIME_client_handle *handle)
 {
   if (!handle)
-	  return;
+    return;
+#if UNIX
+  if (is_special_user)
+    return;
+#endif
 
   HIME_req req;
 //  dbg("hime_im_client_focus_in\n");
@@ -618,6 +632,10 @@ void hime_im_client_focus_out(HIME_client_handle *handle)
 {
   if (!handle)
     return;
+#if UNIX
+  if (is_special_user)
+    return;
+#endif
 
   HIME_req req;
 //  dbg("hime_im_client_focus_out\n");
@@ -639,14 +657,21 @@ void hime_im_client_focus_out2(HIME_client_handle *handle, char **rstr)
   HIME_req req;
   HIME_reply reply;
 
+  if (rstr)
+    *rstr = NULL;
+
   if (!handle)
     return;
+
+#if UNIX
+  if (is_special_user)
+    return;
+#endif
 
 #if DBG
   dbg("hime_im_client_focus_out2\n");
 #endif
   handle->flag &= ~FLAG_HIME_client_handle_has_focus;
-  *rstr = NULL;
 
   if (!gen_req(handle, HIME_req_focus_out2, &req))
     return;
@@ -688,6 +713,10 @@ static int hime_im_client_forward_key_event(HIME_client_handle *handle,
   HIME_req req;
 
   *rstr = NULL;
+
+  if (is_special_user) {
+      return 0;
+  }
 
   if (!gen_req(handle, event_type, &req))
     return 0;
@@ -772,6 +801,10 @@ void hime_im_client_set_cursor_location(HIME_client_handle *handle, int x, int y
 {
   if (!handle)
     return;
+#if UNIX
+  if (is_special_user)
+    return;
+#endif
 
 //  dbg("hime_im_client_set_cursor_location %d   %d,%d\n", handle->flag, x, y);
 
@@ -795,9 +828,12 @@ void hime_im_client_set_cursor_location(HIME_client_handle *handle, int x, int y
 void hime_im_client_set_window(HIME_client_handle *handle, Window win)
 {
   if (!handle)
-	  return;
+    return;
 //  dbg("hime_im_client_set_window %x\n", win);
+
 #if UNIX
+  if (is_special_user)
+    return;
   if (!win)
     return;
 #endif
@@ -817,6 +853,11 @@ void hime_im_client_set_flags(HIME_client_handle *handle, int flags, int *ret_fl
 
   if (!handle)
     return;
+
+#if UNIX
+  if (is_special_user)
+    return;
+#endif
 
   if (!gen_req(handle, HIME_req_set_flags, &req))
     return;
@@ -851,6 +892,11 @@ void hime_im_client_clear_flags(HIME_client_handle *handle, int flags, int *ret_
   if (!handle)
     return;
 
+#if UNIX
+  if (is_special_user)
+    return;
+#endif
+
   if (!gen_req(handle, HIME_req_set_flags, &req))
     return;
 
@@ -878,6 +924,11 @@ int hime_im_client_get_preedit(HIME_client_handle *handle, char **str, HIME_PREE
   *str=NULL;
   if (!handle)
     return 0;
+
+#if UNIX
+  if (is_special_user)
+    return 0;
+#endif
 
   int attN, tcursor, str_len;
 #if DBG
@@ -954,7 +1005,12 @@ err_ret:
 void hime_im_client_reset(HIME_client_handle *handle)
 {
   if (!handle)
-	  return;
+    return;
+
+#if UNIX
+  if (is_special_user)
+    return;
+#endif
 
   HIME_req req;
 #if DBG
