@@ -85,7 +85,6 @@ void init_HIME_module_main_functions(HIME_module_main_functions *func)
   func->mf_hime_pop_up_win = &hime_pop_up_win;
   func->mf_hime_font_size = &hime_font_size;
   func->mf_hime_win_color_fg = &hime_win_color_fg;
-  func->mf_gtab_press_full_auto_send = &gtab_press_full_auto_send;
 
   func->mf_hime_win_color_use = &hime_win_color_use;
   func->mf_tsin_cursor_color = &tsin_cursor_color;

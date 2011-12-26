@@ -1262,7 +1262,7 @@ static gboolean pre_punctuation_sub(KeySym xkey, char shift_punc[], unich_t *cha
       keys[0]=0;
       utf8_pho_keys(pchar, keys);
       add_to_tsin_buf(pchar, &keys[0], 1);
-      if (tsin_cursor_end())
+      if (hime_punc_auto_send && tsin_cursor_end())
         flush_tsin_buffer();
     }
     return 1;
@@ -1275,7 +1275,7 @@ static gboolean pre_punctuation_sub(KeySym xkey, char shift_punc[], unich_t *cha
 gboolean pre_punctuation(KeySym xkey)
 {
   static char shift_punc[]="<>?:\"{}!_";
-  static unich_t *chars[]={_L("，"),_L("。"),_L("？"),_L("："),_L("；"),_L("『"),_L("』"),_L("！"),_L("——")};
+  static unich_t *chars[]={_L("，"),_L("。"),_L("？"),_L("："),_L("；"),_L("「"),_L("」"),_L("！"),_L("——")};
   return pre_punctuation_sub(xkey, shift_punc, chars);
 }
 
@@ -1723,7 +1723,8 @@ tab_phrase_end:
 
            return 1;
          }
-         return 0;
+
+         return tss.c_len>0;
        }
 
        int N;
