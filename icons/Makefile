@@ -1,7 +1,5 @@
 include ../config.mak
 
-ECHO   = /bin/echo
-
 DIR    = black blue dark gray
 
 all:
