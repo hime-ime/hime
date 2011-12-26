@@ -40,6 +40,32 @@ static GtkWidget *g_pHBoxChewing     = NULL;
 static SEG *g_pSeg = NULL;
 static int g_nCurrentCursorPos = 0;
 
+static void (*pKeyHandler[HIME_CHEWING_KEY_MAX]) (ChewingContext *pCtx) =
+{
+    [XK_space]     = (void *)chewing_handle_Space,
+    [XK_BackSpace] = (void *)chewing_handle_Backspace,
+    [XK_Tab]       = (void *)chewing_handle_Tab,
+    [XK_Return]    = (void *)chewing_handle_Enter,
+    [XK_Escape]    = (void *)chewing_handle_Esc,
+    [XK_Home]      = (void *)chewing_handle_Home,
+    [XK_Left]      = (void *)chewing_handle_Left,
+    [XK_Up]        = (void *)chewing_handle_Up,
+    [XK_Right]     = (void *)chewing_handle_Right,
+    [XK_Down]      = (void *)chewing_handle_Down,
+    [XK_Page_Up]   = (void *)chewing_handle_PageUp,
+    [XK_Page_Down] = (void *)chewing_handle_PageDown,
+    [XK_End]       = (void *)chewing_handle_End,
+    [XK_KP_Enter]  = (void *)chewing_handle_Enter,
+    [XK_KP_Left]   = (void *)chewing_handle_Left,
+    [XK_KP_Up]     = (void *)chewing_handle_Up,
+    [XK_KP_Right]  = (void *)chewing_handle_Right,
+    [XK_KP_Down]   = (void *)chewing_handle_Down,
+    [XK_KP_Delete] = (void *)chewing_handle_Del,
+    [XK_Shift_L]   = (void *)chewing_handle_ShiftLeft,
+    [XK_Shift_R]   = (void *)chewing_handle_ShiftRight,
+    [XK_Delete]    = (void *)chewing_handle_Del
+};
+
 // FIXME: impl
 static gboolean
 select_idx (int c)
@@ -191,109 +217,11 @@ is_empty (void)
 static gboolean 
 hime_key_filter (int *pnKeyVal)
 {
-    switch ((*pnKeyVal))
-    {
-        case XK_space:
-            chewing_handle_Space (g_pChewingCtx);
-            break;
-
-        case XK_Escape:
-            chewing_handle_Esc (g_pChewingCtx);
-            break;
-
-        case XK_Return:
-        case XK_KP_Enter:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Enter (g_pChewingCtx);
-            break;
-
-        case XK_Delete:
-        case XK_KP_Delete:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Del (g_pChewingCtx);
-            break;
-
-        case XK_BackSpace:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Backspace (g_pChewingCtx);
-            break;
-
-        case XK_Up:
-        case XK_KP_Up:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Up (g_pChewingCtx);
-            break;
-
-        case XK_Down:
-        case XK_KP_Down:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Down (g_pChewingCtx);
-            break;
-
-        case XK_Left:
-        case XK_KP_Left:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Left (g_pChewingCtx);
-            break;
-
-        case XK_Right:
-        case XK_KP_Right:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Right (g_pChewingCtx);
-            break;
-
-#if 0
-        case XK_Shift_L:
-            chewing_handle_ShiftLeft (g_pChewingCtx);
-            break;
-
-        case XK_Shift_R:
-            chewing_handle_ShiftRight (g_pChewingCtx);
-            break;
-#endif
-
-        case XK_Tab:
-            chewing_handle_Tab (g_pChewingCtx);
-            break;
-
-        case XK_Home:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Home (g_pChewingCtx);
-            break;
-
-        case XK_End:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_End (g_pChewingCtx);
-            break;
-
-#if 0
-        case XK_Page_Up:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_PageUp (g_pChewingCtx);
-            break;
-
-        case XK_Page_Down:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_PageDown (g_pChewingCtx);
-            break;
-#endif
-
-        default:
-            if ((*pnKeyVal) > 32 && (*pnKeyVal) < 127)
-                chewing_handle_Default (g_pChewingCtx, (*pnKeyVal));
-            break;
-    }
+    if ((*pnKeyVal) > HIME_CHEWING_DEFAULT_KEY_MIN && 
+        (*pnKeyVal) < HIME_CHEWING_DEFAULT_KEY_MAX)
+        chewing_handle_Default (g_pChewingCtx, (*pnKeyVal));
+    else
+        pKeyHandler[(*pnKeyVal)] (g_pChewingCtx);
 
     g_nCurrentCursorPos = chewing_cursor_Current (g_pChewingCtx);
 
