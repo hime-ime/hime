@@ -118,10 +118,6 @@ ifeq ($(MAC_OS),1)
 EXTRA_LDFLAGS=-bind_at_load 
 endif
 
-ifeq ($(SYSTEM_IS_UBUNTU),Y)
-CFLAGS     += -DSYSTEM_IS_UBUNTU=1
-endif
-
 HIME_SO   = hime1.so hime2.so
 
 PROGS     = hime \
