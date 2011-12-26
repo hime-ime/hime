@@ -40,7 +40,12 @@
                                            '5', '6', '7', '8', \
                                            '9', '0' }
 
-typedef struct _SEGMENT {
+#define HIME_CHEWING_DEFAULT_KEY_MIN (XK_space)
+#define HIME_CHEWING_DEFAULT_KEY_MAX (XK_asciitilde + 1)
+#define HIME_CHEWING_KEY_MAX         (XK_Delete + 1)
+
+typedef struct _SEGMENT 
+{
     GtkWidget *label;
     unsigned char selidx, selN;
 } SEG;
