@@ -31,6 +31,8 @@ static gboolean hime_key_filter (int *pnKeyVal);
 static gboolean hime_zuin_label_show (void);
 static gboolean hime_buffer_label_show (void);
 static gboolean hime_buffer_commit (void);
+static void hime_chewing_cb_register (void);
+static void hime_chewing_handler_default (ChewingContext *pCtx);
 
 static HIME_module_main_functions g_himeModMainFuncs;
 static GtkWidget *g_pWinChewing      = NULL;
@@ -40,31 +42,7 @@ static GtkWidget *g_pHBoxChewing     = NULL;
 static SEG *g_pSeg = NULL;
 static int g_nCurrentCursorPos = 0;
 
-static void (*pKeyHandler[HIME_CHEWING_KEY_MAX]) (ChewingContext *pCtx) =
-{
-    [XK_space]     = (void *)chewing_handle_Space,
-    [XK_BackSpace] = (void *)chewing_handle_Backspace,
-    [XK_Tab]       = (void *)chewing_handle_Tab,
-    [XK_Return]    = (void *)chewing_handle_Enter,
-    [XK_Escape]    = (void *)chewing_handle_Esc,
-    [XK_Home]      = (void *)chewing_handle_Home,
-    [XK_Left]      = (void *)chewing_handle_Left,
-    [XK_Up]        = (void *)chewing_handle_Up,
-    [XK_Right]     = (void *)chewing_handle_Right,
-    [XK_Down]      = (void *)chewing_handle_Down,
-    [XK_Page_Up]   = (void *)chewing_handle_PageUp,
-    [XK_Page_Down] = (void *)chewing_handle_PageDown,
-    [XK_End]       = (void *)chewing_handle_End,
-    [XK_KP_Enter]  = (void *)chewing_handle_Enter,
-    [XK_KP_Left]   = (void *)chewing_handle_Left,
-    [XK_KP_Up]     = (void *)chewing_handle_Up,
-    [XK_KP_Right]  = (void *)chewing_handle_Right,
-    [XK_KP_Down]   = (void *)chewing_handle_Down,
-    [XK_KP_Delete] = (void *)chewing_handle_Del,
-    [XK_Shift_L]   = (void *)chewing_handle_ShiftLeft,
-    [XK_Shift_R]   = (void *)chewing_handle_ShiftRight,
-    [XK_Delete]    = (void *)chewing_handle_Del
-};
+static void (*g_pKeyHandler[HIME_CHEWING_KEY_MAX]) (ChewingContext *pCtx);
 
 // FIXME: impl
 static gboolean
@@ -203,6 +181,8 @@ chewing_initialize (void)
 
     chewing_config_close ();
 
+    hime_chewing_cb_register ();
+
     return TRUE;
 }
 
@@ -221,7 +201,7 @@ hime_key_filter (int *pnKeyVal)
         (*pnKeyVal) < HIME_CHEWING_DEFAULT_KEY_MAX)
         chewing_handle_Default (g_pChewingCtx, (*pnKeyVal));
     else
-        pKeyHandler[(*pnKeyVal)] (g_pChewingCtx);
+        g_pKeyHandler[(*pnKeyVal)] (g_pChewingCtx);
 
     g_nCurrentCursorPos = chewing_cursor_Current (g_pChewingCtx);
 
@@ -341,6 +321,47 @@ hime_buffer_commit (void)
 
     return TRUE;
 }
+
+static void
+hime_chewing_handler_default (ChewingContext *pCtx)
+{
+    return ((void)NULL);
+}
+
+static void 
+hime_chewing_cb_register (void)
+{
+    int nIdx = 0;
+
+    for (; nIdx < HIME_CHEWING_KEY_MAX; nIdx++)
+        g_pKeyHandler[nIdx] = (void *)hime_chewing_handler_default;
+
+    g_pKeyHandler[XK_space]     = (void *)chewing_handle_Space;
+    g_pKeyHandler[XK_BackSpace] = (void *)chewing_handle_Backspace;
+    g_pKeyHandler[XK_Tab]       = (void *)chewing_handle_Tab;
+    g_pKeyHandler[XK_Return]    = (void *)chewing_handle_Enter;
+    g_pKeyHandler[XK_Escape]    = (void *)chewing_handle_Esc;
+    g_pKeyHandler[XK_Home]      = (void *)chewing_handle_Home;
+    g_pKeyHandler[XK_Left]      = (void *)chewing_handle_Left;
+    g_pKeyHandler[XK_Up]        = (void *)chewing_handle_Up;
+    g_pKeyHandler[XK_Right]     = (void *)chewing_handle_Right;
+    g_pKeyHandler[XK_Down]      = (void *)chewing_handle_Down;
+    g_pKeyHandler[XK_Page_Up]   = (void *)chewing_handle_PageUp;
+    g_pKeyHandler[XK_Page_Down] = (void *)chewing_handle_PageDown;
+    g_pKeyHandler[XK_End]       = (void *)chewing_handle_End;
+    g_pKeyHandler[XK_KP_Enter]  = (void *)chewing_handle_Enter;
+    g_pKeyHandler[XK_KP_Left]   = (void *)chewing_handle_Left;
+    g_pKeyHandler[XK_KP_Up]     = (void *)chewing_handle_Up;
+    g_pKeyHandler[XK_KP_Right]  = (void *)chewing_handle_Right;
+    g_pKeyHandler[XK_KP_Down]   = (void *)chewing_handle_Down;
+    g_pKeyHandler[XK_KP_Delete] = (void *)chewing_handle_Del;
+#if 0
+    g_pKeyHandler[XK_Shift_L]   = (void *)chewing_handle_ShiftLeft;
+    g_pKeyHandler[XK_Shift_R]   = (void *)chewing_handle_ShiftRight;
+#endif
+    g_pKeyHandler[XK_Delete]    = (void *)chewing_handle_Del;
+}
+
 
 int
 module_init_win (HIME_module_main_functions *pFuncs)
