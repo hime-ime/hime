@@ -70,15 +70,7 @@
 #endif
 
 #if !GTK_CHECK_VERSION(2,91,1)
-/* Ubuntu backported gtk_window_set_has_resize_grip to GTK+ 2.x.
- * Official GTK+ 2.x has no gtk_window_set_has_resize_grip.
- */
-#if SYSTEM_IS_UBUNTU
-#define gtk_window_set_has_resize_grip gtk_window_set_resizable
-#endif
-#if !SYSTEM_IS_UBUNTU
 #define gtk_window_set_has_resize_grip(x,y);
-#endif
 #define gtk_widget_set_hexpand(x,y);
 #define gtk_widget_set_vexpand(x,y);
 #endif
