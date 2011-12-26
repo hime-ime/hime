@@ -151,6 +151,14 @@ int main(int argc, char **argv)
     fprintf(fw, "%%flag_auto_select_by_phrase\n");
   if (th->flag & FLAG_GTAB_DISP_PARTIAL_MATCH)
     fprintf(fw, "%%flag_disp_partial_match\n");
+  if (th->flag & FLAG_GTAB_DISP_FULL_MATCH)
+    fprintf(fw, "%%flag_disp_full_match\n");
+  if (th->flag & FLAG_GTAB_VERTICAL_SELECTION)
+    fprintf(fw, "%%flag_vertical_selection\n");
+  if (th->flag & FLAG_GTAB_PRESS_FULL_AUTO_SEND)
+    fprintf(fw, "%%flag_press_full_auto_send\n");
+  if (th->flag & FLAG_GTAB_UNIQUE_AUTO_SEND)
+    fprintf(fw, "%%flag_unique_auto_send\n");
 
   keymap = gtabbuf + sizeof(struct TableHead);
   kname = keymap + th->KeyS;
