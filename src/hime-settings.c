@@ -30,7 +30,7 @@ int left_right_button_tips;
 int hime_im_toggle_keys, hime_bell_off;
 int hime_capslock_lower, hime_eng_phrase_enabled, hime_init_im_enabled;
 int hime_win_sym_click_close, hime_edit_display, hime_win32_icon;
-int hime_on_the_spot_key, hime_tray_hf_win_kbm;
+int hime_on_the_spot_key, hime_tray_hf_win_kbm, hime_punc_auto_send;
 
 int gtab_dup_select_bell;
 int gtab_space_auto_first;
@@ -114,13 +114,20 @@ void load_setttings()
 #endif
 
   hime_single_state = get_hime_conf_int(HIME_SINGLE_STATE, 0);
+  hime_punc_auto_send = get_hime_conf_int(HIME_PUNC_AUTO_SEND, 1);
+
 
   get_hime_conf_str(HIME_STR_IM_CYCLE, &hime_str_im_cycle, "1234567890-=[]\\");
   hime_remote_client = get_hime_conf_int(HIME_REMOTE_CLIENT, 0);
   hime_shift_space_eng_full = get_hime_conf_int(HIME_SHIFT_SPACE_ENG_FULL, 1);
   hime_capslock_lower = get_hime_conf_int(HIME_CAPSLOCK_LOWER, 1);
 
-  get_hime_conf_str(DEFAULT_INPUT_METHOD, &default_input_method_str, "6");
+#if USE_TSIN
+  get_hime_conf_str(DEFAULT_INPUT_METHOD, &default_input_method_str, "6"); /* "6" usually is Tsin */
+#endif
+#if !USE_TSIN
+  get_hime_conf_str(DEFAULT_INPUT_METHOD, &default_input_method_str, "3"); /* "3" usually is Bopomofo */
+#endif
   left_right_button_tips = get_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 1);
   hime_im_toggle_keys = get_hime_conf_int(HIME_IM_TOGGLE_KEYS, 0);
 #if TRAY_ENABLED
@@ -135,18 +142,18 @@ void load_setttings()
 
   gtab_dup_select_bell = get_hime_conf_int(GTAB_DUP_SELECT_BELL, 0);
   gtab_space_auto_first = get_hime_conf_int(GTAB_SPACE_AUTO_FIRST, GTAB_space_auto_first_none);
-  gtab_auto_select_by_phrase = get_hime_conf_int(GTAB_AUTO_SELECT_BY_PHRASE, GTAB_AUTO_SELECT_BY_PHRASE_AUTO);
-  gtab_pre_select = get_hime_conf_int(GTAB_PRE_SELECT, 1);
-  gtab_press_full_auto_send = get_hime_conf_int(GTAB_PRESS_FULL_AUTO_SEND, 0);
-  gtab_disp_partial_match = get_hime_conf_int(GTAB_DISP_PARTIAL_MATCH, 0);
+  gtab_auto_select_by_phrase = get_hime_conf_int(GTAB_AUTO_SELECT_BY_PHRASE, GTAB_OPTION_AUTO);
+  gtab_pre_select = get_hime_conf_int(GTAB_PRE_SELECT, GTAB_OPTION_YES);
+  gtab_press_full_auto_send = get_hime_conf_int(GTAB_PRESS_FULL_AUTO_SEND, GTAB_OPTION_NO);
+  gtab_disp_partial_match = get_hime_conf_int(GTAB_DISP_PARTIAL_MATCH, GTAB_OPTION_NO);
   gtab_disp_key_codes = get_hime_conf_int(GTAB_DISP_KEY_CODES, 0);
   gtab_disp_im_name = get_hime_conf_int(GTAB_DISP_IM_NAME, 1);
   gtab_invalid_key_in = get_hime_conf_int(GTAB_INVALID_KEY_IN, 0);
   gtab_shift_phrase_key = get_hime_conf_int(GTAB_SHIFT_PHRASE_KEY, 0);
   gtab_hide_row2 = get_hime_conf_int(GTAB_HIDE_ROW2, 0);
   gtab_in_row1 = get_hime_conf_int(GTAB_IN_ROW1, 0);
-  gtab_vertical_select = get_hime_conf_int(GTAB_VERTICAL_SELECT, 0);
-  gtab_unique_auto_send = get_hime_conf_int(GTAB_UNIQUE_AUTO_SEND, 0);
+  gtab_vertical_select = get_hime_conf_int(GTAB_VERTICAL_SELECT, GTAB_OPTION_NO);
+  gtab_unique_auto_send = get_hime_conf_int(GTAB_UNIQUE_AUTO_SEND, GTAB_OPTION_NO);
   gtab_que_wild_card = get_hime_conf_int(GTAB_QUE_WILD_CARD, 0);
   gtab_phrase_pre_select = get_hime_conf_int(GTAB_PHRASE_PRE_SELECT, 1);
   gtab_in_area_button = get_hime_conf_int(GTAB_IN_AREA_BUTTON, 0);

@@ -1,9 +1,8 @@
 %ename symbols
 %prompt 符號
-%selkey 12
-%endkey 0123456789abcdefghijklmnopqrstuvwxyz`-=[]\;',./
+%selkey 1
+%endkey 0123456789abcdefghijklmnopqrstuvwxyz`-=[]\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ
 %space_style 2
-%keep_key_case
 %symbol_kbm
 %keyname begin
 `	€

@@ -41,6 +41,7 @@ void inc_gtab_usecount(char *str), ClrSelArea();
 void lookup_gtabn(char *ch, char *out);
 char *htmlspecialchars(char *s, char out[]);
 void hide_gtab_pre_sel();
+gboolean gtab_vertical_select_on();
 
 extern gint64 key_press_time, key_press_time_ctrl;
 
@@ -388,14 +389,12 @@ gboolean output_gbuf()
 
     if (!gbuf[i].plen)
       i++;
-#if USE_TSIN
     else {
       u_int64_t kk[MAX_PHRASE_LEN];
 	  extract_gtab_key(i, gbuf[i].plen, kk);
 	  inc_dec_tsin_use_count(kk, t, gbuf[i].plen);
       i+=gbuf[i].plen;
     }
-#endif
   }
 
 
@@ -588,7 +587,7 @@ GEDIT *insert_gbuf_cursor(char **sel, int selN, u_int64_t key, gboolean b_gtab_e
   pbuf->keysN=1;
   pbuf->flag = b_gtab_en_no_spc ? FLAG_CHPHO_GTAB_BUF_EN_NO_SPC:0;
 
-  if (ggg.gbufN==ggg.gbuf_cursor && selN==1 && strstr(_(auto_end_punch), sel[0])) {
+  if (hime_punc_auto_send && ggg.gbufN==ggg.gbuf_cursor && selN==1 && strstr(_(auto_end_punch), sel[0])) {
     char_play(pbuf->ch);
     output_gbuf();
   } else {
@@ -1111,12 +1110,12 @@ void gtab_scan_pre_select(gboolean b_incr)
 
   for(i=0;i<tss.pre_selN; i++) {
     char ts[(MAX_PHRASE_LEN+3) * CH_SZ + 1];
-    char *br= (i < tss.pre_selN-1 && gtab_vertical_select)?"\n":"";
+    char *br= (i < tss.pre_selN-1 && gtab_vertical_select_on())?"\n":"";
 
     sprintf(ts, "<span foreground=\"%s\">%c</span>%s%s", hime_sel_key_color,
       cur_inmd->selkey[i], tss.pre_sel[i].str, br);
     strcat(tt, ts);
-    if (!gtab_vertical_select && i < tss.pre_selN-1)
+    if (!gtab_vertical_select_on() && i < tss.pre_selN-1)
       strcat(tt, " ");
   }
 

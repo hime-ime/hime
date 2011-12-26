@@ -28,6 +28,7 @@
 
 extern gboolean test_mode;
 gboolean gtab_phrase_on();
+gboolean gtab_disp_partial_match_on(), gtab_vertical_select_on(), gtab_pre_select_on(), gtab_unique_auto_send_on(), gtab_press_full_auto_send_on();
 void init_seltab(char ***p);
 
 extern gint64 key_press_time, key_press_time_ctrl;
@@ -47,20 +48,13 @@ extern char **seltab;
 
 gboolean use_tsin_sel_win()
 {
-  return
-//  !gtab_pre_select && !gtab_disp_partial_match &&
-  gtab_vertical_select && gtab_phrase_pre_select;
-}
-
-static gboolean disp_partial_match_on()
-{
- return gtab_disp_partial_match || (cur_inmd->flag&FLAG_GTAB_DISP_PARTIAL_MATCH)!=0;
+  return  gtab_vertical_select_on() && gtab_phrase_pre_select;
 }
 
 
-static gboolean gtab_pre_select_on()
+static gboolean gtab_pre_select_or_partial_on()
 {
- return gtab_pre_select || (cur_inmd->flag&FLAG_GTAB_DISP_PARTIAL_MATCH)!=0;
+  return gtab_pre_select_on() || (cur_inmd->flag&FLAG_GTAB_DISP_PARTIAL_MATCH)!=0;
 }
 
 gboolean same_query_show_pho_win()
@@ -461,12 +455,10 @@ static void putstr_inp(char *p)
   if (utf8_str_N(p) > 1  || !(p[0]&128)) {
     if ((gtab_disp_key_codes && !gtab_hide_row2) || ggg.wild_mode)
       lookup_gtabn(p, NULL);
-#if USE_TSIN
     if (to_tsin) {
       add_to_tsin_buf_str(p);
     }
     else
-#endif
       send_text(p);
   }
   else {
@@ -687,7 +679,7 @@ void disp_selection0(gboolean phrase_selected, gboolean force_disp)
   pgstr[0]=0;
   page_no_str(pgstr);
 
-  if (!gtab_vertical_select) {
+  if (!gtab_vertical_select_on()) {
     if (ggg.more_pg)
       set_page_label(pgstr);
     else
@@ -701,7 +693,7 @@ void disp_selection0(gboolean phrase_selected, gboolean force_disp)
   int ofs;
   if (!ggg.wild_mode && ggg.exa_match && (_gtab_space_auto_first & GTAB_space_auto_first_any)) {
     strcat(tt, htmlspecialchars(seltab[0], uu));
-    if (gtab_vertical_select)
+    if (gtab_vertical_select_on())
       strcat(tt, "\n");
     else
       strcat(tt, " ");
@@ -727,7 +719,7 @@ void disp_selection0(gboolean phrase_selected, gboolean force_disp)
       sprintf(www, "<span foreground=\"%s\">%s</span>", hime_sel_key_color, htmlspecialchars(uu, vvv));
       strcat(tt, www);
 
-      if (gtab_vertical_select)
+      if (gtab_vertical_select_on())
         strcat(tt, " ");
 
       if (phrase_selected && i==ggg.sel1st_i) {
@@ -737,7 +729,7 @@ void disp_selection0(gboolean phrase_selected, gboolean force_disp)
       } else {
         char uu[MAX_CIN_PHR];
 
-        if (gtab_vertical_select) {
+        if (gtab_vertical_select_on()) {
           utf8cpy_bytes(uu, selback, 120);
           strcat(tt, uu);
         } else {
@@ -757,12 +749,12 @@ void disp_selection0(gboolean phrase_selected, gboolean force_disp)
         }
       }
 
-      if (gtab_vertical_select)
+      if (gtab_vertical_select_on())
         strcat(tt, "\n");
     } else {
       extern gboolean b_use_full_space;
 
-      if (!gtab_vertical_select && disp_partial_match_on()) {
+      if (!gtab_vertical_select_on() && gtab_disp_partial_match_on()) {
          if (b_use_full_space)
            strcat(tt, _(_L(" 　 ")));
          else {
@@ -772,7 +764,7 @@ void disp_selection0(gboolean phrase_selected, gboolean force_disp)
     }
   }
 
-  if (gtab_vertical_select && pgstr[0]) {
+  if (gtab_vertical_select_on() && pgstr[0]) {
     char tstr2[16];
     sprintf(tstr2, "(%s)", pgstr);
     strcat(tt, tstr2);
@@ -782,7 +774,7 @@ void disp_selection0(gboolean phrase_selected, gboolean force_disp)
   if (len && tt[len-1] == '\n')
     tt[len-1] = 0;
 
-  if (gtab_pre_select_on() || ggg.wild_mode || ggg.spc_pressed || ggg.last_full || force_disp) {
+  if (gtab_pre_select_or_partial_on() || ggg.wild_mode || ggg.spc_pressed || ggg.last_full || force_disp) {
     disp_gtab_sel(tt);
   }
 }
@@ -1067,7 +1059,6 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
 shift_proc:
   if (shift_m && !strchr(cur_inmd->selkey, key) && !ggg.more_pg && key>=' ' && key < 0x7e &&
        key!='*' && (key!='?' || (gtab_shift_phrase_key && !ggg.ci))) {
-    dbg("uuuuuuuuuu\n");
     if (gtab_shift_phrase_key) {
       if (tss.pre_selN && shift_char_proc(key, kbstate))
         return TRUE;
@@ -1464,7 +1455,7 @@ keypad_proc:
 #if 1 // for dayi, testcase :  6 space keypad6
       int vv = pselkey - cur_inmd->selkey;
       if (pselkey && tss.pre_selN && !ggg.gtab_buf_select && (tss.ctrl_pre_sel||
-          ((!inkey||ggg.spc_pressed||is_keypad)&&!gtab_disp_partial_match&&!gtab_pre_select))) {
+          ((!inkey||ggg.spc_pressed||is_keypad)&&! gtab_disp_partial_match_on() && !gtab_pre_select_on()))) {
         if (gtab_pre_select_idx(vv))
           return TRUE;
       } else
@@ -1494,7 +1485,7 @@ keypad_proc:
       }
 #endif
 
-//      dbg("iii %x sel1st_i:%d\n", pselkey, ggg.sel1st_i);
+//      dbg("iii %x sel1st_i:%d auto:%d\n", pselkey, ggg.sel1st_i, AUTO_SELECT_BY_PHRASE);
       if (seltab[ggg.sel1st_i][0] && !ggg.wild_mode &&
            (gtab_full_space_auto_first||ggg.spc_pressed||ggg.last_full) ) {
         if (AUTO_SELECT_BY_PHRASE && poo.same_pho_query_state != SAME_PHO_QUERY_gtab_input)
@@ -1736,12 +1727,12 @@ YYYY:
 
     int shiftb=(KEY_N - 1 -ggg.ci) * KeyBits;
 
-//    if (gtab_disp_partial_match)
+//    if (gtab_disp_partial_match_on)
     while((CONVT2(cur_inmd, j) & vmaskci)==ggg.kval && j<oE1) {
       int fff=cur_inmd->keycol[(CONVT2(cur_inmd, j)>>shiftb) & cur_inmd->kmask];
       u_char *tbl_ch = tblch(j);
 
-      if (disp_partial_match_on() && (!seltab[fff][0] || seltab_phrase[fff] ||
+      if (gtab_disp_partial_match_on() && (!seltab[fff][0] || seltab_phrase[fff] ||
            (bchcmp(seltab[fff], tbl_ch)>0 && fff > ggg.exa_match))) {
         seltab_phrase[fff] = load_seltab(j, fff);
         ggg.defselN++;
@@ -1754,7 +1745,7 @@ YYYY:
       j++;
     }
 
-    if (gtab_unique_auto_send) {
+    if (gtab_unique_auto_send_on()) {
       char *first_str=NULL;
       for(i=0; i < page_len(); i++) {
         if (!seltab[i][0])
@@ -1783,7 +1774,7 @@ next_pg:
 
     if (ggg.ci==cur_inmd->MaxPress)
       ggg.last_full=1;
-    int full_send = gtab_press_full_auto_send && ggg.last_full;
+    int full_send = gtab_press_full_auto_send_on() && ggg.last_full;
 
 //    dbg("flag %d\n",!(pendkey && (cur_inmd->flag&FLAG_PHRASE_AUTO_SKIP_ENDKEY)));
     if (AUTO_SELECT_BY_PHRASE && !(pendkey && (cur_inmd->flag&FLAG_PHRASE_AUTO_SKIP_ENDKEY))
@@ -1824,7 +1815,7 @@ next_pg:
 
 
     if (ggg.defselN==1 && !ggg.more_pg) {
-      if (ggg.spc_pressed || full_send || gtab_unique_auto_send) {
+      if (ggg.spc_pressed || full_send || gtab_unique_auto_send_on()) {
         if (AUTO_SELECT_BY_PHRASE && poo.same_pho_query_state != SAME_PHO_QUERY_gtab_input)
           insert_gbuf_cursor1_cond(seltab[0], ggg.kval, ggg.exa_match);
         else
@@ -1844,16 +1835,16 @@ next_pg:
       return TRUE;
     } else
     if (!ggg.more_pg) {
-      if (gtab_dup_select_bell && (disp_partial_match_on() || gtab_pre_select_on())) {
-        if (ggg.spc_pressed || gtab_full_space_auto_first || (ggg.last_full && gtab_press_full_auto_send))
+      if (gtab_dup_select_bell && (gtab_disp_partial_match_on() || gtab_pre_select_or_partial_on())) {
+        if (ggg.spc_pressed || gtab_full_space_auto_first || (ggg.last_full && gtab_press_full_auto_send_on()))
           bell();
       }
     }
   }
 
 Disp_opt:
-  if (disp_partial_match_on() || gtab_pre_select_on() || ((ggg.exa_match > 1 || ggg.more_pg) &&
-    (ggg.spc_pressed || gtab_press_full_auto_send ||
+  if (gtab_disp_partial_match_on() || gtab_pre_select_or_partial_on() || ((ggg.exa_match > 1 || ggg.more_pg) &&
+    (ggg.spc_pressed || gtab_press_full_auto_send_on() ||
     (ggg.ci==cur_inmd->MaxPress && (_gtab_space_auto_first & GTAB_space_auto_first_full))) ) ) {
        disp_selection(phrase_selected);
   }

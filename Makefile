@@ -1,7 +1,5 @@
 include config.mak
 
-ECHO = /bin/echo
-
 VERSION_FILE = VERSION.hime
 
 DIR    = src data filter scripts icons man menu

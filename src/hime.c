@@ -322,6 +322,7 @@ static void change_font_size()
   change_win0_style();
   change_win_gtab_style();
   update_win_kbm_inited();
+  change_win1_font();
 //  change_win_pho_style();
 }
 

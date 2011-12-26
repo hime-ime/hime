@@ -458,14 +458,6 @@ gtk_im_context_hime_filter_keypress (GtkIMContext *context,
 #endif
 
 
-  if (!has_str && context_pe_started) {
-    clear_preedit(context_xim);
-    context_xim->pe_started = FALSE;
-#if DBG
-    printf("preedit-end %x\n", has_str);
-#endif
-    g_signal_emit_by_name (context, "preedit-end");
-  }
 
 
 #if DBG
@@ -478,6 +470,15 @@ gtk_im_context_hime_filter_keypress (GtkIMContext *context,
 #endif
     g_signal_emit_by_name (context, "commit", rstr);
     free(rstr);
+  }
+
+  if (!has_str && context_pe_started) {
+    clear_preedit(context_xim);
+    context_xim->pe_started = FALSE;
+#if DBG
+    printf("preedit-end %x\n", has_str);
+#endif
+    g_signal_emit_by_name (context, "preedit-end");
   }
 
 

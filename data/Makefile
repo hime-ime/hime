@@ -8,7 +8,7 @@ CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I$(SRC_DIR)
 export NO_GTK_INIT=
 export HIME_NO_RELOAD=
 
-DATA=pho.tab2 tsin32.idx \
+DATA=pho.tab2 tsin32.idx gtab.list \
      cj.gtab ar30.gtab ar30-big.gtab dayi3.gtab pinyin.gtab jyutping.gtab cj5.gtab \
      et.kbm et26.kbm zo.kbm pinyin.kbm dvorak.kbm mitac.kbm colemak.kbm \
      ibm.kbm tsin32 hsu.kbm pho-huge.tab2 simplex.gtab symbols.gtab russian.gtab \
@@ -24,6 +24,13 @@ CIN2GTAB   = $(SRC_DIR)/cin2gtab
 KBMCV      = $(SRC_DIR)/kbmcv
 PIN_JUYIN  = $(SRC_DIR)/pin-juyin
 
+ifeq ($(USE_TSIN),Y)
+REMOVE_TSIN = keep_tsin
+endif
+
+ifeq ($(USE_TSIN),N)
+REMOVE_TSIN = remove_tsin
+endif
 
 all:	$(DATA)
 
@@ -88,6 +95,15 @@ tsin-1.src:	extr1
 .kbmsrc.kbm: $(KBMCV)
 	$(KBMCV) $<
 
+keep_tsin: gtab.list.in
+	cp gtab.list.in gtab.list
+
+remove_tsin: gtab.list.in
+	grep -v TSIN gtab.list.in > gtab.list
+
+gtab.list: $(REMOVE_TSIN)
+	touch gtab.list
+
 install:
 	install -d $(HIME_TABLE_DIR_i)
 	install -m 644 $(DATA) $(DATAKEEP) $(HIME_TABLE_DIR_i)
@@ -95,4 +111,4 @@ install:
 
 clean:
 	@echo "clean up"
-	@rm -f *~ tags core.* $(DATA) *.gtab extr1 t2s-file tsin-1.src tsin-gtabidx* tsin-ch-idx
+	@rm -f *~ tags core.* $(DATA) *.gtab extr1 t2s-file tsin-1.src tsin-gtabidx* tsin-ch-idx gtab.list
