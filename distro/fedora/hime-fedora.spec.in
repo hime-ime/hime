@@ -1,6 +1,6 @@
 Name:           hime
 Version:        __hime_version__
-Release:        %{?dist}
+Release:        1%{?dist}
 Summary:        Input method for Traditional Chinese
 
 Group:          System Environment/Libraries
@@ -11,6 +11,7 @@ URL:            http://hime.luna.com.tw
 Source0:        http://hime.luna.com.tw/%{name}-%{version}.tar.xz
 #Source0:        %{name}-%{version}.tar.xz
 Source1:        hime.conf
+BuildRoot:      %{_builddir}/%{name}-%{version}-%{release}-root
 
 BuildRequires:  qt-devel, gtk3-devel, gtk2-devel, desktop-file-utils
 BuildRequires:  libXtst-devel
@@ -55,7 +56,7 @@ sed -i.strip -e 's|install[ \t][ \t]*-s|install|' Makefile
 
 %build
 %configure
-perl -pi -e "s/^(OPTFLAGS.*=)/\1 %{optflags} /" config.mak
+#perl -pi -e "s/^(OPTFLAGS.*=)/\1 %{optflags} /" config.mak
 # fixme: explain how %%{?_smp_mflags} breaks build?
 make
 
@@ -111,17 +112,16 @@ fi
 %files
 %doc AUTHORS gpl-2.0.txt lgpl-2.1.txt fdl-1.2.txt ChangeLog README.html
 %config %{_sysconfdir}/X11/xinit/xinput.d/hime.conf
-%{_bindir}/hime*
-%{_bindir}/gtab*
-%{_bindir}/hime-juyin-learn
-%{_bindir}/pho*
-%{_bindir}/hime-sim2trad
-%{_bindir}/hime-trad2sim
-%{_bindir}/ts*
+%{_bindir}/hime
+%{_bindir}/hime-*
+%{_bindir}/cin2gtab
+%{_bindir}/gtab2cin
 %{_datadir}/applications/fedora-hime-setup.desktop
 %{_datadir}/hime/
-%{_datadir}/icons/hime/
-%{_datadir}/icons/hime*.png
+%{_datadir}/pixmaps/hime/
+%{_datadir}/pixmaps/hime.png
+%{_datadir}/locale/
+%{_datadir}/doc/hime/
 %{_mandir}/*/*
 %{_libdir}/hime/*
 
