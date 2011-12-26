@@ -219,7 +219,10 @@ fi
 DEBIAN_LD=`ld -v 2>&1 | grep -i debian`
 UBUNTU_LD=`ld -v 2>&1 | grep -i ubuntu`
 [ "$DEBIAN_LD" != "" ] && LIB='lib'
-[ "$UBUNTU_LD" != "" ] && LIB='lib'
+if [ "$UBUNTU_LD" != "" ]; then
+  LIB='lib'
+  SYSTEM_IS_UBUNTU='Y'
+fi
 
 # --- QT3 START ---
 QT_IM='N'
@@ -420,6 +423,7 @@ echo "USE_ANTHY=$USE_ANTHY" >> config.mak
 echo "USE_CHEWING=$USE_CHEWING" >> config.mak
 echo "BUILD_MODULE=$BUILD_MODULE" >> config.mak
 echo "ECHO=$ECHO" >> config.mak
+echo "SYSTEM_IS_UBUNTU=$SYSTEM_IS_UBUNTU" >> config.mak
 
 #if [ $prefix = /usr/local ]; then
 #  echo "hime_ld_run_path=$PWD:\$(himelibdir)" >> config.mak
