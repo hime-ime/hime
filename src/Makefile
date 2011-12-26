@@ -109,6 +109,11 @@ CFLAGS     += -DUSE_TSIN=1
 OBJS       += $(hime_tsin_o)
 endif
 
+# Temporary workaround to turn off Tsin, will be fixed later
+ifeq ($(USE_TSIN),N)
+OBJS       += tsin.o tsin-util.o win0.o win1.o tsin-parse.o
+endif
+
 ifeq ($(MAC_OS),1)
 EXTRA_LDFLAGS=-bind_at_load 
 endif
