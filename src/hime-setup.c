@@ -89,7 +89,7 @@ static void cb_kbm()
   create_kbm_window();
 }
 
-static void cb_hime_tslearn()
+static void cb_tslearn()
 {
 #if UNIX
   system("hime-tslearn &");
@@ -1161,7 +1161,7 @@ static void create_main_win()
   GtkWidget *button_hime_tslearn = gtk_button_new_with_label(_(_L("讓詞音從文章學習詞")));
   gtk_box_pack_start (GTK_BOX (vbox_ts), button_hime_tslearn, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (button_hime_tslearn), "clicked",
-                    G_CALLBACK (cb_hime_tslearn), NULL);
+                    G_CALLBACK (cb_tslearn), NULL);
 
   GtkWidget *button_ts_import_sys = gtk_button_new_with_label(_(_L("匯入系統的詞庫")));
   gtk_box_pack_start (GTK_BOX (vbox_ts), button_ts_import_sys, TRUE, TRUE, 0);
