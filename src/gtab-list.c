@@ -94,11 +94,8 @@ void load_gtab_list(gboolean skip_disabled)
     if (strlen(name) < 1)
       break;
 
-    if (strchr(default_input_method_str, key[0])) {
-      default_input_method = inmdN;
-//      dbg("default_input_method %s %s %d\n", default_input_method_str, key, default_input_method);
-    }
-    INMD *pinmd = &inmd[inmdN++];
+    int inmd_idx;
+    INMD *pinmd = &inmd[inmd_idx = inmdN++];
     bzero(pinmd, sizeof(INMD));
     pinmd->key_ch = key[0];
 
@@ -140,6 +137,13 @@ void load_gtab_list(gboolean skip_disabled)
       name++;
       pinmd->disabled = TRUE;
     }
+
+    if (strchr(default_input_method_str, key[0]) && !pinmd->disabled) {
+      default_input_method = inmd_idx;
+      dbg("default_input_method %s %s %s %d\n", name,
+         default_input_method_str, key, default_input_method);
+    }
+
     pinmd->cname = strdup(name);
 
     if (strlen(icon))

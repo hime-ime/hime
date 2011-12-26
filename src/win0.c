@@ -647,6 +647,7 @@ static void destroy_top_bin()
   bzero(chars, sizeof(chars));
 }
 
+#if USE_TSIN
 void destroy_win0()
 {
   if (!gwin0)
@@ -655,6 +656,7 @@ void destroy_win0()
   gtk_widget_destroy(gwin0);
   gwin0 = NULL;
 }
+#endif
 
 void get_win0_geom()
 {

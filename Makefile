@@ -1,10 +1,10 @@
 include config.mak
 
-ECHO = /bin/echo
-
 VERSION_FILE = VERSION.hime
 
 DIR    = src data filter scripts icons man menu
+
+ECHO  := $(shell whereis -b echo | tr -d '\n' | sed 's/^echo: *//g')
 
 ifeq ($(USE_I18N),Y)
 DIR   += po

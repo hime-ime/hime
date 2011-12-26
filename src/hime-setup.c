@@ -89,7 +89,7 @@ static void cb_kbm()
   create_kbm_window();
 }
 
-static void cb_hime_tslearn()
+static void cb_tslearn()
 {
 #if UNIX
   system("hime-tslearn &");
@@ -840,10 +840,10 @@ void create_appearance_conf_window()
        hime_win32_icon);
   gtk_box_pack_start (GTK_BOX(hbox_hime_status_tray), check_button_hime_win32_icon, FALSE, FALSE, 0);
 #endif
-  check_button_hime_tray_hf_win_kbm = gtk_check_button_new_with_label (_(_L("全半形左鍵\n切換小鍵盤")));
+  check_button_hime_tray_hf_win_kbm = gtk_check_button_new_with_label (_(_L("在全/半形圖示上按滑鼠左鍵可顯示/關閉螢幕小鍵盤")));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_tray_hf_win_kbm),
        hime_tray_hf_win_kbm);
-  gtk_box_pack_start (GTK_BOX(hbox_hime_status_tray), check_button_hime_tray_hf_win_kbm, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX(vbox_top), check_button_hime_tray_hf_win_kbm, FALSE, FALSE, 0);
 #endif
 
   GtkWidget *frame_win_color = gtk_frame_new(_(_L("顏色選擇")));
@@ -1161,7 +1161,7 @@ static void create_main_win()
   GtkWidget *button_hime_tslearn = gtk_button_new_with_label(_(_L("讓詞音從文章學習詞")));
   gtk_box_pack_start (GTK_BOX (vbox_ts), button_hime_tslearn, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (button_hime_tslearn), "clicked",
-                    G_CALLBACK (cb_hime_tslearn), NULL);
+                    G_CALLBACK (cb_tslearn), NULL);
 
   GtkWidget *button_ts_import_sys = gtk_button_new_with_label(_(_L("匯入系統的詞庫")));
   gtk_box_pack_start (GTK_BOX (vbox_ts), button_ts_import_sys, TRUE, TRUE, 0);

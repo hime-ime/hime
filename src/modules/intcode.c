@@ -154,9 +154,8 @@ dispIn:
     disp_int(i, _(dstr[h2i(inch[i])]));
   }
 
-  if ((((current_intcode==INTCODE_BIG5 && intcode_cin==4) ||
-       (current_intcode==INTCODE_UTF32 && intcode_cin==6)) &&
-      *gmf.mf_gtab_press_full_auto_send) || key==' ') {
+  if (((current_intcode==INTCODE_BIG5 && intcode_cin==4) ||
+       (current_intcode==INTCODE_UTF32 && intcode_cin==6)) || key==' ') {
     u_char utf8[CH_SZ+1];
 
     if (current_intcode==INTCODE_BIG5) {

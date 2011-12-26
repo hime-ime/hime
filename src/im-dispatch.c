@@ -179,7 +179,8 @@ static void shutdown_client(HANDLE fd)
   hime_clients[idx].fd = NULL;
 #endif
 
-#if UNIX
+/* Now we use "is_special_user" */
+#if 0
   int uid = getuid();
   struct passwd *pwd;
   if ((pwd=getpwuid(uid)) &&

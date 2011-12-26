@@ -51,7 +51,8 @@ static GtkWidget *opt_im_toggle_keys, *check_button_hime_remote_client,
        *check_button_hime_shift_space_eng_full,
        *check_button_hime_init_im_enabled,
        *check_button_hime_eng_phrase_enabled,
-       *check_button_hime_win_sym_click_close;
+       *check_button_hime_win_sym_click_close,
+       *check_button_hime_punc_auto_send;
 #if 0
 static GtkWidget *spinner_gcb_position_x, *spinner_gcb_position_y;
 #endif
@@ -73,6 +74,7 @@ typedef struct
   gboolean default_inmd;
   gboolean use;
   gboolean editable;
+  INMD *pinmd;
 } Item;
 
 enum
@@ -85,6 +87,7 @@ enum
   COLUMN_DEFAULT_INMD,
   COLUMN_USE,
   COLUMN_EDITABLE,
+  COLUMN_PINMD,
   NUM_COLUMNS
 };
 
@@ -135,11 +138,12 @@ add_items (void)
     foo.icon = gdk_pixbuf_new_from_file(icon_path, &err);
     foo.key = g_strdup(key);
     foo.file = g_strdup(file);
-    dbg("%d] %d\n",i,pinmd->in_cycle);
+//    dbg("%d] %d\n",i,pinmd->in_cycle);
     foo.default_inmd =  default_input_method == i;
     foo.use = !pinmd->disabled;
     foo.cycle = pinmd->in_cycle && foo.use;
     foo.editable = FALSE;
+    foo.pinmd = pinmd;
     g_array_append_vals (articles, &foo, 1);
   }
 
@@ -163,7 +167,7 @@ create_model (void)
                               G_TYPE_STRING,
                               G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN,
                               G_TYPE_BOOLEAN,
-                              G_TYPE_BOOLEAN);
+                              G_TYPE_BOOLEAN, G_TYPE_POINTER);
 
   /* add items */
   for (i = 0; i < articles->len; i++) {
@@ -186,6 +190,8 @@ create_model (void)
                           g_array_index (articles, Item, i).use,
                           COLUMN_EDITABLE,
                           g_array_index (articles, Item, i).editable,
+                          COLUMN_PINMD,
+                          g_array_index (articles, Item, i).pinmd,
                           -1);
   }
 
@@ -225,6 +231,25 @@ static void save_gtab_list()
 
 static void cb_ok (GtkWidget *button, gpointer data)
 {
+  GtkTreeModel *model = GTK_TREE_MODEL (data);
+
+  GtkTreeIter iter;
+  if (!gtk_tree_model_get_iter_first(model, &iter))
+    return;
+
+  do {
+    char *tkey;
+    gtk_tree_model_get(model,&iter, COLUMN_KEY, &tkey, -1);
+    gboolean cycle, default_inmd, use;
+    gtk_tree_model_get (model, &iter, COLUMN_CYCLE, &cycle, -1);
+    gtk_tree_model_get (model, &iter, COLUMN_DEFAULT_INMD, &default_inmd, -1);
+    gtk_tree_model_get (model, &iter, COLUMN_USE, &use, -1);
+    INMD *pinmd;
+    gtk_tree_model_get (model, &iter, COLUMN_PINMD, &pinmd, -1);
+    pinmd->in_cycle = cycle;
+    pinmd->disabled = !use;
+  } while (gtk_tree_model_iter_next(model, &iter));
+
   char tt[128];
   tt[0]=inmd[default_input_method].key_ch;
   tt[1]=0;
@@ -269,6 +294,9 @@ static void cb_ok (GtkWidget *button, gpointer data)
 
   save_hime_conf_int(HIME_BELL_OFF,
     gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_bell_off)));
+
+  save_hime_conf_int(HIME_PUNC_AUTO_SEND,
+    gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_punc_auto_send)));
 #if UNIX
   save_hime_conf_int(HIME_SINGLE_STATE,
     gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_single_state)));
@@ -315,29 +343,17 @@ static gboolean toggled (GtkCellRendererToggle *cell, gchar *path_string, gpoint
   GtkTreeModel *model = GTK_TREE_MODEL (data);
   GtkTreeIter iter;
   GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
-  gboolean value;
+  gboolean cycle;
 
   dbg("toggled\n");
 
   gtk_tree_model_get_iter (model, &iter, path);
-  gtk_tree_model_get (model, &iter, COLUMN_CYCLE, &value, -1);
-  int i = gtk_tree_path_get_indices (path)[0];
+  gtk_tree_model_get (model, &iter, COLUMN_CYCLE, &cycle, -1);
 
-  dbg("i %d\n", i);
+  cycle ^= 1;
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_CYCLE, cycle, -1);
 
-//  char *key=g_array_index (articles, Item, i).key;
-  int in_no = i;
-
-  if (in_no < 0)
-    return TRUE;
-
-  value ^= 1;
-  inmd[in_no].in_cycle = value;
-
-  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_CYCLE, value, -1);
-
-  if (value) {
-    inmd[in_no].disabled = 0;
+  if (cycle) {
     gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_USE, TRUE, -1);
   }
 
@@ -372,17 +388,12 @@ static gboolean toggled_default_inmd(GtkCellRendererToggle *cell, gchar *path_st
 
 //  dbg("toggled_default_inmd\n");
   gtk_tree_model_get_iter (model, &iter, path);
-  int i = gtk_tree_path_get_indices (path)[0];
-  char *key=g_array_index (articles, Item, i).key;
+  char *key;
+  gtk_tree_model_get (model, &iter, COLUMN_KEY, &key, -1);
   default_input_method = hime_switch_keys_lookup(key[0]);
-  dbg("default_input_method %d %c\n", default_input_method, key[0]);
-
-  if (default_input_method < 0)
-    default_input_method = hime_switch_keys_lookup('6');
+  dbg("default_input_method %d '%c'\n", default_input_method, key[0]);
 
   gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_DEFAULT_INMD, TRUE, -1);
-
-  inmd[default_input_method].disabled = 0;
   gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_USE, TRUE, -1);
 
   gtk_tree_path_free (path);
@@ -399,19 +410,19 @@ static gboolean toggled_use(GtkCellRendererToggle *cell, gchar *path_string, gpo
 
 //  dbg("toggled_default_inmd\n");
   gtk_tree_model_get_iter (model, &iter, path);
-  int i = gtk_tree_path_get_indices (path)[0];
-  char *key=g_array_index (articles, Item, i).key;
-  int input_method = i;
-  dbg("toggle use %d %c\n", input_method, key[0]);
-  gboolean must_on = inmd[input_method].in_cycle || default_input_method==input_method;
+  gboolean cycle, default_inmd, use;
+  gtk_tree_model_get (model, &iter, COLUMN_CYCLE, &cycle, -1);
+  gtk_tree_model_get (model, &iter, COLUMN_DEFAULT_INMD, &default_inmd, -1);
+  gtk_tree_model_get (model, &iter, COLUMN_USE, &use, -1);
+  gboolean must_on = cycle || default_inmd;
+  dbg("toggle %d %d %d\n", cycle, default_inmd, use);
 
-  if (must_on && !inmd[input_method].disabled) {
+  if (must_on && use) {
 //    dbg("must_on\n");
     return TRUE;
   }
 
-  inmd[input_method].disabled ^= 1;
-  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_USE, !inmd[input_method].disabled, -1);
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_USE, !use, -1);
   gtk_tree_path_free (path);
 
   return TRUE;
@@ -448,15 +459,6 @@ add_columns (GtkTreeView *treeview)
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
                                                -1, _(_L("Ctrl-Alt-鍵")), renderer,
                                                "text", COLUMN_KEY,
-                                               "editable", COLUMN_EDITABLE,
-                                               NULL);
-
-  renderer = gtk_cell_renderer_text_new ();
-  g_object_set_data (G_OBJECT (renderer), "column", (gint *)COLUMN_FILE);
-
-  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
-                                               -1, _(_L("檔案名稱")), renderer,
-                                               "text", COLUMN_FILE,
                                                "editable", COLUMN_EDITABLE,
                                                NULL);
 
@@ -502,6 +504,15 @@ add_columns (GtkTreeView *treeview)
                                                -1, _(_L("啟用")),
                                                renderer,
                                                "active", COLUMN_USE,
+                                               NULL);
+
+  renderer = gtk_cell_renderer_text_new ();
+  g_object_set_data (G_OBJECT (renderer), "column", (gint *)COLUMN_FILE);
+
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
+                                               -1, _(_L("檔案名稱")), renderer,
+                                               "text", COLUMN_FILE,
+                                               "editable", COLUMN_EDITABLE,
                                                NULL);
 }
 
@@ -678,10 +689,6 @@ void create_gtablist_window (void)
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (gtablist_window), vbox);
 
-  gtk_box_pack_start (GTK_BOX (vbox),
-                      gtk_label_new (_(_L("hime 輸入法選擇"))),
-                      FALSE, FALSE, 0);
-
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
                                        GTK_SHADOW_ETCHED_IN);
@@ -768,11 +775,19 @@ void create_gtablist_window (void)
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_win_sym_click_close),
      hime_win_sym_click_close);
 
+  GtkWidget *hbox_hime_bell_off = gtk_hbox_new (FALSE, 10);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_bell_off, FALSE, FALSE, 0);
   check_button_hime_bell_off = gtk_check_button_new_with_label (_(_L("關閉嗶聲")));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_win_sym_click_close),check_button_hime_bell_off,  FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox_hime_bell_off),check_button_hime_bell_off,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_bell_off),
      hime_bell_off);
 
+  GtkWidget *hbox_hime_punc_auto_send = gtk_hbox_new (FALSE, 10);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_punc_auto_send, FALSE, FALSE, 0);
+  check_button_hime_punc_auto_send = gtk_check_button_new_with_label (_(_L("結尾標點符號自動送出編輯區內容")));
+  gtk_box_pack_start (GTK_BOX (hbox_hime_punc_auto_send),check_button_hime_punc_auto_send,  FALSE, FALSE, 0);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_punc_auto_send),
+     hime_punc_auto_send);
 
 #if 0
   GtkWidget *hbox_gcb_pos = gtk_hbox_new (FALSE, 10);

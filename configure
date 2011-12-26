@@ -6,10 +6,10 @@ if [ "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]; then
     echo "  --with_gtk3     : compile with GTK+ 3.x"
     echo "  --use_xim=N     : disable the support of XIM"
     echo "  --prefix=path   : install prefix (e.g. /usr)"
-#   TODO fix those not working options, or just drop them
+#   TODO fix not working option(s)
 #   echo "  --use_tray=N    : disable system tray"
     echo "  --use_i18n=N    : disable i18n"
-#   echo "  --use_tsin=N    : disable Tsin input method"
+    echo "  --use_tsin=N    : disable Tsin input method"
     echo "  --use_anthy=N   : disable Anthy input method"
     echo "  --use_chewing=N : disable Chewing input method"
     echo "  --use_qt3=Y     : enable Qt 3.x immodule"
@@ -218,8 +218,9 @@ LIB='lib64'
 fi
 DEBIAN_LD=`ld -v 2>&1 | grep -i debian`
 UBUNTU_LD=`ld -v 2>&1 | grep -i ubuntu`
-[ "$DEBIAN_LD" != "" ] && LIB='lib'
-[ "$UBUNTU_LD" != "" ] && LIB='lib'
+if [ "$DEBIAN_LD" != "" -o "$UBUNTU_LD" != "" ]; then
+  LIB='lib'
+fi
 
 # --- QT3 START ---
 QT_IM='N'
@@ -363,6 +364,11 @@ if [ -z "$CXX" ]; then
   CXX=g++
 fi
 
+# Fedora want to move /bin and /lib to /usr, hence the hack
+ECHO="echo"
+[ -x /usr/bin/echo ] && ECHO="/usr/bin/echo"
+[ -x /bin/echo ] && ECHO="/bin/echo"
+
 echo "CC=$CC" > config.mak
 echo "CCX=$CC" >> config.mak
 echo "CXX=$CXX" >> config.mak
@@ -414,6 +420,7 @@ echo "USE_TSIN=$use_tsin" >> config.mak
 echo "USE_ANTHY=$USE_ANTHY" >> config.mak
 echo "USE_CHEWING=$USE_CHEWING" >> config.mak
 echo "BUILD_MODULE=$BUILD_MODULE" >> config.mak
+echo "ECHO=$ECHO" >> config.mak
 
 #if [ $prefix = /usr/local ]; then
 #  echo "hime_ld_run_path=$PWD:\$(himelibdir)" >> config.mak

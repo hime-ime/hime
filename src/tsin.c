@@ -358,6 +358,7 @@ void clr_in_area_pho_tsin();
 void close_win_pho_near();
 void compact_win0();
 
+#if USE_TSIN
 void tsin_reset_in_pho0()
 {
 //  prbuf();
@@ -368,13 +369,16 @@ void tsin_reset_in_pho0()
   drawcursor();
   close_win_pho_near();
 }
+#endif
 
 
+#if USE_TSIN
 void tsin_reset_in_pho()
 {
   clrin_pho_tsin();
   tsin_reset_in_pho0();
 }
+#endif
 
 
 void flush_tsin_buffer()
@@ -964,6 +968,7 @@ void tsin_toggle_eng_ch()
 }
 
 
+#if USE_TSIN
 void tsin_toggle_half_full()
 {
     tss.tsin_half_full^=1;
@@ -973,6 +978,7 @@ void tsin_toggle_half_full()
     disp_tray_icon();
 #endif
 }
+#endif
 
 
 #if 0
@@ -1037,7 +1043,6 @@ void set_chpho_ch(CHPHO *pchpho, char *utf8, int len, gboolean is_pho_phrase)
 }
 
 
-#if USE_TSIN
 gboolean add_to_tsin_buf(char *str, phokey_t *pho, int len)
 {
     int i;
@@ -1083,7 +1088,6 @@ gboolean add_to_tsin_buf(char *str, phokey_t *pho, int len)
 
     return TRUE;
 }
-#endif
 
 #if 1
 static void set_phrase_link(int idx, int len)
@@ -1258,7 +1262,7 @@ static gboolean pre_punctuation_sub(KeySym xkey, char shift_punc[], unich_t *cha
       keys[0]=0;
       utf8_pho_keys(pchar, keys);
       add_to_tsin_buf(pchar, &keys[0], 1);
-      if (tsin_cursor_end())
+      if (hime_punc_auto_send && tsin_cursor_end())
         flush_tsin_buffer();
     }
     return 1;
@@ -1271,7 +1275,7 @@ static gboolean pre_punctuation_sub(KeySym xkey, char shift_punc[], unich_t *cha
 gboolean pre_punctuation(KeySym xkey)
 {
   static char shift_punc[]="<>?:\"{}!_";
-  static unich_t *chars[]={_L("，"),_L("。"),_L("？"),_L("："),_L("；"),_L("『"),_L("』"),_L("！"),_L("——")};
+  static unich_t *chars[]={_L("，"),_L("。"),_L("？"),_L("："),_L("；"),_L("「"),_L("」"),_L("！"),_L("——")};
   return pre_punctuation_sub(xkey, shift_punc, chars);
 }
 
@@ -1719,7 +1723,8 @@ tab_phrase_end:
 
            return 1;
          }
-         return 0;
+
+         return tss.c_len>0;
        }
 
        int N;
@@ -2163,7 +2168,6 @@ int feedkey_pp_release(KeySym xkey, int kbstate)
 }
 
 
-#if USE_TSIN
 void tsin_remove_last()
 {
   if (!tss.c_len)
@@ -2171,7 +2175,6 @@ void tsin_remove_last()
   tss.c_len--;
   tss.c_idx--;
 }
-#endif
 
 
 gboolean save_phrase_to_db2(CHPHO *chph, int len)
