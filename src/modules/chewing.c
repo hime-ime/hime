@@ -27,6 +27,10 @@ static gboolean hime_label_show (char *pszPho, int nPos);
 static gboolean hime_label_clear (int nCount);
 static gboolean hime_label_cand_show (char *pszWord, int nCount);
 static gboolean gtk_pango_font_pixel_size_get (int *pnFontWidth, int *pnFontHeight);
+static gboolean hime_key_filter (int *pnKeyVal);
+static gboolean hime_zuin_label_show (void);
+static gboolean hime_buffer_label_show (void);
+static gboolean hime_buffer_commit (void);
 
 static HIME_module_main_functions g_himeModMainFuncs;
 static GtkWidget *g_pWinChewing      = NULL;
@@ -182,6 +186,232 @@ is_empty (void)
     if (!g_pChewingCtx)
         return FALSE;
     return chewing_zuin_Check (g_pChewingCtx) ? FALSE : TRUE;
+}
+
+static gboolean 
+hime_key_filter (int *pnKeyVal)
+{
+    switch ((*pnKeyVal))
+    {
+        case XK_space:
+            chewing_handle_Space (g_pChewingCtx);
+            break;
+
+        case XK_Escape:
+            chewing_handle_Esc (g_pChewingCtx);
+            break;
+
+        case XK_Return:
+        case XK_KP_Enter:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_Enter (g_pChewingCtx);
+            break;
+
+        case XK_Delete:
+        case XK_KP_Delete:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_Del (g_pChewingCtx);
+            break;
+
+        case XK_BackSpace:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_Backspace (g_pChewingCtx);
+            break;
+
+        case XK_Up:
+        case XK_KP_Up:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_Up (g_pChewingCtx);
+            break;
+
+        case XK_Down:
+        case XK_KP_Down:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_Down (g_pChewingCtx);
+            break;
+
+        case XK_Left:
+        case XK_KP_Left:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_Left (g_pChewingCtx);
+            break;
+
+        case XK_Right:
+        case XK_KP_Right:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_Right (g_pChewingCtx);
+            break;
+
+#if 0
+        case XK_Shift_L:
+            chewing_handle_ShiftLeft (g_pChewingCtx);
+            break;
+
+        case XK_Shift_R:
+            chewing_handle_ShiftRight (g_pChewingCtx);
+            break;
+#endif
+
+        case XK_Tab:
+            chewing_handle_Tab (g_pChewingCtx);
+            break;
+
+        case XK_Home:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_Home (g_pChewingCtx);
+            break;
+
+        case XK_End:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_End (g_pChewingCtx);
+            break;
+
+#if 0
+        case XK_Page_Up:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_PageUp (g_pChewingCtx);
+            break;
+
+        case XK_Page_Down:
+            if (!chewing_buffer_Len (g_pChewingCtx))
+                return FALSE;
+            chewing_handle_PageDown (g_pChewingCtx);
+            break;
+#endif
+
+        default:
+            if ((*pnKeyVal) > 32 && (*pnKeyVal) < 127)
+                chewing_handle_Default (g_pChewingCtx, (*pnKeyVal));
+            break;
+    }
+
+    g_nCurrentCursorPos = chewing_cursor_Current (g_pChewingCtx);
+
+    if (g_nCurrentCursorPos < 0 || g_nCurrentCursorPos > MAX_SEG_NUM)
+        return FALSE;
+
+    return TRUE;
+}
+
+static gboolean
+hime_zuin_label_show (void)
+{
+    char *pszTmp  = NULL;
+    char *pszWord = NULL;
+    int  nZuinLen = 0, nIdx = 0, nPhoIdx = 0;
+
+    pszTmp = chewing_zuin_String (g_pChewingCtx, &nZuinLen);
+    pszWord = (char *) realloc (pszWord, 4);
+
+    if (!pszWord)
+        return FALSE;
+
+    memset (pszWord, 0x00, 4);
+
+    if (pszTmp)
+    {
+        for (nIdx = 0; nIdx < nZuinLen; nIdx++)
+        {
+            memcpy (pszWord, pszTmp + nIdx * 3, 3);
+            for (nPhoIdx = 0; nPhoIdx < 3; nPhoIdx++)
+                if (strstr (g_himeModMainFuncs.mf_pho_chars[nPhoIdx], pszWord) != NULL)
+                    hime_label_show (pszWord, nPhoIdx + chewing_buffer_Len (g_pChewingCtx) + 1);
+        }
+
+        free (pszTmp);
+    }
+
+    free (pszWord);
+
+    return TRUE;
+}
+
+static gboolean 
+hime_buffer_label_show (void)
+{
+    char *pszTmp         = NULL;
+    char *pszWord        = NULL;
+    char *pszChewingCand = NULL;
+    int  nIdx            = 0;
+
+    pszWord = (char *) realloc (pszWord, 4);
+
+    if (!pszWord)
+        return FALSE;
+
+    memset (pszWord, 0x00, 4);
+
+    // check if the composing is valid or not
+    if (chewing_buffer_Check (g_pChewingCtx))
+    {
+        g_himeModMainFuncs.mf_hide_selections_win ();
+        pszTmp = chewing_buffer_String (g_pChewingCtx);
+
+        // init cand_no
+        chewing_cand_Enumerate (g_pChewingCtx);
+
+        g_himeModMainFuncs.mf_clear_sele ();
+
+        if (chewing_cand_TotalChoice (g_pChewingCtx))
+        {
+            while (chewing_cand_hasNext (g_pChewingCtx))
+            {
+                pszChewingCand = chewing_cand_String (g_pChewingCtx);
+
+                if (nIdx > chewing_get_candPerPage (g_pChewingCtx) - 1)
+                    break;
+                hime_label_cand_show (pszChewingCand, nIdx++);
+                free (pszChewingCand);
+            }
+        }
+
+        for (nIdx = 0; nIdx < chewing_buffer_Len (g_pChewingCtx); nIdx++)
+        {
+            memcpy (pszWord, pszTmp + (nIdx * 3), 3);
+            hime_label_show (pszWord, nIdx);
+        }
+
+        // if chewing_buffer_Check is not zero, 
+        // it means that the chewing_buffer_String must have val, 
+        // so we could free the ptr here
+        free (pszTmp);
+    }
+
+    free (pszWord);
+
+    return TRUE;
+}
+
+static gboolean 
+hime_buffer_commit (void) 
+{
+    char *pszTmp = NULL;
+
+    if (chewing_commit_Check (g_pChewingCtx))
+    {
+        pszTmp = chewing_commit_String (g_pChewingCtx);
+        g_himeModMainFuncs.mf_send_text (pszTmp);
+
+        // FIXME: workaround for repeated commit
+        chewing_handle_Esc (g_pChewingCtx);
+
+        // if chewing_commit_Check is not zero, 
+        // it means that the chewing_commit_String must have val, 
+        // so we could free the ptr here
+        free (pszTmp);
+    }
+
+    return TRUE;
 }
 
 int
@@ -341,189 +571,25 @@ module_get_preedit (char *pszStr, HIME_PREEDIT_ATTR himePreeditAttr[],
 gboolean
 module_feedkey (int nKeyVal, int nKeyState)
 {
-    char *pszTmp         = NULL;
-    char *pszChewingCand = NULL;
-    int nZuinLen         = 0;
-    char szWord[4];
-    int nPhoIdx, nBufIdx;
-    int nIdx;
-
     if (!g_pChewingCtx)
         return FALSE;
-
-    memset (szWord, 0x00, 4);
 
     if (!g_himeModMainFuncs.mf_tsin_pho_mode ())
         return FALSE;
 
-    switch (nKeyVal)
-    {
-        case XK_space:
-            chewing_handle_Space (g_pChewingCtx);
-            break;
-
-        case XK_Escape:
-            chewing_handle_Esc (g_pChewingCtx);
-            break;
-
-        case XK_Return:
-        case XK_KP_Enter:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Enter (g_pChewingCtx);
-            break;
-
-        case XK_Delete:
-        case XK_KP_Delete:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Del (g_pChewingCtx);
-            break;
-
-        case XK_BackSpace:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Backspace (g_pChewingCtx);
-            break;
-
-        case XK_Up:
-        case XK_KP_Up:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Up (g_pChewingCtx);
-            break;
-
-        case XK_Down:
-        case XK_KP_Down:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Down (g_pChewingCtx);
-            break;
-
-        case XK_Left:
-        case XK_KP_Left:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Left (g_pChewingCtx);
-            break;
-
-        case XK_Right:
-        case XK_KP_Right:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Right (g_pChewingCtx);
-            break;
-
-#if 0
-        case XK_Shift_L:
-            chewing_handle_ShiftLeft (g_pChewingCtx);
-            break;
-
-        case XK_Shift_R:
-            chewing_handle_ShiftRight (g_pChewingCtx);
-            break;
-#endif
-
-        case XK_Tab:
-            chewing_handle_Tab (g_pChewingCtx);
-            break;
-
-        case XK_Home:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_Home (g_pChewingCtx);
-            break;
-
-        case XK_End:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_End (g_pChewingCtx);
-            break;
-
-#if 0
-        case XK_Page_Up:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_PageUp (g_pChewingCtx);
-            break;
-
-        case XK_Page_Down:
-            if (!chewing_buffer_Len (g_pChewingCtx))
-                return FALSE;
-            chewing_handle_PageDown (g_pChewingCtx);
-            break;
-#endif
-
-        default:
-            if (nKeyVal > 32 && nKeyVal < 127)
-                chewing_handle_Default (g_pChewingCtx, nKeyVal);
-            break;
-    }
-
     hime_label_clear (MAX_SEG_NUM);
-    g_nCurrentCursorPos = chewing_cursor_Current (g_pChewingCtx);
 
-    if (g_nCurrentCursorPos < 0 || g_nCurrentCursorPos > MAX_SEG_NUM)
+    if (!hime_key_filter (&nKeyVal))
         return FALSE;
 
-    // zuin symbols
-    pszTmp = chewing_zuin_String (g_pChewingCtx, &nZuinLen);
-    if (pszTmp)
-    {
-        for (nBufIdx = 0; nBufIdx < nZuinLen; nBufIdx++)
-        {
-            memcpy (szWord, pszTmp + nBufIdx * 3, 3);
-            for (nPhoIdx = 0; nPhoIdx < 3; nPhoIdx++)
-                if (strstr (g_himeModMainFuncs.mf_pho_chars[nPhoIdx], szWord) != NULL)
-                    hime_label_show (szWord, nPhoIdx + chewing_buffer_Len (g_pChewingCtx) + 1);
-        }
-        free (pszTmp);
-    }
+    if (!hime_zuin_label_show ())
+        return FALSE;
 
-    // check if the composing is valid or not
-    if (chewing_buffer_Check (g_pChewingCtx))
-    {
-        g_himeModMainFuncs.mf_hide_selections_win ();
-        pszTmp = chewing_buffer_String (g_pChewingCtx);
+    if (!hime_buffer_label_show ())
+        return FALSE;
 
-        // init cand_no
-        chewing_cand_Enumerate (g_pChewingCtx);
-
-        g_himeModMainFuncs.mf_clear_sele ();
-
-        if (chewing_cand_TotalChoice (g_pChewingCtx))
-        {
-            nIdx = 0;
-            while (chewing_cand_hasNext (g_pChewingCtx))
-            {
-                pszChewingCand = chewing_cand_String (g_pChewingCtx);
-
-                if (nIdx > chewing_get_candPerPage (g_pChewingCtx) - 1)
-                    break;
-                hime_label_cand_show (pszChewingCand, nIdx++);
-                free (pszChewingCand);
-            }
-        }
-
-        for (nIdx = 0; nIdx < chewing_buffer_Len (g_pChewingCtx); nIdx++)
-        {
-            memcpy (szWord, pszTmp + (nIdx * 3), 3);
-            hime_label_show (szWord, nIdx);
-        }
-
-        free (pszTmp);
-    }
-
-    if (chewing_commit_Check (g_pChewingCtx))
-    {
-        pszTmp = chewing_commit_String (g_pChewingCtx);
-        g_himeModMainFuncs.mf_send_text (pszTmp);
-
-        // FIXME: workaround for repeated commit
-        //        it impacts the bEscCleanAllBuf setting!
-        chewing_handle_Esc (g_pChewingCtx);
-        free (pszTmp);
-    }
+    if (!hime_buffer_commit ())
+        return FALSE;
 
     module_show_win ();
 
