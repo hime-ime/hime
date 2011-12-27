@@ -1,0 +1,59 @@
+#!/bin/sh
+# Copyright and license see bottom of this file
+
+GTK_2_DEMO_APP=gtk-demo
+GTK_3_DEMO_APP=gtk3-demo
+GTK_QUERY_IMMODULES_2=gtk-query-immodules-2.0
+GTK_QUERY_IMMODULES_3=gtk-query-immodules-3.0
+
+export HIME_OUTPUT_FILTER=$PWD/filter/nobopomofo
+UTF8_LOCALE=`locale -a | grep utf8 | tail -n 1`
+
+XIM_NAME=`date +%N | tr -d 0`
+GTK_2_TEMP_FILE=$PWD/gtk2
+GTK_3_TEMP_FILE=$PWD/gtk3
+
+[ ! -e distro/debian ] && exec echo Please run this script under hime directory, thanks.
+
+export PATH=$PWD/src:$PATH
+export HIME_TABLE_DIR=$PWD/data
+export XMODIFIERS=@im=$XIM_NAME
+unset LC_ALL
+export LC_CTYPE=$UTF8_LOCALE
+
+$GTK_QUERY_IMMODULES_2 | grep -v hime > $GTK_2_TEMP_FILE
+$GTK_QUERY_IMMODULES_3 | grep -v hime > $GTK_3_TEMP_FILE
+LD_LIBRARY_PATH=$PWD/src/im-client/ $GTK_QUERY_IMMODULES_2 $PWD/src/gtk-im/im-hime.so >> $GTK_2_TEMP_FILE
+LD_LIBRARY_PATH=$PWD/src/im-client/ $GTK_QUERY_IMMODULES_3 $PWD/src/gtk3-im/im-hime.so >> $GTK_3_TEMP_FILE
+
+export LD_PRELOAD=$PWD/src/im-client/libhime-im-client.so
+export GTK_IM_MODULE=hime
+
+if [ ! -x "$HIME_OUTPUT_FILTER" ]; then
+  echo [1m[31mWarning![0m Your filter it not executable. Filter has been turned off automatically.
+  unset HIME_OUTPUT_FILTER
+fi
+
+sh scripts/hime-user-setup $PWD/data $PWD/src
+HIME_TABLE_DIR=data LD_LIBRARY_PATH=$PWD/src/im-client/:$PWD/src XMODIFIERS=@im=$XIM_NAME src/hime &
+
+[ "$GTK_2_DEMO_APP" != "" ] && GTK_IM_MODULE_FILE=$GTK_2_TEMP_FILE $GTK_2_DEMO_APP
+[ "$GTK_3_DEMO_APP" != "" ] && GTK_IM_MODULE_FILE=$GTK_3_TEMP_FILE $GTK_3_DEMO_APP
+
+rm $GTK_2_TEMP_FILE $GTK_3_TEMP_FILE /tmp/hime-$USER/socket-\:0.0-$XIM_NAME
+
+# Copyright (C) 2007-2011 Wen-Yen Chuang <caleb AT calno DOT com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
