@@ -33,8 +33,9 @@ cp -r ${DISTRODIR} ${DISTROROOT}
 echo "building ${SPEC_FILE} ..."
 if [ -d '.git' ] ; then
     git archive --format=tar --prefix=hime-${VERSION}/ HEAD | xz > ${SRCDIR}/${SRC_FILE}
-#else
-#    #tar cf - "`basename $(pwd)`/*" | xz > ${SRCDIR}/${SRC_FILE}
+else
+    echo Please copy source tar ball to $SRCDIR/ or clone from github!
+    exit
 fi
 
 cd ${DISTROROOT}
