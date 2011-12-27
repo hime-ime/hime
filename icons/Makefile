@@ -2,6 +2,13 @@ include ../config.mak
 
 DIR    = black blue dark gray
 
+ifeq ($(ECHO),)
+ECHO  := $(shell whereis -b echo|sed 's/^echo: *\([^ ]\+\).*/\1/')
+ifeq ($(ECHO),)
+ECHO   = echo
+endif
+endif
+
 all:
 
 install:

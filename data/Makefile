@@ -16,7 +16,7 @@ DATA=pho.tab2 tsin32.idx gtab.list \
      t2s.dat s2t.dat cj543.gtab s-tsin32 s-tsin32.idx s-pho.tab2 s-pho-huge.tab2 \
      pinyin-no-tone.kbm simplex-punc.gtab hangul.gtab
 
-DATAKEEP = symbol-table gtab.list phrase.table phrase-ctrl.table
+DATAKEEP = symbol-table phrase.table phrase-ctrl.table
 
 PHO_A2D    = $(SRC_DIR)/hime-phoa2d
 TS_A2D     = $(SRC_DIR)/hime-tsa2d32

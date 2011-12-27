@@ -364,11 +364,6 @@ if [ -z "$CXX" ]; then
   CXX=g++
 fi
 
-# Fedora want to move /bin and /lib to /usr, hence the hack
-ECHO="echo"
-[ -x /usr/bin/echo ] && ECHO="/usr/bin/echo"
-[ -x /bin/echo ] && ECHO="/bin/echo"
-
 echo "CC=$CC" > config.mak
 echo "CCX=$CC" >> config.mak
 echo "CXX=$CXX" >> config.mak
@@ -408,6 +403,8 @@ echo "QT4_IM=$QT4_IM" >> config.mak
 echo "QT4_IM_DIR=$QT4_IM_DIR" >> config.mak
 echo "QT3_MOC_PATH=$QT3_MOC_PATH" >> config.mak
 echo "QT4_MOC_PATH=$QT4_MOC_PATH" >> config.mak
+echo "QT3_QMAKE_PATH=$QT3_MOC_PATH" | sed 's/moc/qmake/' >> config.mak
+echo "QT4_QMAKE_PATH=$QT4_MOC_PATH" | sed 's/moc/qmake/' >> config.mak
 echo "GTK_IM=$GTK_IM" >> config.mak
 echo "GTK3_IM=$GTK3_IM" >> config.mak
 echo "USE_XIM=$use_xim" >> config.mak
@@ -420,7 +417,6 @@ echo "USE_TSIN=$use_tsin" >> config.mak
 echo "USE_ANTHY=$USE_ANTHY" >> config.mak
 echo "USE_CHEWING=$USE_CHEWING" >> config.mak
 echo "BUILD_MODULE=$BUILD_MODULE" >> config.mak
-echo "ECHO=$ECHO" >> config.mak
 
 #if [ $prefix = /usr/local ]; then
 #  echo "hime_ld_run_path=$PWD:\$(himelibdir)" >> config.mak
