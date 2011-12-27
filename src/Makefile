@@ -277,6 +277,12 @@ hime-version.h: $(VERSION_FILE)
 	@echo "building $@ ... current version is '"`cat $<`"'"
 	@echo '#define HIME_VERSION "'`cat $<`'"' > $@
 
+ed3: qt3-test/ed3.cpp qt3-test/ed3.h qt3-test/ed3.pro qt3-test/ed3a.cpp
+	cd qt3-test && $(QT3_QMAKE_PATH) ed3.pro && $(MAKE) && mv ed3 ..
+
+ed4: qt4-test/ed4.cpp qt4-test/ed4.h qt4-test/ed4.pro qt4-test/ed4a.cpp
+	cd qt4-test && $(QT4_QMAKE_PATH) ed4.pro && $(MAKE) && mv ed4 ..
+
 #ibin: hime-nocur
 #	install $(PROGS) $(bindir); \
 #	cp hime-nocur $(bindir)/hime; \
@@ -306,7 +312,8 @@ clean:
 	$(MAKE) -C qt-im clean
 	$(MAKE) -C qt4-im clean
 	@rm -f *.o *.E *.db *.pico *.so tags $(PROGS) hime-nocur $(PROGS_CV) \
-		$(DATA) .depend hime-trad2sim hime.log hime-fedora.spec
+		$(DATA) .depend hime-trad2sim hime.log hime-fedora.spec \
+		qt[34]-test/*.o qt[34]-test/Makefile ed[34]
 	@find . '(' -name '.ted*' -o -name '*~' -o -name 'core.*' -o -name 'vgcore.*' ')' -exec rm {} \;
 
 .depend:
