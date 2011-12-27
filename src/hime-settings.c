@@ -114,7 +114,7 @@ void load_setttings()
 #endif
 
   hime_single_state = get_hime_conf_int(HIME_SINGLE_STATE, 0);
-  hime_punc_auto_send = get_hime_conf_int(HIME_PUNC_AUTO_SEND, 1);
+  hime_punc_auto_send = get_hime_conf_int(HIME_PUNC_AUTO_SEND, 0);
 
 
   get_hime_conf_str(HIME_STR_IM_CYCLE, &hime_str_im_cycle, "1234567890-=[]\\");
