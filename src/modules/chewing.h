@@ -21,6 +21,7 @@
 #include <chewing/chewing.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdint.h>
 
 #include "hime.h"
 #include "pho.h"
@@ -43,6 +44,9 @@
 #define HIME_CHEWING_DEFAULT_KEY_MIN (XK_space)
 #define HIME_CHEWING_DEFAULT_KEY_MAX (XK_asciitilde + 1)
 #define HIME_CHEWING_KEY_MAX         (XK_Delete + 1)
+
+#define HIME_CHEWING_WRAPPER_FUNC(FUNC_NAME) return (chewing_buffer_Len (g_pChewingCtx) \
+                                             == 0 ? (-1) : FUNC_NAME(g_pChewingCtx));
 
 typedef struct _SEGMENT 
 {

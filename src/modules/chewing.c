@@ -33,6 +33,17 @@ static gboolean hime_buffer_label_show (void);
 static gboolean hime_buffer_commit (void);
 static void hime_chewing_cb_register (void);
 static void hime_chewing_handler_default (ChewingContext *pCtx);
+static int hime_chewing_wrapper_bs (ChewingContext *pCtx);
+static int hime_chewing_wrapper_enter (ChewingContext *pCtx);
+static int hime_chewing_wrapper_home (ChewingContext *pCtx);
+static int hime_chewing_wrapper_left (ChewingContext *pCtx);
+static int hime_chewing_wrapper_up (ChewingContext *pCtx);
+static int hime_chewing_wrapper_right (ChewingContext *pCtx);
+static int hime_chewing_wrapper_down (ChewingContext *pCtx);
+static int hime_chewing_wrapper_pageup (ChewingContext *pCtx);
+static int hime_chewing_wrapper_pagedown (ChewingContext *pCtx);
+static int hime_chewing_wrapper_end (ChewingContext *pCtx);
+static int hime_chewing_wrapper_del (ChewingContext *pCtx);
 
 static HIME_module_main_functions g_himeModMainFuncs;
 static GtkWidget *g_pWinChewing      = NULL;
@@ -42,7 +53,7 @@ static GtkWidget *g_pHBoxChewing     = NULL;
 static SEG *g_pSeg = NULL;
 static int g_nCurrentCursorPos = 0;
 
-static void (*g_pKeyHandler[HIME_CHEWING_KEY_MAX]) (ChewingContext *pCtx);
+static intptr_t (*g_pKeyHandler[HIME_CHEWING_KEY_MAX]) (ChewingContext *pCtx);
 
 // FIXME: impl
 static gboolean
@@ -200,8 +211,9 @@ hime_key_filter (int *pnKeyVal)
     if ((*pnKeyVal) > HIME_CHEWING_DEFAULT_KEY_MIN && 
         (*pnKeyVal) < HIME_CHEWING_DEFAULT_KEY_MAX)
         chewing_handle_Default (g_pChewingCtx, (*pnKeyVal));
-    else
-        g_pKeyHandler[(*pnKeyVal)] (g_pChewingCtx);
+    else 
+        if (g_pKeyHandler[(*pnKeyVal)] (g_pChewingCtx) == -1)
+            return FALSE;
 
     g_nCurrentCursorPos = chewing_cursor_Current (g_pChewingCtx);
 
@@ -328,6 +340,71 @@ hime_chewing_handler_default (ChewingContext *pCtx)
     return ((void)NULL);
 }
 
+static int 
+hime_chewing_wrapper_bs (ChewingContext *pCtx)
+{
+    HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Backspace);
+}
+
+static int 
+hime_chewing_wrapper_enter (ChewingContext *pCtx)
+{
+    HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Enter);
+}
+
+static int 
+hime_chewing_wrapper_home (ChewingContext *pCtx)
+{
+    HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Home);
+}
+
+static int 
+hime_chewing_wrapper_left (ChewingContext *pCtx)
+{
+    HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Left);
+}
+
+static int 
+hime_chewing_wrapper_up (ChewingContext *pCtx)
+{
+    HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Up);
+}
+
+static int 
+hime_chewing_wrapper_right (ChewingContext *pCtx)
+{
+    HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Right);
+}
+
+static int 
+hime_chewing_wrapper_down (ChewingContext *pCtx)
+{
+    HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Down);
+}
+
+static int 
+hime_chewing_wrapper_pageup (ChewingContext *pCtx)
+{
+    HIME_CHEWING_WRAPPER_FUNC (chewing_handle_PageUp);
+}
+
+static int hime_chewing_wrapper_pagedown (ChewingContext *pCtx)
+{
+    HIME_CHEWING_WRAPPER_FUNC (chewing_handle_PageDown);
+}
+
+static int 
+hime_chewing_wrapper_end (ChewingContext *pCtx)
+{
+    HIME_CHEWING_WRAPPER_FUNC (chewing_handle_End);
+}
+
+static int 
+hime_chewing_wrapper_del (ChewingContext *pCtx)
+{
+    HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Del);
+}
+
 static void 
 hime_chewing_cb_register (void)
 {
@@ -337,31 +414,30 @@ hime_chewing_cb_register (void)
         g_pKeyHandler[nIdx] = (void *)hime_chewing_handler_default;
 
     g_pKeyHandler[XK_space]     = (void *)chewing_handle_Space;
-    g_pKeyHandler[XK_BackSpace] = (void *)chewing_handle_Backspace;
+    g_pKeyHandler[XK_BackSpace] = (void *)hime_chewing_wrapper_bs;
     g_pKeyHandler[XK_Tab]       = (void *)chewing_handle_Tab;
-    g_pKeyHandler[XK_Return]    = (void *)chewing_handle_Enter;
+    g_pKeyHandler[XK_Return]    = (void *)hime_chewing_wrapper_enter;
     g_pKeyHandler[XK_Escape]    = (void *)chewing_handle_Esc;
-    g_pKeyHandler[XK_Home]      = (void *)chewing_handle_Home;
-    g_pKeyHandler[XK_Left]      = (void *)chewing_handle_Left;
-    g_pKeyHandler[XK_Up]        = (void *)chewing_handle_Up;
-    g_pKeyHandler[XK_Right]     = (void *)chewing_handle_Right;
-    g_pKeyHandler[XK_Down]      = (void *)chewing_handle_Down;
-    g_pKeyHandler[XK_Page_Up]   = (void *)chewing_handle_PageUp;
-    g_pKeyHandler[XK_Page_Down] = (void *)chewing_handle_PageDown;
-    g_pKeyHandler[XK_End]       = (void *)chewing_handle_End;
-    g_pKeyHandler[XK_KP_Enter]  = (void *)chewing_handle_Enter;
-    g_pKeyHandler[XK_KP_Left]   = (void *)chewing_handle_Left;
-    g_pKeyHandler[XK_KP_Up]     = (void *)chewing_handle_Up;
-    g_pKeyHandler[XK_KP_Right]  = (void *)chewing_handle_Right;
-    g_pKeyHandler[XK_KP_Down]   = (void *)chewing_handle_Down;
-    g_pKeyHandler[XK_KP_Delete] = (void *)chewing_handle_Del;
+    g_pKeyHandler[XK_Home]      = (void *)hime_chewing_wrapper_home;
+    g_pKeyHandler[XK_Left]      = (void *)hime_chewing_wrapper_left;
+    g_pKeyHandler[XK_Up]        = (void *)hime_chewing_wrapper_up;
+    g_pKeyHandler[XK_Right]     = (void *)hime_chewing_wrapper_right;
+    g_pKeyHandler[XK_Down]      = (void *)hime_chewing_wrapper_down;
+    g_pKeyHandler[XK_Page_Up]   = (void *)hime_chewing_wrapper_pageup;
+    g_pKeyHandler[XK_Page_Down] = (void *)hime_chewing_wrapper_pagedown;
+    g_pKeyHandler[XK_End]       = (void *)hime_chewing_wrapper_end;
+    g_pKeyHandler[XK_KP_Enter]  = (void *)hime_chewing_wrapper_enter;
+    g_pKeyHandler[XK_KP_Left]   = (void *)hime_chewing_wrapper_left;
+    g_pKeyHandler[XK_KP_Up]     = (void *)hime_chewing_wrapper_up;
+    g_pKeyHandler[XK_KP_Right]  = (void *)hime_chewing_wrapper_right;
+    g_pKeyHandler[XK_KP_Down]   = (void *)hime_chewing_wrapper_down;
+    g_pKeyHandler[XK_KP_Delete] = (void *)hime_chewing_wrapper_del;
 #if 0
     g_pKeyHandler[XK_Shift_L]   = (void *)chewing_handle_ShiftLeft;
     g_pKeyHandler[XK_Shift_R]   = (void *)chewing_handle_ShiftRight;
 #endif
-    g_pKeyHandler[XK_Delete]    = (void *)chewing_handle_Del;
+    g_pKeyHandler[XK_Delete]    = (void *)hime_chewing_wrapper_del;
 }
-
 
 int
 module_init_win (HIME_module_main_functions *pFuncs)
