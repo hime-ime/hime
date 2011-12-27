@@ -14,8 +14,7 @@ Source1:        hime.conf
 BuildRoot:      %{_builddir}/%{name}-%{version}-%{release}-root
 
 BuildRequires:  qt-devel, gtk3-devel, gtk2-devel, desktop-file-utils
-BuildRequires:  libXtst-devel
-BuildRequires:  anthy-devel
+BuildRequires:  libXtst-devel, anthy-devel, gettext
 Requires:       im-chooser, imsettings
 Requires(post): %{_sbindir}/alternatives
 Requires(preun): %{_sbindir}/alternatives
@@ -62,6 +61,7 @@ make
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
+%find_lang %{name}
 mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/X11/xinit/xinput.d
 install -m 644 -p %{SOURCE1} $RPM_BUILD_ROOT/%{_sysconfdir}/X11/xinit/xinput.d/hime.conf
 # devel files {
@@ -109,7 +109,7 @@ if [ $1 -eq 0 ]; then
     %{_sbindir}/alternatives --remove xinputrc %{_sysconfdir}/X11/xinit/xinput.d/hime.conf >/dev/null 2>&1 || :
 fi
 
-%files
+%files -f %{name}.lang
 %doc AUTHORS gpl-2.0.txt lgpl-2.1.txt fdl-1.2.txt ChangeLog README.html
 %config %{_sysconfdir}/X11/xinit/xinput.d/hime.conf
 %{_bindir}/hime
@@ -120,7 +120,6 @@ fi
 %{_datadir}/hime/
 %{_datadir}/pixmaps/hime/
 %{_datadir}/pixmaps/hime.png
-%{_datadir}/locale/
 %{_datadir}/doc/hime/
 %{_mandir}/*/*
 %{_libdir}/hime/*
