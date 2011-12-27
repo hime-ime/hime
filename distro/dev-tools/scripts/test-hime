@@ -5,7 +5,10 @@ GTK_2_DEMO_APP=gtk-demo
 GTK_3_DEMO_APP=gtk3-demo
 GTK_QUERY_IMMODULES_2=gtk-query-immodules-2.0
 GTK_QUERY_IMMODULES_3=gtk-query-immodules-3.0
+
+export HIME_OUTPUT_FILTER=$PWD/filter/nobopomofo
 UTF8_LOCALE=`locale -a | grep utf8 | tail -n 1`
+
 XIM_NAME=`date +%N | tr -d 0`
 GTK_2_TEMP_FILE=$PWD/gtk2
 GTK_3_TEMP_FILE=$PWD/gtk3
@@ -25,6 +28,11 @@ LD_LIBRARY_PATH=$PWD/src/im-client/ $GTK_QUERY_IMMODULES_3 $PWD/src/gtk3-im/im-h
 
 export LD_PRELOAD=$PWD/src/im-client/libhime-im-client.so
 export GTK_IM_MODULE=hime
+
+if [ ! -x "$HIME_OUTPUT_FILTER" ]; then
+  echo [1m[31mWarning![0m Your filter it not executable. Filter has been turned off automatically.
+  unset HIME_OUTPUT_FILTER
+fi
 
 sh scripts/hime-user-setup $PWD/data $PWD/src
 HIME_TABLE_DIR=data LD_LIBRARY_PATH=$PWD/src/im-client/:$PWD/src XMODIFIERS=@im=$XIM_NAME src/hime &
