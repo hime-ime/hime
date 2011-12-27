@@ -31,7 +31,7 @@ rm -fr ${DISTROROOT}
 cp -r ${DISTRODIR} ${DISTROROOT}
 
 echo "building ${SPEC_FILE} ..."
-if [[ -d '.git' ]] ; then
+if [ -d '.git' ] ; then
     git archive --format=tar --prefix=hime-${VERSION}/ HEAD | xz > ${SRCDIR}/${SRC_FILE}
 #else
 #    #tar cf - "`basename $(pwd)`/*" | xz > ${SRCDIR}/${SRC_FILE}
