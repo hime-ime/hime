@@ -268,9 +268,6 @@ void restart_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
 void cb_tog_phospeak(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
-void gcb_main();
-void cb_tog_gcb(GtkCheckMenuItem *checkmenuitem, gpointer dat);
-
 #include "mitem.h"
 
 void kbm_toggle_(GtkCheckMenuItem *checkmenuitem, gpointer dat);
@@ -282,9 +279,6 @@ static MITEM mitems[] = {
   {N_("設定"), GTK_STOCK_PREFERENCES, exec_hime_setup_, NULL},
   {N_("重新執行hime"), GTK_STOCK_QUIT, restart_hime, NULL},
   {N_("念出發音"), NULL, cb_tog_phospeak, &phonetic_speak},
-#if 0
-  {N_("gcb(剪貼區暫存)"), NULL, cb_tog_gcb, &gcb_enabled},
-#endif
   {N_("正→簡體"), NULL, cb_hime_trad2sim, NULL},
   {N_("簡→正體"), NULL, cb_hime_sim2trad, NULL},
   {N_("選擇輸入法"), NULL, cb_inmd_menu, NULL},
