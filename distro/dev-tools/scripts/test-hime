@@ -17,6 +17,7 @@ GTK_3_TEMP_FILE=$PWD/gtk3
 
 export PATH=$PWD/src:$PATH
 export HIME_TABLE_DIR=$PWD/data
+export HIME_MODULE_DIR=$PWD/src/modules
 export XMODIFIERS=@im=$XIM_NAME
 unset LC_ALL
 export LC_CTYPE=$UTF8_LOCALE
@@ -30,7 +31,7 @@ export LD_PRELOAD=$PWD/src/im-client/libhime-im-client.so
 export GTK_IM_MODULE=hime
 
 if [ ! -x "$HIME_OUTPUT_FILTER" ]; then
-  echo [1m[31mWarning![0m Your filter it not executable. Filter has been turned off automatically.
+  echo [1m[31mWarning![0m Your filter is not executable. Filter has been turned off automatically.
   unset HIME_OUTPUT_FILTER
 fi
 

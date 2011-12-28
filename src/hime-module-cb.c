@@ -15,6 +15,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+/**
+ @file hime-module-cb.c
+ @brief Handle module callback.
+
+ Find hime modules.
+
+*/
+
 #include "hime.h"
 #include "gtab.h"
 #include "pho.h"
@@ -34,8 +42,14 @@ HIME_module_callback_functions *init_HIME_module_callback_functions(char *sofile
 #if UNIX
   void *handle;
   char *error;
+  char so_absolute_path[512];
+  char *module_path = getenv("HIME_MODULE_DIR");
+  if (module_path)
+    g_snprintf(so_absolute_path, sizeof(so_absolute_path), "%s/%s", module_path, sofile);
+  else
+    g_snprintf(so_absolute_path, sizeof(so_absolute_path), "%s", sofile);
 
-  if (!(handle = dlopen(sofile, RTLD_LAZY))) {
+  if (!(handle = dlopen(so_absolute_path, RTLD_LAZY))) {
     if ((error = dlerror()) != NULL)  {
       fprintf(stderr, "%s\n", error);
     }
