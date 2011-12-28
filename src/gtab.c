@@ -756,7 +756,7 @@ void disp_selection0(gboolean phrase_selected, gboolean force_disp)
 
       if (!gtab_vertical_select_on() && gtab_disp_partial_match_on()) {
          if (b_use_full_space)
-           strcat(tt, _(_L(" 　 ")));
+           strcat(tt, " 　 ");
          else {
            strcat(tt, "   ");
          }

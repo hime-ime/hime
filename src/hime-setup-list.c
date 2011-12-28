@@ -31,12 +31,6 @@ struct {
   { NULL, 0},
 };
 
-#if 0
-unich_t *gcb_pos[] = {
-N_(_L("左下")), N_(_L("左上")), N_(_L("右下")), N_(_L("右上"))
-};
-#endif
-
 static GtkWidget *gtablist_window = NULL;
 static GtkWidget *vbox;
 static GtkWidget *hbox;
@@ -44,18 +38,12 @@ static GtkWidget *sw;
 static GtkWidget *treeview;
 static GtkWidget *button, *button2, *check_button_phonetic_speak, *opt_speaker_opts, *check_button_hime_bell_off;
 static GtkWidget *opt_im_toggle_keys, *check_button_hime_remote_client,
-#if 0
-       *check_button_gcb_enabled,
-       *opt_gcb_pos,
-#endif
        *check_button_hime_shift_space_eng_full,
        *check_button_hime_init_im_enabled,
        *check_button_hime_eng_phrase_enabled,
        *check_button_hime_win_sym_click_close,
        *check_button_hime_punc_auto_send;
-#if 0
-static GtkWidget *spinner_gcb_position_x, *spinner_gcb_position_y;
-#endif
+
 #if UNIX
 static GtkWidget *check_button_hime_single_state;
 #endif
@@ -305,17 +293,6 @@ static void cb_ok (GtkWidget *button, gpointer data)
     idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_speaker_opts));
     save_hime_conf_str(PHONETIC_SPEAK_SEL, pho_speaker[idx]);
   }
-
-
-#if 0
-  save_hime_conf_int(GCB_ENABLED, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_gcb_enabled)));
-  idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_gcb_pos));
-  save_hime_conf_int(GCB_POSITION, idx+1); // for backward compatbility
-  int pos_x = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_gcb_position_x));
-  save_hime_conf_int(GCB_POSITION_X, pos_x);
-  int pos_y = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_gcb_position_y));
-  save_hime_conf_int(GCB_POSITION_Y, pos_y);
-#endif
 
   save_gtab_list();
 
@@ -628,38 +605,6 @@ static GtkWidget *create_speaker_opts()
   return hbox;
 }
 
-
-#if 0
-static GtkWidget *create_gcb_pos_opts()
-{
-  GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
-
-  opt_gcb_pos = gtk_combo_box_new_text ();
-#if !GTK_CHECK_VERSION(2,4,0)
-  GtkWidget *menu_gcb_pos = gtk_menu_new ();
-#endif
-  gtk_box_pack_start (GTK_BOX (hbox), opt_gcb_pos, FALSE, FALSE, 0);
-
-  int i;
-
-  for(i=0; i<sizeof(gcb_pos)/sizeof(gcb_pos[0]); i++) {
-#if GTK_CHECK_VERSION(2,4,0)
-    gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_gcb_pos), _(gcb_pos[i]));
-#else
-    GtkWidget *item = gtk_menu_item_new_with_label (_(gcb_pos[i]));
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu_gcb_pos), item);
-#endif
-  }
-
-#if !GTK_CHECK_VERSION(2,4,0)
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opt_gcb_pos), menu_gcb_pos);
-#endif
-  gtk_combo_box_set_active (GTK_COMBO_BOX (opt_gcb_pos), gcb_position-1); // for backward compatibily
-
-  return hbox;
-}
-#endif
-
 #if UNIX
 #include <dirent.h>
 #endif
@@ -788,25 +733,6 @@ void create_gtablist_window (void)
   gtk_box_pack_start (GTK_BOX (hbox_hime_punc_auto_send),check_button_hime_punc_auto_send,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_punc_auto_send),
      hime_punc_auto_send);
-
-#if 0
-  GtkWidget *hbox_gcb_pos = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox_gcb_pos, FALSE, FALSE, 0);
-  check_button_gcb_enabled = gtk_check_button_new_with_label (_(_L("剪貼區管理視窗位置&開關")));
-  gtk_box_pack_start (GTK_BOX (hbox_gcb_pos), check_button_gcb_enabled,  FALSE, FALSE, 0);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gcb_enabled),
-     gcb_enabled);
-
-  gtk_box_pack_start (GTK_BOX (hbox_gcb_pos), create_gcb_pos_opts(),  FALSE, FALSE, 0);
-  GtkAdjustment *adj_gcb_position_x =
-   (GtkAdjustment *) gtk_adjustment_new (gcb_position_x, 0.0, 100.0, 1.0, 1.0, 0.0);
-  spinner_gcb_position_x = gtk_spin_button_new (adj_gcb_position_x, 0, 0);
-  gtk_box_pack_start (GTK_BOX (hbox_gcb_pos), spinner_gcb_position_x, FALSE, FALSE, 0);
-  GtkAdjustment *adj_gcb_position_y =
-   (GtkAdjustment *) gtk_adjustment_new (gcb_position_y, 0.0, 100.0, 1.0, 1.0, 0.0);
-  spinner_gcb_position_y = gtk_spin_button_new (adj_gcb_position_y, 0, 0);
-  gtk_box_pack_start (GTK_BOX (hbox_gcb_pos), spinner_gcb_position_y, FALSE, FALSE, 0);
-#endif
 
 #if UNIX
   DIR *dir;

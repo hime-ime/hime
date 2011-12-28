@@ -105,7 +105,7 @@ void disp_int(int index, char *intcode)
   gtk_label_set_text(GTK_LABEL(labels_int[index]), intcode);
 }
 
-static unich_t full_space[]=_L("　");
+static unich_t full_space[] = "　";
 
 void clear_int_code(int index)
 {

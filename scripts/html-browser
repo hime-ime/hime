@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in x-www-browser firefox mozilla-firefox mozilla konqueror iceweasel google-chrome chromium
+for i in sensible-browser x-www-browser xdg-open firefox mozilla-firefox mozilla iceweasel google-chrome chromium opera konqueror icecat midori arora galeon
 do
   which $i >& /dev/null
   if [ $? = 0 ]; then
