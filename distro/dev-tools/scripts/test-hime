@@ -41,7 +41,7 @@ HIME_TABLE_DIR=data LD_LIBRARY_PATH=$PWD/src/im-client/:$PWD/src XMODIFIERS=@im=
 [ "$GTK_2_DEMO_APP" != "" ] && GTK_IM_MODULE_FILE=$GTK_2_TEMP_FILE $GTK_2_DEMO_APP
 [ "$GTK_3_DEMO_APP" != "" ] && GTK_IM_MODULE_FILE=$GTK_3_TEMP_FILE $GTK_3_DEMO_APP
 
-rm $GTK_2_TEMP_FILE $GTK_3_TEMP_FILE /tmp/hime-$USER/socket-\:0.0-$XIM_NAME
+rm $GTK_2_TEMP_FILE $GTK_3_TEMP_FILE /tmp/hime-$USER/socket-*-$XIM_NAME
 
 # Copyright (C) 2007-2011 Wen-Yen Chuang <caleb AT calno DOT com>
 #
