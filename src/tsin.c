@@ -1275,14 +1275,14 @@ static gboolean pre_punctuation_sub(KeySym xkey, char shift_punc[], unich_t *cha
 gboolean pre_punctuation(KeySym xkey)
 {
   static char shift_punc[]="<>?:\"{}!_";
-  static unich_t *chars[]={_L("，"),_L("。"),_L("？"),_L("："),_L("；"),_L("「"),_L("」"),_L("！"),_L("——")};
+  static unich_t *chars[] = { "，", "。", "？", "：", "；", "「", "」", "！", "——" };
   return pre_punctuation_sub(xkey, shift_punc, chars);
 }
 
 static char hsu_punc[]=",./;'";
 gboolean pre_punctuation_hsu(KeySym xkey)
 {
-  static unich_t *chars[]={_L("，"),_L("。"),_L("？"),_L("；"),_L("、")};
+  static unich_t *chars[] = { "，", "。", "？", "；", "、" };
   return pre_punctuation_sub(xkey, hsu_punc, chars);
 }
 
@@ -1754,7 +1754,7 @@ tab_phrase_end:
      case XK_space:
        if (!tss.c_len && !poo.ityp3_pho && !poo.typ_pho[0] && !poo.typ_pho[1] && !poo.typ_pho[2]
            && tss.tsin_half_full) {
-         send_text(_(_L("　")));
+         send_text("　");	 /* Full width space */
          return 1;
        }
 

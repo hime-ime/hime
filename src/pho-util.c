@@ -234,7 +234,7 @@ char *phokey_to_str2(phokey_t kk, int last_number)
   k1=(kk&31) * PHO_CHAR_LEN;
 
   if (k1==BACK_QUOTE_NO * PHO_CHAR_LEN) {
-    strcpy(phchars, _(_L("、")));
+    strcpy(phchars, "、");
     int len=strlen(phchars);
     phchars[len++]=okk & 0x7f;
     phchars[len]=0;
