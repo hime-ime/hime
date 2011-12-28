@@ -274,13 +274,8 @@ void init_gtab(int inmdno)
   fread(inp->keyname, CH_SZ, th.KeyS, fp);
   inp->WILD_QUES=th.KeyS+1;
   inp->WILD_STAR=th.KeyS+2;
-#if 0
-  utf8cpy(&inp->keyname[inp->WILD_QUES*CH_SZ], _(_L("？")));  /* for wild card */
-  utf8cpy(&inp->keyname[inp->WILD_STAR*CH_SZ], _(_L("＊")));
-#else
   utf8cpy(&inp->keyname[inp->WILD_QUES*CH_SZ], "?");  /* for wild card */
   utf8cpy(&inp->keyname[inp->WILD_STAR*CH_SZ], "*");
-#endif
 
   // for boshiamy
   gboolean all_full_ascii = TRUE;

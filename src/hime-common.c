@@ -75,7 +75,7 @@ void disp_pho_sub(GtkWidget *label, int index, char *pho)
     return;
 
   if (pho[0]==' ' && !pin_juyin) {
-    u8cpy(text_pho[index], _(_L("　")));
+    u8cpy(text_pho[index], "　"); /* Full width space */
   }
   else {
     u8cpy(text_pho[index], pho);

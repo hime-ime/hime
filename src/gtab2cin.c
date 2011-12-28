@@ -196,7 +196,7 @@ int main(int argc, char **argv)
         fprintf(fw, "%c%c ", *(keymap + key_idx + 1), *(keymap + key_idx2 + 1));
         for (i = 0; i < 10; i++) {
           if (0 == futf8cpy_bytes(fw, th->qkeys.quick2[key_idx][key_idx2][i], CH_SZ))
-            futf8cpy_bytes(fw, _(_L("□")), CH_SZ);
+            futf8cpy_bytes(fw, "□", CH_SZ);
         }
         fprintf(fw, "\n");
       }

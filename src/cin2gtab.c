@@ -377,7 +377,7 @@ int main(int argc, char **argv)
           char tp[4];
           int len=u8cpy(tp, p);
 
-          if (utf8_eq(tp,_(_L("□"))))
+          if (utf8_eq(tp,"□"))
              tp[0]=0;
 
           u8cpy(th.qkeys.quick2[(int)k][(int)k1][N++], tp);
