@@ -90,9 +90,7 @@ void big5_utf8(char *s, char out[])
 }
 
 
-static unich_t *dstr[]={
-_L("０"),_L("１"),_L("２"),_L("３"),_L("４"),_L("５"),_L("６"),_L("７"),_L("８"),_L("９"),_L("Ａ"),_L("Ｂ"),_L("Ｃ"),_L("Ｄ"),_L("Ｅ"),_L("Ｆ")
-};
+static unich_t *dstr[] = { "０", "１", "２", "３", "４", "５", "６", "７", "８", "９", "Ａ", "Ｂ", "Ｃ", "Ｄ", "Ｅ", "Ｆ" };
 
 void disp_int(int index, char *intcode);
 void clear_int_code_all();

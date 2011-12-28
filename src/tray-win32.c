@@ -80,17 +80,6 @@ void restart_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat)
   do_exit();
 }
 
-void gcb_main();
-void cb_tog_gcb(GtkCheckMenuItem *checkmenuitem, gpointer dat)
-{
-#if 0
-  gcb_enabled = gtk_check_menu_item_get_active(checkmenuitem);
-//  dbg("gcb_enabled %d\n", gcb_enabled);
-  gcb_main();
-#endif
-}
-
-
 void kbm_toggle(), exec_hime_setup(), restart_hime(), cb_hime_trad2sim(), cb_hime_sim2trad();
 
 void cb_hime_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat);
@@ -135,9 +124,6 @@ extern int win_kbm_on;
 static MITEM mitems_main[] = {
   {N_(_L("關於hime/常見問題")), GTK_STOCK_ABOUT, cb_about_window},
   {N_(_L("設定/工具")), GTK_STOCK_PREFERENCES, exec_hime_setup_},
-#if 0
-  {N_(_L("gcb(剪貼區暫存)")), NULL, cb_tog_gcb, &gcb_enabled},
-#endif
   {N_(_L("重新執行hime")), GTK_STOCK_QUIT, restart_hime},
   {N_(_L("念出發音")), NULL, cb_tog_phospeak, &phonetic_speak},
   {N_(_L("小鍵盤")), NULL, kbm_toggle_, &win_kbm_on},

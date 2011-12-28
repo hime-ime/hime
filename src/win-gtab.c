@@ -125,7 +125,7 @@ void gtab_disp_empty(char *tt, int N)
 
   for (i=0;i < N; i++)
 //    strcat(tt, _(_L("﹍")));
-    strcat(tt, _(_L("　")));
+    strcat(tt, "　"); /* Full width space */
 }
 
 void clear_gtab_in_area()

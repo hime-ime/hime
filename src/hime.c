@@ -271,7 +271,7 @@ void open_xim()
 void load_tsin_db();
 void load_tsin_conf(), load_setttings(), load_tab_pho_file();
 
-void disp_hide_tsin_status_row(), gcb_main(), update_win_kbm_inited();
+void disp_hide_tsin_status_row(), update_win_kbm_inited();
 void change_tsin_line_color(), change_win0_style(), change_tsin_color();
 void change_win_gtab_style();
 void update_item_active_all();
@@ -300,9 +300,6 @@ static void reload_data()
   load_gtab_list(TRUE);
 
   update_item_active_all();
-#if 0
-  gcb_main();
-#endif
 }
 
 void change_tsin_font_size();
@@ -491,7 +488,7 @@ void init_hime_im_serv(Window win);
 #else
 void init_hime_im_serv();
 #endif
-void gcb_main(), init_tray_win32();
+void init_tray_win32();
 
 #if WIN32
 void init_hime_program_files();
@@ -520,13 +517,6 @@ gboolean delayed_start_cb(gpointer data)
 #endif
 
   dbg("after init_tray\n");
-
-#if 0
-  if (gcb_position)
-    gcb_main();
-
-  dbg("after gcb_main\n");
-#endif
 
   return FALSE;
 }
