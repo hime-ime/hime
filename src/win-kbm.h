@@ -1,4 +1,17 @@
+/**
+ @file win-kbm.h
+ @brief Virtual keyboard definition
+
+ Some rare users maybe need to translate those key defines.
+ So we kept those _L("stuff").
+
+ Note that our po/Makefile do not search .h files so those
+ strings will not present (by default) in .pot nor .po files.
+
+*/
+
 #define COLN 19
+
 static KEY keys[][COLN]={
 {{XK_Escape,_L("Esc")},{XK_F1,_L("F1")},{XK_F2,_L("F2")},{XK_F3,_L("F3")},{XK_F4,_L("F4")},{XK_F5,_L("F5")},{XK_F6,_L("F6")},{XK_F7,_L("F7")},{XK_F8,_L("F8")},{XK_F9,_L("F9")},{XK_F10,_L("F10")},{XK_F11,_L("F11")},{XK_F12,_L("F12")},{XK_Print,_L("Pr"),0,8},{XK_Scroll_Lock,_L("Slk"),0,8},{XK_Pause,_L("Pau"),0,8}},
 
