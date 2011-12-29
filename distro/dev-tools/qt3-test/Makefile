@@ -1,0 +1,16 @@
+ECHO = $(shell whereis -b echo | awk '{print $$2}')
+
+.PHONY: all
+all: ed3.cpp ed3.h ed3.pro ed3a.cpp
+	@ $(ECHO) -e "\x1b[1;33m** Compiling ed3...\x1b[0m"
+	@ qmake-qt3 ed3.pro -o ed3.makefile && make -f ed3.makefile > /dev/null
+
+.PHONY: clean
+clean:
+	-@ for FileName in ed3.makefile ed3a.o ed3.o ed3; \
+	do \
+		if [ -f "$$FileName" ]; then \
+			$(ECHO) -e "\x1b[1;31m** "deleting $$FileName..."\x1b[0m"; \
+			rm "$$FileName" ; \
+		fi; \
+	done
