@@ -301,7 +301,7 @@ hime_buffer_label_show (void)
             }
         }
 
-        for (nPos = 0, pHead = pszTmp; nPos < strlen (pszTmp); nPos += nWordSize, pHead += nWordSize)
+        for (nPos = 0, pHead = pszTmp, nIdx = 0; nPos < strlen (pszTmp); nPos += nWordSize, pHead += nWordSize)
         {
             if (!((*pHead) & 0x80))               // 1 byte utf-8 data
                 nWordSize = 1;
