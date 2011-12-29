@@ -24,16 +24,11 @@ CFLAGS = $(OPTFLAGS) $(EXTRA_INC) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
 	@echo "  $< -> $@"
 	@$(CC) -E $(CFLAGS) -o $@ $<
 
-all:	im-hime.so im-hime-cur.so
+all:	im-hime.so
 
 im-hime.so:     $(OBJS) ../im-client/libhime-im-client.so
 	@echo "linking $@ ..."
 	@$(CC) $(gcc_ld_run_path) $(SO_FLAGS) $(OBJS) -L../im-client -lhime-im-client -o $@ $(LDFLAGS)
-	@rm -f core.*
-
-im-hime-cur.so:     $(OBJS) ../im-client/libhime-im-client.so
-	@echo "linking $@ ..."
-	@$(CC) $(SO_FLAGS) $(OBJS) -L../im-client -lhime-im-client -o $@ $(LDFLAGS)
 	@rm -f core.*
 
 clean:
