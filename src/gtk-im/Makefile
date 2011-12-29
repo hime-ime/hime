@@ -44,7 +44,7 @@ install:
 	if [ $(prefix) = /usr/local ]; then \
 		install -d $(IMMODULES_LOCAL); \
 		install -m 755 im-hime.so $(IMMODULES_LOCAL); \
-		cd /etc/gtk-2.0; gtk-query-immodules-2.0 > gtk.immodules.lib; \
+		cd /etc/gtk-2.0; gtk-query-immodules-2.0 > gtk.immodules; \
 	else \
 		install -d $(IMMODULES); \
 		install -m 755 im-hime.so $(IMMODULES); \
