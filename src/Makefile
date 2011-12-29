@@ -77,7 +77,6 @@ OBJS_hime_setup   = hime-setup.o hime-conf.o util.o hime-settings.o \
 
 OBJS_hime_gb_toggle  = hime-gb-toggle.o  hime-conf.o util.o
 OBJS_hime_kbm_toggle = hime-kbm-toggle.o hime-conf.o util.o
-OBJS_hime_exit       = hime-exit.o       hime-conf.o util.o
 OBJS_hime_message    = hime-message.o    hime-conf.o util.o
 
 OBJS_pin_juyin       = pin-juyin.o util.o pho-lookup.o locale.o pho-sym.o
@@ -124,9 +123,9 @@ PROGS     = hime \
 	hime-tsd2a32 hime-tsa2d32 hime-phoa2d hime-phod2a \
 	hime-tslearn hime-setup cin2gtab gtab2cin \
 	hime-juyin-learn hime-sim2trad hime-gb-toggle hime-message hime-gtab-merge \
-	hime-kbm-toggle hime-tsin2gtab-phrase hime-exit hime-ts-edit
+	hime-kbm-toggle hime-tsin2gtab-phrase hime-ts-edit
 
-PROGS_SYM = hime-trad2sim
+PROGS_SYM = hime-trad2sim hime-exit hime-sim hime-trad
 
 PROGS_CV  = kbmcv pin-juyin
 
@@ -204,7 +203,7 @@ hime-sim2trad: $(OBJS_hime-sim2trad)
 	@rm -f core.*
 
 hime-trad2sim:  hime-sim2trad
-	ln -sf hime-sim2trad hime-trad2sim
+	ln -sf hime-sim2trad $@
 
 hime-setup: $(OBJS_hime_setup) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
@@ -256,9 +255,14 @@ hime-kbm-toggle: $(OBJS_hime_kbm_toggle) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
 	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
-hime-exit: $(OBJS_hime_exit) im-client/libhime-im-client.so
-	@echo "linking $@ ..."
-	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+hime-exit: hime-gb-toggle
+	ln -sf hime-gb-toggle $@
+
+hime-trad: hime-gb-toggle
+	ln -sf hime-gb-toggle $@
+
+hime-sim: hime-gb-toggle
+	ln -sf hime-gb-toggle $@
 
 hime-message: $(OBJS_hime_message) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
@@ -287,6 +291,9 @@ install:
 	install -d $(bindir)
 	install $(PROGS) $(bindir)
 	rm -f $(bindir)/hime-trad2sim; ln -sf hime-sim2trad $(bindir)/hime-trad2sim
+	rm -f $(bindir)/hime-exit; ln -sf hime-gb-toggle $(bindir)/hime-exit
+	rm -f $(bindir)/hime-trad; ln -sf hime-gb-toggle $(bindir)/hime-trad
+	rm -f $(bindir)/hime-sim; ln -sf hime-gb-toggle $(bindir)/hime-sim
 	install -d $(himelibdir)
 	install $(HIME_SO) $(himelibdir)
 	$(MAKE) -C im-client install
@@ -306,7 +313,7 @@ clean:
 	$(MAKE) -C qt-im clean
 	$(MAKE) -C qt4-im clean
 	@rm -f *.o *.E *.db *.pico *.so tags $(PROGS) hime-nocur $(PROGS_CV) \
-		$(DATA) .depend hime-trad2sim hime.log hime-fedora.spec
+		$(DATA) .depend $(PROGS_SYM) hime.log hime-fedora.spec
 	@find . '(' -name '.ted*' -o -name '*~' -o -name 'core.*' -o -name 'vgcore.*' ')' -exec rm {} \;
 
 .depend:
