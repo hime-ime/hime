@@ -166,11 +166,7 @@ void send_utf8_ch(char *bchar);
 void send_ascii(char key);
 void bell();
 void set_label_font_size(GtkWidget *label, int size);
-#if UNIX
 void send_hime_message(Display *dpy, char *s);
-#else
-void send_hime_message(char *s);
-#endif
 void check_CS();
 gint64 current_time();
 void get_win_size(GtkWidget *win, int *width, int *height);

@@ -185,11 +185,10 @@ static gboolean cb_ok( GtkWidget *widget,
   save_hime_conf_str(TSIN_CURSOR_COLOR, cstr);
   g_free(cstr);
 
-  send_hime_message(
-#if UNIX
-	  GDK_DISPLAY(),
-#endif
-	  "reload kbm");
+  /* caleb- does found where "reload kbm" is used.
+   * caleb- think the send_hime_message() here does nothing.
+   */
+  send_hime_message(GDK_DISPLAY(), "reload kbm");
 
   gtk_widget_destroy(hime_kbm_window); hime_kbm_window = NULL;
 
