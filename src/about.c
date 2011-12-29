@@ -29,7 +29,6 @@ static void callback_close( GtkWidget *widget, gpointer   data )
 
 
 void align_with_ui_window(GtkWidget *win);
-int html_browser(char *fname);
 
 void sys_icon_fname(char *iconame, char fname[]);
 void create_about_window()
