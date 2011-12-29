@@ -26,7 +26,6 @@
 #include "hime.h"
 #include "gtab.h"
 #include "hime-endian.h"
-#include "hime-version.h"
 
 
 int futf8cpy_bytes(FILE *fp, char *s, int n)
