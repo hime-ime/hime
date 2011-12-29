@@ -120,11 +120,7 @@ static gboolean cb_gtab_conf_ok( GtkWidget *widget,
 
   save_menu_val(GTAB_UNIQUE_AUTO_SEND, opt_gtab_unique_auto_send);
 
-  send_hime_message(
-#if UNIX
-	  GDK_DISPLAY(),
-#endif
-	  CHANGE_FONT_SIZE);
+  send_hime_message(GDK_DISPLAY(), CHANGE_FONT_SIZE);
   gtk_widget_destroy(hime_gtab_conf_window); hime_gtab_conf_window = NULL;
 
   return TRUE;

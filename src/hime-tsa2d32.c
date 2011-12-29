@@ -557,11 +557,7 @@ int main(int argc, char **argv)
 
   if (reload) {
     printf("reload....\n");
-    send_hime_message(
-#if UNIX
-    GDK_DISPLAY(),
-#endif
-    RELOAD_TSIN_DB);
+    send_hime_message(GDK_DISPLAY(), RELOAD_TSIN_DB);
   }
 
   exit(0);

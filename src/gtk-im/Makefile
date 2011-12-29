@@ -24,16 +24,11 @@ CFLAGS = $(OPTFLAGS) $(EXTRA_INC) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
 	@echo "  $< -> $@"
 	@$(CC) -E $(CFLAGS) -o $@ $<
 
-all:	im-hime.so im-hime-cur.so
+all:	im-hime.so
 
 im-hime.so:     $(OBJS) ../im-client/libhime-im-client.so
 	@echo "linking $@ ..."
 	@$(CC) $(gcc_ld_run_path) $(SO_FLAGS) $(OBJS) -L../im-client -lhime-im-client -o $@ $(LDFLAGS)
-	@rm -f core.*
-
-im-hime-cur.so:     $(OBJS) ../im-client/libhime-im-client.so
-	@echo "linking $@ ..."
-	@$(CC) $(SO_FLAGS) $(OBJS) -L../im-client -lhime-im-client -o $@ $(LDFLAGS)
 	@rm -f core.*
 
 clean:
@@ -44,7 +39,7 @@ install:
 	if [ $(prefix) = /usr/local ]; then \
 		install -d $(IMMODULES_LOCAL); \
 		install -m 755 im-hime.so $(IMMODULES_LOCAL); \
-		cd /etc/gtk-2.0; gtk-query-immodules-2.0 > gtk.immodules.lib; \
+		cd /etc/gtk-2.0; gtk-query-immodules-2.0 > gtk.immodules; \
 	else \
 		install -d $(IMMODULES); \
 		install -m 755 im-hime.so $(IMMODULES); \

@@ -214,11 +214,10 @@ int main(int argc, char **argv)
   fclose(fp);
 
   if (getenv("HIME_NO_RELOAD")==NULL) {
-    send_hime_message(
-#if UNIX
-	GDK_DISPLAY(),
-#endif
-	"reload");
+    /* caleb- does found where "reload" is used.
+     * caleb- think the send_hime_message() here does nothing.
+     */
+    send_hime_message(GDK_DISPLAY(), "reload");
   }
 
   return 0;

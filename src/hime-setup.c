@@ -451,12 +451,7 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
 
   g_free(cstr);
 
-
-  send_hime_message(
-#if UNIX
-	  GDK_DISPLAY(),
-#endif
-	  CHANGE_FONT_SIZE);
+  send_hime_message(GDK_DISPLAY(), CHANGE_FONT_SIZE);
   gtk_widget_destroy(hime_appearance_conf_window); hime_appearance_conf_window = NULL;
 
   return TRUE;
@@ -954,11 +949,7 @@ static void cb_gtab_conf()
 
 static void cb_gb_output_toggle()
 {
-  send_hime_message(
-#if UNIX
-	  GDK_DISPLAY(),
-#endif
-	  GB_OUTPUT_TOGGLE);
+  send_hime_message(GDK_DISPLAY(), GB_OUTPUT_TOGGLE);
   exit(0);
 }
 
