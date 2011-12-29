@@ -17,7 +17,6 @@
 
 #include "hime.h"
 #include "pho.h"
-#include "config.h"
 #if HIME_i18n_message
 #include <libintl.h>
 #endif

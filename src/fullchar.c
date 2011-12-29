@@ -1,7 +1,4 @@
-#include "hime.h"
-#include "config.h"
-#include "hime-version.h"
-#include "gtab.h"
+#include "os-dep.h"
 unich_t *fullchar[]=
 {
 "　", "！", "”", "＃", "＄", "％", "＆", "’", "（", "）", "＊", "＋",
