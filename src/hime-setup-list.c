@@ -301,11 +301,10 @@ static void cb_ok (GtkWidget *button, gpointer data)
 
   gtk_widget_destroy(gtablist_window); gtablist_window = NULL;
 
-  send_hime_message(
-#if UNIX
-	  GDK_DISPLAY(),
-#endif
-	  "reload");
+  /* caleb- does found where "reload" is used.
+   * caleb- think the send_hime_message() here does nothing.
+   */
+  send_hime_message(GDK_DISPLAY(), "reload");
 }
 
 static void cb_cancel (GtkWidget *widget, gpointer data)
