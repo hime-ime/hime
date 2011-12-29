@@ -37,13 +37,6 @@ Server_IP_port srv_ip_port;
 static Window prop_win;
 static Atom addr_atom;
 
-
-#ifdef __cplusplus
-extern "C" gint gdk_input_add	  (gint		     source,
-			   GdkInputCondition condition,
-			   GdkInputFunction  function,
-			   gpointer	     data);
-#endif
 void gdk_input_remove	  (gint		     tag);
 
 
