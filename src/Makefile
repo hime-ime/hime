@@ -292,6 +292,7 @@ install:
 	rm -f $(bindir)/hime-exit; ln -sf hime-gb-toggle $(bindir)/hime-exit
 	rm -f $(bindir)/hime-trad; ln -sf hime-gb-toggle $(bindir)/hime-trad
 	rm -f $(bindir)/hime-sim; ln -sf hime-gb-toggle $(bindir)/hime-sim
+	rm -f $(bindir)/hime-kbm-toggle; ln -sf hime-gb-toggle $(bindir)/hime-kbm-toggle
 	install -d $(himelibdir)
 	install $(HIME_SO) $(himelibdir)
 	$(MAKE) -C im-client install
