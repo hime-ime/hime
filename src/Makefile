@@ -178,11 +178,6 @@ hime: $(HIME_SO) $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
 	@$(CCLD) $(EXTRA_LDFLAGS) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) $(HIME_SO) -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
 	@rm -f core.* vgcore.*
 
-hime-nocur: $(HIME_SO) $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
-	@echo "linking $@ ..."
-	@$(CCLD) -Wl,-rpath,$(himelibdir) $(EXTRA_LDFLAGS) -o $@ $^ -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
-	@rm -f core.*
-
 hime-tslearn: $(OBJS_TSLEARN) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
 	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
@@ -279,12 +274,6 @@ hime-version.h: $(VERSION_FILE)
 	@echo "building $@ ... current version is '"`cat $<`"'"
 	@echo '#define HIME_VERSION "'`cat $<`'"' > $@
 
-#ibin: hime-nocur
-#	install $(PROGS) $(bindir); \
-#	cp hime-nocur $(bindir)/hime; \
-#	rm -f $(bindir)/hime-trad2sim; ln -sf hime-sim2trad $(bindir)/hime-trad2sim
-#	install $(HIME_SO) $(himelibdir)
-
 install:
 	install -d $(bindir)
 	install $(PROGS) $(bindir)
@@ -311,7 +300,7 @@ clean:
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im clean; fi
 	$(MAKE) -C qt-im clean
 	$(MAKE) -C qt4-im clean
-	@rm -f *.o *.E *.db *.pico *.so tags $(PROGS) hime-nocur $(PROGS_CV) \
+	@rm -f *.o *.E *.db *.pico *.so tags $(PROGS) $(PROGS_CV) \
 		$(DATA) .depend $(PROGS_SYM) hime.log hime-fedora.spec
 	@find . '(' -name '.ted*' -o -name '*~' -o -name 'core.*' -o -name 'vgcore.*' ')' -exec rm {} \;
 
