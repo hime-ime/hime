@@ -24,6 +24,7 @@
    hime-trad
    hime-sim
    hime-exit
+   hime-kbm-toggle
 
 */
 
@@ -45,6 +46,10 @@ int main(int argc, char **argv)
   /* Toggle between Original string and Simplified Chinese */
   if (strstr(argv[0],"hime-gb-toggle"))
     send_hime_message(GDK_DISPLAY(), GB_OUTPUT_TOGGLE);
+
+  /* Toggle virtual keyboard */
+  if (strstr(argv[0],"hime-kbm-toggle"))
+    send_hime_message(GDK_DISPLAY(), KBM_TOGGLE);
 
   if (strstr(argv[0],"hime-exit")) {
     Display *dpy = GDK_DISPLAY();
