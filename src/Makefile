@@ -76,7 +76,6 @@ OBJS_hime_setup   = hime-setup.o hime-conf.o util.o hime-settings.o \
 	pho-kbm-name.o hime-module-cb.o
 
 OBJS_hime_gb_toggle  = hime-gb-toggle.o  hime-conf.o util.o
-OBJS_hime_kbm_toggle = hime-kbm-toggle.o hime-conf.o util.o
 OBJS_hime_message    = hime-message.o    hime-conf.o util.o
 
 OBJS_pin_juyin       = pin-juyin.o util.o pho-lookup.o locale.o pho-sym.o
@@ -123,9 +122,9 @@ PROGS     = hime \
 	hime-tsd2a32 hime-tsa2d32 hime-phoa2d hime-phod2a \
 	hime-tslearn hime-setup cin2gtab gtab2cin \
 	hime-juyin-learn hime-sim2trad hime-gb-toggle hime-message hime-gtab-merge \
-	hime-kbm-toggle hime-tsin2gtab-phrase hime-ts-edit
+	hime-tsin2gtab-phrase hime-ts-edit
 
-PROGS_SYM = hime-trad2sim hime-exit hime-sim hime-trad
+PROGS_SYM = hime-trad2sim hime-exit hime-sim hime-trad hime-kbm-toggle
 
 PROGS_CV  = kbmcv pin-juyin
 
@@ -251,9 +250,8 @@ hime-gb-toggle: $(OBJS_hime_gb_toggle) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
 	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
-hime-kbm-toggle: $(OBJS_hime_kbm_toggle) im-client/libhime-im-client.so
-	@echo "linking $@ ..."
-	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+hime-kbm-toggle: hime-gb-toggle
+	ln -sf hime-gb-toggle $@
 
 hime-exit: hime-gb-toggle
 	ln -sf hime-gb-toggle $@
