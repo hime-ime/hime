@@ -342,21 +342,6 @@ static void cb_symbol_table()
 #endif
 }
 
-
-int html_browser(char *fname);
-
-static void cb_help()
-{
-#if UNIX
-  html_browser(DOC_DIR"/README.html");
-#else
-  char fname[512];
-  strcpy(fname, hime_program_files_path);
-  strcat(fname, "\\README.html");
-  html_browser(fname);
-#endif
-}
-
 static GtkWidget *spinner_hime_font_size, *spinner_hime_font_size_tsin_presel,
                  *spinner_hime_font_size_symbol,*spinner_hime_font_size_pho_near,
                  *spinner_hime_font_size_win_kbm,
@@ -1164,12 +1149,6 @@ static void create_main_win()
   gtk_box_pack_start (GTK_BOX (vbox), button_about, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (button_about), "clicked",
                     G_CALLBACK (create_about_window),  NULL);
-
-
-  GtkWidget *button_help = gtk_button_new_from_stock (GTK_STOCK_HELP);
-  gtk_box_pack_start (GTK_BOX (vbox), button_help, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_help), "clicked",
-                    G_CALLBACK (cb_help), NULL);
 
 #if 0
   char *pid = getenv("HIME_PID");
