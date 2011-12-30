@@ -142,10 +142,6 @@ int write_enc(HANDLE fd, void *p, int n)
 #endif
 }
 
-#ifdef __cplusplus
-extern "C" void gdk_input_remove	  (gint		     tag);
-#endif
-
 #if WIN32
 typedef int socklen_t;
 #else

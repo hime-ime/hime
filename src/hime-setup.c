@@ -45,7 +45,9 @@ static GtkWidget *check_button_root_style_use,
 
 
 static GtkWidget *hime_kbm_window = NULL, *hime_appearance_conf_window;
+#if WIN32
 static GtkClipboard *pclipboard;
+#endif
 static GtkWidget *opt_hime_edit_display;
 GtkWidget *main_window;
 static GdkColor hime_win_gcolor_fg, hime_win_gcolor_bg, hime_sel_key_gcolor;
@@ -342,21 +344,6 @@ static void cb_symbol_table()
 #endif
 }
 
-
-int html_browser(char *fname);
-
-static void cb_help()
-{
-#if UNIX
-  html_browser(DOC_DIR"/README.html");
-#else
-  char fname[512];
-  strcpy(fname, hime_program_files_path);
-  strcat(fname, "\\README.html");
-  html_browser(fname);
-#endif
-}
-
 static GtkWidget *spinner_hime_font_size, *spinner_hime_font_size_tsin_presel,
                  *spinner_hime_font_size_symbol,*spinner_hime_font_size_pho_near,
                  *spinner_hime_font_size_win_kbm,
@@ -567,8 +554,15 @@ static void cb_save_hime_sel_key_color(GtkWidget *widget, gpointer user_data)
   gtk_color_selection_get_current_color(GTK_COLOR_SELECTION(gtk_color_selection_dialog_get_color_selection(color_selector)), &hime_sel_key_gcolor);
   hime_sel_key_color = gtk_color_selection_palette_to_string(&hime_sel_key_gcolor, 1);
 
-  g_snprintf(eng_color_full_str, 128, "<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_full_str));
-  g_snprintf(cht_color_full_str, 128, "<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(cht_full_str));
+  if (eng_color_full_str) {
+    g_free(eng_color_full_str);
+    g_free(eng_color_half_str);
+    g_free(cht_color_full_str);
+  }
+
+  eng_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_full_str));
+  eng_color_half_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_half_str));
+  cht_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(cht_full_str));
 
   disp_fg_bg_color();
 }
@@ -1165,12 +1159,6 @@ static void create_main_win()
   g_signal_connect (G_OBJECT (button_about), "clicked",
                     G_CALLBACK (create_about_window),  NULL);
 
-
-  GtkWidget *button_help = gtk_button_new_from_stock (GTK_STOCK_HELP);
-  gtk_box_pack_start (GTK_BOX (vbox), button_help, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_help), "clicked",
-                    G_CALLBACK (cb_help), NULL);
-
 #if 0
   char *pid = getenv("HIME_PID");
   if (pid && (hime_pid = atoi(pid))) {
@@ -1237,7 +1225,9 @@ int main(int argc, char **argv)
   // once you invoke hime-setup, the left-right buton tips is disabled
   save_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 0);
 
+#if WIN32
   pclipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
+#endif
 
   gtk_main();
 

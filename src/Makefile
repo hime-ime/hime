@@ -26,7 +26,7 @@ hime_gtab_o = gtab.o win-gtab.o gtab-util.o gtab-list.o gtab-buf.o
 
 
 OBJS      = hime.o eve.o util.o hime-conf.o hime-settings.o locale.o \
-	hime-icon.o about.o html-browser.o \
+	hime-icon.o about.o \
 	hime-exec-script.o pho-play.o cache.o gtk_bug_fix.o \
 	phrase-save-menu.o \
 	$(hime_pho_o) $(hime_gtab_o) \
@@ -71,7 +71,7 @@ OBJS_cin2gtab     = cin2gtab.o gtab-util.o util.o locale.o
 OBJS_gtab2cin     = gtab2cin.o gtab-util.o util.o locale.o
 OBJS_gtab_merge   = hime-gtab-merge.o gtab-util.o util.o locale.o
 OBJS_hime_setup   = hime-setup.o hime-conf.o util.o hime-settings.o \
-	html-browser.o hime-setup-list.o locale.o hime-setup-pho.o about.o \
+	hime-setup-list.o locale.o hime-setup-pho.o about.o \
 	lang.o hime-icon.o hime-setup-gtab.o gtab-list.o hime-exec-script.o \
 	pho-kbm-name.o hime-module-cb.o
 

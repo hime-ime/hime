@@ -15,12 +15,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+/**
+ @file table-update.c
+ @brief Update pho.tab2 when necessary
+
+ if (phonetic_char_dynamic_sequence) {
+   mv pho.tab2 pho.tab2.old
+   $(UPDATE) pho.tab2
+   $(CREATE) pho.tab2.version
+ }
+
+*/
+
 #include "hime.h"
 #include <sys/stat.h>
 
 void update_table_file(char *name, int version)
 {
-#if UNIX
+  if (!phonetic_char_dynamic_sequence)
+    return;
+
   char fname_user[256];
   char fname_version[256];
   char fname_sys[256];
@@ -46,5 +60,4 @@ void update_table_file(char *name, int version)
       fname_sys, fname_user, version, fname_version);
   dbg("exec %s\n", cmd);
   system(cmd);
-#endif
 }

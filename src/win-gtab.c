@@ -742,7 +742,17 @@ void show_win_gtab()
 #endif
 
   if (current_CS)
-    set_gtab_input_method_name(inmd[current_CS->in_method].cname);
+  {
+    if (current_CS->tsin_pho_mode==0)
+      set_gtab_input_method_name(eng_half_str);
+    else
+      set_gtab_input_method_name(inmd[current_CS->in_method].cname);
+
+    if (hime_status_tray || (! gtab_hide_row2))
+      gtk_widget_hide(label_gtab);
+    else
+      win_gtab_disp_half_full();
+  }
 
   show_win_sym();
 }
@@ -839,6 +849,14 @@ static void set_disp_im_name()
 
 char *get_full_str()
 {
+  if (current_CS->tsin_pho_mode==0)
+  {
+    if (hime_win_color_use)
+      return eng_color_half_str;
+    else
+      return _(eng_half_str);
+  }
+
   switch (current_CS->im_state) {
     case HIME_STATE_CHINESE:
       if (current_CS->b_half_full_char)

@@ -28,10 +28,10 @@ install:
 	@if [ $(prefix) = /usr/local ]; then \
 	   install -m 644 icons/hime.png /usr/share/pixmaps; \
 	   install -d $(DOC_DIR); \
-	   install -m 644 README.html ChangeLog $(DOC_DIR); \
+	   install -m 644 ChangeLog $(DOC_DIR); \
 	else \
 	   install -d $(DOC_DIR_i); \
-	   install -m 644 README.html ChangeLog $(DOC_DIR_i); \
+	   install -m 644 ChangeLog $(DOC_DIR_i); \
 	fi
 
 clean:

@@ -381,7 +381,7 @@ void create_gtab_conf_window()
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_shift_phrase_key),
      gtab_shift_phrase_key);
 
-  gtk_box_pack_start (GTK_BOX (vbox_gtab_r), create_en_pho_key_sel(_(_L("切換[中/英]打"))), FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox_gtab_r), create_en_pho_key_sel(_(_L("切換[中/英]輸入"))), FALSE, FALSE, 0);
 
 #if 0
   GtkWidget *hbox_hime_capslock_lower = gtk_hbox_new (FALSE, SPC);
