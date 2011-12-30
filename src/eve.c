@@ -298,6 +298,7 @@ void send_output_buffer_bak()
   send_text(output_buffer_raw_bak);
 }
 
+#if WIN32
 void set_output_buffer_bak_to_clipboard()
 {
   char *text, *utf8_gbtext=NULL;
@@ -309,16 +310,13 @@ void set_output_buffer_bak_to_clipboard()
   } else
     text = output_buffer_raw_bak;
 
-#if UNIX && 0
-  GtkClipboard *pclipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
-#else
   GtkClipboard *pclipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-#endif
 
   gtk_clipboard_set_text(pclipboard, text, -1);
 
   free(utf8_gbtext);
 }
+#endif
 
 void send_utf8_ch(char *bchar)
 {

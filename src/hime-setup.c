@@ -45,7 +45,9 @@ static GtkWidget *check_button_root_style_use,
 
 
 static GtkWidget *hime_kbm_window = NULL, *hime_appearance_conf_window;
+#if WIN32
 static GtkClipboard *pclipboard;
+#endif
 static GtkWidget *opt_hime_edit_display;
 GtkWidget *main_window;
 static GdkColor hime_win_gcolor_fg, hime_win_gcolor_bg, hime_sel_key_gcolor;
@@ -1223,7 +1225,9 @@ int main(int argc, char **argv)
   // once you invoke hime-setup, the left-right buton tips is disabled
   save_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 0);
 
+#if WIN32
   pclipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
+#endif
 
   gtk_main();
 
