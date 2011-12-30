@@ -17,7 +17,6 @@
 
 #include "hime.h"
 #include "pho.h"
-#include "win-sym.h"
 #include "gst.h"
 #include "tsin.h"
 

@@ -22,7 +22,6 @@
 #include "pho.h"
 #include "hime-conf.h"
 #include "hime-endian.h"
-#include "gtab-buf.h"
 #include "tsin.h"
 #include "gst.h"
 

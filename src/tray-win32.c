@@ -18,7 +18,6 @@
 #include "hime.h"
 #include "pho.h"
 #include "gtab.h"
-#include "win-sym.h"
 #include "eggtrayicon.h"
 #include <string.h>
 #if UNIX

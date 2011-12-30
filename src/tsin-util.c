@@ -118,7 +118,6 @@ void free_tsin()
 }
 #endif
 
-extern gboolean is_chs;
 #if USE_TSIN
 void load_tsin_db()
 {

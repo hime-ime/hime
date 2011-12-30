@@ -21,7 +21,6 @@
 #include "hime-endian.h"
 #include "pho.h"
 #include "tsin.h"
-#include "tsin-parse.h"
 #if WIN32
 #include <io.h>
 #endif

@@ -46,7 +46,7 @@ gboolean last_cursor_off;
 void set_label_space(GtkWidget *label);
 void minimize_win_gtab();
 gboolean win_size_exceed(GtkWidget *win), gtab_phrase_on();
-void move_win_gtab(int x, int y), toggle_win_sym();
+void move_win_gtab(int x, int y);
 int win_gtab_max_key_press;
 
 static void adj_gtab_win_pos()
@@ -304,8 +304,6 @@ void set_page_label(char *s)
   gtk_widget_show(label_page);
 }
 
-void show_win_sym();
-
 void move_win_gtab(int x, int y)
 {
   if (!gwin_gtab)
@@ -367,7 +365,6 @@ void create_win_gtab()
     init_tsin_selection_win();
 }
 
-void create_win_sym();
 void exec_hime_setup();
 
 static void mouse_button_callback( GtkWidget *widget,GdkEventButton *event, gpointer data)
@@ -758,7 +755,6 @@ void show_win_gtab()
 }
 
 
-void hide_win_sym();
 void close_gtab_pho_win();
 
 static void destroy_top_bin()

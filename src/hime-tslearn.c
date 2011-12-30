@@ -41,7 +41,6 @@ char *phokey2pinyin(phokey_t k);
 gboolean b_pinyin;
 GtkWidget *hbox_buttons;
 char current_str[MAX_PHRASE_LEN*CH_SZ+1];
-extern gboolean is_chs;
 
 GtkWidget *mainwin;
 GtkTextBuffer *buffer;

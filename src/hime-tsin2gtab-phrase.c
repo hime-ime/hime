@@ -27,7 +27,6 @@
 ITEM it[MAX_K];
 ITEM64 it64[MAX_K];
 gboolean key64;
-extern gboolean is_chs;
 int itN;
 
 int qcmp_ch(const void *aa, const void *bb)
