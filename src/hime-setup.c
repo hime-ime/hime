@@ -552,8 +552,15 @@ static void cb_save_hime_sel_key_color(GtkWidget *widget, gpointer user_data)
   gtk_color_selection_get_current_color(GTK_COLOR_SELECTION(gtk_color_selection_dialog_get_color_selection(color_selector)), &hime_sel_key_gcolor);
   hime_sel_key_color = gtk_color_selection_palette_to_string(&hime_sel_key_gcolor, 1);
 
-  g_snprintf(eng_color_full_str, 128, "<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_full_str));
-  g_snprintf(cht_color_full_str, 128, "<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(cht_full_str));
+  if (eng_color_full_str) {
+    g_free(eng_color_full_str);
+    g_free(eng_color_half_str);
+    g_free(cht_color_full_str);
+  }
+
+  eng_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_full_str));
+  eng_color_half_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_half_str));
+  cht_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(cht_full_str));
 
   disp_fg_bg_color();
 }

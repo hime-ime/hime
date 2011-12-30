@@ -455,7 +455,7 @@ static GtkWidget *create_eng_ch_opts()
 
 GtkWidget *create_en_pho_key_sel(char *s)
 {
-GtkWidget *frame_tsin_sw = gtk_frame_new(s);
+  GtkWidget *frame_tsin_sw = gtk_frame_new(s);
   GtkWidget *vbox_tsin_sw = gtk_vbox_new(FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_tsin_sw), GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (frame_tsin_sw), vbox_tsin_sw);
