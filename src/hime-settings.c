@@ -63,8 +63,9 @@ int hime_shift_space_eng_full;
 char *tsin_phrase_line_color;
 char *tsin_cursor_color, *hime_sel_key_color;
 unich_t eng_full_str[]=_L("[英/全]");
+unich_t eng_half_str[]=_L("[英]");
 unich_t cht_full_str[]=_L("[全]");
-char *eng_color_full_str, *cht_color_full_str;
+char *eng_color_full_str, *eng_color_half_str, *cht_color_full_str;
 int tsin_tab_phrase_end;
 int hime_input_style, hime_root_x, hime_root_y, hime_pop_up_win;
 int hime_inner_frame;
@@ -184,10 +185,12 @@ void load_setttings()
 
   if (eng_color_full_str) {
     g_free(eng_color_full_str);
+    g_free(eng_color_half_str);
     g_free(cht_color_full_str);
   }
 
   eng_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_full_str));
+  eng_color_half_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_half_str));
   cht_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(cht_full_str));
 
   get_hime_conf_str(HIME_WIN_COLOR_FG, &hime_win_color_fg, "black");

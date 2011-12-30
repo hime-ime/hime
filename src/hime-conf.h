@@ -135,8 +135,8 @@ extern char *phonetic_speak_sel;
 extern int tsin_space_opt, tsin_tone_char_input;
 
 extern char *tsin_phrase_line_color, *tsin_cursor_color, *hime_font_name, *hime_sel_key_color;
-extern unich_t eng_full_str[], cht_full_str[];
-extern char *eng_color_full_str, *cht_color_full_str;
+extern unich_t eng_full_str[], eng_half_str[], cht_full_str[];
+extern char *eng_color_full_str, *eng_color_half_str, *cht_color_full_str;
 extern char *hime_win_color_fg, *hime_win_color_bg;
 extern int hime_win_color_use, hime_bell_off;
 extern int hime_init_im_enabled, hime_win32_icon;
