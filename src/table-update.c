@@ -15,6 +15,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+/**
+ @file table-update.c
+ @brief Update pho.tab2 when necessary
+
+ mv pho.tab2 pho.tab2.old
+ $(UPDATE) pho.tab2
+ $(CREATE) pho.tab2.version
+
+*/
+
 #include "hime.h"
 #include <sys/stat.h>
 
