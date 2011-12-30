@@ -63,8 +63,9 @@ int hime_shift_space_eng_full;
 char *tsin_phrase_line_color;
 char *tsin_cursor_color, *hime_sel_key_color;
 unich_t eng_full_str[]=_L("[英/全]");
+unich_t eng_half_str[]=_L("[英]");
 unich_t cht_full_str[]=_L("[全]");
-char *eng_color_full_str, *cht_color_full_str;
+char *eng_color_full_str, *eng_color_half_str, *cht_color_full_str;
 int tsin_tab_phrase_end;
 int hime_input_style, hime_root_x, hime_root_y, hime_pop_up_win;
 int hime_inner_frame;
@@ -74,9 +75,6 @@ int hime_status_tray;
 #endif
 
 int pho_hide_row2, pho_in_row1;
-#if 0
-int gcb_enabled, gcb_position, gcb_position_x, gcb_position_y;
-#endif
 int hime_bell_volume;
 int hime_sound_play_overlap, hime_enable_ctrl_alt_switch;
 char *pho_kbm_name, *pho_selkey;
@@ -184,10 +182,12 @@ void load_setttings()
 
   if (eng_color_full_str) {
     g_free(eng_color_full_str);
+    g_free(eng_color_half_str);
     g_free(cht_color_full_str);
   }
 
   eng_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_full_str));
+  eng_color_half_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_half_str));
   cht_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(cht_full_str));
 
   get_hime_conf_str(HIME_WIN_COLOR_FG, &hime_win_color_fg, "black");
@@ -195,13 +195,6 @@ void load_setttings()
   hime_win_color_use = get_hime_conf_int(HIME_WIN_COLOR_USE, 0);
   hime_bell_off = get_hime_conf_int(HIME_BELL_OFF, 0);
 
-
-#if 0
-  gcb_enabled = get_hime_conf_int(GCB_ENABLED, 0);
-  gcb_position = get_hime_conf_int(GCB_POSITION, 4);
-  gcb_position_x = get_hime_conf_int(GCB_POSITION_X, 0);
-  gcb_position_y = get_hime_conf_int(GCB_POSITION_Y, 0);
-#endif
   hime_bell_volume = get_hime_conf_int(HIME_BELL_VOLUME, -97);
   hime_sound_play_overlap = get_hime_conf_int(HIME_SOUND_PLAY_OVERLAP, 0);
   hime_enable_ctrl_alt_switch = get_hime_conf_int(HIME_ENABLE_CTRL_ALT_SWITCH, 1);

@@ -91,10 +91,6 @@
 #define PHONETIC_HUGE_TAB "phonetic-huge-tab"
 #define PHONETIC_SPEAK "phonetic-speak"
 #define PHONETIC_SPEAK_SEL "phonetic-speak-sel"
-#define GCB_POSITION "gcb-position"
-#define GCB_POSITION_X "gcb-position-x"
-#define GCB_POSITION_Y "gcb-position-y"
-#define GCB_ENABLED "gcb-enabled"
 
 extern int hime_font_size, hime_font_size_tsin_presel, hime_font_size_symbol,
            hime_font_size_tsin_pho_in, hime_font_size_pho_near,
@@ -135,12 +131,12 @@ extern char *phonetic_speak_sel;
 extern int tsin_space_opt, tsin_tone_char_input;
 
 extern char *tsin_phrase_line_color, *tsin_cursor_color, *hime_font_name, *hime_sel_key_color;
-extern unich_t eng_full_str[], cht_full_str[];
-extern char *eng_color_full_str, *cht_color_full_str;
+extern unich_t eng_full_str[], eng_half_str[], cht_full_str[];
+extern char *eng_color_full_str, *eng_color_half_str, *cht_color_full_str;
 extern char *hime_win_color_fg, *hime_win_color_bg;
 extern int hime_win_color_use, hime_bell_off;
 extern int hime_init_im_enabled, hime_win32_icon;
-extern int gcb_enabled, gcb_position, gcb_position_x, gcb_position_y, hime_edit_display;
+extern int hime_edit_display;
 extern char *pho_kbm_name, *pho_selkey, *hime_str_im_cycle;
 extern int pho_candicate_col_N, pho_candicate_R2L;
 

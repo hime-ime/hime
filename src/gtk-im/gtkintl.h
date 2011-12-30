@@ -1,24 +1,11 @@
-#ifndef __GTKINTL_H__
-#define __GTKINTL_H__
+/* To get GETTEXT_PACKAGE */
+#include "../config.h"
 
-#include "config.h"
+#include <libintl.h>
 
-#ifdef ENABLE_NLS
-#include<libintl.h>
+/* TODO: Should support build-time configuration */
+#define GTK_LOCALEDIR "/usr/share/locale"
+
+/* TODO: Should support #if HIME_i18n_message here */
 #define _(String) dgettext(GETTEXT_PACKAGE,String)
-#ifdef gettext_noop
-#define N_(String) gettext_noop(String)
-#else
 #define N_(String) (String)
-#endif
-#else /* NLS is disabled */
-#define _(String) (String)
-#define N_(String) (String)
-#define textdomain(String) (String)
-#define gettext(String) (String)
-#define dgettext(Domain,String) (String)
-#define dcgettext(Domain,String,Type) (String)
-#define bindtextdomain(Domain,Directory) (Domain)
-#endif
-
-#endif

@@ -49,25 +49,12 @@ gboolean init_tsin_table_fname(INMD *p, char *fname)
   strcat(strcpy(gtab_phrase_src, fname), ".src");
 //  dbg("init_tsin_table %s\n", fname);
 
-#if UNIX
   putenv("HIME_NO_RELOAD=");
-#else
-  _putenv("HIME_NO_RELOAD=Y");
-#endif
 
-#if UNIX
   if (access(fname, W_OK) < 0 || access(fname_idx, W_OK) < 0)
-#else
-  if (_access(fname, 02) < 0 || _access(fname, 02) < 0)
-#endif
   {
-#if UNIX
     unix_exec(HIME_BIN_DIR"/hime-tsin2gtab-phrase %s %s", gtabfname, gtab_phrase_src);
     unix_exec(HIME_BIN_DIR"/hime-tsa2d32 %s %s", gtab_phrase_src, fname);
-#else
-    win32exec_va("hime-tsin2gtab-phrase", gtabfname, gtab_phrase_src, NULL);
-    win32exec_va("hime-tsa2d32", gtab_phrase_src, fname, NULL);
-#endif
   }
 
   return TRUE;

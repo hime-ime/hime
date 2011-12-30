@@ -956,6 +956,8 @@ void tsin_set_eng_ch(int nmod)
 
     show_button_pho(tsin_pho_mode());
   }
+  else
+    show_win_gtab();
 
   show_tsin_stat();
 }

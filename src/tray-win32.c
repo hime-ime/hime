@@ -133,13 +133,13 @@ static MITEM mitems_main[] = {
   {NULL}
 };
 
-
-void set_output_buffer_bak_to_clipboard();
+#if WIN32
 void set_output_buffer_bak_to_clipboard();
 static void cb_set_output_buffer_bak_to_clipboard(GtkCheckMenuItem *checkmenuitem, gpointer dat)
 {
   set_output_buffer_bak_to_clipboard();
 }
+#endif
 
 void load_setttings(), load_tab_pho_file();;
 void update_win_kbm();
@@ -164,7 +164,9 @@ static MITEM mitems_state[] = {
   {N_(_L("簡→正體")), NULL, cb_hime_sim2trad},
   {N_(_L("简体输出")), NULL, cb_trad_sim_toggle_, &gb_output},
   {N_(_L("打字速度")), NULL, cb_stat_toggle_, &stat_enabled},
+#if WIN32
   {N_(_L("送字到剪貼區")), NULL, cb_set_output_buffer_bak_to_clipboard},
+#endif
   {NULL}
 };
 

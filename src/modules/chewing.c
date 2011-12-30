@@ -27,12 +27,15 @@ static gboolean hime_label_show (char *pszPho, int nPos);
 static gboolean hime_label_clear (int nCount);
 static gboolean hime_label_cand_show (char *pszWord, int nCount);
 static gboolean gtk_pango_font_pixel_size_get (int *pnFontWidth, int *pnFontHeight);
+
 static gboolean hime_key_filter (int *pnKeyVal);
 static gboolean hime_zuin_label_show (void);
 static gboolean hime_buffer_label_show (void);
 static gboolean hime_buffer_commit (void);
+
 static void hime_chewing_cb_register (void);
 static void hime_chewing_handler_default (ChewingContext *pCtx);
+
 static int hime_chewing_wrapper_bs (ChewingContext *pCtx);
 static int hime_chewing_wrapper_enter (ChewingContext *pCtx);
 static int hime_chewing_wrapper_home (ChewingContext *pCtx);
@@ -262,14 +265,17 @@ hime_buffer_label_show (void)
     char *pszTmp         = NULL;
     char *pszWord        = NULL;
     char *pszChewingCand = NULL;
+    char *pHead          = NULL;
     int  nIdx            = 0;
+    int  nPos            = 0;
+    int  nWordSize       = 0; 
 
-    pszWord = (char *) realloc (pszWord, 4);
+    pszWord = (char *) realloc (pszWord, 8);
 
     if (!pszWord)
         return FALSE;
 
-    memset (pszWord, 0x00, 4);
+    memset (pszWord, 0x00, 8);
 
     // check if the composing is valid or not
     if (chewing_buffer_Check (g_pChewingCtx))
@@ -295,10 +301,19 @@ hime_buffer_label_show (void)
             }
         }
 
-        for (nIdx = 0; nIdx < chewing_buffer_Len (g_pChewingCtx); nIdx++)
+        for (nPos = 0, pHead = pszTmp, nIdx = 0; nPos < strlen (pszTmp); nPos += nWordSize, pHead += nWordSize)
         {
-            memcpy (pszWord, pszTmp + (nIdx * 3), 3);
-            hime_label_show (pszWord, nIdx);
+            if (!((*pHead) & 0x80))               // 1 byte utf-8 data
+                nWordSize = 1;
+            else if (((*pHead) & 0xf0) == 0xc0)   // 2 bytes utf-8 data
+                nWordSize = 2;
+            else if (((*pHead) & 0xf0) == 0xe0)   // 3 bytes utf-8 data
+                nWordSize = 3;
+            else if (((*pHead) & 0xf0) == 0xf0)   // 4 bytes utf-8 data
+                nWordSize = 4;
+
+            memcpy (pszWord, pHead, nWordSize);
+            hime_label_show (pszWord, nIdx++);
         }
 
         // if chewing_buffer_Check is not zero, 

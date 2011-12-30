@@ -521,12 +521,7 @@ Display *dpy;
 
 void do_exit()
 {
-  send_hime_message(
-#if UNIX
-	  dpy,
-#endif
-	  RELOAD_TSIN_DB);
-
+  send_hime_message(dpy, RELOAD_TSIN_DB);
   exit(0);
 }
 

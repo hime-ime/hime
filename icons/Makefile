@@ -1,6 +1,6 @@
 include ../config.mak
 
-DIR    = black blue dark gray
+DIR    = black dark gray pink
 
 ifeq ($(ECHO),)
 ECHO  := $(shell whereis -b echo|sed 's/^echo: *\([^ ]\+\).*/\1/')
