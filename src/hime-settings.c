@@ -18,8 +18,6 @@
 #include "hime.h"
 #include "gtab.h"
 
-extern gboolean is_chs;
-
 int hime_font_size, hime_font_size_tsin_presel, hime_font_size_symbol;
 int hime_font_size_pho_near, hime_font_size_gtab_in, hime_font_size_win_kbm, hime_font_size_win_kbm_en;
 int hime_win_color_use, hime_single_state;

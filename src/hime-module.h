@@ -15,6 +15,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "win1.h"
+
 // optional functions/data for hime module to use, please refer to anthy.cpp
 #if UNIX && defined(__cplusplus)
 extern "C" {

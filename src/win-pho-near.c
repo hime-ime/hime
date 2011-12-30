@@ -19,7 +19,6 @@
 #include "hime.h"
 #include "pho.h"
 #include "gtab.h"
-#include "win-sym.h"
 
 static GtkWidget *gwin_pho_near = NULL;
 

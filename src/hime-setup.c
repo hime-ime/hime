@@ -26,8 +26,6 @@
 #endif
 #include "lang.h"
 
-extern gboolean is_chs;
-
 #if UNIX
 char utf8_edit[]=HIME_SCRIPT_DIR"/utf8-edit";
 #endif
@@ -1015,7 +1013,6 @@ expander_callback (GObject    *object,
 #include "tsin.h"
 #include "gst.h"
 #include "im-client/hime-im-client-attr.h"
-#include "win1.h"
 #include "hime-module.h"
 #include "hime-module-cb.h"
 HIME_module_callback_functions *init_HIME_module_callback_functions(char *sofile);

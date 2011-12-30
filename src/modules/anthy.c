@@ -1153,8 +1153,7 @@ static void mouse_button_callback( GtkWidget *widget,GdkEventButton *event, gpoi
 
 #include <dlfcn.h>
 
-void create_win1(), create_win1_gui(), load_tab_pho_file(), show_win_sym();
-void hide_win_sym();
+void create_win1(), create_win1_gui(), load_tab_pho_file();
 int module_init_win(HIME_module_main_functions *funcs)
 {
   gmf = *funcs;

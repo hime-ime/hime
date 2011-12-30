@@ -28,7 +28,7 @@ static GtkWidget *label_pho;
 static GtkWidget *label_full;
 static GtkWidget *label_key_codes;
 
-void change_pho_font_size(), toggle_win_sym();
+void change_pho_font_size();
 void disp_pho_sub(GtkWidget *label, int index, char *pho);
 
 void disp_pho(int index, char *phochar)
@@ -109,9 +109,6 @@ void set_key_codes_label_pho(char *s)
   gtk_widget_show(label_key_codes);
 }
 
-
-void show_win_sym();
-
 void move_win_pho(int x, int y)
 {
   int twin_xl, twin_yl;
@@ -159,7 +156,7 @@ void create_win_pho()
   change_win_bg(gwin_pho);
 }
 
-void create_win_sym(), exec_hime_setup();
+void exec_hime_setup();
 
 static void mouse_button_callback( GtkWidget *widget,GdkEventButton *event, gpointer data)
 {
@@ -322,9 +319,6 @@ void show_win_pho()
   else
     gtk_widget_show(hbox_row2);
 }
-
-
-void hide_win_sym();
 
 void hide_win_pho()
 {
