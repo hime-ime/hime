@@ -71,8 +71,7 @@ void pho_load()
     dbg("use system's pho, no dynamic adj\n");
   }
 
-  if (phonetic_char_dynamic_sequence)
-    update_table_file(pho_tab, 4);
+  update_table_file(pho_tab, 4);
 
   FILE *fr;
 
