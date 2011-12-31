@@ -31,7 +31,6 @@
 #include "hime-module.h"
 #include "hime-module-cb.h"
 #include "hime-conf.h"
-#include "pho-kbm-name.h"
 
 #define MAX_SEG_NUM  128
 #define HIME_CHEWING_CONFIG "/.config/hime/config/chewing_conf.dat"

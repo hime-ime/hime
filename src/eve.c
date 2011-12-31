@@ -32,6 +32,7 @@
 #include "win1.h"
 #include "hime-module.h"
 #include "hime-module-cb.h"
+#include "win-sym.h"
 
 #define STRBUFLEN 64
 
@@ -920,7 +921,6 @@ void init_tab_pho();
 extern int b_show_win_kbm;
 
 void hide_win_kbm();
-extern gboolean win_sym_enabled;
 void show_win_kbm();
 extern char *TableDir;
 void set_gtab_input_method_name(char *s);
@@ -1067,7 +1067,6 @@ static void cycle_next_in_method()
 
 void add_to_tsin_buf_str(char *str);
 gboolean gtab_phrase_on();
-void insert_gbuf_nokey(char *s);
 
 gboolean full_char_proc(KeySym keysym)
 {
@@ -1112,7 +1111,7 @@ gboolean timeout_raise_window(gpointer data)
 }
 
 extern Window xwin_pho, xwin0, xwin_gtab;
-void create_win_sym(), win_kbm_disp_caplock();
+void win_kbm_disp_caplock();
 
 #if !GTK_CHECK_VERSION(2,16,0)
 gboolean get_caps_lock_state()

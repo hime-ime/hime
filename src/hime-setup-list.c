@@ -18,7 +18,6 @@
 #include "hime.h"
 #include "hime-conf.h"
 #include "gtab.h"
-#include "gtab-list.h"
 
 struct {
   char *keystr;

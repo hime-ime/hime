@@ -479,7 +479,6 @@ void disp_tsin_eng_pho(int eng_pho)
 }
 
 void exec_hime_setup();
-void toggle_win_sym();
 
 static void mouse_button_callback( GtkWidget *widget,GdkEventButton *event, gpointer data)
 {
