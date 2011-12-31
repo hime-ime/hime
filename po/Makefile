@@ -7,7 +7,7 @@ gmo:
 	$(MAKE) -C zh_CN
 
 pot:
-	xgettext --from-code=UTF-8 --keyword=_ --keyword=N_ --keyword=_L -o ./hime.pot ../*/*.c ../src/*/*.c*
+	xgettext --from-code=UTF-8 --keyword=_ --keyword=N_ -o ./hime.pot ../*/*.c ../src/*/*.c*
 
 install:
 	install -d $(datadir)/locale/en_US/LC_MESSAGES
