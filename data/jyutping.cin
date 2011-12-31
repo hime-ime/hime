@@ -2,20 +2,20 @@
 
 #  $Id: jyutping.cin,v 1.2 2001/11/28 14:40:39 thhsieh Exp $
 #  ====================================================================
-#  
+#
 #  This cin file is originally converted from the "phrase box" file
 #  available on the Linguistic Society of Hong Kong's website:
-#  
+#
 #	http://www.hku.hk/linguist/lshk/
-#  
+#
 #  You are free to use and redistribute this file; the author only
 #  wishes you keep the following notice intact:
-#  
+#
 #  "The copyright of the Jyutping phrase box belongs to the Linguistic
 #  Society of Hong Kong.  We would like to thank the Jyutping Group of
 #  the Linguistic Society of Hong Kong for permission to use the
 #  electronic file in our research and/or product development."
-#  
+#
 #  For more information about the Jyutping system, visit the above
 #  website.  The romanisation system is a little bit different from
 #  common Hong Kong usage, but this system is a lot more systematic.
@@ -12750,7 +12750,7 @@ lyun2	㜃	# 8BA6 from; by; whence, to undertake; to manage, to follow
 lyut6	㜃	# 8BA6
 gam1	㘚	# 8BB1 angry air of look; to look furious, the roars of a tiger
 ham3	㘚	# 8BB1
-cang1	䠀	# 8BB5 
+cang1	䠀	# 8BB5
 tong3	䠀	# 8BB5
 joeng1	䬬	# 8BB6 to eat to the full; surfeited, well-stacked (figure, etc.); plump
 wok6	㗲	# 8BBE to call; to summon
@@ -12780,7 +12780,7 @@ pang1	㧸	# 8D7D to hit; to beat; to strike
 cang4	㨃	# 8DA1 a row; a line, to push; to clear out, (same as 朾) to bump; to knock against; to strike accidentally; to collide
 suk1	㩋	# 8DA6 to beat; to strike; to attact, sound of beating or hitting, a handle; a hold; to hold; to take, to guard; to watch over
 taau2	㪗	# 8DAB (a dialect) to open (a parcel; abundle or a package); to unroll ( a scroll, etc.)
-so2	㪽	# 8DAD 
+so2	㪽	# 8DAD
 but6	㫲	# 8DB0 dark; dull
 pui3	㫲	# 8DB0
 pui3	㫲	# 8DB0
@@ -12876,14 +12876,14 @@ juk6	㣃	# 9166 (same as 鬻) to sell; to buy, to nourish
 zak1	鰂	# 916F
 caak6	鰂	# 916F cuttlefish
 tip3	䴴	# 91AE a kind of cake, a kind of herb medicine, (same as 黏) to stick, glutinous; adhesive
-sin2	㭠	# 91B3 
+sin2	㭠	# 91B3
 sin2	㧥	# 91B4 to nip with the fingers; to take a pinch; to take up as with tongs
 lai4	㴝	# 91B5 (a variant of 黎) many; numerous, black; dark
 nei4	㞾	# 91B7 (same as 尼) a nun, the mountains after which Confucius was named
 bit3	鼈	# 91BA fresh water turtle, trionyx sine
 coeng1	䮖	# 91BB name of a horse
-lai4	嚟	# 91C1 
-lei4	嚟	# 91C1 
+lai4	嚟	# 91C1
+lei4	嚟	# 91C1
 pong4	䮾	# 91CD (same as 龐) huge, rich; abundance, to fill up; full of (same as 龍) a legendary; miraculous; marvelous animal; the dragon, associated with rain, floods, and geomancy, an emblem of imperialism
 bit1	㻫	# 91E3 (same as ancient form of 珌) a gem or ornament on a scabbard
 jin4	㜣	# 91F9 a last name, carriage; deportment; bearing; poise (of a woman)
@@ -13014,12 +13014,12 @@ ji1	㳖	# 97D2 name of a river
 fung4	㵯	# 97D7 sound of water flowing; flowing water
 nau2	㚼	# 97DA (non-classical form of 妞) a girl; a little girl
 bing1	㓈	# 97DB sound of flying or speeding
-jyun2	䡱	# 97DE 
+jyun2	䡱	# 97DE
 tou4	䤾	# 97E1 to contain; to envelop, a case a box
 zo6	㛖	# 97E7 used in girl's name
 so1	㛖	# 97E7
 zau1	䓟	# 97FD name of a variety of grass, (same as 茢) a broom
-gon1	㶥	# 9872 
+gon1	㶥	# 9872
 soeng2	㶥	# 9872
 ngaan6	㷳	# 9879 color of the flame
 huk6	㿥	# 98A8 shine; clear and pure white feather (same as U+76AC) white, white but not pure
@@ -13180,7 +13180,7 @@ dau2	唞	# 9E57 (Cantonese) to gasp; to breathe; to rest
 tau2	唞	# 9E57 (Cantonese) to gasp; to breathe; to rest
 zaang1	踭	# 9E5A heel, elbow (Cantonese word)
 zang1	踭	# 9E5A
-kam4	蠄	# 9E5E 
+kam4	蠄	# 9E5E
 jeon6	膶	# 9E61 (Cantonese) liver
 jeon2	膶	# 9E61
 mo4	䃺	# 9E7E (a standard form of 磨) to grind, to rub, to sharpen
