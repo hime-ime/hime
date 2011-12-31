@@ -29,7 +29,6 @@
 #include "gst.h"
 #include "pho.h"
 #include "im-client/hime-im-client-attr.h"
-#include "win1.h"
 #include "hime-module.h"
 #include "hime-module-cb.h"
 #include "win-sym.h"
@@ -667,7 +666,6 @@ void win_tsin_disp_half_full();
 void win_gtab_disp_half_full();
 void update_tray_icon(), load_tray_icon(), load_tray_icon_win32();
 static int current_hime_win32_icon = -1;
-void restart_hime();
 extern void destroy_tray_win32();
 extern void destroy_tray_icon();
 

@@ -497,9 +497,9 @@ int main(int argc, char **argv)
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
 #if UNIX
-  char *text = _(_L("按滑鼠中鍵, 貼上你要 hime-tslearn 學習的文章。"));
+  char *text = _("按滑鼠中鍵, 貼上你要 hime-tslearn 學習的文章。");
 #else
-  char *text = _(_L("按 ctrl-V, 貼上你要 hime-tslearn 學習的文章。"));
+  char *text = _("按 ctrl-V, 貼上你要 hime-tslearn 學習的文章。");
 #endif
 
   gtk_text_buffer_set_text (buffer, text, -1);
@@ -513,12 +513,12 @@ int main(int argc, char **argv)
   hbox_buttons = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox_top), hbox_buttons, FALSE, FALSE, 0);
 
-  GtkWidget *button_parse = gtk_button_new_with_label(_(_L("標示已知詞")));
+  GtkWidget *button_parse = gtk_button_new_with_label(_("標示已知詞"));
   gtk_box_pack_start (GTK_BOX (hbox_buttons), button_parse, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_parse), "clicked",
      G_CALLBACK (cb_button_parse), NULL);
 
-  GtkWidget *button_add = gtk_button_new_with_label(_(_L("新增詞")));
+  GtkWidget *button_add = gtk_button_new_with_label(_("新增詞"));
   gtk_box_pack_start (GTK_BOX (hbox_buttons), button_add, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (button_add), "clicked",
      G_CALLBACK (cb_button_add), NULL);

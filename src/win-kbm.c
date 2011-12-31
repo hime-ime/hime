@@ -45,7 +45,7 @@ typedef struct {
   GtkWidget *lab, *but, *laben;
 } KEY;
 
-/* include win-kbm.h here so we do not have to translate those _L("stuff") */
+/* include win-kbm.h here so we do not have to translate those N_("stuff") */
 #include "win-kbm.h"
 
 static int keysN=sizeof(keys)/sizeof(keys[0]);

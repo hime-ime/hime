@@ -226,7 +226,7 @@ void create_win_pho_gui_simple()
   hbox_row2 = gtk_hbox_new (FALSE, 0);
   /* This packs the button into the gwin_pho (a gtk container). */
   gtk_container_add (GTK_CONTAINER (vbox_top), hbox_row2);
-  label_full = gtk_label_new(_(_L("全")));
+  label_full = gtk_label_new(_("全"));
   gtk_container_add (GTK_CONTAINER (hbox_row2), label_full);
 
 
@@ -253,10 +253,10 @@ void create_win_pho_gui_simple()
 
   if (left_right_button_tips) {
 #if GTK_CHECK_VERSION(2,12,0)
-    gtk_widget_set_tooltip_text (event_box_pho, _(_L("左鍵符號，右鍵設定")));
+    gtk_widget_set_tooltip_text (event_box_pho, _("左鍵符號，右鍵設定"));
 #else
     GtkTooltips *button_gtab_tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (GTK_TOOLTIPS (button_gtab_tips), event_box_pho, _(_L("左鍵符號，右鍵設定")),NULL);
+    gtk_tooltips_set_tip (GTK_TOOLTIPS (button_gtab_tips), event_box_pho, _("左鍵符號，右鍵設定"),NULL);
 #endif
   }
 

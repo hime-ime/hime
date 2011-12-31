@@ -124,7 +124,7 @@ void gtab_disp_empty(char *tt, int N)
     return;
 
   for (i=0;i < N; i++)
-//    strcat(tt, _(_L("﹍")));
+//    strcat(tt, "﹍");
     strcat(tt, "　"); /* Full width space */
 }
 
@@ -605,7 +605,7 @@ void create_win_gtab_gui_simple()
 
     if (left_right_button_tips) {
 #if GTK_CHECK_VERSION(2,12,0)
-      gtk_widget_set_tooltip_text (event_box_gtab, _(_L("左鍵符號，右鍵設定")));
+      gtk_widget_set_tooltip_text (event_box_gtab, _("左鍵符號，右鍵設定"));
 #else
       GtkTooltips *button_gtab_tips = gtk_tooltips_new ();
       gtk_tooltips_set_tip (GTK_TOOLTIPS (button_gtab_tips), event_box_gtab, _("左鍵符號，右鍵設定"),NULL);

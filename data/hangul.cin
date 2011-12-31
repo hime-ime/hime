@@ -1,6 +1,5 @@
 %ename Hangul
 %cname 韓拼
-#%cncoding UTF-8
 %selkey 123456789
 %keep_key_case
 %keyname begin
