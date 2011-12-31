@@ -470,7 +470,7 @@ void move_win0(int x, int y)
 
 void disp_tsin_eng_pho(int eng_pho)
 {
-  static unich_t *eng_pho_strs[]={_L("英"),_L("注")};
+  static unich_t *eng_pho_strs[] = { N_("英"), N_("注") };
 
   if (!button_eng_ph)
     return;

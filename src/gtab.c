@@ -1383,7 +1383,7 @@ direct_select:
     case '`':
       if (!cur_inmd->keymap[key]) {
         poo.same_pho_query_state = SAME_PHO_QUERY_gtab_input;
-        disp_gtab_sel(_(_L("輸入要查的同音字，接著在注音視窗選字")));
+        disp_gtab_sel(_("輸入要查的同音字，接著在注音視窗選字"));
         if (hime_pop_up_win)
           show_win_gtab();
         init_gtab_pho_query_win();

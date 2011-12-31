@@ -226,7 +226,7 @@ void create_win_pho_gui_simple()
   hbox_row2 = gtk_hbox_new (FALSE, 0);
   /* This packs the button into the gwin_pho (a gtk container). */
   gtk_container_add (GTK_CONTAINER (vbox_top), hbox_row2);
-  label_full = gtk_label_new(_(_L("全")));
+  label_full = gtk_label_new(_("全"));
   gtk_container_add (GTK_CONTAINER (hbox_row2), label_full);
 
 
