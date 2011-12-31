@@ -27,7 +27,6 @@
 #include "pho.h"
 #include "gst.h"
 #include "im-client/hime-im-client-attr.h"
-#include "win1.h"
 #include "hime-module.h"
 #include "hime-module-cb.h"
 #include "hime-conf.h"

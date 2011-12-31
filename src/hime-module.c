@@ -21,7 +21,6 @@
 #include "tsin.h"
 #include "gst.h"
 #include "im-client/hime-im-client-attr.h"
-#include "win1.h"
 #include "hime-module.h"
 #include "win-sym.h"
 
