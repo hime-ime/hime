@@ -47,11 +47,9 @@ int utf8_to_16(char *text, wchar_t *wtext, int wlen);
 int utf16_to_8(wchar_t *in, char *out, int outN);
 inline void *GDK_DISPLAY() { return NULL;}
 typedef wchar_t unich_t;
-#define _L(x)      L ## x
 #else
 typedef char unich_t;
 void unix_exec(char *fmt,...);
-#define _L(x) x
 #include <X11/Xlib.h>
 #include <X11/Xlocale.h>
 #include <X11/keysym.h>

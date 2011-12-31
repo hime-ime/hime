@@ -121,13 +121,13 @@ extern gboolean win_kbm_inited;
 extern int win_kbm_on;
 
 static MITEM mitems_main[] = {
-  {N_(_L("關於hime/常見問題")), GTK_STOCK_ABOUT, cb_about_window},
-  {N_(_L("設定/工具")), GTK_STOCK_PREFERENCES, exec_hime_setup_},
-  {N_(_L("重新執行hime")), GTK_STOCK_QUIT, restart_hime},
-  {N_(_L("念出發音")), NULL, cb_tog_phospeak, &phonetic_speak},
-  {N_(_L("小鍵盤")), NULL, kbm_toggle_, &win_kbm_on},
+  {N_("關於hime/常見問題"), GTK_STOCK_ABOUT, cb_about_window},
+  {N_("設定/工具"), GTK_STOCK_PREFERENCES, exec_hime_setup_},
+  {N_("重新執行hime"), GTK_STOCK_QUIT, restart_hime},
+  {N_("念出發音"), NULL, cb_tog_phospeak, &phonetic_speak},
+  {N_("小鍵盤"), NULL, kbm_toggle_, &win_kbm_on},
 #if UNIX
-  {N_(_L("選擇輸入法")), GTK_STOCK_INDEX, cb_inmd_menu, NULL},
+  {N_("選擇輸入法"), GTK_STOCK_INDEX, cb_inmd_menu, NULL},
 #endif
   {NULL}
 };
@@ -159,12 +159,12 @@ static void cb_fast_phonetic_kbd_switch(GtkCheckMenuItem *checkmenuitem, gpointe
 
 static MITEM mitems_state[] = {
   {NULL, NULL, cb_fast_phonetic_kbd_switch},
-  {N_(_L("正→簡體")), NULL, cb_hime_trad2sim},
-  {N_(_L("簡→正體")), NULL, cb_hime_sim2trad},
-  {N_(_L("简体输出")), NULL, cb_trad_sim_toggle_, &gb_output},
-  {N_(_L("打字速度")), NULL, cb_stat_toggle_, &stat_enabled},
+  {N_("外部繁轉簡工具"), NULL, cb_hime_trad2sim},
+  {N_("外部簡轉繁工具"), NULL, cb_hime_sim2trad},
+  {N_("輸出成簡體"), NULL, cb_trad_sim_toggle_, &gb_output},
+  {N_("打字速度統計"), NULL, cb_stat_toggle_, &stat_enabled},
 #if WIN32
-  {N_(_L("送字到剪貼區")), NULL, cb_set_output_buffer_bak_to_clipboard},
+  {N_("送字到剪貼區"), NULL, cb_set_output_buffer_bak_to_clipboard},
 #endif
   {NULL}
 };
@@ -420,19 +420,19 @@ void load_tray_icon_win32()
       (current_method_type()==method_type_TSIN && tss.tsin_half_full))) {
       if (gb_output) {
         icon_st="full-simp.png";
-        tip = _L("全形/簡體輸出");
+        tip = _("全形/簡體輸出");
       }
       else {
         icon_st="full-trad.png";
-        tip = _L("全形/正體輸出");
+        tip = _("全形/正體輸出");
       }
   } else {
     if (gb_output) {
       icon_st="half-simp.png";
-      tip= _L("半形/簡體輸出");
+      tip= _("半形/簡體輸出");
     } else {
       icon_st="half-trad.png";
-      tip = _L("半形/正體輸出");
+      tip = _("半形/正體輸出");
     }
   }
 

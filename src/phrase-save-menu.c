@@ -82,9 +82,9 @@ void create_phrase_save_menu(GdkEventButton * event)
   gtk_container_add(GTK_CONTAINER(phrase_save_win), vbox);
   char tt[512];
 
-  add_button(vbox, _(_L("關閉")), 0, 0);
+  add_button(vbox, _("關閉"), 0, 0);
 
-  GtkWidget *label = gtk_label_new(_(_L("--- 加到詞庫 ---")));
+  GtkWidget *label = gtk_label_new(_("--- 加到詞庫 ---"));
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
 
@@ -92,7 +92,7 @@ void create_phrase_save_menu(GdkEventButton * event)
     phokey_t phs[MAX_PHRASE_LEN];
     char str[MAX_PHRASE_STR_LEN];
     chpho_extract(&tss.chpho[tss.c_idx], len, phs, str);
-    sprintf(tt, _(_L("%s shift-Enter")), str);
+    sprintf(tt, _("%s shift-Enter"), str);
     add_button(vbox, tt, tss.c_idx, len);
   }
 
@@ -101,7 +101,7 @@ void create_phrase_save_menu(GdkEventButton * event)
       phokey_t phs[MAX_PHRASE_LEN];
       char str[MAX_PHRASE_STR_LEN];
       chpho_extract(&tss.chpho[tss.c_idx - len], len, phs, str);
-      sprintf(tt, _(_L("%s Ctrl-%d")), str, len);
+      sprintf(tt, _("%s Ctrl-%d"), str, len);
       add_button(vbox, tt, tss.c_idx, len);
     }
   }

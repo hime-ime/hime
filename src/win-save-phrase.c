@@ -120,7 +120,7 @@ static void disp_countdown(SAVE_SESS *sess)
 {
   char tt[64];
 
-  sprintf(tt, _(_L("%d 秒後自動加入")), sess->countdown);
+  sprintf(tt, _("%d 秒後自動加入"), sess->countdown);
   gtk_label_set_text(GTK_LABEL(sess->label_countdown), tt);
 }
 
@@ -158,7 +158,7 @@ void create_win_save_phrase(WSP_S *wsp, int wspN)
 
   gtk_window_set_default_size(GTK_WINDOW (main_window), 20, 10);
 
-  gtk_window_set_title(GTK_WINDOW(main_window), _(_L("加片語到詞庫")));
+  gtk_window_set_title(GTK_WINDOW(main_window), _("加片語到詞庫"));
 
 #if 0
   g_signal_connect (G_OBJECT (main_window), "delete_event",
