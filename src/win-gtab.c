@@ -82,27 +82,29 @@ void disp_gtab(char *str)
   adj_gtab_win_pos();
 }
 
-
+#if !GTK_CHECK_VERSION(2,91,6)
 void set_gtab_input_color(GdkColor *color)
 {
-  if (label_gtab) {
-#if !GTK_CHECK_VERSION(2,91,6)
+  if (label_gtab) 
     gtk_widget_modify_fg(label_gtab, GTK_STATE_NORMAL, color);
-#else
-    if (color) {
-      GdkRGBA rgbfg;
-      gdk_rgba_parse(&rgbfg, gdk_color_to_string(color));
-      gtk_widget_override_color(label_gtab, GTK_STATE_FLAG_NORMAL, &rgbfg);
-    } else
-      gtk_widget_override_color(label_gtab, GTK_STATE_FLAG_NORMAL, NULL);
-#endif
-  }
 }
+#else
+void set_gtab_input_color(GdkRGBA *rgbfg)
+{
+  if (label_gtab)
+    gtk_widget_override_color(label_gtab, GTK_STATE_FLAG_NORMAL, rgbfg);
+}
+#endif
 
 void set_gtab_input_error_color()
 {
+#if !GTK_CHECK_VERSION(2,91,6)
   GdkColor red;
   gdk_color_parse("red", &red);
+#else
+  GdkRGBA red;
+  gdk_rgba_parse(&red, "red");
+#endif
   set_gtab_input_color(&red);
 }
 
