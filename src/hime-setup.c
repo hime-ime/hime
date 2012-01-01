@@ -68,7 +68,7 @@ struct {
   unich_t *keystr;
   int keynum;
 } edit_disp[] = {
-  {N_("hime視窗"), HIME_EDIT_DISPLAY_OVER_THE_SPOT},
+  {N_("輸入視窗"), HIME_EDIT_DISPLAY_OVER_THE_SPOT},
   {N_("應用程式編輯區"), HIME_EDIT_DISPLAY_ON_THE_SPOT},
   {N_("同時顯示"),  HIME_EDIT_DISPLAY_BOTH},
   { NULL, 0},
@@ -774,7 +774,7 @@ void create_appearance_conf_window()
        hime_pop_up_win);
   gtk_box_pack_start (GTK_BOX(hbox_hime_pop_up_win), check_button_hime_pop_up_win, FALSE, FALSE, 0);
 
-  GtkWidget *frame_root_style = gtk_frame_new(_("固定 hime 視窗位置"));
+  GtkWidget *frame_root_style = gtk_frame_new(_("固定輸入視窗位置"));
   gtk_box_pack_start (GTK_BOX (vbox_top), frame_root_style, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame_root_style), 3);
   GtkWidget *vbox_root_style = gtk_vbox_new (FALSE, 10);
@@ -809,7 +809,7 @@ void create_appearance_conf_window()
 
   GtkWidget *hbox_hime_inner_frame = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX(vbox_top), hbox_hime_inner_frame, FALSE, FALSE, 0);
-  check_button_hime_inner_frame = gtk_check_button_new_with_label (_("字根區顯示內框"));
+  check_button_hime_inner_frame = gtk_check_button_new_with_label (_("輸入視窗顯示內框"));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_inner_frame),
        hime_inner_frame);
   gtk_box_pack_start (GTK_BOX(hbox_hime_inner_frame), check_button_hime_inner_frame, FALSE, FALSE, 0);
