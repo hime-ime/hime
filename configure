@@ -8,6 +8,7 @@ if [ "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]; then
     echo "  --prefix=path   : install prefix (e.g. /usr)"
 #   TODO fix not working option(s)
 #   echo "  --use_tray=N    : disable system tray"
+    echo "  --use_unity=Y   : enable Ubuntu unity tray"
     echo "  --use_i18n=N    : disable i18n"
     echo "  --use_tsin=N    : disable Tsin input method"
     echo "  --use_anthy=N   : disable Anthy input method"
@@ -51,6 +52,7 @@ fi
 prefix="/usr/local"
 use_xim='Y'
 use_tray='Y'
+use_unity='N'
 use_i18n='Y'
 use_tsin='Y'
 use_anthy='Y'
@@ -105,6 +107,8 @@ for opt do
   ;;
   --use_tray=*) use_tray=`echo $opt | cut -d '=' -f 2`
   ;;
+  --use_unity=*) use_unity=`echo $opt | cut -d '=' -f 2`
+  ;;
   --use_i18n=*) use_i18n=`echo $opt | cut -d '=' -f 2`
   ;;
   --use_tsin=*) use_tsin=`echo $opt | cut -d '=' -f 2`
@@ -134,7 +138,7 @@ if [ -z "$GTK" ]; then
   GTK=gtk+-2.0
 fi
 
-echo -n ".... Testing $GTK : "
+echo -n ".... Testing $GTK    : "
 
 GTKINC=`pkg-config --cflags $GTK`
 
@@ -181,7 +185,7 @@ else
   echo " found."
 fi
 
-echo -n ".... Testing anthy    :  "
+echo -n ".... Testing anthy       :  "
 USE_ANTHY=`pkg-config --libs anthy`
 if [ $? != 0 ]; then
   USE_ANTHY=N
@@ -196,7 +200,7 @@ else
   fi
 fi
 
-echo -n ".... Testing chewing  :  "
+echo -n ".... Testing chewing     :  "
 USE_CHEWING=`pkg-config --libs chewing`
 if [ $? != 0 ]; then
   USE_CHEWING=N
@@ -211,6 +215,22 @@ else
   fi
 fi
 
+if [ "$use_unity" = "Y" ]; then
+  echo -n ".... Testing appindicator:  "
+  USE_UNITY=`pkg-config --libs appindicator-0.1`
+  if [ $? != 0 ]; then
+    USE_UNITY=N
+    echo "It's ok if you don't want Ubuntu unity support."
+  else
+    if [ $use_unity = "N" ]; then
+      USE_UNITY='N'
+      echo "disabled."
+    else
+      USE_UNITY='Y'
+      echo "found."
+    fi
+  fi
+fi
 
 LIB='lib'
 if [ -d /usr/lib64 -a -d /lib64 ]; then
@@ -383,6 +403,7 @@ echo "himelibdir=\$(libdir)/hime" >> config.mak
 echo "includedir=\$(DESTDIR)$includedir" >> config.mak
 echo "LDFLAGS=-Wl,--as-needed -lX11 -lm" >> config.mak
 echo "LDFLAGS+=$GTKLDFLAGS -lX11 -ldl" >> config.mak
+[ "$USE_UNITY" = "Y" ] && echo "LDFLAGS+=-L/usr/lib -lappindicator" >> config.mak
 echo "HIME_VERSION=$HIME_VERSION" >> config.mak
 echo "HIME_TABLE_DIR=\$(datadir_r)/hime/table" >> config.mak
 echo "HIME_OGG_DIR=\$(datadir_r)/hime/ogg" >> config.mak
@@ -416,6 +437,7 @@ echo "USE_I18N=$use_i18n" >> config.mak
 echo "USE_TSIN=$use_tsin" >> config.mak
 echo "USE_ANTHY=$USE_ANTHY" >> config.mak
 echo "USE_CHEWING=$USE_CHEWING" >> config.mak
+echo "USE_UNITY=$USE_UNITY" >> config.mak
 echo "BUILD_MODULE=$BUILD_MODULE" >> config.mak
 
 #if [ $prefix = /usr/local ]; then

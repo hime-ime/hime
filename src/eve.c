@@ -664,7 +664,7 @@ void update_in_win_pos()
 void win_pho_disp_half_full();
 void win_tsin_disp_half_full();
 void win_gtab_disp_half_full();
-void update_tray_icon(), load_tray_icon(), load_tray_icon_win32();
+void update_tray_icon(), load_tray_icon(), load_tray_icon_win32(), load_tray_appindicator();
 static int current_hime_win32_icon = -1;
 extern void destroy_tray_win32();
 extern void destroy_tray_icon();
@@ -684,7 +684,7 @@ void disp_tray_icon()
 {
 //  dbg("disp_tray_icon\n");
 //dbg("disp_tray_icon %d %d\n", current_hime_win32_icon, hime_win32_icon);
-#if UNIX
+#if !TRAY_UNITY
   if (current_hime_win32_icon >= 0 && current_hime_win32_icon != hime_win32_icon) {
     destroy_tray();
   }
@@ -692,12 +692,12 @@ void disp_tray_icon()
   current_hime_win32_icon = hime_win32_icon;
 
   if (hime_win32_icon)
-#endif
-
     load_tray_icon_win32();
-#if UNIX
   else
     load_tray_icon();
+#endif
+#if TRAY_UNITY
+  load_tray_appindicator();
 #endif
 }
 #endif
