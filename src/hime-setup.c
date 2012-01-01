@@ -136,37 +136,39 @@ static void cb_ts_export()
    if (button_order)
        file_selector = gtk_file_chooser_dialog_new(_("請輸入要匯出的檔案名稱"),
                               GTK_WINDOW(main_window),
-                              GTK_FILE_CHOOSER_ACTION_OPEN,
-                              GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                              GTK_FILE_CHOOSER_ACTION_SAVE,
+                              GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
                               GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                               NULL);
    else
        file_selector = gtk_file_chooser_dialog_new(_("請輸入要匯出的檔案名稱"),
                               GTK_WINDOW(main_window),
-                              GTK_FILE_CHOOSER_ACTION_OPEN,
+                              GTK_FILE_CHOOSER_ACTION_SAVE,
                               GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                              GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                              GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
                               NULL);
+   char hime_dir[512];
+   get_hime_dir(hime_dir);
+   char cmd[512];
+   char fname[256];
+   char *filename=inmd[default_input_method].filename;
+   char tt[256];
+   if (inmd[default_input_method].method_type==method_type_TSIN) {
+      get_hime_user_fname(tsin32_f, fname);
+      gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER (file_selector), tsin32_f);
+   } else if (filename) {
+      strcat(strcpy(tt, filename), ".append.gtab.tsin-db");
+      if (!get_hime_user_fname(tt, fname)) {
+         strcat(strcpy(tt, filename), ".tsin-db");
+         if (!get_hime_user_fname(tt, fname))
+            p_err("cannot find %s", fname);
+      }
+      gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER (file_selector), tt);
+   }
+   
+   gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER (file_selector), TRUE);
    if (gtk_dialog_run (GTK_DIALOG (file_selector)) == GTK_RESPONSE_ACCEPT) {
        gchar *selected_filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (file_selector));
-       char hime_dir[512];
-       get_hime_dir(hime_dir);
-       char cmd[512];
-       char fname[256];
-       char *filename=inmd[default_input_method].filename;
-
-       if (inmd[default_input_method].method_type==method_type_TSIN)
-         get_hime_user_fname(tsin32_f, fname);
-       else
-       if (filename) {
-         char tt[256];
-         strcat(strcpy(tt, filename), ".append.gtab.tsin-db");
-         if (!get_hime_user_fname(tt, fname)) {
-           strcat(strcpy(tt, filename), ".tsin-db");
-           if (!get_hime_user_fname(tt, fname))
-             p_err("cannot find %s", fname);
-         }
-       }
 #if UNIX
        snprintf(cmd, sizeof(cmd), HIME_BIN_DIR"/hime-tsd2a32 %s -o %s", fname, selected_filename);
        dbg("exec %s\n", cmd);
