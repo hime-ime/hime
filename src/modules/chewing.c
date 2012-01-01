@@ -215,7 +215,7 @@ hime_key_filter (int *pnKeyVal)
         (*pnKeyVal) < HIME_CHEWING_DEFAULT_KEY_MAX)
         chewing_handle_Default (g_pChewingCtx, (*pnKeyVal));
     else 
-        if (g_pKeyHandler[(*pnKeyVal)] (g_pChewingCtx) == -1)
+        if ((int)(g_pKeyHandler[(*pnKeyVal)] (g_pChewingCtx)) == -1)
             return FALSE;
 
     g_nCurrentCursorPos = chewing_cursor_Current (g_pChewingCtx);
