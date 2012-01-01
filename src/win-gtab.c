@@ -49,6 +49,8 @@ gboolean win_size_exceed(GtkWidget *win), gtab_phrase_on();
 void move_win_gtab(int x, int y);
 int win_gtab_max_key_press;
 
+void move_gtab_pho_query_win();
+
 static void adj_gtab_win_pos()
 {
   if (!gwin_gtab)
@@ -325,6 +327,8 @@ void move_win_gtab(int x, int y)
   win_x = x;  win_y = y;
 
   move_win_sym();
+  if (poo.same_pho_query_state != SAME_PHO_QUERY_none)
+    move_gtab_pho_query_win();
 }
 
 void set_gtab_input_method_name(char *s)
