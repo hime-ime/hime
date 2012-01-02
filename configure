@@ -228,6 +228,10 @@ if [ "$use_unity" = "Y" ]; then
     else
       USE_UNITY='Y'
       echo "found."
+      # TODO: We should auto-detect it here but have to prevent include 
+      #       gtk-2.0 and gtk-3.0 at the same time.
+      #       Anyway, below workaround seems work.
+      UNITY_INC="-I/usr/include/libappindicator-0.1"
     fi
   fi
 fi
@@ -403,7 +407,10 @@ echo "himelibdir=\$(libdir)/hime" >> config.mak
 echo "includedir=\$(DESTDIR)$includedir" >> config.mak
 echo "LDFLAGS=-Wl,--as-needed -lX11 -lm" >> config.mak
 echo "LDFLAGS+=$GTKLDFLAGS -lX11 -ldl" >> config.mak
-[ "$USE_UNITY" = "Y" ] && echo "LDFLAGS+=-L/usr/lib -lappindicator" >> config.mak
+if [ "$USE_UNITY" = "Y" ]; then
+  echo "LDFLAGS+=-L/usr/lib -lappindicator" >> config.mak
+  echo "GTKINC+=$UNITY_INC" >> config.mak
+fi
 echo "HIME_VERSION=$HIME_VERSION" >> config.mak
 echo "HIME_TABLE_DIR=\$(datadir_r)/hime/table" >> config.mak
 echo "HIME_OGG_DIR=\$(datadir_r)/hime/ogg" >> config.mak
