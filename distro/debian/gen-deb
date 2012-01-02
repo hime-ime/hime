@@ -3,4 +3,5 @@
 rm -fr debian
 cp -r distro/debian .
 sed -i "s#9-9#`cat VERSION.hime | sed -e "s/$/+\`date +git%y%m%d\`-1/" -e 's/UNRELEASED/0UNRELEASED/'`#" debian/changelog
+export CFLAGS="-Wall -g -O0"
 dpkg-buildpackage -b
