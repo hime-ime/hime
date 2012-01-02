@@ -507,11 +507,14 @@ gboolean delayed_start_cb(gpointer data)
 
 #if TRAY_ENABLED
   if (hime_status_tray) {
-#if UNIX
+#if !TRAY_UNITY
     if (hime_win32_icon)
       init_tray_win32();
     else
       init_tray();
+#endif
+#if TRAY_UNITY
+    init_tray_appindicator();
 #endif
   }
 #endif

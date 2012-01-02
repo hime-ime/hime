@@ -68,7 +68,7 @@ struct {
   unich_t *keystr;
   int keynum;
 } edit_disp[] = {
-  {N_("hime視窗"), HIME_EDIT_DISPLAY_OVER_THE_SPOT},
+  {N_("輸入視窗"), HIME_EDIT_DISPLAY_OVER_THE_SPOT},
   {N_("應用程式編輯區"), HIME_EDIT_DISPLAY_ON_THE_SPOT},
   {N_("同時顯示"),  HIME_EDIT_DISPLAY_BOTH},
   { NULL, 0},
@@ -136,37 +136,39 @@ static void cb_ts_export()
    if (button_order)
        file_selector = gtk_file_chooser_dialog_new(_("請輸入要匯出的檔案名稱"),
                               GTK_WINDOW(main_window),
-                              GTK_FILE_CHOOSER_ACTION_OPEN,
-                              GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                              GTK_FILE_CHOOSER_ACTION_SAVE,
+                              GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
                               GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                               NULL);
    else
        file_selector = gtk_file_chooser_dialog_new(_("請輸入要匯出的檔案名稱"),
                               GTK_WINDOW(main_window),
-                              GTK_FILE_CHOOSER_ACTION_OPEN,
+                              GTK_FILE_CHOOSER_ACTION_SAVE,
                               GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                              GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                              GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
                               NULL);
+   char hime_dir[512];
+   get_hime_dir(hime_dir);
+   char cmd[512];
+   char fname[256];
+   char *filename=inmd[default_input_method].filename;
+   char tt[256];
+   if (inmd[default_input_method].method_type==method_type_TSIN) {
+      get_hime_user_fname(tsin32_f, fname);
+      gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER (file_selector), tsin32_f);
+   } else if (filename) {
+      strcat(strcpy(tt, filename), ".append.gtab.tsin-db");
+      if (!get_hime_user_fname(tt, fname)) {
+         strcat(strcpy(tt, filename), ".tsin-db");
+         if (!get_hime_user_fname(tt, fname))
+            p_err("cannot find %s", fname);
+      }
+      gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER (file_selector), tt);
+   }
+   
+   gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER (file_selector), TRUE);
    if (gtk_dialog_run (GTK_DIALOG (file_selector)) == GTK_RESPONSE_ACCEPT) {
        gchar *selected_filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (file_selector));
-       char hime_dir[512];
-       get_hime_dir(hime_dir);
-       char cmd[512];
-       char fname[256];
-       char *filename=inmd[default_input_method].filename;
-
-       if (inmd[default_input_method].method_type==method_type_TSIN)
-         get_hime_user_fname(tsin32_f, fname);
-       else
-       if (filename) {
-         char tt[256];
-         strcat(strcpy(tt, filename), ".append.gtab.tsin-db");
-         if (!get_hime_user_fname(tt, fname)) {
-           strcat(strcpy(tt, filename), ".tsin-db");
-           if (!get_hime_user_fname(tt, fname))
-             p_err("cannot find %s", fname);
-         }
-       }
 #if UNIX
        snprintf(cmd, sizeof(cmd), HIME_BIN_DIR"/hime-tsd2a32 %s -o %s", fname, selected_filename);
        dbg("exec %s\n", cmd);
@@ -774,7 +776,7 @@ void create_appearance_conf_window()
        hime_pop_up_win);
   gtk_box_pack_start (GTK_BOX(hbox_hime_pop_up_win), check_button_hime_pop_up_win, FALSE, FALSE, 0);
 
-  GtkWidget *frame_root_style = gtk_frame_new(_("固定 hime 視窗位置"));
+  GtkWidget *frame_root_style = gtk_frame_new(_("固定輸入視窗位置"));
   gtk_box_pack_start (GTK_BOX (vbox_top), frame_root_style, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame_root_style), 3);
   GtkWidget *vbox_root_style = gtk_vbox_new (FALSE, 10);
@@ -809,7 +811,7 @@ void create_appearance_conf_window()
 
   GtkWidget *hbox_hime_inner_frame = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX(vbox_top), hbox_hime_inner_frame, FALSE, FALSE, 0);
-  check_button_hime_inner_frame = gtk_check_button_new_with_label (_("字根區顯示內框"));
+  check_button_hime_inner_frame = gtk_check_button_new_with_label (_("輸入視窗顯示內框"));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_inner_frame),
        hime_inner_frame);
   gtk_box_pack_start (GTK_BOX(hbox_hime_inner_frame), check_button_hime_inner_frame, FALSE, FALSE, 0);

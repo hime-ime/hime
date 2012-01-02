@@ -38,21 +38,21 @@ void get_icon_path(char *iconame, char fname[]);
 void cb_trad_sim_toggle();
 
 #if WIN32
-void cb_hime_sim2trad(GtkCheckMenuItem *checkmenuitem, gpointer dat)
+void cb_sim2trad(GtkCheckMenuItem *checkmenuitem, gpointer dat)
 {
   win32exec("hime-sim2trad");
 }
-void cb_hime_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat)
+void cb_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat)
 {
   win32exec("hime-trad2sim");
 }
 #else
-void cb_hime_sim2trad(GtkCheckMenuItem *checkmenuitem, gpointer dat)
+void cb_sim2trad(GtkCheckMenuItem *checkmenuitem, gpointer dat)
 {
   system(HIME_BIN_DIR"/hime-sim2trad &");
 }
 
-void cb_hime_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat)
+void cb_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat)
 {
   system(HIME_BIN_DIR"/hime-trad2sim &");
 }
@@ -79,9 +79,9 @@ void restart_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat)
   do_exit();
 }
 
-void kbm_toggle(), exec_hime_setup(), restart_hime(), cb_hime_trad2sim(), cb_hime_sim2trad();
+void kbm_toggle(), exec_hime_setup(), restart_hime(), cb_trad2sim(), cb_sim2trad();
 
-void cb_hime_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat);
+void cb_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
 void cb_trad_sim_toggle_(GtkCheckMenuItem *checkmenuitem, gpointer dat)
 {
@@ -159,8 +159,8 @@ static void cb_fast_phonetic_kbd_switch(GtkCheckMenuItem *checkmenuitem, gpointe
 
 static MITEM mitems_state[] = {
   {NULL, NULL, cb_fast_phonetic_kbd_switch},
-  {N_("外部繁轉簡工具"), NULL, cb_hime_trad2sim},
-  {N_("外部簡轉繁工具"), NULL, cb_hime_sim2trad},
+  {N_("外部繁轉簡工具"), NULL, cb_trad2sim},
+  {N_("外部簡轉繁工具"), NULL, cb_sim2trad},
   {N_("輸出成簡體"), NULL, cb_trad_sim_toggle_, &gb_output},
   {N_("打字速度統計"), NULL, cb_stat_toggle_, &stat_enabled},
 #if WIN32
