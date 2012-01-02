@@ -373,6 +373,7 @@ if [ -z "$CFLAGS" ]; then
 else
   OPTFLAGS="$CFLAGS"
 fi
+echo "-> CFLAGS = $CFLAGS."
 
 if [ -z "$HIME_DEBUG" ]; then
   HIME_DEBUG='0'
