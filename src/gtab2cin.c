@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <sys/types.h>
+#include <unistd.h>
 #if FREEBSD
 #include <sys/param.h>
 #include <sys/stat.h>
@@ -76,13 +77,34 @@ u_int64_t convert_key64(unsigned char *key64)
   return key;
 }
 
+void bot_output(int status, struct TableHead *th)
+{
+  if (status == 0 && th) {
+    printf("0:%d:%d%d", th->keybits, th->MaxPress, th->DefC);
+    return;
+  }
+  printf("%d:0:0:0", status);
+}
+
+void usage()
+{
+  printf(
+    "gtab2cin usages:\n"
+    "  gtab2cin -i <gtab> -o <cin>\n\n"
+    "    -h         Help message\n"
+    "    -i         Table(gtab) filename\n"
+    "    -o         Table(cin) filename\n"
+    "    -b         Output information for machine\n"
+  );
+}
+
 int main(int argc, char **argv)
 {
   const char CIN_HEADER[] = "#\n# cin file created via gtab2cin\n#\n";
   FILE *fr, *fw;
-  char fname[64];
-  char fname_cin[64];
-  char fname_tab[64];
+  char fname[256];
+  char fname_cin[256];
+  char fname_tab[256];
   struct TableHead *th;
   char *kname;
   char *keymap;
@@ -93,22 +115,50 @@ int main(int argc, char **argv)
   QUICK_KEYS qkeys;
   int *phridx;
   char *phrbuf;
+  int opt;
+  int bot = 0;
 
   if (!getenv("NO_GTK_INIT"))
     gtk_init(&argc, &argv);
 
-  if (argc<=1) {
-    printf("Enter table file name [.gtab] : ");
-    scanf("%s", fname);
-  } else strcpy(fname,argv[1]);
+  fname_cin[0] = fname_tab[0] = 0;
+  while ((opt = getopt(argc, argv, "i:o:bh")) != -1) {
+    switch (opt) {
+      case 'i':
+        if (strlen(optarg) < 256)
+          strncpy(fname_tab, optarg, 256);
+        break;
+      case 'o':
+        if (strlen(optarg) < 256)
+          strncpy(fname_cin, optarg, 256);
+        break;
+      case 'b':
+        bot = 1;
+        break;
+      case 'h':
+      default:
+        usage();
+        exit(1);
+    }
+  }
 
-  strcpy(fname_cin,fname);
-  strcpy(fname_tab,fname);
-  strcat(fname_cin,".cin");
-  strcat(fname_tab,".gtab");
+  if (!strlen(fname_cin) || !strlen(fname_tab)) {
+    if (bot) {
+      bot_output(-1, NULL);
+    }
+    else
+      usage();
+    exit(1);
+  }
 
-  if ((fr=fopen(fname_tab,"rb"))==NULL)
-    p_err("Cannot open %s\n", fname_tab);
+  if ((fr=fopen(fname_tab,"rb"))==NULL) {
+    if (bot) {
+      bot_output(1, NULL);
+      exit(1);
+    }
+    else
+      p_err("Cannot open %s\n", fname_tab);
+  }
 
   fseek(fr, 0L, SEEK_END);
   gtablen = ftell(fr);
@@ -116,12 +166,20 @@ int main(int argc, char **argv)
   gtabbuf = malloc(gtablen);
   if (gtabbuf && (gtablen != fread(gtabbuf, 1, gtablen, fr) || gtablen <= 0)) {
     fclose(fr);
-    p_err("Read %s fail\n", fname_tab);
+    if (bot) {
+      bot_output(1, NULL);
+    }
+    else
+      p_err("Read %s fail\n", fname_tab);
   }
   fclose(fr);
   if ((fw=fopen(fname_cin,"wb"))==NULL) {
     free(gtabbuf);
-    p_err("Cannot create");
+    if (bot) {
+      bot_output(2, NULL);
+    }
+    else
+      p_err("Cannot create");
   }
 
   th = (struct TableHead *)gtabbuf;
@@ -279,7 +337,6 @@ int main(int argc, char **argv)
         phr_len = *(phridx + idx + 2) - *(phridx + idx + 1);
         memcpy(phr_str, phrbuf + *(phridx + idx + 1), phr_len);
         fprintf(fw, "%s\n", phr_str);
-        printf("%s\n", phr_str);
       }
       else {
         /* characters define */
@@ -300,8 +357,11 @@ int main(int argc, char **argv)
   fprintf(fw, "# MaxPress: %d\n", th->MaxPress);
   fprintf(fw, "# Defined Characters : %d\n", th->DefC);
   fprintf(fw, "#\n");
+  if (bot)
+    bot_output(0, th);
+  else
+    printf("gtab2cin done\n");
   free(gtabbuf);
   fclose(fw);
-  printf("gtab2cin done\n");
   return 0;
 }
