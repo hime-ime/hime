@@ -19,7 +19,7 @@
 #include "pho.h"
 #include "gtab.h"
 #include "gst.h"
-#include "libappindicator/app-indicator.h"
+#include <libappindicator/app-indicator.h>
 #include "mitem.h"
 
 // NOTE: win-kbm.c Provide GEO information 無解
