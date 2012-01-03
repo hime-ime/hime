@@ -36,6 +36,11 @@
 #include <dlfcn.h>
 #endif
 
+#define SETUP_CB(fn) do { \
+	*(void **) (&st.fn) = dlsym(handle, # fn); \
+	if(st.fn == NULL) { dbg("[W] %s doesn't provide callback: %s\n", sofile, # fn); } } while(0)
+
+
 HIME_module_callback_functions *init_HIME_module_callback_functions(char *sofile)
 {
 #if UNIX
@@ -67,18 +72,18 @@ HIME_module_callback_functions *init_HIME_module_callback_functions(char *sofile
   if (!st.module_init_win)
     p_err("module_init_win() not found in %s", sofile);
 
-  *(void **) (&st.module_get_win_geom) = dlsym(handle, "module_get_win_geom");
-  *(void **) (&st.module_reset) = dlsym(handle, "module_reset");
-  *(void **) (&st.module_get_preedit) = dlsym(handle, "module_get_preedit");
-  *(void **) (&st.module_feedkey) = dlsym(handle, "module_feedkey");
-  *(void **) (&st.module_feedkey_release) = dlsym(handle, "module_feedkey_release");
-  *(void **) (&st.module_move_win) = dlsym(handle, "module_move_win");
-  *(void **) (&st.module_change_font_size) = dlsym(handle, "module_change_font_size");
-  *(void **) (&st.module_show_win) = dlsym(handle, "module_show_win");
-  *(void **) (&st.module_hide_win) = dlsym(handle, "module_hide_win");
-  *(void **) (&st.module_win_visible) = dlsym(handle, "module_win_visible");
-  *(void **) (&st.module_flush_input) = dlsym(handle, "module_flush_input");
-  *(void **) (&st.module_setup_window_create) = dlsym(handle, "module_setup_window_create");
+  SETUP_CB(module_get_win_geom);
+  SETUP_CB(module_reset);
+  SETUP_CB(module_get_preedit);
+  SETUP_CB(module_feedkey);
+  SETUP_CB(module_feedkey_release);
+  SETUP_CB(module_move_win);
+  SETUP_CB(module_change_font_size);
+  SETUP_CB(module_show_win);
+  SETUP_CB(module_hide_win);
+  SETUP_CB(module_win_visible);
+  SETUP_CB(module_flush_input);
+  SETUP_CB(module_setup_window_create);
 
   return tmemdup(&st, HIME_module_callback_functions, 1);
 }
