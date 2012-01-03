@@ -38,7 +38,7 @@ Usage: ./configure --disable-xim
 -DEFS = @DEFS@
 -LIBS = @LIBS@
 +DEFS = @DEFS@ -DUSE_HIME -DUNIX=1
-+LIBS = @LIBS@ -lhime-im-client
++LIBS = @LIBS@ -lhime-im-client -L$(libdir)/hime
  XINC = @X_CFLAGS@ @AFTERIMAGE_CFLAGS@ @PIXBUF_CFLAGS@ @STARTUP_NOTIFICATION_CFLAGS@
  XLIB = @X_LIBS@ @AFTERIMAGE_LIBS@ -lX11 @X_EXTRA_LIBS@ @PIXBUF_LIBS@ @STARTUP_NOTIFICATION_LIBS@
  COMPILE = $(CXX) -I.. -I$(srcdir) -I. -I$(srcdir)/../libev -I$(srcdir)/../libptytty/src -I$(srcdir)/../libecb $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(XINC)
