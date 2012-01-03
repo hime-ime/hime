@@ -24,7 +24,7 @@ int hime_win_color_use, hime_single_state;
 int hime_remote_client;
 char *default_input_method_str;
 int default_input_method;
-int left_right_button_tips;
+// int left_right_button_tips;
 int hime_im_toggle_keys, hime_bell_off;
 int hime_capslock_lower, hime_eng_phrase_enabled, hime_init_im_enabled;
 int hime_win_sym_click_close, hime_edit_display, hime_win32_icon;
@@ -124,7 +124,7 @@ void load_setttings()
 #if !USE_TSIN
   get_hime_conf_str(DEFAULT_INPUT_METHOD, &default_input_method_str, "3"); /* "3" usually is Bopomofo */
 #endif
-  left_right_button_tips = get_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 1);
+//  left_right_button_tips = get_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 1);
   hime_im_toggle_keys = get_hime_conf_int(HIME_IM_TOGGLE_KEYS, 0);
 #if TRAY_ENABLED
   hime_status_tray = get_hime_conf_int(HIME_STATUS_TRAY, 1);

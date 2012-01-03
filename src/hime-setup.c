@@ -1221,8 +1221,10 @@ int main(int argc, char **argv)
 
   create_main_win();
 
+#if 0
   // once you invoke hime-setup, the left-right buton tips is disabled
   save_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 0);
+#endif
 
 #if WIN32
   pclipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
