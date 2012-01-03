@@ -5,6 +5,8 @@ depend on libhime-im-client.so.1, and let hime works like GTK+ / Qt immodule.
 
 Unpatched rxvt-unicode still can use hime via XIM protocol.
 
+Usage: ./configure --disable-xim
+
 --- rxvt-unicode-9.14.orig/README.hime
 +++ rxvt-unicode-9.14/README.hime
 @@ -0,0 +1 @@
