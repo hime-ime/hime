@@ -823,6 +823,7 @@ void get_win_pho_geom();
 
 void update_active_in_win_geom()
 {
+  HIME_module_callback_functions *mod_cbs;
 //  dbg("update_active_in_win_geom\n");
   switch (current_method_type()) {
     case method_type_PHO:
@@ -834,7 +835,9 @@ void update_active_in_win_geom()
       break;
 #endif
     case method_type_MODULE:
-      module_cb()->module_get_win_geom();
+      mod_cbs = module_cb();
+      if(mod_cbs && mod_cbs->module_get_win_geom)
+        mod_cbs->module_get_win_geom();
       break;
     default:
       get_win_gtab_geom();
