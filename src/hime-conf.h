@@ -34,7 +34,7 @@
 
 #define HIME_IM_TOGGLE_KEYS "hime-im-toggle-keys"
 #define DEFAULT_INPUT_METHOD "default-input-method"
-#define LEFT_RIGHT_BUTTON_TIPS "left-right-button-tips"
+// #define LEFT_RIGHT_BUTTON_TIPS "left-right-button-tips"
 #define HIME_STR_IM_CYCLE "hime-str-im-cycle"
 #define HIME_REMOTE_CLIENT "hime-remote-client"
 #define HIME_SHIFT_SPACE_ENG_FULL "hime-shift-space-eng-full"
@@ -104,7 +104,7 @@ extern int hime_font_size, hime_font_size_tsin_presel, hime_font_size_symbol,
            hime_bell_volume, hime_sound_play_overlap, hime_enable_ctrl_alt_switch, hime_on_the_spot_key;
 
 extern int default_input_method;
-extern int left_right_button_tips;
+// extern int left_right_button_tips;
 extern int gtab_dup_select_bell;
 extern int gtab_space_auto_first;
 extern int gtab_auto_select_by_phrase;

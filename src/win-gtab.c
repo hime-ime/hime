@@ -609,6 +609,7 @@ void create_win_gtab_gui_simple()
     g_signal_connect(G_OBJECT(event_box_gtab),"button-press-event",
                      G_CALLBACK(mouse_button_callback), NULL);
 
+#if 0
     if (left_right_button_tips) {
 #if GTK_CHECK_VERSION(2,12,0)
       gtk_widget_set_tooltip_text (event_box_gtab, _("左鍵符號，右鍵設定"));
@@ -617,6 +618,7 @@ void create_win_gtab_gui_simple()
       gtk_tooltips_set_tip (GTK_TOOLTIPS (button_gtab_tips), event_box_gtab, _("左鍵符號，右鍵設定"),NULL);
 #endif
     }
+#endif
 
 
     label_gtab = gtk_label_new(NULL);

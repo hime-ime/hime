@@ -251,6 +251,7 @@ void create_win_pho_gui_simple()
 	gtk_container_add (GTK_CONTAINER (frame_pho), label_pho);
   }
 
+#if 0
   if (left_right_button_tips) {
 #if GTK_CHECK_VERSION(2,12,0)
     gtk_widget_set_tooltip_text (event_box_pho, _("左鍵符號，右鍵設定"));
@@ -259,6 +260,7 @@ void create_win_pho_gui_simple()
     gtk_tooltips_set_tip (GTK_TOOLTIPS (button_gtab_tips), event_box_pho, _("左鍵符號，右鍵設定"),NULL);
 #endif
   }
+#endif
 
   label_key_codes  = gtk_label_new(NULL);
   gtk_label_set_selectable(GTK_LABEL(label_key_codes), TRUE);
