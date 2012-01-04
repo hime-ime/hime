@@ -427,9 +427,6 @@ GtkWidget *create_pho_sel_area()
 
   for(i=0; i < bigphoN; i++) {
     bigpho[i].opt_menu = gtk_combo_box_new_text ();
-#if !GTK_CHECK_VERSION(2,4,0)
-    GtkWidget *menu = gtk_menu_new ();
-#endif
     gtk_box_pack_start (GTK_BOX (hbox_pho_sel), bigpho[i].opt_menu, FALSE, FALSE, 0);
 
     int j;
@@ -457,20 +454,10 @@ GtkWidget *create_pho_sel_area()
         phokey2pinyin(k):phokey_to_str(k);
       }
 
-#if GTK_CHECK_VERSION(2,4,0)
       gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (bigpho[i].opt_menu), phostr);
-#else
-      GtkWidget *item = gtk_menu_item_new_with_label (phostr);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-#endif
     }
 
-#if GTK_CHECK_VERSION(2,4,0)
     gtk_combo_box_set_active (GTK_COMBO_BOX(bigpho[i].opt_menu), 0);
-#else
-    gtk_option_menu_set_menu (GTK_OPTION_MENU (bigpho[i].opt_menu), menu);
-#endif
-
   }
 
 
