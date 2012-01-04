@@ -225,8 +225,9 @@ void load_tray_icon()
     GError *err = NULL;
 //    dbg("icon_name %s\n", icon_fname);
     pixbuf = gdk_pixbuf_new_from_file_at_size(icon_fname, dw, dh, &err);
-    if (!pixbuf)
-      p_err("cannot load file %s", icon_fname);
+    //Reduce troublesome when hime-tray.png does not exist
+    //if (!pixbuf)
+    //  p_err("cannot load file %s", icon_fname);
   }
 
 #if 0
