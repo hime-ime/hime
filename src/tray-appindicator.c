@@ -92,6 +92,8 @@ static void tray_appindicator_load_icon(char iconame[], char fallback[])
   } else if (access(gx, F_OK) == 0) {
     app_indicator_set_icon_theme_path(tray_appindicator, HIME_ICON_DIR);
   } else {
+    if (iconame == HIME_TRAY_ICONAME)
+      return;
     strcpy(iconame, fallback);
     app_indicator_set_icon_theme_path(tray_appindicator, HIME_ICON_DIR);
     if (fallback != HIME_TRAY_ICONAME)

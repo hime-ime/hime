@@ -131,7 +131,7 @@ void load_setttings()
   hime_status_tray = get_hime_conf_int(HIME_STATUS_TRAY, 1);
 #endif
   hime_win_sym_click_close = get_hime_conf_int(HIME_WIN_SYM_CLICK_CLOSE, 1);
-  hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, 1);
+  hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, 2);
 
   gtab_dup_select_bell = get_hime_conf_int(GTAB_DUP_SELECT_BELL, 0);
   gtab_space_auto_first = get_hime_conf_int(GTAB_SPACE_AUTO_FIRST, GTAB_space_auto_first_none);
