@@ -41,7 +41,7 @@
 #endif
 #endif
 
-#define N_(STRING) STRING
+#define N_(STRING) (STRING)
 
 #include "hime-gtk-compatible.h"
 
