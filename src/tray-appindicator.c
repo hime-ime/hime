@@ -170,14 +170,14 @@ gboolean tray_appindicator_create(gpointer data)
     return FALSE;
   }
   GtkWidget *menu = NULL;
-//TODO: (OK) return false if hime-tray.png does not exist in HIME_ICON_DIR
-//    : error message
   if (access(HIME_ICON_DIR"/"HIME_TRAY_PNG, F_OK) != 0)
     return FALSE;
   tray_appindicator = app_indicator_new_with_path ("hime", HIME_TRAY_ICONAME, APP_INDICATOR_CATEGORY_APPLICATION_STATUS, HIME_ICON_DIR);
   app_indicator_set_status (tray_appindicator, APP_INDICATOR_STATUS_ACTIVE);
   menu = create_tray_menu(mitems);
-  app_indicator_set_secondary_activate_target(tray_appindicator, mitems[0].item);
+// Temporarily comment the following line:
+//    app_indicator_set_secondary_activate_target(tray_appindicator, mitems[0].item);
+// TODO: implement secondat_activate signal back for older version of libappindicator later
   app_indicator_set_menu (tray_appindicator, GTK_MENU (menu));
 
   load_tray_appindicator();
