@@ -21,9 +21,6 @@
 #include "hime-endian.h"
 #include "pho.h"
 #include "tsin.h"
-#if WIN32
-#include <io.h>
-#endif
 
 void get_hime_user_or_sys_fname(char *name, char fname[]);
 
