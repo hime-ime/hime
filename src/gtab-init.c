@@ -30,11 +30,7 @@ char **seltab;
 extern gboolean test_mode;
 extern unich_t *fullchar[];
 INMD *cur_inmd;
-#if UNIX
 GTAB_ST ggg = {.sel1st_i=MAX_SELKEY - 1};
-#else
-GTAB_ST ggg;
-#endif
 
 /* for array30-like quick code */
 static char keyrow[]=
