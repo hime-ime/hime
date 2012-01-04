@@ -37,28 +37,9 @@ void disp_pho(int index, char *phochar)
   disp_pho_sub(label_pho, index, phochar);
 }
 
-#if WIN32
-static int timeout_handle_pho;
-gboolean timeout_minimize_win_pho(gpointer data)
-{
-  if (!gwin_pho)
-    return FALSE;
-  gtk_window_resize(GTK_WINDOW(gwin_pho), 1, 1);
-//  gtk_window_present(GTK_WINDOW(gwin0));
-  timeout_handle_pho = 0;
-  return FALSE;
-}
-#endif
-
-
 void minimize_win_pho()
 {
   gtk_window_resize(GTK_WINDOW(gwin_pho), 1, 1);
-
-#if WIN32
-  if (!timeout_handle_pho)
-	timeout_handle_pho = g_timeout_add(50, timeout_minimize_win_pho, NULL);
-#endif
 }
 
 
@@ -143,16 +124,9 @@ void create_win_pho()
   gwin_pho = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size(GTK_WINDOW(gwin_pho), 1 ,1);
   gtk_window_set_has_resize_grip(GTK_WINDOW(gwin_pho), FALSE);
-#if WIN32
-  set_no_focus(gwin_pho);
-#endif
   gtk_container_set_border_width (GTK_CONTAINER (gwin_pho), 0);
   gtk_widget_realize (gwin_pho);
-#if UNIX
   set_no_focus(gwin_pho);
-#else
-  win32_init_win(gwin_pho);
-#endif
   change_win_bg(gwin_pho);
 }
 
@@ -327,13 +301,6 @@ void hide_win_pho()
 // dbg("hide_win_pho\n");
   if (!gwin_pho)
     return;
-
-#if WIN32
-  if (timeout_handle_pho) {
-	  g_source_remove(timeout_handle_pho);
-	  timeout_handle_pho = 0;
-  }
-#endif
 
   gtk_widget_hide(gwin_pho);
   hide_win_sym();

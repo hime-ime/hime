@@ -20,12 +20,7 @@
 struct HIME_PASSWD;
 
 typedef struct HIME_client_handle_S {
-#if UNIX
   int fd;
-#else
-  HANDLE fd;               // <=0 ; connection is not established
-  int server_idx;
-#endif
   Window client_win;	/* client window */
   u_int	input_style;	/* input style */
   XPoint spot_location; /* spot location */

@@ -452,9 +452,7 @@ int main(int argc, char **argv)
 
   dbg("ph_key_sz: %d\n", ph_key_sz);
 
-#if UNIX
   dpy = GDK_DISPLAY();
-#endif
 
   mainwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_has_resize_grip(GTK_WINDOW(mainwin), FALSE);
@@ -479,11 +477,7 @@ int main(int argc, char **argv)
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
-#if UNIX
   char *text = _("按滑鼠中鍵, 貼上你要 hime-tslearn 學習的文章。");
-#else
-  char *text = _("按 ctrl-V, 貼上你要 hime-tslearn 學習的文章。");
-#endif
 
   gtk_text_buffer_set_text (buffer, text, -1);
 

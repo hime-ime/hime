@@ -15,9 +15,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#if UNIX
 #include <X11/Xlib.h>
-#endif
 #include "../hime-endian.h"
 
 typedef enum {
@@ -92,6 +90,4 @@ typedef struct {
 typedef struct {
   char sock_path[80];
 } Server_sock_path;
-#if UNIX
 void __hime_enc_mem(u_char *p, int n, HIME_PASSWD *passwd, u_int *seed);
-#endif
