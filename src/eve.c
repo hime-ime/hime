@@ -58,7 +58,7 @@ void gtab_set_win1_cb();
 
 gboolean old_capslock_on;
 
-
+int hime_tray_display;
 void init_gtab(int inmdno);
 
 char current_method_type()
@@ -664,39 +664,65 @@ void update_in_win_pos()
 void win_pho_disp_half_full();
 void win_tsin_disp_half_full();
 void win_gtab_disp_half_full();
-void update_tray_icon(), load_tray_icon(), load_tray_icon_win32(), load_tray_appindicator();
+void update_tray_icon(), load_tray_icon(), load_tray_icon_double();
+#if TRAY_UNITY
+void load_tray_appindicator();
+#endif
 static int current_hime_win32_icon = -1;
-extern void destroy_tray_win32();
+gboolean is_exist_tray();
 extern void destroy_tray_icon();
+gboolean is_exist_tray_double();
+extern void destroy_tray_double();
+#if TRAY_UNITY
+gboolean is_exist_tray_appindicator();
+extern void destroy_tray_appindicator();
+#endif
 
 #if TRAY_ENABLED
-#if UNIX
 void destroy_tray()
 {
-  if (current_hime_win32_icon)
-    destroy_tray_win32();
-  else
+// TODO: optimze it , e.g. struct
+  if (is_exist_tray())
     destroy_tray_icon();
-}
+  if (is_exist_tray_double())
+    destroy_tray_double();
+#if TRAY_UNITY
+  if (is_exist_tray_appindicator())
+    destroy_tray_appindicator();
 #endif
+}
+
+void destroy_other_tray()
+{
+  if (!hime_status_tray) {
+    destroy_tray();
+    return;
+  }
+  if (is_exist_tray() && hime_tray_display != HIME_TRAY_DISPLAY_SINGLE)
+    destroy_tray_icon();
+  if (is_exist_tray_double() && hime_tray_display != HIME_TRAY_DISPLAY_DOUBLE)
+    destroy_tray_double();
+#if TRAY_UNITY
+  if (is_exist_tray_appindicator() && hime_tray_display != HIME_TRAY_DISPLAY_APPINDICATOR)
+    destroy_tray_appindicator();
+#endif
+}
+
 
 void disp_tray_icon()
 {
-//  dbg("disp_tray_icon\n");
-//dbg("disp_tray_icon %d %d\n", current_hime_win32_icon, hime_win32_icon);
-#if !TRAY_UNITY
-  if (current_hime_win32_icon >= 0 && current_hime_win32_icon != hime_win32_icon) {
-    destroy_tray();
-  }
+  if (!hime_status_tray)
+    return destroy_tray();
+// dbg("disp_tray_icon\n");
+// dbg("disp_tray_icon %d %d\n", current_hime_win32_icon, hime_win32_icon);
 
-  current_hime_win32_icon = hime_win32_icon;
-
-  if (hime_win32_icon)
-    load_tray_icon_win32();
-  else
+//  current_hime_win32_icon = hime_win32_icon;
+  if (hime_tray_display == HIME_TRAY_DISPLAY_SINGLE)
     load_tray_icon();
-#endif
+  if (hime_tray_display == HIME_TRAY_DISPLAY_DOUBLE)
+    load_tray_icon_double();
 #if TRAY_UNITY
+  if (hime_tray_display == HIME_TRAY_DISPLAY_APPINDICATOR)
   load_tray_appindicator();
 #endif
 }

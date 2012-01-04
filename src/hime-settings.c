@@ -27,8 +27,9 @@ int default_input_method;
 // int left_right_button_tips;
 int hime_im_toggle_keys, hime_bell_off;
 int hime_capslock_lower, hime_eng_phrase_enabled, hime_init_im_enabled;
-int hime_win_sym_click_close, hime_edit_display, hime_win32_icon;
+int hime_win_sym_click_close, hime_edit_display;
 int hime_on_the_spot_key, hime_tray_hf_win_kbm, hime_punc_auto_send;
+int hime_tray_display;
 
 int gtab_dup_select_bell;
 int gtab_space_auto_first;
@@ -130,11 +131,7 @@ void load_setttings()
   hime_status_tray = get_hime_conf_int(HIME_STATUS_TRAY, 1);
 #endif
   hime_win_sym_click_close = get_hime_conf_int(HIME_WIN_SYM_CLICK_CLOSE, 1);
-#if WIN32
-  hime_win32_icon = 1;
-#else
-  hime_win32_icon = get_hime_conf_int(HIME_WIN32_ICON, 1);
-#endif
+  hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, 1);
 
   gtab_dup_select_bell = get_hime_conf_int(GTAB_DUP_SELECT_BELL, 0);
   gtab_space_auto_first = get_hime_conf_int(GTAB_SPACE_AUTO_FIRST, GTAB_space_auto_first_none);

@@ -94,7 +94,7 @@ endif
 
 ifeq ($(USE_TRAY),Y)
 CFLAGS     += -DTRAY_ENABLED=1
-OBJS       += tray.o eggtrayicon.o tray-win32.o
+OBJS       += tray.o eggtrayicon.o tray-double.o
 ifeq ($(USE_UNITY),Y)
 CFLAGS     += -DTRAY_UNITY=1
 OBJS       += tray-appindicator.o
