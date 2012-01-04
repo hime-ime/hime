@@ -76,10 +76,6 @@ int hime_im_client_forward_key_press2(HIME_client_handle *handle,
 int hime_im_client_forward_key_release(HIME_client_handle *handle,
                                           KeySym key, u_int state,
                                           char **rstr);
-#if WIN32
-bool hime_im_client_key_eaten(HIME_client_handle *handle, int press_release,
-                                          KeySym key, u_int state);
-#endif
 
 void hime_im_client_set_flags(HIME_client_handle *handle, int flags, int *ret_flags);
 void hime_im_client_clear_flags(HIME_client_handle *handle, int flags, int *ret_flags);
@@ -90,12 +86,7 @@ void hime_im_client_message(HIME_client_handle *handle, char *message);
 #include "hime-im-client-attr.h"
 int hime_im_client_get_preedit(HIME_client_handle *handle, char **str, HIME_PREEDIT_ATTR att[], int *cursor, int *sub_comp_len);
 
-#if UNIX
 Window find_hime_window(Display *dpy);
-#else
-HWND find_hime_window();
-#endif
-
 
 #ifdef __cplusplus
 }

@@ -78,19 +78,15 @@ typedef struct {
 
 #define __HIME_PASSWD_N_ (31)
 
-#if !WIN32
 typedef struct HIME_PASSWD {
   u_int seed;
   u_char passwd[__HIME_PASSWD_N_];
 } HIME_PASSWD;
-#endif
 
 typedef struct {
   u_int ip;
   u_short port;
-#if !WIN32
   HIME_PASSWD passwd;
-#endif
 } Server_IP_port;
 
 typedef struct {
@@ -98,11 +94,4 @@ typedef struct {
 } Server_sock_path;
 #if UNIX
 void __hime_enc_mem(u_char *p, int n, HIME_PASSWD *passwd, u_int *seed);
-#endif
-
-#if WIN32
-#define HIME_WIN_NAME "hime0"
-#define HIME_PORT_MESSAGE WM_USER+10
-#define HIME_CLIENT_MESSAGE_REQ WM_USER+11
-#define HIME_PIPE_PATH "\\\\.\\pipe\\hime-svr%d"
 #endif
