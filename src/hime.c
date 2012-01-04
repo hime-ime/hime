@@ -402,6 +402,11 @@ void message_cb(char *message)
      execute_message(message);
    } else
 #endif
+#if TRAY_ENABLED
+   if (!strcmp(message, UPDATE_TRAY)) {
+     disp_tray_icon();
+   } else
+#endif
    if (!strcmp(message, RELOAD_TSIN_DB)) {
      reload_tsin_db();
    } else
