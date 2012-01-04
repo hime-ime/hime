@@ -106,13 +106,3 @@ void destroy_inmd_menu()
   gtk_widget_destroy(menu);
   menu = NULL;
 }
-
-#if WIN32
-void inmd_popup_tray()
-{
-  if (!menu)
-    create_inmd_switch();
-
-  gtk_menu_popup (GTK_MENU(menu), NULL, NULL, NULL, NULL, 1, gtk_get_current_event_time());
-}
-#endif
