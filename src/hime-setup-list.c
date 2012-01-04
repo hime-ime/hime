@@ -702,7 +702,6 @@ void create_gtablist_window (void)
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_punc_auto_send),
      hime_punc_auto_send);
 
-#if UNIX
   DIR *dir;
   if ((dir=opendir(HIME_OGG_DIR"/ㄧ"))) {
     struct dirent *dire;
@@ -720,28 +719,6 @@ void create_gtablist_window (void)
     dbg("pho_speakerN:%d\n", pho_speakerN);
 
   }
-#else
-  wchar_t oggdir[256];
-  wchar_t hime16[256];
-  utf8_to_16(hime_program_files_path, hime16, sizeof(hime16));
-  wsprintfW(oggdir, L"%s\\ogg\\ㄧ\\*", hime16);
-
-  WIN32_FIND_DATAW ffd;
-  HANDLE hFind = FindFirstFileW(oggdir, &ffd);
-
-  if (INVALID_HANDLE_VALUE != hFind) {
-    do {
-      char tt[256];
-      utf16_to_8(ffd.cFileName, tt, sizeof(tt));
-	  if (!strcmp(tt, ".") || !strcmp(tt, ".."))
-		  continue;
-	  dbg("--- %s\n", tt);
-      pho_speaker[pho_speakerN++]=strdup(tt);
-    } while (FindNextFileW(hFind, &ffd) != 0);
-
-    FindClose(hFind);
-  }
-#endif
 
   if (pho_speakerN) {
     GtkWidget *labelspeaker = gtk_label_new(_("發音選擇"));
