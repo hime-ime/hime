@@ -146,7 +146,6 @@ static gboolean cb_gtab_edit_append( GtkWidget *widget,
     return TRUE;
 
   char append_fname[128];
-#if UNIX
   sprintf(append_fname, "~/.config/hime/%s.append", fname);
 
   char prepare[128];
@@ -158,16 +157,6 @@ static gboolean cb_gtab_edit_append( GtkWidget *widget,
   sprintf(exec, "%s %s", utf8_edit, append_fname);
   dbg("exec %s\n", exec);
   system(exec);
-#else
-  strcat(strcpy(append_fname, fname), ".append");
-  char user_fname[512];
-  get_hime_user_fname(append_fname, user_fname);
-  if (GetFileAttributesA(user_fname) == INVALID_FILE_ATTRIBUTES)
-    win32exec_script("gtab.append_prepare.bat", user_fname);
-  else {
-    win32exec_script("utf8-edit.bat", user_fname);
-  }
-#endif
   return TRUE;
 }
 

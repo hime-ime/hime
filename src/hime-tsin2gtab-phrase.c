@@ -106,11 +106,6 @@ typedef struct {
 
 void get_keymap_str(u_int64_t k, char *keymap, int keybits, char tkey[]);
 
-#if WIN32
-void init_hime_program_files();
- #pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#endif
-
 int main(int argc, char **argv)
 {
   gtk_init(&argc, &argv);

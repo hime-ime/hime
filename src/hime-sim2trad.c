@@ -80,11 +80,6 @@ gboolean cb_button_fetch()
   return TRUE;
 }
 
-#if WIN32
-void init_hime_program_files();
- #pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#endif
-
 void set_window_hime_icon(GtkWidget *window);
 void init_TableDir();
 int main(int argc, char **argv)

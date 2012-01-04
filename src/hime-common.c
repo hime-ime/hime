@@ -54,16 +54,10 @@ void case_inverse(KeySym *xkey, int shift_m)
 
 gint64 current_time()
 {
-#if WIN32
-  gint64 v = (gint64)GetTickCount()*1000;
-//  dbg("v %lld\n", v);
-  return v;
-#else
   struct timeval tval;
 
   gettimeofday(&tval, NULL);
   return (gint64)tval.tv_sec * 1000000 + tval.tv_usec;
-#endif
 }
 
 void disp_pho_sub(GtkWidget *label, int index, char *pho)
@@ -95,9 +89,6 @@ void disp_pho_sub(GtkWidget *label, int index, char *pho)
 
 //  gtk_widget_show(label);
   gtk_label_set_text(GTK_LABEL(label), s);
-#if WIN32
-  delete s;
-#endif
 }
 
 void exec_hime_setup()
@@ -123,11 +114,7 @@ void exec_hime_setup()
   putenv(pidstr);
 #endif
 
-#if UNIX
   system(HIME_BIN_DIR"/hime-setup &");
-#else
-  win32exec("hime-setup.exe");
-#endif
 }
 
 void set_label_font_size(GtkWidget *label, int size)

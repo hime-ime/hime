@@ -162,11 +162,6 @@ int qcmp_64(const void *aa, const void *bb)
 
 static char kno[128];
 
-#if WIN32
-void init_hime_program_files();
- #pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#endif
-
 int main(int argc, char **argv)
 {
   int i;
