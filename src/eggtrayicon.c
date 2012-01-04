@@ -25,11 +25,6 @@
 #include <X11/Xatom.h>
 #include "hime.h"
 
-#if GTK_CHECK_VERSION(2,24,0)
-#define gdk_window_lookup_for_display gdk_x11_window_lookup_for_display
-#endif
-
-
 #define SYSTEM_TRAY_REQUEST_DOCK    0
 #define SYSTEM_TRAY_BEGIN_MESSAGE   1
 #define SYSTEM_TRAY_CANCEL_MESSAGE  2
@@ -387,6 +382,7 @@ static void
 make_transparent_again (GtkWidget *widget, GtkStyle *previous_style,
                        gpointer user_data)
 {
+/* TODO: move to hime-gtk-compatible.h */
 #if !GTK_CHECK_VERSION(2,91,0)
 	gdk_window_set_back_pixmap(gtk_widget_get_window(widget), NULL, TRUE);
 #else
@@ -397,6 +393,7 @@ make_transparent_again (GtkWidget *widget, GtkStyle *previous_style,
 static void
 make_transparent (GtkWidget *widget, gpointer user_data)
 {
+/* TODO: move to hime-gtk-compatible.h */
 #if GTK_CHECK_VERSION(2,19,3)
 	if (GTK_WIDGET_NO_WINDOW (widget) || gtk_widget_get_app_paintable (widget))
 #else

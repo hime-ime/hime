@@ -35,6 +35,7 @@
 #endif
 
 #if GTK_CHECK_VERSION(2,24,0)
+#define gdk_window_lookup_for_display gdk_x11_window_lookup_for_display
 #define gtk_combo_box_new_text gtk_combo_box_text_new
 #define gtk_combo_box_append_text gtk_combo_box_text_append_text
 #define gtk_widget_hide_all gtk_widget_hide
