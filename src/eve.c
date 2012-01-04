@@ -20,11 +20,6 @@
 #if UNIX
 #include <signal.h>
 #include <X11/extensions/XTest.h>
-#if !GTK_CHECK_VERSION(2,16,0)
-#include <X11/XKBlib.h>
-#include <gdk/gdkx.h>
-#define gdk_keymap_get_caps_lock_state(x) get_caps_lock_state()
-#endif
 #endif
 #include "gst.h"
 #include "pho.h"

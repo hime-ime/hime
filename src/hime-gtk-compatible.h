@@ -7,6 +7,12 @@
 #define gtk_status_icon_set_tooltip_text gtk_status_icon_set_tooltip
 #endif
 
+#if !GTK_CHECK_VERSION(2,16,0)
+#include <X11/XKBlib.h>
+#include <gdk/gdkx.h>
+#define gdk_keymap_get_caps_lock_state(x) get_caps_lock_state()
+#endif
+
 #if GTK_CHECK_VERSION(2,17,5)
 #undef GTK_WIDGET_NO_WINDOW
 #define GTK_WIDGET_NO_WINDOW !gtk_widget_get_has_window
