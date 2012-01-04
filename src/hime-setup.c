@@ -419,6 +419,9 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
   g_free(cstr);
 
   send_hime_message(GDK_DISPLAY(), CHANGE_FONT_SIZE);
+#if TRAY_ENABLED
+  send_hime_message(GDK_DISPLAY(), UPDATE_TRAY);
+#endif
   gtk_widget_destroy(hime_appearance_conf_window); hime_appearance_conf_window = NULL;
 
   return TRUE;

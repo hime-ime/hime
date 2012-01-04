@@ -3,6 +3,9 @@
 #define SIM_OUTPUT_TOGGLE "gb output sim"
 #define TRAD_OUTPUT_TOGGLE "gb output trad"
 #define KBM_TOGGLE "kbm toggle"
+#if TRAY_ENABLED
+#define UPDATE_TRAY "update tray"
+#endif
 #define RELOAD_TSIN_DB "reload tsin db"
 #define HIME_EXIT_MESSAGE "hime exit"
 
