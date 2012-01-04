@@ -199,10 +199,6 @@ static void putbuf(int len)
 {
   u_char tt[CH_SZ * (MAX_PH_BF_EXT+1) + 1];
   int i,idx;
-#if WIN32
-  if (test_mode)
-    return;
-#endif
 
 //  dbg("putbuf:%d\n", len);
 #if 1
@@ -383,10 +379,6 @@ void tsin_reset_in_pho()
 
 void flush_tsin_buffer()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   tsin_reset_in_pho();
 
   if (hime_pop_up_win)
@@ -510,11 +502,6 @@ gboolean save_phrase_to_db2(CHPHO *chph, int len);
 
 void save_phrase(int save_frm, int len)
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
   int save_to = save_frm + len -1;
   if (len <= 0 || len > MAX_PHRASE_LEN)
     return;
@@ -938,10 +925,6 @@ void show_button_pho(gboolean bshow);
 void tsin_set_eng_ch(int nmod)
 {
 //  dbg("tsin_set_eng_ch %d\n", nmod);
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   if (current_CS) {
     current_CS->tsin_pho_mode = nmod;
     save_CS_current_to_temp();
@@ -2240,14 +2223,12 @@ fin:
   }
 
   *cursor = tss.c_idx;
-#if WIN32 || 1
   *comp_flag = !typ_pho_empty();
   if (gwin1 && GTK_WIDGET_VISIBLE(gwin1))
     *comp_flag|=2;
 #if 1
   if (tss.c_len && !ap_only)
 	*comp_flag|=4;
-#endif
 #endif
 
   return attrN;
@@ -2256,46 +2237,11 @@ fin:
 int tsin_reset()
 {
 //  dbg("tsin_reset\n");
-#if UNIX
   if (!gwin0)
     return 0;
-#endif
   int v = tss.c_len > 0;
   tsin_reset_in_pho0();
   clear_tsin_buffer();
 
   return v;
 }
-
-
-#if WIN32
-static TSIN_ST temp_st;
-static PRE_SEL *temp_pre_sel;
-static CHPHO *temp_chpho;
-void pho_save_gst(),pho_restore_gst();
-
-void tsin_save_gst()
-{
-  pho_save_gst();
-
-  if (!temp_pre_sel)
-    temp_pre_sel=tzmalloc(PRE_SEL, 10);
-
-  if (!temp_chpho)
-    temp_chpho=tzmalloc(CHPHO, MAX_PH_BF_EXT);
-
-
-  temp_st = tss;
-  memcpy(temp_chpho, tss.chpho, sizeof(CHPHO) * MAX_PH_BF_EXT);
-  memcpy(temp_pre_sel, tss.pre_sel, sizeof(PRE_SEL) * 10);
-}
-
-void  tsin_restore_gst()
-{
-  pho_restore_gst();
-
-  tss = temp_st;
-  memcpy(tss.chpho, temp_chpho, sizeof(CHPHO) * MAX_PH_BF_EXT);
-  memcpy(tss.pre_sel, temp_pre_sel, sizeof(PRE_SEL) * 10);
-}
-#endif

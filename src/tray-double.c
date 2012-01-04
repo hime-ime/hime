@@ -239,12 +239,8 @@ void update_item_active_all()
 #endif
 }
 
-
-void inmd_popup_tray();
-
 static void cb_activate(GtkStatusIcon *status_icon, gpointer user_data)
 {
-#if UNIX
 //  dbg("cb_activate\n");
   toggle_im_enabled();
 
@@ -252,9 +248,6 @@ static void cb_activate(GtkStatusIcon *status_icon, gpointer user_data)
   bzero(&rect, sizeof(rect));
   GtkOrientation ori;
   gtk_status_icon_get_geometry(status_icon, NULL, &rect, &ori);
-#else
-  inmd_popup_tray();
-#endif
 }
 
 static void cb_popup(GtkStatusIcon *status_icon, guint button, guint activate_time, gpointer user_data)

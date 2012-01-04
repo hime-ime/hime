@@ -182,16 +182,9 @@ void init_gtab(int inmdno)
     if (mtime_append_gtab < mtime || mtime_append_gtab < mtime_append) {
       char exe[256];
 
-#if WIN32
-      sprintf(exe, "\"%s\" \"%s\" \"%s\"", ttt, append_user, append_user_gtab);
-      dbg("exe %s\n", exe);
-      win32exec_para("hime-gtab-merge", exe);
-      Sleep(1000);
-#else
       sprintf(exe, HIME_BIN_DIR"/hime-gtab-merge %s %s %s", ttt, append_user, append_user_gtab);
       dbg("exe %s\n", exe);
       system(exe);
-#endif
 
       mtime_append_gtab = file_mtime(append_user_gtab);
     }
