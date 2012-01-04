@@ -306,16 +306,16 @@ void hide_win_pho()
 void init_tab_pho();
 void get_win_gtab_geom();
 
-void init_gtab_pho_query_win()
-{
-  init_tab_pho();
-  move_gtab_pho_query_win();
-}
-
 void move_gtab_pho_query_win()
 {
   get_win_gtab_geom();
   move_win_pho(win_x, win_y + win_yl);
+}
+
+void init_gtab_pho_query_win()
+{
+  init_tab_pho();
+  move_gtab_pho_query_win();
 }
 
 char *get_full_str();

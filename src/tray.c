@@ -58,9 +58,9 @@ static void draw_icon()
   if (!da)
     return;
 
-  GdkPixbuf *pix =  !current_CS ||
-    (current_CS->im_state == HIME_STATE_DISABLED||current_CS->im_state == HIME_STATE_ENG_FULL) ?
-    pixbuf : pixbuf_ch;
+  GdkPixbuf *pix =  ((! current_CS) ||
+                     (current_CS->im_state != HIME_STATE_CHINESE)) ?
+                    pixbuf : pixbuf_ch;
 
 #if GTK_CHECK_VERSION(2,17,7)
   GtkAllocation dwdh;
@@ -110,7 +110,7 @@ static void draw_icon()
         current_method_type()==method_type_TSIN && tss.tsin_half_full &&
 #endif
         current_CS->im_state == HIME_STATE_CHINESE)) {
-      static char full[] = "全";
+      static char full[] = N_("全");
       get_text_w_h(full,  &w, &h);
 #if !GTK_CHECK_VERSION(2,90,6)
       gdk_draw_layout(tray_da_win, gc, dw - w, dh - h, pango);
@@ -122,7 +122,7 @@ static void draw_icon()
     }
 
     if (current_CS->im_state == HIME_STATE_ENG_FULL) {
-      static char efull[] = "A全";
+      static char efull[] = N_("A全");
       get_text_w_h(efull,  &w, &h);
 #if !GTK_CHECK_VERSION(2,90,6)
       gdk_draw_layout(tray_da_win, gc, 0, 0, pango);
@@ -133,7 +133,9 @@ static void draw_icon()
 #endif
     }
 #if USE_TSIN
-    if ((current_method_type()==method_type_TSIN||current_method_type()==method_type_MODULE) && current_CS->im_state == HIME_STATE_CHINESE && !tsin_pho_mode()) {
+    if (((current_method_type()==method_type_TSIN) || (current_method_type()==method_type_MODULE)) &&
+        (current_CS->im_state == HIME_STATE_CHINESE) &&
+	 (! tsin_pho_mode())) {
       static char efull[] = "ABC";
       gdk_color_parse("blue", &color_fg);
 #if !GTK_CHECK_VERSION(2,90,6)

@@ -922,6 +922,7 @@ static void close_selection_win()
 
 void show_button_pho(gboolean bshow);
 
+void show_win_gtab();
 void tsin_set_eng_ch(int nmod)
 {
 //  dbg("tsin_set_eng_ch %d\n", nmod);

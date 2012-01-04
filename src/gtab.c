@@ -334,7 +334,7 @@ void close_gtab_pho_win()
   if (same_query_show_pho_win()) {
     poo.same_pho_query_state = SAME_PHO_QUERY_none;
     hide_win_pho();
-    if (hime_pop_up_win && str_key_codes && !strlen(str_key_codes))
+    if (hime_pop_up_win && (str_key_codes[0]!='\0'))
       hide_win_gtab();
   }
 }
@@ -956,6 +956,7 @@ gboolean win_sym_page_up(), win_sym_page_down();
 u_int64_t vmaskci;
 gboolean gtab_pre_select_idx(int c);
 void save_CS_current_to_temp();
+void tsin_set_eng_ch(int nmod);
 
 gboolean feedkey_gtab(KeySym key, int kbstate)
 {

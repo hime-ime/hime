@@ -876,6 +876,7 @@ char *get_full_str()
         return eng_color_full_str;
       else
         return _(eng_full_str);
+      break;
     default:
       break;
   }
