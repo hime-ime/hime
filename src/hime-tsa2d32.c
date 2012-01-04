@@ -192,9 +192,6 @@ static int qcmp_usecount(const void *a, const void *b)
 }
 
 void send_hime_message(Display *dpy, char *s);
-#if WIN32 && 1
- #pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#endif
 
 void init_TableDir();
 

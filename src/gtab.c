@@ -306,11 +306,6 @@ static void clr_seltab()
 void clear_gtab_in_area(), hide_win_gtab();
 void ClrIn()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
   bzero(ggg.inch,sizeof(ggg.inch));
   clr_seltab();
   ggg.total_matchN=ggg.pg_idx=ggg.more_pg=ggg.wild_mode=ggg.wild_page=ggg.last_idx=ggg.defselN=ggg.exa_match=
@@ -350,10 +345,6 @@ extern int win_gtab_max_key_press;
 static void DispInArea()
 {
   int i;
-#if WIN32
-  if (test_mode)
-    return;
-#endif
 
 //  hide_gtab_pre_sel();
 
@@ -443,11 +434,6 @@ void hide_row2_if_necessary()
 
 static void putstr_inp(char *p)
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
   clear_page_label();
 
 //  dbg("gtab_hide_row2 %d\n", gtab_hide_row2);
@@ -1858,31 +1844,3 @@ Disp_opt:
 
   return 1;
 }
-
-#if WIN32
-static GTAB_ST temp_st;
-void pho_save_gst(), pho_restore_gst();
-// static GEDIT *gbuf_save;
-static char **seltab_save;
-
-void gtab_save_gst()
-{
-  init_seltab(&seltab_save);
-  int i;
-  for(i=0; i < MAX_SELKEY; i++)
-    strcpy(seltab_save[i], seltab[i]);
-
-  pho_save_gst();
-  temp_st = ggg;
-}
-
-void gtab_restore_gst()
-{
-  int i;
-  for(i=0; i < MAX_SELKEY; i++)
-    strcpy(seltab[i], seltab_save[i]);
-
-  pho_restore_gst();
-  ggg = temp_st;
-}
-#endif

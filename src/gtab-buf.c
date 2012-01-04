@@ -25,9 +25,6 @@
 #include "win-save-phrase.h"
 #include "gtab-buf.h"
 #include "gst.h"
-#if WIN32
-#include <io.h>
-#endif
 
 void disp_gbuf(), ClrIn(), clear_after_put();
 gboolean gtab_phrase_on();
@@ -113,12 +110,7 @@ int en_word_len(char *bf)
     } else
     if (sz==2) {
       char *p;
-#if WIN32
-      p = _(latin_chars);
-      for (; *p; p+=2)
-#else
       for (p=latin_chars; *p; p+=2)
-#endif
         if (!memcmp(p, s, 2))
           break;
       if (!(*p))
@@ -258,10 +250,6 @@ static void clear_gtab_buf_all()
 void minimize_win_gtab();
 void disp_gbuf()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   char *bf=gen_buf_str_disp();
   disp_label_edit(bf);
 
@@ -285,10 +273,6 @@ int gbuf_cursor_left()
   hide_gtab_pre_sel();
   if (!ggg.gbuf_cursor)
     return ggg.gbufN;
-#if WIN32
-  if (test_mode)
-    return 1;
-#endif
   if (ggg.gtab_buf_select)
     clear_gbuf_sel();
   ClrIn();
@@ -303,10 +287,6 @@ int gbuf_cursor_right()
   hide_gtab_pre_sel();
   if (ggg.gbuf_cursor==ggg.gbufN)
     return ggg.gbufN;
-#if WIN32
-  if (test_mode)
-    return 1;
-#endif
   if (ggg.gtab_buf_select)
     clear_gbuf_sel();
   ggg.gbuf_cursor++;
@@ -319,10 +299,6 @@ int gbuf_cursor_home()
   hide_gtab_pre_sel();
   if (!ggg.gbufN)
     return 0;
-#if WIN32
-  if (test_mode)
-    return 1;
-#endif
   if (ggg.gtab_buf_select)
     clear_gbuf_sel();
 
@@ -337,10 +313,6 @@ int gbuf_cursor_end()
   hide_gtab_pre_sel();
   if (!ggg.gbufN)
     return 0;
-#if WIN32
-  if (test_mode)
-    return 1;
-#endif
   if (ggg.gtab_buf_select)
     clear_gbuf_sel();
 
@@ -358,10 +330,6 @@ gboolean output_gbuf()
 
   if (!ggg.gbufN)
     return FALSE;
-#if WIN32
-  if (test_mode)
-    return TRUE;
-#endif
   char *bf=gen_buf_str(0, TRUE);
 #if 0
   printf("out %s\n", bf);
@@ -666,10 +634,6 @@ static int qcmp_key_N(const void *aa, const void *bb)
 
 void insert_gbuf_nokey(char *s)
 {
-#if WIN32
-   if (test_mode)
-     return;
-#endif
    if (!gtab_phrase_on())
      return;
 
@@ -712,11 +676,6 @@ void insert_gbuf_nokey(char *s)
 
 void insert_gbuf_cursor1_cond(char *s, u_int64_t key, gboolean valid_key)
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
   if (valid_key)
     insert_gbuf_cursor1(s, key, FALSE);
   else
@@ -725,10 +684,6 @@ void insert_gbuf_cursor1_cond(char *s, u_int64_t key, gboolean valid_key)
 
 void insert_gbuf_cursor_char(char ch)
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   char t[2];
   t[0]=ch;
   t[1]=0;
@@ -774,12 +729,6 @@ int gtab_buf_backspace_ex(gboolean auto_hide)
   if (!ggg.gbuf_cursor) {
     return ggg.gbufN>0;
   }
-
-#if WIN32
-  if (test_mode)
-    return 1;
-#endif
-
   ggg.gbuf_cursor--;
   gtab_buf_delete_ex(auto_hide);
 
@@ -820,13 +769,8 @@ void gtab_disp_sel()
 
   if (pbuf->selN > page_len())
     ggg.more_pg = 1;
-#if WIN32
-  show_win_gtab();
-  disp_selection0(FALSE, TRUE);
-#else
   disp_selection0(FALSE, TRUE);
   show_win_gtab();
-#endif
 }
 
 
@@ -880,12 +824,10 @@ int gtab_get_preedit(char *str, HIME_PREEDIT_ATTR attr[], int *pcursor, int *sub
   str[0]=0;
   *pcursor=0;
 
-#if WIN32 || 1
   *sub_comp_len = ggg.ci > 0;
 #if 1
   if (ggg.gbufN && !hime_edit_display_ap_only())
 	*sub_comp_len|=4;
-#endif
 #endif
   gboolean ap_only = hime_edit_display_ap_only();
 

@@ -68,20 +68,6 @@ static void recreate_win0()
   create_win0_gui();
 }
 
-#if WIN32
-static int timeout_handle;
-gboolean timeout_minimize_win0(gpointer data)
-{
-  if (!gwin0)
-    return FALSE;
-  gtk_window_resize(GTK_WINDOW(gwin0), 1, 1);
-//  gtk_window_present(GTK_WINDOW(gwin0));
-  timeout_handle = 0;
-  return FALSE;
-}
-#endif
-
-
 #if USE_TSIN
 void change_win0_style()
 {
@@ -207,10 +193,6 @@ void disp_char(int index, char *ch)
 
 void hide_char(int index)
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   if (!chars[index].vbox)
     return;
   gtk_label_set_text(GTK_LABEL(chars[index].label), "");
@@ -221,10 +203,6 @@ void hide_char(int index)
 void clear_chars_all()
 {
   int i;
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   for(i=0; i < MAX_PH_BF_EXT; i++) {
     hide_char(i);
   }
@@ -251,10 +229,6 @@ void clr_tsin_cursor(int index)
 
   if (!label)
     return;
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   gtk_label_set_attributes(GTK_LABEL(label), attr_list_blank);
 }
 
@@ -263,10 +237,6 @@ void hide_win0();
 
 void disp_tsin_pho(int index, char *pho)
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   if (hime_display_on_the_spot_key()) {
     if (gwin0 && GTK_WIDGET_VISIBLE(gwin0))
       hide_win0();
@@ -284,10 +254,6 @@ void disp_tsin_pho(int index, char *pho);
 void clr_in_area_pho_tsin()
 {
   int i;
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   for(i=0; i < text_pho_N; i++)
    disp_tsin_pho(i, " ");
 }
@@ -332,10 +298,6 @@ void disp_selections(int x, int y);
 void disp_tsin_select(int index)
 {
   int x,y;
-#if WIN32
-  if (test_mode)
-    return;
-#endif
 
   if (index < 0)
     return;
@@ -388,43 +350,14 @@ static void raw_move(int x, int y)
 //  dbg("gwin0:%x raw_move %d,%d\n", gwin0, x, y);
 }
 
-#if 0
-void compact_win0_x()
-{
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-  if (!gwin0)
-    return;
-
-  gtk_window_resize(GTK_WINDOW(gwin0), 1, 1);
-  raw_move(best_win_x, best_win_y);
-#if WIN32
-  if (!timeout_handle)
-	timeout_handle = g_timeout_add(50, timeout_minimize_win0, NULL);
-#endif
-}
-#endif
-
 void compact_win0()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
   if (!gwin0)
     return;
 
 //  max_yl = 0;
   gtk_window_resize(GTK_WINDOW(gwin0), 1, 1);
   raw_move(best_win_x, best_win_y);
-
-#if WIN32
-  if (!timeout_handle)
-	timeout_handle = g_timeout_add(50, timeout_minimize_win0, NULL);
-#endif
 }
 
 gboolean tsin_has_input();
@@ -457,12 +390,6 @@ void move_win0(int x, int y)
 //  dbg("move_win0 %d %d\n",x,y);
   win_x = x;
   win_y = y;
-
-#if WIN32 && 0
-  if (gwin1 && GTK_WIDGET_VISIBLE(gwin1)) {
-    gtk_window_move(GTK_WINDOW(gwin1), x, y);
-  }
-#endif
 
   move_win_sym();
 }
@@ -510,16 +437,9 @@ void create_win0()
 #endif
   gwin0 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_has_resize_grip(GTK_WINDOW(gwin0), FALSE);
-#if WIN32
-  set_no_focus(gwin0);
-#endif
   gtk_container_set_border_width (GTK_CONTAINER (gwin0), 0);
   gtk_widget_realize (gwin0);
-#if UNIX
   set_no_focus(gwin0);
-#else
-  win32_init_win(gwin0);
-#endif
 }
 
 
@@ -673,11 +593,6 @@ void raise_tsin_selection_win();
 
 void show_win0()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
 #if _DEBUG && 1
 	dbg("show_win0 pop:%d in:%d for:%d \n", hime_pop_up_win, tsin_has_input(), force_show);
 #endif
@@ -689,30 +604,18 @@ void show_win0()
     return;
   }
 
-#if WIN32
-  compact_win0();
-#endif
-
 #if UNIX && 0
   if (!GTK_WIDGET_VISIBLE(gwin0))
 #endif
   {
 //    dbg("gtk_widget_show %x\n", gwin0);
-#if UNIX
     move_win0(win_x, win_y);
     gtk_widget_show(gwin0);
-#else
-	move_win0(win_x, win_y);
-    gtk_widget_show(gwin0);
-//    move_win0(win_x, win_y);
-#endif
   }
 
   show_win_sym();
 
-#if UNIX
   if (current_CS->b_raise_window)
-#endif
   {
     gtk_window_present(GTK_WINDOW(gwin0));
     raise_tsin_selection_win();
@@ -722,19 +625,8 @@ void show_win0()
 void hide_selections_win();
 void hide_win0()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   if (!gwin0)
     return;
-
-#if WIN32
-  if (timeout_handle) {
-	  g_source_remove(timeout_handle);
-	  timeout_handle = 0;
-  }
-#endif
 
   gtk_widget_hide(gwin0);
   if (destroy_window)
@@ -807,10 +699,6 @@ char *get_full_str();
 
 void win_tsin_disp_half_full()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   if (hime_win_color_use)
    gtk_label_set_markup(GTK_LABEL(label_pho), get_full_str());
   else
