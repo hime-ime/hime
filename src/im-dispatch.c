@@ -15,13 +15,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#if UNIX
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#endif
 
 #include <string.h>
 #include "hime.h"
@@ -32,26 +30,9 @@
 
 #define DBG 0
 
-#if UNIX
 static int myread(int fd, void *buf, int bufN)
-#else
-static int myread(HANDLE fd, void *buf, int bufN)
-#endif
 {
-#if UNIX
   return read(fd, buf, bufN);
-#else
-  int ofs=0, toN = bufN;
-  while (toN) {
-	DWORD rn;
-    BOOL r = ReadFile(fd, ((char *)buf) + ofs, toN, &rn, 0);
-    if (!r)
-      return -1;
-    ofs+=rn;
-	toN-=rn;
-  };
-  return bufN;
-#endif
 }
 
 
@@ -105,12 +86,8 @@ int write_enc(int fd, void *p, int n)
 static void shutdown_client(int fd)
 {
 //  dbg("client shutdown rn %d\n", rn);
-#if UNIX
   g_source_remove(hime_clients[fd].tag);
   int idx = fd;
-#else
-  int idx = find_im_client(fd);
-#endif
 
   if (hime_clients[idx].cs == current_CS) {
     hide_in_win(current_CS);
@@ -119,11 +96,7 @@ static void shutdown_client(int fd)
 
   free(hime_clients[idx].cs);
   hime_clients[idx].cs = NULL;
-#if UNIX
   hime_clients[idx].fd = 0;
-#else
-  hime_clients[idx].fd = NULL;
-#endif
 
 /* Now we use "is_special_user" */
 #if 0
@@ -134,23 +107,13 @@ static void shutdown_client(int fd)
     exit(0);
   }
 #endif
-#if UNIX
   close(fd);
-#else
-  CloseHandle(fd);
-//  CloseHandle(handle);
-#endif
 }
 
 void message_cb(char *message);
 void save_CS_temp_to_current();
 
-
-#if UNIX
 void process_client_req(int fd)
-#else
-void process_client_req(HANDLE fd)
-#endif
 {
   HIME_req req;
 #if DBG
@@ -162,11 +125,9 @@ void process_client_req(HANDLE fd)
     shutdown_client(fd);
     return;
   }
-#if UNIX
   if (hime_clients[fd].type == Connection_type_tcp) {
     __hime_enc_mem((u_char *)&req, sizeof(req), &srv_ip_port.passwd, &hime_clients[fd].seed);
   }
-#endif
   to_hime_endian_4(&req.req_no);
   to_hime_endian_4(&req.client_win);
   to_hime_endian_4(&req.flag);
@@ -398,7 +359,6 @@ cli_down:
       break;
     default:
       dbg_time("Invalid request %x from:", req.req_no);
-#if UNIX
       struct sockaddr_in addr;
       socklen_t len=sizeof(addr);
       bzero(&addr, sizeof(addr));
@@ -408,7 +368,6 @@ cli_down:
       } else {
         perror("getpeername\n");
       }
-#endif
       shutdown_client(fd);
       break;
   }

@@ -1129,10 +1129,7 @@ shift_proc:
         return TRUE;
       return FALSE;
     case XK_Down:
-#if UNIX
     case XK_KP_Down:
-#endif
-
       if (AUTO_SELECT_BY_PHRASE)
         return show_buf_select();
       else
@@ -1161,9 +1158,7 @@ shift_proc:
         return 0;
       }
     case XK_Prior:
-#if UNIX
     case XK_KP_Prior:
-#endif
     case XK_KP_Subtract:
       if (ggg.wild_mode) {
         if (ggg.wild_page >= cur_inmd->M_DUP_SEL) ggg.wild_page-=cur_inmd->M_DUP_SEL;
@@ -1188,9 +1183,7 @@ shift_proc:
 
       return win_sym_page_up();
     case XK_Next:
-#if UNIX
     case XK_KP_Next:
-#endif
     case XK_KP_Add:
       if (ggg.more_pg) {
         if (ggg.gtab_buf_select) {
@@ -1339,29 +1332,19 @@ direct_select:
       }
       return 0;
     case XK_Left:
-#if UNIX
     case XK_KP_Left:
-#endif
       return gbuf_cursor_left();
     case XK_Right:
-#if UNIX
     case XK_KP_Right:
-#endif
       return gbuf_cursor_right();
     case XK_Home:
-#if UNIX
     case XK_KP_Home:
-#endif
       return gbuf_cursor_home();
     case XK_End:
-#if UNIX
     case XK_KP_End:
-#endif
       return gbuf_cursor_end();
     case XK_Delete:
-#if UNIX
     case XK_KP_Delete:
-#endif
       return gtab_buf_delete();
     case XK_Shift_L:
     case XK_Shift_R:

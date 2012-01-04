@@ -274,18 +274,14 @@ void show_win_pho()
   if (hime_pop_up_win && !pho_has_input())
     return;
 
-#if UNIX
   if (!GTK_WIDGET_VISIBLE(gwin_pho))
-#endif
   {
     gtk_widget_show(gwin_pho);
     move_win_pho(win_x, win_y);
   }
 
   gtk_widget_show(gwin_pho);
-#if UNIX
   if (current_CS->b_raise_window)
-#endif
     gtk_window_present(GTK_WINDOW(gwin_pho));
 
   show_win_sym();

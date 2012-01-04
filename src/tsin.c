@@ -1621,9 +1621,7 @@ int feedkey_pp(KeySym xkey, int kbstate)
           return 1;
         }
      case XK_Home:
-#if UNIX
      case XK_KP_Home:
-#endif
         close_selection_win();
         if (!tss.c_len)
           return 0;
@@ -1632,33 +1630,23 @@ int feedkey_pp(KeySym xkey, int kbstate)
         drawcursor();
         return 1;
      case XK_End:
-#if UNIX
      case XK_KP_End:
-#endif
         close_selection_win();
         if (!tss.c_len)
           return 0;
         move_cursor_end();
         return 1;
      case XK_Left:
-#if UNIX
      case XK_KP_Left:
-#endif
         return cursor_left();
      case XK_Right:
-#if UNIX
      case XK_KP_Right:
-#endif
         return cursor_right();
      case XK_Caps_Lock:
         if (caps_eng_tog) {
 #if 0
           close_selection_win();
-#if UNIX
           tsin_toggle_eng_ch();
-#else
-		  tsin_set_eng_ch(!(kbstate&LockMask));
-#endif
 #endif
           return 1;
         } else
@@ -1686,16 +1674,12 @@ tab_phrase_end:
         }
         return 0;
      case XK_Delete:
-#if UNIX
      case XK_KP_Delete:
-#endif
         return cursor_delete();
      case XK_BackSpace:
 		return cursor_backspace();
      case XK_Up:
-#if UNIX
      case XK_KP_Up:
-#endif
        if (!tss.sel_pho) {
          if (tsin_use_pho_near && tss.c_len && tss.c_idx == tss.c_len) {
            int idx = tss.c_len-1;
@@ -1722,9 +1706,7 @@ tab_phrase_end:
        disp_current_sel_page();
        return 1;
      case XK_Prior:
-#if UNIX
      case XK_KP_Prior:
-#endif
      case XK_KP_Subtract:
        if (!tss.sel_pho && tss.c_len && xkey == XK_KP_Subtract) {
          add_to_tsin_buf_str("-");
@@ -1754,9 +1736,7 @@ tab_phrase_end:
        if (!tsin_pho_mode())
            goto asc_char;
      case XK_Down:
-#if UNIX
      case XK_KP_Down:
-#endif
        if (xkey==XK_space && !poo.ityp3_pho && (poo.typ_pho[0]||poo.typ_pho[1]||poo.typ_pho[2])) {
          kno=0;
 #if 1
@@ -1789,9 +1769,7 @@ change_char:
        }
        return 1;
      case XK_Next:
-#if UNIX
      case XK_KP_Next:
-#endif
      case XK_KP_Add:
        if (!tss.sel_pho && tss.c_len && xkey == XK_KP_Add) {
          add_to_tsin_buf_str("+");

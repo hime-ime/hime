@@ -16,9 +16,7 @@
  */
 
 #include <sys/stat.h>
-#if UNIX
 #include <X11/extensions/XTest.h>
-#endif
 #include "hime.h"
 #include "gtab.h"
 extern INMD *cur_inmd;
