@@ -1260,8 +1260,8 @@ static gboolean pre_punctuation_sub(KeySym xkey, char shift_punc[], unich_t *cha
 
 gboolean pre_punctuation(KeySym xkey)
 {
-  static char shift_punc[]="<>?:\"{}!_";
-  static unich_t *chars[] = { "，", "。", "？", "：", "；", "「", "」", "！", "——" };
+  static char shift_punc[]="<>?:\"{}!_()";
+  static unich_t *chars[] = { "，", "。", "？", "：", "；", "「", "」", "！", "——", "（", "）" };
   return pre_punctuation_sub(xkey, shift_punc, chars);
 }
 
