@@ -31,8 +31,9 @@
 extern void destroy_other_tray();
 
 gboolean tsin_pho_mode();
-extern int tsin_half_full, gb_output;
+extern int tsin_half_full;
 extern int win32_tray_disabled;
+extern gboolean gb_output;
 GtkStatusIcon *icon_main=NULL, *icon_state=NULL;
 
 void get_icon_path(char *iconame, char fname[]);
@@ -120,7 +121,7 @@ gint inmd_switch_popup_handler (GtkWidget *widget, GdkEvent *event);
 extern gboolean win_kbm_inited;
 
 #include "mitem.h"
-extern int win_kbm_on;
+extern gboolean win_kbm_on;
 
 static MITEM mitems_main[] = {
   {N_("關於hime/常見問題"), GTK_STOCK_ABOUT, cb_about_window},
@@ -225,17 +226,21 @@ void update_item_active(MITEM *mitems)
     }
 }
 
-void update_item_active_unix();
+void update_item_active_single();
+void update_item_active_appindicator();
 
 void update_item_active_all()
 {
   if (hime_tray_display == HIME_TRAY_DISPLAY_DOUBLE) {
     update_item_active(mitems_main);
     update_item_active(mitems_state);
+  } else if (hime_tray_display == HIME_TRAY_DISPLAY_SINGLE) {
+    update_item_active_single();
   }
-#if UNIX
-  else
-    update_item_active_unix();
+#if TRAY_UNITY
+  else if (hime_tray_display == HIME_TRAY_DISPLAY_APPINDICATOR) {
+    update_item_active_appindicator();
+  }
 #endif
 }
 
