@@ -17,7 +17,7 @@
 
 #include "hime.h"
 
-#if !HIME_IME && !TSF
+#if !HIME_IME
 void utf8_big5_n(char *s, int len, char out[])
 {
   out[0]=0;
