@@ -22,6 +22,8 @@
 #include <signal.h>
 #include "gst.h"
 
+extern void destroy_other_tray();
+
 #if UNIX
 static GdkPixbuf *pixbuf, *pixbuf_ch;
 static PangoLayout* pango;
@@ -52,9 +54,7 @@ static void draw_icon()
 {
   gboolean tsin_pho_mode();
 //  dbg("draw_icon\n");
-#if 0
-  return;
-#endif
+
   if (!da)
     return;
 
@@ -264,15 +264,14 @@ void cb_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 void restart_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 #endif  // UNIX
 
-
 void cb_tog_phospeak(GtkCheckMenuItem *checkmenuitem, gpointer dat);
-
-#include "mitem.h"
 
 void kbm_toggle_(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 extern int win_kbm_on;
 
 void cb_inmd_menu(GtkCheckMenuItem *checkmenuitem, gpointer dat);
+
+#include "mitem.h"
 
 static MITEM mitems[] = {
   {N_("設定"), GTK_STOCK_PREFERENCES, exec_hime_setup_, NULL},
@@ -295,8 +294,6 @@ void update_item_active_all();
 gint inmd_switch_popup_handler (GtkWidget *widget, GdkEvent *event);
 extern gboolean win_kbm_inited;
 
-
-#if UNIX
 void toggle_im_enabled(), kbm_toggle();
 gboolean
 tray_button_press_event_cb (GtkWidget * button, GdkEventButton * event, gpointer userdata)
@@ -360,6 +357,8 @@ gboolean create_tray(gpointer data)
 {
   if (da)
     return FALSE;
+
+  destroy_other_tray();
 
   egg_tray_icon = egg_tray_icon_new ("hime");
 
@@ -437,12 +436,18 @@ gboolean create_tray(gpointer data)
 
 void destroy_tray_icon()
 {
+  if (!egg_tray_icon)
+    return;
   gtk_widget_destroy(GTK_WIDGET(egg_tray_icon));
   egg_tray_icon = NULL; da = NULL;
 }
 
+gboolean is_exist_tray()
+{
+  return tray_da_win != NULL;
+}
+
 void init_tray()
 {
-  g_timeout_add(5000, create_tray, NULL);
+  g_timeout_add(200, create_tray, NULL); // Old setting is 5000 here.
 }
-#endif

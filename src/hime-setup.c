@@ -1,4 +1,5 @@
 /* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+ * Copyright (C) 2012 tytsim <https://github.com/tytsim>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,7 +36,6 @@ static GtkWidget *check_button_root_style_use,
                  *check_button_hime_inner_frame,
 #if TRAY_ENABLED
                  *check_button_hime_status_tray,
-                 *check_button_hime_win32_icon,
                  *check_button_hime_tray_hf_win_kbm,
 #endif
                  *check_button_hime_win_color_use,
@@ -50,6 +50,8 @@ static GtkWidget *opt_hime_edit_display;
 GtkWidget *main_window;
 static GdkColor hime_win_gcolor_fg, hime_win_gcolor_bg, hime_sel_key_gcolor;
 gboolean button_order;
+
+static GtkWidget *opt_hime_tray_display;
 
 
 typedef struct {
@@ -71,6 +73,18 @@ struct {
   {N_("輸入視窗"), HIME_EDIT_DISPLAY_OVER_THE_SPOT},
   {N_("應用程式編輯區"), HIME_EDIT_DISPLAY_ON_THE_SPOT},
   {N_("同時顯示"),  HIME_EDIT_DISPLAY_BOTH},
+  { NULL, 0},
+};
+
+struct {
+  unich_t *keystr;
+  int keynum;
+} tray_disp[] = {
+  {N_("單圖示"), HIME_TRAY_DISPLAY_SINGLE},
+  {N_("雙圖示"), HIME_TRAY_DISPLAY_DOUBLE},
+#if TRAY_UNITY
+  {N_("AppIndicator"),  HIME_TRAY_DISPLAY_APPINDICATOR},
+#endif
   { NULL, 0},
 };
 
@@ -412,7 +426,6 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
   save_hime_conf_int(HIME_INNER_FRAME, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_inner_frame)));
 #if TRAY_ENABLED
   save_hime_conf_int(HIME_STATUS_TRAY, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_status_tray)));
-  save_hime_conf_int(HIME_WIN32_ICON, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_win32_icon)));
 #endif
 
   gchar *cstr = gtk_color_selection_palette_to_string(&hime_win_gcolor_fg, 1);
@@ -435,6 +448,9 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
 
   int idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_edit_display));
   save_hime_conf_int(HIME_EDIT_DISPLAY, edit_disp[idx].keynum);
+
+  idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_tray_display));
+  save_hime_conf_int(HIME_TRAY_DISPLAY, tray_disp[idx].keynum);
 
   g_free(cstr);
 
@@ -651,6 +667,39 @@ static GtkWidget *create_hime_edit_display()
   return hbox;
 }
 
+static GtkWidget *create_hime_tray_display()
+{
+
+  GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
+
+  check_button_hime_status_tray = gtk_check_button_new_with_label (_("啟用 System Tray Icon"));
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_status_tray),
+       hime_status_tray);
+  gtk_box_pack_start (GTK_BOX(hbox), check_button_hime_status_tray, FALSE, FALSE, 0);
+
+//  GtkWidget *label = gtk_label_new(_("System tray displays as"));
+//  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+  opt_hime_tray_display = gtk_combo_box_new_text ();
+
+  gtk_box_pack_start (GTK_BOX (hbox), opt_hime_tray_display, FALSE, FALSE, 0);
+
+  int i, current_idx=0;
+
+  for(i=0; tray_disp[i].keystr; i++) {
+    if (tray_disp[i].keynum == hime_tray_display)
+      current_idx = i;
+    gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_hime_tray_display), _(tray_disp[i].keystr));
+  }
+
+  gtk_combo_box_set_active (GTK_COMBO_BOX (opt_hime_tray_display), current_idx);
+
+//  g_signal_connect(G_OBJECT(opt_hime_tray_display), "changed",
+//        G_CALLBACK(combo_selected), (gpointer) NULL);
+
+  return hbox;
+}
+
 
 
 static gboolean cb_hime_win_color_use(GtkToggleButton *togglebutton, gpointer user_data)
@@ -817,18 +866,7 @@ void create_appearance_conf_window()
   gtk_box_pack_start (GTK_BOX(hbox_hime_inner_frame), check_button_hime_inner_frame, FALSE, FALSE, 0);
 
 #if TRAY_ENABLED
-  GtkWidget *hbox_hime_status_tray = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX(vbox_top), hbox_hime_status_tray, FALSE, FALSE, 0);
-  check_button_hime_status_tray = gtk_check_button_new_with_label (_("啟用 System Tray Icon"));
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_status_tray),
-       hime_status_tray);
-  gtk_box_pack_start (GTK_BOX(hbox_hime_status_tray), check_button_hime_status_tray, FALSE, FALSE, 0);
-#if UNIX
-  check_button_hime_win32_icon = gtk_check_button_new_with_label (_("使用雙圖示"));
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_win32_icon),
-       hime_win32_icon);
-  gtk_box_pack_start (GTK_BOX(hbox_hime_status_tray), check_button_hime_win32_icon, FALSE, FALSE, 0);
-#endif
+  gtk_box_pack_start (GTK_BOX(vbox_top), create_hime_tray_display(), FALSE, FALSE, 0);
   check_button_hime_tray_hf_win_kbm = gtk_check_button_new_with_label (_("在全/半形圖示上按滑鼠左鍵可顯示/關閉螢幕小鍵盤"));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_tray_hf_win_kbm),
        hime_tray_hf_win_kbm);

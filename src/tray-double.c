@@ -28,6 +28,8 @@
 #include "gst.h"
 #include "pho-kbm-name.h"
 
+extern void destroy_other_tray();
+
 gboolean tsin_pho_mode();
 extern int tsin_half_full, gb_output;
 extern int win32_tray_disabled;
@@ -227,7 +229,7 @@ void update_item_active_unix();
 
 void update_item_active_all()
 {
-  if (hime_win32_icon) {
+  if (hime_tray_display == HIME_TRAY_DISPLAY_DOUBLE) {
     update_item_active(mitems_main);
     update_item_active(mitems_state);
   }
@@ -360,18 +362,20 @@ static void cb_popup_state(GtkStatusIcon *status_icon, guint button, guint activ
 #define HIME_TRAY_PNG "hime-tray.png"
 
 
-void load_tray_icon_win32()
+void load_tray_icon_double()
 {
-#if UNIX
-  if (!hime_win32_icon)
+  if (!hime_status_tray)
     return;
-#endif
+  if (hime_tray_display != HIME_TRAY_DISPLAY_DOUBLE)
+    return;
 
 #if WIN32
   // when login, creating icon too early may cause block in gtk_status_icon_new_from_file
   if (win32_tray_disabled)
     return;
 #endif
+
+  destroy_other_tray();
 
 //  dbg("load_tray_icon_win32\n");
 #if UNIX
@@ -479,13 +483,37 @@ void load_tray_icon_win32()
   return;
 }
 
-void init_tray_win32()
+gboolean is_exist_tray_double()
 {
-  load_tray_icon_win32();
+  return icon_main != NULL && icon_state != NULL;
 }
 
-void destroy_tray_win32()
+gboolean create_tray_double(gpointer data)
 {
+  load_tray_icon_double();
+  return TRUE;
+}
+
+void init_tray_double()
+{
+  g_timeout_add(200, create_tray_double, NULL);
+}
+
+void destroy_tray_double()
+{
+  if (icon_main == NULL || icon_state == NULL)
+    return;
+// Workaround: to release the space on notification area
+  gtk_status_icon_set_visible(icon_main, FALSE);
+  gtk_status_icon_set_visible(icon_state, FALSE);
   g_object_unref(icon_main); icon_main = NULL;
   g_object_unref(icon_state); icon_state = NULL;
+  if (tray_menu) {
+    gtk_widget_destroy(tray_menu);
+    tray_menu = NULL;
+  }
+  if (tray_menu_state) {
+    gtk_widget_destroy(tray_menu_state);
+    tray_menu_state = NULL;
+  }
 }

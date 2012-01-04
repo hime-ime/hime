@@ -145,7 +145,7 @@ int hime_ProtoHandler(XIMS ims, IMProtocol *call_data)
     {
       IMOpenStruct *pimopen=(IMOpenStruct *)call_data;
 
-      if(pimopen->connect_id > MAX_CONNECT - 1)
+      if (pimopen->connect_id > MAX_CONNECT - 1)
         return True;
 
 #if DEBUG && 0
@@ -449,7 +449,7 @@ void hide_win0();
 void destroy_win0();
 void destroy_win1();
 void destroy_win_gtab();
-void free_pho_mem(),free_tsin(),free_all_IC(), free_gtab(), free_phrase(), destroy_tray_win32();
+void free_pho_mem(),free_tsin(),free_all_IC(), free_gtab(), free_phrase(), destroy_tray();
 
 void do_exit()
 {
@@ -469,9 +469,8 @@ void do_exit()
   destroy_win_gtab();
 #endif
 
-#if WIN32
-  destroy_tray_win32();
-#endif
+  destroy_tray();
+
   gtk_main_quit();
 }
 
@@ -488,7 +487,11 @@ void init_hime_im_serv(Window win);
 #else
 void init_hime_im_serv();
 #endif
-void init_tray_win32();
+void init_tray_double();
+
+#if TRAY_UNITY
+void init_tray_appindicator();
+#endif
 
 #if WIN32
 void init_hime_program_files();
@@ -507,13 +510,12 @@ gboolean delayed_start_cb(gpointer data)
 
 #if TRAY_ENABLED
   if (hime_status_tray) {
-#if !TRAY_UNITY
-    if (hime_win32_icon)
-      init_tray_win32();
-    else
+    if (hime_tray_display == HIME_TRAY_DISPLAY_SINGLE)
       init_tray();
-#endif
+    else if (hime_tray_display == HIME_TRAY_DISPLAY_DOUBLE)
+      init_tray_double();
 #if TRAY_UNITY
+    else if (hime_tray_display == HIME_TRAY_DISPLAY_APPINDICATOR)
     init_tray_appindicator();
 #endif
   }
@@ -699,7 +701,7 @@ static char button_rc[]="style \"button\"\n"
   exec_setup_scripts();
 
 #if UNIX
-  g_timeout_add(5000, delayed_start_cb, NULL);
+  g_timeout_add(200, delayed_start_cb, NULL); // Old setting is 5000 here.
 #else
   delayed_start_cb(NULL);
 #endif

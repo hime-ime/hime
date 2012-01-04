@@ -46,7 +46,7 @@
 #define HIME_ENG_PHRASE_ENABLED "hime-eng-phrase-enabled"
 #define HIME_WIN_SYM_CLICK_CLOSE "hime-win-sym-click-close"
 #define HIME_SEL_KEY_COLOR "hime-sel-key-color"
-#define HIME_WIN32_ICON "hime-win32-icon"
+#define HIME_TRAY_DISPLAY "hime-tray-display"
 
 #define GTAB_DUP_SELECT_BELL "gtab-dup-select-bell"
 #define GTAB_SPACE_AUTO_FIRST "gtab-space-auto-first"
@@ -135,8 +135,8 @@ extern unich_t eng_full_str[], eng_half_str[], cht_full_str[];
 extern char *eng_color_full_str, *eng_color_half_str, *cht_color_full_str;
 extern char *hime_win_color_fg, *hime_win_color_bg;
 extern int hime_win_color_use, hime_bell_off;
-extern int hime_init_im_enabled, hime_win32_icon;
-extern int hime_edit_display;
+extern int hime_init_im_enabled;
+extern int hime_edit_display, hime_tray_display;
 extern char *pho_kbm_name, *pho_selkey, *hime_str_im_cycle;
 extern int pho_candicate_col_N, pho_candicate_R2L;
 
