@@ -1,10 +1,3 @@
-#if !GTK_CHECK_VERSION(2,4,0)
-#define GTK_COMBO_BOX GTK_OPTION_MENU
-#define gtk_combo_box_get_active gtk_option_menu_get_history
-#define gtk_combo_box_set_active gtk_option_menu_set_history
-#define gtk_combo_box_new_text gtk_option_menu_new
-#endif
-
 #if !GTK_CHECK_VERSION(2,13,4)
 #define gtk_widget_get_window(x) (x)->window
 #define gtk_color_selection_dialog_get_color_selection(x) (x)->colorsel

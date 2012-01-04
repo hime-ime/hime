@@ -224,24 +224,10 @@ static void ts_import(const gchar *selected_filename)
 #endif
 }
 
-#if !GTK_CHECK_VERSION(2,4,0)
-static void cb_file_ts_import(GtkWidget *widget, gpointer user_data)
-{
-   GtkWidget *file_selector = (GtkWidget *)user_data;
-   const gchar *selected_filename;
-
-   selected_filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (file_selector));
-//   g_print ("Selected filename: %s\n", selected_filename);
-
-   ts_import(selected_filename);
-}
-#endif
-
 static void cb_ts_import()
 {
    /* Create the selector */
 
-#if GTK_CHECK_VERSION(2,4,0)
    GtkWidget *file_selector;
    if (button_order)
        file_selector = gtk_file_chooser_dialog_new(_("請輸入要匯入的檔案名稱"),
@@ -263,26 +249,6 @@ static void cb_ts_import()
        ts_import(selected_filename);
    }
    gtk_widget_destroy (file_selector);
-#else
-   GtkWidget *file_selector = gtk_file_selection_new (_("請輸入要匯入的檔案名稱"));
-
-   g_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->ok_button),
-                     "clicked",
-                     G_CALLBACK (cb_file_ts_import),
-                     (gpointer) file_selector);
-
-   g_signal_connect_swapped (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->ok_button),
-                             "clicked",
-                             G_CALLBACK (gtk_widget_destroy),
-                             (gpointer) file_selector);
-
-   g_signal_connect_swapped (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->cancel_button),
-                             "clicked",
-                             G_CALLBACK (gtk_widget_destroy),
-                             (gpointer) file_selector);
-
-   gtk_widget_show(file_selector);
-#endif
 }
 
 static void cb_ts_edit()
@@ -374,7 +340,6 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
   int font_size = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_hime_font_size));
   save_hime_conf_int(HIME_FONT_SIZE, font_size);
 
-#if GTK_CHECK_VERSION(2,4,0)
   char fname[128];
   strcpy(fname, gtk_font_button_get_font_name(GTK_FONT_BUTTON(font_sel)));
   int len = strlen(fname)-1;
@@ -388,7 +353,6 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
   }
 
   save_hime_conf_str(HIME_FONT_NAME, fname);
-#endif
 
   int font_size_tsin_presel = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_hime_font_size_tsin_presel));
   save_hime_conf_int(HIME_FONT_SIZE_TSIN_PRESEL, font_size_tsin_presel);
@@ -627,31 +591,16 @@ static GtkWidget *create_hime_edit_display()
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
   opt_hime_edit_display = gtk_combo_box_new_text ();
-#if !GTK_CHECK_VERSION(2,4,0)
-  GtkWidget *menu = gtk_menu_new ();
-#endif
   gtk_box_pack_start (GTK_BOX (hbox), opt_hime_edit_display, FALSE, FALSE, 0);
 
   int i, current_idx=0;
 
   for(i=0; edit_disp[i].keystr; i++) {
-#if !GTK_CHECK_VERSION(2,4,0)
-    GtkWidget *item = gtk_menu_item_new_with_label (_(edit_disp[i].keystr));
-#endif
-
     if (edit_disp[i].keynum == hime_edit_display)
       current_idx = i;
-
-#if GTK_CHECK_VERSION(2,4,0)
     gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_hime_edit_display), _(edit_disp[i].keystr));
-#else
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-#endif
   }
 
-#if !GTK_CHECK_VERSION(2,4,0)
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opt_hime_edit_display), menu);
-#endif
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_hime_edit_display), current_idx);
 
   check_button_hime_on_the_spot_key = gtk_check_button_new_with_label (_("顯示字根於應用程式中\n(OnTheSpot)"));
@@ -810,13 +759,10 @@ void create_appearance_conf_window()
   spinner_hime_font_size_win_kbm_en = gtk_spin_button_new (adj_hime_font_size_win_kbm_en, 0, 0);
   gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), spinner_hime_font_size_win_kbm_en, FALSE, FALSE, 0);
 
-
-#if GTK_CHECK_VERSION(2,4,0)
   char tt[128];
   sprintf(tt, "%s %d", hime_font_name, hime_font_size);
   font_sel = gtk_font_button_new_with_font (tt);
   gtk_box_pack_start (GTK_BOX (vbox_top), font_sel, FALSE, FALSE, 0);
-#endif
 
   GtkWidget *hbox_hime_pop_up_win = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX(vbox_top), hbox_hime_pop_up_win, FALSE, FALSE, 0);

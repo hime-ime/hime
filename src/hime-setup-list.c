@@ -534,31 +534,16 @@ static GtkWidget *create_im_toggle_keys()
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
   opt_im_toggle_keys = gtk_combo_box_new_text ();
-#if !GTK_CHECK_VERSION(2,4,0)
-  GtkWidget *menu_im_toggle_keys = gtk_menu_new ();
-#endif
   gtk_box_pack_start (GTK_BOX (hbox), opt_im_toggle_keys, FALSE, FALSE, 0);
 
   int i, current_idx=0;
 
   for(i=0; imkeys[i].keystr; i++) {
-#if !GTK_CHECK_VERSION(2,4,0)
-    GtkWidget *item = gtk_menu_item_new_with_label (imkeys[i].keystr);
-#endif
-
     if (imkeys[i].keynum == hime_im_toggle_keys)
       current_idx = i;
-
-#if GTK_CHECK_VERSION(2,4,0)
     gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_im_toggle_keys), imkeys[i].keystr);
-#else
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu_im_toggle_keys), item);
-#endif
   }
 
-#if !GTK_CHECK_VERSION(2,4,0)
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opt_im_toggle_keys), menu_im_toggle_keys);
-#endif
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_im_toggle_keys), current_idx);
 
   return hbox;
@@ -572,32 +557,17 @@ static GtkWidget *create_speaker_opts()
   GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
 
   opt_speaker_opts = gtk_combo_box_new_text ();
-#if !GTK_CHECK_VERSION(2,4,0)
-  GtkWidget *menu_speaker_opts = gtk_menu_new ();
-#endif
   gtk_box_pack_start (GTK_BOX (hbox), opt_speaker_opts, FALSE, FALSE, 0);
 
   int i;
   int current_idx = get_current_speaker_idx();
 
   for(i=0; i<pho_speakerN; i++) {
-#if !GTK_CHECK_VERSION(2,4,0)
-    GtkWidget *item = gtk_menu_item_new_with_label (pho_speaker[i]);
-#endif
-
     if (imkeys[i].keynum == hime_im_toggle_keys)
       current_idx = i;
-
-#if GTK_CHECK_VERSION(2,4,0)
     gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_speaker_opts), pho_speaker[i]);
-#else
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu_speaker_opts), item);
-#endif
   }
 
-#if !GTK_CHECK_VERSION(2,4,0)
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opt_speaker_opts), menu_speaker_opts);
-#endif
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_speaker_opts), current_idx);
 
   return hbox;
