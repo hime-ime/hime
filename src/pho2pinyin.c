@@ -24,7 +24,6 @@
 #include "tsin.h"
 
 static gboolean b_pinyin;
-#if !HIME_SVR
 PIN_JUYIN *pin_juyin;
 int pin_juyinN;
 PHOKBM phkbm;
@@ -35,7 +34,6 @@ int text_pho_N;
 void key_typ_pho(phokey_t phokey, u_char rtyp_pho[])
 {
 }
-#endif
 
 char *phokey2pinyin(phokey_t k)
 {

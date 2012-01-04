@@ -127,11 +127,6 @@ char *sys_err_strA()
 #if _DBG
 static FILE *dbgfp;
 #endif
-#if HIME_SVR
-void dbg_time(char *fmt,...)
-{
-}
-#endif
 
 static void init_dbgfp()
 {
@@ -245,40 +240,6 @@ void p_err(char *format, ...) {
 
 }
 
-#if HIME_SVR
-void ErrorExit(LPTSTR lpszFunction)
-{
-    // Retrieve the system error message for the last-error code
-
-    LPVOID lpMsgBuf;
-    LPVOID lpDisplayBuf;
-    DWORD dw = GetLastError();
-
-    FormatMessage(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER |
-        FORMAT_MESSAGE_FROM_SYSTEM |
-        FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL,
-        dw,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-        (LPTSTR) &lpMsgBuf,
-        0, NULL );
-
-    // Display the error message and exit the process
-
-    lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT,
-        (lstrlen((LPCTSTR)lpMsgBuf) + lstrlen((LPCTSTR)lpszFunction) + 40) * sizeof(TCHAR));
-    StringCchPrintf((LPTSTR)lpDisplayBuf,
-        LocalSize(lpDisplayBuf) / sizeof(TCHAR),
-        TEXT("%s failed with error %d: %s"),
-        lpszFunction, dw, lpMsgBuf);
-    MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
-
-    LocalFree(lpMsgBuf);
-    LocalFree(lpDisplayBuf);
-    ExitProcess(dw);
-}
-#endif
 #endif
 
 
@@ -331,20 +292,4 @@ char *myfgets(char *buf, int bufN, FILE *fp)
 	*out = 0;
 	return buf;
 }
-#endif
-
-#if HIME_SVR
-#if WIN32
-#include <gdk/gdkwin32.h>
-void win32_init_win(GtkWidget *win)
-{
-  HWND handle=(HWND)gdk_win32_drawable_get_handle(win->window);
-
-  ShowWindow(handle, SW_HIDE);
-
-  SetWindowLong(handle, GWL_EXSTYLE, WS_EX_NOACTIVATE|WS_EX_TOPMOST);
-  SetWindowPos(handle, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
-//  ShowWindow(handle, SW_SHOW);
-}
-#endif
 #endif

@@ -20,10 +20,6 @@
 #include "lang.h"
 #include <sys/stat.h>
 #include <stdlib.h>
-#if WIN32
-#include <io.h>
-#endif
-
 
 char phofname[128]="";
 extern char *TableDir;

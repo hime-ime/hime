@@ -1318,15 +1318,10 @@ int module_feedkey_release(KeySym xkey, int kbstate)
    (*gmf.mf_tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR
      && xkey == XK_Shift_R))
           &&  gmf.mf_current_time() - key_press_time < 300000) {
-#if WIN32
-          if (!*gmf.test_mode)
-#endif
-          {
-            module_flush_input();
-            key_press_time = 0;
-            gmf.mf_hide_selections_win();
-            gmf.mf_tsin_set_eng_ch(!gmf.mf_tsin_pho_mode());
-          }
+          module_flush_input();
+          key_press_time = 0;
+          gmf.mf_hide_selections_win();
+          gmf.mf_tsin_set_eng_ch(!gmf.mf_tsin_pho_mode());
           return 1;
         } else
           return 0;
