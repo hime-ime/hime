@@ -967,8 +967,7 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
   gboolean is_keypad = FALSE;
   gboolean shift_m = (kbstate & ShiftMask) > 0;
 //  gboolean ctrl_m = (kbstate & ControlMask) > 0;
-  int caps_eng_tog = tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock;
-  gboolean capslock_on = (kbstate&LockMask);
+  gboolean capslock_on = (kbstate & LockMask);
   gboolean is_dayi = !strncmp(cur_inmd->filename, "dayi", 4);
 
   bzero(seltab_phrase, sizeof(seltab_phrase));
@@ -978,11 +977,14 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
   if (!cur_inmd)
     return 0;
 
-  if (caps_eng_tog) {
-    gboolean new_tsin_pho_mode =!capslock_on;
+  if ((tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock) &&
+      (key == XK_Caps_Lock)){
+    // The CapLock status may be incorrect when XK_Caps_Lock is pressed.
+    gboolean new_tsin_pho_mode = ! gdk_keymap_get_caps_lock_state(gdk_keymap_get_default());
     if (current_CS->tsin_pho_mode != new_tsin_pho_mode) {
       current_CS->tsin_pho_mode = new_tsin_pho_mode;
       save_CS_current_to_temp();
+      tsin_set_eng_ch(new_tsin_pho_mode);
     }
   }
 

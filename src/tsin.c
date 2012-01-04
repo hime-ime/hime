@@ -1533,7 +1533,7 @@ int feedkey_pp(KeySym xkey, int kbstate)
 //    dbg("aaa\n");
 
   if (caps_eng_tog) {
-    gboolean new_tsin_pho_mode =!(kbstate&LockMask);
+    gboolean new_tsin_pho_mode = ! gdk_keymap_get_caps_lock_state(gdk_keymap_get_default());
     if (current_CS->tsin_pho_mode != new_tsin_pho_mode) {
       close_selection_win();
       tsin_set_eng_ch(new_tsin_pho_mode);
@@ -1919,8 +1919,7 @@ asc_char:
             xkey=*(ppp+1);
 
         } else {
-          if (!tsin_pho_mode() && tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock
-              && hime_capslock_lower) {
+          if (!tsin_pho_mode() && caps_eng_tog && hime_capslock_lower) {
             case_inverse(&xkey, shift_m);
           }
         }
