@@ -31,7 +31,7 @@ void bell()
   if (hime_bell_off)
     return;
 
-#if UNIX
+#if 1
   XBell(dpy, hime_bell_volume);
 #else
   gdk_beep();
@@ -74,11 +74,7 @@ void disp_pho_sub(GtkWidget *label, int index, char *pho)
   else {
     u8cpy(text_pho[index], pho);
   }
-#if UNIX
   char s[text_pho_N * CH_SZ+1];
-#else
-  char *s = new char[text_pho_N * CH_SZ+1];
-#endif
 
   int tn = 0;
   int i;
@@ -94,23 +90,12 @@ void disp_pho_sub(GtkWidget *label, int index, char *pho)
 void exec_hime_setup()
 {
   dbg("exec hime\n");
-#if UNIX
   if (geteuid() < 100 || getegid() < 100)
     return;
-#else
-  if (getenv("WIN_LOGON"))
-    return;
-#endif
 
 #if 0
   char pidstr[32];
-  sprintf(pidstr, "HIME_PID=%d",
-#if UNIX
-	  getpid()
-#else
-	  GetCurrentProcessId()
-#endif
-  );
+  sprintf(pidstr, "HIME_PID=%d", getpid());
   putenv(pidstr);
 #endif
 
@@ -146,16 +131,7 @@ void set_label_space(GtkWidget *label)
 
 void set_no_focus(GtkWidget *win)
 {
-#if UNIX
   gdk_window_set_override_redirect(gtk_widget_get_window(win), TRUE);
-#else
-  gtk_window_set_decorated(GTK_WINDOW(win), FALSE);
-  gtk_window_set_keep_above(GTK_WINDOW(win), TRUE);
-  gtk_window_set_accept_focus(GTK_WINDOW(win), FALSE);
-  gtk_window_set_type_hint(GTK_WINDOW(win), GDK_WINDOW_TYPE_HINT_TOOLTIP);
-  gtk_window_set_skip_taskbar_hint(GTK_WINDOW(win), TRUE);
-#endif
-
   gtk_window_set_accept_focus(GTK_WINDOW(win), FALSE);
   gtk_window_set_focus_on_map (GTK_WINDOW(win), FALSE);
 }

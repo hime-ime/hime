@@ -16,11 +16,8 @@
  */
 
 #include "hime.h"
-#if UNIX
 #include <errno.h>
-#endif
 
-#if UNIX
 #if !CLIENT_LIB || DEBUG
 static FILE *out_fp;
 #endif
@@ -112,136 +109,6 @@ char *sys_err_strA()
 {
   return (char *)strerror(errno);
 }
-
-#else
-#include <share.h>
-#include <io.h>
-#include <strsafe.h>
-
-#if _DEBUG
-#define _DBG 1
-#define CONSOLE_OFF 0
-#endif
-
-
-#if _DBG
-static FILE *dbgfp;
-#endif
-
-static void init_dbgfp()
-{
-#if _DBG
-	if (!dbgfp) {
-#if (!HIME_IME || 1) && !CONSOLE_OFF
-		AllocConsole();
-		fclose(stdout);
-		fclose(stderr);
-		int fh = _open_osfhandle((long)GetStdHandle(STD_OUTPUT_HANDLE), 0);
-		_dup2(fh, 1);
-		_dup2(fh, 2);
-		_fdopen(1, "wt");
-		_fdopen(2, "wt");
-		fflush(stdout);
-#endif
-		char tt[512];
-#if HIME_IME
-		sprintf(tt, "C:\\dbg\\ime%x", GetCurrentProcessId());
-#elif HIME_SVR
-		sprintf(tt, "C:\\dbg\\svr%x", GetCurrentProcessId());
-#else
-		sprintf(tt, "C:\\dbg\\other%x", GetCurrentProcessId());
-#endif
-		dbgfp=_fsopen(tt, "wt",  _SH_DENYWR);
-		setbuf(dbgfp, NULL);
-
-		char exe[MAX_PATH];
-		GetModuleFileNameA(NULL, exe, sizeof(exe));
-		dbg("started %s\n", exe);
-	}
-#endif
-}
-
-int utf8_to_big5(char *in, char *out, int outN);
-
-#if DEBUG
-void __hime_dbg_(char *format, ...) {
-#if _DBG
-	va_list ap;
-	va_start(ap, format);
-
-	init_dbgfp();
-
-	char buf[1024];
-
-	vsprintf_s(buf, sizeof(buf), format, ap);
-	char bufb5[1024];
-#if 1
-	utf8_to_big5(buf, bufb5, sizeof(bufb5));
-#else
-	strcpy(bufb5, buf);
-#endif
-
-	fprintf(dbgfp, "%s", bufb5);
-	printf("%s", bufb5);
-	wchar_t wchstr[1024];
-	utf8_to_16(buf, wchstr, ARRAYSIZE(wchstr));
-	OutputDebugStringW(wchstr);
-
-	fflush(dbgfp);
-	va_end(ap);
-#endif
-}
-#endif
-
-char *err_strA(DWORD dw)
-{
-	static char msgstr[256];
-    LPVOID lpMsgBuf;
-
-    FormatMessageA(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER |
-        FORMAT_MESSAGE_FROM_SYSTEM |
-        FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL,
-        dw,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-        (LPSTR) &lpMsgBuf,
-        0, NULL );
-
-    // Display the error message and exit the process
-
-    StringCchPrintfA(msgstr, ARRAYSIZE(msgstr), "%d: %s", dw, lpMsgBuf);
-	return msgstr;
-}
-
-
-char *sys_err_strA()
-{
-	return err_strA(GetLastError());
-}
-
-void p_err(char *format, ...) {
-
-	va_list ap;
-	va_start(ap, format);
-#if _DBG
-	init_dbgfp();
-	vfprintf_s(dbgfp, format, ap);
-	vprintf(format, ap);
-	fflush(dbgfp);
-#endif
-	char tt[512];
-	vsprintf_s(tt, sizeof(tt), format, ap);
-	char exe[512];
-	GetModuleFileNameA(NULL, exe, sizeof(exe));
-	MessageBoxA(NULL, tt, exe, MB_OK);
-	exit(0);
-	va_end(ap);
-
-}
-
-#endif
-
 
 void *zmalloc(int n)
 {

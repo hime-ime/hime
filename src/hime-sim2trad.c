@@ -148,13 +148,7 @@ int main(int argc, char **argv)
 
   gtk_widget_show_all(mainwin);
 
-#if UNIX
   pclipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
-#else
-  pclipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-#endif
-
-
 
   req_clipboard();
 
