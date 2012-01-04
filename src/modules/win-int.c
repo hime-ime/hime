@@ -211,10 +211,7 @@ void module_show_win()
     return;
 #endif
 
-#if UNIX
-  if (!GTK_WIDGET_VISIBLE(gwin_int))
-#endif
-  {
+  if (!GTK_WIDGET_VISIBLE(gwin_int)) {
     gtk_widget_show(gwin_int);
   }
 

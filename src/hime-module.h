@@ -18,7 +18,7 @@
 #include "win1.h"
 
 // optional functions/data for hime module to use, please refer to anthy.cpp
-#if UNIX && defined(__cplusplus)
+#ifdef __cplusplus
 extern "C" {
 #endif
 typedef struct {
@@ -70,7 +70,7 @@ typedef struct {
   gboolean *mf_force_show;
   int *mf_win_x, *mf_win_y, *mf_win_xl, *mf_win_yl, *mf_dpy_xl, *mf_dpy_yl;
 } HIME_module_main_functions;
-#if UNIX && defined(__cplusplus)
+#ifdef __cplusplus
 }
 #endif
 
