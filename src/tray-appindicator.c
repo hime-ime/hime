@@ -44,11 +44,10 @@ void restart_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 void cb_tog_phospeak(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
 void kbm_toggle_(GtkCheckMenuItem *checkmenuitem, gpointer dat);
-extern int win_kbm_on;
 
 void cb_inmd_menu(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
-extern int win_kbm_on, gb_output;
+extern gboolean win_kbm_on, gb_output;
 
 void get_icon_path(char *iconame, char fname[]);
 
@@ -72,6 +71,14 @@ static MITEM mitems[] = {
   {N_("輸出成簡體"), NULL, cb_trad_sim_toggle_, &gb_output},
   {NULL, NULL, NULL, NULL}
 };
+
+void update_item_active(MITEM *mitems);
+void update_item_active_appindicator()
+{
+  update_item_active(mitems);
+}
+
+
 #define HIME_TRAY_ICONAME "hime-tray"
 #ifndef HIME_TRAY_PNG
 #define HIME_TRAY_PNG "hime-tray.png"

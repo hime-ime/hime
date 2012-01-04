@@ -270,7 +270,7 @@ void restart_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 void cb_tog_phospeak(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
 void kbm_toggle_(GtkCheckMenuItem *checkmenuitem, gpointer dat);
-extern int win_kbm_on;
+extern gboolean win_kbm_on;
 
 void cb_inmd_menu(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
@@ -331,7 +331,7 @@ tray_button_press_event_cb (GtkWidget * button, GdkEventButton * event, gpointer
 
 void update_item_active(MITEM *mitems);
 
-void update_item_active_unix()
+void update_item_active_single()
 {
   update_item_active(mitems);
 }

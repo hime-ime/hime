@@ -274,7 +274,9 @@ void load_tsin_conf(), load_setttings(), load_tab_pho_file();
 void disp_hide_tsin_status_row(), update_win_kbm_inited();
 void change_tsin_line_color(), change_win0_style(), change_tsin_color();
 void change_win_gtab_style();
+#if TRAY_ENABLED
 void update_item_active_all();
+#endif
 void destroy_inmd_menu();
 void load_gtab_list(gboolean);
 void change_win1_font();
@@ -299,7 +301,9 @@ static void reload_data()
   destroy_inmd_menu();
   load_gtab_list(TRUE);
 
+#if TRAY_ENABLED
   update_item_active_all();
+#endif
 }
 
 void change_tsin_font_size();
@@ -307,7 +311,7 @@ void change_gtab_font_size();
 void change_pho_font_size();
 void change_win_sym_font_size();
 void change_win_gtab_style();
-extern int win_kbm_on;
+extern gboolean win_kbm_on;
 
 static void change_font_size()
 {
@@ -378,21 +382,23 @@ void message_cb(char *message)
    } else
    if (!strcmp(message, GB_OUTPUT_TOGGLE)) {
      cb_trad_sim_toggle();
+#if TRAY_ENABLED
      update_item_active_all();
+#endif
    } else
    if (!strcmp(message, SIM_OUTPUT_TOGGLE)) {
      sim_output();
 #if TRAY_ENABLED
      disp_tray_icon();
-#endif
      update_item_active_all();
+#endif
    } else
    if (!strcmp(message, TRAD_OUTPUT_TOGGLE)) {
      trad_output();
 #if TRAY_ENABLED
      disp_tray_icon();
-#endif
      update_item_active_all();
+#endif
    } else
    if (!strcmp(message, KBM_TOGGLE)) {
      kbm_toggle();
