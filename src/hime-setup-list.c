@@ -43,9 +43,7 @@ static GtkWidget *opt_im_toggle_keys, *check_button_hime_remote_client,
        *check_button_hime_win_sym_click_close,
        *check_button_hime_punc_auto_send;
 
-#if UNIX
 static GtkWidget *check_button_hime_single_state;
-#endif
 extern gboolean button_order;
 
 char *pho_speaker[16];
@@ -243,12 +241,8 @@ static void cb_ok (GtkWidget *button, gpointer data)
   save_hime_conf_str(DEFAULT_INPUT_METHOD, tt);
 
   int idx;
-#if UNIX
   idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_im_toggle_keys));
   save_hime_conf_int(HIME_IM_TOGGLE_KEYS, imkeys[idx].keynum);
-#else
-  save_hime_conf_int(HIME_IM_TOGGLE_KEYS, Control_Space);
-#endif
 
   free(hime_str_im_cycle);
 
@@ -284,10 +278,8 @@ static void cb_ok (GtkWidget *button, gpointer data)
 
   save_hime_conf_int(HIME_PUNC_AUTO_SEND,
     gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_punc_auto_send)));
-#if UNIX
   save_hime_conf_int(HIME_SINGLE_STATE,
     gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_single_state)));
-#endif
   if (opt_speaker_opts) {
     idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_speaker_opts));
     save_hime_conf_str(PHONETIC_SPEAK_SEL, pho_speaker[idx]);
@@ -445,11 +437,7 @@ add_columns (GtkTreeView *treeview)
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
 
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),-1,
-#if UNIX
 	  _("在 Ctrl-Shift 中循環"),
-#else
-	  _("Ctrl-Shift 循環(必須關閉Windows按鍵"),
-#endif
 	  renderer, "active", COLUMN_CYCLE,
                                                NULL);
 
@@ -525,7 +513,6 @@ void set_selection_by_key(int key)
     gtk_tree_selection_select_iter(selection,&iter);
 }
 
-#if UNIX
 static GtkWidget *create_im_toggle_keys()
 {
 
@@ -548,7 +535,6 @@ static GtkWidget *create_im_toggle_keys()
 
   return hbox;
 }
-#endif
 
 int get_current_speaker_idx();
 
@@ -573,9 +559,7 @@ static GtkWidget *create_speaker_opts()
   return hbox;
 }
 
-#if UNIX
 #include <dirent.h>
-#endif
 
 void create_gtablist_window (void)
 {
@@ -628,11 +612,8 @@ void create_gtablist_window (void)
 
   gtk_container_add (GTK_CONTAINER (sw), treeview);
 
-#if UNIX
   gtk_box_pack_start (GTK_BOX (vbox), create_im_toggle_keys(), FALSE, FALSE, 0);
-#endif
 
-#if UNIX
   GtkWidget *hbox_hime_remote_client = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_remote_client, FALSE, FALSE, 0);
   check_button_hime_remote_client = gtk_check_button_new_with_label (_("支援遠端用戶端程式 (port 9999-)"));
@@ -647,8 +628,6 @@ void create_gtablist_window (void)
   gtk_box_pack_start (GTK_BOX (hbox_hime_init_im_enabled),check_button_hime_init_im_enabled,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_init_im_enabled),
      hime_init_im_enabled);
-#endif
-
 
   GtkWidget *hbox_hime_shift_space_eng_full = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_shift_space_eng_full, FALSE, FALSE, 0);
@@ -657,14 +636,12 @@ void create_gtablist_window (void)
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_shift_space_eng_full),
      hime_shift_space_eng_full);
 
-#if UNIX
   GtkWidget *hbox_hime_single_state = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_single_state, FALSE, FALSE, 0);
   check_button_hime_single_state = gtk_check_button_new_with_label (_("所有程式共用相同的輸入法狀態"));
   gtk_box_pack_start (GTK_BOX (hbox_hime_single_state),check_button_hime_single_state,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_single_state),
      hime_single_state);
-#endif
 
   GtkWidget *hbox_hime_eng_phrase_enabled = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_eng_phrase_enabled, FALSE, FALSE, 0);
@@ -752,11 +729,7 @@ void create_gtablist_window (void)
   else
     gtk_grid_attach_next_to (GTK_BOX (hbox), button2, button, GTK_POS_RIGHT, 1, 1);
 #endif
-#if UNIX
   gtk_window_set_default_size (GTK_WINDOW (gtablist_window), 620, 450);
-#else
-  gtk_window_set_default_size (GTK_WINDOW (gtablist_window), 680, 450);
-#endif
 
   g_signal_connect (G_OBJECT (gtablist_window), "delete_event",
                     G_CALLBACK (gtk_main_quit), NULL);

@@ -570,12 +570,7 @@ int main(int argc, char **argv)
 
   char hime_dir[512];
   get_hime_dir(hime_dir);
-#if UNIX
   chdir(hime_dir);
-#else
-  _chdir(hime_dir);
-#endif
-
 
 #if HIME_i18n_message
   bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
@@ -602,9 +597,7 @@ int main(int argc, char **argv)
 
   dbg("ph_key_sz: %d\n", ph_key_sz);
 
-#if UNIX
   dpy = GDK_DISPLAY();
-#endif
 
   mainwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_position(GTK_WINDOW(mainwin), GTK_WIN_POS_CENTER);

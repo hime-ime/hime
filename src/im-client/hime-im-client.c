@@ -15,7 +15,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#if UNIX
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/socket.h>
@@ -29,17 +28,12 @@
 #ifndef _XSERVER64
 #define _XSERVER64
 #endif
-#else
-#include <windows.h>
-#include <winsock.h>
-#endif
 #include "hime.h"
 #include "hime-protocol.h"
 #include "hime-im-client.h"
 #define DBG 0
 static int flags_backup;
 
-#if UNIX
 Atom get_hime_sockpath_atom(Display *dpy);
 static void save_old_sigaction_single(int signo, struct sigaction *act)
 {
@@ -57,11 +51,7 @@ static void restore_old_sigaction_single(int signo, struct sigaction *act)
 }
 char *get_hime_im_srv_sock_path();
 Atom get_hime_addr_atom(Display *dpy);
-#endif
 
-
-
-#if UNIX
 Window find_hime_window(Display *dpy)
 {
   Atom hime_addr_atom = get_hime_addr_atom(dpy);
@@ -69,12 +59,6 @@ Window find_hime_window(Display *dpy)
     return FALSE;
   return XGetSelectionOwner(dpy, hime_addr_atom);
 }
-#else
-HWND find_hime_window()
-{
-  return FindWindowA(HIME_WIN_NAME, NULL);
-}
-#endif
 
 int is_special_user;
 
@@ -98,7 +82,6 @@ static HIME_client_handle *hime_im_client_reopen(HIME_client_handle *hime_ch, Di
   int rstatus;
 
 //  dbg("hime_im_client_reopen\n");
-#if UNIX
   if (!dpy) {
     dbg("null disp %d\n", hime_ch->fd);
     goto next;
@@ -251,9 +234,6 @@ tcp:
   if (dbg_msg)
     dbg("hime client connected to server %d.%d.%d.%d:%d\n",
         pp[0], pp[1], pp[2], pp[3], ntohs(srv_ip_port.port));
-#else
-	sockfd = open_pipe_client();
-#endif // UNIX
 
   tcp = TRUE;
 
@@ -269,7 +249,6 @@ next:
 
   if (sockfd > 0) {
     handle->fd = sockfd;
-#if UNIX
     if (tcp) {
       if (!handle->passwd)
         handle->passwd = malloc(sizeof(HIME_PASSWD));
@@ -279,13 +258,6 @@ next:
         free(handle->passwd); handle->passwd = NULL;
       }
     }
-#else
-	dbg("zzzzz %x\n", sockfd);
-	DWORD rn;
-	ReadFile(sockfd, &handle->server_idx, sizeof(int), &rn, NULL);
-	dbg("hhhhh\n");
-	dbg("server_idx %d\n", handle->server_idx);
-#endif
   }
 
   if (handle->fd)  {
@@ -303,10 +275,8 @@ static void validate_handle(HIME_client_handle *hime_ch)
 {
   if (hime_ch->fd > 0)
     return;
-#if UNIX
   if (is_special_user)
     return;
-#endif
 
   hime_im_client_reopen(hime_ch, hime_ch->disp);
 }
@@ -458,10 +428,8 @@ void hime_im_client_focus_out(HIME_client_handle *handle)
 {
   if (!handle)
     return;
-#if UNIX
   if (is_special_user)
     return;
-#endif
 
   HIME_req req;
 //  dbg("hime_im_client_focus_out\n");
@@ -475,7 +443,6 @@ void hime_im_client_focus_out(HIME_client_handle *handle)
   }
 }
 
-#if UNIX
 void hime_im_client_focus_out2(HIME_client_handle *handle, char **rstr)
 {
   HIME_req req;
@@ -487,10 +454,8 @@ void hime_im_client_focus_out2(HIME_client_handle *handle, char **rstr)
   if (!handle)
     return;
 
-#if UNIX
   if (is_special_user)
     return;
-#endif
 
 #if DBG
   dbg("hime_im_client_focus_out2\n");
@@ -526,7 +491,6 @@ void hime_im_client_focus_out2(HIME_client_handle *handle, char **rstr)
 
   return;
 }
-#endif
 
 static int hime_im_client_forward_key_event(HIME_client_handle *handle,
                                           HIME_req_t event_type,
@@ -624,10 +588,8 @@ void hime_im_client_set_cursor_location(HIME_client_handle *handle, int x, int y
 {
   if (!handle)
     return;
-#if UNIX
   if (is_special_user)
     return;
-#endif
 
 //  dbg("hime_im_client_set_cursor_location %d   %d,%d\n", handle->flag, x, y);
 
@@ -674,10 +636,8 @@ void hime_im_client_set_flags(HIME_client_handle *handle, int flags, int *ret_fl
   if (!handle)
     return;
 
-#if UNIX
   if (is_special_user)
     return;
-#endif
 
   if (!gen_req(handle, HIME_req_set_flags, &req))
     return;
@@ -711,10 +671,8 @@ void hime_im_client_clear_flags(HIME_client_handle *handle, int flags, int *ret_
   if (!handle)
     return;
 
-#if UNIX
   if (is_special_user)
     return;
-#endif
 
   if (!gen_req(handle, HIME_req_set_flags, &req))
     return;
