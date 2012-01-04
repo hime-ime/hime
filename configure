@@ -384,12 +384,6 @@ else
 fi
 echo "-> CFLAGS = $CFLAGS."
 
-if [ -z "$HIME_DEBUG" ]; then
-  HIME_DEBUG='0'
-else
-  HIME_DEBUG=$HIME_DEBUG
-fi
-
 if [ -z "$CC" ]; then
   CC=gcc
 fi
@@ -452,12 +446,5 @@ echo "USE_ANTHY=$USE_ANTHY" >> config.mak
 echo "USE_CHEWING=$USE_CHEWING" >> config.mak
 echo "USE_UNITY=$USE_UNITY" >> config.mak
 echo "BUILD_MODULE=$BUILD_MODULE" >> config.mak
-
-#if [ $prefix = /usr/local ]; then
-#  echo "hime_ld_run_path=$PWD:\$(himelibdir)" >> config.mak
-#  echo "HIME_DEBUG=${HIME_DEBUG}" >> config.mak
-#else
-  echo "hime_ld_run_path=\$(himelibdir)" >> config.mak
-#fi
-
+echo "hime_ld_run_path=\$(himelibdir)" >> config.mak
 echo "gcc_ld_run_path=-Wl,-rpath,\$(hime_ld_run_path)" >> config.mak
