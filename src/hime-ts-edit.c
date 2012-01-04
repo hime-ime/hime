@@ -367,13 +367,8 @@ static void cb_button_save(GtkButton *button, gpointer user_data)
   }
   fflush(fph);
 
-#if UNIX
   unix_exec(HIME_BIN_DIR"/hime-tsd2a32 %s -o tsin.tmp", current_tsin_fname);
   unix_exec(HIME_BIN_DIR"/hime-tsa2d32 tsin.tmp %s", current_tsin_fname);
-#else
-  win32exec_va("hime-tsd2a32", current_tsin_fname, "-o", "tsin.tmp", NULL);
-  win32exec_va("hime-tsa2d32", "tsin.tmp",  current_tsin_fname, NULL);
-#endif
   exit(0);
 }
 
@@ -513,10 +508,6 @@ void do_exit()
 
 void load_tsin_db();
 void set_window_hime_icon(GtkWidget *window);
-#if WIN32
-void init_hime_program_files();
-#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#endif
 
 static gboolean  scroll_event(GtkWidget *widget,GdkEventScroll *event, gpointer user_data)
 {
@@ -566,10 +557,6 @@ gboolean key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer user_da
 }
 
 gboolean is_pinyin_kbm();
-
-#if WIN32
-#include <direct.h>
-#endif
 
 int main(int argc, char **argv)
 {

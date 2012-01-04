@@ -413,10 +413,6 @@ void do_exit()
 
 void load_tsin_db();
 void set_window_hime_icon(GtkWidget *window);
-#if WIN32
-void init_hime_program_files();
-#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#endif
 
 gboolean is_pinyin_kbm();
 
@@ -523,9 +519,6 @@ int main(int argc, char **argv)
   all_wrap();
 
   gtk_widget_show_all(mainwin);
-#if WIN32
-  gtk_window_present(GTK_WINDOW(mainwin));
-#endif
 
   gtk_main();
   return 0;
