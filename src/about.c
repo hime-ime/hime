@@ -73,13 +73,7 @@ void create_about_window()
     GtkWidget *separator = gtk_hseparator_new ();
     gtk_box_pack_start(GTK_BOX(vbox), separator, FALSE, FALSE, 3);
 
-#if UNIX
     image = gtk_image_new_from_file (SYS_ICON_DIR"/hime.png");
-#else
-    char hime_png[128];
-    sys_icon_fname("hime.png", hime_png);
-    image = gtk_image_new_from_file (hime_png);
-#endif
 
     label_version = gtk_label_new ("version " HIME_VERSION "  " __DATE__);
 

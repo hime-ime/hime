@@ -604,7 +604,7 @@ void show_win0()
     return;
   }
 
-#if UNIX && 0
+#if 0
   if (!GTK_WIDGET_VISIBLE(gwin0))
 #endif
   {

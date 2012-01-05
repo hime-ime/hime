@@ -104,19 +104,11 @@ void load_gtab_list(gboolean skip_disabled)
 
 
     if (!strcmp(file, "!ANTHY")) {
-#if UNIX
        strcpy(file, "anthy-module.so");
-#else
-       strcpy(file, "anthy-module.dll");
-#endif
     }
 
     if (!strcmp(file, "!INT_CODE")) {
-#if UNIX
        strcpy(file, "intcode-module.so");
-#else
-       strcpy(file, "intcode-module.dll");
-#endif
     }
 
     pinmd->filename = strdup(file);
