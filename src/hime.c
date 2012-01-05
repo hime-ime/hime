@@ -19,16 +19,12 @@
 #include "config.h"
 #include "hime-version.h"
 #include "gtab.h"
-#if UNIX
 #include <signal.h>
-#endif
 #if HIME_i18n_message
 #include <libintl.h>
 #endif
 
-#if UNIX
 Window root;
-#endif
 Display *dpy;
 
 int win_xl, win_yl;
@@ -46,8 +42,6 @@ char *half_char_to_full_char(KeySym xkey)
   return _(fullchar[xkey-' ']);
 }
 
-
-#if UNIX
 static void start_inmd_window()
 {
   GtkWidget *win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -56,8 +50,6 @@ static void start_inmd_window()
   xim_arr[0].xim_xwin = GDK_WINDOW_XWINDOW(gdkwin0);
   dbg("xim_xwin %x\n", xim_arr[0].xim_xwin);
 }
-#endif
-
 
 #if USE_XIM
 char *lc;
@@ -327,16 +319,12 @@ static void change_font_size()
 //  change_win_pho_style();
 }
 
-#if UNIX
 static int xerror_handler(Display *d, XErrorEvent *eve)
 {
   return 0;
 }
-#endif
 
-#if UNIX
 Atom hime_atom;
-#endif
 void disp_tray_icon(), toggle_gb_output();
 
 void cb_trad_sim_toggle()
@@ -422,7 +410,6 @@ void message_cb(char *message)
      reload_data();
 }
 
-#if UNIX
 static GdkFilterReturn my_gdk_filter(GdkXEvent *xevent,
                                      GdkEvent *event,
                                      gpointer data)
@@ -453,8 +440,6 @@ void init_atom_property()
   hime_atom = get_hime_atom(dpy);
   XSetSelectionOwner(dpy, hime_atom, xim_arr[0].xim_xwin, CurrentTime);
 }
-#endif
-
 
 void hide_win0();
 void destroy_win0();
@@ -553,10 +538,6 @@ extern int destroy_window;
 
 int main(int argc, char **argv)
 {
-#if WIN32
-   putenv("PANGO_WIN32_NO_UNISCRIBE=1");
-#endif
-
   char *destroy = getenv("HIME_DESTROY_WINDOW");
   if (destroy)
     destroy_window = atoi(destroy);
@@ -596,7 +577,6 @@ static char button_rc[]="style \"button\"\n"
   gtk_rc_parse_string(button_rc);
 #endif
 
-#if UNIX
   signal(SIGCHLD, SIG_IGN);
   signal(SIGPIPE, SIG_IGN);
 
@@ -608,23 +588,11 @@ static char button_rc[]="style \"button\"\n"
     setpgrp();
 #endif
   }
-#endif
 
 //putenv("GDK_NATIVE_WINDOWS=1");
-#if WIN32
-  typedef BOOL (WINAPI* pImmDisableIME)(DWORD);
-  pImmDisableIME pd;
-  HMODULE imm32=LoadLibraryA("imm32");
-  if (imm32 && (pd=(pImmDisableIME)GetProcAddress(imm32, "ImmDisableIME"))) {
-     (*pd)(0);
-  }
-  init_hime_program_files();
-  init_hime_im_serv();
-#endif
 
   set_is_chs();
 
-#if UNIX
   char *lc_ctype = getenv("LC_CTYPE");
   char *lc_all = getenv("LC_ALL");
   char *lang = getenv("LANG");
@@ -637,7 +605,6 @@ static char button_rc[]="style \"button\"\n"
   if (!lc_ctype)
     lc_ctype = "zh_TW.Big5";
   dbg("hime get env LC_CTYPE=%s  LC_ALL=%s  LANG=%s\n", lc_ctype, lc_all, lang);
-#endif
 
 #if USE_XIM
   char *t = strchr(lc_ctype, '.');
@@ -677,24 +644,19 @@ static char button_rc[]="style \"button\"\n"
 
   dbg("after gtk_init\n");
 
-#if UNIX
   dpy = GDK_DISPLAY();
   root=DefaultRootWindow(dpy);
-#endif
   get_dpy_xyl();
   g_signal_connect(gdk_screen_get_default(),"size-changed", G_CALLBACK(screen_size_changed), NULL);
 
   dbg("display width:%d height:%d\n", dpy_xl, dpy_yl);
 
-#if UNIX
   start_inmd_window();
-#endif
 
 #if USE_XIM
   open_xim();
 #endif
 
-#if UNIX
   gdk_window_add_filter(NULL, my_gdk_filter, NULL);
 
   init_atom_property();
@@ -703,19 +665,12 @@ static char button_rc[]="style \"button\"\n"
   // disable the io handler abort
   // void *olderr =
     XSetErrorHandler((XErrorHandler)xerror_handler);
-#endif
 
-#if UNIX
   init_hime_im_serv(xim_arr[0].xim_xwin);
-#endif
 
   exec_setup_scripts();
 
-#if UNIX
   g_timeout_add(200, delayed_start_cb, NULL); // Old setting is 5000 here.
-#else
-  delayed_start_cb(NULL);
-#endif
 
   dbg("before gtk_main\n");
 

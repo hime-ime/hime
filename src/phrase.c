@@ -16,10 +16,8 @@
  */
 
 #include <stdio.h>
-#if UNIX
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
-#endif
 #include "hime.h"
 #include "gtab.h"
 #include "gtab-buf.h"

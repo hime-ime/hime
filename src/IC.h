@@ -26,7 +26,6 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
   Author: Hidetoshi Tajima(tajima@Eng.Sun.COM) Sun Microsystems, Inc.
 
 ******************************************************************/
-#if UNIX
 typedef struct {
     XRectangle	area;		/* area */
     XRectangle	area_needed;	/* area needed */
@@ -50,7 +49,6 @@ typedef struct {
     CARD32	line_space;	/* line spacing */
     Cursor	cursor;		/* cursor */
 } StatusAttributes;
-#endif
 
 typedef struct {
     Window	client_win;	/* client window */

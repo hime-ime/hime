@@ -85,11 +85,7 @@ int get_hime_conf_int(char *name, int default_value);
 void load_setttings()
 {
   hime_font_size = get_hime_conf_int(HIME_FONT_SIZE, 16);
-#if UNIX || 1
   get_hime_conf_str(HIME_FONT_NAME, &hime_font_name, "Sans");
-#else
-  get_hime_conf_str(HIME_FONT_NAME, &hime_font_name, "MingLiU Bold");
-#endif
   hime_font_size_tsin_presel = get_hime_conf_int(HIME_FONT_SIZE_TSIN_PRESEL, 16);
   hime_font_size_symbol = get_hime_conf_int(HIME_FONT_SIZE_SYMBOL, 12);
   hime_font_size_tsin_pho_in = get_hime_conf_int(HIME_FONT_SIZE_TSIN_PHO_IN, 13);
@@ -104,11 +100,7 @@ void load_setttings()
   hime_inner_frame = get_hime_conf_int(HIME_INNER_FRAME, 1);
   hime_eng_phrase_enabled = get_hime_conf_int(HIME_ENG_PHRASE_ENABLED, 1);
   hime_tray_hf_win_kbm = get_hime_conf_int(HIME_TRAY_HF_WIN_KBM, 0);
-#if UNIX
   hime_init_im_enabled = get_hime_conf_int(HIME_INIT_IM_ENABLED, 0);
-#else
-  hime_init_im_enabled = true;
-#endif
 
   hime_single_state = get_hime_conf_int(HIME_SINGLE_STATE, 0);
   hime_punc_auto_send = get_hime_conf_int(HIME_PUNC_AUTO_SEND, 0);
