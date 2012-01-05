@@ -22,8 +22,7 @@
 #include <libappindicator/app-indicator.h>
 #include "mitem.h"
 
-// TODO: win-kbm.c Provide GEO information.
-// TODO: mouse left/right click.
+// TODO: win-kbm.c positioning
 
 extern void destroy_other_tray();
 
@@ -78,66 +77,69 @@ void update_item_active_appindicator()
   update_item_active(mitems);
 }
 
-
 #define HIME_TRAY_ICONAME "hime-tray"
 #ifndef HIME_TRAY_PNG
 #define HIME_TRAY_PNG "hime-tray.png"
 #endif
-static void tray_appindicator_load_icon(char iconame[], char fallback[])
+static char iconfile[64], icondir[256], iconame[64];
+// TODO: maybe simply merge the following two function into a common function and put the conditional test in tray_appindicator_load_icon
+static void tray_appindicator_render_iconame(char iconfile[], char iconame[])
 {
-  char fname[512];
-  get_icon_path("", fname);
- 
-  char fx[128];
-  char gx[128];
-  char dname[512];
-  get_icon_path(iconame, dname);
-  sprintf(fx, "%s.png", dname);
-  sprintf(gx, HIME_ICON_DIR"/%s.png", iconame);
-  if (access(fx, F_OK) == 0) {
-    app_indicator_set_icon_theme_path(tray_appindicator, fname);
-  } else if (access(gx, F_OK) == 0) {
-    app_indicator_set_icon_theme_path(tray_appindicator, HIME_ICON_DIR);
+// TODO: check file extension before cut 4 bytes
+  strcpy(iconame, iconfile);
+  iconame[strlen(iconame)-4] = 0;
+}
+
+static void tray_appindicator_render_icondir(char iconfile[], char iconpath[], char icondir[])
+{
+// TODO: check iconpath.contain(iconfile);
+  strcpy(icondir, iconpath);
+  icondir[strlen(icondir)-strlen(iconfile)] = 0;
+}
+
+static gboolean tray_appindicator_load_icon(char fallback[], char iconfile[], char iconame[], char icondir[])
+{
+  char iconpath[256];
+  get_icon_path(iconfile, iconpath);
+  if (!access(iconpath, R_OK)) { // iconpath exists
+    tray_appindicator_render_icondir(iconfile, iconpath, icondir);
+    tray_appindicator_render_iconame(iconfile, iconame);
+    return !access(iconpath, R_OK);
+  } else if (fallback != HIME_TRAY_PNG) { // iconpath does not exist, then fallback
+    strcpy(iconfile, fallback);
+    return tray_appindicator_load_icon(HIME_TRAY_PNG, iconfile, iconame, icondir);
   } else {
-    if (iconame == HIME_TRAY_ICONAME)
-      return;
-    strcpy(iconame, fallback);
-    app_indicator_set_icon_theme_path(tray_appindicator, HIME_ICON_DIR);
-    if (fallback != HIME_TRAY_ICONAME)
-      tray_appindicator_load_icon(iconame, HIME_TRAY_ICONAME);    
+    return FALSE;
   }
 }
 
 static void tray_appindicator_update_icon()
 {
-  char iconame[128];
   if (!current_CS || current_CS->im_state == HIME_STATE_DISABLED||current_CS->im_state == HIME_STATE_ENG_FULL) {
-    strcpy(iconame, HIME_TRAY_ICONAME);
+    strcpy(iconfile, HIME_TRAY_PNG);
   } else {
-    strcpy(iconame, inmd[current_CS->in_method].icon);
-    iconame[strlen(iconame)-4] = 0;
+    strcpy(iconfile, inmd[current_CS->in_method].icon);
   }
 
   if (current_CS && current_CS->im_state == HIME_STATE_CHINESE && !tsin_pho_mode()) {
-    if ((current_method_type()==method_type_TSIN || current_method_type()==method_type_MODULE)) {
-      char s[128];
-      strcpy(s, "en-");
-      strcat(s, iconame);
-      strcpy(iconame, s);
-    } else {
-      strcpy(iconame, "en-tsin");
-    }
-    tray_appindicator_load_icon(iconame, "en-tsin");
+    char s[64];
+    strcpy(s, "en-");
+    strcat(s, iconfile);
+    strcpy(iconfile, s);
+    if (!tray_appindicator_load_icon("en-tsin.png", iconfile, iconame, icondir))
+      return;
   } else {
-    tray_appindicator_load_icon(iconame, HIME_TRAY_ICONAME);
+    if (!tray_appindicator_load_icon(HIME_TRAY_PNG, iconfile, iconame, icondir))
+      return;
   }
-
+  
+  app_indicator_set_icon_theme_path(tray_appindicator, icondir);
   app_indicator_set_icon_full(tray_appindicator, iconame, "");
 }
 
-char *tray_appindicator_label_create()
+static char st_gb[]=N_("/簡"), st_half[]=N_("半"), st_full[]=N_("全"), st_str[32];
+static char * tray_appindicator_label_create()
 {
-  static char st_str[128]="",st_gb[32]=N_("/簡"), st_half[32]=N_("半"), st_full[32]=N_("全");
   strcpy(st_str, "");
   if (current_CS && (current_CS->im_state == HIME_STATE_ENG_FULL || (current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char) || (current_method_type()==method_type_TSIN && tss.tsin_half_full)))
     strcat(st_str, st_full);
@@ -156,8 +158,8 @@ void load_tray_appindicator()
     init_tray_appindicator();
     return;
   }
-  
-  app_indicator_set_label(tray_appindicator, tray_appindicator_label_create(), "　　");
+
+  app_indicator_set_label(tray_appindicator, tray_appindicator_label_create(), "　/　");
   tray_appindicator_update_icon();
 }
 
@@ -178,11 +180,12 @@ gboolean tray_appindicator_create(gpointer data)
     }
     return FALSE;
   }
-  GtkWidget *menu = NULL;
-  if (access(HIME_ICON_DIR"/"HIME_TRAY_PNG, F_OK) != 0)
-    return FALSE;
-  tray_appindicator = app_indicator_new_with_path ("hime", HIME_TRAY_ICONAME, APP_INDICATOR_CATEGORY_APPLICATION_STATUS, HIME_ICON_DIR);
+  
+  if (!tray_appindicator_load_icon(HIME_TRAY_PNG, HIME_TRAY_PNG, iconame, icondir))
+    return;
+  tray_appindicator = app_indicator_new_with_path ("hime", iconame, APP_INDICATOR_CATEGORY_APPLICATION_STATUS, icondir);
   app_indicator_set_status (tray_appindicator, APP_INDICATOR_STATUS_ACTIVE);
+  GtkWidget *menu = NULL;
   menu = create_tray_menu(mitems);
   app_indicator_set_secondary_activate_target(tray_appindicator, mitems[0].item);
   app_indicator_set_menu (tray_appindicator, GTK_MENU (menu));

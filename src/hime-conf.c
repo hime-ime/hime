@@ -43,7 +43,7 @@ gboolean get_hime_user_fname(char *name, char fname[])
 {
   get_hime_dir(fname);
   strcat(strcat(fname,"/"),name);
-  return access(fname, R_OK)==0;
+  return !access(fname, R_OK);
 //  dbg("get_hime_user_fname %s %s\n", name, fname);
 }
 
