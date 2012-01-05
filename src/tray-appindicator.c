@@ -22,8 +22,8 @@
 #include <libappindicator/app-indicator.h>
 #include "mitem.h"
 
-// NOTE: win-kbm.c Provide GEO information 無解
-// NOTE: 左右鍵無解
+// TODO: win-kbm.c Provide GEO information.
+// TODO: mouse left/right click.
 
 extern void destroy_other_tray();
 
@@ -137,7 +137,7 @@ static void tray_appindicator_update_icon()
 
 char *tray_appindicator_label_create()
 {
-  static char st_str[128]="",st_gb[32]="/簡", st_half[32]="半", st_full[32]="全";
+  static char st_str[128]="",st_gb[32]=N_("/簡"), st_half[32]=N_("半"), st_full[32]=N_("全");
   strcpy(st_str, "");
   if (current_CS && (current_CS->im_state == HIME_STATE_ENG_FULL || (current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char) || (current_method_type()==method_type_TSIN && tss.tsin_half_full)))
     strcat(st_str, st_full);
@@ -184,9 +184,7 @@ gboolean tray_appindicator_create(gpointer data)
   tray_appindicator = app_indicator_new_with_path ("hime", HIME_TRAY_ICONAME, APP_INDICATOR_CATEGORY_APPLICATION_STATUS, HIME_ICON_DIR);
   app_indicator_set_status (tray_appindicator, APP_INDICATOR_STATUS_ACTIVE);
   menu = create_tray_menu(mitems);
-// Temporarily comment the following line:
-//    app_indicator_set_secondary_activate_target(tray_appindicator, mitems[0].item);
-// TODO: implement secondat_activate signal back for older version of libappindicator later
+  app_indicator_set_secondary_activate_target(tray_appindicator, mitems[0].item);
   app_indicator_set_menu (tray_appindicator, GTK_MENU (menu));
 
   load_tray_appindicator();
