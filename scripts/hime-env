@@ -28,7 +28,7 @@ locale 2> /dev/null | grep -v '"' | sed 's/=/\t:/' | grep -v ':$'
 [ -n "$QT4_IM_MODULE" ] && echo "QT4_IM_MODULE: QT4_IM_MODULE=$QT4_IM_MODULE"
 
 echo
-echo "Running hime number: "`pgrep -c hime | wc -l`
+echo "Running hime number: "`pgrep hime | wc -l`
 
 echo
 echo "hime socket number: "`ls /tmp/hime-$USER/socket-:* | wc -l`
