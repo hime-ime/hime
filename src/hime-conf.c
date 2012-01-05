@@ -149,6 +149,8 @@ char *get_hime_xim_name()
     static char sstr[32];
     char *p = strstr(xim_name, find);
 
+    if (p==NULL) return "hime";
+
     p += strlen(find);
     strncpy(sstr, p, sizeof(sstr));
     sstr[sizeof(sstr) - 1]=0;
