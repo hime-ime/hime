@@ -192,7 +192,7 @@ if [ $? != 0 ]; then
   echo not found, anthy module is turned off.
   USE_ANTHY=N
 else
-  if [ $use_anthy = "N" ]; then
+  if [ "$use_anthy" = "N" ]; then
     USE_ANTHY='N'
     echo "disabled."
   else
@@ -227,14 +227,14 @@ if [ "$use_unity" = "Y" ]; then
     echo not found, unity tray is turned off.
     USE_UNITY=N
   else
-    if [ $use_unity = "N" ]; then
+    if [ "$use_unity" = "N" ]; then
       USE_UNITY='N'
       echo "disabled."
     else
       USE_UNITY='Y'
       echo "found."
       UNITY_INC="-I/usr/include/libappindicator-0.1"
-      if [ $GTK = "gtk+-3.0" ]; then
+      if [ "$GTK" = "gtk+-3.0" ]; then
         GTKINC=`pkg-config --cflags $GTK appindicator3-0.1`
         GTKLDFLAGS=`pkg-config --libs $GTK appindicator3-0.1`
       else
@@ -268,8 +268,8 @@ if [ ! -x "$QT3_MOC_PATH" ]; then
 	 find_in_path_list_to_variable "qt3_moc_path_list" "QT3_MOC_PATH"
 fi
 
-if [ $QT_IM = "Y" ]; then
-    if [ $use_qt3 = "N" ]; then
+if [ "$QT_IM" = "Y" ]; then
+    if [ "$use_qt3" = "N" ]; then
         QT_IM='N'
         echo "found, but disabled."
     else
@@ -298,8 +298,8 @@ if [ ! -x "${QT4_MOC_PATH}" ]; then
 	 find_in_path_list_to_variable "qt4_moc_path_list" "QT4_MOC_PATH"
 fi
 
-if [ $QT4_IM = "Y" ]; then
-    if [ $use_qt4 = "N" ]; then
+if [ "$QT4_IM" = "Y" ]; then
+    if [ "$use_qt4" = "N" ]; then
         QT4_IM='N'
         echo "found, but disabled."
     else
@@ -319,8 +319,8 @@ fi
 
 echo
 echo ========================================
-if [ $QT_IM = "Y" ]; then echo -e "Qt3 moc = ${QT3_MOC_PATH}"; fi
-if [ $QT4_IM = "Y" ]; then echo -e "Qt4 moc = ${QT4_MOC_PATH}"; fi
+if [ "$QT_IM" = "Y" ]; then echo -e "Qt3 moc = ${QT3_MOC_PATH}"; fi
+if [ "$QT4_IM" = "Y" ]; then echo -e "Qt4 moc = ${QT4_MOC_PATH}"; fi
 echo ========================================
 echo
 
@@ -334,8 +334,8 @@ if [ "$GTK"=gtk+-3.0 ]; then
     GTK_IM='Y'
   fi
   
-  if [ $GTK_IM = "Y" ]; then
-      if [ $use_gtk = "N" ]; then
+  if [ "$GTK_IM" = "Y" ]; then
+      if [ "$use_gtk" = "N" ]; then
           GTK_IM='N'
           echo "-> Yes, but disabled."
       else
@@ -353,8 +353,8 @@ if [ $? = 0 ]; then
   GTK3_IM='Y'
 fi
 
-if [ $GTK3_IM = "Y" ]; then
-    if [ $use_gtk3 = "N" ]; then
+if [ "$GTK3_IM" = "Y" ]; then
+    if [ "$use_gtk3" = "N" ]; then
         GTK3_IM='N'
         echo "-> Yes, but disabled."
     else
@@ -373,7 +373,7 @@ optdir=/opt
 HIME_VERSION=`cat VERSION.hime`
 
 BUILD_MODULE='N'
-if [ $USE_ANTHY = 'Y' ] || [ $USE_CHEWING = 'Y' ]; then
+if [ "$USE_ANTHY" = 'Y' ] || [ "$USE_CHEWING" = 'Y' ]; then
   BUILD_MODULE='Y'
 fi
 
