@@ -26,9 +26,8 @@ void get_icon_path(char *iconame, char fname[])
 {
   char uu[128];
   sprintf(uu, "icons/%s", iconame);
-  get_hime_user_fname(uu, fname);
 
-  if (access(fname, R_OK)) {
+  if (!get_hime_user_fname(uu, fname)) {
     sys_icon_fname(iconame, fname);
   }
 }
