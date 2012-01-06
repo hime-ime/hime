@@ -8,8 +8,8 @@ all:	$(SCRIPTS)
 install:
 	install -d $(HIME_SCRIPT_DIR_i)
 	install -m 755 $(SCRIPTS) $(HIME_SCRIPT_DIR_i)
-	install -d $(HIME_BIN_DIR)
-	install -m 755 $(BIN_SCRIPTS) $(HIME_BIN_DIR)
+	install -d $(bindir)
+	install -m 755 $(BIN_SCRIPTS) $(bindir)
 
 clean:
 	@echo "clean up"
