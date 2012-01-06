@@ -457,6 +457,7 @@ void check_CS()
 }
 
 gboolean force_show;
+void show_input_method_name_on_gtab();
 
 void show_in_win(ClientState *cs)
 {
@@ -481,6 +482,8 @@ void show_in_win(ClientState *cs)
       break;
     default:
       show_win_gtab();
+      show_input_method_name_on_gtab();
+      break;
   }
 #if 0
   show_win_stautus();
@@ -1034,8 +1037,10 @@ gboolean init_in_method(int in_no)
       if (!inmd[in_no].DefChars)
         return FALSE;
       current_CS->in_method = in_no;
-      if (!(inmd[in_no].flag & FLAG_GTAB_SYM_KBM))
+      if (!(inmd[in_no].flag & FLAG_GTAB_SYM_KBM)) {
         show_win_gtab();
+	show_input_method_name_on_gtab();
+      }
       else {
         win_kbm_inited = 1;
         show_win_kbm();
