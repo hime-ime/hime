@@ -77,34 +77,23 @@ void update_item_active_appindicator()
   update_item_active(mitems);
 }
 
-#define HIME_TRAY_ICONAME "hime-tray"
-#ifndef HIME_TRAY_PNG
 #define HIME_TRAY_PNG "hime-tray.png"
-#endif
+
 static char iconfile[64], icondir[256], iconame[64];
-// TODO: maybe simply merge the following two function into a common function and put the conditional test in tray_appindicator_load_icon
-static void tray_appindicator_render_iconame(char iconfile[], char iconame[])
-{
-// TODO: check file extension before cut 4 bytes
-  strcpy(iconame, iconfile);
-  iconame[strlen(iconame)-4] = 0;
-}
-
-static void tray_appindicator_render_icondir(char iconfile[], char iconpath[], char icondir[])
-{
-// TODO: check iconpath.contain(iconfile);
-  strcpy(icondir, iconpath);
-  icondir[strlen(icondir)-strlen(iconfile)] = 0;
-}
-
 static gboolean tray_appindicator_load_icon(char fallback[], char iconfile[], char iconame[], char icondir[])
 {
   char iconpath[256];
+  gboolean icon_readable;
   get_icon_path(iconfile, iconpath);
-  if (!access(iconpath, R_OK)) { // iconpath exists
-    tray_appindicator_render_icondir(iconfile, iconpath, icondir);
-    tray_appindicator_render_iconame(iconfile, iconame);
-    return !access(iconpath, R_OK);
+  icon_readable = !access(iconpath, R_OK);
+  if (icon_readable) { // iconpath exists
+// TODO: check iconpath.endWith(iconfile);
+    strcpy(icondir, iconpath);
+    icondir[strlen(icondir)-strlen(iconfile)] = 0;
+// TODO: check file extension before cut 4 bytes
+    strcpy(iconame, iconfile);
+    iconame[strlen(iconame)-4] = 0;
+    return icon_readable;
   } else if (fallback != HIME_TRAY_PNG) { // iconpath does not exist, then fallback
     strcpy(iconfile, fallback);
     return tray_appindicator_load_icon(HIME_TRAY_PNG, iconfile, iconame, icondir);
