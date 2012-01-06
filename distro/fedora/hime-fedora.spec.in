@@ -49,6 +49,15 @@ Requires: %{name} = %{version}-%{release}
 %description qt4
 qt4 support for hime.
 
+%package devel
+Summary: Development files for HIME
+Group:   Development/Libraries
+Requires: libX11-devel
+
+%description devel
+The %{name}-devel package contains header files necessary for
+developing programs using HIME client libraries.
+
 %prep
 %setup -q
 sed -i.strip -e 's|install[ \t][ \t]*-s|install|' Makefile
@@ -64,10 +73,6 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 %find_lang %{name}
 mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/X11/xinit/xinput.d
 install -m 644 -p %{SOURCE1} $RPM_BUILD_ROOT/%{_sysconfdir}/X11/xinit/xinput.d/hime.conf
-# devel files {
-rm -f $RPM_BUILD_ROOT/%{_includedir}/hime-im-client.h
-rm -f $RPM_BUILD_ROOT/%{_libdir}/libhime-im-client.so
-# }
 rm -f $RPM_BUILD_ROOT/%{_docdir}/hime-%{version}/Changelog
 rm -f $RPM_BUILD_ROOT/%{_docdir}/hime-%{version}/README
 desktop-file-install \
@@ -132,6 +137,10 @@ fi
 
 %files qt4
 %{_libdir}/qt4/plugins/inputmethods/im-hime.so
+
+%files devel
+%{_includedir}/hime-im-client-attr.h
+%{_includedir}/hime-im-client.h
 
 %changelog
 * Tue Dec 10 2011 HIME - 0.9
