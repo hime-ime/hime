@@ -1046,7 +1046,7 @@ gboolean init_in_method(int in_no)
         show_win_kbm();
       }
 
-      set_gtab_input_method_name(inmd[in_no].cname);
+      // set_gtab_input_method_name(inmd[in_no].cname);
       break;
   }
 #if WIN32

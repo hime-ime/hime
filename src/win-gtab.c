@@ -701,8 +701,8 @@ void show_win_gtab()
 
     if (hime_status_tray || (! gtab_hide_row2))
       gtk_widget_hide(label_gtab);
-    else
-      win_gtab_disp_half_full();
+    
+    win_gtab_disp_half_full();
   }
 
   show_win_sym();
@@ -824,10 +824,22 @@ char *get_full_str()
 void win_gtab_disp_half_full()
 {
   if (label_full) {
-    if (current_CS->im_state == HIME_STATE_CHINESE && (!current_CS->b_half_full_char))
+    if ((current_CS->im_state == HIME_STATE_CHINESE && (!current_CS->b_half_full_char)) ||
+        (current_CS->tsin_pho_mode == 0))
       gtk_widget_hide(label_full);
     else
       gtk_widget_show(label_full);
+  }
+
+  if (current_CS->tsin_pho_mode)
+  {
+    gtk_widget_show(label_gtab_sele);
+    gtk_widget_show(label_gtab);
+  }
+  else
+  {
+    gtk_widget_hide(label_gtab_sele);
+    gtk_widget_hide(label_gtab);
   }
 
   if (label_gtab && (gtab_hide_row2))
