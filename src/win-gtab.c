@@ -582,18 +582,6 @@ void create_win_gtab_gui_simple()
 
 
     label_gtab = gtk_label_new(NULL);
-    if (current_CS && (! hime_status_tray) && gtab_hide_row2 && gtab_disp_im_name)
-    {
-      if (hime_win_color_use)
-      {
-	gchar *color_cname = g_strdup_printf("<span foreground=\"%s\">[%s]</span>",
-					     hime_sel_key_color, inmd[current_CS->in_method].cname);
-	gtk_label_set_markup(GTK_LABEL(label_gtab), color_cname);
-	g_free(color_cname);
-      }
-      else
-	gtk_label_set_text(GTK_LABEL(label_gtab), inmd[current_CS->in_method].cname);
-    }
 
     if (gtab_in_area_button)
       gtk_container_add (GTK_CONTAINER (event_box_gtab), label_gtab);
@@ -636,6 +624,21 @@ void create_win_gtab_gui_simple()
   minimize_win_gtab();
 }
 
+void show_input_method_name_on_gtab()
+{
+  if (current_CS && (! hime_status_tray) && gtab_hide_row2 && gtab_disp_im_name)
+  {
+    if (hime_win_color_use)
+    {
+      gchar *color_cname = g_strdup_printf("<span foreground=\"%s\">[%s]</span>",
+					   hime_sel_key_color, inmd[current_CS->in_method].cname);
+      gtk_label_set_markup(GTK_LABEL(label_gtab), color_cname);
+      g_free(color_cname);
+    }
+    else
+      gtk_label_set_text(GTK_LABEL(label_gtab), inmd[current_CS->in_method].cname);
+  }
+}
 
 static void create_win_gtab_gui()
 {
