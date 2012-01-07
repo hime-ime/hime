@@ -121,12 +121,14 @@ int lookup_gtab_key(char *ch, void *out)
 }
 
 
+#if 0
 static int qcmp_str(const void *aa, const void *bb)
 {
   char *a = * (char **)aa, *b = * (char **)bb;
 
   return strcmp(a,b);
 }
+#endif
 
 extern FILE *fph;
 
@@ -361,9 +363,11 @@ static void cb_button_find(GtkButton *button, gpointer user_data)
   gtk_widget_show_all(last_row);
 }
 
+#if 0
 static void cb_button_edit(GtkButton *button, gpointer user_data)
 {
 }
+#endif
 
 static void cb_button_save(GtkButton *button, gpointer user_data)
 {
@@ -483,6 +487,7 @@ GtkWidget *create_pho_sel_area()
 }
 
 
+#if 0
 static void cb_button_add(GtkButton *button, gpointer user_data)
 {
   bigphoN = 0;
@@ -510,6 +515,7 @@ static void cb_button_add(GtkButton *button, gpointer user_data)
   gtk_widget_show_all(hbox_buttons);
 
 }
+#endif
 
 Display *dpy;
 
@@ -522,6 +528,7 @@ void do_exit()
 void load_tsin_db();
 void set_window_hime_icon(GtkWidget *window);
 
+#if 0
 static gboolean  scroll_event(GtkWidget *widget,GdkEventScroll *event, gpointer user_data)
 {
   dbg("scroll_event\n");
@@ -531,6 +538,7 @@ static gboolean  scroll_event(GtkWidget *widget,GdkEventScroll *event, gpointer 
 
   return FALSE;
 }
+#endif
 
 gboolean key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
