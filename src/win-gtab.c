@@ -627,7 +627,8 @@ void create_win_gtab_gui_simple()
 void show_input_method_name_on_gtab()
 {
   if (current_CS && (! hime_status_tray) && gtab_hide_row2 && gtab_disp_im_name &&
-      (current_CS->im_state == HIME_STATE_CHINESE) && (current_CS->b_half_full_char == 0))
+      (current_CS->im_state == HIME_STATE_CHINESE) && (current_CS->b_half_full_char == 0) &&
+      (current_CS->tsin_pho_mode))
   {
     if (hime_win_color_use)
     {
@@ -834,12 +835,14 @@ void win_gtab_disp_half_full()
   if (current_CS->tsin_pho_mode)
   {
     gtk_widget_show(label_gtab_sele);
-    gtk_widget_show(label_gtab);
+    if (hime_status_tray || (! gtab_hide_row2))
+      gtk_widget_show(label_gtab);
   }
   else
   {
     gtk_widget_hide(label_gtab_sele);
-    gtk_widget_hide(label_gtab);
+    if (hime_status_tray || (! gtab_hide_row2))
+      gtk_widget_hide(label_gtab);
   }
 
   if (label_gtab && (gtab_hide_row2))
