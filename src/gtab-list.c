@@ -1,4 +1,4 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/* Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,6 +29,7 @@ GTAB_LIST_S method_codes[] = {
  {"!PHO", method_type_PHO},
  {"!TSIN", method_type_TSIN},
  {"!SYMBOL_TABLE", method_type_SYMBOL_TABLE},
+ {"!EN", method_type_EN},
  {NULL}
 };
 
@@ -60,6 +61,10 @@ void load_gtab_list(gboolean skip_disabled)
   }
 
   inmdN = 0;
+
+  char *def_file = strrchr(default_input_method_str, ' ');
+  if (def_file)
+    def_file++;
 
   while (!feof(fp)) {
     char line[256];
@@ -130,7 +135,7 @@ void load_gtab_list(gboolean skip_disabled)
       pinmd->disabled = TRUE;
     }
 
-    if (strchr(default_input_method_str, key[0]) && !pinmd->disabled) {
+    if (default_input_method_str[0]==key[0] && !pinmd->disabled && (!def_file || !strcmp(file, def_file))) {
       default_input_method = inmd_idx;
       dbg("default_input_method %s %s %s %d\n", name,
          default_input_method_str, key, default_input_method);
