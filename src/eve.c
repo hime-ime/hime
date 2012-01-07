@@ -1,4 +1,4 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/* Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -50,6 +50,7 @@ int last_input_method;
 #endif
 void set_wselkey(char *s);
 void gtab_set_win1_cb();
+void toggle_symbol_table();
 
 gboolean old_capslock_on;
 
@@ -478,6 +479,8 @@ void show_in_win(ClientState *cs)
       break;
 #endif
     case method_type_MODULE:
+      if (!module_cb1(cs))
+        return;
       module_cb1(cs)->module_show_win();
       break;
     default:
@@ -880,6 +883,8 @@ gboolean win_is_visible()
       return gwin0 && GTK_WIDGET_VISIBLE(gwin0);
 #endif
     case method_type_MODULE:
+      if (!module_cb())
+        return FALSE;
       return module_cb()->module_win_visible();
     default:
       if (!gwin_gtab)
@@ -1007,6 +1012,9 @@ gboolean init_in_method(int in_no)
       current_CS->in_method = in_no;
       init_tab_pp(init_im);
       break;
+    case method_type_SYMBOL_TABLE:
+      toggle_symbol_table();
+      break;
     case method_type_MODULE:
     {
       HIME_module_main_functions gmf;
@@ -1031,6 +1039,12 @@ gboolean init_in_method(int in_no)
       }
 
       break;
+    }
+    case method_type_EN:
+    {
+      if (current_CS && current_CS->im_state==HIME_STATE_CHINESE)
+        toggle_im_enabled();
+      return TRUE;
     }
     default:
       init_gtab(in_no);
@@ -1181,6 +1195,25 @@ void disp_win_kbm_capslock_init()
     win_kbm_disp_caplock();
 }
 
+void toggle_symbol_table()
+{
+  if (current_CS->im_state == HIME_STATE_CHINESE) {
+    if (!win_is_visible())
+      win_sym_enabled=1;
+    else
+      win_sym_enabled^=1;
+  } else
+    win_sym_enabled=0;
+
+  create_win_sym();
+  if (win_sym_enabled) {
+    force_show = TRUE;
+    if (current_CS->im_state == HIME_STATE_CHINESE)
+      show_in_win(current_CS);
+    force_show = FALSE;
+  }
+}
+
 void destroy_phrase_save_menu();
 int hime_switch_keys_lookup(int key);
 
@@ -1274,25 +1307,7 @@ gboolean ProcessKeyPress(KeySym keysym, u_int kev_state)
       return FALSE;
 
     if (inmd[kidx].method_type == method_type_SYMBOL_TABLE) {
-#if 1
-      if (current_CS->im_state == HIME_STATE_CHINESE) {
-        if (!win_is_visible())
-          win_sym_enabled=1;
-        else
-          win_sym_enabled^=1;
-      } else
-        win_sym_enabled=0;
-#else
-      win_sym_enabled^=1;
-#endif
-
-      create_win_sym();
-      if (win_sym_enabled) {
-        force_show = TRUE;
-        if (current_CS->im_state == HIME_STATE_CHINESE)
-          show_in_win(current_CS);
-        force_show = FALSE;
-      }
+      toggle_symbol_table();
       return TRUE;
     }
 
@@ -1343,6 +1358,8 @@ gboolean ProcessKeyPress(KeySym keysym, u_int kev_state)
       return feedkey_pp(keysym, kev_state);
 #endif
     case method_type_MODULE:
+      if (!module_cb())
+        return FALSE;
       return module_cb()->module_feedkey(keysym, kev_state);
     default:
       return feedkey_gtab(keysym, kev_state);
@@ -1384,6 +1401,8 @@ gboolean ProcessKeyRelease(KeySym keysym, u_int kev_state)
     case method_type_TSIN:
       return feedkey_pp_release(keysym, kev_state);
     case method_type_MODULE:
+      if (!module_cb())
+        return FALSE;
       return module_cb()->module_feedkey_release(keysym, kev_state);
     default:
       return feedkey_gtab_release(keysym, kev_state);

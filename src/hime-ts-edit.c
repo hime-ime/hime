@@ -300,8 +300,8 @@ static void cb_button_find_ok(GtkButton *button, gpointer user_data)
 {
   txt[0]=0;
   strcpy(txt, gtk_entry_get_text(GTK_ENTRY(find_textentry)));
-  gtk_widget_destroy(last_row);
-  last_row = NULL;
+//  gtk_widget_destroy(last_row);
+//  last_row = NULL;
   if (!txt[0])
     return;
   int row;
@@ -327,6 +327,14 @@ static void cb_button_find_ok(GtkButton *button, gpointer user_data)
   }
 }
 
+static void cb_button_close(GtkButton *button, gpointer user_data)
+{
+  if (last_row)
+    gtk_widget_destroy(last_row);
+  last_row = NULL;
+  gtk_window_resize(GTK_WINDOW(mainwin), 1, 1);
+}
+
 static void cb_button_find(GtkButton *button, gpointer user_data)
 {
   if (last_row)
@@ -340,6 +348,11 @@ static void cb_button_find(GtkButton *button, gpointer user_data)
   g_signal_connect (G_OBJECT (button_ok), "clicked",
      G_CALLBACK (cb_button_find_ok), NULL);
   gtk_box_pack_start (GTK_BOX (last_row), button_ok, FALSE, FALSE, 5);
+
+  GtkWidget *button_close = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+  g_signal_connect (G_OBJECT (button_close), "clicked",
+     G_CALLBACK (cb_button_close), NULL);
+  gtk_box_pack_start (GTK_BOX (last_row), button_close, FALSE, FALSE, 5);
 
   gtk_box_pack_start (GTK_BOX (vbox_top), last_row, FALSE, FALSE, 0);
 

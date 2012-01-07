@@ -1,4 +1,4 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/* Copyright (C) 2005-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,6 +29,8 @@ struct {
   {"Windows-Space", Windows_Space},
   { NULL, 0},
 };
+
+extern char *default_input_method_str;
 
 static GtkWidget *gtablist_window = NULL;
 static GtkWidget *vbox;
@@ -235,10 +237,8 @@ static void cb_ok (GtkWidget *button, gpointer data)
     pinmd->disabled = !use;
   } while (gtk_tree_model_iter_next(model, &iter));
 
-  char tt[128];
-  tt[0]=inmd[default_input_method].key_ch;
-  tt[1]=0;
-  save_hime_conf_str(DEFAULT_INPUT_METHOD, tt);
+  dbg("default_input_method_str %s\n",default_input_method_str);
+  save_hime_conf_str(DEFAULT_INPUT_METHOD, default_input_method_str);
 
   int idx;
   idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_im_toggle_keys));
@@ -247,6 +247,7 @@ static void cb_ok (GtkWidget *button, gpointer data)
   free(hime_str_im_cycle);
 
   int i;
+  char tt[512];
   int ttN=0;
   for(i=0;i<inmdN;i++) {
     if (inmd[i].in_cycle) {
@@ -357,8 +358,14 @@ static gboolean toggled_default_inmd(GtkCellRendererToggle *cell, gchar *path_st
   gtk_tree_model_get_iter (model, &iter, path);
   char *key;
   gtk_tree_model_get (model, &iter, COLUMN_KEY, &key, -1);
-  default_input_method = hime_switch_keys_lookup(key[0]);
-  dbg("default_input_method %d '%c'\n", default_input_method, key[0]);
+  char *file;
+  gtk_tree_model_get (model, &iter, COLUMN_FILE, &file, -1);
+  char tt[128];
+  sprintf(tt, "%s %s", key, file);
+  free(default_input_method_str);
+  default_input_method_str = strdup(tt);
+  dbg("default_input_method_str %s\n", default_input_method_str);
+//  default_input_method = hime_switch_keys_lookup(key[0]);
 
   gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_DEFAULT_INMD, TRUE, -1);
   gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_USE, TRUE, -1);
@@ -381,15 +388,18 @@ static gboolean toggled_use(GtkCellRendererToggle *cell, gchar *path_string, gpo
   gtk_tree_model_get (model, &iter, COLUMN_CYCLE, &cycle, -1);
   gtk_tree_model_get (model, &iter, COLUMN_DEFAULT_INMD, &default_inmd, -1);
   gtk_tree_model_get (model, &iter, COLUMN_USE, &use, -1);
-  gboolean must_on = cycle || default_inmd;
+  use=!use;
+  gboolean must_on = default_inmd;
   dbg("toggle %d %d %d\n", cycle, default_inmd, use);
 
-  if (must_on && use) {
-//    dbg("must_on\n");
+  if (must_on && !use) {
     return TRUE;
   }
 
-  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_USE, !use, -1);
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_USE, use, -1);
+  if (!use)
+    gtk_list_store_set (GTK_LIST_STORE (model), &iter, COLUMN_CYCLE, FALSE, -1);
+
   gtk_tree_path_free (path);
 
   return TRUE;

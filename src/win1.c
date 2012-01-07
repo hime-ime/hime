@@ -1,4 +1,4 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/* Copyright (C) 2004-2012 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,7 +26,7 @@ static char wselkey[16];
 static int wselkeyN;
 //Window xwin1;
 
-#define SELEN (12)
+#define SELEN (15)
 
 static GtkWidget *labels_sele[SELEN], *labels_seleR[SELEN];
 static GtkWidget *eve_sele[SELEN], *eve_seleR[SELEN];
