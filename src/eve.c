@@ -534,7 +534,7 @@ void move_in_win(ClientState *cs, int x, int y)
         module_cb1(cs)->module_move_win(x, y);
       break;
     default:
-      if (cs->in_method < 0)
+      if (!cs->in_method)
         return;
       move_win_gtab(x, y);
   }
@@ -758,7 +758,7 @@ void init_state_chinese(ClientState *cs)
 {
   cs->im_state = HIME_STATE_CHINESE;
   set_tsin_pho_mode0(cs);
-  if (cs->in_method < 0)
+  if (!cs->in_method)
 #if UNIX
     init_in_method(default_input_method);
 #else
