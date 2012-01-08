@@ -199,10 +199,6 @@ static void putbuf(int len)
 {
   u_char tt[CH_SZ * (MAX_PH_BF_EXT+1) + 1];
   int i,idx;
-#if WIN32
-  if (test_mode)
-    return;
-#endif
 
 //  dbg("putbuf:%d\n", len);
 #if 1
@@ -383,10 +379,6 @@ void tsin_reset_in_pho()
 
 void flush_tsin_buffer()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   tsin_reset_in_pho();
 
   if (hime_pop_up_win)
@@ -510,11 +502,6 @@ gboolean save_phrase_to_db2(CHPHO *chph, int len);
 
 void save_phrase(int save_frm, int len)
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
   int save_to = save_frm + len -1;
   if (len <= 0 || len > MAX_PHRASE_LEN)
     return;
@@ -935,13 +922,10 @@ static void close_selection_win()
 
 void show_button_pho(gboolean bshow);
 
+void show_win_gtab();
 void tsin_set_eng_ch(int nmod)
 {
 //  dbg("tsin_set_eng_ch %d\n", nmod);
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   if (current_CS) {
     current_CS->tsin_pho_mode = nmod;
     save_CS_current_to_temp();
@@ -1276,8 +1260,8 @@ static gboolean pre_punctuation_sub(KeySym xkey, char shift_punc[], unich_t *cha
 
 gboolean pre_punctuation(KeySym xkey)
 {
-  static char shift_punc[]="<>?:\"{}!_";
-  static unich_t *chars[] = { "，", "。", "？", "：", "；", "「", "」", "！", "——" };
+  static char shift_punc[]="<>?:\"{}!_()";
+  static unich_t *chars[] = { "，", "。", "？", "：", "；", "「", "」", "！", "——", "（", "）" };
   return pre_punctuation_sub(xkey, shift_punc, chars);
 }
 
@@ -1550,7 +1534,7 @@ int feedkey_pp(KeySym xkey, int kbstate)
 //    dbg("aaa\n");
 
   if (caps_eng_tog) {
-    gboolean new_tsin_pho_mode =!(kbstate&LockMask);
+    gboolean new_tsin_pho_mode = ! gdk_keymap_get_caps_lock_state(gdk_keymap_get_default());
     if (current_CS->tsin_pho_mode != new_tsin_pho_mode) {
       close_selection_win();
       tsin_set_eng_ch(new_tsin_pho_mode);
@@ -1638,9 +1622,7 @@ int feedkey_pp(KeySym xkey, int kbstate)
           return 1;
         }
      case XK_Home:
-#if UNIX
      case XK_KP_Home:
-#endif
         close_selection_win();
         if (!tss.c_len)
           return 0;
@@ -1649,33 +1631,23 @@ int feedkey_pp(KeySym xkey, int kbstate)
         drawcursor();
         return 1;
      case XK_End:
-#if UNIX
      case XK_KP_End:
-#endif
         close_selection_win();
         if (!tss.c_len)
           return 0;
         move_cursor_end();
         return 1;
      case XK_Left:
-#if UNIX
      case XK_KP_Left:
-#endif
         return cursor_left();
      case XK_Right:
-#if UNIX
      case XK_KP_Right:
-#endif
         return cursor_right();
      case XK_Caps_Lock:
         if (caps_eng_tog) {
 #if 0
           close_selection_win();
-#if UNIX
           tsin_toggle_eng_ch();
-#else
-		  tsin_set_eng_ch(!(kbstate&LockMask));
-#endif
 #endif
           return 1;
         } else
@@ -1703,16 +1675,12 @@ tab_phrase_end:
         }
         return 0;
      case XK_Delete:
-#if UNIX
      case XK_KP_Delete:
-#endif
         return cursor_delete();
      case XK_BackSpace:
 		return cursor_backspace();
      case XK_Up:
-#if UNIX
      case XK_KP_Up:
-#endif
        if (!tss.sel_pho) {
          if (tsin_use_pho_near && tss.c_len && tss.c_idx == tss.c_len) {
            int idx = tss.c_len-1;
@@ -1739,9 +1707,7 @@ tab_phrase_end:
        disp_current_sel_page();
        return 1;
      case XK_Prior:
-#if UNIX
      case XK_KP_Prior:
-#endif
      case XK_KP_Subtract:
        if (!tss.sel_pho && tss.c_len && xkey == XK_KP_Subtract) {
          add_to_tsin_buf_str("-");
@@ -1771,9 +1737,7 @@ tab_phrase_end:
        if (!tsin_pho_mode())
            goto asc_char;
      case XK_Down:
-#if UNIX
      case XK_KP_Down:
-#endif
        if (xkey==XK_space && !poo.ityp3_pho && (poo.typ_pho[0]||poo.typ_pho[1]||poo.typ_pho[2])) {
          kno=0;
 #if 1
@@ -1806,9 +1770,7 @@ change_char:
        }
        return 1;
      case XK_Next:
-#if UNIX
      case XK_KP_Next:
-#endif
      case XK_KP_Add:
        if (!tss.sel_pho && tss.c_len && xkey == XK_KP_Add) {
          add_to_tsin_buf_str("+");
@@ -1958,8 +1920,7 @@ asc_char:
             xkey=*(ppp+1);
 
         } else {
-          if (!tsin_pho_mode() && tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock
-              && hime_capslock_lower) {
+          if (!tsin_pho_mode() && caps_eng_tog && hime_capslock_lower) {
             case_inverse(&xkey, shift_m);
           }
         }
@@ -2240,14 +2201,12 @@ fin:
   }
 
   *cursor = tss.c_idx;
-#if WIN32 || 1
   *comp_flag = !typ_pho_empty();
   if (gwin1 && GTK_WIDGET_VISIBLE(gwin1))
     *comp_flag|=2;
 #if 1
   if (tss.c_len && !ap_only)
 	*comp_flag|=4;
-#endif
 #endif
 
   return attrN;
@@ -2256,46 +2215,11 @@ fin:
 int tsin_reset()
 {
 //  dbg("tsin_reset\n");
-#if UNIX
   if (!gwin0)
     return 0;
-#endif
   int v = tss.c_len > 0;
   tsin_reset_in_pho0();
   clear_tsin_buffer();
 
   return v;
 }
-
-
-#if WIN32
-static TSIN_ST temp_st;
-static PRE_SEL *temp_pre_sel;
-static CHPHO *temp_chpho;
-void pho_save_gst(),pho_restore_gst();
-
-void tsin_save_gst()
-{
-  pho_save_gst();
-
-  if (!temp_pre_sel)
-    temp_pre_sel=tzmalloc(PRE_SEL, 10);
-
-  if (!temp_chpho)
-    temp_chpho=tzmalloc(CHPHO, MAX_PH_BF_EXT);
-
-
-  temp_st = tss;
-  memcpy(temp_chpho, tss.chpho, sizeof(CHPHO) * MAX_PH_BF_EXT);
-  memcpy(temp_pre_sel, tss.pre_sel, sizeof(PRE_SEL) * 10);
-}
-
-void  tsin_restore_gst()
-{
-  pho_restore_gst();
-
-  tss = temp_st;
-  memcpy(tss.chpho, temp_chpho, sizeof(CHPHO) * MAX_PH_BF_EXT);
-  memcpy(tss.pre_sel, temp_pre_sel, sizeof(PRE_SEL) * 10);
-}
-#endif

@@ -1,4 +1,4 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/* Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -138,6 +138,7 @@ enum {
   method_type_TSIN=6,
   method_type_MODULE=12,
   method_type_SYMBOL_TABLE=13,
+  method_type_EN=14,
 };
 
 extern INMD *inmd;

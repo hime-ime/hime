@@ -1,4 +1,5 @@
 /* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+ * Copyright (C) 2012 tytsim <https://github.com/tytsim>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,7 +36,6 @@ static GtkWidget *check_button_root_style_use,
                  *check_button_hime_inner_frame,
 #if TRAY_ENABLED
                  *check_button_hime_status_tray,
-                 *check_button_hime_win32_icon,
                  *check_button_hime_tray_hf_win_kbm,
 #endif
                  *check_button_hime_win_color_use,
@@ -50,6 +50,8 @@ static GtkWidget *opt_hime_edit_display;
 GtkWidget *main_window;
 static GdkColor hime_win_gcolor_fg, hime_win_gcolor_bg, hime_sel_key_gcolor;
 gboolean button_order;
+
+static GtkWidget *opt_hime_tray_display;
 
 
 typedef struct {
@@ -71,6 +73,18 @@ struct {
   {N_("輸入視窗"), HIME_EDIT_DISPLAY_OVER_THE_SPOT},
   {N_("應用程式編輯區"), HIME_EDIT_DISPLAY_ON_THE_SPOT},
   {N_("同時顯示"),  HIME_EDIT_DISPLAY_BOTH},
+  { NULL, 0},
+};
+
+struct {
+  unich_t *keystr;
+  int keynum;
+} tray_disp[] = {
+  {N_("單圖示"), HIME_TRAY_DISPLAY_SINGLE},
+  {N_("雙圖示"), HIME_TRAY_DISPLAY_DOUBLE},
+#if TRAY_UNITY
+  {N_("AppIndicator"),  HIME_TRAY_DISPLAY_APPINDICATOR},
+#endif
   { NULL, 0},
 };
 
@@ -210,24 +224,10 @@ static void ts_import(const gchar *selected_filename)
 #endif
 }
 
-#if !GTK_CHECK_VERSION(2,4,0)
-static void cb_file_ts_import(GtkWidget *widget, gpointer user_data)
-{
-   GtkWidget *file_selector = (GtkWidget *)user_data;
-   const gchar *selected_filename;
-
-   selected_filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (file_selector));
-//   g_print ("Selected filename: %s\n", selected_filename);
-
-   ts_import(selected_filename);
-}
-#endif
-
 static void cb_ts_import()
 {
    /* Create the selector */
 
-#if GTK_CHECK_VERSION(2,4,0)
    GtkWidget *file_selector;
    if (button_order)
        file_selector = gtk_file_chooser_dialog_new(_("請輸入要匯入的檔案名稱"),
@@ -249,26 +249,6 @@ static void cb_ts_import()
        ts_import(selected_filename);
    }
    gtk_widget_destroy (file_selector);
-#else
-   GtkWidget *file_selector = gtk_file_selection_new (_("請輸入要匯入的檔案名稱"));
-
-   g_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->ok_button),
-                     "clicked",
-                     G_CALLBACK (cb_file_ts_import),
-                     (gpointer) file_selector);
-
-   g_signal_connect_swapped (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->ok_button),
-                             "clicked",
-                             G_CALLBACK (gtk_widget_destroy),
-                             (gpointer) file_selector);
-
-   g_signal_connect_swapped (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->cancel_button),
-                             "clicked",
-                             G_CALLBACK (gtk_widget_destroy),
-                             (gpointer) file_selector);
-
-   gtk_widget_show(file_selector);
-#endif
 }
 
 static void cb_ts_edit()
@@ -360,7 +340,6 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
   int font_size = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_hime_font_size));
   save_hime_conf_int(HIME_FONT_SIZE, font_size);
 
-#if GTK_CHECK_VERSION(2,4,0)
   char fname[128];
   strcpy(fname, gtk_font_button_get_font_name(GTK_FONT_BUTTON(font_sel)));
   int len = strlen(fname)-1;
@@ -374,7 +353,6 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
   }
 
   save_hime_conf_str(HIME_FONT_NAME, fname);
-#endif
 
   int font_size_tsin_presel = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_hime_font_size_tsin_presel));
   save_hime_conf_int(HIME_FONT_SIZE_TSIN_PRESEL, font_size_tsin_presel);
@@ -412,7 +390,6 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
   save_hime_conf_int(HIME_INNER_FRAME, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_inner_frame)));
 #if TRAY_ENABLED
   save_hime_conf_int(HIME_STATUS_TRAY, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_status_tray)));
-  save_hime_conf_int(HIME_WIN32_ICON, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_win32_icon)));
 #endif
 
   gchar *cstr = gtk_color_selection_palette_to_string(&hime_win_gcolor_fg, 1);
@@ -436,9 +413,15 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
   int idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_edit_display));
   save_hime_conf_int(HIME_EDIT_DISPLAY, edit_disp[idx].keynum);
 
+  idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_tray_display));
+  save_hime_conf_int(HIME_TRAY_DISPLAY, tray_disp[idx].keynum);
+
   g_free(cstr);
 
   send_hime_message(GDK_DISPLAY(), CHANGE_FONT_SIZE);
+#if TRAY_ENABLED
+  send_hime_message(GDK_DISPLAY(), UPDATE_TRAY);
+#endif
   gtk_widget_destroy(hime_appearance_conf_window); hime_appearance_conf_window = NULL;
 
   return TRUE;
@@ -611,31 +594,16 @@ static GtkWidget *create_hime_edit_display()
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
   opt_hime_edit_display = gtk_combo_box_new_text ();
-#if !GTK_CHECK_VERSION(2,4,0)
-  GtkWidget *menu = gtk_menu_new ();
-#endif
   gtk_box_pack_start (GTK_BOX (hbox), opt_hime_edit_display, FALSE, FALSE, 0);
 
   int i, current_idx=0;
 
   for(i=0; edit_disp[i].keystr; i++) {
-#if !GTK_CHECK_VERSION(2,4,0)
-    GtkWidget *item = gtk_menu_item_new_with_label (_(edit_disp[i].keystr));
-#endif
-
     if (edit_disp[i].keynum == hime_edit_display)
       current_idx = i;
-
-#if GTK_CHECK_VERSION(2,4,0)
     gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_hime_edit_display), _(edit_disp[i].keystr));
-#else
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-#endif
   }
 
-#if !GTK_CHECK_VERSION(2,4,0)
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opt_hime_edit_display), menu);
-#endif
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_hime_edit_display), current_idx);
 
   check_button_hime_on_the_spot_key = gtk_check_button_new_with_label (_("顯示字根於應用程式中\n(OnTheSpot)"));
@@ -647,6 +615,39 @@ static GtkWidget *create_hime_edit_display()
 
   g_signal_connect(G_OBJECT(opt_hime_edit_display), "changed",
         G_CALLBACK(combo_selected), (gpointer) NULL);
+
+  return hbox;
+}
+
+static GtkWidget *create_hime_tray_display()
+{
+
+  GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
+
+  check_button_hime_status_tray = gtk_check_button_new_with_label (_("啟用 System Tray Icon"));
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_status_tray),
+       hime_status_tray);
+  gtk_box_pack_start (GTK_BOX(hbox), check_button_hime_status_tray, FALSE, FALSE, 0);
+
+//  GtkWidget *label = gtk_label_new(_("System tray displays as"));
+//  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+  opt_hime_tray_display = gtk_combo_box_new_text ();
+
+  gtk_box_pack_start (GTK_BOX (hbox), opt_hime_tray_display, FALSE, FALSE, 0);
+
+  int i, current_idx=0;
+
+  for(i=0; tray_disp[i].keystr; i++) {
+    if (tray_disp[i].keynum == hime_tray_display)
+      current_idx = i;
+    gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_hime_tray_display), _(tray_disp[i].keystr));
+  }
+
+  gtk_combo_box_set_active (GTK_COMBO_BOX (opt_hime_tray_display), current_idx);
+
+//  g_signal_connect(G_OBJECT(opt_hime_tray_display), "changed",
+//        G_CALLBACK(combo_selected), (gpointer) NULL);
 
   return hbox;
 }
@@ -761,13 +762,10 @@ void create_appearance_conf_window()
   spinner_hime_font_size_win_kbm_en = gtk_spin_button_new (adj_hime_font_size_win_kbm_en, 0, 0);
   gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), spinner_hime_font_size_win_kbm_en, FALSE, FALSE, 0);
 
-
-#if GTK_CHECK_VERSION(2,4,0)
   char tt[128];
   sprintf(tt, "%s %d", hime_font_name, hime_font_size);
   font_sel = gtk_font_button_new_with_font (tt);
   gtk_box_pack_start (GTK_BOX (vbox_top), font_sel, FALSE, FALSE, 0);
-#endif
 
   GtkWidget *hbox_hime_pop_up_win = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX(vbox_top), hbox_hime_pop_up_win, FALSE, FALSE, 0);
@@ -817,18 +815,7 @@ void create_appearance_conf_window()
   gtk_box_pack_start (GTK_BOX(hbox_hime_inner_frame), check_button_hime_inner_frame, FALSE, FALSE, 0);
 
 #if TRAY_ENABLED
-  GtkWidget *hbox_hime_status_tray = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX(vbox_top), hbox_hime_status_tray, FALSE, FALSE, 0);
-  check_button_hime_status_tray = gtk_check_button_new_with_label (_("啟用 System Tray Icon"));
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_status_tray),
-       hime_status_tray);
-  gtk_box_pack_start (GTK_BOX(hbox_hime_status_tray), check_button_hime_status_tray, FALSE, FALSE, 0);
-#if UNIX
-  check_button_hime_win32_icon = gtk_check_button_new_with_label (_("使用雙圖示"));
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_win32_icon),
-       hime_win32_icon);
-  gtk_box_pack_start (GTK_BOX(hbox_hime_status_tray), check_button_hime_win32_icon, FALSE, FALSE, 0);
-#endif
+  gtk_box_pack_start (GTK_BOX(vbox_top), create_hime_tray_display(), FALSE, FALSE, 0);
   check_button_hime_tray_hf_win_kbm = gtk_check_button_new_with_label (_("在全/半形圖示上按滑鼠左鍵可顯示/關閉螢幕小鍵盤"));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_tray_hf_win_kbm),
        hime_tray_hf_win_kbm);
@@ -1221,8 +1208,10 @@ int main(int argc, char **argv)
 
   create_main_win();
 
+#if 0
   // once you invoke hime-setup, the left-right buton tips is disabled
   save_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 0);
+#endif
 
 #if WIN32
   pclipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);

@@ -25,11 +25,6 @@
 #include <X11/Xatom.h>
 #include "hime.h"
 
-#if GTK_CHECK_VERSION(2,24,0)
-#define gdk_window_lookup_for_display gdk_x11_window_lookup_for_display
-#endif
-
-
 #define SYSTEM_TRAY_REQUEST_DOCK    0
 #define SYSTEM_TRAY_BEGIN_MESSAGE   1
 #define SYSTEM_TRAY_CANCEL_MESSAGE  2
@@ -169,11 +164,7 @@ egg_tray_icon_get_orientation_property (EggTrayIcon *icon)
 
   g_return_if_fail(icon->manager_window != None);
 
-#if GTK_CHECK_VERSION(2,1,0)
   xdisplay = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (GTK_WIDGET (icon)));
-#else
-  xdisplay = gdk_display;
-#endif
 
   gdk_error_trap_push ();
   type = None;
@@ -247,25 +238,17 @@ egg_tray_icon_unrealize (GtkWidget *widget)
     {
       GdkWindow *gdkwin;
 
-#if GTK_CHECK_VERSION(2,1,0)
       gdkwin = gdk_window_lookup_for_display (gtk_widget_get_display (widget),
                                               icon->manager_window);
-#else
-      gdkwin = gdk_window_lookup (icon->manager_window);
-#endif
 
       gdk_window_remove_filter (gdkwin, egg_tray_icon_manager_filter, icon);
     }
 
-#if GTK_CHECK_VERSION(2,1,0)
   GdkScreen *screen = gtk_widget_get_screen (widget);
   if (screen)
     root_window = gdk_screen_get_root_window (screen);
   else
     return;
-#else
-  root_window = gdk_window_lookup (gdk_x11_get_default_root_xwindow ());
-#endif
 
   gdk_window_remove_filter (root_window, egg_tray_icon_manager_filter, icon);
 
@@ -294,11 +277,7 @@ egg_tray_icon_send_manager_message (EggTrayIcon *icon,
   ev.data.l[3] = data2;
   ev.data.l[4] = data3;
 
-#if GTK_CHECK_VERSION(2,1,0)
   display = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (GTK_WIDGET (icon)));
-#else
-  display = gdk_display;
-#endif
 
   gdk_error_trap_push ();
   XSendEvent (display,
@@ -326,11 +305,7 @@ egg_tray_icon_update_manager_window (EggTrayIcon *icon,
   if (icon->manager_window != None)
     return;
 
-#if GTK_CHECK_VERSION(2,1,0)
   xdisplay = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (GTK_WIDGET (icon)));
-#else
-  xdisplay = gdk_display;
-#endif
 
   XGrabServer (xdisplay);
 
@@ -348,12 +323,8 @@ egg_tray_icon_update_manager_window (EggTrayIcon *icon,
     {
       GdkWindow *gdkwin;
 
-#if GTK_CHECK_VERSION(2,1,0)
       gdkwin = gdk_window_lookup_for_display (gtk_widget_get_display (GTK_WIDGET (icon)),
 					      icon->manager_window);
-#else
-      gdkwin = gdk_window_lookup (icon->manager_window);
-#endif
 
       gdk_window_add_filter (gdkwin, egg_tray_icon_manager_filter, icon);
 
@@ -371,12 +342,8 @@ egg_tray_icon_manager_window_destroyed (EggTrayIcon *icon)
 
   g_return_if_fail (icon->manager_window != None);
 
-#if GTK_CHECK_VERSION(2,1,0)
   gdkwin = gdk_window_lookup_for_display (gtk_widget_get_display (GTK_WIDGET (icon)),
 					  icon->manager_window);
-#else
-  gdkwin = gdk_window_lookup (icon->manager_window);
-#endif
 
   gdk_window_remove_filter (gdkwin, egg_tray_icon_manager_filter, icon);
 
@@ -415,6 +382,7 @@ static void
 make_transparent_again (GtkWidget *widget, GtkStyle *previous_style,
                        gpointer user_data)
 {
+/* TODO: move to hime-gtk-compatible.h */
 #if !GTK_CHECK_VERSION(2,91,0)
 	gdk_window_set_back_pixmap(gtk_widget_get_window(widget), NULL, TRUE);
 #else
@@ -425,6 +393,7 @@ make_transparent_again (GtkWidget *widget, GtkStyle *previous_style,
 static void
 make_transparent (GtkWidget *widget, gpointer user_data)
 {
+/* TODO: move to hime-gtk-compatible.h */
 #if GTK_CHECK_VERSION(2,19,3)
 	if (GTK_WIDGET_NO_WINDOW (widget) || gtk_widget_get_app_paintable (widget))
 #else
@@ -461,14 +430,9 @@ egg_tray_icon_realize (GtkWidget *widget)
 
   make_transparent (widget, NULL);
 
-#if GTK_CHECK_VERSION(2,1,0)
   GdkScreen *Screen = gtk_widget_get_screen (widget);
   if (Screen) screen = gdk_screen_get_number (Screen);
   xdisplay = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (widget));
-#else
-  screen = XScreenNumberOfScreen (DefaultScreenOfDisplay (gdk_display));
-  xdisplay = gdk_display;
-#endif
 
   /* Now see if there's a manager window around */
   g_snprintf (buffer, sizeof (buffer),
@@ -490,14 +454,10 @@ egg_tray_icon_realize (GtkWidget *widget)
   egg_tray_icon_update_manager_window (icon, FALSE);
   egg_tray_icon_send_dock_request (icon);
 
-#if GTK_CHECK_VERSION(2,1,0)
   if (Screen)
     root_window = gdk_screen_get_root_window (Screen);
   else
     return;
-#else
-  root_window = gdk_window_lookup (gdk_x11_get_default_root_xwindow ());
-#endif
 
   /* Add a root window filter so that we get changes on MANAGER */
   gdk_window_add_filter (root_window,
@@ -512,7 +472,6 @@ egg_tray_icon_add (GtkContainer *container, GtkWidget *widget)
 	GTK_CONTAINER_CLASS (parent_class)->add (container, widget);
 }
 
-#if GTK_CHECK_VERSION(2,1,0)
 EggTrayIcon *
 egg_tray_icon_new_for_screen (GdkScreen *screen, const char *name)
 {
@@ -520,7 +479,6 @@ egg_tray_icon_new_for_screen (GdkScreen *screen, const char *name)
 
   return (EggTrayIcon*)g_object_new (EGG_TYPE_TRAY_ICON, "screen", screen, "title", name, NULL);
 }
-#endif
 
 EggTrayIcon*
 egg_tray_icon_new (const gchar *name)
@@ -560,11 +518,7 @@ egg_tray_icon_send_message (EggTrayIcon *icon,
       XClientMessageEvent ev;
       Display *xdisplay;
 
-#if GTK_CHECK_VERSION(2,1,0)
       xdisplay = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (GTK_WIDGET (icon)));
-#else
-      xdisplay = gdk_display;
-#endif
 
       ev.type = ClientMessage;
       ev.window = (Window)gtk_plug_get_id (GTK_PLUG (icon));

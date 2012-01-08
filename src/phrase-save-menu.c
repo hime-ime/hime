@@ -67,16 +67,9 @@ void create_phrase_save_menu(GdkEventButton * event)
 
   phrase_save_win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_has_resize_grip(GTK_WINDOW(phrase_save_win), FALSE);
-#if WIN32
-  set_no_focus(phrase_save_win);
-#endif
   gtk_widget_realize (phrase_save_win);
 
-#if UNIX
   set_no_focus(phrase_save_win);
-#else
-  win32_init_win(phrase_save_win);
-#endif
   GtkWidget *vbox = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
   gtk_container_add(GTK_CONTAINER(phrase_save_win), vbox);

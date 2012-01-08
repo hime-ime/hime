@@ -103,10 +103,6 @@ gboolean module_feedkey(int key, int kvstate)
 #endif
   key=toupper(key);
   if (key==XK_BackSpace||key==XK_Delete) {
-#if WIN32
-    if (*gmf.mf_test_mode)
-      return intcode_cin>0;
-#endif
     if (intcode_cin)
       intcode_cin--;
     else
@@ -132,10 +128,6 @@ gboolean module_feedkey(int key, int kvstate)
 
   if (!intcode_cin && key==' ')
     return 0;
-#if WIN32
-  if (*gmf.mf_test_mode)
-    return 1;
-#endif
   if ((intcode_cin<MAX_INTCODE-1 || (current_intcode!=INTCODE_BIG5 && intcode_cin < MAX_INTCODE)) && key!=' ')
     inch[intcode_cin++]=key;
 
@@ -186,14 +178,12 @@ extern GtkWidget *gwin_int;
 
 int module_get_preedit(char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *comp_flag)
 {
-#if WIN32 || 1
   *comp_flag = intcode_cin>0;
 #if 1
   if (gwin_int && GTK_WIDGET_VISIBLE(gwin_int))
     *comp_flag|=2;
 #endif
 //  dbg("comp_len %x\n", *sub_comp_len);
-#endif
   str[0]=0;
   *cursor=0;
   return 0;

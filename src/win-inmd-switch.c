@@ -47,11 +47,7 @@ void create_inmd_switch()
       continue;
 
     char tt[64];
-#if UNIX
     sprintf(tt, "%s ctrl-alt-%c", inmd[i].cname, inmd[i].key_ch);
-#else
-    strcpy(tt, inmd[i].cname);
-#endif
 
     GtkWidget *item = gtk_image_menu_item_new_with_label (tt);
     if (inmd[i].icon) {
@@ -106,13 +102,3 @@ void destroy_inmd_menu()
   gtk_widget_destroy(menu);
   menu = NULL;
 }
-
-#if WIN32
-void inmd_popup_tray()
-{
-  if (!menu)
-    create_inmd_switch();
-
-  gtk_menu_popup (GTK_MENU(menu), NULL, NULL, NULL, NULL, 1, gtk_get_current_event_time());
-}
-#endif

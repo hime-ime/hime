@@ -316,9 +316,6 @@ GtkWidget *create_pho_sel_area()
 
   for(i=0; i < bigphoN; i++) {
     bigpho[i].opt_menu = gtk_combo_box_new_text ();
-#if !GTK_CHECK_VERSION(2,4,0)
-    GtkWidget *menu = gtk_menu_new ();
-#endif
     gtk_box_pack_start (GTK_BOX (hbox_pho_sel), bigpho[i].opt_menu, FALSE, FALSE, 0);
 
     int j;
@@ -346,20 +343,10 @@ GtkWidget *create_pho_sel_area()
         phokey2pinyin(k):phokey_to_str(k);
       }
 
-#if GTK_CHECK_VERSION(2,4,0)
       gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (bigpho[i].opt_menu), phostr);
-#else
-      GtkWidget *item = gtk_menu_item_new_with_label (phostr);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-#endif
     }
 
-#if GTK_CHECK_VERSION(2,4,0)
     gtk_combo_box_set_active (GTK_COMBO_BOX(bigpho[i].opt_menu), 0);
-#else
-    gtk_option_menu_set_menu (GTK_OPTION_MENU (bigpho[i].opt_menu), menu);
-#endif
-
   }
 
 
@@ -426,10 +413,6 @@ void do_exit()
 
 void load_tsin_db();
 void set_window_hime_icon(GtkWidget *window);
-#if WIN32
-void init_hime_program_files();
-#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#endif
 
 gboolean is_pinyin_kbm();
 
@@ -469,9 +452,7 @@ int main(int argc, char **argv)
 
   dbg("ph_key_sz: %d\n", ph_key_sz);
 
-#if UNIX
   dpy = GDK_DISPLAY();
-#endif
 
   mainwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_has_resize_grip(GTK_WINDOW(mainwin), FALSE);
@@ -496,11 +477,7 @@ int main(int argc, char **argv)
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
-#if UNIX
   char *text = _("按滑鼠中鍵, 貼上你要 hime-tslearn 學習的文章。");
-#else
-  char *text = _("按 ctrl-V, 貼上你要 hime-tslearn 學習的文章。");
-#endif
 
   gtk_text_buffer_set_text (buffer, text, -1);
 
@@ -536,9 +513,6 @@ int main(int argc, char **argv)
   all_wrap();
 
   gtk_widget_show_all(mainwin);
-#if WIN32
-  gtk_window_present(GTK_WINDOW(mainwin));
-#endif
 
   gtk_main();
   return 0;

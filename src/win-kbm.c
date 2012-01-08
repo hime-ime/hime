@@ -16,9 +16,7 @@
  */
 
 #include <sys/stat.h>
-#if UNIX
 #include <X11/extensions/XTest.h>
-#endif
 #include "hime.h"
 #include "gtab.h"
 extern INMD *cur_inmd;
@@ -29,7 +27,7 @@ static GdkColor red;
 #else
 static GdkRGBA red;
 #endif
-int win_kbm_on;
+gboolean win_kbm_on = FALSE;
 extern gboolean test_mode;
 
 enum {
@@ -48,6 +46,10 @@ typedef struct {
   char flag;
   GtkWidget *lab, *but, *laben;
 } KEY;
+
+#if TRAY_ENABLED
+extern void update_item_active_all();
+#endif
 
 /* include win-kbm.h here so we do not have to translate those N_("stuff") */
 #include "win-kbm.h"
@@ -75,20 +77,12 @@ void mod_fg_all(GtkWidget *lab, GdkRGBA *rgbfg)
 #endif
 
 void send_fake_key_eve(KeySym key);
-#if WIN32
-void win32_FakeKey(UINT vk, bool key_press);
-#endif
 
 void send_fake_key_eve2(KeySym key, gboolean press)
 {
-#if WIN32
-  win32_FakeKey(key, press);
-#else
   KeyCode kc = XKeysymToKeycode(dpy, key);
   XTestFakeKeyEvent(dpy, kc, press, CurrentTime);
-#endif
 }
-
 
 static int kbm_timeout_handle;
 
@@ -187,9 +181,6 @@ static void create_win_kbm()
 
   gwin_kbm = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_has_resize_grip(GTK_WINDOW(gwin_kbm), FALSE);
-#if WIN32
-  set_no_focus(gwin_kbm);
-#endif
 
   gtk_container_set_border_width (GTK_CONTAINER (gwin_kbm), 0);
   GtkWidget *hbox_top = gtk_hbox_new (FALSE, 0);
@@ -252,15 +243,13 @@ static void create_win_kbm()
   }
 
   gtk_widget_realize (gwin_kbm);
-#if WIN32
-  win32_init_win(gwin_kbm);
-#else
   set_no_focus(gwin_kbm);
-#endif
 }
 
 extern GdkWindow *tray_da_win;
 extern GtkStatusIcon *icon_main;
+
+extern gboolean is_exist_tray_double();
 
 static void move_win_kbm()
 {
@@ -271,7 +260,6 @@ static void move_win_kbm()
   GdkRectangle r;
   GtkOrientation ori;
 
-#if UNIX
   int szx, szy;
   if (tray_da_win) {
     gdk_window_get_origin(tray_da_win, &ox, &oy);
@@ -296,8 +284,7 @@ static void move_win_kbm()
     if (ox < 0)
       ox = 0;
   } else
-#endif
-  if (icon_main && gtk_status_icon_get_geometry(icon_main, NULL, &r,  &ori)) {
+  if (is_exist_tray_double() && gtk_status_icon_get_geometry(icon_main, NULL, &r,  &ori)) {
 //    dbg("rect %d:%d %d:%d\n", r.x, r.y, r.width, r.height);
     ox = r.x;
     if (ox + width > dpy_xl)
@@ -324,9 +311,9 @@ void show_win_kbm()
   }
 
   gtk_widget_show_all(gwin_kbm);
-  win_kbm_on = 1;
-#if WIN32
-  gtk_window_present(GTK_WINDOW(gwin_kbm));
+  win_kbm_on = TRUE;
+#if TRAY_ENABLED
+  update_item_active_all();
 #endif
   move_win_kbm();
 }
@@ -539,13 +526,11 @@ void hide_win_kbm()
 {
   if (!gwin_kbm)
     return;
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
   clear_kbm_timeout_handle();
-  win_kbm_on = 0;
+  win_kbm_on = FALSE;
+#if TRAY_ENABLED
+  update_item_active_all();
+#endif
   gtk_widget_hide(gwin_kbm);
 }
 

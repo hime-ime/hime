@@ -22,11 +22,6 @@
 int phcount;
 void prph2(FILE *fp, phokey_t kk);
 
-#if WIN32
-void init_hime_program_files();
- #pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#endif
-
 void get_keymap_str(u_int64_t k, char *keymap, int keybits, char tkey[]);
 char *phokey2pinyin(phokey_t k);
 gboolean is_pinyin_kbm();

@@ -33,6 +33,7 @@ static void exec_script(char *name)
 {
   char scr[512];
   sprintf(scr, HIME_SCRIPT_DIR"/%s", name);
+  dbg("do %s\n", scr);
   system(scr);
 }
 
@@ -43,6 +44,7 @@ void exec_setup_scripts()
   struct passwd *pw = getpwuid(getuid());
   char hime_conf_dir[512];
   g_snprintf(hime_conf_dir, sizeof(hime_conf_dir), "mkdir -p %s/.config/hime/config", pw->pw_dir);
+  dbg("do %s\n", hime_conf_dir);
   system(hime_conf_dir);
   exec_script("hime-user-setup "HIME_TABLE_DIR" "HIME_BIN_DIR);
 }

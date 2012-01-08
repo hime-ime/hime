@@ -17,7 +17,7 @@
 
 #include "hime.h"
 
-#if !HIME_IME && !TSF
+#if !HIME_IME
 void utf8_big5_n(char *s, int len, char out[])
 {
   out[0]=0;
@@ -117,15 +117,7 @@ void utf8_putchar_fp(FILE *fp, char *s)
 
 void utf8_putchar(char *s)
 {
-#if WIN32
-  char tt[CH_SZ+1], vv[CH_SZ+1];
-  utf8cpy(tt, s);
-  int len = utf8_to_big5(tt, vv, sizeof(vv));
-  for(int i=0;i<len;i++)
-    fputc(vv[i], stdout);
-#else
 	utf8_putchar_fp(stdout, s);
-#endif
 }
 
 void utf8_putcharn(char *s, int n)
@@ -206,35 +198,6 @@ void utf8cpy_bytes(char *t, char *s, int n)
 
   t[tn]=0;
 }
-
-#if WIN32
-int utf8_to_16(char *text, wchar_t *wtext, int wlen)
-{
-  return MultiByteToWideChar( CP_UTF8, 0, text, -1, wtext, wlen/sizeof(wchar_t)) -1;
-}
-
-int utf16_to_8(wchar_t *in, char *out, int outN)
-{
-  return WideCharToMultiByte( CP_UTF8, 0, in, -1, out, outN, NULL, NULL) - 1;
-}
-
-int utf8_to_big5(char *in, char *out, int outN)
-{
-	wchar_t tt[512];
-	utf8_to_16(in, tt, sizeof(tt));
-	return WideCharToMultiByte( 950, 0, tt, -1, out, outN, NULL, NULL) - 1;
-}
-
-
-char *__utf16_8(wchar_t *s)
-{
-  static char tt[512];
-  utf16_to_8(s, tt, sizeof(tt));
-  return tt;
-}
-
-#endif
-
 
 char utf8_sigature[]="\xef\xbb\xbf";
 

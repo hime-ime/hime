@@ -306,11 +306,6 @@ static void clr_seltab()
 void clear_gtab_in_area(), hide_win_gtab();
 void ClrIn()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
   bzero(ggg.inch,sizeof(ggg.inch));
   clr_seltab();
   ggg.total_matchN=ggg.pg_idx=ggg.more_pg=ggg.wild_mode=ggg.wild_page=ggg.last_idx=ggg.defselN=ggg.exa_match=
@@ -339,7 +334,7 @@ void close_gtab_pho_win()
   if (same_query_show_pho_win()) {
     poo.same_pho_query_state = SAME_PHO_QUERY_none;
     hide_win_pho();
-    if (hime_pop_up_win && str_key_codes && !strlen(str_key_codes))
+    if (hime_pop_up_win && (str_key_codes[0]!='\0'))
       hide_win_gtab();
   }
 }
@@ -350,10 +345,6 @@ extern int win_gtab_max_key_press;
 static void DispInArea()
 {
   int i;
-#if WIN32
-  if (test_mode)
-    return;
-#endif
 
 //  hide_gtab_pre_sel();
 
@@ -443,11 +434,6 @@ void hide_row2_if_necessary()
 
 static void putstr_inp(char *p)
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
   clear_page_label();
 
 //  dbg("gtab_hide_row2 %d\n", gtab_hide_row2);
@@ -970,6 +956,7 @@ gboolean win_sym_page_up(), win_sym_page_down();
 u_int64_t vmaskci;
 gboolean gtab_pre_select_idx(int c);
 void save_CS_current_to_temp();
+void tsin_set_eng_ch(int nmod);
 
 gboolean feedkey_gtab(KeySym key, int kbstate)
 {
@@ -981,8 +968,7 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
   gboolean is_keypad = FALSE;
   gboolean shift_m = (kbstate & ShiftMask) > 0;
 //  gboolean ctrl_m = (kbstate & ControlMask) > 0;
-  int caps_eng_tog = tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock;
-  gboolean capslock_on = (kbstate&LockMask);
+  gboolean capslock_on = (kbstate & LockMask);
   gboolean is_dayi = !strncmp(cur_inmd->filename, "dayi", 4);
 
   bzero(seltab_phrase, sizeof(seltab_phrase));
@@ -992,11 +978,14 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
   if (!cur_inmd)
     return 0;
 
-  if (caps_eng_tog) {
-    gboolean new_tsin_pho_mode =!capslock_on;
+  if ((tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock) &&
+      (key == XK_Caps_Lock)){
+    // The CapLock status may be incorrect when XK_Caps_Lock is pressed.
+    gboolean new_tsin_pho_mode = ! gdk_keymap_get_caps_lock_state(gdk_keymap_get_default());
     if (current_CS->tsin_pho_mode != new_tsin_pho_mode) {
       current_CS->tsin_pho_mode = new_tsin_pho_mode;
       save_CS_current_to_temp();
+      tsin_set_eng_ch(new_tsin_pho_mode);
     }
   }
 
@@ -1143,10 +1132,7 @@ shift_proc:
         return TRUE;
       return FALSE;
     case XK_Down:
-#if UNIX
     case XK_KP_Down:
-#endif
-
       if (AUTO_SELECT_BY_PHRASE)
         return show_buf_select();
       else
@@ -1175,9 +1161,7 @@ shift_proc:
         return 0;
       }
     case XK_Prior:
-#if UNIX
     case XK_KP_Prior:
-#endif
     case XK_KP_Subtract:
       if (ggg.wild_mode) {
         if (ggg.wild_page >= cur_inmd->M_DUP_SEL) ggg.wild_page-=cur_inmd->M_DUP_SEL;
@@ -1202,9 +1186,7 @@ shift_proc:
 
       return win_sym_page_up();
     case XK_Next:
-#if UNIX
     case XK_KP_Next:
-#endif
     case XK_KP_Add:
       if (ggg.more_pg) {
         if (ggg.gtab_buf_select) {
@@ -1353,29 +1335,19 @@ direct_select:
       }
       return 0;
     case XK_Left:
-#if UNIX
     case XK_KP_Left:
-#endif
       return gbuf_cursor_left();
     case XK_Right:
-#if UNIX
     case XK_KP_Right:
-#endif
       return gbuf_cursor_right();
     case XK_Home:
-#if UNIX
     case XK_KP_Home:
-#endif
       return gbuf_cursor_home();
     case XK_End:
-#if UNIX
     case XK_KP_End:
-#endif
       return gbuf_cursor_end();
     case XK_Delete:
-#if UNIX
     case XK_KP_Delete:
-#endif
       return gtab_buf_delete();
     case XK_Shift_L:
     case XK_Shift_R:
@@ -1858,31 +1830,3 @@ Disp_opt:
 
   return 1;
 }
-
-#if WIN32
-static GTAB_ST temp_st;
-void pho_save_gst(), pho_restore_gst();
-// static GEDIT *gbuf_save;
-static char **seltab_save;
-
-void gtab_save_gst()
-{
-  init_seltab(&seltab_save);
-  int i;
-  for(i=0; i < MAX_SELKEY; i++)
-    strcpy(seltab_save[i], seltab[i]);
-
-  pho_save_gst();
-  temp_st = ggg;
-}
-
-void gtab_restore_gst()
-{
-  int i;
-  for(i=0; i < MAX_SELKEY; i++)
-    strcpy(seltab[i], seltab_save[i]);
-
-  pho_restore_gst();
-  ggg = temp_st;
-}
-#endif

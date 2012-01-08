@@ -10,7 +10,7 @@ CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I./IMdkit/include -I./im-client 
         -DSYS_ICON_DIR=\"$(SYS_ICON_DIR)\" -DFREEBSD=$(FREEBSD) -DMAC_OS=$(MAC_OS) \
         -DG_DISABLE_SINGLE_INCLUDES -DG_DISABLE_DEPRECATED \
         -DGDK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED \
-        -DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED
+        -DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE
 
 VERSION_FILE = ../VERSION.hime
 
@@ -94,7 +94,7 @@ endif
 
 ifeq ($(USE_TRAY),Y)
 CFLAGS     += -DTRAY_ENABLED=1
-OBJS       += tray.o eggtrayicon.o tray-win32.o
+OBJS       += tray.o eggtrayicon.o tray-double.o
 ifeq ($(USE_UNITY),Y)
 CFLAGS     += -DTRAY_UNITY=1
 OBJS       += tray-appindicator.o
@@ -288,6 +288,8 @@ install:
 	rm -f $(bindir)/hime-kbm-toggle; ln -sf hime-gb-toggle $(bindir)/hime-kbm-toggle
 	install -d $(himelibdir)
 	install $(HIME_SO) $(himelibdir)
+	install -d $(includedir)
+	install -m 644 im-client/hime-im-client.h im-client/hime-im-client-attr.h $(includedir)
 	$(MAKE) -C im-client install
 	if [ $(BUILD_MODULE) = 'Y' ]; then $(MAKE) -C modules install; fi
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im install; fi

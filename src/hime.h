@@ -22,26 +22,16 @@
 #include "os-dep.h"
 #include <gtk/gtk.h>
 #include <string.h>
-#if UNIX
 #include "IMdkit.h"
 #include "Xi18n.h"
-#endif
 #if HIME_i18n_message
 #include <libintl.h>
 #define _(STRING) gettext(STRING)
 #else
-#if UNIX
 #define _(STRING) (STRING)
-#else
-#if _USRDLL
-#define _(x) gmf.mf__utf16_8(x)
-#else
-#define _(x) __utf16_8(x)
-#endif
-#endif
 #endif
 
-#define N_(STRING) STRING
+#define N_(STRING) (STRING)
 
 #include "hime-gtk-compatible.h"
 
@@ -72,19 +62,15 @@ void *memdup(void *p, int n);
 #define tzmalloc(type,n)  (type*)zmalloc(sizeof(type) * (n))
 #define trealloc(p,type,n)  (type*)realloc(p, sizeof(type) * (n+1))
 #define tmemdup(p,type,n) (type*)memdup(p, sizeof(type) * n)
-#if UNIX
 extern Display *dpy;
-#endif
 
 extern char *TableDir;
 extern GtkWidget *gwin0;
 extern GdkWindow *gdkwin0;
 extern Window xwin0;
 extern Window root;
-#if UNIX
 void loadIC();
 IC *FindIC(CARD16 icid);
-#endif
 extern ClientState *current_CS;
 
 enum {
@@ -118,6 +104,16 @@ enum {
   HIME_EDIT_DISPLAY_ON_THE_SPOT=2,
   HIME_EDIT_DISPLAY_BOTH=4,
 };
+
+#if TRAY_ENABLED
+enum {
+  HIME_TRAY_DISPLAY_SINGLE=1,
+  HIME_TRAY_DISPLAY_DOUBLE=2,
+#if TRAY_UNITY
+  HIME_TRAY_DISPLAY_APPINDICATOR=3,
+#endif
+};
+#endif
 
 #define ROW_ROW_SPACING (2)
 
@@ -156,9 +152,7 @@ void utf8cpyn(char *t, char *s, int n);
 void utf8cpy_bytes(char *t, char *s, int n);
 char *myfgets(char *buf, int bufN, FILE *fp);
 void get_hime_dir(char *tt);
-#if UNIX
 Atom get_hime_atom(Display *dpy);
-#endif
 void get_sys_table_file_name(char *name, char *fname);
 char *half_char_to_full_char(KeySym xkey);
 void send_text(char *text);
@@ -177,10 +171,6 @@ gboolean hime_edit_display_ap_only();
 gboolean hime_display_on_the_spot_key();
 void char_play(char *utf8);
 void skip_utf8_sigature(FILE *fp);
-#if WIN32
-char *__utf16_8(wchar_t *s);
-void win32_init_win(GtkWidget *win);
-#endif
 
 #define BITON(flag, bit) ((flag) & (bit))
 

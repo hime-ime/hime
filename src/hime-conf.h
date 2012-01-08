@@ -3,6 +3,9 @@
 #define SIM_OUTPUT_TOGGLE "gb output sim"
 #define TRAD_OUTPUT_TOGGLE "gb output trad"
 #define KBM_TOGGLE "kbm toggle"
+#if TRAY_ENABLED
+#define UPDATE_TRAY "update tray"
+#endif
 #define RELOAD_TSIN_DB "reload tsin db"
 #define HIME_EXIT_MESSAGE "hime exit"
 
@@ -34,7 +37,7 @@
 
 #define HIME_IM_TOGGLE_KEYS "hime-im-toggle-keys"
 #define DEFAULT_INPUT_METHOD "default-input-method"
-#define LEFT_RIGHT_BUTTON_TIPS "left-right-button-tips"
+// #define LEFT_RIGHT_BUTTON_TIPS "left-right-button-tips"
 #define HIME_STR_IM_CYCLE "hime-str-im-cycle"
 #define HIME_REMOTE_CLIENT "hime-remote-client"
 #define HIME_SHIFT_SPACE_ENG_FULL "hime-shift-space-eng-full"
@@ -46,7 +49,7 @@
 #define HIME_ENG_PHRASE_ENABLED "hime-eng-phrase-enabled"
 #define HIME_WIN_SYM_CLICK_CLOSE "hime-win-sym-click-close"
 #define HIME_SEL_KEY_COLOR "hime-sel-key-color"
-#define HIME_WIN32_ICON "hime-win32-icon"
+#define HIME_TRAY_DISPLAY "hime-tray-display"
 
 #define GTAB_DUP_SELECT_BELL "gtab-dup-select-bell"
 #define GTAB_SPACE_AUTO_FIRST "gtab-space-auto-first"
@@ -104,7 +107,7 @@ extern int hime_font_size, hime_font_size_tsin_presel, hime_font_size_symbol,
            hime_bell_volume, hime_sound_play_overlap, hime_enable_ctrl_alt_switch, hime_on_the_spot_key;
 
 extern int default_input_method;
-extern int left_right_button_tips;
+// extern int left_right_button_tips;
 extern int gtab_dup_select_bell;
 extern int gtab_space_auto_first;
 extern int gtab_auto_select_by_phrase;
@@ -135,8 +138,8 @@ extern unich_t eng_full_str[], eng_half_str[], cht_full_str[];
 extern char *eng_color_full_str, *eng_color_half_str, *cht_color_full_str;
 extern char *hime_win_color_fg, *hime_win_color_bg;
 extern int hime_win_color_use, hime_bell_off;
-extern int hime_init_im_enabled, hime_win32_icon;
-extern int hime_edit_display;
+extern int hime_init_im_enabled;
+extern int hime_edit_display, hime_tray_display;
 extern char *pho_kbm_name, *pho_selkey, *hime_str_im_cycle;
 extern int pho_candicate_col_N, pho_candicate_R2L;
 

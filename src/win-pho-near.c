@@ -94,16 +94,9 @@ void create_win_pho_near(phokey_t pho)
     close_win_pho_near();
 
   gwin_pho_near = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-gtk_window_set_has_resize_grip(GTK_WINDOW(gwin_pho_near), FALSE);
-#if WIN32
-  set_no_focus(gwin_pho_near);
-#endif
+  gtk_window_set_has_resize_grip(GTK_WINDOW(gwin_pho_near), FALSE);
   gtk_widget_realize (gwin_pho_near);
-#if UNIX
   set_no_focus(gwin_pho_near);
-#else
-  win32_init_win(gwin_pho_near);
-#endif
 
   GtkWidget *frame = gtk_frame_new(NULL);
   gtk_container_add(GTK_CONTAINER (gwin_pho_near), frame);

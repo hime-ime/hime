@@ -28,9 +28,12 @@
 #include "gst.h"
 #include "pho-kbm-name.h"
 
+extern void destroy_other_tray();
+
 gboolean tsin_pho_mode();
-extern int tsin_half_full, gb_output;
+extern int tsin_half_full;
 extern int win32_tray_disabled;
+extern gboolean gb_output;
 GtkStatusIcon *icon_main=NULL, *icon_state=NULL;
 
 void get_icon_path(char *iconame, char fname[]);
@@ -118,7 +121,7 @@ gint inmd_switch_popup_handler (GtkWidget *widget, GdkEvent *event);
 extern gboolean win_kbm_inited;
 
 #include "mitem.h"
-extern int win_kbm_on;
+extern gboolean win_kbm_on;
 
 static MITEM mitems_main[] = {
   {N_("關於hime/常見問題"), GTK_STOCK_ABOUT, cb_about_window},
@@ -223,26 +226,26 @@ void update_item_active(MITEM *mitems)
     }
 }
 
-void update_item_active_unix();
+void update_item_active_single();
+void update_item_active_appindicator();
 
 void update_item_active_all()
 {
-  if (hime_win32_icon) {
+  if (hime_tray_display == HIME_TRAY_DISPLAY_DOUBLE) {
     update_item_active(mitems_main);
     update_item_active(mitems_state);
+  } else if (hime_tray_display == HIME_TRAY_DISPLAY_SINGLE) {
+    update_item_active_single();
   }
-#if UNIX
-  else
-    update_item_active_unix();
+#if TRAY_UNITY
+  else if (hime_tray_display == HIME_TRAY_DISPLAY_APPINDICATOR) {
+    update_item_active_appindicator();
+  }
 #endif
 }
 
-
-void inmd_popup_tray();
-
 static void cb_activate(GtkStatusIcon *status_icon, gpointer user_data)
 {
-#if UNIX
 //  dbg("cb_activate\n");
   toggle_im_enabled();
 
@@ -250,9 +253,6 @@ static void cb_activate(GtkStatusIcon *status_icon, gpointer user_data)
   bzero(&rect, sizeof(rect));
   GtkOrientation ori;
   gtk_status_icon_get_geometry(status_icon, NULL, &rect, &ori);
-#else
-  inmd_popup_tray();
-#endif
 }
 
 static void cb_popup(GtkStatusIcon *status_icon, guint button, guint activate_time, gpointer user_data)
@@ -360,18 +360,20 @@ static void cb_popup_state(GtkStatusIcon *status_icon, guint button, guint activ
 #define HIME_TRAY_PNG "hime-tray.png"
 
 
-void load_tray_icon_win32()
+void load_tray_icon_double()
 {
-#if UNIX
-  if (!hime_win32_icon)
+  if (!hime_status_tray)
     return;
-#endif
+  if (hime_tray_display != HIME_TRAY_DISPLAY_DOUBLE)
+    return;
 
 #if WIN32
   // when login, creating icon too early may cause block in gtk_status_icon_new_from_file
   if (win32_tray_disabled)
     return;
 #endif
+
+  destroy_other_tray();
 
 //  dbg("load_tray_icon_win32\n");
 #if UNIX
@@ -479,13 +481,37 @@ void load_tray_icon_win32()
   return;
 }
 
-void init_tray_win32()
+gboolean is_exist_tray_double()
 {
-  load_tray_icon_win32();
+  return icon_main != NULL && icon_state != NULL;
 }
 
-void destroy_tray_win32()
+gboolean create_tray_double(gpointer data)
 {
+  load_tray_icon_double();
+  return TRUE;
+}
+
+void init_tray_double()
+{
+  g_timeout_add(200, create_tray_double, NULL);
+}
+
+void destroy_tray_double()
+{
+  if (icon_main == NULL || icon_state == NULL)
+    return;
+// Workaround: to release the space on notification area
+  gtk_status_icon_set_visible(icon_main, FALSE);
+  gtk_status_icon_set_visible(icon_state, FALSE);
   g_object_unref(icon_main); icon_main = NULL;
   g_object_unref(icon_state); icon_state = NULL;
+  if (tray_menu) {
+    gtk_widget_destroy(tray_menu);
+    tray_menu = NULL;
+  }
+  if (tray_menu_state) {
+    gtk_widget_destroy(tray_menu_state);
+    tray_menu_state = NULL;
+  }
 }

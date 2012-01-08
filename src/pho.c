@@ -851,17 +851,14 @@ extern GtkWidget *gwin_pho;
 
 int pho_get_preedit(char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *sub_comp_len)
 {
-#if WIN32 || 1
   *sub_comp_len = !typ_pho_empty();;
   if (gwin_pho && GTK_WIDGET_VISIBLE(gwin_pho))
     *sub_comp_len|=2;
-#endif
   *cursor = 0;
   str[0]=0;
   return 0;
 }
 
-#if WIN32 || 1
 static PHO_ST temp_pho_st;
 void pho_save_gst()
 {
@@ -872,4 +869,3 @@ void pho_restore_gst()
 {
   poo = temp_pho_st;
 }
-#endif

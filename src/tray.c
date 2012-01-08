@@ -22,6 +22,8 @@
 #include <signal.h>
 #include "gst.h"
 
+extern void destroy_other_tray();
+
 #if UNIX
 static GdkPixbuf *pixbuf, *pixbuf_ch;
 static PangoLayout* pango;
@@ -52,15 +54,13 @@ static void draw_icon()
 {
   gboolean tsin_pho_mode();
 //  dbg("draw_icon\n");
-#if 0
-  return;
-#endif
+
   if (!da)
     return;
 
-  GdkPixbuf *pix =  !current_CS ||
-    (current_CS->im_state == HIME_STATE_DISABLED||current_CS->im_state == HIME_STATE_ENG_FULL) ?
-    pixbuf : pixbuf_ch;
+  GdkPixbuf *pix =  ((! current_CS) ||
+                     (current_CS->im_state != HIME_STATE_CHINESE)) ?
+                    pixbuf : pixbuf_ch;
 
 #if GTK_CHECK_VERSION(2,17,7)
   GtkAllocation dwdh;
@@ -110,7 +110,7 @@ static void draw_icon()
         current_method_type()==method_type_TSIN && tss.tsin_half_full &&
 #endif
         current_CS->im_state == HIME_STATE_CHINESE)) {
-      static char full[] = "全";
+      static char full[] = N_("全");
       get_text_w_h(full,  &w, &h);
 #if !GTK_CHECK_VERSION(2,90,6)
       gdk_draw_layout(tray_da_win, gc, dw - w, dh - h, pango);
@@ -122,7 +122,7 @@ static void draw_icon()
     }
 
     if (current_CS->im_state == HIME_STATE_ENG_FULL) {
-      static char efull[] = "A全";
+      static char efull[] = N_("A全");
       get_text_w_h(efull,  &w, &h);
 #if !GTK_CHECK_VERSION(2,90,6)
       gdk_draw_layout(tray_da_win, gc, 0, 0, pango);
@@ -133,7 +133,9 @@ static void draw_icon()
 #endif
     }
 #if USE_TSIN
-    if ((current_method_type()==method_type_TSIN||current_method_type()==method_type_MODULE) && current_CS->im_state == HIME_STATE_CHINESE && !tsin_pho_mode()) {
+    if (((current_method_type()==method_type_TSIN) || (current_method_type()==method_type_MODULE)) &&
+        (current_CS->im_state == HIME_STATE_CHINESE) &&
+	 (! tsin_pho_mode())) {
       static char efull[] = "ABC";
       gdk_color_parse("blue", &color_fg);
 #if !GTK_CHECK_VERSION(2,90,6)
@@ -223,8 +225,9 @@ void load_tray_icon()
     GError *err = NULL;
 //    dbg("icon_name %s\n", icon_fname);
     pixbuf = gdk_pixbuf_new_from_file_at_size(icon_fname, dw, dh, &err);
-    if (!pixbuf)
-      p_err("cannot load file %s", icon_fname);
+    //Reduce troublesome when hime-tray.png does not exist
+    //if (!pixbuf)
+    //  p_err("cannot load file %s", icon_fname);
   }
 
 #if 0
@@ -264,15 +267,14 @@ void cb_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 void restart_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 #endif  // UNIX
 
-
 void cb_tog_phospeak(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
-#include "mitem.h"
-
 void kbm_toggle_(GtkCheckMenuItem *checkmenuitem, gpointer dat);
-extern int win_kbm_on;
+extern gboolean win_kbm_on;
 
 void cb_inmd_menu(GtkCheckMenuItem *checkmenuitem, gpointer dat);
+
+#include "mitem.h"
 
 static MITEM mitems[] = {
   {N_("設定"), GTK_STOCK_PREFERENCES, exec_hime_setup_, NULL},
@@ -295,8 +297,6 @@ void update_item_active_all();
 gint inmd_switch_popup_handler (GtkWidget *widget, GdkEvent *event);
 extern gboolean win_kbm_inited;
 
-
-#if UNIX
 void toggle_im_enabled(), kbm_toggle();
 gboolean
 tray_button_press_event_cb (GtkWidget * button, GdkEventButton * event, gpointer userdata)
@@ -331,7 +331,7 @@ tray_button_press_event_cb (GtkWidget * button, GdkEventButton * event, gpointer
 
 void update_item_active(MITEM *mitems);
 
-void update_item_active_unix()
+void update_item_active_single()
 {
   update_item_active(mitems);
 }
@@ -360,6 +360,8 @@ gboolean create_tray(gpointer data)
 {
   if (da)
     return FALSE;
+
+  destroy_other_tray();
 
   egg_tray_icon = egg_tray_icon_new ("hime");
 
@@ -437,12 +439,18 @@ gboolean create_tray(gpointer data)
 
 void destroy_tray_icon()
 {
+  if (!egg_tray_icon)
+    return;
   gtk_widget_destroy(GTK_WIDGET(egg_tray_icon));
   egg_tray_icon = NULL; da = NULL;
 }
 
+gboolean is_exist_tray()
+{
+  return tray_da_win != NULL;
+}
+
 void init_tray()
 {
-  g_timeout_add(5000, create_tray, NULL);
+  g_timeout_add(200, create_tray, NULL); // Old setting is 5000 here.
 }
-#endif

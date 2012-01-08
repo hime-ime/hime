@@ -300,8 +300,8 @@ static void cb_button_find_ok(GtkButton *button, gpointer user_data)
 {
   txt[0]=0;
   strcpy(txt, gtk_entry_get_text(GTK_ENTRY(find_textentry)));
-  gtk_widget_destroy(last_row);
-  last_row = NULL;
+//  gtk_widget_destroy(last_row);
+//  last_row = NULL;
   if (!txt[0])
     return;
   int row;
@@ -327,6 +327,14 @@ static void cb_button_find_ok(GtkButton *button, gpointer user_data)
   }
 }
 
+static void cb_button_close(GtkButton *button, gpointer user_data)
+{
+  if (last_row)
+    gtk_widget_destroy(last_row);
+  last_row = NULL;
+  gtk_window_resize(GTK_WINDOW(mainwin), 1, 1);
+}
+
 static void cb_button_find(GtkButton *button, gpointer user_data)
 {
   if (last_row)
@@ -340,6 +348,11 @@ static void cb_button_find(GtkButton *button, gpointer user_data)
   g_signal_connect (G_OBJECT (button_ok), "clicked",
      G_CALLBACK (cb_button_find_ok), NULL);
   gtk_box_pack_start (GTK_BOX (last_row), button_ok, FALSE, FALSE, 5);
+
+  GtkWidget *button_close = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+  g_signal_connect (G_OBJECT (button_close), "clicked",
+     G_CALLBACK (cb_button_close), NULL);
+  gtk_box_pack_start (GTK_BOX (last_row), button_close, FALSE, FALSE, 5);
 
   gtk_box_pack_start (GTK_BOX (vbox_top), last_row, FALSE, FALSE, 0);
 
@@ -367,13 +380,8 @@ static void cb_button_save(GtkButton *button, gpointer user_data)
   }
   fflush(fph);
 
-#if UNIX
   unix_exec(HIME_BIN_DIR"/hime-tsd2a32 %s -o tsin.tmp", current_tsin_fname);
   unix_exec(HIME_BIN_DIR"/hime-tsa2d32 tsin.tmp %s", current_tsin_fname);
-#else
-  win32exec_va("hime-tsd2a32", current_tsin_fname, "-o", "tsin.tmp", NULL);
-  win32exec_va("hime-tsa2d32", "tsin.tmp",  current_tsin_fname, NULL);
-#endif
   exit(0);
 }
 
@@ -427,9 +435,6 @@ GtkWidget *create_pho_sel_area()
 
   for(i=0; i < bigphoN; i++) {
     bigpho[i].opt_menu = gtk_combo_box_new_text ();
-#if !GTK_CHECK_VERSION(2,4,0)
-    GtkWidget *menu = gtk_menu_new ();
-#endif
     gtk_box_pack_start (GTK_BOX (hbox_pho_sel), bigpho[i].opt_menu, FALSE, FALSE, 0);
 
     int j;
@@ -457,20 +462,10 @@ GtkWidget *create_pho_sel_area()
         phokey2pinyin(k):phokey_to_str(k);
       }
 
-#if GTK_CHECK_VERSION(2,4,0)
       gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (bigpho[i].opt_menu), phostr);
-#else
-      GtkWidget *item = gtk_menu_item_new_with_label (phostr);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-#endif
     }
 
-#if GTK_CHECK_VERSION(2,4,0)
     gtk_combo_box_set_active (GTK_COMBO_BOX(bigpho[i].opt_menu), 0);
-#else
-    gtk_option_menu_set_menu (GTK_OPTION_MENU (bigpho[i].opt_menu), menu);
-#endif
-
   }
 
 
@@ -526,10 +521,6 @@ void do_exit()
 
 void load_tsin_db();
 void set_window_hime_icon(GtkWidget *window);
-#if WIN32
-void init_hime_program_files();
-#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#endif
 
 static gboolean  scroll_event(GtkWidget *widget,GdkEventScroll *event, gpointer user_data)
 {
@@ -580,10 +571,6 @@ gboolean key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer user_da
 
 gboolean is_pinyin_kbm();
 
-#if WIN32
-#include <direct.h>
-#endif
-
 int main(int argc, char **argv)
 {
   set_is_chs();
@@ -596,12 +583,7 @@ int main(int argc, char **argv)
 
   char hime_dir[512];
   get_hime_dir(hime_dir);
-#if UNIX
   chdir(hime_dir);
-#else
-  _chdir(hime_dir);
-#endif
-
 
 #if HIME_i18n_message
   bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
@@ -628,9 +610,7 @@ int main(int argc, char **argv)
 
   dbg("ph_key_sz: %d\n", ph_key_sz);
 
-#if UNIX
   dpy = GDK_DISPLAY();
-#endif
 
   mainwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_position(GTK_WINDOW(mainwin), GTK_WIN_POS_CENTER);

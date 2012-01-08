@@ -20,7 +20,6 @@
 
 void load_tab_pho_file();
 
-#if UNIX
 #include <signal.h>
 gboolean test_mode;
 
@@ -58,71 +57,6 @@ int pho_play(phokey_t key)
   execlp("ogg123", "ogg123", tt, NULL);
   return 0;
 }
-#else
-extern "C" {
-	HANDLE play_ogg_file(wchar_t *file_name);
-};
-
-void ErrorExit(LPTSTR lpszFunction);
-void pho_play(phokey_t key)
-{
-  if (!phonetic_speak)
-    return;
-
-#if 0
-  static PROCESS_INFORMATION procinfo;
-  static time_t last_time;
-  time_t t = time(NULL);
-#if 0
-  // the result is bad on windows
-  if (!hime_sound_play_overlap) {
-    if (procinfo.hProcess && t - last_time < 2)
-      TerminateProcess(procinfo.hProcess, 0);
-  }
-#endif
-  char *ph = phokey_to_str2(key, 1);
-  char tt[512];
-
-  last_time = t;
-  if (procinfo.hProcess) {
-    CloseHandle(procinfo.hProcess);
-    CloseHandle(procinfo.hThread);
-  }
-
-  sprintf(tt, "\"%s\\bin\\oggdec.exe\" -p \"%s\\ogg\\%s\\%s\"", hime_program_files_path, hime_program_files_path, ph, phonetic_speak_sel);
-  wchar_t tt16[MAX_PATH*2];
-
-  utf8_to_16(tt, tt16, sizeof(tt16));
-#if 0
-  char pro[64];
-  wchar_t pro16[64];
-  strcpy(pro, hime_program_files_path);
-  strcat(pro, "\\oggdec.exe");
-  utf8_to_16(pro, pro16, ARRAYSIZE(tt16));
-#endif
-  STARTUPINFOW si;
-//  PROCESS_INFORMATION pi;
-
-  ZeroMemory( &si, sizeof(si) );
-  si.cb = sizeof(si);
-  ZeroMemory( &procinfo, sizeof(procinfo));
-
-  if(!CreateProcessW(NULL, tt16, NULL,NULL,FALSE, CREATE_NO_WINDOW, NULL,NULL, &si, &procinfo)) {
-#if _DEBUG
-    ErrorExit("CreateProcessW");
-    dbg("cannot exec %s\n", tt);
-#endif
-  }
-#else
-  char *ph = phokey_to_str2(key, 1);
-  char tt[512];
-  sprintf(tt, "%s\\ogg\\%s\\%s", hime_program_files_path, ph, phonetic_speak_sel);
-  wchar_t tt16[MAX_PATH];
-  utf8_to_16(tt, tt16, ARRAYSIZE(tt16));
-  play_ogg_file(tt16);
-#endif
-}
-#endif
 
 void char_play(char *utf8)
 {

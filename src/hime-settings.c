@@ -24,11 +24,12 @@ int hime_win_color_use, hime_single_state;
 int hime_remote_client;
 char *default_input_method_str;
 int default_input_method;
-int left_right_button_tips;
+// int left_right_button_tips;
 int hime_im_toggle_keys, hime_bell_off;
 int hime_capslock_lower, hime_eng_phrase_enabled, hime_init_im_enabled;
-int hime_win_sym_click_close, hime_edit_display, hime_win32_icon;
+int hime_win_sym_click_close, hime_edit_display;
 int hime_on_the_spot_key, hime_tray_hf_win_kbm, hime_punc_auto_send;
+int hime_tray_display;
 
 int gtab_dup_select_bell;
 int gtab_space_auto_first;
@@ -84,11 +85,7 @@ int get_hime_conf_int(char *name, int default_value);
 void load_setttings()
 {
   hime_font_size = get_hime_conf_int(HIME_FONT_SIZE, 16);
-#if UNIX || 1
   get_hime_conf_str(HIME_FONT_NAME, &hime_font_name, "Sans");
-#else
-  get_hime_conf_str(HIME_FONT_NAME, &hime_font_name, "MingLiU Bold");
-#endif
   hime_font_size_tsin_presel = get_hime_conf_int(HIME_FONT_SIZE_TSIN_PRESEL, 16);
   hime_font_size_symbol = get_hime_conf_int(HIME_FONT_SIZE_SYMBOL, 12);
   hime_font_size_tsin_pho_in = get_hime_conf_int(HIME_FONT_SIZE_TSIN_PHO_IN, 13);
@@ -103,11 +100,7 @@ void load_setttings()
   hime_inner_frame = get_hime_conf_int(HIME_INNER_FRAME, 1);
   hime_eng_phrase_enabled = get_hime_conf_int(HIME_ENG_PHRASE_ENABLED, 1);
   hime_tray_hf_win_kbm = get_hime_conf_int(HIME_TRAY_HF_WIN_KBM, 0);
-#if UNIX
   hime_init_im_enabled = get_hime_conf_int(HIME_INIT_IM_ENABLED, 0);
-#else
-  hime_init_im_enabled = true;
-#endif
 
   hime_single_state = get_hime_conf_int(HIME_SINGLE_STATE, 0);
   hime_punc_auto_send = get_hime_conf_int(HIME_PUNC_AUTO_SEND, 0);
@@ -124,17 +117,13 @@ void load_setttings()
 #if !USE_TSIN
   get_hime_conf_str(DEFAULT_INPUT_METHOD, &default_input_method_str, "3"); /* "3" usually is Bopomofo */
 #endif
-  left_right_button_tips = get_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 1);
+//  left_right_button_tips = get_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 1);
   hime_im_toggle_keys = get_hime_conf_int(HIME_IM_TOGGLE_KEYS, 0);
 #if TRAY_ENABLED
   hime_status_tray = get_hime_conf_int(HIME_STATUS_TRAY, 1);
 #endif
   hime_win_sym_click_close = get_hime_conf_int(HIME_WIN_SYM_CLICK_CLOSE, 1);
-#if WIN32
-  hime_win32_icon = 1;
-#else
-  hime_win32_icon = get_hime_conf_int(HIME_WIN32_ICON, 1);
-#endif
+  hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, 2);
 
   gtab_dup_select_bell = get_hime_conf_int(GTAB_DUP_SELECT_BELL, 0);
   gtab_space_auto_first = get_hime_conf_int(GTAB_SPACE_AUTO_FIRST, GTAB_space_auto_first_none);
