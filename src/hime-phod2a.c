@@ -45,8 +45,7 @@ int main(int argc, char **argv)
     int j;
     for(j=frm; j < to; j++) {
       prph(key);
-      char *str = pho_idx_str(j);
-      dbg(" %s %d\n", str, ch_pho[j].count);
+      dbg(" %s %d\n", pho_idx_str(j), ch_pho[j].count);
     }
   }
 

@@ -68,7 +68,7 @@ static HIME_client_handle *hime_im_client_reopen(HIME_client_handle *hime_ch, Di
   int dbg_msg = getenv("HIME_CONNECT_MSG_ON") != NULL;
   int sockfd=0;
   int servlen;
-  char *addr;
+//  char *addr;
   Server_IP_port srv_ip_port;
   u_char *pp;
 
@@ -160,7 +160,7 @@ static HIME_client_handle *hime_im_client_reopen(HIME_client_handle *hime_ch, Di
     get_hime_im_srv_sock_path(sock_path, sizeof(sock_path));
   }
 
-  addr = sock_path;
+//  addr = sock_path;
   strcpy(serv_addr.sun_path, sock_path);
 #ifdef SUN_LEN
   servlen = SUN_LEN(&serv_addr);

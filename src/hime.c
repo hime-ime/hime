@@ -284,6 +284,7 @@ static void reload_data()
 //  load_tsin_db();
   change_win0_style();
   change_win1_font();
+  create_win_gtab();
   change_win_gtab_style();
 //  change_win_pho_style();
   load_tab_pho_file();

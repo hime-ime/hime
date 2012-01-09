@@ -103,7 +103,8 @@ void save_tsin_eng_pho_key()
 static GtkWidget *hime_kbm_window = NULL;
 
 static int new_select_idx_tsin_space_opt;
-static GdkColor tsin_phrase_line_gcolor, tsin_cursor_gcolor;
+//static GdkColor tsin_phrase_line_gcolor;
+static GdkColor tsin_cursor_gcolor;
 
 
 static gboolean cb_ok( GtkWidget *widget,
@@ -253,8 +254,10 @@ static gboolean close_kbm_window( GtkWidget *widget,
   return TRUE;
 }
 
-static GtkWidget *da_phrase_line, *da_cursor;
+//static GtkWidget *da_phrase_line;
+static GtkWidget *da_cursor;
 
+#if 0
 static void cb_save_tsin_phrase_line_color(GtkWidget *widget, gpointer user_data)
 {
   GtkColorSelectionDialog *color_selector = (GtkColorSelectionDialog *)user_data;
@@ -268,44 +271,7 @@ static void cb_save_tsin_phrase_line_color(GtkWidget *widget, gpointer user_data
   gtk_widget_override_background_color(da_phrase_line, GTK_STATE_FLAG_NORMAL, &rgbbg);
 #endif
 }
-
-
-static gboolean cb_tsin_phrase_line_color( GtkWidget *widget,
-                                   gpointer   data )
-{
-   GtkWidget *color_selector = gtk_color_selection_dialog_new (_("詞音標示詞的底線顏色"));
-
-   gtk_color_selection_set_current_color(
-           GTK_COLOR_SELECTION(gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(color_selector))),
-           &tsin_phrase_line_gcolor);
-
-
-#if 0
-   g_signal_connect (GTK_OBJECT (color_selector->ok_button),
-                     "clicked",
-                     G_CALLBACK (cb_save_tsin_phrase_line_color),
-                     (gpointer) color_selector);
-#if 1
-   g_signal_connect_swapped (GTK_OBJECT (color_selector->ok_button),
-                             "clicked",
-                             G_CALLBACK (gtk_widget_destroy),
-                             (gpointer) color_selector);
 #endif
-   g_signal_connect_swapped (GTK_OBJECT (color_selector->cancel_button),
-                             "clicked",
-                             G_CALLBACK (gtk_widget_destroy),
-                             (gpointer) color_selector);
-#endif
-
-   gtk_widget_show((GtkWidget*)color_selector);
-#if 1
-   if (gtk_dialog_run(GTK_DIALOG(color_selector)) == GTK_RESPONSE_OK)
-     cb_save_tsin_phrase_line_color((GtkWidget *)color_selector, (gpointer) color_selector);
-   gtk_widget_destroy(color_selector);
-#endif
-   return TRUE;
-}
-
 
 static void cb_save_tsin_cursor_color(GtkWidget *widget, gpointer user_data)
 {
