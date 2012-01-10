@@ -1,7 +1,4 @@
 include ../../config.mak
-QT=qt4
-QTIM=$(QT)/plugins/inputmethods
-IMMODULES=$(libdir)/$(QTIM)
 
 INCS=-I../im-client -I/usr/include/X11 `pkg-config QtCore QtGui --cflags`
 CXXFLAGS=$(OPTFLAGS) $(INCS) -Wall -D_REENTRANT -DUNIX=1 -fPIC  -DQT4 -DQT_SHARED \
@@ -30,13 +27,8 @@ im-hime.so: $(OBJS)
 	@rm -f core.*
 
 install:
-	if [ $(prefix) = /usr/local ]; then \
-		install -d $(DESTDIR)/$(QT4_IM_DIR); \
-		install -m 755 im-hime.so $(DESTDIR)/$(QT4_IM_DIR); \
-	else \
-		install -d $(IMMODULES); \
-                install -m 755 im-hime.so $(IMMODULES); \
-	fi
+	install -d $(DESTDIR)/$(QT4_IM_DIR); \
+	install -m 755 im-hime.so $(DESTDIR)/$(QT4_IM_DIR)
 
 clean:
 	@echo "clean up"

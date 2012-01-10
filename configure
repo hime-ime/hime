@@ -17,6 +17,7 @@ if [ "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]; then
     echo "  --use_qt4=N     : disable Qt 4.x immodule"
     echo "  --qt3-moc-path  : specify the path of \"moc\" tool for Qt 3.x"
     echo "  --qt4-moc-path  : specify the path of \"moc\" tool for Qt 4.x"
+    echo "  --qt4-install-to: install path for Qt 4.x input method plugin."
     echo "  --use_gtk=N     : disable GTK+ 2.x immodule"
     echo "  --use_gtk3=N    : disable GTK+ 3.x immodule"
     exit
@@ -128,6 +129,8 @@ for opt do
   --qt3-moc-path=*) QT3_MOC_PATH=`echo $opt | cut -d '=' -f 2`
   ;;
   --qt4-moc-path=*) QT4_MOC_PATH=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --qt4-install-to=*) QT4_IM_DIR=`echo $opt | cut -d '=' -f 2`
   ;;
   esac
 done
@@ -287,7 +290,8 @@ fi
 
 # --- QT4 START ---
 QT4_IM='N'
-QT4_IM_DIR=/usr/$LIB/qt4/plugins/inputmethods
+if [ -z "$QT4_IM_DIR" ]; then QT4_IM_DIR=/usr/$LIB/qt4/plugins/inputmethods; fi
+
 echo -n ".... Testing Qt 4.x      :  "
 pkg-config --libs QtCore QtGui > /dev/null 2> /dev/null
 if [ $? = 0 ]; then
