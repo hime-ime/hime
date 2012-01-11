@@ -1,0 +1,22 @@
+#!/bin/sh 
+[ ! -e distro/dev-tools/scripts/make-tarball ] && exec echo Please execute '"[1m[32mdistro/dev-tools/scripts/make-tarball[0m"' under hime directory, thanks.
+XZ_OPT=${XZ_OPT-"-7e"}
+head -n 1 ChangeLog > VERSION.hime
+echo -n '#define HIME_VERSION "' > src/hime-version.h
+head -n 1 ChangeLog | sed 's/$/"/' >> src/hime-version.h
+echo -n "ChangeLog: "
+head -n 1 ChangeLog
+echo -n "VERSION.hime: "
+cat VERSION.hime 
+echo -n "src/hime-version.h: "
+cat src/hime-version.h
+GIT_DIR_NAME="${PWD##*/}"
+TAR_NAME=hime-`head -n 1 ChangeLog`
+cd ..
+[ -e "$TAR_NAME" ] && exec echo "$TAR_NAME" exist. exit.
+[ -e "$TAR_NAME".tar.xz ] && exec echo  "$TAR_NAME".tar.xz exist. exit.
+[ -e "$TAR_NAME".dfsg.orig.tar.xz ] && exec echo  "$TAR_NAME".dfsg.orig.tar.xz exist. exit.
+cp -r $GIT_DIR_NAME $TAR_NAME
+tar --owner=0 --group=0 -Jcf "$TAR_NAME".tar.xz $TAR_NAME --exclude=.gitignore
+tar --owner=0 --group=0 -Jcf "$TAR_NAME".dfsg.orig.tar.xz $TAR_NAME --exclude=.gitignore --exclude=dayi3.cin
+ls -ald "$TAR_NAME".tar.xz "$TAR_NAME".dfsg.orig.tar.xz
