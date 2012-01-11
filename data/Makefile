@@ -9,7 +9,7 @@ export NO_GTK_INIT=
 export HIME_NO_RELOAD=
 
 DATA=pho.tab2 tsin32.idx gtab.list \
-     cj.gtab ar30.gtab ar30-big.gtab dayi3.gtab pinyin.gtab jyutping.gtab cj5.gtab \
+     cj.gtab ar30.gtab ar30-big.gtab pinyin.gtab jyutping.gtab cj5.gtab \
      et.kbm et26.kbm zo.kbm pinyin.kbm dvorak.kbm mitac.kbm colemak.kbm \
      ibm.kbm tsin32 hsu.kbm pho-huge.tab2 simplex.gtab symbols.gtab russian.gtab \
      greek.gtab cj-punc.gtab latin-letters.gtab tsin-1.src pin-juyin.xlt \
@@ -30,6 +30,10 @@ endif
 
 ifeq ($(USE_TSIN),N)
 REMOVE_TSIN = remove_tsin
+endif
+
+ifeq ($(INSTALL_DFSG_INCOMPATIBLE),Y)
+DATA += dayi3.gtab
 endif
 
 all:	$(DATA)
