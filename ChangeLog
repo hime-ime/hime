@@ -1,20 +1,37 @@
 UNRELEASED
 
- The "You can provide a pretty sentence here for next tarball release." Release
-
- * Changelog will be generated from something like "git shortlog" before
-   tarball release
- * If you find some changes or contributions can not be seem in git commit log,
-   Please write them here so we will not miss anyone's effort.
-
  [ Enhancement ]
- * blah blah (Issue #9999) [ contributor ]
+ * Improve chewing key handler and 64 bit compatibility (Cheng-Wei Lin)
+ * #110: Support libappindicator, aka Ubuntu Unity tray (Tommy Tsim)
+ * Improve tray behavior and associated settings (Tommy Tsim)
+ * More user-friendly build system (letoh, b4283)
+ * #71: Clarify license of ar30.cin and ar30-big.cin (Ming-Te Liao)
+ * More user-friendly UI (Tommy Tsim, Tetralet, taylorchu)
+ * Improve Bopomofo and Tsin database (Vdragon, Franklin Weng, petercommand, maxwux)
+ * Improve compatibility of gtab2cin (solomonhuang)
+ * Improve half-width and double-width related issues (Tetralet)
+ * #7: New icon sets (Tetralet)
+ * #61: Provide rpm packaging solution (Dieter Hsu)
+ * Provide rxvt-unicode patch to drop XIM dependency (kanru)
+ * Sync with gcin 2.7.0, thanks to Edward Der-Hua Liu
+ * #37: Add missing manpages (Yao Wei)
+ * Provide some developing related tools (Tetralet, caleb-)
 
  [ Bug fix ]
- * blah blah (Issue #9999) [ contributor ]
+ * Fix buffer flushing problem while toggling module IMs (Cheng-Wei Lin)
+ * #30: Fix double free while switch method_type (Cheng-Wei Lin)
+ * #96(partial): [chewing] fixed utf-8 label showing process (Cheng-Wei Lin)
+ * [chewing] fixed cursor position problem (Cheng-Wei Lin)
+ * [chewing] fixed err argument of chewing_set_selKey (Cheng-Wei Lin)
+ * #112: Fix crash with GTK+ 3.x and GdkRGBA (Tommy Tsim)
+ * #60: Fix build failure under Ubuntu 11.10 32 bit (letoh)
+ * Harden module callback related codes (letoh)
+ * Fix gtab behavior for querying same pronunciation words (Tommy Tsim)
+ * Fix build warnings (letoh, Tetralet, caleb-, taylorchu)
 
  [ Additional Information ]
- * Default settings in gtab.list has been changed in this release
+ * Detailed changlog: https://github.com/caleb-/hime/commits/master/
+   You may also git clone our repository and type "git log".
 
 
 
