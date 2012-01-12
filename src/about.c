@@ -27,10 +27,6 @@ static void callback_close( GtkWidget *widget, gpointer   data )
    about_window = NULL;
 }
 
-
-void align_with_ui_window(GtkWidget *win);
-
-void sys_icon_fname(char *iconame, char fname[]);
 void create_about_window()
 {
     if (about_window) {
@@ -89,6 +85,10 @@ void create_about_window()
 		      G_CALLBACK (callback_close), (gpointer) "cool button");
 
     gtk_widget_show_all (about_window);
+    /* Put gtk_label_set_selectable() here so it will not be selected
+     * by default. It is still selectable and can be copied.
+     */
+    gtk_label_set_selectable (GTK_LABEL(label_version), TRUE);
 
     return;
 }
