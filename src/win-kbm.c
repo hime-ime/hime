@@ -246,10 +246,13 @@ static void create_win_kbm()
   set_no_focus(gwin_kbm);
 }
 
-extern GdkWindow *tray_da_win;
+#if TRAY_ENABLED
+extern GtkStatusIcon *tray_icon;
 extern GtkStatusIcon *icon_main;
 
+extern gboolean is_exist_tray();
 extern gboolean is_exist_tray_double();
+#endif
 
 static void move_win_kbm()
 {
@@ -261,30 +264,8 @@ static void move_win_kbm()
   GtkOrientation ori;
 
   int szx, szy;
-  if (tray_da_win) {
-    gdk_window_get_origin(tray_da_win, &ox, &oy);
-#if !GTK_CHECK_VERSION(2,91,0)
-    gdk_drawable_get_size(tray_da_win, &szx, &szy);
-#else
-    szx = gdk_window_get_width(tray_da_win);
-    szy = gdk_window_get_height(tray_da_win);
-#endif
-    if (oy<height) {
-      oy = szy;
-    } else {
-      oy -= height;
-      if (oy + height > dpy_yl)
-        oy = dpy_yl - height;
-      if (oy < 0)
-        oy = szy;
-    }
-
-    if (ox + width > dpy_xl)
-      ox = dpy_xl - width;
-    if (ox < 0)
-      ox = 0;
-  } else
-  if (is_exist_tray_double() && gtk_status_icon_get_geometry(icon_main, NULL, &r,  &ori)) {
+#if TRAY_ENABLED
+  if ((is_exist_tray() && gtk_status_icon_get_geometry(tray_icon, NULL, &r,  &ori)) || (is_exist_tray_double() && gtk_status_icon_get_geometry(icon_main, NULL, &r,  &ori))) {
 //    dbg("rect %d:%d %d:%d\n", r.x, r.y, r.width, r.height);
     ox = r.x;
     if (ox + width > dpy_xl)
@@ -295,7 +276,9 @@ static void move_win_kbm()
     else {
       oy = r.y - height;
     }
-  } else {
+  } else
+#endif
+  {
     ox = dpy_xl - width;
     oy = dpy_yl - height - 16;
   }

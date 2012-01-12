@@ -396,7 +396,10 @@ void flush_tsin_buffer()
 }
 
 
-void disp_tsin_eng_pho(int eng_pho), disp_tray_icon();
+void disp_tsin_eng_pho(int eng_pho);
+#if TRAY_ENABLED
+void disp_tray_icon();
+#endif
 
 void show_tsin_stat()
 {

@@ -54,7 +54,9 @@ void toggle_symbol_table();
 
 gboolean old_capslock_on;
 
+#if TRAY_ENABLED
 int hime_tray_display;
+#endif
 void init_gtab(int inmdno);
 
 char current_method_type()
@@ -434,7 +436,9 @@ void hide_in_win(ClientState *cs)
 void show_win_pho();
 void show_win0();
 void show_win_gtab();
+#if TRAY_ENABLED
 void disp_tray_icon();
+#endif
 
 void check_CS()
 {
@@ -665,7 +669,8 @@ void update_in_win_pos()
 void win_pho_disp_half_full();
 void win_tsin_disp_half_full();
 void win_gtab_disp_half_full();
-void update_tray_icon(), load_tray_icon(), load_tray_icon_double();
+#if TRAY_ENABLED
+void load_tray_icon(), load_tray_icon_double();
 #if TRAY_UNITY
 void load_tray_appindicator();
 #endif
@@ -677,6 +682,7 @@ extern void destroy_tray_double();
 gboolean is_exist_tray_appindicator();
 extern void destroy_tray_appindicator();
 #endif
+#endif //TRAY_ENABLED
 
 #if TRAY_ENABLED
 void destroy_tray()

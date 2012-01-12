@@ -94,7 +94,10 @@ endif
 
 ifeq ($(USE_TRAY),Y)
 CFLAGS     += -DTRAY_ENABLED=1
-OBJS       += tray.o eggtrayicon.o tray-double.o
+OBJS       += tray.o tray-double.o
+ifeq ($(GTK),gtk+-2.0)
+OBJS       += gdkpixbuf-drawable.o
+endif
 ifeq ($(USE_UNITY),Y)
 CFLAGS     += -DTRAY_UNITY=1
 OBJS       += tray-appindicator.o
