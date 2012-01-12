@@ -28,8 +28,10 @@ int default_input_method;
 int hime_im_toggle_keys, hime_bell_off;
 int hime_capslock_lower, hime_eng_phrase_enabled, hime_init_im_enabled;
 int hime_win_sym_click_close, hime_edit_display;
-int hime_on_the_spot_key, hime_tray_hf_win_kbm, hime_punc_auto_send;
-int hime_tray_display;
+int hime_on_the_spot_key, hime_punc_auto_send;
+#if TRAY_ENABLED
+int hime_tray_display, hime_tray_hf_win_kbm;
+#endif
 
 int gtab_dup_select_bell;
 int gtab_space_auto_first;
@@ -69,9 +71,8 @@ int tsin_tab_phrase_end;
 int hime_input_style, hime_root_x, hime_root_y, hime_pop_up_win;
 int hime_inner_frame;
 char *hime_font_name, *hime_win_color_fg, *hime_win_color_bg;
-#if TRAY_ENABLED
+// TODO: move it into if TRAY_ENABLED block
 int hime_status_tray;
-#endif
 
 int pho_hide_row2, pho_in_row1;
 int hime_bell_volume;
@@ -99,7 +100,9 @@ void load_setttings()
   hime_pop_up_win = get_hime_conf_int(HIME_POP_UP_WIN, 0);
   hime_inner_frame = get_hime_conf_int(HIME_INNER_FRAME, 1);
   hime_eng_phrase_enabled = get_hime_conf_int(HIME_ENG_PHRASE_ENABLED, 1);
+#if TRAY_ENABLED
   hime_tray_hf_win_kbm = get_hime_conf_int(HIME_TRAY_HF_WIN_KBM, 0);
+#endif
   hime_init_im_enabled = get_hime_conf_int(HIME_INIT_IM_ENABLED, 0);
 
   hime_single_state = get_hime_conf_int(HIME_SINGLE_STATE, 0);
@@ -119,11 +122,14 @@ void load_setttings()
 #endif
 //  left_right_button_tips = get_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 1);
   hime_im_toggle_keys = get_hime_conf_int(HIME_IM_TOGGLE_KEYS, 0);
+  hime_win_sym_click_close = get_hime_conf_int(HIME_WIN_SYM_CLICK_CLOSE, 1);
 #if TRAY_ENABLED
   hime_status_tray = get_hime_conf_int(HIME_STATUS_TRAY, 1);
-#endif
-  hime_win_sym_click_close = get_hime_conf_int(HIME_WIN_SYM_CLICK_CLOSE, 1);
   hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, 2);
+#else
+// TODO: remove it
+  hime_status_tray = 0;
+#endif
 
   gtab_dup_select_bell = get_hime_conf_int(GTAB_DUP_SELECT_BELL, 0);
   gtab_space_auto_first = get_hime_conf_int(GTAB_SPACE_AUTO_FIRST, GTAB_space_auto_first_none);

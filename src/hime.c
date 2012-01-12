@@ -326,7 +326,10 @@ static int xerror_handler(Display *d, XErrorEvent *eve)
 }
 
 Atom hime_atom;
-void disp_tray_icon(), toggle_gb_output();
+#if TRAY_ENABLED
+void disp_tray_icon();
+#endif
+void toggle_gb_output();
 
 void cb_trad_sim_toggle()
 {
@@ -446,7 +449,10 @@ void hide_win0();
 void destroy_win0();
 void destroy_win1();
 void destroy_win_gtab();
-void free_pho_mem(),free_tsin(),free_all_IC(), free_gtab(), free_phrase(), destroy_tray();
+void free_pho_mem(),free_tsin(),free_all_IC(), free_gtab(), free_phrase();
+#if TRAY_ENABLED
+void destroy_tray();
+#endif
 
 void do_exit()
 {
@@ -466,7 +472,9 @@ void do_exit()
   destroy_win_gtab();
 #endif
 
+#if TRAY_ENABLED
   destroy_tray();
+#endif
 
   gtk_main_quit();
 }

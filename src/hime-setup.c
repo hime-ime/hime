@@ -50,9 +50,9 @@ static GtkWidget *opt_hime_edit_display;
 GtkWidget *main_window;
 static GdkColor hime_win_gcolor_fg, hime_win_gcolor_bg, hime_sel_key_gcolor;
 gboolean button_order;
-
+#if TRAY_ENABLED
 static GtkWidget *opt_hime_tray_display;
-
+#endif
 
 typedef struct {
   GdkColor *color;
@@ -76,6 +76,7 @@ struct {
   { NULL, 0},
 };
 
+#if TRAY_ENABLED
 struct {
   unich_t *keystr;
   int keynum;
@@ -87,6 +88,7 @@ struct {
 #endif
   { NULL, 0},
 };
+#endif
 
 static gboolean close_application( GtkWidget *widget,
                                    GdkEvent  *event,
@@ -404,7 +406,9 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
 
   save_hime_conf_int(HIME_WIN_COLOR_USE, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_win_color_use)));
   save_hime_conf_int(HIME_ON_THE_SPOT_KEY, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_on_the_spot_key)));
+#if TRAY_ENABLED
   save_hime_conf_int(HIME_TRAY_HF_WIN_KBM, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_tray_hf_win_kbm)));
+#endif
 
   cstr = gtk_color_selection_palette_to_string(&hime_sel_key_gcolor, 1);
   dbg("selkey color %s\n", cstr);
@@ -413,8 +417,10 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
   int idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_edit_display));
   save_hime_conf_int(HIME_EDIT_DISPLAY, edit_disp[idx].keynum);
 
+#if TRAY_ENABLED
   idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_tray_display));
   save_hime_conf_int(HIME_TRAY_DISPLAY, tray_disp[idx].keynum);
+#endif
 
   g_free(cstr);
 
@@ -619,6 +625,7 @@ static GtkWidget *create_hime_edit_display()
   return hbox;
 }
 
+#if TRAY_ENABLED
 static GtkWidget *create_hime_tray_display()
 {
 
@@ -651,7 +658,7 @@ static GtkWidget *create_hime_tray_display()
 
   return hbox;
 }
-
+#endif
 
 
 static gboolean cb_hime_win_color_use(GtkToggleButton *togglebutton, gpointer user_data)

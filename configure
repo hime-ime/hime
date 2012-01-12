@@ -408,6 +408,7 @@ echo "CCX=$CC" >> config.mak
 echo "CXX=$CXX" >> config.mak
 echo "CCLD=$CC" >> config.mak
 echo "MAKE=$MAKE" >> config.mak
+echo "GTK=$GTK" >> config.mak
 echo "GTKINC=$GTKINC" >> config.mak
 echo "prefix=$prefix" >> config.mak
 echo "bindir=\$(DESTDIR)$bindir" >> config.mak

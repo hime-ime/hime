@@ -18,30 +18,53 @@
 #include "hime.h"
 #include "pho.h"
 #include "gtab.h"
-#include "eggtrayicon.h"
 #include <signal.h>
 #include "gst.h"
 
+#if !GTK_CHECK_VERSION(2,90,6)
+extern GdkPixbuf *gdk_pixbuf_get_from_surface(cairo_surface_t *surface, gint src_x, gint src_y, gint width, gint height);
+#endif
+
 extern void destroy_other_tray();
 
-#if UNIX
+GtkStatusIcon *tray_icon;
 static GdkPixbuf *pixbuf, *pixbuf_ch;
 static PangoLayout* pango;
-static GtkWidget *da;
-#if !GTK_CHECK_VERSION(2,90,6)
-static GdkGC *gc;
-#else
-static cairo_t *gc;
-#endif
-GdkWindow *tray_da_win;
-static EggTrayIcon *egg_tray_icon;
+static cairo_t *cr;
+static GtkWidget *tray_menu = NULL;
+
+static int iw, ih;
+
+static GdkColor red_color_fg;
+static GdkColor blue_color_fg;
 
 #define HIME_TRAY_PNG "hime-tray.png"
-static char *pixbuf_ch_fname;
+static char pixbuf_ch_fname[512];
 void exec_hime_setup();
 
 void toggle_gb_output();
 extern gboolean gb_output;
+
+static char efull[] = N_("A全"), full[] = N_("全"), engst[] = N_("ABC"), sim[] = N_("简");
+
+void destroy_tray_icon()
+{
+  if (tray_icon != NULL) {
+// Workaround: to release the space on notification area
+  gtk_status_icon_set_visible(tray_icon, FALSE);
+  g_object_unref(tray_icon); tray_icon = NULL;
+  }
+  if (tray_menu) {
+    gtk_widget_destroy(tray_menu);
+    tray_menu = NULL;
+  }
+  if (pixbuf) {
+    g_object_unref(pixbuf); pixbuf = NULL;
+  }
+  if (pixbuf_ch) {
+    g_object_unref(pixbuf_ch); pixbuf_ch = NULL;
+  }
+}
 
 static void get_text_w_h(char *s, int *w, int *h)
 {
@@ -49,211 +72,102 @@ static void get_text_w_h(char *s, int *w, int *h)
   pango_layout_get_pixel_size(pango, w, h);
 }
 
-
 static void draw_icon()
 {
   gboolean tsin_pho_mode();
-//  dbg("draw_icon\n");
 
-  if (!da)
+  if (!tray_icon)
     return;
 
   GdkPixbuf *pix =  ((! current_CS) ||
                      (current_CS->im_state != HIME_STATE_CHINESE)) ?
                     pixbuf : pixbuf_ch;
 
-#if GTK_CHECK_VERSION(2,17,7)
-  GtkAllocation dwdh;
-  gtk_widget_get_allocation(da, &dwdh);
-  int dw = dwdh.width, dh = dwdh.height;
-#else
-  int dw = da->allocation.width, dh = da->allocation.height;
-#endif
-  int w, h;
+  int w = 0, h = 0;
+  iw = gtk_status_icon_get_size(tray_icon), ih = gtk_status_icon_get_size(tray_icon);
 
-  GdkColor color_fg;
-
-
-//  dbg("wh %d,%d\n", dw,dh);
-
-  gdk_color_parse("black", &color_fg);
-#if !GTK_CHECK_VERSION(2,90,6)
-  gdk_gc_set_rgb_fg_color(gc, &color_fg);
-#else
-  gc = gdk_cairo_create (tray_da_win);
-  gdk_cairo_set_source_color (gc, &color_fg);
-#endif
+  cairo_surface_t *cst = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, iw, ih);
+  cr = cairo_create (cst);
+  gdk_cairo_set_source_color (cr, &red_color_fg);
 
   if (pix) {
-    int ofs = (dh - gdk_pixbuf_get_height (pix))/2;
-#if !GTK_CHECK_VERSION(2,90,6)
-    gdk_draw_pixbuf(tray_da_win, NULL, pix, 0, 0, 0, ofs, -1, -1, GDK_RGB_DITHER_NORMAL, 0, 0);
-#else
-    gdk_cairo_set_source_pixbuf (gc, pix, 0, ofs);
-    cairo_paint (gc);
-    cairo_destroy (gc);
-#endif
+    gdk_cairo_set_source_pixbuf (cr, pix, 0, 0);
+    cairo_paint (cr);
   } else {
     get_text_w_h(inmd[current_CS->in_method].cname, &w, &h);
-#if !GTK_CHECK_VERSION(2,90,6)
-    gdk_draw_layout(tray_da_win, gc, 0, 0, pango);
-#else
-    cairo_move_to (gc, 0, 0);
-    pango_cairo_show_layout (gc, pango);
-    cairo_destroy (gc);
-#endif
+    cairo_move_to (cr, 0, 0);
+    pango_cairo_show_layout (cr, pango);
   }
 
   if (current_CS) {
-    if (current_CS->b_half_full_char || (
-#if USE_TSIN
-        current_method_type()==method_type_TSIN && tss.tsin_half_full &&
-#endif
-        current_CS->im_state == HIME_STATE_CHINESE)) {
-      static char full[] = N_("全");
-      get_text_w_h(full,  &w, &h);
-#if !GTK_CHECK_VERSION(2,90,6)
-      gdk_draw_layout(tray_da_win, gc, dw - w, dh - h, pango);
-#else
-      cairo_move_to (gc, dw - w, dh - h);
-      pango_cairo_show_layout (gc, pango);
-      cairo_destroy (gc);
-#endif
-    }
-
+    gdk_cairo_set_source_color (cr, &red_color_fg);
     if (current_CS->im_state == HIME_STATE_ENG_FULL) {
-      static char efull[] = N_("A全");
       get_text_w_h(efull,  &w, &h);
-#if !GTK_CHECK_VERSION(2,90,6)
-      gdk_draw_layout(tray_da_win, gc, 0, 0, pango);
-#else
-      cairo_move_to (gc, 0, 0);
-      pango_cairo_show_layout (gc, pango);
-      cairo_destroy (gc);
-#endif
+      cairo_move_to (cr, 0, 0);
+      pango_cairo_show_layout (cr, pango);
+    } else if ((current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char) || (current_method_type()==method_type_TSIN && tss.tsin_half_full)) {
+      get_text_w_h(full,  &w, &h);
+      cairo_move_to (cr, iw - w, ih - h);
+      pango_cairo_show_layout (cr, pango);
     }
-#if USE_TSIN
-    if (((current_method_type()==method_type_TSIN) || (current_method_type()==method_type_MODULE)) &&
-        (current_CS->im_state == HIME_STATE_CHINESE) &&
-	 (! tsin_pho_mode())) {
-      static char efull[] = "ABC";
-      gdk_color_parse("blue", &color_fg);
-#if !GTK_CHECK_VERSION(2,90,6)
-      gdk_gc_set_rgb_fg_color(gc, &color_fg);
-#else
-      gc = gdk_cairo_create (tray_da_win);
-      gdk_cairo_set_source_color (gc, &color_fg);
-#endif
-
-      get_text_w_h(efull,  &w, &h);
-#if !GTK_CHECK_VERSION(2,90,6)
-      gdk_draw_layout(tray_da_win, gc, 0, 0, pango);
-#else
-      cairo_move_to (gc, 0, 0);
-      pango_cairo_show_layout (gc, pango);
-      cairo_destroy (gc);
-#endif
+    if (current_CS->im_state == HIME_STATE_CHINESE && !tsin_pho_mode()) {
+      gdk_cairo_set_source_color (cr, &blue_color_fg);
+      get_text_w_h(engst,  &w, &h);
+      cairo_move_to (cr, 0, 0);
+      pango_cairo_show_layout (cr, pango);
     }
-#endif
   }
-
-  gdk_color_parse("red", &color_fg);
-#if !GTK_CHECK_VERSION(2,90,6)
-  gdk_gc_set_rgb_fg_color(gc, &color_fg);
-#else
-  gc = gdk_cairo_create (tray_da_win);
-  gdk_cairo_set_source_color (gc, &color_fg);
-#endif
 
   if (gb_output) {
-    static char sim[] = "简";
+    gdk_cairo_set_source_color (cr, &red_color_fg);
     get_text_w_h(sim,  &w, &h);
-#if !GTK_CHECK_VERSION(2,90,6)
-    gdk_draw_layout(tray_da_win, gc, 0, dh - h, pango);
-#else
-    cairo_move_to (gc, 0, dh - h);
-    pango_cairo_show_layout (gc, pango);
-    cairo_destroy (gc);
-#endif
+    cairo_move_to (cr, 0, ih - h);
+    pango_cairo_show_layout (cr, pango);
   }
-
-}
-
-gboolean create_tray(gpointer data);
-void update_tray_icon()
-{
-//  dbg("update_tray_icon\n");
-  if (!hime_status_tray)
-    return;
-
-  if (!da)
-    create_tray(NULL);
-
-  gtk_widget_queue_draw(da);
+  cairo_destroy(cr); cr = NULL;
+  GdkPixbuf *icon_pixbuf_output = gdk_pixbuf_get_from_surface(cst, 0, 0, iw, ih);
+  cairo_surface_destroy(cst); cst = NULL;
+  gtk_status_icon_set_from_pixbuf(tray_icon, icon_pixbuf_output);
+  g_object_unref(icon_pixbuf_output); icon_pixbuf_output = NULL;
+  pix = NULL;
 }
 
 void get_icon_path(char *iconame, char fname[]);
+gboolean create_tray(gpointer data);
 
 void load_tray_icon()
 {
-//  dbg("load_tray_icon\n");
   if (!hime_status_tray)
     return;
-
-  if (!da)
+  if (!tray_icon) {
     create_tray(NULL);
-
-  char *iconame = inmd[current_CS->in_method].icon;
-  char fname[512];
-
-  fname[0]=0;
-
-  if (iconame)
-    get_icon_path(iconame, fname);
-
-#if GTK_CHECK_VERSION(2,17,7)
-  GtkAllocation dwdh;
-  gtk_widget_get_allocation(da, &dwdh);
-  int dw = dwdh.width, dh = dwdh.height;
-#else
-    int dw = da->allocation.width, dh = da->allocation.height;
-#endif
-
-  if (!pixbuf || gdk_pixbuf_get_width (pixbuf) != dw || gdk_pixbuf_get_height (pixbuf) != dh) {
+    return;
+  }
+  // wrong width & height if it is not embedded-ready
+  if (!gtk_status_icon_is_embedded(tray_icon)) 
+    return;
+  iw = gtk_status_icon_get_size(tray_icon), ih = gtk_status_icon_get_size(tray_icon);
+  if (!pixbuf) {
     char icon_fname[128];
     get_icon_path(HIME_TRAY_PNG, icon_fname);
-    GError *err = NULL;
-//    dbg("icon_name %s\n", icon_fname);
-    pixbuf = gdk_pixbuf_new_from_file_at_size(icon_fname, dw, dh, &err);
-    //Reduce troublesome when hime-tray.png does not exist
-    //if (!pixbuf)
-    //  p_err("cannot load file %s", icon_fname);
+    pixbuf = gdk_pixbuf_new_from_file_at_size(icon_fname, iw, ih, NULL);
   }
-
-#if 0
-  dbg("fname %x %s\n", fname, fname);
-#endif
-  if (!fname[0]) {
-    if (pixbuf_ch)
-      g_object_unref(pixbuf_ch);
-
-    pixbuf_ch = NULL;
-    if (pixbuf_ch_fname)
-      pixbuf_ch_fname[0] = 0;
-  } else
-  if (!pixbuf_ch_fname || strcmp(fname, pixbuf_ch_fname)) {
-    free(pixbuf_ch_fname);
-    pixbuf_ch_fname = strdup(fname);
-
-    if (pixbuf_ch)
-      g_object_unref(pixbuf_ch);
-
-    dbg("ch %s\n", fname);
-    GError *err = NULL;
-    pixbuf_ch = gdk_pixbuf_new_from_file_at_size(fname, dw, dh, &err);
+  // FIXME: tray may load before the following stuffs are initialized
+  if (!current_CS || !current_CS->in_method || !inmd)
+    return;
+  char *iconame = inmd[current_CS->in_method].icon;
+  char fname[512];
+  if (iconame)
+    get_icon_path(iconame, fname);
+  if (strcmp(pixbuf_ch_fname, fname) && pixbuf_ch) {
+    g_object_unref(pixbuf_ch); pixbuf_ch = NULL;
   }
-
-  update_tray_icon();
+  if (!pixbuf_ch) {
+    strcpy(pixbuf_ch_fname, fname);
+    pixbuf_ch = gdk_pixbuf_new_from_file_at_size(fname, iw, ih, NULL);
+  }
+  draw_icon();
+  iconame = NULL;
 }
 
 void exec_hime_setup_(GtkCheckMenuItem *checkmenuitem, gpointer dat);
@@ -265,7 +179,6 @@ void cb_sim2trad(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 void cb_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
 void restart_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat);
-#endif  // UNIX
 
 void cb_tog_phospeak(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
@@ -283,13 +196,11 @@ static MITEM mitems[] = {
   {N_("外部繁轉簡工具"), NULL, cb_trad2sim, NULL},
   {N_("外部簡轉繁工具"), NULL, cb_sim2trad, NULL},
   {N_("選擇輸入法"), NULL, cb_inmd_menu, NULL},
-  {N_("小鍵盤"), NULL, kbm_toggle_, NULL},
+  {N_("小鍵盤"), NULL, kbm_toggle_, &win_kbm_on},
   {N_("輸出成簡體"), NULL, cb_trad_sim_toggle_, &gb_output},
   {NULL, NULL, NULL, NULL}
 };
 
-
-static GtkWidget *tray_menu=NULL;
 
 GtkWidget *create_tray_menu(MITEM *mitems);
 void update_item_active_all();
@@ -297,9 +208,13 @@ void update_item_active_all();
 gint inmd_switch_popup_handler (GtkWidget *widget, GdkEvent *event);
 extern gboolean win_kbm_inited;
 
+gboolean tray_size_changed_cb (GtkStatusIcon *status_icon, gint *size, gpointer user_data)
+{
+  load_tray_icon();
+}
+
 void toggle_im_enabled(), kbm_toggle();
-gboolean
-tray_button_press_event_cb (GtkWidget * button, GdkEventButton * event, gpointer userdata)
+gboolean tray_button_press_event_cb (GtkStatusIcon *status_icon, GdkEventButton * event, gpointer userdata)
 {
   switch (event->button) {
     case 1:
@@ -320,9 +235,7 @@ tray_button_press_event_cb (GtkWidget * button, GdkEventButton * event, gpointer
     case 3:
       if (!tray_menu)
         tray_menu = create_tray_menu(mitems);
-
-      gtk_menu_popup(GTK_MENU(tray_menu), NULL, NULL, NULL, NULL,
-         event->button, event->time);
+      gtk_menu_popup(GTK_MENU(tray_menu), NULL, NULL, gtk_status_icon_position_menu, tray_icon, event->button, event->time);
       break;
   }
 
@@ -336,118 +249,51 @@ void update_item_active_single()
   update_item_active(mitems);
 }
 
-
-#if !GTK_CHECK_VERSION(2,91,0)
-gboolean cb_expose(GtkWidget *da, GdkEventExpose *event, gpointer data)
-#else
-gboolean cb_expose(GtkWidget *da, cairo_t *event, gpointer data)
-#endif
-{
-  if (!da)
-    create_tray(NULL);
-
-//  dbg("cb_expose\n");
-
-  draw_icon();
-  return FALSE;
-}
-
-#if !GTK_CHECK_VERSION(2,90,7)
-GdkGC *gdk_gc_new (GdkDrawable *drawable);
-#endif
-
 gboolean create_tray(gpointer data)
 {
-  if (da)
+  if (tray_icon)
     return FALSE;
 
   destroy_other_tray();
+  destroy_tray_icon();
 
-  egg_tray_icon = egg_tray_icon_new ("hime");
+  char fname[256];
+  get_icon_path(HIME_TRAY_PNG, fname);
+  tray_icon = gtk_status_icon_new_from_file(fname);
 
-  if (!egg_tray_icon)
-    return FALSE;
-
-  GtkWidget *event_box = gtk_event_box_new ();
-// Do not use this, otherwise tray menu fails
-//  gtk_event_box_set_visible_window (event_box, FALSE);
-  gtk_container_add (GTK_CONTAINER (egg_tray_icon), event_box);
-#if GTK_CHECK_VERSION(2,12,0)
-  gtk_widget_set_tooltip_text (event_box, _("左:中英切換 中:小鍵盤 右:選項"));
-#else
-  GtkTooltips *tips = gtk_tooltips_new ();
-  gtk_tooltips_set_tip (GTK_TOOLTIPS (tips), event_box, _("左:中英切換 中:小鍵盤 右:選項"), NULL);
-#endif
-
-  g_signal_connect (G_OBJECT (event_box), "button-press-event",
+  g_signal_connect (G_OBJECT (tray_icon), "button-press-event",
                     G_CALLBACK (tray_button_press_event_cb), NULL);
 
-  GError *err = NULL;
-  if (pixbuf)
-    g_object_unref(pixbuf);
+  g_signal_connect (G_OBJECT (tray_icon), "size-changed",
+                    G_CALLBACK (tray_size_changed_cb), NULL);
 
-  char icon_fname[128];
-  get_icon_path(HIME_TRAY_PNG, icon_fname);
-  pixbuf = gdk_pixbuf_new_from_file(icon_fname, &err);
-  int pwidth = gdk_pixbuf_get_width (pixbuf);
-  int pheight = gdk_pixbuf_get_height (pixbuf);
-
-  da =  gtk_drawing_area_new();
-  g_signal_connect (G_OBJECT (event_box), "destroy",
-                    G_CALLBACK (gtk_widget_destroyed), &da);
-#if !GTK_CHECK_VERSION(2,91,0)
-  g_signal_connect(G_OBJECT(da), "expose-event", G_CALLBACK(cb_expose), NULL);
+#if GTK_CHECK_VERSION(2,12,0)
+  gtk_status_icon_set_tooltip_text (tray_icon, _("左:中英切換 中:小鍵盤 右:選項"));
 #else
-  g_signal_connect(G_OBJECT(da), "draw", G_CALLBACK(cb_expose), NULL);
+  GtkTooltips *tips = gtk_tooltips_new ();
+  gtk_status_icon_set_tooltip (GTK_TOOLTIPS (tips), tray_icon, _("左:中英切換 中:小鍵盤 右:選項"), NULL);
 #endif
 
-  gtk_container_add (GTK_CONTAINER (event_box), da);
-  gtk_widget_set_size_request(GTK_WIDGET(egg_tray_icon), pwidth, pheight);
-
-  gtk_widget_show_all (GTK_WIDGET (egg_tray_icon));
-  tray_da_win = gtk_widget_get_window(da);
-  // tray window is not ready ??
-  if (!tray_da_win || !GTK_WIDGET_DRAWABLE(da)) {
-    gtk_widget_destroy(GTK_WIDGET(egg_tray_icon));
-    da = NULL;
-    return FALSE;
-  }
-
-  PangoContext *context=gtk_widget_get_pango_context(da);
-  PangoFontDescription* desc=pango_context_get_font_description(context);
-
-//  dbg("zz %s %d\n",  pango_font_description_to_string(desc), PANGO_SCALE);
-
-  pango = gtk_widget_create_pango_layout(da, NULL);
-  pango_layout_set_font_description(pango, desc);
-#if 1
-  // strange bug, why do we need this ?
-  desc = (PangoFontDescription *)pango_layout_get_font_description(pango);
-#endif
+// Initiate Pango for drawing texts from default setting
+  GtkWidget *wi = gtk_label_new (NULL); // for reference
+  PangoContext *context = gtk_widget_get_pango_context(wi);
+  PangoFontDescription* desc = pango_font_description_copy(pango_context_get_font_description(context)); // Copy one from wi for pango
   pango_font_description_set_size(desc, 9 * PANGO_SCALE);
+  pango = gtk_widget_create_pango_layout(wi, NULL);
+  pango_layout_set_font_description(pango, desc);
+ 
+  gdk_color_parse("red", &red_color_fg);
+  gdk_color_parse("blue", &blue_color_fg);
 
-#if 0
-  dbg("aa %s\n",  pango_font_description_to_string(desc));
-  dbg("context %x %x\n", pango_layout_get_context(pango), context);
-  dbg("font %x %x\n",pango_layout_get_font_description(pango), desc);
-#endif
-#if !GTK_CHECK_VERSION(2,90,6)
-  gc = gdk_gc_new (tray_da_win);
-#endif
+  gtk_widget_destroy(wi);
+
+  load_tray_icon();
   return FALSE;
-}
-
-void destroy_tray_icon()
-{
-  if (!egg_tray_icon)
-    return;
-  gtk_widget_destroy(GTK_WIDGET(egg_tray_icon));
-  egg_tray_icon = NULL; da = NULL;
 }
 
 gboolean is_exist_tray()
 {
-  return tray_da_win != NULL;
+  return tray_icon != NULL;
 }
 
 void init_tray()
