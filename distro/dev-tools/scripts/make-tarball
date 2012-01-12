@@ -17,6 +17,6 @@ cd ..
 [ -e "$TAR_NAME".tar.xz ] && exec echo  "$TAR_NAME".tar.xz exist. exit.
 [ -e "$TAR_NAME".dfsg.orig.tar.xz ] && exec echo  "$TAR_NAME".dfsg.orig.tar.xz exist. exit.
 cp -r $GIT_DIR_NAME $TAR_NAME
-tar --owner=0 --group=0 -Jcf "$TAR_NAME".tar.xz $TAR_NAME --exclude=.gitignore
-tar --owner=0 --group=0 -Jcf "$TAR_NAME".dfsg.orig.tar.xz $TAR_NAME --exclude=.gitignore --exclude=dayi3.cin
+tar --owner=0 --group=0 -Jcf "$TAR_NAME".tar.xz $TAR_NAME --exclude=.gitignore --exclude=.git
+tar --owner=0 --group=0 -Jcf "$TAR_NAME".dfsg.orig.tar.xz $TAR_NAME --exclude=.gitignore --exclude=.git --exclude=dayi3.cin
 ls -ald "$TAR_NAME".tar.xz "$TAR_NAME".dfsg.orig.tar.xz
