@@ -1,4 +1,4 @@
-UNRELEASED
+0.9.9
 
  [ Enhancement ]
  * Improve chewing key handler and 64 bit compatibility (Cheng-Wei Lin)
