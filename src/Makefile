@@ -120,6 +120,10 @@ ifeq ($(MAC_OS),1)
 EXTRA_LDFLAGS=-bind_at_load 
 endif
 
+ifeq ($(GIT_HAVE),Y)
+CFLAGS     += -DGIT_HASH=\"$(GIT_HASH)\" -DGIT_HAVE=1
+endif
+
 HIME_SO   = hime1.so hime2.so
 
 PROGS     = hime \

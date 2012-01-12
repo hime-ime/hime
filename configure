@@ -370,6 +370,11 @@ fi
 
 [ -f "data/dayi3.cin" ] && INSTALL_DFSG_INCOMPATIBLE=Y
 
+if [ -d .git ]; then
+  GIT_HAVE='Y'
+  GIT_HASH=`git log 2> /dev/null | head -n 1 | cut -d ' ' -f 2 | head -c 7`
+fi
+
 bindir=$prefix/bin
 datadir=$prefix/share
 mandir=$datadir/man
@@ -452,6 +457,8 @@ echo "USE_ANTHY=$USE_ANTHY" >> config.mak
 echo "USE_CHEWING=$USE_CHEWING" >> config.mak
 echo "USE_UNITY=$USE_UNITY" >> config.mak
 echo "INSTALL_DFSG_INCOMPATIBLE=$INSTALL_DFSG_INCOMPATIBLE" >> config.mak
+echo "GIT_HAVE=$GIT_HAVE" >> config.mak
+echo "GIT_HASH=$GIT_HASH" >> config.mak
 echo "BUILD_MODULE=$BUILD_MODULE" >> config.mak
 echo "hime_ld_run_path=\$(himelibdir)" >> config.mak
 echo "gcc_ld_run_path=-Wl,-rpath,\$(hime_ld_run_path)" >> config.mak
