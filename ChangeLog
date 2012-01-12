@@ -6,7 +6,7 @@ UNRELEASED
  * Improve tray behavior and associated settings (Tommy Tsim)
  * More user-friendly build system (letoh, b4283)
  * #71: Clarify license of ar30.cin and ar30-big.cin (Ming-Te Liao)
- * More user-friendly UI (Tommy Tsim, Tetralet, taylorchu)
+ * More user-friendly UI (Tommy Tsim, Tetralet, Dieter Hsu, taylorchu)
  * Improve Bopomofo and Tsin database (Vdragon, Franklin Weng, petercommand, maxwux)
  * Improve compatibility of gtab2cin (solomonhuang)
  * Improve half-width and double-width related issues (Tetralet)
