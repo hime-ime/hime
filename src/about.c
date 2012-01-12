@@ -27,10 +27,6 @@ static void callback_close( GtkWidget *widget, gpointer   data )
    about_window = NULL;
 }
 
-
-void align_with_ui_window(GtkWidget *win);
-
-void sys_icon_fname(char *iconame, char fname[]);
 void create_about_window()
 {
     if (about_window) {
@@ -75,7 +71,11 @@ void create_about_window()
 
     image = gtk_image_new_from_file (SYS_ICON_DIR"/hime.png");
 
-    label_version = gtk_label_new ("version " HIME_VERSION "  " __DATE__);
+#if GIT_HAVE
+    label_version = gtk_label_new ("version " HIME_VERSION "\n(git " GIT_HASH ")");
+#else
+    label_version = gtk_label_new ("version " HIME_VERSION);
+#endif
 
     gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 3);
     gtk_box_pack_start (GTK_BOX (hbox), label_version, FALSE, FALSE, 3);
@@ -89,6 +89,10 @@ void create_about_window()
 		      G_CALLBACK (callback_close), (gpointer) "cool button");
 
     gtk_widget_show_all (about_window);
+    /* Put gtk_label_set_selectable() here so it will not be selected
+     * by default. It is still selectable and can be copied.
+     */
+    gtk_label_set_selectable (GTK_LABEL(label_version), TRUE);
 
     return;
 }

@@ -598,7 +598,11 @@ int main(int argc, char **argv)
 
   if (argc == 2 && (!strcmp(argv[1], "-v") || !strcmp(argv[1], "--version") || !strcmp(argv[1], "-h")) ) {
     setenv("NO_GTK_INIT", "", TRUE);
+#if GIT_HAVE
+    p_err(" version %s (git %s)\n", HIME_VERSION, GIT_HASH);
+#else
     p_err(" version %s\n", HIME_VERSION);
+#endif
   }
 
   init_TableDir();

@@ -834,13 +834,13 @@ void win_gtab_disp_half_full()
 
   if (current_CS->tsin_pho_mode)
   {
-    gtk_widget_show(label_gtab_sele);
+    if (label_gtab_sele) gtk_widget_show(label_gtab_sele);
     if (hime_status_tray || (! gtab_hide_row2))
       gtk_widget_show(label_gtab);
   }
   else
   {
-    gtk_widget_hide(label_gtab_sele);
+    if (label_gtab_sele) gtk_widget_hide(label_gtab_sele);
     if (hime_status_tray || (! gtab_hide_row2))
       gtk_widget_hide(label_gtab);
   }
