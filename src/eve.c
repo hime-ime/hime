@@ -17,10 +17,8 @@
 
 #include "hime.h"
 #include "gtab.h"
-#if UNIX
 #include <signal.h>
 #include <X11/extensions/XTest.h>
-#endif
 #include "gst.h"
 #include "pho.h"
 #include "im-client/hime-im-client-attr.h"
@@ -44,10 +42,6 @@ char *output_buffer;
 int output_bufferN;
 static char *output_buffer_raw, *output_buffer_raw_bak;
 static int output_buffer_rawN;
-#if WIN32
-gboolean test_mode;
-int last_input_method;
-#endif
 void set_wselkey(char *s);
 void gtab_set_win1_cb();
 void toggle_symbol_table();
@@ -63,34 +57,17 @@ char current_method_type()
 {
 //  dbg("default_input_method %d\n",default_input_method);
   if (!current_CS)
-#if UNIX
     return inmd[default_input_method].method_type;
-#else
-  {
-    if (!last_input_method)
-      last_input_method = default_input_method;
-    return inmd[last_input_method].method_type;
-  }
-#endif
 
 //  dbg("current_CS->in_method %d\n", current_CS->in_method);
   return inmd[current_CS->in_method].method_type;
 }
 
-
-#if WIN32
-void win32_FakeKey(UINT vk, bool key_pressed);
-#endif
 void send_fake_key_eve(KeySym key)
 {
-#if WIN32
-  win32_FakeKey(key, true);
-  win32_FakeKey(key, false);
-#else
   KeyCode kc = XKeysymToKeycode(dpy, key);
   XTestFakeKeyEvent(dpy, kc, True, CurrentTime);
   XTestFakeKeyEvent(dpy, kc, False, CurrentTime);
-#endif
 }
 
 void fake_shift()
@@ -135,7 +112,6 @@ static ClientState temp_CS;
 
 void save_CS_current_to_temp()
 {
-#if UNIX
   if (!hime_single_state)
     return;
 
@@ -144,13 +120,11 @@ void save_CS_current_to_temp()
   temp_CS.im_state = current_CS->im_state;
   temp_CS.in_method = current_CS->in_method;
   temp_CS.tsin_pho_mode = current_CS->tsin_pho_mode;
-#endif
 }
 
 
 void save_CS_temp_to_current()
 {
-#if UNIX
   if (!hime_single_state)
     return;
 
@@ -159,7 +133,6 @@ void save_CS_temp_to_current()
   current_CS->im_state = temp_CS.im_state;
   current_CS->in_method = temp_CS.in_method;
   current_CS->tsin_pho_mode = temp_CS.tsin_pho_mode;
-#endif
 }
 
 
@@ -212,11 +185,6 @@ void add_ch_time_str(char *s);
 
 void send_text(char *text)
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
   char *filter;
 
   if (!text)
@@ -235,7 +203,6 @@ void send_text(char *text)
   }
 
 //direct:
-#if UNIX
   filter = getenv("HIME_OUTPUT_FILTER");
   char filter_text[512];
 
@@ -282,7 +249,6 @@ void send_text(char *text)
     }
 
   }
-#endif
 next:
   if (len) {
     append_str(&output_buffer, &output_bufferN, text, len);
@@ -295,26 +261,6 @@ void send_output_buffer_bak()
 {
   send_text(output_buffer_raw_bak);
 }
-
-#if WIN32
-void set_output_buffer_bak_to_clipboard()
-{
-  char *text, *utf8_gbtext=NULL;
-
-  if (gb_output) {
-    trad2sim(output_buffer_raw_bak, strlen(output_buffer_raw_bak),
-      &utf8_gbtext);
-    text = utf8_gbtext;
-  } else
-    text = output_buffer_raw_bak;
-
-  GtkClipboard *pclipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-
-  gtk_clipboard_set_text(pclipboard, text, -1);
-
-  free(utf8_gbtext);
-}
-#endif
 
 void send_utf8_ch(char *bchar)
 {
@@ -543,12 +489,11 @@ void move_in_win(ClientState *cs, int x, int y)
       move_win_gtab(x, y);
   }
 }
-#if UNIX
+
 static int xerror_handler(Display *d, XErrorEvent *eve)
 {
   return 0;
 }
-#endif
 
 void getRootXY(Window win, int wx, int wy, int *tx, int *ty)
 {
@@ -558,17 +503,10 @@ void getRootXY(Window win, int wx, int wy, int *tx, int *ty)
 	return;
   }
 
-#if WIN32
-  POINT pt;
-  pt.x = wx; pt.y = wy;
-  ClientToScreen((HWND)win, &pt);
-  *tx = pt.x; *ty=pt.y;
-#else
   Window ow;
   XErrorHandler olderr = XSetErrorHandler((XErrorHandler)xerror_handler);
   XTranslateCoordinates(dpy,win,root,wx,wy,tx,ty,&ow);
   XSetErrorHandler(olderr);
-#endif
 }
 
 
@@ -578,12 +516,12 @@ void move_IC_in_win(ClientState *cs)
    dbg("move_IC_in_win %d,%d\n", cs->spot_location.x, cs->spot_location.y);
 #endif
    Window inpwin = cs->client_win;
-#if UNIX
+
    if (!inpwin) {
      dbg("no inpwin\n");
      return;
    }
-#endif
+
    // non focus win filtering is done in the client lib
    if (inpwin != focus_win && focus_win && !cs->b_hime_protocol) {
       return;
@@ -592,7 +530,6 @@ void move_IC_in_win(ClientState *cs)
    int inpx = cs->spot_location.x;
    int inpy = cs->spot_location.y;
 
-#if UNIX
    XWindowAttributes att;
    XGetWindowAttributes(dpy, inpwin, &att);
 // chrome window is override_redirect
@@ -603,17 +540,6 @@ void move_IC_in_win(ClientState *cs)
      inpx = att.width - 1;
    if (inpy >= att.height)
      inpy = att.height - 1;
-#else
-   if (inpwin) {
-     RECT rect;
-     GetClientRect((HWND)inpwin, &rect);
-     if (inpx >= rect.right)
-       inpx = rect.right - 1;
-     if (inpy >= rect.bottom)
-       inpy = rect.bottom - 1;
-   }
-//   dbg("GetClientRect %x %d,%d\n", inpwin, inpx, inpy);
-#endif
    int tx,ty;
    getRootXY(inpwin, inpx, inpy, &tx, &ty);
 
@@ -632,7 +558,6 @@ void update_in_win_pos()
 //  dbg("update_in_win_pos %x %d\n", current_CS, current_CS->input_style);
 
   if (current_CS->input_style == InputStyleRoot) {
-#if UNIX
     Window r_root, r_child;
     int winx, winy, rootx, rooty;
     u_int mask;
@@ -654,12 +579,6 @@ void update_in_win_pos()
       current_CS->spot_location.x = tx;
       current_CS->spot_location.y = ty;
     }
-#else
-	  int winx=0, winy=0;
-      current_CS->spot_location.x = 0;
-      current_CS->spot_location.y = 0;
-#endif
-
     move_in_win(current_CS, winx, winy);
   } else {
     move_IC_in_win(current_CS);
@@ -765,13 +684,7 @@ void init_state_chinese(ClientState *cs)
   cs->im_state = HIME_STATE_CHINESE;
   set_tsin_pho_mode0(cs);
   if (!cs->in_method)
-#if UNIX
     init_in_method(default_input_method);
-#else
-  if (!last_input_method)
-    last_input_method = default_input_method;
-  init_in_method(last_input_method);
-#endif
 
   save_CS_current_to_temp();
 }
@@ -908,11 +821,6 @@ void tsin_toggle_half_full();
 // <Shift><Space> is pressed
 void toggle_half_full_char()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
   check_CS();
 
   if (!hime_shift_space_eng_full) {
@@ -1069,10 +977,6 @@ gboolean init_in_method(int in_no)
       // set_gtab_input_method_name(inmd[in_no].cname);
       break;
   }
-#if WIN32
-  if (current_CS && current_CS->in_method != last_input_method)
-    last_input_method = current_CS->in_method;
-#endif
 
 #if TRAY_ENABLED
   disp_tray_icon();
@@ -1094,11 +998,6 @@ gboolean init_in_method(int in_no)
 static void cycle_next_in_method()
 {
   int i;
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
   for(i=0; i < inmdN; i++) {
     int v = (current_CS->in_method + 1 + i) % inmdN;
     if (!inmd[v].in_cycle)
@@ -1237,11 +1136,7 @@ gboolean ProcessKeyPress(KeySym keysym, u_int kev_state)
   if (current_CS->client_win)
     focus_win = current_CS->client_win;
 
-  if (
-#if WIN32
-  !test_mode &&
-#endif
-  callback_str_buffer && strlen(callback_str_buffer)) {
+  if (callback_str_buffer && strlen(callback_str_buffer)) {
     send_text(callback_str_buffer);
     callback_str_buffer[0]=0;
     return TRUE;
@@ -1268,11 +1163,7 @@ gboolean ProcessKeyPress(KeySym keysym, u_int kev_state)
       }
 
       toggle_im_enabled();
-#if UNIX
       return TRUE;
-#else
-      return FALSE;
-#endif
     }
   }
 
@@ -1321,10 +1212,7 @@ gboolean ProcessKeyPress(KeySym keysym, u_int kev_state)
       return FALSE;
 
     current_CS->im_state = HIME_STATE_CHINESE;
-#if WIN32
-    if (!test_mode)
-#endif
-      init_in_method(kidx);
+    init_in_method(kidx);
 
     return TRUE;
   }
@@ -1452,7 +1340,6 @@ int xim_ForwardEventHandler(IMForwardEventStruct *call_data)
 }
 #endif
 
-#if UNIX
 int skip_window(Window win)
 {
   XWindowAttributes att;
@@ -1466,7 +1353,6 @@ int skip_window(Window win)
 
   return 0;
 }
-#endif
 
 void hime_reset();
 
@@ -1475,7 +1361,7 @@ int hime_FocusIn(ClientState *cs)
 //  dbg("hime_FocusIn\n");
   Window win = cs->client_win;
 
-#if UNIX && 0
+#if 0
   if (skip_window(win))
     return FALSE;
 #endif
@@ -1562,7 +1448,7 @@ int hime_FocusOut(ClientState *cs)
   if (cs != current_CS)
      return FALSE;
 
-#if UNIX && 0
+#if 0
 //  dbg("hime_FocusOut\n");
   if (skip_window(cs->client_win))
     return FALSE;
@@ -1676,10 +1562,6 @@ int xim_hime_FocusOut(IMChangeFocusStruct *call_data)
 
 gboolean hime_edit_display_ap_only()
 {
-#if WIN32
-  if (test_mode)
-    return TRUE;
-#endif
   if (!current_CS)
     return FALSE;
 //  dbg("hime_edit_display_ap_only %d\n", current_CS->use_preedit)
@@ -1719,73 +1601,3 @@ void flush_edit_buffer()
   }
 #endif
 }
-
-#if WIN32
-void pho_save_gst(), tsin_save_gst(), gtab_save_gst();
-void pho_restore_gst(), tsin_restore_gst(), gtab_restore_gst();
-
-gboolean ProcessTestKeyPress(KeySym keysym, u_int kev_state)
-{
-  if (!current_CS)
-    return TRUE;
-//  dbg("hime_reset\n");
-  gboolean v;
-
-  test_mode= TRUE;
-  switch(current_method_type()) {
-    case method_type_PHO:
-      pho_save_gst();
-      v = ProcessKeyPress(keysym, kev_state);
-      pho_restore_gst();
-      break;
-    case method_type_TSIN:
-      tsin_save_gst();
-      v = ProcessKeyPress(keysym, kev_state);
-      tsin_restore_gst();
-      break;
-    case method_type_MODULE:
-      break;
-    default:
-      gtab_save_gst();
-      v = ProcessKeyPress(keysym, kev_state);
-      gtab_restore_gst();
-  }
-
-  test_mode= FALSE;
-
-  return v;
-}
-
-
-gboolean Process2KeyPress(KeySym keysym, u_int kev_state)
-{
-  gboolean tv = ProcessTestKeyPress(keysym, kev_state);
-  gboolean v = ProcessKeyPress(keysym, kev_state);
-
-  if (tv != v)
-    dbg("ProcessKeyPress %x -> %d %d\n",keysym, tv, v);
-
-  return v;
-}
-
-
-gboolean ProcessTestKeyRelease(KeySym keysym, u_int kev_state)
-{
-  test_mode = TRUE;
-  gboolean v = ProcessKeyRelease(keysym, kev_state);
-  test_mode = FALSE;
-  return v;
-}
-
-
-gboolean Process2KeyRelease(KeySym keysym, u_int kev_state)
-{
-  gboolean tv = ProcessTestKeyRelease(keysym, kev_state);
-  gboolean v = ProcessKeyRelease(keysym, kev_state);
-
-  if (tv != v)
-    dbg("ProcessKeyRelease %x -> %d %d\n",keysym, tv, v);
-
-  return v;
-}
-#endif
