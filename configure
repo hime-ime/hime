@@ -137,6 +137,15 @@ done
 
 echo "prefix: $prefix"
 
+echo -n ".... Testing Xtst        : "
+XTST=`pkg-config --exists xtst 2> /dev/null`
+if [ $? != 0 ]; then
+  echo "please install rpm/package xtest-devel"
+  exit -1;
+else
+  echo " found."
+fi
+
 if [ -z "$GTK" ]; then
   GTK=gtk+-2.0
 fi
@@ -147,7 +156,7 @@ GTKINC=`pkg-config --cflags $GTK`
 
 if [ $? != 0 ]; then
   GTK=gtk+-3.0
-  echo -n ".... Testing $GTK : "
+  echo -n ".... Testing $GTK    : "
   
   GTKINC=`pkg-config --cflags $GTK`
   
