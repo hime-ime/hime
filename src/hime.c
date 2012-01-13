@@ -487,32 +487,15 @@ void sig_do_exit(int sig)
 char *get_hime_xim_name();
 void load_phrase(), init_TableDir();
 void init_tray(), exec_setup_scripts();
-#if UNIX
 void init_hime_im_serv(Window win);
-#else
-void init_hime_im_serv();
-#endif
 void init_tray_double();
 
 #if TRAY_UNITY
 void init_tray_appindicator();
 #endif
 
-#if WIN32
-void init_hime_program_files();
- #pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#endif
-int win32_tray_disabled = 1;
-
-
 gboolean delayed_start_cb(gpointer data)
 {
-#if WIN32
-  Sleep(200);
-#endif
-
-  win32_tray_disabled = 0;
-
 #if TRAY_ENABLED
   if (hime_status_tray) {
     if (hime_tray_display == HIME_TRAY_DISPLAY_SINGLE)

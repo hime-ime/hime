@@ -31,7 +31,6 @@ extern void destroy_other_tray();
 
 gboolean tsin_pho_mode();
 extern int tsin_half_full;
-extern int win32_tray_disabled;
 extern gboolean gb_output;
 GtkStatusIcon *icon_main=NULL, *icon_state=NULL;
 
@@ -366,22 +365,11 @@ void load_tray_icon_double()
   if (hime_tray_display != HIME_TRAY_DISPLAY_DOUBLE)
     return;
 
-#if WIN32
-  // when login, creating icon too early may cause block in gtk_status_icon_new_from_file
-  if (win32_tray_disabled)
-    return;
-#endif
-
   destroy_other_tray();
 
-//  dbg("load_tray_icon_win32\n");
-#if UNIX
+//  dbg("load_tray_icon_double\n");
   char *tip;
   tip="";
-#else
-  wchar_t *tip;
-  tip=L"";
-#endif
 
   char *iconame;
   if (!current_CS || current_CS->im_state == HIME_STATE_DISABLED||current_CS->im_state == HIME_STATE_ENG_FULL) {
