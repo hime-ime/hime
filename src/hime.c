@@ -395,11 +395,9 @@ void message_cb(char *message)
    if (!strcmp(message, KBM_TOGGLE)) {
      kbm_toggle();
    } else
-#if UNIX
    if (strstr(message, "#hime_message")) {
      execute_message(message);
    } else
-#endif
 #if TRAY_ENABLED
    if (!strcmp(message, UPDATE_TRAY)) {
      disp_tray_icon();
