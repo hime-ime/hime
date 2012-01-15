@@ -17,7 +17,7 @@
  */
 
 #include <gtk/gtk.h>
-#if !GTK_CHECK_VERSION(3,0,0)
+#if !GTK_CHECK_VERSION(3,0,0) // latest GTK+ 2.x can drop these, keep them for older GTK+ 2.x
 #include <gtk/gtkimcontext.h>
 #endif
 #include "gdk/gdkx.h"

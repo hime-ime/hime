@@ -178,31 +178,16 @@ static GtkWidget *create_spc_opts()
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
   opt_spc_opts = gtk_combo_box_new_text ();
-#if !GTK_CHECK_VERSION(2,4,0)
-  GtkWidget *menu_spc_opts = gtk_menu_new ();
-#endif
   gtk_box_pack_start (GTK_BOX (hbox), opt_spc_opts, FALSE, FALSE, 0);
 
   int i, current_idx=0;
 
   for(i=0; spc_opts[i].str; i++) {
-#if !GTK_CHECK_VERSION(2,4,0)
-    GtkWidget *item = gtk_menu_item_new_with_label (_(spc_opts[i].str));
-#endif
-
     if (spc_opts[i].num == gtab_space_auto_first)
       current_idx = i;
-
-#if GTK_CHECK_VERSION(2,4,0)
     gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_spc_opts), _(spc_opts[i].str));
-#else
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu_spc_opts), item);
-#endif
   }
 
-#if !GTK_CHECK_VERSION(2,4,0)
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opt_spc_opts), menu_spc_opts);
-#endif
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_spc_opts), current_idx);
 
   return hbox;
@@ -211,30 +196,15 @@ static GtkWidget *create_spc_opts()
 static GtkWidget *create_auto_select_by_phrase_opts(GtkWidget **out, int val)
 {
   *out = gtk_combo_box_new_text ();
-#if !GTK_CHECK_VERSION(2,4,0)
-  GtkWidget *menu_auto_select_by_phrase = gtk_menu_new ();
-#endif
 
   int i, current_idx=0;
 
   for(i=0; auto_select_by_phrase_opts[i].str; i++) {
-#if !GTK_CHECK_VERSION(2,4,0)
-    GtkWidget *item = gtk_menu_item_new_with_label (_(auto_select_by_phrase_opts[i].str));
-#endif
-
     if (auto_select_by_phrase_opts[i].num == val)
       current_idx = i;
-
-#if GTK_CHECK_VERSION(2,4,0)
     gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (*out), _(auto_select_by_phrase_opts[i].str));
-#else
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu_auto_select_by_phrase), item);
-#endif
   }
 
-#if !GTK_CHECK_VERSION(2,4,0)
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (opt_auto_select_by_phrase), menu_auto_select_by_phrase);
-#endif
   gtk_combo_box_set_active (GTK_COMBO_BOX (*out), current_idx);
 
   return *out;
