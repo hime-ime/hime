@@ -24,7 +24,11 @@
 extern INMD *cur_inmd;
 
 static GtkWidget *gwin_kbm;
+#if !GTK_CHECK_VERSION(2,91,6)
 static GdkColor red;
+#else
+static GdkRGBA red;
+#endif
 int win_kbm_on;
 extern gboolean test_mode;
 
@@ -45,30 +49,30 @@ typedef struct {
   GtkWidget *lab, *but, *laben;
 } KEY;
 
-/* include win-kbm.h here so we do not have to translate those _L("stuff") */
+/* include win-kbm.h here so we do not have to translate those N_("stuff") */
 #include "win-kbm.h"
 
 static int keysN=sizeof(keys)/sizeof(keys[0]);
 
 void update_win_kbm();
 
+#if !GTK_CHECK_VERSION(2,91,6)
 void mod_fg_all(GtkWidget *lab, GdkColor *col)
 {
-#if !GTK_CHECK_VERSION(2,91,6)
   gtk_widget_modify_fg(lab, GTK_STATE_NORMAL, col);
   gtk_widget_modify_fg(lab, GTK_STATE_ACTIVE, col);
   gtk_widget_modify_fg(lab, GTK_STATE_SELECTED, col);
   gtk_widget_modify_fg(lab, GTK_STATE_PRELIGHT, col);
-#else
-  GdkRGBA rgbfg;
-  gdk_rgba_parse(&rgbfg, gdk_color_to_string(col));
-  gtk_widget_override_color(lab, GTK_STATE_FLAG_NORMAL, &rgbfg);
-  gtk_widget_override_color(lab, GTK_STATE_FLAG_ACTIVE, &rgbfg);
-  gtk_widget_override_color(lab, GTK_STATE_FLAG_SELECTED, &rgbfg);
-  gtk_widget_override_color(lab, GTK_STATE_FLAG_PRELIGHT, &rgbfg);
-#endif
 }
-
+#else
+void mod_fg_all(GtkWidget *lab, GdkRGBA *rgbfg)
+{
+  gtk_widget_override_color(lab, GTK_STATE_FLAG_NORMAL, rgbfg);
+  gtk_widget_override_color(lab, GTK_STATE_FLAG_ACTIVE, rgbfg);
+  gtk_widget_override_color(lab, GTK_STATE_FLAG_SELECTED, rgbfg);
+  gtk_widget_override_color(lab, GTK_STATE_FLAG_PRELIGHT, rgbfg);
+}
+#endif
 
 void send_fake_key_eve(KeySym key);
 #if WIN32
@@ -175,7 +179,11 @@ static void cb_button_release(GtkWidget *wid, KEY *k)
 
 static void create_win_kbm()
 {
+#if !GTK_CHECK_VERSION(2,91,6)
   gdk_color_parse("red", &red);
+#else
+  gdk_rgba_parse(&red, "red");
+#endif
 
   gwin_kbm = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_has_resize_grip(GTK_WINDOW(gwin_kbm), FALSE);

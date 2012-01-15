@@ -56,11 +56,11 @@ static struct {
   unich_t *name;
   int key;
 } tsin_eng_ch_sw[]={
-  {N_(_L("CapsLock")), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock},
-//  {N_(_L("Tab")), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Tab},
-  {N_(_L("Shift")), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Shift},
-  {N_(_L("左Shift")), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftL},
-  {N_(_L("右Shift")), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR},
+  {N_("CapsLock"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock},
+//  {N_("Tab"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Tab},
+  {N_("Shift"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Shift},
+  {N_("左Shift"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftL},
+  {N_("右Shift"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR},
 };
 int tsin_eng_ch_swN = sizeof(tsin_eng_ch_sw) / sizeof(tsin_eng_ch_sw[0]);
 
@@ -69,8 +69,8 @@ static struct {
   unich_t *name;
   int key;
 } tsin_space_options[]={
-  {N_(_L("選擇同音字")), TSIN_SPACE_OPT_SELECT_CHAR},
-  {N_(_L("輸入空白")), TSIN_SPACE_OPT_INPUT}
+  {N_("選擇同音字"), TSIN_SPACE_OPT_SELECT_CHAR},
+  {N_("輸入空白"), TSIN_SPACE_OPT_INPUT}
 };
 int tsin_space_optionsN = sizeof(tsin_space_options) / sizeof(tsin_space_options[0]);
 
@@ -273,7 +273,7 @@ static void cb_save_tsin_phrase_line_color(GtkWidget *widget, gpointer user_data
 static gboolean cb_tsin_phrase_line_color( GtkWidget *widget,
                                    gpointer   data )
 {
-   GtkWidget *color_selector = gtk_color_selection_dialog_new (_(_L("詞音標示詞的底線顏色")));
+   GtkWidget *color_selector = gtk_color_selection_dialog_new (_("詞音標示詞的底線顏色"));
 
    gtk_color_selection_set_current_color(
            GTK_COLOR_SELECTION(gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(color_selector))),
@@ -325,7 +325,7 @@ static void cb_save_tsin_cursor_color(GtkWidget *widget, gpointer user_data)
 static gboolean cb_tsin_cursor_color( GtkWidget *widget,
                                    gpointer   data )
 {
-   GtkWidget *color_selector = gtk_color_selection_dialog_new (_(_L("詞音游標的顏色")));
+   GtkWidget *color_selector = gtk_color_selection_dialog_new (_("詞音游標的顏色"));
 
    gtk_color_selection_set_current_color(
            GTK_COLOR_SELECTION(gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(color_selector))),
@@ -463,7 +463,7 @@ GtkWidget *create_en_pho_key_sel(char *s)
   gtk_container_add (GTK_CONTAINER (vbox_tsin_sw), create_eng_ch_opts());
   GtkWidget *hbox_hime_capslock_lower = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox_tsin_sw), hbox_hime_capslock_lower, TRUE, TRUE, 0);
-  check_button_hime_capslock_lower = gtk_check_button_new_with_label(_(_L("按下 Capslock 時輸出小寫英數字")));
+  check_button_hime_capslock_lower = gtk_check_button_new_with_label(_("按下 Capslock 時輸出小寫英數字"));
   gtk_box_pack_start (GTK_BOX (hbox_hime_capslock_lower), check_button_hime_capslock_lower, FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_capslock_lower), hime_capslock_lower);
 
@@ -490,7 +490,7 @@ void create_kbm_window()
                     G_CALLBACK (close_kbm_window),
                     NULL);
 
-  gtk_window_set_title (GTK_WINDOW (hime_kbm_window), _(_L("HIME 注音/詞音設定")));
+  gtk_window_set_title (GTK_WINDOW (hime_kbm_window), _("HIME 注音/詞音設定"));
   gtk_container_set_border_width (GTK_CONTAINER (hime_kbm_window), 1);
 
   GtkWidget *vbox_top = gtk_vbox_new (FALSE, 3);
@@ -512,14 +512,14 @@ void create_kbm_window()
   gtk_box_pack_start (GTK_BOX (hbox_lr), vbox_r, TRUE, TRUE, 10);
 
 
-  GtkWidget *frame_kbm = gtk_frame_new(_(_L("鍵盤排列方式/選擇鍵/選單每列字數")));
+  GtkWidget *frame_kbm = gtk_frame_new(_("鍵盤排列方式/選擇鍵/選單每列字數"));
   gtk_box_pack_start (GTK_BOX (vbox_l), frame_kbm, TRUE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame_kbm), 1);
   gtk_container_add (GTK_CONTAINER (frame_kbm), create_kbm_opts());
 
-  gtk_box_pack_start (GTK_BOX (vbox_l), create_en_pho_key_sel(_(_L("(詞音) 切換[中/英]輸入"))), TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox_l), create_en_pho_key_sel(_("(詞音) 切換[中/英]輸入")), TRUE, TRUE, 0);
 
-  GtkWidget *frame_tsin_space_opt = gtk_frame_new(_(_L("(詞音) 鍵入空白鍵")));
+  GtkWidget *frame_tsin_space_opt = gtk_frame_new(_("(詞音) 鍵入空白鍵"));
   gtk_box_pack_start (GTK_BOX (vbox_l), frame_tsin_space_opt, TRUE, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame_tsin_space_opt), 1);
 
@@ -548,7 +548,7 @@ void create_kbm_window()
 
   GtkWidget *hbox_tsin_phrase_pre_select = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox_l), hbox_tsin_phrase_pre_select , TRUE, TRUE, 1);
-  check_button_tsin_phrase_pre_select = gtk_check_button_new_with_label(_(_L("詞音輸入預選詞視窗")));
+  check_button_tsin_phrase_pre_select = gtk_check_button_new_with_label(_("詞音輸入預選詞視窗"));
   gtk_box_pack_start (GTK_BOX (hbox_tsin_phrase_pre_select), check_button_tsin_phrase_pre_select, FALSE, FALSE, 0);
   gtk_toggle_button_set_active(
      GTK_TOGGLE_BUTTON(check_button_tsin_phrase_pre_select), tsin_phrase_pre_select);
@@ -556,7 +556,7 @@ void create_kbm_window()
 
   GtkWidget *hbox_phonetic_char_dynamic_sequence = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox_l), hbox_phonetic_char_dynamic_sequence , TRUE, TRUE, 1);
-  check_button_phonetic_char_dynamic_sequence = gtk_check_button_new_with_label(_(_L("依使用頻率調整字的順序")));
+  check_button_phonetic_char_dynamic_sequence = gtk_check_button_new_with_label(_("依使用頻率調整字的順序"));
   gtk_box_pack_start (GTK_BOX (hbox_phonetic_char_dynamic_sequence), check_button_phonetic_char_dynamic_sequence, FALSE, FALSE, 0);
   gtk_toggle_button_set_active(
      GTK_TOGGLE_BUTTON(check_button_phonetic_char_dynamic_sequence), phonetic_char_dynamic_sequence);
@@ -564,7 +564,7 @@ void create_kbm_window()
 
   GtkWidget *hbox_pho_hide_row2 = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox_l), hbox_pho_hide_row2 , TRUE, TRUE, 1);
-  check_button_pho_hide_row2 = gtk_check_button_new_with_label(_(_L("注音隱藏第二列 (注音符號)")));
+  check_button_pho_hide_row2 = gtk_check_button_new_with_label(_("注音隱藏第二列 (注音符號)"));
   gtk_box_pack_start (GTK_BOX (hbox_pho_hide_row2), check_button_pho_hide_row2, FALSE, FALSE, 0);
   gtk_toggle_button_set_active(
      GTK_TOGGLE_BUTTON(check_button_pho_hide_row2), pho_hide_row2);
@@ -572,7 +572,7 @@ void create_kbm_window()
 
   GtkWidget *hbox_pho_in_row1 = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox_l), hbox_pho_in_row1 , TRUE, TRUE, 1);
-  check_button_pho_in_row1 = gtk_check_button_new_with_label(_(_L("注音符號移至第一列")));
+  check_button_pho_in_row1 = gtk_check_button_new_with_label(_("注音符號移至第一列"));
   gtk_box_pack_start (GTK_BOX (hbox_pho_in_row1), check_button_pho_in_row1, FALSE, FALSE, 0);
   gtk_toggle_button_set_active(
      GTK_TOGGLE_BUTTON(check_button_pho_in_row1), pho_in_row1);
@@ -580,7 +580,7 @@ void create_kbm_window()
 
   GtkWidget *hbox_phonetic_huge_tab = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox_r), hbox_phonetic_huge_tab , TRUE, TRUE, 1);
-  check_button_phonetic_huge_tab = gtk_check_button_new_with_label(_(_L("使用巨大 UTF-8 字集")));
+  check_button_phonetic_huge_tab = gtk_check_button_new_with_label(_("使用巨大 UTF-8 字集"));
   gtk_box_pack_start (GTK_BOX (hbox_phonetic_huge_tab), check_button_phonetic_huge_tab, FALSE, FALSE, 0);
   gtk_toggle_button_set_active(
      GTK_TOGGLE_BUTTON(check_button_phonetic_huge_tab), phonetic_huge_tab);
@@ -588,7 +588,7 @@ void create_kbm_window()
 
   GtkWidget *hbox_tsin_tone_char_input = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox_r), hbox_tsin_tone_char_input , TRUE, TRUE, 1);
-  check_button_tsin_tone_char_input = gtk_check_button_new_with_label(_(_L("(詞音) 輸入注音聲調符號")));
+  check_button_tsin_tone_char_input = gtk_check_button_new_with_label(_("(詞音) 輸入注音聲調符號"));
   gtk_box_pack_start (GTK_BOX (hbox_tsin_tone_char_input), check_button_tsin_tone_char_input, FALSE, FALSE, 0);
   gtk_toggle_button_set_active(
      GTK_TOGGLE_BUTTON(check_button_tsin_tone_char_input), tsin_tone_char_input);
@@ -596,33 +596,33 @@ void create_kbm_window()
 
   GtkWidget *hbox_tsin_tab_phrase_end = gtk_hbox_new(FALSE, 1);
   gtk_box_pack_start (GTK_BOX (vbox_r), hbox_tsin_tab_phrase_end , TRUE, TRUE, 1);
-  check_button_tsin_tab_phrase_end = gtk_check_button_new_with_label(_(_L("(詞音) 使用 Escape/Tab 斷詞")));
+  check_button_tsin_tab_phrase_end = gtk_check_button_new_with_label(_("(詞音) 使用 Escape/Tab 斷詞"));
   gtk_box_pack_start (GTK_BOX (hbox_tsin_tab_phrase_end), check_button_tsin_tab_phrase_end, FALSE, FALSE, 0);
   gtk_toggle_button_set_active(
      GTK_TOGGLE_BUTTON(check_button_tsin_tab_phrase_end), tsin_tab_phrase_end);
 
   GtkWidget *hbox_tsin_tail_select_key = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox_r), hbox_tsin_tail_select_key , TRUE, TRUE, 1);
-  check_button_tsin_tail_select_key = gtk_check_button_new_with_label(_(_L("選擇鍵顯示於候選字(詞)後方")));
+  check_button_tsin_tail_select_key = gtk_check_button_new_with_label(_("選擇鍵顯示於候選字(詞)後方"));
   gtk_box_pack_start (GTK_BOX (hbox_tsin_tail_select_key), check_button_tsin_tail_select_key, FALSE, FALSE, 0);
   gtk_toggle_button_set_active(
      GTK_TOGGLE_BUTTON(check_button_tsin_tail_select_key), tsin_tail_select_key);
 
   GtkWidget *hbox_tsin_buffer_editing_mode = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox_r), hbox_tsin_buffer_editing_mode , TRUE, TRUE, 1);
-  check_button_tsin_buffer_editing_mode = gtk_check_button_new_with_label(_(_L("\\ 鍵可切換 jkx 鍵編輯模式")));
+  check_button_tsin_buffer_editing_mode = gtk_check_button_new_with_label(_("\\ 鍵可切換 jkx 鍵編輯模式"));
   gtk_box_pack_start (GTK_BOX (hbox_tsin_buffer_editing_mode), check_button_tsin_buffer_editing_mode, FALSE, FALSE, 0);
   gtk_toggle_button_set_active(
      GTK_TOGGLE_BUTTON(check_button_tsin_buffer_editing_mode), tsin_buffer_editing_mode);
 
   GtkWidget *hbox_tsin_use_pho_near = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox_r), hbox_tsin_use_pho_near , TRUE, TRUE, 1);
-  check_button_tsin_use_pho_near = gtk_check_button_new_with_label(_(_L("按下 ↑ 鍵查詢近似音")));
+  check_button_tsin_use_pho_near = gtk_check_button_new_with_label(_("按下 ↑ 鍵查詢近似音"));
   gtk_box_pack_start (GTK_BOX (hbox_tsin_use_pho_near), check_button_tsin_use_pho_near, FALSE, FALSE, 0);
   gtk_toggle_button_set_active(
      GTK_TOGGLE_BUTTON(check_button_tsin_use_pho_near), tsin_use_pho_near);
 
-  GtkWidget *frame_tsin_buffer_size = gtk_frame_new(_(_L("(詞音) 的編輯緩衝區大小")));
+  GtkWidget *frame_tsin_buffer_size = gtk_frame_new(_("(詞音) 的編輯緩衝區大小"));
   gtk_box_pack_start (GTK_BOX (vbox_r), frame_tsin_buffer_size, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame_tsin_buffer_size), 1);
   GtkAdjustment *adj_gtab_in =
@@ -630,7 +630,7 @@ void create_kbm_window()
   spinner_tsin_buffer_size = gtk_spin_button_new (adj_gtab_in, 0, 0);
   gtk_container_add (GTK_CONTAINER (frame_tsin_buffer_size), spinner_tsin_buffer_size);
 
-  GtkWidget *frame_tsin_cursor_color = gtk_frame_new(_(_L("詞音游標的顏色")));
+  GtkWidget *frame_tsin_cursor_color = gtk_frame_new(_("詞音游標的顏色"));
   gtk_box_pack_start (GTK_BOX (vbox_r), frame_tsin_cursor_color, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame_tsin_cursor_color), 1);
   GtkWidget *button_tsin_cursor_color = gtk_button_new();

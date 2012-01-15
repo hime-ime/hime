@@ -21,10 +21,9 @@
 #include "tsin.h"
 #include "gst.h"
 #include "im-client/hime-im-client-attr.h"
-#include "win1.h"
 #include "hime-module.h"
+#include "win-sym.h"
 
-void show_win_sym(),hide_win_sym(),move_win_sym(),toggle_win_sym();
 void init_tsin_selection_win(),disp_selections(int x, int y),hide_selections_win();
 void disp_arrow_up(),disp_arrow_down(), set_tsin_pho_mode();
 void set_sele_text(int tN, int i, char *text, int len);

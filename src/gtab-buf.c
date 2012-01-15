@@ -431,12 +431,8 @@ void set_gtab_user_head()
   gbuf[ggg.gbuf_cursor].flag |= FLAG_CHPHO_PHRASE_USER_HEAD;
 }
 
-
-CACHE *cache_lookup(int start);
-
 #define DBG 0
 
-void init_cache();
 void free_cache();
 void init_tsin_table();
 void set_tsin_parse_len(int);

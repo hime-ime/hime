@@ -43,6 +43,9 @@ extern char *TableDir;
 extern INMD *cur_inmd;
 extern char **seltab;
 
+extern char str_key_codes[128];
+void disp_pho_sel(char *s);
+
 #define gtab_full_space_auto_first (_gtab_space_auto_first & (GTAB_space_auto_first_any|GTAB_space_auto_first_full))
 #define AUTO_SELECT_BY_PHRASE (gtab_phrase_on())
 
@@ -333,9 +336,11 @@ void close_gtab_pho_win()
 {
   if (test_mode)
     return;
-  if (poo.same_pho_query_state != SAME_PHO_QUERY_none) {
+  if (same_query_show_pho_win()) {
     poo.same_pho_query_state = SAME_PHO_QUERY_none;
     hide_win_pho();
+    if (hime_pop_up_win && str_key_codes && !strlen(str_key_codes))
+      hide_win_gtab();
   }
 }
 
@@ -1156,7 +1161,7 @@ shift_proc:
           hide_win_gtab();
         return 1;
       }
-
+      ClrSelArea();
       close_gtab_pho_win();
       if (ggg.ci) {
         reset_gtab_all();
@@ -1383,9 +1388,11 @@ direct_select:
     case '`':
       if (!cur_inmd->keymap[key]) {
         poo.same_pho_query_state = SAME_PHO_QUERY_gtab_input;
-        disp_gtab_sel(_(_L("輸入要查的同音字，接著在注音視窗選字")));
+        reset_gtab_all();
+        disp_gtab_sel(_("輸入要查的同音字，接著在注音視窗選字"));
         if (hime_pop_up_win)
           show_win_gtab();
+        disp_pho_sel("");
         init_gtab_pho_query_win();
         return 1;
       }

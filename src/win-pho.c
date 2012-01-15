@@ -28,7 +28,7 @@ static GtkWidget *label_pho;
 static GtkWidget *label_full;
 static GtkWidget *label_key_codes;
 
-void change_pho_font_size(), toggle_win_sym();
+void change_pho_font_size();
 void disp_pho_sub(GtkWidget *label, int index, char *pho);
 
 void disp_pho(int index, char *phochar)
@@ -109,9 +109,6 @@ void set_key_codes_label_pho(char *s)
   gtk_widget_show(label_key_codes);
 }
 
-
-void show_win_sym();
-
 void move_win_pho(int x, int y)
 {
   int twin_xl, twin_yl;
@@ -159,7 +156,7 @@ void create_win_pho()
   change_win_bg(gwin_pho);
 }
 
-void create_win_sym(), exec_hime_setup();
+void exec_hime_setup();
 
 static void mouse_button_callback( GtkWidget *widget,GdkEventButton *event, gpointer data)
 {
@@ -229,7 +226,7 @@ void create_win_pho_gui_simple()
   hbox_row2 = gtk_hbox_new (FALSE, 0);
   /* This packs the button into the gwin_pho (a gtk container). */
   gtk_container_add (GTK_CONTAINER (vbox_top), hbox_row2);
-  label_full = gtk_label_new(_(_L("全")));
+  label_full = gtk_label_new(_("全"));
   gtk_container_add (GTK_CONTAINER (hbox_row2), label_full);
 
 
@@ -254,14 +251,16 @@ void create_win_pho_gui_simple()
 	gtk_container_add (GTK_CONTAINER (frame_pho), label_pho);
   }
 
+#if 0
   if (left_right_button_tips) {
 #if GTK_CHECK_VERSION(2,12,0)
-    gtk_widget_set_tooltip_text (event_box_pho, _(_L("左鍵符號，右鍵設定")));
+    gtk_widget_set_tooltip_text (event_box_pho, _("左鍵符號，右鍵設定"));
 #else
     GtkTooltips *button_gtab_tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (GTK_TOOLTIPS (button_gtab_tips), event_box_pho, _(_L("左鍵符號，右鍵設定")),NULL);
+    gtk_tooltips_set_tip (GTK_TOOLTIPS (button_gtab_tips), event_box_pho, _("左鍵符號，右鍵設定"),NULL);
 #endif
   }
+#endif
 
   label_key_codes  = gtk_label_new(NULL);
   gtk_label_set_selectable(GTK_LABEL(label_key_codes), TRUE);
@@ -323,9 +322,6 @@ void show_win_pho()
     gtk_widget_show(hbox_row2);
 }
 
-
-void hide_win_sym();
-
 void hide_win_pho()
 {
 // dbg("hide_win_pho\n");
@@ -350,6 +346,11 @@ void get_win_gtab_geom();
 void init_gtab_pho_query_win()
 {
   init_tab_pho();
+  move_gtab_pho_query_win();
+}
+
+void move_gtab_pho_query_win()
+{
   get_win_gtab_geom();
   move_win_pho(win_x, win_y + win_yl);
 }

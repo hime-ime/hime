@@ -46,8 +46,10 @@ gboolean last_cursor_off;
 void set_label_space(GtkWidget *label);
 void minimize_win_gtab();
 gboolean win_size_exceed(GtkWidget *win), gtab_phrase_on();
-void move_win_gtab(int x, int y), toggle_win_sym();
+void move_win_gtab(int x, int y);
 int win_gtab_max_key_press;
+
+void move_gtab_pho_query_win();
 
 static void adj_gtab_win_pos()
 {
@@ -80,27 +82,29 @@ void disp_gtab(char *str)
   adj_gtab_win_pos();
 }
 
-
+#if !GTK_CHECK_VERSION(2,91,6)
 void set_gtab_input_color(GdkColor *color)
 {
-  if (label_gtab) {
-#if !GTK_CHECK_VERSION(2,91,6)
+  if (label_gtab) 
     gtk_widget_modify_fg(label_gtab, GTK_STATE_NORMAL, color);
-#else
-    if (color) {
-      GdkRGBA rgbfg;
-      gdk_rgba_parse(&rgbfg, gdk_color_to_string(color));
-      gtk_widget_override_color(label_gtab, GTK_STATE_FLAG_NORMAL, &rgbfg);
-    } else
-      gtk_widget_override_color(label_gtab, GTK_STATE_FLAG_NORMAL, NULL);
-#endif
-  }
 }
+#else
+void set_gtab_input_color(GdkRGBA *rgbfg)
+{
+  if (label_gtab)
+    gtk_widget_override_color(label_gtab, GTK_STATE_FLAG_NORMAL, rgbfg);
+}
+#endif
 
 void set_gtab_input_error_color()
 {
+#if !GTK_CHECK_VERSION(2,91,6)
   GdkColor red;
   gdk_color_parse("red", &red);
+#else
+  GdkRGBA red;
+  gdk_rgba_parse(&red, "red");
+#endif
   set_gtab_input_color(&red);
 }
 
@@ -124,7 +128,7 @@ void gtab_disp_empty(char *tt, int N)
     return;
 
   for (i=0;i < N; i++)
-//    strcat(tt, _(_L("﹍")));
+//    strcat(tt, "﹍");
     strcat(tt, "　"); /* Full width space */
 }
 
@@ -304,8 +308,6 @@ void set_page_label(char *s)
   gtk_widget_show(label_page);
 }
 
-void show_win_sym();
-
 void move_win_gtab(int x, int y)
 {
   if (!gwin_gtab)
@@ -327,6 +329,8 @@ void move_win_gtab(int x, int y)
   win_x = x;  win_y = y;
 
   move_win_sym();
+  if (poo.same_pho_query_state != SAME_PHO_QUERY_none)
+    move_gtab_pho_query_win();
 }
 
 void set_gtab_input_method_name(char *s)
@@ -367,7 +371,6 @@ void create_win_gtab()
     init_tsin_selection_win();
 }
 
-void create_win_sym();
 void exec_hime_setup();
 
 static void mouse_button_callback( GtkWidget *widget,GdkEventButton *event, gpointer data)
@@ -606,14 +609,16 @@ void create_win_gtab_gui_simple()
     g_signal_connect(G_OBJECT(event_box_gtab),"button-press-event",
                      G_CALLBACK(mouse_button_callback), NULL);
 
+#if 0
     if (left_right_button_tips) {
 #if GTK_CHECK_VERSION(2,12,0)
-      gtk_widget_set_tooltip_text (event_box_gtab, _(_L("左鍵符號，右鍵設定")));
+      gtk_widget_set_tooltip_text (event_box_gtab, _("左鍵符號，右鍵設定"));
 #else
       GtkTooltips *button_gtab_tips = gtk_tooltips_new ();
       gtk_tooltips_set_tip (GTK_TOOLTIPS (button_gtab_tips), event_box_gtab, _("左鍵符號，右鍵設定"),NULL);
 #endif
     }
+#endif
 
 
     label_gtab = gtk_label_new(NULL);
@@ -758,7 +763,6 @@ void show_win_gtab()
 }
 
 
-void hide_win_sym();
 void close_gtab_pho_win();
 
 static void destroy_top_bin()

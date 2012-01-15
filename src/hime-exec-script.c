@@ -27,7 +27,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pwd.h>
-#include "os-dep.h"
 #include "hime.h"
 
 static void exec_script(char *name)

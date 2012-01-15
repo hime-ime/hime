@@ -1,0 +1,442 @@
+    Copyright (C) 2007 Kan-Ru Chen <koster AT debian DOT org>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+This patch will make rxvt-unicode to use hime protocol, make rxvt-unicode to
+depend on libhime-im-client.so.1, and let hime works like GTK+ / Qt immodule.
+
+Unpatched rxvt-unicode still can use hime via XIM protocol.
+
+Usage: ./configure --disable-xim
+
+       Note that you need hime's headers: hime-im-client.h
+                                          hime-im-client-attr.h
+       Also make sure that your library path can found libhime-im-client.so.1.
+
+--- rxvt-unicode-9.14.orig/README.hime
++++ rxvt-unicode-9.14/README.hime
+@@ -0,0 +1 @@
++./configure --disable-xim
+--- rxvt-unicode-9.14.orig/src/Makefile.in
++++ rxvt-unicode-9.14/src/Makefile.in
+@@ -17,8 +17,8 @@
+ CXXFLAGS = @CXXFLAGS@
+ CPPFLAGS = @CPPFLAGS@
+ LDFLAGS = @LDFLAGS@
+-DEFS = @DEFS@
+-LIBS = @LIBS@
++DEFS = @DEFS@ -DUSE_HIME -DUNIX=1
++LIBS = @LIBS@ -lhime-im-client -L$(libdir)/hime
+ XINC = @X_CFLAGS@ @AFTERIMAGE_CFLAGS@ @PIXBUF_CFLAGS@ @STARTUP_NOTIFICATION_CFLAGS@
+ XLIB = @X_LIBS@ @AFTERIMAGE_LIBS@ -lX11 @X_EXTRA_LIBS@ @PIXBUF_LIBS@ @STARTUP_NOTIFICATION_LIBS@
+ COMPILE = $(CXX) -I.. -I$(srcdir) -I. -I$(srcdir)/../libev -I$(srcdir)/../libptytty/src -I$(srcdir)/../libecb $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(XINC)
+--- rxvt-unicode-9.14.orig/src/command.C
++++ rxvt-unicode-9.14/src/command.C
+@@ -475,6 +475,36 @@
+       valid_keysym = status_return == XLookupKeySym
+                      || status_return == XLookupBoth;
+     }
++#endif
++#ifdef USE_HIME
++  if (Hime_Handle)
++    {
++      char *rstr = NULL;
++      len = XLookupString (&ev, kbuf, KBUFSZ, &keysym, &compose);
++      //      valid_keysym = 1;
++      valid_keysym = keysym != NoSymbol;
++      if (hime_im_client_forward_key_press (Hime_Handle, keysym, ev.state, &rstr))
++	{
++	  if (rstr)
++	    {
++	      len = strlen (rstr);
++	      strncpy (kbuf, rstr, len);
++	      kbuf[len] = '\0';
++	      keysym = ' ';
++	      shft = ctrl = meta = 0;
++	    }
++	  else
++	    {
++#if 0
++	      len = 0;
++	      valid_keysym = 0;
++#endif
++	      return;
++	    }
++	}
++      if (rstr)
++	free (rstr);
++    }
+   else
+ #endif
+     {
+@@ -860,10 +890,13 @@
+ void
+ rxvt_term::key_release (XKeyEvent &ev)
+ {
+-#if (MOUSE_WHEEL && MOUSE_SLIP_WHEELING) || ISO_14755 || ENABLE_PERL
++#ifdef USE_HIME
+   KeySym keysym;
+ 
+   keysym = XLookupKeysym (&ev, ev.state & ShiftMask ? 1 : 0); // sorry, only shift supported :/
++  char *rstr = NULL;
++  hime_im_client_forward_key_release (Hime_Handle, keysym, ev.state, &rstr);
++  free (rstr);
+ #endif
+ 
+ #if ENABLE_FRILLS || ISO_14755
+@@ -989,7 +1022,7 @@
+ 
+       scr_refresh ();
+       scrollBar.show (1);
+-#ifdef USE_XIM
++#ifdef USE_HIME
+       im_send_spot ();
+ #endif
+     }
+@@ -1739,6 +1772,15 @@
+           XSetICFocus (Input_Context);
+         }
+ #endif
++#ifdef USE_HIME
++      if (Hime_Handle != NULL)
++	{
++#if 0
++	  IMSetPosition ();
++#endif
++	  hime_im_client_focus_in(Hime_Handle);
++	}
++#endif
+ #if CURSOR_BLINK
+       if (option (Opt_cursorBlink))
+         cursor_blink_ev.again ();
+@@ -1784,6 +1826,10 @@
+       if (Input_Context != NULL)
+         XUnsetICFocus (Input_Context);
+ #endif
++#ifdef USE_HIME
++      if (Hime_Handle != NULL)
++	hime_im_client_focus_out(Hime_Handle);
++#endif
+ #if CURSOR_BLINK
+       if (option (Opt_cursorBlink))
+         cursor_blink_ev.stop ();
+--- rxvt-unicode-9.14.orig/src/init.C
++++ rxvt-unicode-9.14/src/init.C
+@@ -1022,7 +1022,7 @@
+ {
+   set_environ (envv);
+ 
+-#ifdef USE_XIM
++#ifdef USE_HIME
+   if (!locale)
+     rxvt_warn ("setting locale failed, continuing without locale support.\n");
+   else
+@@ -1536,7 +1536,7 @@
+ 
+   XSelectInput (dpy, top,
+                 KeyPressMask
+-#if (MOUSE_WHEEL && MOUSE_SLIP_WHEELING) || ENABLE_FRILLS || ISO_14755
++#ifdef USE_HIME
+                 | KeyReleaseMask
+ #endif
+                 | FocusChangeMask | VisibilityChangeMask
+@@ -1669,6 +1669,9 @@
+                 if ((*t)->pty->pty > 2) close ((*t)->pty->pty);
+                 if ((*t)->pty->tty > 2) close ((*t)->pty->tty);
+               }
++#ifdef USE_HIME
++	    close (Hime_Handle->fd);
++#endif
+ 
+             run_child (argv);
+             fprintf (stderr, "%s: unable to exec child.", RESNAME);
+--- rxvt-unicode-9.14.orig/src/main.C
++++ rxvt-unicode-9.14/src/main.C
+@@ -176,7 +176,7 @@
+   rootwin_ev.set          <rxvt_term, &rxvt_term::rootwin_cb> (this),
+ #endif
+   scrollbar_ev.set        <rxvt_term, &rxvt_term::x_cb>       (this),
+-#ifdef USE_XIM
++#ifdef USE_HIME
+   im_ev.set               <rxvt_term, &rxvt_term::im_cb>      (this),
+ #endif
+ #ifdef POINTER_BLANK
+@@ -314,7 +314,7 @@
+ 
+   if (display)
+     {
+-#if USE_XIM
++#ifdef USE_HIME
+       im_ev.stop (display);
+ #endif
+       scrollbar_ev.stop (display);
+@@ -1123,7 +1123,7 @@
+ /* -------------------------------------------------------------------- *
+  * -                      X INPUT METHOD ROUTINES                     - *
+  * -------------------------------------------------------------------- */
+-#ifdef USE_XIM
++#ifdef USE_HIME
+ 
+ void
+ rxvt_term::im_set_color (unsigned long &fg, unsigned long &bg)
+@@ -1166,6 +1166,11 @@
+   Window win;
+   char server[IMBUFSIZ];
+ 
++#ifdef USE_HIME
++  if (Hime_Handle)
++    return True;
++#endif
++#ifdef USE_XIM
+   /* get current locale modifier */
+   if (char *p = XSetLocaleModifiers (0))
+     {
+@@ -1181,6 +1186,7 @@
+       if (win != None)
+         return true;
+     }
++#endif
+ 
+   return false;
+ }
+@@ -1191,9 +1197,7 @@
+   XPoint nspot;
+   XVaNestedList preedit_attr;
+ 
+-  if (!Input_Context
+-      || !focus
+-      || !(input_style & (XIMPreeditPosition | XIMPreeditCallbacks)))
++  if (!focus || !Hime_Handle)
+     return;
+ 
+   im_set_position (nspot);
+@@ -1203,11 +1207,13 @@
+ 
+   spot = nspot;
+ 
+-  preedit_attr = XVaCreateNestedList (0, XNSpotLocation, &spot, NULL);
+-  XSetICValues (Input_Context, XNPreeditAttributes, preedit_attr, NULL);
+-  XFree (preedit_attr);
++#ifdef USE_HIME
++  if (Hime_Handle)
++      hime_im_client_set_cursor_location(Hime_Handle, nspot.x, nspot.y);
++#endif
+ }
+ 
++#ifdef USE_XIM
+ void
+ rxvt_term::im_destroy ()
+ {
+@@ -1222,6 +1228,7 @@
+ 
+   Input_Context = 0;
+ }
++#endif
+ 
+ #ifdef ENABLE_XIM_ONTHESPOT
+ 
+@@ -1304,6 +1311,10 @@
+ bool
+ rxvt_term::im_get_ic (const char *modifiers)
+ {
++#ifdef USE_HIME
++  Hime_Handle = hime_im_client_open(display->dpy);
++  hime_im_client_set_window(Hime_Handle, parent);
++#else
+   int i, j, found;
+   XIM xim;
+   XPoint spot;
+@@ -1511,6 +1522,7 @@
+ #endif
+ 
+   im_set_position ();
++#endif
+ 
+   return true;
+ }
+@@ -1518,6 +1530,7 @@
+ void
+ rxvt_term::im_cb ()
+ {
++#ifdef USE_XIM
+   int i;
+   const char *p;
+   char **s;
+@@ -1561,6 +1574,7 @@
+       if (found)
+         goto done;
+     }
++#endif
+ 
+   /* try with XMODIFIERS env. var. */
+   if (im_get_ic (""))
+@@ -1577,6 +1591,7 @@
+ #endif
+ }
+ 
++#ifdef USE_XIM
+ void
+ rxvt_term::im_set_position ()
+ {
+@@ -1620,6 +1635,7 @@
+ 
+    XFree (preedit_attr);
+ }
++#endif
+ #endif /* USE_XIM */
+ 
+ void
+--- rxvt-unicode-9.14.orig/src/rxvt.h
++++ rxvt-unicode-9.14/src/rxvt.h
+@@ -90,6 +90,10 @@
+ # define HAVE_BG_PIXMAP 1
+ #endif
+ 
++#ifdef USE_HIME
++#include <hime-im-client.h>
++#endif
++
+ #include "encoding.h"
+ #include "rxvtutil.h"
+ #include "rxvtfont.h"
+@@ -1329,6 +1333,8 @@
+   rxvt_xim *input_method;
+   XIC      Input_Context;
+   XIMStyle input_style;
++#endif
++#ifdef USE_HIME
+   XPoint   spot; // most recently sent spot position
+ 
+   void im_destroy ();
+@@ -1343,6 +1349,9 @@
+   bool im_get_ic (const char *modifiers);
+   void im_set_position ();
+ #endif
++#ifdef USE_HIME
++  HIME_client_handle *Hime_Handle;
++#endif
+ 
+   // command.C
+   void key_press (XKeyEvent &ev);
+--- rxvt-unicode-9.14.orig/src/rxvttoolkit.C
++++ rxvt-unicode-9.14/src/rxvttoolkit.C
+@@ -64,8 +64,10 @@
+   "_NET_WM_PING",
+   "_NET_WM_ICON",
+ #endif
+-#if USE_XIM
++#ifdef USE_HIME
+   "WM_LOCALE_NAME",
++#endif
++#ifdef USE_XIM
+   "XIM_SERVERS",
+ #endif
+ #ifdef ENABLE_TRANSPARENCY
+@@ -520,13 +522,15 @@
+   XCloseDisplay (dpy);
+ }
+ 
+-#ifdef USE_XIM
++#ifdef USE_HIME
+ void rxvt_display::im_change_cb ()
+ {
+   for (im_watcher **i = imw.begin (); i != imw.end (); ++i)
+     (*i)->call ();
+ }
++#endif
+ 
++#ifdef USE_XIM
+ void rxvt_display::im_change_check ()
+ {
+   // try to only call im_change_cb when a new input method
+@@ -625,7 +629,7 @@
+   cur_owner = owner;
+ }
+ 
+-#ifdef USE_XIM
++#ifdef USE_HIME
+ 
+ void rxvt_display::reg (im_watcher *w)
+ {
+@@ -636,7 +640,9 @@
+ {
+   imw.erase (find (imw.begin (), imw.end (), w));
+ }
++#endif
+ 
++#ifdef USE_XIM
+ rxvt_xim *rxvt_display::get_xim (const char *locale, const char *modifiers)
+ {
+   char *id;
+--- rxvt-unicode-9.14.orig/src/rxvttoolkit.h
++++ rxvt-unicode-9.14/src/rxvttoolkit.h
+@@ -64,8 +64,10 @@
+   XA_NET_WM_PING,
+   XA_NET_WM_ICON,
+ #endif
+-#if USE_XIM
++#ifdef USE_HIME
+   XA_WM_LOCALE_NAME,
++#endif
++#ifdef USE_XIM
+   XA_XIM_SERVERS,
+ #endif
+ #if ENABLE_TRANSPARENCY
+@@ -227,9 +229,13 @@
+ 
+ #ifdef USE_XIM
+   refcache<rxvt_xim> xims;
++#endif
++#ifdef USE_HIME
+   vector<im_watcher *> imw;
+ 
+   void im_change_cb ();
++#endif
++#ifdef USE_XIM
+   void im_change_check ();
+ #endif
+ 
+@@ -262,16 +268,18 @@
+   void reg (xevent_watcher *w);
+   void unreg (xevent_watcher *w);
+ 
+-#ifdef USE_XIM
++#ifdef USE_HIME
+   void reg (im_watcher *w);
+   void unreg (im_watcher *w);
++#endif
+ 
++#ifdef USE_XIM
+   rxvt_xim *get_xim (const char *locale, const char *modifiers);
+   void put_xim (rxvt_xim *xim);
+ #endif
+ };
+ 
+-#ifdef USE_XIM
++#ifdef USE_HIME
+ struct im_watcher : rxvt_watcher, callback<void (void)>
+ {
+   void start (rxvt_display *display)
+--- rxvt-unicode-9.14.orig/src/screen.C
++++ rxvt-unicode-9.14/src/screen.C
+@@ -3531,7 +3531,7 @@
+ }
+ 
+ /* ------------------------------------------------------------------------- */
+-#ifdef USE_XIM
++#ifdef USE_HIME
+ void
+ rxvt_term::im_set_position (XPoint &pos) NOTHROW
+ {

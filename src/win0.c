@@ -470,7 +470,7 @@ void move_win0(int x, int y)
 
 void disp_tsin_eng_pho(int eng_pho)
 {
-  static unich_t *eng_pho_strs[]={_L("英"),_L("注")};
+  static unich_t *eng_pho_strs[] = { N_("英"), N_("注") };
 
   if (!button_eng_ph)
     return;
@@ -479,7 +479,6 @@ void disp_tsin_eng_pho(int eng_pho)
 }
 
 void exec_hime_setup();
-void toggle_win_sym();
 
 static void mouse_button_callback( GtkWidget *widget,GdkEventButton *event, gpointer data)
 {
@@ -608,14 +607,16 @@ static void create_win0_gui()
   GTK_WIDGET_UNSET_FLAGS(button_pho,  GTK_CAN_FOCUS|GTK_CAN_DEFAULT);
 #endif
 
+#if 0
   if (left_right_button_tips) {
 #if GTK_CHECK_VERSION(2,12,0)
-    gtk_widget_set_tooltip_text (button_pho, _(_L("左鍵符號，右鍵設定")));
+    gtk_widget_set_tooltip_text (button_pho, _("左鍵符號，右鍵設定"));
 #else
     GtkTooltips *button_pho_tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (GTK_TOOLTIPS (button_pho_tips), button_pho, _(_L("左鍵符號，右鍵設定")),NULL);
+    gtk_tooltips_set_tip (GTK_TOOLTIPS (button_pho_tips), button_pho, _("左鍵符號，右鍵設定"),NULL);
 #endif
   }
+#endif
 
   label_pho = gtk_label_new("");
   set_label_font_size(label_pho, hime_font_size_tsin_pho_in);

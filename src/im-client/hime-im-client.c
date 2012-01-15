@@ -33,7 +33,6 @@
 #include <windows.h>
 #include <winsock.h>
 #endif
-#include "os-dep.h"
 #include "hime.h"
 #include "hime-protocol.h"
 #include "hime-im-client.h"

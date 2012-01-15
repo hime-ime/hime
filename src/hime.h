@@ -41,7 +41,7 @@
 #endif
 #endif
 
-#define N_(STRING) STRING
+#define N_(STRING) (STRING)
 
 #include "hime-gtk-compatible.h"
 
@@ -118,6 +118,16 @@ enum {
   HIME_EDIT_DISPLAY_ON_THE_SPOT=2,
   HIME_EDIT_DISPLAY_BOTH=4,
 };
+
+#if TRAY_ENABLED
+enum {
+  HIME_TRAY_DISPLAY_SINGLE=1,
+  HIME_TRAY_DISPLAY_DOUBLE=2,
+#if TRAY_UNITY
+  HIME_TRAY_DISPLAY_APPINDICATOR=3,
+#endif
+};
+#endif
 
 #define ROW_ROW_SPACING (2)
 

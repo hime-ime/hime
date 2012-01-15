@@ -18,19 +18,18 @@
 #include "hime.h"
 #include "gtab.h"
 
-extern gboolean is_chs;
-
 int hime_font_size, hime_font_size_tsin_presel, hime_font_size_symbol;
 int hime_font_size_pho_near, hime_font_size_gtab_in, hime_font_size_win_kbm, hime_font_size_win_kbm_en;
 int hime_win_color_use, hime_single_state;
 int hime_remote_client;
 char *default_input_method_str;
 int default_input_method;
-int left_right_button_tips;
+// int left_right_button_tips;
 int hime_im_toggle_keys, hime_bell_off;
 int hime_capslock_lower, hime_eng_phrase_enabled, hime_init_im_enabled;
-int hime_win_sym_click_close, hime_edit_display, hime_win32_icon;
+int hime_win_sym_click_close, hime_edit_display;
 int hime_on_the_spot_key, hime_tray_hf_win_kbm, hime_punc_auto_send;
+int hime_tray_display;
 
 int gtab_dup_select_bell;
 int gtab_space_auto_first;
@@ -62,9 +61,9 @@ int tsin_buffer_editing_mode;
 int hime_shift_space_eng_full;
 char *tsin_phrase_line_color;
 char *tsin_cursor_color, *hime_sel_key_color;
-unich_t eng_full_str[]=_L("[英/全]");
-unich_t eng_half_str[]=_L("[英]");
-unich_t cht_full_str[]=_L("[全]");
+unich_t eng_full_str[] = N_("[英/全]");
+unich_t eng_half_str[] = N_("[英]");
+unich_t cht_full_str[] = N_("[全]");
 char *eng_color_full_str, *eng_color_half_str, *cht_color_full_str;
 int tsin_tab_phrase_end;
 int hime_input_style, hime_root_x, hime_root_y, hime_pop_up_win;
@@ -126,17 +125,13 @@ void load_setttings()
 #if !USE_TSIN
   get_hime_conf_str(DEFAULT_INPUT_METHOD, &default_input_method_str, "3"); /* "3" usually is Bopomofo */
 #endif
-  left_right_button_tips = get_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 1);
+//  left_right_button_tips = get_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 1);
   hime_im_toggle_keys = get_hime_conf_int(HIME_IM_TOGGLE_KEYS, 0);
 #if TRAY_ENABLED
   hime_status_tray = get_hime_conf_int(HIME_STATUS_TRAY, 1);
 #endif
   hime_win_sym_click_close = get_hime_conf_int(HIME_WIN_SYM_CLICK_CLOSE, 1);
-#if WIN32
-  hime_win32_icon = 1;
-#else
-  hime_win32_icon = get_hime_conf_int(HIME_WIN32_ICON, 1);
-#endif
+  hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, 1);
 
   gtab_dup_select_bell = get_hime_conf_int(GTAB_DUP_SELECT_BELL, 0);
   gtab_space_auto_first = get_hime_conf_int(GTAB_SPACE_AUTO_FIRST, GTAB_space_auto_first_none);

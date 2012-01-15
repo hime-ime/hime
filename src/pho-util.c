@@ -17,6 +17,7 @@
 
 #include "hime.h"
 #include "pho.h"
+#include "lang.h"
 #include <sys/stat.h>
 #include <stdlib.h>
 #if WIN32
@@ -38,7 +39,6 @@ static char pho_huge_tab[]="pho-huge.tab2";
 static char s_pho_normal_tab[]="s-pho.tab2";
 static char s_pho_huge_tab[]="s-pho-huge.tab2";
 void update_table_file(char *name, int version);
-extern gboolean is_chs;
 
 void pho_load()
 {
@@ -71,8 +71,7 @@ void pho_load()
     dbg("use system's pho, no dynamic adj\n");
   }
 
-  if (phonetic_char_dynamic_sequence)
-    update_table_file(pho_tab, 4);
+  update_table_file(pho_tab, 4);
 
   FILE *fr;
 

@@ -37,9 +37,12 @@ fi
 
 sh scripts/hime-user-setup $PWD/data $PWD/src
 HIME_TABLE_DIR=data LD_LIBRARY_PATH=$PWD/src/im-client/:$PWD/src XMODIFIERS=@im=$XIM_NAME src/hime &
+HIME_PID=$!
 
 [ "$GTK_2_DEMO_APP" != "" ] && GTK_IM_MODULE_FILE=$GTK_2_TEMP_FILE $GTK_2_DEMO_APP
 [ "$GTK_3_DEMO_APP" != "" ] && GTK_IM_MODULE_FILE=$GTK_3_TEMP_FILE $GTK_3_DEMO_APP
+
+[ $(id -u $USER) != "0" ] && kill -HUP $HIME_PID
 
 rm $GTK_2_TEMP_FILE $GTK_3_TEMP_FILE /tmp/hime-$USER/socket-*-$XIM_NAME
 

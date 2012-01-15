@@ -94,7 +94,11 @@ endif
 
 ifeq ($(USE_TRAY),Y)
 CFLAGS     += -DTRAY_ENABLED=1
-OBJS       += tray.o eggtrayicon.o tray-win32.o
+OBJS       += tray.o eggtrayicon.o tray-double.o
+ifeq ($(USE_UNITY),Y)
+CFLAGS     += -DTRAY_UNITY=1
+OBJS       += tray-appindicator.o
+endif
 endif
 
 ifeq ($(USE_I18N),Y)
@@ -284,6 +288,8 @@ install:
 	rm -f $(bindir)/hime-kbm-toggle; ln -sf hime-gb-toggle $(bindir)/hime-kbm-toggle
 	install -d $(himelibdir)
 	install $(HIME_SO) $(himelibdir)
+	install -d $(includedir)
+	install -m 644 im-client/hime-im-client.h im-client/hime-im-client-attr.h $(includedir)
 	$(MAKE) -C im-client install
 	if [ $(BUILD_MODULE) = 'Y' ]; then $(MAKE) -C modules install; fi
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im install; fi
