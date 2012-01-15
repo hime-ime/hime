@@ -20,9 +20,6 @@
 #include "win-sym.h"
 #include "gst.h"
 
-#if WIN32
-extern gboolean test_mode;
-#endif
 static int current_hime_inner_frame;
 static int current_gtab_in_row1;
 static int current_gtab_vertical_select;
@@ -63,10 +60,6 @@ void win_gtab_disp_half_full();
 
 void disp_gtab(char *str)
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   if (!label_gtab)
      return;
   if (str && (str[0]!='\0')) {
@@ -110,10 +103,6 @@ void set_gtab_input_error_color()
 
 void clear_gtab_input_error_color()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   set_gtab_input_color(NULL);
 }
 
@@ -229,10 +218,6 @@ void disp_gtab_sel(char *s)
     else
       return;
   }
-#if WIN32
-  if (test_mode)
-    return;
-#endif
 
   if (!s[0])
     gtk_widget_hide(label_gtab_sele);
@@ -253,16 +238,8 @@ void set_key_codes_label(char *s, int better)
 //  dbg("set_key_codes_label %s %x\n", s, label_key_codes);
   if (!label_key_codes)
     return;
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   if (s && strlen(s)) {
-    if (hbox_row2 && (!gtab_hide_row2 || ggg.wild_mode
-#if WIN32 || 1
-        || (str_key_codes[0])
-#endif
-      )) {
+    if (hbox_row2 && (!gtab_hide_row2 || ggg.wild_mode || (str_key_codes[0]))) {
       gtk_widget_show(hbox_row2);
     }
   } else {
@@ -290,13 +267,11 @@ void set_key_codes_label(char *s, int better)
   if (s && s[0])
     gtk_widget_show(label_key_codes);
 
-#if WIN32 || 1
   better_key_codes = better;
   if (s && s != str_key_codes)
     strcpy(str_key_codes, s);
   else
     str_key_codes[0]=0;
-#endif
 }
 
 
@@ -355,17 +330,10 @@ void create_win_gtab()
 
   gwin_gtab = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_has_resize_grip(GTK_WINDOW(gwin_gtab), FALSE);
-#if WIN32
-  set_no_focus(gwin_gtab);
-#endif
   gtk_container_set_border_width (GTK_CONTAINER (gwin_gtab), 0);
   gtk_widget_realize (gwin_gtab);
 
-#if UNIX
   set_no_focus(gwin_gtab);
-#else
-  win32_init_win(gwin_gtab);
-#endif
 
   if (use_tsin_sel_win())
     init_tsin_selection_win();
@@ -397,10 +365,6 @@ gint inmd_switch_popup_handler (GtkWidget *widget, GdkEvent *event);
 
 void show_hide_label_edit()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   if (!label_edit)
     return;
 
@@ -413,10 +377,6 @@ void show_hide_label_edit()
 
 void disp_label_edit(char *str)
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   if (!label_edit)
     return;
 
@@ -622,18 +582,6 @@ void create_win_gtab_gui_simple()
 
 
     label_gtab = gtk_label_new(NULL);
-    if (current_CS && (! hime_status_tray) && gtab_hide_row2 && gtab_disp_im_name)
-    {
-      if (hime_win_color_use)
-      {
-	gchar *color_cname = g_strdup_printf("<span foreground=\"%s\">[%s]</span>",
-					     hime_sel_key_color, inmd[current_CS->in_method].cname);
-	gtk_label_set_markup(GTK_LABEL(label_gtab), color_cname);
-	g_free(color_cname);
-      }
-      else
-	gtk_label_set_text(GTK_LABEL(label_gtab), inmd[current_CS->in_method].cname);
-    }
 
     if (gtab_in_area_button)
       gtk_container_add (GTK_CONTAINER (event_box_gtab), label_gtab);
@@ -676,6 +624,23 @@ void create_win_gtab_gui_simple()
   minimize_win_gtab();
 }
 
+void show_input_method_name_on_gtab()
+{
+  if (current_CS && (! hime_status_tray) && gtab_hide_row2 && gtab_disp_im_name &&
+      (current_CS->im_state == HIME_STATE_CHINESE) && (current_CS->b_half_full_char == 0) &&
+      (current_CS->tsin_pho_mode))
+  {
+    if (hime_win_color_use)
+    {
+      gchar *color_cname = g_strdup_printf("<span foreground=\"%s\">[%s]</span>",
+					   hime_sel_key_color, inmd[current_CS->in_method].cname);
+      gtk_label_set_markup(GTK_LABEL(label_gtab), color_cname);
+      g_free(color_cname);
+    }
+    else
+      gtk_label_set_text(GTK_LABEL(label_gtab), inmd[current_CS->in_method].cname);
+  }
+}
 
 static void create_win_gtab_gui()
 {
@@ -700,27 +665,16 @@ extern gboolean force_show;
 
 void show_win_gtab()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
   create_win_gtab();
   create_win_gtab_gui();
-#if WIN32 || 1
   // window was destroyed
   if (hime_pop_up_win)
     set_key_codes_label(str_key_codes, better_key_codes);
-#endif
 
   if (current_CS) {
     if (current_CS->fixed_pos)
       move_win_gtab(0,0);
   }
-
-#if WIN32
-  minimize_win_gtab();
-#endif
 
 //  init_gtab(current_CS->in_method);
 
@@ -729,22 +683,15 @@ void show_win_gtab()
     return;
 
 //  dbg("show_win_gtab()\n");
-#if WIN32
-    gtk_widget_show(gwin_gtab);
-#endif
 
-#if UNIX && 0
+#if 0
   if (current_CS->b_raise_window)
 #endif
     gtk_window_present(GTK_WINDOW(gwin_gtab));
 
-#if WIN32 || 1
   move_win_gtab(current_in_win_x, current_in_win_y);
-#endif
 
-#if UNIX
   gtk_widget_show(gwin_gtab);
-#endif
 
   if (current_CS)
   {
@@ -755,8 +702,8 @@ void show_win_gtab()
 
     if (hime_status_tray || (! gtab_hide_row2))
       gtk_widget_hide(label_gtab);
-    else
-      win_gtab_disp_half_full();
+    
+    win_gtab_disp_half_full();
   }
 
   show_win_sym();
@@ -794,10 +741,6 @@ void destroy_win_gtab()
 
 void hide_win_gtab()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   win_gtab_max_key_press = 0;
 
   if (!gwin_gtab)
@@ -819,10 +762,6 @@ void hide_win_gtab()
 
 void minimize_win_gtab()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
   if (!gwin_gtab)
     return;
 
@@ -876,6 +815,7 @@ char *get_full_str()
         return eng_color_full_str;
       else
         return _(eng_full_str);
+      break;
     default:
       break;
   }
@@ -884,16 +824,25 @@ char *get_full_str()
 
 void win_gtab_disp_half_full()
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
   if (label_full) {
-    if (current_CS->im_state == HIME_STATE_CHINESE && (!current_CS->b_half_full_char))
+    if ((current_CS->im_state == HIME_STATE_CHINESE && (!current_CS->b_half_full_char)) ||
+        (current_CS->tsin_pho_mode == 0))
       gtk_widget_hide(label_full);
     else
       gtk_widget_show(label_full);
+  }
+
+  if (current_CS->tsin_pho_mode)
+  {
+    if (label_gtab_sele) gtk_widget_show(label_gtab_sele);
+    if (hime_status_tray || (! gtab_hide_row2))
+      gtk_widget_show(label_gtab);
+  }
+  else
+  {
+    if (label_gtab_sele) gtk_widget_hide(label_gtab_sele);
+    if (hime_status_tray || (! gtab_hide_row2))
+      gtk_widget_hide(label_gtab);
   }
 
   if (label_gtab && (gtab_hide_row2))

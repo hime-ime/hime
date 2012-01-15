@@ -153,9 +153,6 @@ void create_win_intcode()
 
   gwin_int = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_has_resize_grip(GTK_WINDOW(gwin_int), FALSE);
-#if WIN32
-  gmf.mf_set_no_focus(gwin_int);
-#endif
 
 //  gtk_window_set_default_size(GTK_WINDOW (gwin_int), 1, 1);
   gtk_container_set_border_width (GTK_CONTAINER (gwin_int), 0);
@@ -194,11 +191,7 @@ void create_win_intcode()
   gtk_widget_show_all (gwin_int);
 
   gtk_widget_realize (gwin_int);
-#if WIN32
-  gmf.mf_win32_init_win(gwin_int);
-#else
   set_no_focus(gwin_int);
-#endif
 
   adj_intcode_buttons();
   minimize_win();
@@ -218,10 +211,7 @@ void module_show_win()
     return;
 #endif
 
-#if UNIX
-  if (!GTK_WIDGET_VISIBLE(gwin_int))
-#endif
-  {
+  if (!GTK_WIDGET_VISIBLE(gwin_int)) {
     gtk_widget_show(gwin_int);
   }
 

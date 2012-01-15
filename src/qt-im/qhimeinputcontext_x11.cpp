@@ -155,7 +155,7 @@ void QHIMEInputContext::setMicroFocus(int x, int y, int, int h, QFont *f)
 
     if (widget ) {
 	QPoint p( x, y );
-	QPoint p2 = widget->mapTo( widget->topLevelWidget(), QPoint( 0, 0 ) );
+//	QPoint p2 = widget->mapTo( widget->topLevelWidget(), QPoint( 0, 0 ) );
 	p = widget->topLevelWidget()->mapFromGlobal( p );
 	setComposePosition(p.x(), p.y() + h);
    }

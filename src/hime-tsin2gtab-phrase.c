@@ -106,11 +106,6 @@ typedef struct {
 
 void get_keymap_str(u_int64_t k, char *keymap, int keybits, char tkey[]);
 
-#if WIN32
-void init_hime_program_files();
- #pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#endif
-
 int main(int argc, char **argv)
 {
   gtk_init(&argc, &argv);
@@ -157,13 +152,13 @@ int main(int argc, char **argv)
     th.keybits = 6;
   dbg("keybits:%d  maxPress:%d\n", th.keybits, th.MaxPress);
 
-  int max_keyN;
+//  int max_keyN;
   if (th.MaxPress*th.keybits > 32) {
-    max_keyN = 64 / th.keybits;
+//    max_keyN = 64 / th.keybits;
     key64 = TRUE;
     dbg("it's a 64-bit .gtab\n");
   } else {
-    max_keyN = 32 / th.keybits;
+//    max_keyN = 32 / th.keybits;
     key64 = FALSE;
   }
 
@@ -172,7 +167,7 @@ int main(int argc, char **argv)
   char kname[128][CH_SZ];
   char keymap[128];
   gtab_idx1_t idx1[256];
-  static char kno[128];
+//  static char kno[128];
 
   itN = th.DefC;
 
@@ -181,10 +176,12 @@ int main(int argc, char **argv)
   fread(kname, CH_SZ, th.KeyS, fr);
   fread(idx1, sizeof(gtab_idx1_t), KeyNum+1, fr);
 
+#if 0
   int i;
   for(i=0; i < th.KeyS; i++) {
     kno[keymap[i]] = i;
   }
+#endif
 
   fprintf(fp_out,TSIN_GTAB_KEY" %d %d %s\n", th.keybits, th.MaxPress, keymap+1);
 

@@ -25,11 +25,7 @@ typedef struct {
   int tag;
   u_int seed;
   Connection_type type;
-#if	UNIX
   int fd;
-#else
-  HANDLE fd;
-#endif
 } HIME_ENT;
 
 extern HIME_ENT *hime_clients;

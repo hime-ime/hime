@@ -107,17 +107,9 @@ void create_stat_win()
 {
   gwin_stat = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_has_resize_grip(GTK_WINDOW(gwin_stat), FALSE);
-#if WIN32
-  set_no_focus(gwin_stat);
-#endif
   gtk_container_set_border_width (GTK_CONTAINER (gwin_stat), 0);
   gtk_widget_realize (gwin_stat);
-#if UNIX
   set_no_focus(gwin_stat);
-#else
-  win32_init_win(gwin_stat);
-#endif
-
 
   GtkWidget *vbox = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);

@@ -13,7 +13,7 @@ XIM_NAME=`date +%N | tr -d 0`
 GTK_2_TEMP_FILE=$PWD/gtk2
 GTK_3_TEMP_FILE=$PWD/gtk3
 
-[ ! -e distro/debian ] && exec echo Please run this script under hime directory, thanks.
+[ ! -e distro/debian ] && exec echo Please execute '"distro/dev-tools/scripts/test-hime"' under hime directory, thanks.
 
 export PATH=$PWD/src:$PATH
 export HIME_TABLE_DIR=$PWD/data

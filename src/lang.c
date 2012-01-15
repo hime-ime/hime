@@ -23,7 +23,6 @@ char *tsin32_f="tsin32";
 
 void set_is_chs()
 {
-#if UNIX
   char *lc_ctype = getenv("LC_CTYPE");
   char *lc_all = getenv("LC_ALL");
   char *lang = getenv("LANG");
@@ -40,10 +39,6 @@ void set_is_chs()
   if (strstr(lc_ctype, "zh_CN") || 0) {
     is_chs = TRUE;
   }
-#else
-  is_chs = GetACP() == 936;
-//  is_chs = TRUE;
-#endif
 
   if (is_chs) {
     tsin32_f = "s-tsin32";

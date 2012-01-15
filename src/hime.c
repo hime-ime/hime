@@ -19,16 +19,12 @@
 #include "config.h"
 #include "hime-version.h"
 #include "gtab.h"
-#if UNIX
 #include <signal.h>
-#endif
 #if HIME_i18n_message
 #include <libintl.h>
 #endif
 
-#if UNIX
 Window root;
-#endif
 Display *dpy;
 
 int win_xl, win_yl;
@@ -46,8 +42,6 @@ char *half_char_to_full_char(KeySym xkey)
   return _(fullchar[xkey-' ']);
 }
 
-
-#if UNIX
 static void start_inmd_window()
 {
   GtkWidget *win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -56,8 +50,6 @@ static void start_inmd_window()
   xim_arr[0].xim_xwin = GDK_WINDOW_XWINDOW(gdkwin0);
   dbg("xim_xwin %x\n", xim_arr[0].xim_xwin);
 }
-#endif
-
 
 #if USE_XIM
 char *lc;
@@ -274,7 +266,9 @@ void load_tsin_conf(), load_setttings(), load_tab_pho_file();
 void disp_hide_tsin_status_row(), update_win_kbm_inited();
 void change_tsin_line_color(), change_win0_style(), change_tsin_color();
 void change_win_gtab_style();
+#if TRAY_ENABLED
 void update_item_active_all();
+#endif
 void destroy_inmd_menu();
 void load_gtab_list(gboolean);
 void change_win1_font();
@@ -290,6 +284,7 @@ static void reload_data()
 //  load_tsin_db();
   change_win0_style();
   change_win1_font();
+  create_win_gtab();
   change_win_gtab_style();
 //  change_win_pho_style();
   load_tab_pho_file();
@@ -299,7 +294,9 @@ static void reload_data()
   destroy_inmd_menu();
   load_gtab_list(TRUE);
 
+#if TRAY_ENABLED
   update_item_active_all();
+#endif
 }
 
 void change_tsin_font_size();
@@ -307,7 +304,7 @@ void change_gtab_font_size();
 void change_pho_font_size();
 void change_win_sym_font_size();
 void change_win_gtab_style();
-extern int win_kbm_on;
+extern gboolean win_kbm_on;
 
 static void change_font_size()
 {
@@ -323,17 +320,16 @@ static void change_font_size()
 //  change_win_pho_style();
 }
 
-#if UNIX
 static int xerror_handler(Display *d, XErrorEvent *eve)
 {
   return 0;
 }
-#endif
 
-#if UNIX
 Atom hime_atom;
+#if TRAY_ENABLED
+void disp_tray_icon();
 #endif
-void disp_tray_icon(), toggle_gb_output();
+void toggle_gb_output();
 
 void cb_trad_sim_toggle()
 {
@@ -378,28 +374,33 @@ void message_cb(char *message)
    } else
    if (!strcmp(message, GB_OUTPUT_TOGGLE)) {
      cb_trad_sim_toggle();
+#if TRAY_ENABLED
      update_item_active_all();
+#endif
    } else
    if (!strcmp(message, SIM_OUTPUT_TOGGLE)) {
      sim_output();
 #if TRAY_ENABLED
      disp_tray_icon();
-#endif
      update_item_active_all();
+#endif
    } else
    if (!strcmp(message, TRAD_OUTPUT_TOGGLE)) {
      trad_output();
 #if TRAY_ENABLED
      disp_tray_icon();
-#endif
      update_item_active_all();
+#endif
    } else
    if (!strcmp(message, KBM_TOGGLE)) {
      kbm_toggle();
    } else
-#if UNIX
    if (strstr(message, "#hime_message")) {
      execute_message(message);
+   } else
+#if TRAY_ENABLED
+   if (!strcmp(message, UPDATE_TRAY)) {
+     disp_tray_icon();
    } else
 #endif
    if (!strcmp(message, RELOAD_TSIN_DB)) {
@@ -411,7 +412,6 @@ void message_cb(char *message)
      reload_data();
 }
 
-#if UNIX
 static GdkFilterReturn my_gdk_filter(GdkXEvent *xevent,
                                      GdkEvent *event,
                                      gpointer data)
@@ -442,14 +442,15 @@ void init_atom_property()
   hime_atom = get_hime_atom(dpy);
   XSetSelectionOwner(dpy, hime_atom, xim_arr[0].xim_xwin, CurrentTime);
 }
-#endif
-
 
 void hide_win0();
 void destroy_win0();
 void destroy_win1();
 void destroy_win_gtab();
-void free_pho_mem(),free_tsin(),free_all_IC(), free_gtab(), free_phrase(), destroy_tray();
+void free_pho_mem(),free_tsin(),free_all_IC(), free_gtab(), free_phrase();
+#if TRAY_ENABLED
+void destroy_tray();
+#endif
 
 void do_exit()
 {
@@ -469,7 +470,9 @@ void do_exit()
   destroy_win_gtab();
 #endif
 
+#if TRAY_ENABLED
   destroy_tray();
+#endif
 
   gtk_main_quit();
 }
@@ -482,32 +485,15 @@ void sig_do_exit(int sig)
 char *get_hime_xim_name();
 void load_phrase(), init_TableDir();
 void init_tray(), exec_setup_scripts();
-#if UNIX
 void init_hime_im_serv(Window win);
-#else
-void init_hime_im_serv();
-#endif
 void init_tray_double();
 
 #if TRAY_UNITY
 void init_tray_appindicator();
 #endif
 
-#if WIN32
-void init_hime_program_files();
- #pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#endif
-int win32_tray_disabled = 1;
-
-
 gboolean delayed_start_cb(gpointer data)
 {
-#if WIN32
-  Sleep(200);
-#endif
-
-  win32_tray_disabled = 0;
-
 #if TRAY_ENABLED
   if (hime_status_tray) {
     if (hime_tray_display == HIME_TRAY_DISPLAY_SINGLE)
@@ -542,10 +528,6 @@ extern int destroy_window;
 
 int main(int argc, char **argv)
 {
-#if WIN32
-   putenv("PANGO_WIN32_NO_UNISCRIBE=1");
-#endif
-
   char *destroy = getenv("HIME_DESTROY_WINDOW");
   if (destroy)
     destroy_window = atoi(destroy);
@@ -553,39 +535,6 @@ int main(int argc, char **argv)
 
   gtk_init (&argc, &argv);
 
-/* Should be limited in specific buttons.
- * Do not force apply the theme to everywhere.
- */
-#if 0 && GTK_CHECK_VERSION(2,91,6)
-  static char css[]=
-"GtkButton\n"
-"{\n"
-"  border-width: 0;\n"
-"  padding: 0;\n"
-"  -GtkButton-inner-border: 0;\n"
-"}";
-  GtkCssProvider *provider = gtk_css_provider_new();
-  gtk_css_provider_load_from_data(provider, css, -1, NULL);
-  gtk_style_context_add_provider_for_screen(gdk_display_get_default_screen(gdk_display_get_default()), GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-  g_object_unref(provider);
-#endif
-
-/* Should be limited in specific buttons.
- * Do not force apply the theme to everywhere.
- */
-#if 0 && !GTK_CHECK_VERSION(2,91,6)
-static char button_rc[]="style \"button\"\n"
-"{\n"
-"   GtkButton::inner-border = {0,0,0,0}\n"
-"\n"
-"xthickness = 1\n"
-"ythickness = 0\n"
-"}\n"
-"class \"GtkButton\" style \"button\"";
-  gtk_rc_parse_string(button_rc);
-#endif
-
-#if UNIX
   signal(SIGCHLD, SIG_IGN);
   signal(SIGPIPE, SIG_IGN);
 
@@ -597,23 +546,11 @@ static char button_rc[]="style \"button\"\n"
     setpgrp();
 #endif
   }
-#endif
 
 //putenv("GDK_NATIVE_WINDOWS=1");
-#if WIN32
-  typedef BOOL (WINAPI* pImmDisableIME)(DWORD);
-  pImmDisableIME pd;
-  HMODULE imm32=LoadLibraryA("imm32");
-  if (imm32 && (pd=(pImmDisableIME)GetProcAddress(imm32, "ImmDisableIME"))) {
-     (*pd)(0);
-  }
-  init_hime_program_files();
-  init_hime_im_serv();
-#endif
 
   set_is_chs();
 
-#if UNIX
   char *lc_ctype = getenv("LC_CTYPE");
   char *lc_all = getenv("LC_ALL");
   char *lang = getenv("LANG");
@@ -626,7 +563,6 @@ static char button_rc[]="style \"button\"\n"
   if (!lc_ctype)
     lc_ctype = "zh_TW.Big5";
   dbg("hime get env LC_CTYPE=%s  LC_ALL=%s  LANG=%s\n", lc_ctype, lc_all, lang);
-#endif
 
 #if USE_XIM
   char *t = strchr(lc_ctype, '.');
@@ -651,7 +587,11 @@ static char button_rc[]="style \"button\"\n"
 
   if (argc == 2 && (!strcmp(argv[1], "-v") || !strcmp(argv[1], "--version") || !strcmp(argv[1], "-h")) ) {
     setenv("NO_GTK_INIT", "", TRUE);
+#if GIT_HAVE
+    p_err(" version %s (git %s)\n", HIME_VERSION, GIT_HASH);
+#else
     p_err(" version %s\n", HIME_VERSION);
+#endif
   }
 
   init_TableDir();
@@ -666,24 +606,19 @@ static char button_rc[]="style \"button\"\n"
 
   dbg("after gtk_init\n");
 
-#if UNIX
   dpy = GDK_DISPLAY();
   root=DefaultRootWindow(dpy);
-#endif
   get_dpy_xyl();
   g_signal_connect(gdk_screen_get_default(),"size-changed", G_CALLBACK(screen_size_changed), NULL);
 
   dbg("display width:%d height:%d\n", dpy_xl, dpy_yl);
 
-#if UNIX
   start_inmd_window();
-#endif
 
 #if USE_XIM
   open_xim();
 #endif
 
-#if UNIX
   gdk_window_add_filter(NULL, my_gdk_filter, NULL);
 
   init_atom_property();
@@ -692,19 +627,12 @@ static char button_rc[]="style \"button\"\n"
   // disable the io handler abort
   // void *olderr =
     XSetErrorHandler((XErrorHandler)xerror_handler);
-#endif
 
-#if UNIX
   init_hime_im_serv(xim_arr[0].xim_xwin);
-#endif
 
   exec_setup_scripts();
 
-#if UNIX
   g_timeout_add(200, delayed_start_cb, NULL); // Old setting is 5000 here.
-#else
-  delayed_start_cb(NULL);
-#endif
 
   dbg("before gtk_main\n");
 

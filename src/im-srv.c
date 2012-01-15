@@ -43,7 +43,6 @@ void gdk_input_remove	  (gint		     tag);
 void get_hime_im_srv_sock_path(char *outstr, int outstrN);
 void process_client_req(int fd);
 
-#if UNIX
 static gboolean cb_read_hime_client_data(GIOChannel *source, GIOCondition condition, gpointer data)
 {
   int fd=GPOINTER_TO_INT(data);
@@ -51,7 +50,6 @@ static gboolean cb_read_hime_client_data(GIOChannel *source, GIOCondition condit
   process_client_req(fd);
   return TRUE;
 }
-#endif
 
 Atom get_hime_addr_atom(Display *dpy);
 

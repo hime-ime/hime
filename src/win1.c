@@ -1,4 +1,4 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/* Copyright (C) 2004-2012 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,7 +26,7 @@ static char wselkey[16];
 static int wselkeyN;
 //Window xwin1;
 
-#define SELEN (12)
+#define SELEN (15)
 
 static GtkWidget *labels_sele[SELEN], *labels_seleR[SELEN];
 static GtkWidget *eve_sele[SELEN], *eve_seleR[SELEN];
@@ -80,16 +80,9 @@ void create_win1()
 
   gwin1 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_has_resize_grip(GTK_WINDOW(gwin1), FALSE);
-#if WIN32
-  set_no_focus(gwin1);
-#endif
   gtk_widget_realize (gwin1);
 
-#if UNIX
   set_no_focus(gwin1);
-#else
-  win32_init_win(gwin1);
-#endif
 
   g_signal_connect (G_OBJECT (gwin1), "scroll-event", G_CALLBACK (button_scroll_event_tsin), NULL);
 }
@@ -241,9 +234,6 @@ void clear_sele()
   gtk_widget_hide(arrow_up);
   gtk_widget_hide(arrow_down);
   gtk_window_resize(GTK_WINDOW(gwin1), 1, 1);
-#if WIN32
-  gdk_flush();
-#endif
   hide_selections_win();
 }
 
@@ -291,17 +281,6 @@ void set_sele_text(int tN, int i, char *text, int len)
   gtk_label_set_markup(GTK_LABEL(labels_sele[i]), tt);
 }
 
-#if WIN32
-static int timeout_handle;
-gboolean timeout_minimize_win1(gpointer data)
-{
-  gtk_window_resize(GTK_WINDOW(gwin1), 1, 1);
-  gtk_window_present(GTK_WINDOW(gwin1));
-  timeout_handle = 0;
-  return FALSE;
-}
-#endif
-
 void raise_tsin_selection_win()
 {
   if (gwin1 && GTK_WIDGET_VISIBLE(gwin1))
@@ -314,12 +293,6 @@ void disp_selections(int x, int y)
 {
   if (!gwin1)
     p_err("disp_selections !gwin1");
-
-#if WIN32
-  if (!GTK_WIDGET_VISIBLE(gwin1)) {
-    gtk_widget_show(gwin1);
-  }
-#endif
 
   if (y < 0) {
 	 int tx;
@@ -346,35 +319,16 @@ void disp_selections(int x, int y)
     y = win_y - win1_yl;
 
   gtk_window_move(GTK_WINDOW(gwin1), x, y);
-#if WIN32
-  if (!timeout_handle)
-    timeout_handle = g_timeout_add(50, timeout_minimize_win1, NULL);
-#endif
 
-#if UNIX
   if (!GTK_WIDGET_VISIBLE(gwin1)) {
     gtk_widget_show(gwin1);
   }
-#endif
-#if WIN32
-  raise_tsin_selection_win();
-#endif
 }
 
 void hide_selections_win()
 {
   if (!gwin1)
     return;
-#if WIN32
-  if (timeout_handle) {
-	  g_source_remove(timeout_handle);
-	  timeout_handle = 0;
-  }
-#endif
-
-#if WIN32
-  gtk_window_resize(GTK_WINDOW(gwin1), 1, 1);
-#endif
   gtk_widget_hide(gwin1);
 }
 

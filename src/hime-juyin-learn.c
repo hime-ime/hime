@@ -113,20 +113,10 @@ gboolean cb_button_fetch()
 
 void set_window_hime_icon(GtkWidget *window);
 
-#if WIN32
-void init_hime_program_files();
-#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-void init_TableDir();
-#endif
-
 gboolean is_pinyin_kbm();
 
 int main(int argc, char **argv)
 {
-#if WIN32
-  init_TableDir();
-#endif
-
   gtk_init (&argc, &argv);
 
 #if HIME_i18n_message
@@ -185,11 +175,7 @@ int main(int argc, char **argv)
                     G_CALLBACK (do_exit), NULL);
 
   gtk_widget_show_all(mainwin);
-#if UNIX
   pclipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
-#else
-  pclipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-#endif
 
   req_clipboard();
 

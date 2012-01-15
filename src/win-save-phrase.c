@@ -142,11 +142,6 @@ gboolean timeout_countdown(gpointer data)
 
 void create_win_save_phrase(WSP_S *wsp, int wspN)
 {
-#if WIN32
-  if (test_mode)
-    return;
-#endif
-
   if (!wspN)
     return;
 
@@ -200,17 +195,8 @@ void create_win_save_phrase(WSP_S *wsp, int wspN)
   sess->label_countdown = gtk_label_new(NULL);
   gtk_box_pack_start (GTK_BOX (vbox), sess->label_countdown, FALSE, FALSE, 5);
 
-#if 1
-#if WIN32
-  set_no_focus(main_window);
-#endif
   gtk_widget_realize(main_window);
-#if UNIX
   set_no_focus(main_window);
-#else
-  win32_init_win(main_window);
-#endif
-#endif
 
 //  dbg("mmmmmmmmmmmmm\n");
 

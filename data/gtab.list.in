@@ -1,3 +1,4 @@
+英數 e !EN hime-tray.png
 內碼 0  intcode-module.so intcode.png
 倉頡 1 cj.gtab cj.png
 #五四三倉頡 2 cj543.gtab cj5.png
@@ -13,6 +14,7 @@
 大易 7 dayi3.gtab dayi3.png
 行列 8 ar30.gtab ar30.png
 #行列大字集 8 ar30-big.gtab ar30.png
+# Too many people depends on "嘸蝦米 9", kept for compatibility
 嘸蝦米 9 noseeing.gtab noseeing.png
 #標點簡易 - simplex-punc.gtab simplex.png
 速成(簡易) - simplex.gtab simplex.png

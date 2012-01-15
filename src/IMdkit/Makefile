@@ -6,7 +6,8 @@ libXimd.a:
 	$(MAKE) -C lib
 
 clean:
-	rm -f *.bak *~
+	@echo "clean up"
+	@rm -f *.bak *~
 	$(MAKE) -C lib clean
 
 install:

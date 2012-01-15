@@ -10,7 +10,7 @@ CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I./IMdkit/include -I./im-client 
         -DSYS_ICON_DIR=\"$(SYS_ICON_DIR)\" -DFREEBSD=$(FREEBSD) -DMAC_OS=$(MAC_OS) \
         -DG_DISABLE_SINGLE_INCLUDES -DG_DISABLE_DEPRECATED \
         -DGDK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED \
-        -DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED
+        -DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE
 
 VERSION_FILE = ../VERSION.hime
 
@@ -94,7 +94,10 @@ endif
 
 ifeq ($(USE_TRAY),Y)
 CFLAGS     += -DTRAY_ENABLED=1
-OBJS       += tray.o eggtrayicon.o tray-double.o
+OBJS       += tray.o tray-double.o
+ifeq ($(GTK),gtk+-2.0)
+OBJS       += gdkpixbuf-drawable.o
+endif
 ifeq ($(USE_UNITY),Y)
 CFLAGS     += -DTRAY_UNITY=1
 OBJS       += tray-appindicator.o
@@ -118,6 +121,10 @@ endif
 
 ifeq ($(MAC_OS),1)
 EXTRA_LDFLAGS=-bind_at_load 
+endif
+
+ifeq ($(GIT_HAVE),Y)
+CFLAGS     += -DGIT_HASH=\"$(GIT_HASH)\" -DGIT_HAVE=1
 endif
 
 HIME_SO   = hime1.so hime2.so

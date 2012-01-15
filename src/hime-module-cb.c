@@ -31,10 +31,7 @@
 #include "im-client/hime-im-client-attr.h"
 #include "hime-module.h"
 #include "hime-module-cb.h"
-
-#if UNIX
 #include <dlfcn.h>
-#endif
 
 #define SETUP_CB(fn) do { \
 	*(void **) (&st.fn) = dlsym(handle, # fn); \
@@ -43,7 +40,6 @@
 
 HIME_module_callback_functions *init_HIME_module_callback_functions(char *sofile)
 {
-#if UNIX
   void *handle;
   char *error;
   char so_absolute_path[512];
@@ -60,12 +56,6 @@ HIME_module_callback_functions *init_HIME_module_callback_functions(char *sofile
     dbg("dlopen %s failed\n", sofile);
     return NULL;
   }
-#else
-  HMODULE handle = LoadLibraryA(sofile);
-  if (!handle)
-    return NULL;
-#define dlsym GetProcAddress
-#endif
 
   HIME_module_callback_functions st;
   *(void **) (&st.module_init_win) = dlsym(handle, "module_init_win");

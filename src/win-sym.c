@@ -55,23 +55,14 @@ FILE *watch_fopen(char *filename, time_t *pfile_modify_time)
   get_hime_user_or_sys_fname(filename, fname);
 
   if ((fp=fopen(fname, "rb"))==NULL) {
-#if UNIX
     strcat(strcat(strcpy(fname, TableDir), "/"), filename);
-#else
-    strcat(strcat(strcpy(fname, TableDir), "\\"), filename);
-#endif
 
     if ((fp=fopen(fname, "rb"))==NULL)
      return NULL;
   }
 
-#if UNIX
   struct stat st;
   fstat(fileno(fp), &st);
-#else
-  struct _stat st;
-  _fstat(fileno(fp), &st);
-#endif
 
   if (st.st_mtime == *pfile_modify_time) {
     fclose(fp);
@@ -320,9 +311,6 @@ void show_win_sym()
 #endif
   gtk_widget_show_all(gwin_sym);
   move_win_sym();
-#if WIN32
-  gtk_window_present(GTK_WINDOW(gwin_sym));
-#endif
 }
 
 
@@ -364,9 +352,6 @@ static void disp_win_sym()
   destory_win();
 //  win_sym_enabled = 0;
   create_win_sym();
-#if WIN32
-  show_win_sym();
-#endif
 }
 
 gboolean win_sym_page_up()
@@ -452,9 +437,6 @@ void create_win_sym()
 
   gwin_sym = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_has_resize_grip(GTK_WINDOW(gwin_sym), FALSE);
-#if WIN32
-  set_no_focus(gwin_sym);
-#endif
 
   cur_in_method = current_CS->in_method;
 
@@ -529,22 +511,14 @@ void create_win_sym()
 
 
   gtk_widget_realize (gwin_sym);
-#if UNIX
   set_no_focus(gwin_sym);
-#else
-  win32_init_win(gwin_sym);
-#endif
 
   if (win_sym_enabled)
     gtk_widget_show_all(gwin_sym);
 
   g_signal_connect (G_OBJECT (gwin_sym), "scroll-event", G_CALLBACK (button_scroll_event), NULL);
 
-#if WIN32
-  show_win_sym();
-#else
   move_win_sym();
-#endif
 #if 0
   dbg("in_method:%d\n", current_CS->in_method);
 #endif

@@ -16,22 +16,11 @@
  */
 
 #include "hime.h"
-#if UNIX
 #include <dirent.h>
 #include <X11/Xatom.h>
-#else
-#include <shellapi.h>
-#include <shlobj.h>
-#include <io.h>
-#endif
 
 #if !CLIENT_LIB
-#if WIN32
-char *TableDir;
-void init_hime_program_files();
-#else
 char *TableDir=HIME_TABLE_DIR;
-#endif
 
 void init_TableDir()
 {
@@ -40,51 +29,28 @@ void init_TableDir()
     TableDir = dname;
     return;
   }
-
-#if WIN32
-  char tt[MAX_PATH];
-  init_hime_program_files();
-
-  sprintf_s(tt, sizeof(tt), "%s\\table", hime_program_files_path);
-  TableDir=strdup(tt);
-  dbg("%s\n", TableDir);
-#endif
 }
 
 
 void get_hime_dir(char *tt)
 {
-#if WIN32
-  SHGetFolderPathA(NULL,CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, tt);
-  strcat(tt,"\\hime");
-#else
     strcpy(tt,(char *)getenv("HOME"));
     strcat(tt,"/.config/hime");
-#endif
 }
 
 
 gboolean get_hime_user_fname(char *name, char fname[])
 {
   get_hime_dir(fname);
-#if UNIX
   strcat(strcat(fname,"/"),name);
-  return access(fname, R_OK)==0;
-#else
-  strcat(strcat(fname,"\\"),name);
-  return (_access(fname, 04) >=0);
-#endif
+  return !access(fname, R_OK);
 //  dbg("get_hime_user_fname %s %s\n", name, fname);
 }
 
 void get_hime_conf_fname(char *name, char fname[])
 {
   get_hime_dir(fname);
-#if UNIX
   strcat(strcat(fname,"/config/"),name);
-#else
-  strcat(strcat(fname,"\\config\\"),name);
-#endif
 }
 
 void get_hime_user_or_sys_fname(char *name, char fname[])
@@ -170,15 +136,10 @@ void save_hime_conf_int(char *name, int val)
 
 void get_sys_table_file_name(char *name, char *fname)
 {
-#if UNIX
   sprintf(fname, "%s/%s", TableDir, name);
-#else
-  sprintf(fname, "%s\\%s", TableDir, name);
-#endif
 }
-#endif
+#endif /* !CLIENT_LIB */
 
-#if UNIX
 char *get_hime_xim_name()
 {
   char *xim_name;
@@ -187,6 +148,8 @@ char *get_hime_xim_name()
     static char find[] = "@im=";
     static char sstr[32];
     char *p = strstr(xim_name, find);
+
+    if (p==NULL) return "hime";
 
     p += strlen(find);
     strncpy(sstr, p, sizeof(sstr));
@@ -213,4 +176,3 @@ Atom get_hime_atom(Display *dpy)
 
   return atom;
 }
-#endif

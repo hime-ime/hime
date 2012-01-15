@@ -23,11 +23,13 @@ static gboolean timeout_destroy_window(GtkWidget *win)
   return FALSE;
 }
 
-#if !TRAY_ENABLED
-GdkWindow *tray_da_win;
-#endif
-extern GdkWindow *tray_da_win;
+#if TRAY_ENABLED
+extern GtkStatusIcon *tray_icon;
 extern GtkStatusIcon *icon_main;
+
+extern gboolean is_exist_tray();
+extern gboolean is_exist_tray_double();
+#endif
 
 static void create_win_message(char *icon, char *text, int duration)
 {
@@ -87,51 +89,26 @@ static void create_win_message(char *icon, char *text, int duration)
 
   int ox=-1, oy;
   int szx, szy;
-  if (tray_da_win) {
-    gdk_window_get_origin  (tray_da_win, &ox, &oy);
-#if !GTK_CHECK_VERSION(2,91,0)
-    gdk_drawable_get_size(tray_da_win, &szx, &szy);
-#else
-    szx = gdk_window_get_width(tray_da_win);
-    szy = gdk_window_get_height(tray_da_win);
-#endif
-
-    if (oy<height) {
-      oy = szy;
+#if TRAY_ENABLED
+  GdkRectangle rect;
+  GtkOrientation ori;
+  if ((is_exist_tray() && gtk_status_icon_get_geometry(tray_icon, NULL, &rect,  &ori)) || (is_exist_tray_double() && gtk_status_icon_get_geometry(icon_main, NULL, &rect,  &ori))) {
+    dbg("rect %d,%d\n", rect.x, rect.y, rect.width, rect.height);
+    if (ori==GTK_ORIENTATION_HORIZONTAL) {
+      ox=rect.x;
+      if (rect.y > 100)
+        oy=rect.y - height;
+      else
+        oy=rect.y + rect.height;
     } else {
-      oy -= height;
-      if (oy + height > dpy_yl)
-        oy = dpy_yl - height;
-      if (oy < 0)
-        oy = 0;
-    }
-
-    if (ox + width > dpy_xl)
-      ox = dpy_xl - width;
-    if (ox < 0)
-      ox = 0;
-  } else
-  if (icon_main) {
-    GdkRectangle rect;
-    GtkOrientation ori;
-    if (gtk_status_icon_get_geometry(icon_main, NULL, &rect, &ori)) {
-      dbg("rect %d,%d\n", rect.x, rect.y, rect.width, rect.height);
-      if (ori==GTK_ORIENTATION_HORIZONTAL) {
-        ox=rect.x;
-        if (rect.y > 100)
-          oy=rect.y - height;
-        else
-          oy=rect.y + rect.height;
-      } else {
-        oy=rect.y;
-        if (rect.x > 100)
-          ox=rect.x - width;
-        else
-          ox=rect.x + rect.width;
-      }
+      oy=rect.y;
+      if (rect.x > 100)
+        ox=rect.x - width;
+      else
+        ox=rect.x + rect.width;
     }
   }
-
+#endif
   if (ox < 0) {
     ox = dpy_xl - width;
     oy = dpy_yl - height;

@@ -15,13 +15,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#if UNIX
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#endif
 
 #include <string.h>
 #include "hime.h"
@@ -32,59 +30,14 @@
 
 #define DBG 0
 
-#if UNIX
 static int myread(int fd, void *buf, int bufN)
-#else
-static int myread(HANDLE fd, void *buf, int bufN)
-#endif
 {
-#if UNIX
   return read(fd, buf, bufN);
-#else
-  int ofs=0, toN = bufN;
-  while (toN) {
-	DWORD rn;
-    BOOL r = ReadFile(fd, ((char *)buf) + ofs, toN, &rn, 0);
-    if (!r)
-      return -1;
-    ofs+=rn;
-	toN-=rn;
-  };
-  return bufN;
-#endif
 }
 
 
 HIME_ENT *hime_clients;
 int hime_clientsN;
-
-#if WIN32
-// need to use Enter/Leave CriticalSection in the future
-int find_im_client(HANDLE hand)
-{
-	int i;
-	for(i=0;i<hime_clientsN;i++)
-		if (hime_clients[i].fd == hand)
-			break;
-	if (i==hime_clientsN)
-		return -1;
-	return i;
-}
-
-int add_im_client(HANDLE hand)
-{
-	int i = find_im_client(0);
-	if (i<0) {
-		hime_clients=trealloc(hime_clients, HIME_ENT, hime_clientsN);
-		i=hime_clientsN++;
-	}
-
-	ZeroMemory(&hime_clients[i], sizeof(HIME_ENT));
-	hime_clients[i].fd = hand;
-	return i;
-}
-
-#endif
 
 extern HIME_PASSWD my_passwd;
 
@@ -106,21 +59,8 @@ void dbg_time(char *fmt,...);
 extern char *output_buffer;
 extern int output_bufferN;
 
-#if UNIX
 int write_enc(int fd, void *p, int n)
-#else
-int write_enc(HANDLE fd, void *p, int n)
-#endif
 {
-#if WIN32
-  DWORD wn;
-  BOOL r = WriteFile(fd, (char *)p, n, &wn, 0);
-  if (!r) {
-    perror("write_enc");
-	return -1;
-  }
-  return wn;
-#else
   if (!fd)
     return 0;
 
@@ -139,28 +79,15 @@ int write_enc(HANDLE fd, void *p, int n)
   free(tmp);
 
   return r;
-#endif
 }
 
-#if WIN32
-typedef int socklen_t;
-#else
 #include <pwd.h>
-#endif
 
-#if UNIX
 static void shutdown_client(int fd)
-#else
-static void shutdown_client(HANDLE fd)
-#endif
 {
 //  dbg("client shutdown rn %d\n", rn);
-#if UNIX
   g_source_remove(hime_clients[fd].tag);
   int idx = fd;
-#else
-  int idx = find_im_client(fd);
-#endif
 
   if (hime_clients[idx].cs == current_CS) {
     hide_in_win(current_CS);
@@ -169,11 +96,7 @@ static void shutdown_client(HANDLE fd)
 
   free(hime_clients[idx].cs);
   hime_clients[idx].cs = NULL;
-#if UNIX
   hime_clients[idx].fd = 0;
-#else
-  hime_clients[idx].fd = NULL;
-#endif
 
 /* Now we use "is_special_user" */
 #if 0
@@ -184,23 +107,13 @@ static void shutdown_client(HANDLE fd)
     exit(0);
   }
 #endif
-#if UNIX
   close(fd);
-#else
-  CloseHandle(fd);
-//  CloseHandle(handle);
-#endif
 }
 
 void message_cb(char *message);
 void save_CS_temp_to_current();
 
-
-#if UNIX
 void process_client_req(int fd)
-#else
-void process_client_req(HANDLE fd)
-#endif
 {
   HIME_req req;
 #if DBG
@@ -212,11 +125,9 @@ void process_client_req(HANDLE fd)
     shutdown_client(fd);
     return;
   }
-#if UNIX
   if (hime_clients[fd].type == Connection_type_tcp) {
     __hime_enc_mem((u_char *)&req, sizeof(req), &srv_ip_port.passwd, &hime_clients[fd].seed);
   }
-#endif
   to_hime_endian_4(&req.req_no);
   to_hime_endian_4(&req.client_win);
   to_hime_endian_4(&req.flag);
@@ -230,13 +141,8 @@ void process_client_req(HANDLE fd)
   if (current_CS && req.client_win == current_CS->client_win) {
     cs = current_CS;
   } else {
-#if UNIX
     int idx = fd;
     cs = hime_clients[fd].cs;
-#else
-    int idx = find_im_client(fd);
-    cs = hime_clients[idx].cs;
-#endif
 
     int new_cli = 0;
     if (!cs) {
@@ -248,16 +154,7 @@ void process_client_req(HANDLE fd)
     cs->b_hime_protocol = TRUE;
     cs->input_style = InputStyleOverSpot;
 
-
-#if WIN32
-    cs->use_preedit = TRUE;
-#endif
-
-#if UNIX
     if (hime_init_im_enabled && new_cli)
-#else
-    if (new_cli)
-#endif
     {
       current_CS = cs;
       dbg("new_cli default_input_method:%d\n", default_input_method);
@@ -344,30 +241,6 @@ void process_client_req(HANDLE fd)
       }
 
       break;
-#if WIN32
-    case HIME_req_test_key_press:
-    case HIME_req_test_key_release:
-      current_CS = cs;
-      save_CS_temp_to_current();
-      to_hime_endian_4(&req.keyeve.key);
-      to_hime_endian_4(&req.keyeve.state);
-
-//	  dbg("serv key eve %x %x predit:%d\n",req.keyeve.key, req.keyeve.state, cs->use_preedit);
-
-      if (req.req_no==HIME_req_test_key_press)
-        status = ProcessTestKeyPress(req.keyeve.key, req.keyeve.state);
-      else
-        status = ProcessTestKeyRelease(req.keyeve.key, req.keyeve.state);
-
-      if (status)
-        reply.flag |= HIME_reply_key_processed;
-
-      reply.datalen = 0;
-      to_hime_endian_4(&reply.flag);
-      to_hime_endian_4(&reply.datalen);
-      write_enc(fd, &reply, sizeof(reply));
-      break;
-#endif
     case HIME_req_focus_in:
 #if DBG
       dbg_time("HIME_req_focus_in  %x %d %d\n",cs, cs->spot_location.x, cs->spot_location.y);
@@ -381,7 +254,6 @@ void process_client_req(HANDLE fd)
 #endif
       hime_FocusOut(cs);
       break;
-#if UNIX
     case HIME_req_focus_out2:
       {
 #if DBG
@@ -407,7 +279,6 @@ void process_client_req(HANDLE fd)
       }
       }
       break;
-#endif
     case HIME_req_set_cursor_location:
 #if DBG
       dbg_time("set_cursor_location %x %d %d\n", cs,
@@ -457,10 +328,8 @@ void process_client_req(HANDLE fd)
       write_enc(fd, &attrN, sizeof(attrN));
       if (attrN > 0)
         write_enc(fd, attr, sizeof(HIME_PREEDIT_ATTR)*attrN);
-      write_enc(fd, &cursor, sizeof(cursor));
-#if WIN32 || 1
-      write_enc(fd, &sub_comp_len, sizeof(sub_comp_len));
-#endif
+        write_enc(fd, &cursor, sizeof(cursor));
+        write_enc(fd, &sub_comp_len, sizeof(sub_comp_len));
 //      dbg("uuuuuuuuuuuuuuuuu len:%d %d cursor:%d\n", len, attrN, cursor);
       }
       break;
@@ -490,7 +359,6 @@ cli_down:
       break;
     default:
       dbg_time("Invalid request %x from:", req.req_no);
-#if UNIX
       struct sockaddr_in addr;
       socklen_t len=sizeof(addr);
       bzero(&addr, sizeof(addr));
@@ -500,7 +368,6 @@ cli_down:
       } else {
         perror("getpeername\n");
       }
-#endif
       shutdown_client(fd);
       break;
   }

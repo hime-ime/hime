@@ -18,7 +18,7 @@
 #include "win1.h"
 
 // optional functions/data for hime module to use, please refer to anthy.cpp
-#if UNIX && defined(__cplusplus)
+#ifdef __cplusplus
 extern "C" {
 #endif
 typedef struct {
@@ -69,13 +69,8 @@ typedef struct {
   char **mf_hime_win_color_fg, **mf_pho_selkey, **mf_tsin_cursor_color;
   gboolean *mf_force_show;
   int *mf_win_x, *mf_win_y, *mf_win_xl, *mf_win_yl, *mf_dpy_xl, *mf_dpy_yl;
-#if WIN32
-  int *mf_test_mode;
-  void (*mf_win32_init_win)(GtkWidget *);
-  char *(*mf__utf16_8)(wchar_t *s);
-#endif
 } HIME_module_main_functions;
-#if UNIX && defined(__cplusplus)
+#ifdef __cplusplus
 }
 #endif
 

@@ -37,28 +37,9 @@ void disp_pho(int index, char *phochar)
   disp_pho_sub(label_pho, index, phochar);
 }
 
-#if WIN32
-static int timeout_handle_pho;
-gboolean timeout_minimize_win_pho(gpointer data)
-{
-  if (!gwin_pho)
-    return FALSE;
-  gtk_window_resize(GTK_WINDOW(gwin_pho), 1, 1);
-//  gtk_window_present(GTK_WINDOW(gwin0));
-  timeout_handle_pho = 0;
-  return FALSE;
-}
-#endif
-
-
 void minimize_win_pho()
 {
   gtk_window_resize(GTK_WINDOW(gwin_pho), 1, 1);
-
-#if WIN32
-  if (!timeout_handle_pho)
-	timeout_handle_pho = g_timeout_add(50, timeout_minimize_win_pho, NULL);
-#endif
 }
 
 
@@ -143,16 +124,9 @@ void create_win_pho()
   gwin_pho = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size(GTK_WINDOW(gwin_pho), 1 ,1);
   gtk_window_set_has_resize_grip(GTK_WINDOW(gwin_pho), FALSE);
-#if WIN32
-  set_no_focus(gwin_pho);
-#endif
   gtk_container_set_border_width (GTK_CONTAINER (gwin_pho), 0);
   gtk_widget_realize (gwin_pho);
-#if UNIX
   set_no_focus(gwin_pho);
-#else
-  win32_init_win(gwin_pho);
-#endif
   change_win_bg(gwin_pho);
 }
 
@@ -300,18 +274,14 @@ void show_win_pho()
   if (hime_pop_up_win && !pho_has_input())
     return;
 
-#if UNIX
   if (!GTK_WIDGET_VISIBLE(gwin_pho))
-#endif
   {
     gtk_widget_show(gwin_pho);
     move_win_pho(win_x, win_y);
   }
 
   gtk_widget_show(gwin_pho);
-#if UNIX
   if (current_CS->b_raise_window)
-#endif
     gtk_window_present(GTK_WINDOW(gwin_pho));
 
   show_win_sym();
@@ -328,13 +298,6 @@ void hide_win_pho()
   if (!gwin_pho)
     return;
 
-#if WIN32
-  if (timeout_handle_pho) {
-	  g_source_remove(timeout_handle_pho);
-	  timeout_handle_pho = 0;
-  }
-#endif
-
   gtk_widget_hide(gwin_pho);
   hide_win_sym();
 }
@@ -343,16 +306,16 @@ void hide_win_pho()
 void init_tab_pho();
 void get_win_gtab_geom();
 
-void init_gtab_pho_query_win()
-{
-  init_tab_pho();
-  move_gtab_pho_query_win();
-}
-
 void move_gtab_pho_query_win()
 {
   get_win_gtab_geom();
   move_win_pho(win_x, win_y + win_yl);
+}
+
+void init_gtab_pho_query_win()
+{
+  init_tab_pho();
+  move_gtab_pho_query_win();
 }
 
 char *get_full_str();

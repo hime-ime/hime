@@ -35,10 +35,6 @@ void load_tab_pho_file();
 void clear_sele();
 void send_utf8_ch(char *s);
 extern gboolean force_show;
-#if WIN32
-extern int test_mode;
-void win32_init_win(GtkWidget *);
-#endif
 
 void init_HIME_module_main_functions(HIME_module_main_functions *func)
 {
@@ -96,10 +92,4 @@ void init_HIME_module_main_functions(HIME_module_main_functions *func)
   func->mf_dpy_xl = &dpy_xl;
   func->mf_dpy_yl = &dpy_yl;
   func->mf_pho_chars = pho_chars;
-
-#if WIN32
-  func->mf_test_mode = &test_mode;
-  func->mf_win32_init_win = win32_init_win;
-  func->mf__utf16_8 = __utf16_8;
-#endif
 }
