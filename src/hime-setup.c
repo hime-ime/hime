@@ -230,75 +230,33 @@ static void cb_ts_import()
 
 static void cb_ts_edit()
 {
-#if 0
-#if UNIX
-  if (inmd[default_input_method].method_type==method_type_TSIN) {
-    char tt[512];
-    sprintf(tt, "( cd ~/.config/hime && "HIME_BIN_DIR"/hime-tsd2a32 %s > tmpfile && %s tmpfile && "HIME_BIN_DIR"/hime-tsa2d32 tmpfile %s) &",
-      tsin32_f, utf8_edit, tsin32_f);
-    dbg("exec %s\n", tt);
-    system(tt);
-  } else {
-    char tt[512];
-    sprintf(tt, HIME_SCRIPT_DIR"/tsin-gtab-edit %s", inmd[default_input_method].filename);
-    system(tt);
-  }
-#else
-  if (inmd[default_input_method].method_type==method_type_TSIN)
-    win32exec_script("hime-ts-edit.bat", tsin32_f);
-  else {
-    win32exec_script("ts-gtab-edit.bat", inmd[default_input_method].filename);
-  }
-#endif
-#else
-#if UNIX
   system(HIME_BIN_DIR"/hime-ts-edit");
-#else
-  win32exec("hime-ts-edit.exe");
-#endif
-#endif
 }
 
 
 static void cb_ts_import_sys()
 {
-#if UNIX
   char tt[512];
   sprintf(tt, "cd ~/.config/hime && "HIME_BIN_DIR"/hime-tsd2a32 %s > tmpfile && "HIME_BIN_DIR"/hime-tsd2a32 %s/%s >> tmpfile && "HIME_BIN_DIR"/hime-tsa2d32 tmpfile",
     tsin32_f, HIME_TABLE_DIR, tsin32_f);
   dbg("exec %s\n", tt);
   system(tt);
-#else
-  win32exec_script("ts-import-sys.bat", tsin32_f);
-#endif
 }
 
 
 static void cb_alt_shift()
 {
-#if UNIX
   char tt[512];
   sprintf(tt, "( cd ~/.config/hime && %s phrase.table ) &", utf8_edit);
   system(tt);
-#else
-  char fname[512];
-  get_hime_user_fname("phrase.table", fname);
-  win32exec_script("utf8-edit.bat", fname);
-#endif
 }
 
 
 static void cb_symbol_table()
 {
   char tt[512];
-#if UNIX
   sprintf(tt, "( cd ~/.config/hime && %s symbol-table ) &", utf8_edit);
   system(tt);
-#else
-  char fname[512];
-  get_hime_user_fname("symbol-table", fname);
-  win32exec_script("utf8-edit.bat", fname);
-#endif
 }
 
 static GtkWidget *spinner_hime_font_size, *spinner_hime_font_size_tsin_presel,
