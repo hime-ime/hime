@@ -65,6 +65,8 @@
 #define GTAB_VERTICAL_SELECT "gtab-vertical-select"
 #define GTAB_UNIQUE_AUTO_SEND "gtab-unique-auto-send"
 #define GTAB_QUE_WILD_CARD "gtab-que-wild-card"
+#define GTAB_QUE_WILD_CARD_ASTERISK "gtab-que-wild-card-asterisk"
+#define GTAB_PHO_QUERY "gtab-pho-query"
 #define GTAB_PHRASE_PRE_SELECT "gtab-phrase-pre-select"
 #define GTAB_IN_AREA_BUTTON "gtab-in-area-button"
 
@@ -101,7 +103,8 @@ extern int hime_font_size, hime_font_size_tsin_presel, hime_font_size_symbol,
            gtab_disp_key_codes, gtab_disp_im_name, hime_shift_space_eng_full,
            gtab_invalid_key_in, gtab_hide_row2, gtab_in_row1,
            hime_capslock_lower, pho_hide_row2, pho_in_row1,
-           hime_eng_phrase_enabled, gtab_que_wild_card, hime_win_sym_click_close,
+           hime_eng_phrase_enabled, hime_win_sym_click_close,
+           gtab_que_wild_card, gtab_que_wild_card_asterisk, gtab_pho_query,
            hime_bell_volume, hime_sound_play_overlap, hime_enable_ctrl_alt_switch, hime_on_the_spot_key;
 
 extern int default_input_method;
