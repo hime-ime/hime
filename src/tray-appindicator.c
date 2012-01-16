@@ -25,6 +25,7 @@
 // TODO: win-kbm.c positioning
 
 extern void destroy_other_tray();
+gboolean is_exist_tray_appindicator();
 
 AppIndicator *tray_appindicator = NULL;
 void init_tray_appindicator();
@@ -94,13 +95,15 @@ static gboolean tray_appindicator_load_icon(char fallback[], char iconfile[], ch
     strcpy(iconame, iconfile);
     iconame[strlen(iconame)-4] = 0;
     return icon_readable;
-  } else if (fallback != HIME_TRAY_PNG) { // iconpath does not exist, then fallback
+  } else if (strcmp(fallback, HIME_TRAY_PNG)) { // iconpath does not exist, then fallback
     strcpy(iconfile, fallback);
     return tray_appindicator_load_icon(HIME_TRAY_PNG, iconfile, iconame, icondir);
   } else {
     return FALSE;
   }
 }
+
+extern gboolean tsin_pho_mode();
 
 static void tray_appindicator_update_icon()
 {
@@ -152,16 +155,10 @@ void load_tray_appindicator()
   tray_appindicator_update_icon();
 }
 
-static void cb_activate(GtkStatusIcon *status_icon, gpointer user_data)
-{
-  toggle_im_enabled();
-}
-
 gboolean tray_appindicator_create(gpointer data)
 {
   if (is_exist_tray_appindicator())
     return FALSE;
-  destroy_other_tray();
   if (IS_APP_INDICATOR(tray_appindicator) && tray_appindicator) {
     if (app_indicator_get_status (tray_appindicator) == APP_INDICATOR_STATUS_PASSIVE) {
        app_indicator_set_status (tray_appindicator, APP_INDICATOR_STATUS_ACTIVE);
@@ -169,9 +166,11 @@ gboolean tray_appindicator_create(gpointer data)
     }
     return FALSE;
   }
+  destroy_other_tray();
   
   if (!tray_appindicator_load_icon(HIME_TRAY_PNG, HIME_TRAY_PNG, iconame, icondir))
-    return;
+    return FALSE;
+
   tray_appindicator = app_indicator_new_with_path ("hime", iconame, APP_INDICATOR_CATEGORY_APPLICATION_STATUS, icondir);
   app_indicator_set_status (tray_appindicator, APP_INDICATOR_STATUS_ACTIVE);
   GtkWidget *menu = NULL;
@@ -180,7 +179,7 @@ gboolean tray_appindicator_create(gpointer data)
   app_indicator_set_menu (tray_appindicator, GTK_MENU (menu));
 
   load_tray_appindicator();
-  return TRUE;
+  return FALSE;
 }
 
 
