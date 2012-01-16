@@ -6,7 +6,6 @@
 
 */
 
-#include "os-dep.h" // for G_CONST_RETURN
 #include <gtk/gtk.h>
 
 void gdk_window_freeze_toplevel_updates_libgtk_only(GdkWindow *window) {}
