@@ -11,7 +11,7 @@ endif
 ifeq ($(USE_CHEWING),Y)
 HIME_MODULE+=chewing-module.so
 CHEWING_DATADIR=$(shell pkg-config --variable=datadir chewing)
-CFLAGS += -DCHEWING_DATADIR=\"$(CHEWING_DATADIR)\"
+CFLAGS += -DCHEWING_DATADIR=\"$(CHEWING_DATADIR)\" $(shell pkg-config --cflags chewing)
 endif
 
 all:	$(HIME_MODULE)

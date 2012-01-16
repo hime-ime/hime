@@ -83,14 +83,3 @@ typedef struct _IC {
     ClientState cs;
     struct _IC	*next;
 } IC;
-
-typedef struct {
-//  char *server_locale;
-  char xim_server_name[32];
-  Window xim_xwin;
-#if USE_XIM
-  XIMS xims;
-#endif
-} DUAL_XIM_ENTRY;
-
-Window get_ic_win(IC *rec);
