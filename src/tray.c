@@ -144,7 +144,7 @@ void load_tray_icon()
     return;
   }
   // wrong width & height if it is not embedded-ready
-  if (!gtk_status_icon_is_embedded(tray_icon)) 
+  if (!gtk_status_icon_is_embedded(tray_icon))
     return;
   iw = gtk_status_icon_get_size(tray_icon), ih = gtk_status_icon_get_size(tray_icon);
   if (!pixbuf) {
@@ -152,10 +152,9 @@ void load_tray_icon()
     get_icon_path(HIME_TRAY_PNG, icon_fname);
     pixbuf = gdk_pixbuf_new_from_file_at_size(icon_fname, iw, ih, NULL);
   }
-  // FIXME: tray may load before the following stuffs are initialized
-  if (!current_CS || !current_CS->in_method || !inmd)
-    return;
-  char *iconame = inmd[current_CS->in_method].icon;
+  char *iconame = HIME_TRAY_PNG;
+  if (current_CS && current_CS->in_method && inmd)
+    iconame = inmd[current_CS->in_method].icon;
   char fname[512];
   if (iconame)
     get_icon_path(iconame, fname);
@@ -206,11 +205,29 @@ GtkWidget *create_tray_menu(MITEM *mitems);
 void update_item_active_all();
 
 gint inmd_switch_popup_handler (GtkWidget *widget, GdkEvent *event);
-extern gboolean win_kbm_inited;
+
+void reload_tray_icon()
+{
+  if (pixbuf) {
+    g_object_unref(pixbuf); pixbuf = NULL;
+  }
+  if (pixbuf_ch) {
+    g_object_unref(pixbuf_ch); pixbuf_ch = NULL;
+  }
+  load_tray_icon();
+}
 
 gboolean tray_size_changed_cb (GtkStatusIcon *status_icon, gint *size, gpointer user_data)
 {
-  load_tray_icon();
+  reload_tray_icon();
+  return FALSE;
+}
+
+gboolean tray_embedded_cb (GtkStatusIcon *status_icon, GParamSpec *pspec, gpointer user_data)
+{
+  if (gtk_status_icon_is_embedded(tray_icon)) {
+    reload_tray_icon();
+  }
   return TRUE;
 }
 
@@ -258,15 +275,16 @@ gboolean create_tray(gpointer data)
   destroy_other_tray();
   destroy_tray_icon();
 
-  char fname[256];
-  get_icon_path(HIME_TRAY_PNG, fname);
-  tray_icon = gtk_status_icon_new_from_file(fname);
+  tray_icon = gtk_status_icon_new();
 
   g_signal_connect (G_OBJECT (tray_icon), "button-press-event",
                     G_CALLBACK (tray_button_press_event_cb), NULL);
 
   g_signal_connect (G_OBJECT (tray_icon), "size-changed",
                     G_CALLBACK (tray_size_changed_cb), NULL);
+
+  g_signal_connect (G_OBJECT (tray_icon), "notify::embedded",
+                  G_CALLBACK (tray_embedded_cb), NULL);
 
 #if GTK_CHECK_VERSION(2,12,0)
   gtk_status_icon_set_tooltip_text (tray_icon, _("左:中英切換 中:小鍵盤 右:選項"));
