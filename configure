@@ -137,31 +137,34 @@ done
 
 echo "prefix: $prefix"
 
-echo -n ".... Testing Xtst        : "
+echo -n ".... Testing Xtst        :  "
 XTST=`pkg-config --exists xtst 2> /dev/null`
 if [ $? != 0 ]; then
-  echo "please install rpm/package xtest-devel"
+  echo "please install rpm/package xtest-devel. abort!"
   exit -1;
 else
-  echo " found."
+  echo "found."
 fi
 
 if [ -z "$GTK" ]; then
   GTK=gtk+-2.0
 fi
 
-echo -n ".... Testing $GTK    : "
+echo -n ".... Testing $GTK    :  "
 
-GTKINC=`pkg-config --cflags $GTK`
+GTKINC=`pkg-config --cflags $GTK 2> /dev/null`
 
 if [ $? != 0 ]; then
-  GTK=gtk+-3.0
-  echo -n ".... Testing $GTK    : "
+  if [ "$GTK" = gtk+-2.0 ]; then
+    echo "not found, trying gtk+-3.0..."
+    GTK=gtk+-3.0
+    echo -n ".... Testing $GTK    :  "
   
-  GTKINC=`pkg-config --cflags $GTK`
-  
+    GTKINC=`pkg-config --cflags $GTK 2> /dev/null`
+  fi
+
   if [ $? != 0 ]; then
-    echo "$GTK or above required --cflags"
+    echo "$GTK or above required --cflags. abort!"
     rm -f config.mak
     exit -1;
   fi
@@ -187,15 +190,15 @@ if [ ! -x /bin/bash ]; then
 fi
 
 
-GTKLDFLAGS=`pkg-config --libs $GTK`
+GTKLDFLAGS=`pkg-config --libs $GTK 2> /dev/null`
 
 if [ $? != 0 ]; then
   echo "$GTK or above required --libs"
-  echo "please install rpm/package libgtk+2.0_0-devel"
+  echo "please install rpm/package libgtk+2.0_0-devel/libgtk+3.0_0-devel. abort!"
   rm -f config.mak
   exit -1;
 else
-  echo " found."
+  echo "found."
 fi
 
 echo -n ".... Testing anthy       :  "
@@ -287,7 +290,7 @@ if [ "$QT_IM" = "Y" ]; then
     else
 		  if [ ! -x "$QT3_MOC_PATH" ]; then
 				echo "not found, cannot find \"moc\" tool for Qt 3.x."
-				echo "Hint: use the --qt3-moc-path option."
+				echo "Hint: use the --qt3-moc-path option. abort!"
 				exit 1
 		  fi
         echo "found."
@@ -318,7 +321,7 @@ if [ "$QT4_IM" = "Y" ]; then
     else
 		  if [ ! -x "$QT4_MOC_PATH" ]; then
 				echo "not found, cannot find \"moc\" tool for Qt 4.x."
-				echo "Hint: use the --qt4-moc-path option."
+				echo "Hint: use the --qt4-moc-path option. abort!"
 				exit 1
 		  fi		  
         echo "found."
