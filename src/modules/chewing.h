@@ -18,7 +18,7 @@
 #ifndef CHEWING_H
 #define CHEWING_H
 
-#include <chewing/chewing.h>
+#include <chewing.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdint.h>
