@@ -277,6 +277,7 @@ void destroy_inmd_menu();
 void load_gtab_list(gboolean);
 void change_win1_font();
 void set_wselkey(char *s);
+void create_win_gtab();
 
 static void reload_data()
 {

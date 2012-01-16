@@ -211,6 +211,7 @@ extern gboolean win_kbm_inited;
 gboolean tray_size_changed_cb (GtkStatusIcon *status_icon, gint *size, gpointer user_data)
 {
   load_tray_icon();
+  return TRUE;
 }
 
 void toggle_im_enabled(), kbm_toggle();

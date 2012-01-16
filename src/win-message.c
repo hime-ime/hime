@@ -88,7 +88,6 @@ static void create_win_message(char *icon, char *text, int duration)
   get_win_size(gwin_message, &width, &height);
 
   int ox=-1, oy;
-  int szx, szy;
 #if TRAY_ENABLED
   GdkRectangle rect;
   GtkOrientation ori;
