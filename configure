@@ -401,7 +401,7 @@ if [ "$USE_ANTHY" = 'Y' ] || [ "$USE_CHEWING" = 'Y' ]; then
 fi
 
 if [ -z "$CFLAGS" ]; then
-  OPTFLAGS="-Wall -Os"
+  OPTFLAGS="-Wall"
 else
   OPTFLAGS="$CFLAGS"
 fi
