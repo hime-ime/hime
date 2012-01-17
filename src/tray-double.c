@@ -106,9 +106,9 @@ extern gboolean win_kbm_inited;
 extern gboolean win_kbm_on;
 
 static MITEM mitems_main[] = {
-  {N_("關於hime/常見問題"), GTK_STOCK_ABOUT, cb_about_window},
+  {N_("關於hime"), GTK_STOCK_ABOUT, cb_about_window},
   {N_("設定/工具"), GTK_STOCK_PREFERENCES, exec_hime_setup_},
-  {N_("重新執行hime"), GTK_STOCK_QUIT, restart_hime},
+  {N_("結束hime"), GTK_STOCK_QUIT, restart_hime},
   {N_("念出發音"), NULL, cb_tog_phospeak, &phonetic_speak},
   {N_("小鍵盤"), NULL, kbm_toggle_, &win_kbm_on},
   {N_("選擇輸入法"), GTK_STOCK_INDEX, cb_inmd_menu, NULL},
@@ -134,8 +134,8 @@ static void cb_fast_phonetic_kbd_switch(GtkCheckMenuItem *checkmenuitem, gpointe
 
 static MITEM mitems_state[] = {
   {NULL, NULL, cb_fast_phonetic_kbd_switch},
-  {N_("外部繁轉簡工具"), NULL, cb_trad2sim},
-  {N_("外部簡轉繁工具"), NULL, cb_sim2trad},
+  {N_("繁轉簡工具"), NULL, cb_trad2sim},
+  {N_("簡轉繁工具"), NULL, cb_sim2trad},
   {N_("輸出成簡體"), NULL, cb_trad_sim_toggle_, &gb_output},
   {N_("打字速度統計"), NULL, cb_stat_toggle_, &stat_enabled},
   {NULL}
