@@ -23,6 +23,7 @@ if [ -x "$HIME_BINARY" ]; then
   echo
   echo -n "$HIME_BINARY:"`$HIME_BINARY -v 2>&1 | grep version | sed -e 's/$/, linked to /'`
   ldd "$HIME_BINARY" | grep -i gtk | cut -d '>' -f 2 | cut -d '(' -f 1 | tr -s '\t' ' '
+  ls /usr/share/doc/hime*/changelog.Debian.gz | while read ver; do echo $ver: `zcat $ver | head -n 1`; done
 fi
 
 if [ -n "$XMODIFIERS" -o -n "$LC_ALL" -o -n "$LC_CTYPE" -o -n "$LANG" -o -n "$LANGUAGE" -o -n "$GTK_IM_MODULE" -o -n "$QT_IM_MODULE" -o -n "$QT4_IM_MODULE" ]; then
@@ -52,17 +53,23 @@ ls -d /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64 2> /dev/null
 GTK_QUERY_2=`whereis gtk-query-immodules-2.0 | cut -d ' ' -f 2`
 if [ -x "$GTK_QUERY_2" ]; then
   echo
-  echo "$GTK_QUERY_2: "`$GTK_QUERY_2 2> /dev/null | grep hime | wc -l` | sed -e 's/2$/has hime/' -e 's/^.$/may has some problem/' | grep -v 0$
-  ls /etc/gtk-2.0/gtk.immodules* | while read ver; do echo $ver: `grep hime $ver | wc -l | sed -e 's/^2$/has hime/' -e 's/^.$/may has some problem/'`; done
+  echo gtk-query-immodules-2.0:
+  ls -d `$GTK_QUERY_2 | grep hime | cut -d '"' -f 2 | grep '/'` 
 fi
+  echo
+  echo `ls -d /etc/gtk-2.0/gtk.immodules* /usr/local/etc/gtk-2.0/gtk.immodules* 2> /dev/null` | sed 's/$/:/'
+  ls -d `grep hime /etc/gtk-2.0/gtk.immodules* /usr/local/etc/gtk-2.0/gtk.immodules* 2> /dev/null | cut -d '"' -f 2 | grep '/'`
 
 # TODO: detect more binary name of gtk-query-immodules-3.0
 GTK_QUERY_3=`whereis gtk-query-immodules-3.0 | cut -d ' ' -f 2`
 if [ -x "$GTK_QUERY_3" ]; then
   echo
-  echo "$GTK_QUERY_3: "`$GTK_QUERY_3 2> /dev/null | grep hime | wc -l` | sed -e 's/2$/has hime/' -e 's/^.$/may has some problem/' | grep -v 0$
-  ls /usr/lib/gtk-3.0/*/immodules.cache* | while read ver; do echo $ver: `grep hime $ver | wc -l | sed -e 's/^2$/has hime/' -e 's/^.$/may has some problem/'`; done
+  echo gtk-query-immodules-3.0:
+  ls -d `$GTK_QUERY_3 | grep hime | cut -d '"' -f 2 | grep '/'`
 fi
+  echo
+  echo `ls -d /usr/lib*/gtk-3.0/*/immodules.cache* /usr/local/lib*/gtk-3.0/*/immodules.cache* 2> /dev/null` | sed 's/$/:/'
+  ls -d `grep hime /usr/lib*/gtk-3.0/*/immodules.cache* /usr/local/lib*/gtk-3.0/*/immodules.cache* 2> /dev/null | cut -d '"' -f 2 | grep '/'`
 
 # Copyright (C) 2012 Wen-Yen Chuang <caleb AT calno DOT com>
 #
