@@ -1294,7 +1294,8 @@ direct_select:
 
       break;
     case '?':
-      if (!gtab_que_wild_card) {
+    case '*':
+      if ((!gtab_que_wild_card && key == '?') || (!gtab_que_wild_card_asterisk && key == '*')) {
         inkey=cur_inmd->keymap[key];
         if ((inkey && (inkey!=cur_inmd->WILD_QUES && inkey!=cur_inmd->WILD_STAR)) || ptr_selkey(key))
           goto next;
@@ -1308,7 +1309,6 @@ direct_select:
             return 0;
 		}
       }
-    case '*':
       if (tss.pre_selN && shift_char_proc(key, kbstate))
         return TRUE;
 
@@ -1358,7 +1358,7 @@ direct_select:
     case XK_Caps_Lock:
       return 0;
     case '`':
-      if (!cur_inmd->keymap[key]) {
+      if (gtab_pho_query && !cur_inmd->keymap[key]) {
         poo.same_pho_query_state = SAME_PHO_QUERY_gtab_input;
         reset_gtab_all();
         disp_gtab_sel(_("輸入要查的同音字，接著在注音視窗選字"));

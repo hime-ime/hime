@@ -67,7 +67,6 @@ QHIMEInputContext::~QHIMEInputContext()
 
 bool QHIMEInputContext::x11FilterEvent( QWidget *keywidget, XEvent *event )
 {
-#ifndef QT_NO_HIME
     KeySym keysym;
     char static_buffer[256];
     char *buffer = static_buffer;
@@ -226,5 +225,3 @@ QString QHIMEInputContext::language()
 
     return _language;
 }
-
-#endif //QT_NO_IM

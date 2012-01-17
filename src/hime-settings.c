@@ -47,7 +47,8 @@ int gtab_hide_row2;
 int gtab_in_row1;
 int gtab_vertical_select;
 int gtab_unique_auto_send;
-int gtab_que_wild_card, gtab_in_area_button;
+int gtab_que_wild_card, gtab_que_wild_card_asterisk, gtab_pho_query;
+int gtab_in_area_button;
 
 int tsin_phrase_pre_select, tsin_tone_char_input;
 int tsin_capslock_upper, tsin_use_pho_near;
@@ -146,6 +147,8 @@ void load_setttings()
   gtab_vertical_select = get_hime_conf_int(GTAB_VERTICAL_SELECT, GTAB_OPTION_NO);
   gtab_unique_auto_send = get_hime_conf_int(GTAB_UNIQUE_AUTO_SEND, GTAB_OPTION_NO);
   gtab_que_wild_card = get_hime_conf_int(GTAB_QUE_WILD_CARD, 0);
+  gtab_que_wild_card_asterisk = get_hime_conf_int(GTAB_QUE_WILD_CARD_ASTERISK, 1);
+  gtab_pho_query = get_hime_conf_int(GTAB_PHO_QUERY, 1);
   gtab_phrase_pre_select = get_hime_conf_int(GTAB_PHRASE_PRE_SELECT, 1);
   gtab_in_area_button = get_hime_conf_int(GTAB_IN_AREA_BUTTON, 0);
 

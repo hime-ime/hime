@@ -30,10 +30,11 @@ Display *dpy;
 int win_xl, win_yl;
 int win_x, win_y;   // actual win x/y
 int dpy_xl, dpy_yl;
-DUAL_XIM_ENTRY xim_arr[1];
+Window xim_xwin;
 
 extern unich_t *fullchar[];
 gboolean win_kbm_inited;
+char *get_hime_xim_name();
 
 char *half_char_to_full_char(KeySym xkey)
 {
@@ -46,9 +47,8 @@ static void start_inmd_window()
 {
   GtkWidget *win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_realize (win);
-  GdkWindow *gdkwin0 = gtk_widget_get_window(win);
-  xim_arr[0].xim_xwin = GDK_WINDOW_XWINDOW(gdkwin0);
-  dbg("xim_xwin %x\n", xim_arr[0].xim_xwin);
+  xim_xwin = GDK_WINDOW_XWINDOW(gtk_widget_get_window(win));
+  dbg("xim_xwin %x\n", xim_xwin);
 }
 
 #if USE_XIM
@@ -240,10 +240,12 @@ void open_xim()
   encodings.count_encodings = sizeof(chEncodings)/sizeof(XIMEncoding) - 1;
   encodings.supported_encodings = chEncodings;
 
-  if ((xim_arr[0].xims = IMOpenIM(dpy,
-          IMServerWindow,         xim_arr[0].xim_xwin,        //input window
+  char *xim_name = get_hime_xim_name();
+
+  XIMS xims = IMOpenIM(dpy,
+          IMServerWindow,         xim_xwin,        //input window
           IMModifiers,            "Xi18n",        //X11R6 protocol
-          IMServerName,           xim_arr[0].xim_server_name, //XIM server name
+          IMServerName,           xim_name, //XIM server name
           IMLocale,               lc,
           IMServerTransport,      "X/",      //Comm. protocol
           IMInputStyles,          &im_styles,   //faked styles
@@ -251,10 +253,12 @@ void open_xim()
           IMProtocolHandler,      hime_ProtoHandler,
           IMFilterEventMask,      KeyPressMask|KeyReleaseMask,
           IMOnKeysList, &triggerKeys,
-          NULL)) == NULL) {
+          NULL);
+
+  if (xims == NULL) {
           setenv("NO_GTK_INIT", "", TRUE);
           p_err("IMOpenIM '%s' failed. Maybe another XIM server is running.\n",
-          xim_arr[0].xim_server_name);
+          xim_name);
   }
 }
 
@@ -273,6 +277,7 @@ void destroy_inmd_menu();
 void load_gtab_list(gboolean);
 void change_win1_font();
 void set_wselkey(char *s);
+void create_win_gtab();
 
 static void reload_data()
 {
@@ -395,11 +400,9 @@ void message_cb(char *message)
    if (!strcmp(message, KBM_TOGGLE)) {
      kbm_toggle();
    } else
-#if UNIX
    if (strstr(message, "#hime_message")) {
      execute_message(message);
    } else
-#endif
 #if TRAY_ENABLED
    if (!strcmp(message, UPDATE_TRAY)) {
      disp_tray_icon();
@@ -442,7 +445,7 @@ static GdkFilterReturn my_gdk_filter(GdkXEvent *xevent,
 void init_atom_property()
 {
   hime_atom = get_hime_atom(dpy);
-  XSetSelectionOwner(dpy, hime_atom, xim_arr[0].xim_xwin, CurrentTime);
+  XSetSelectionOwner(dpy, hime_atom, xim_xwin, CurrentTime);
 }
 
 void hide_win0();
@@ -484,35 +487,17 @@ void sig_do_exit(int sig)
   do_exit();
 }
 
-char *get_hime_xim_name();
 void load_phrase(), init_TableDir();
 void init_tray(), exec_setup_scripts();
-#if UNIX
 void init_hime_im_serv(Window win);
-#else
-void init_hime_im_serv();
-#endif
 void init_tray_double();
 
 #if TRAY_UNITY
 void init_tray_appindicator();
 #endif
 
-#if WIN32
-void init_hime_program_files();
- #pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#endif
-int win32_tray_disabled = 1;
-
-
 gboolean delayed_start_cb(gpointer data)
 {
-#if WIN32
-  Sleep(200);
-#endif
-
-  win32_tray_disabled = 0;
-
 #if TRAY_ENABLED
   if (hime_status_tray) {
     if (hime_tray_display == HIME_TRAY_DISPLAY_SINGLE)
@@ -597,10 +582,6 @@ int main(int argc, char **argv)
   else
     lc = lc_ctype;
 
-  char *xim_server_name = get_hime_xim_name();
-
-  strcpy(xim_arr[0].xim_server_name, xim_server_name);
-
   dbg("hime XIM will use %s as the default encoding\n", lc_ctype);
 #endif
 
@@ -647,7 +628,7 @@ int main(int argc, char **argv)
   // void *olderr =
     XSetErrorHandler((XErrorHandler)xerror_handler);
 
-  init_hime_im_serv(xim_arr[0].xim_xwin);
+  init_hime_im_serv(xim_xwin);
 
   exec_setup_scripts();
 

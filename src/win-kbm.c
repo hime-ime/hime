@@ -263,7 +263,6 @@ static void move_win_kbm()
   GdkRectangle r;
   GtkOrientation ori;
 
-  int szx, szy;
 #if TRAY_ENABLED
   if ((is_exist_tray() && gtk_status_icon_get_geometry(tray_icon, NULL, &r,  &ori)) || (is_exist_tray_double() && gtk_status_icon_get_geometry(icon_main, NULL, &r,  &ori))) {
 //    dbg("rect %d:%d %d:%d\n", r.x, r.y, r.width, r.height);

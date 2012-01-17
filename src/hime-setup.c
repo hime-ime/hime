@@ -19,17 +19,13 @@
 #include "hime.h"
 #include "gtab.h"
 #include "config.h"
-#if UNIX
 #include <signal.h>
-#endif
 #if HIME_i18n_message
 #include <libintl.h>
 #endif
 #include "lang.h"
 
-#if UNIX
 char utf8_edit[]=HIME_SCRIPT_DIR"/utf8-edit";
-#endif
 
 static GtkWidget *check_button_root_style_use,
                  *check_button_hime_pop_up_win,
@@ -43,9 +39,6 @@ static GtkWidget *check_button_root_style_use,
 
 
 static GtkWidget *hime_kbm_window = NULL, *hime_appearance_conf_window;
-#if WIN32
-static GtkClipboard *pclipboard;
-#endif
 static GtkWidget *opt_hime_edit_display;
 GtkWidget *main_window;
 static GdkColor hime_win_gcolor_fg, hime_win_gcolor_bg, hime_sel_key_gcolor;
@@ -107,11 +100,7 @@ static void cb_kbm()
 
 static void cb_tslearn()
 {
-#if UNIX
   system("hime-tslearn &");
-#else
-  win32exec("hime-tslearn");
-#endif
   exit(0);
 }
 
@@ -185,17 +174,11 @@ static void cb_ts_export()
    gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER (file_selector), TRUE);
    if (gtk_dialog_run (GTK_DIALOG (file_selector)) == GTK_RESPONSE_ACCEPT) {
        gchar *selected_filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (file_selector));
-#if UNIX
        snprintf(cmd, sizeof(cmd), HIME_BIN_DIR"/hime-tsd2a32 %s -o %s", fname, selected_filename);
        dbg("exec %s\n", cmd);
        int res = system(cmd);
        res = 0; // some problem in system(), the exit code is not reliable
        create_result_win(res, cmd);
-#else
-	   char para[256];
-       sprintf_s(para, sizeof(para), "\"%s\" -o \"%s\"", fname, selected_filename);
-	   win32exec_para("hime-tsd2a32", para);
-#endif
    }
    gtk_widget_destroy (file_selector);
 }
@@ -203,7 +186,6 @@ static void cb_ts_export()
 static void ts_import(const gchar *selected_filename)
 {
    char cmd[256];
-#if UNIX
    if (inmd[default_input_method].method_type==method_type_TSIN) {
      snprintf(cmd, sizeof(cmd),
         "cd %s/.config/hime && "HIME_BIN_DIR"/hime-tsd2a32 %s > tmpfile && cat %s >> tmpfile && "HIME_BIN_DIR"/hime-tsa2d32 tmpfile %s",
@@ -217,13 +199,6 @@ static void ts_import(const gchar *selected_filename)
      selected_filename);
      system(tt);
    }
-#else
-   if (inmd[default_input_method].method_type==method_type_TSIN)
-     win32exec_script_va("ts-import.bat", (char *)selected_filename, tsin32_f, NULL);
-   else {
-     win32exec_script_va("ts-gtab-import.bat", inmd[default_input_method].filename,  selected_filename, NULL);
-   }
-#endif
 }
 
 static void cb_ts_import()
@@ -255,75 +230,33 @@ static void cb_ts_import()
 
 static void cb_ts_edit()
 {
-#if 0
-#if UNIX
-  if (inmd[default_input_method].method_type==method_type_TSIN) {
-    char tt[512];
-    sprintf(tt, "( cd ~/.config/hime && "HIME_BIN_DIR"/hime-tsd2a32 %s > tmpfile && %s tmpfile && "HIME_BIN_DIR"/hime-tsa2d32 tmpfile %s) &",
-      tsin32_f, utf8_edit, tsin32_f);
-    dbg("exec %s\n", tt);
-    system(tt);
-  } else {
-    char tt[512];
-    sprintf(tt, HIME_SCRIPT_DIR"/tsin-gtab-edit %s", inmd[default_input_method].filename);
-    system(tt);
-  }
-#else
-  if (inmd[default_input_method].method_type==method_type_TSIN)
-    win32exec_script("hime-ts-edit.bat", tsin32_f);
-  else {
-    win32exec_script("ts-gtab-edit.bat", inmd[default_input_method].filename);
-  }
-#endif
-#else
-#if UNIX
   system(HIME_BIN_DIR"/hime-ts-edit");
-#else
-  win32exec("hime-ts-edit.exe");
-#endif
-#endif
 }
 
 
 static void cb_ts_import_sys()
 {
-#if UNIX
   char tt[512];
   sprintf(tt, "cd ~/.config/hime && "HIME_BIN_DIR"/hime-tsd2a32 %s > tmpfile && "HIME_BIN_DIR"/hime-tsd2a32 %s/%s >> tmpfile && "HIME_BIN_DIR"/hime-tsa2d32 tmpfile",
     tsin32_f, HIME_TABLE_DIR, tsin32_f);
   dbg("exec %s\n", tt);
   system(tt);
-#else
-  win32exec_script("ts-import-sys.bat", tsin32_f);
-#endif
 }
 
 
 static void cb_alt_shift()
 {
-#if UNIX
   char tt[512];
   sprintf(tt, "( cd ~/.config/hime && %s phrase.table ) &", utf8_edit);
   system(tt);
-#else
-  char fname[512];
-  get_hime_user_fname("phrase.table", fname);
-  win32exec_script("utf8-edit.bat", fname);
-#endif
 }
 
 
 static void cb_symbol_table()
 {
   char tt[512];
-#if UNIX
   sprintf(tt, "( cd ~/.config/hime && %s symbol-table ) &", utf8_edit);
   system(tt);
-#else
-  char fname[512];
-  get_hime_user_fname("symbol-table", fname);
-  win32exec_script("utf8-edit.bat", fname);
-#endif
 }
 
 static GtkWidget *spinner_hime_font_size, *spinner_hime_font_size_tsin_presel,
@@ -519,7 +452,6 @@ void disp_fg_bg_color()
 
   char *key_color = gtk_color_selection_palette_to_string(&hime_sel_key_gcolor, 1);
   unich_t tt[512];
-#if UNIX
 #if PANGO_VERSION_CHECK(1,22,0)
   sprintf
 (tt, _("<span foreground=\"%s\" font=\"%d\">7</span><span font=\"%d\">測試</span>"), key_color,
@@ -528,10 +460,6 @@ hime_font_size_tsin_presel, hime_font_size_tsin_presel);
   sprintf
 (tt, _("<span foreground=\"%s\" font_desc=\"%d\">7</span><span font_desc=\"%d\">測試</span>"), key_color,
 hime_font_size_tsin_presel, hime_font_size_tsin_presel);
-#endif
-#else
-  swprintf
-(tt, "<span foreground=\"%S\" font=\"%d\">7</span><span font=\"%d\">測試</span>", key_color, hime_font_size_tsin_presel, hime_font_size_tsin_presel);
 #endif
 
   gtk_label_set_markup(GTK_LABEL(label_win_color_test), _(tt));
@@ -943,36 +871,16 @@ static void cb_gb_output_toggle()
 
 static void cb_gb_translate_toggle()
 {
-#if WIN32
-  win32exec("hime-sim2trad");
-#else
   system(HIME_BIN_DIR"/hime-sim2trad &");
-#endif
   exit(0);
 }
 
 
 static void cb_juying_learn()
 {
-#if WIN32
-  win32exec("hime-juyin-learn");
-#else
   system(HIME_BIN_DIR"/hime-juyin-learn &");
-#endif
   exit(0);
 }
-
-#if 0
-int hime_pid;
-static void cb_hime_exit()
-{
-#if UNIX
-  kill(hime_pid, 9);
-#else
-  TerminateProcess(
-#endif
-}
-#endif
 
 void create_gtablist_window();
 static void cb_default_input_method()
@@ -1152,17 +1060,6 @@ static void create_main_win()
   g_signal_connect (G_OBJECT (button_about), "clicked",
                     G_CALLBACK (create_about_window),  NULL);
 
-#if 0
-  char *pid = getenv("HIME_PID");
-  if (pid && (hime_pid = atoi(pid))) {
-    GtkWidget *button_hime_exit = gtk_button_new_with_label (_("結束 hime"));
-    gtk_box_pack_start (GTK_BOX (vbox), button_hime_exit, TRUE, TRUE, 0);
-    g_signal_connect (G_OBJECT (button_hime_exit), "clicked",
-                      G_CALLBACK (cb_hime_exit), NULL);
-  }
-#endif
-
-
   GtkWidget *button_quit = gtk_button_new_from_stock (GTK_STOCK_QUIT);
   gtk_box_pack_start (GTK_BOX (vbox), button_quit, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (button_quit), "clicked",
@@ -1173,11 +1070,6 @@ static void create_main_win()
 
 
 void init_TableDir(), exec_setup_scripts();
-#if WIN32
-void init_hime_program_files();
-#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#endif
-
 
 int main(int argc, char **argv)
 {
@@ -1190,11 +1082,8 @@ int main(int argc, char **argv)
 
   set_is_chs();
 
-
-#if UNIX
   setenv("HIME_BIN_DIR", HIME_BIN_DIR, TRUE);
   setenv("UTF8_EDIT", utf8_edit, TRUE);
-#endif
 
   exec_setup_scripts();
 
@@ -1218,10 +1107,6 @@ int main(int argc, char **argv)
 #if 0
   // once you invoke hime-setup, the left-right buton tips is disabled
   save_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 0);
-#endif
-
-#if WIN32
-  pclipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
 #endif
 
   gtk_main();

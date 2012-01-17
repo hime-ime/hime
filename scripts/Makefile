@@ -1,6 +1,6 @@
 include ../config.mak
 
-SCRIPTS=hime-user-setup utf8-edit gtab.append_prepare tsin-gtab-import tsin-gtab-edit
+SCRIPTS=hime-user-setup utf8-edit gtab.append_prepare tsin-gtab-import
 BIN_SCRIPTS=hime-env
 
 all:	$(SCRIPTS)
