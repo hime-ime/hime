@@ -117,9 +117,6 @@ int main(int argc, char **argv)
   int opt;
   int bot = 0;
 
-  if (!getenv("NO_GTK_INIT"))
-    gtk_init(&argc, &argv);
-
   fname_cin[0] = fname_tab[0] = 0;
   while ((opt = getopt(argc, argv, "i:o:bh")) != -1) {
     switch (opt) {

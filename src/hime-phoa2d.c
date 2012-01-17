@@ -71,9 +71,6 @@ int main(int argc, char **argv)
   int phrase_area_N=0;
   char *phrase_area = NULL;
 
-  if (!getenv("NO_GTK_INIT"))
-    gtk_init(&argc, &argv);
-
   if (argc > 1)
     fname = argv[1];
 

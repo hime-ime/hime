@@ -1073,17 +1073,7 @@ void init_TableDir(), exec_setup_scripts();
 
 int main(int argc, char **argv)
 {
-//  char *messages=getenv("LC_MESSAGES");
-#if 0
-  char *ctype=getenv("LC_CTYPE");
-  if (!(ctype && strstr(ctype, "zh_CN")))
-    putenv("LANGUAGE=zh_TW.UTF-8");
-#endif
-
   set_is_chs();
-
-  setenv("HIME_BIN_DIR", HIME_BIN_DIR, TRUE);
-  setenv("UTF8_EDIT", utf8_edit, TRUE);
 
   exec_setup_scripts();
 
