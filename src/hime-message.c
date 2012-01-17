@@ -17,11 +17,6 @@
 
 #include "hime.h"
 
-void print_help()
-{
-  p_err("usage: hime-message -icon file_name -text string -duration milli_seconds\n");
-}
-
 int main(int argc, char **argv)
 {
   int i;
@@ -29,10 +24,10 @@ int main(int argc, char **argv)
   char icon[128];
   int duration = 3000;
 
-  gtk_init(&argc, &argv);
+  gdk_init(&argc, &argv);
 
   if (argc < 3)
-    print_help();
+    p_err("usage: hime-message -icon file_name -text string -duration milli_seconds\n");
 
   strcpy(text, "-");
   strcpy(icon, "-");
@@ -54,9 +49,6 @@ int main(int argc, char **argv)
   char message[512];
 
   sprintf(message, "#hime_message %s %s %d", icon, text, duration);
-
-
-  gdk_init(NULL, NULL);
 
   send_hime_message(GDK_DISPLAY(), message);
 

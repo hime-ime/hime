@@ -44,7 +44,8 @@ HIME_PID=$!
 
 [ $(id -u $USER) != "0" ] && kill -HUP $HIME_PID
 
-rm $GTK_2_TEMP_FILE $GTK_3_TEMP_FILE /tmp/hime-$USER/socket-*-$XIM_NAME
+# TODO: get tempdir from TMPDIR, TMP, and TEMP
+rm $GTK_2_TEMP_FILE $GTK_3_TEMP_FILE /tmp/.hime-$USER/socket-*-$XIM_NAME
 
 # Copyright (C) 2007-2011 Wen-Yen Chuang <caleb AT calno DOT com>
 #

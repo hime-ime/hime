@@ -184,9 +184,6 @@ int main(int argc, char **argv)
   char *phrbuf = NULL;
   int prbf_cou=0;
 
-  if (!getenv("NO_GTK_INIT"))
-    gtk_init(&argc, &argv);
-
   printf("-- cin2gtab encoding UTF-8 --\n");
   printf("--- please use iconv -f big5 -t utf-8 if your file is in big5 encoding\n");
 

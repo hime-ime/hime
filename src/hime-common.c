@@ -93,12 +93,6 @@ void exec_hime_setup()
   if (geteuid() < 100 || getegid() < 100)
     return;
 
-#if 0
-  char pidstr[32];
-  sprintf(pidstr, "HIME_PID=%d", getpid());
-  putenv(pidstr);
-#endif
-
   system(HIME_BIN_DIR"/hime-setup &");
 }
 

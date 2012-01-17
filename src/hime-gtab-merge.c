@@ -178,8 +178,6 @@ int main(int argc, char **argv)
   char *phrbuf = NULL;
   int prbf_cou=0;
 
-  gtk_init(&argc, &argv);
-
   INMD tinmd, *inp = &tinmd, *cur_inmd = &tinmd;
 
   if (argc != 4) {
