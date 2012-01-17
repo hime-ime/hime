@@ -19,7 +19,7 @@
 [ ! -e distro/fedora ] && exec echo Please execute '"[1m[32mdistro/fedora/gen-rpm[0m"' under hime directory, thanks.
 
 VERSION_FILE=VERSION.hime
-VERSION=`cat ${VERSION_FILE}`
+VERSION=`cat ${VERSION_FILE}`+`date +git%y%m%d`
 SPEC_FILE=hime-fedora.spec
 SRC_FILE=hime-${VERSION}.tar.xz
 DISTRODIR=distro/fedora
