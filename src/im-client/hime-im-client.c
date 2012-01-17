@@ -109,7 +109,7 @@ static HIME_client_handle *hime_im_client_reopen(HIME_client_handle *hime_ch, Di
       int pid;
 
       if ((pid=fork())==0) {
-        putenv("HIME_DAEMON=");
+        setenv("HIME_DAEMON", "", TRUE);
         execl(execbin, "hime", NULL);
       } else {
         int status;

@@ -2,6 +2,12 @@
 [ ! -e distro/debian ] && exec echo Please execute '"[1m[32mdistro/debian/gen-deb[0m"' under hime directory, thanks.
 rm -fr debian
 cp -r distro/debian .
-sed -i "s#9-9#`cat VERSION.hime | sed -e "s/$/+\`date +git%y%m%d\`-1/" -e 's/UNRELEASED/0UNRELEASED/'`#" debian/changelog
-export CFLAGS="-Wall -g -O0"
+if [ -d .git ]; then
+  sed -i "s#9-9#`cat VERSION.hime | sed -e "s/$/+\`date +git%y%m%d\`-1/" -e 's/UNRELEASED/0UNRELEASED/'`#" debian/changelog
+else
+  sed -i "s#9-9#`cat VERSION.hime | sed -e 's/UNRELEASED/0UNRELEASED/'`#" debian/changelog
+fi
+# Not sure if DEB_CFLAGS_SET do work
+export DEB_CFLAGS_SET="-Wall -g -O0"
+export CFLAGS="$CFLAGS -Wall -g -O0"
 dpkg-buildpackage -b
