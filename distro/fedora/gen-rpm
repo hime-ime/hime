@@ -19,23 +19,28 @@
 [ ! -e distro/fedora ] && exec echo Please execute '"[1m[32mdistro/fedora/gen-rpm[0m"' under hime directory, thanks.
 
 VERSION_FILE=VERSION.hime
-VERSION=`cat ${VERSION_FILE}`
 SPEC_FILE=hime-fedora.spec
-SRC_FILE=hime-${VERSION}.tar.xz
 DISTRODIR=distro/fedora
 DISTROROOT=`basename ${DISTRODIR}`
 SRCDIR=`rpm --eval "%{_sourcedir}"`
 SPECDIR=`rpm --eval "%{_specdir}"`
+GIT_DIR_NAME="${PWD##*/}"
 
 rm -fr ${DISTROROOT}
 cp -r ${DISTRODIR} ${DISTROROOT}
-
 echo "building ${SPEC_FILE} ..."
 if [ -d '.git' ] ; then
-    git archive --format=tar --prefix=hime-${VERSION}/ HEAD | xz > ${SRCDIR}/${SRC_FILE}
+    VERSION=`cat ${VERSION_FILE}`+`date +git%y%m%d`
+    TAR_NAME=hime-${VERSION}
+    git archive --format=tar --prefix=${TAR_NAME}/ HEAD | xz > ${SRCDIR}/${TAR_NAME}.tar.xz
 else
-    echo Please copy source tar ball to $SRCDIR/ or clone from github!
-    exit
+    VERSION=`cat ${VERSION_FILE}`
+    XZ_OPT=${XZ_OPT-"-7e"}
+    TAR_NAME=hime-${VERSION}
+    cd ..
+    cp -r $GIT_DIR_NAME $TAR_NAME
+    tar --owner=0 --group=0 -Jcf "$TAR_NAME".tar.xz $TAR_NAME --exclude=.git
+    cp ${TAR_NAME}.tar.xz ${SRCDIR}/${TAR_NAME}.tar.xz
 fi
 
 cd ${DISTROROOT}
