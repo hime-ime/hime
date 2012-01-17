@@ -32,7 +32,7 @@ echo "building ${SPEC_FILE} ..."
 if [ -d '.git' ] ; then
     VERSION=`cat ${VERSION_FILE}`+`date +git%y%m%d`
     TAR_NAME=hime-${VERSION}
-    git archive --format=tar --prefix=hime-${TAR_NAME}/ HEAD | xz > ${SRCDIR}/${TAR_NAME}.tar.xz
+    git archive --format=tar --prefix=${TAR_NAME}/ HEAD | xz > ${SRCDIR}/${TAR_NAME}.tar.xz
 else
     VERSION=`cat ${VERSION_FILE}`
     XZ_OPT=${XZ_OPT-"-7e"}
