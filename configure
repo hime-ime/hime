@@ -1,25 +1,32 @@
 #!/bin/bash
 
-
 if [ "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]; then
-    echo "** valid options:"
-    echo "  --with_gtk3     : compile with GTK+ 3.x"
-    echo "  --use_xim=N     : disable the support of XIM"
-    echo "  --prefix=path   : install prefix (e.g. /usr)"
-#   TODO fix not working option(s)
-#   echo "  --use_tray=N    : disable system tray"
-    echo "  --use_unity=N   : disable Ubuntu unity tray"
-    echo "  --use_i18n=N    : disable i18n"
-    echo "  --use_tsin=N    : disable Tsin input method"
-    echo "  --use_anthy=N   : disable Anthy input method"
-    echo "  --use_chewing=N : disable Chewing input method"
-    echo "  --use_qt3=Y     : enable Qt 3.x immodule"
-    echo "  --use_qt4=N     : disable Qt 4.x immodule"
-    echo "  --qt3-moc-path  : specify the path of \"moc\" tool for Qt 3.x"
-    echo "  --qt4-moc-path  : specify the path of \"moc\" tool for Qt 4.x"
-    echo "  --qt4-install-to: install path for Qt 4.x input method plugin."
-    echo "  --use_gtk=N     : disable GTK+ 2.x immodule"
-    echo "  --use_gtk3=N    : disable GTK+ 3.x immodule"
+    echo "Usage: $0 [OPTION]... [VAR=VALUE]..."
+    echo ""
+    echo "Installation directories:"
+    echo "  --prefix=PREFIX       : install in PREFIX (e.g. /usr) [default: /usr/local]"
+    echo ""
+    echo "Optional Packages:"
+    echo "  --with-gtk=2.0|3.0    : which gtk+ version to compile against [default: 2.0]"
+    echo ""
+    echo "Optional Features:"
+    echo "  --disable-nls            : disable Native Language Support [default: enable]"
+    echo "  --disable-xim            : disable the support of XIM [default: enable]"
+    echo "  --disable-system-tray    : disable system tray support [default: enable]"
+    echo "  --disable-tsin           : disable Tsin input method [default: enable]"
+    echo "  --disable-gtk2-im-module : disable GTK+ 2.x im-module [default: auto-detect]"
+    echo "  --disable-gtk3-im-module : disable GTK+ 3.x im-module [default: auto-detect]"
+    echo "  --enable-qt3-immodule    : enable QT3 im-module [default: disable]"
+    echo "  --disable-qt4-immodule   : disable QT4 im-module [default: auto-detect]"
+    echo "  --disable-anthy          : disable Anthy input method [default: auto-detect]"
+    echo "  --disable-chewing        : disable Chewing input method [default: auto-detect]"
+    echo "  --disable-appindicator   : disable Ubuntu unity tray [default: auto-detect]"
+    echo ""
+    echo "System Specific Pathes:"
+    echo "  --qt3-moc-path=PATH       : specify the path of \"moc\" command for Qt 3.x"
+    echo "  --qt4-moc-path=PATH       : specify the path of \"moc\" command for Qt 4.x"
+    echo "  --qt4-im-module-path=PATH : specify the install path for Qt 4.x im-module."
+    echo ""
     exit
 fi
 
@@ -100,37 +107,81 @@ fi
 
 for opt do
   case "$opt" in
-  --with_gtk3) GTK=gtk+-3.0
+  --with_gtk3|--with-gtk=3.0) GTK=gtk+-3.0
   ;;
   --prefix=*) prefix=`echo $opt | cut -d '=' -f 2`
   ;;
   --use_xim=*) use_xim=`echo $opt | cut -d '=' -f 2`
   ;;
+  --enable_xim) use_xim=Y
+  ;;
+  --disable-xim) use_xim=N
+  ;;
   --use_tray=*) use_tray=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --enable-system-tray) use_tray=Y
+  ;;
+  --disable-system-tray) use_tray=N
   ;;
   --use_unity=*) use_unity=`echo $opt | cut -d '=' -f 2`
   ;;
+  --enable_appindicator) use_tray=Y
+  ;;
+  --disable-appindicator) use_tray=N
+  ;;
   --use_i18n=*) use_i18n=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --enable_nls) use_i18n=Y
+  ;;
+  --disable-nls) use_i18n=N
   ;;
   --use_tsin=*) use_tsin=`echo $opt | cut -d '=' -f 2`
   ;;
+  --enable_tsin) use_tsin=Y
+  ;;
+  --disable-tsin) use_tsin=N
+  ;;
   --use_anthy=*) use_anthy=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --enable_anthy) use_anthy=Y
+  ;;
+  --disable-anthy) use_anthy=N
   ;;
   --use_chewing=*) use_chewing=`echo $opt | cut -d '=' -f 2`
   ;;
+  --enable_chewing) use_chewing=Y
+  ;;
+  --disable-chewing) use_chewing=N
+  ;;
   --use_qt3=*) use_qt3=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --enable-qt3-immodule) use_qt3=Y
+  ;;
+  --disable_qt3-immodule) use_qt3=N
   ;;
   --use_qt4=*) use_qt4=`echo $opt | cut -d '=' -f 2`
   ;;
+  --enable_qt4-immodule) use_qt4=Y
+  ;;
+  --disable-qt4-immodule) use_qt4=N
+  ;;
   --use_gtk=*) use_gtk=`echo $opt | cut -d '=' -f 2`
   ;;
+  --enable_gtk2-im-module) use_gtk=Y
+  ;;
+  --disable-gtk2-im-module) use_gtk=N
+  ;;
   --use_gtk3=*) use_gtk3=`echo $opt | cut -d '=' -f 2`
+  ;;
+  --enable_gtk3-im-module) use_gtk3=Y
+  ;;
+  --disable-gtk3-im-module) use_gtk3=N
   ;;
   --qt3-moc-path=*) QT3_MOC_PATH=`echo $opt | cut -d '=' -f 2`
   ;;
   --qt4-moc-path=*) QT4_MOC_PATH=`echo $opt | cut -d '=' -f 2`
   ;;
-  --qt4-install-to=*) QT4_IM_DIR=`echo $opt | cut -d '=' -f 2`
+  --qt4-install-to=*|--qt4-im-module-path) QT4_IM_DIR=`echo $opt | cut -d '=' -f 2`
   ;;
   esac
 done
