@@ -42,7 +42,7 @@ void get_hime_im_srv_sock_path(char *outstr, int outstrN)
   char my_dir[128];
 
   struct passwd *pw = getpwuid(my_uid);
-  snprintf(my_dir, sizeof(my_dir), "/tmp/hime-%s", pw->pw_name);
+  snprintf(my_dir, sizeof(my_dir), "%s/.hime-%s", g_get_tmp_dir(), pw->pw_name);
   struct stat st;
 
   if (stat(my_dir, &st) < 0)

@@ -183,7 +183,8 @@ void init_hime_im_serv(Window win)
   // unix socket
   bzero(&serv_addr,sizeof(serv_addr));
   serv_addr.sun_family = AF_UNIX;
-  char sock_path[128];
+  // the max size of saddr.sun_path in Linux is 108!
+  char sock_path[108];
   get_hime_im_srv_sock_path(sock_path, sizeof(sock_path));
   strcpy(serv_addr.sun_path, sock_path);
 
