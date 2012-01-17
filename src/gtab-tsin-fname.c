@@ -45,7 +45,7 @@ gboolean init_tsin_table_fname(INMD *p, char *fname)
   strcat(strcpy(gtab_phrase_src, fname), ".src");
 //  dbg("init_tsin_table %s\n", fname);
 
-  putenv("HIME_NO_RELOAD=");
+  setenv("HIME_NO_RELOAD", "", TRUE);
 
   if (access(fname, W_OK) < 0 || access(fname_idx, W_OK) < 0)
   {
