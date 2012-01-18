@@ -1,6 +1,10 @@
 #!/bin/sh 
 [ ! -e distro/dev-tools/scripts/make-tarball ] && exec echo Please execute '"[1m[32mdistro/dev-tools/scripts/make-tarball[0m"' under hime directory, thanks.
 XZ_OPT=${XZ_OPT-"-7e"}
+VER_1=`head -n 1 ChangeLog`
+# Remove space, tab, BOM
+VER_2=`sed -e 's/ //g' -e 's/	//g' -e 's/\t//g' -e 's/\xef\xbb\xbf//g' ChangeLog | grep -v ^$ | head -n 1`
+[ "$VER_1" != "$VER_2" ] && exec echo [1m[31mWarning! Version number in ChangeLog has some problem, please fix it![0m
 echo -n "ChangeLog: "
 head -n 1 ChangeLog
 GIT_DIR_NAME="${PWD##*/}"
