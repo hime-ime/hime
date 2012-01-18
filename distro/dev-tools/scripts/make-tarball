@@ -1,15 +1,8 @@
 #!/bin/sh 
 [ ! -e distro/dev-tools/scripts/make-tarball ] && exec echo Please execute '"[1m[32mdistro/dev-tools/scripts/make-tarball[0m"' under hime directory, thanks.
 XZ_OPT=${XZ_OPT-"-7e"}
-head -n 1 ChangeLog > VERSION.hime
-echo -n '#define HIME_VERSION "' > src/hime-version.h
-head -n 1 ChangeLog | sed 's/$/"/' >> src/hime-version.h
 echo -n "ChangeLog: "
 head -n 1 ChangeLog
-echo -n "VERSION.hime: "
-cat VERSION.hime 
-echo -n "src/hime-version.h: "
-cat src/hime-version.h
 GIT_DIR_NAME="${PWD##*/}"
 TAR_NAME=hime-`head -n 1 ChangeLog`
 cd ..

@@ -17,7 +17,6 @@
 
 #include "hime.h"
 #include "config.h"
-#include "hime-version.h"
 #include "gtab.h"
 #include <signal.h>
 #if HIME_i18n_message
