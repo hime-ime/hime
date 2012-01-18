@@ -105,6 +105,7 @@ if [ "$HIME_USE_XIM" ]; then
   use_xim=$HIME_USE_XIM
 fi
 
+QT4_IM_DIR_CUSTOM=
 for opt do
   case "$opt" in
   --with_gtk3|--with-gtk=3.0) GTK=gtk+-3.0
@@ -181,7 +182,7 @@ for opt do
   ;;
   --qt4-moc-path=*) QT4_MOC_PATH=`echo $opt | cut -d '=' -f 2`
   ;;
-  --qt4-install-to=*|--qt4-im-module-path=*) QT4_IM_DIR=`echo $opt | cut -d '=' -f 2`
+  --qt4-install-to=*|--qt4-im-module-path=*) QT4_IM_DIR_CUSTOM=`echo $opt | cut -d '=' -f 2`
   ;;
   esac
 done
@@ -501,7 +502,11 @@ echo "FREEBSD=$FREEBSD" >> config.mak
 echo "QT_IM=$QT_IM" >> config.mak
 echo "QT_IM_DIR=\$(libdir)$QT_IM_DIR" >> config.mak
 echo "QT4_IM=$QT4_IM" >> config.mak
-echo "QT4_IM_DIR=\$(libdir)$QT4_IM_DIR" >> config.mak
+if [ -z "$QT4_IM_DIR_CUSTOM" ]; then
+	echo "QT4_IM_DIR=\$(libdir)$QT4_IM_DIR" >> config.mak
+else
+	echo "QT4_IM_DIR=$QT4_IM_DIR_CUSTOM" >> config.mak
+fi
 echo "QT3_MOC_PATH=$QT3_MOC_PATH" >> config.mak
 echo "QT4_MOC_PATH=$QT4_MOC_PATH" >> config.mak
 echo "QT3_QMAKE_PATH=$QT3_MOC_PATH" | sed 's/moc/qmake/' >> config.mak
