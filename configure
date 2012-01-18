@@ -323,7 +323,7 @@ fi
 
 # --- QT3 START ---
 QT_IM='N'
-QT_IM_DIR=/usr/$LIB/qt3/plugins/inputmethods
+QT_IM_DIR=/qt3/plugins/inputmethods
 echo -n ".... Testing Qt 3.x      :  "
 pkg-config --libs qt-mt > /dev/null 2> /dev/null
 if [ $? = 0 ]; then
@@ -353,7 +353,7 @@ fi
 
 # --- QT4 START ---
 QT4_IM='N'
-if [ -z "$QT4_IM_DIR" ]; then QT4_IM_DIR=/usr/$LIB/qt4/plugins/inputmethods; fi
+if [ -z "$QT4_IM_DIR" ]; then QT4_IM_DIR=/qt4/plugins/inputmethods; fi
 
 echo -n ".... Testing Qt 4.x      :  "
 pkg-config --libs QtCore QtGui > /dev/null 2> /dev/null
@@ -499,9 +499,9 @@ echo "HIME_ICON_DIR_i=\$(datadir)/pixmaps/hime" >> config.mak
 echo "HIME_BIN_DIR=\$(bindir_r)" >> config.mak
 echo "FREEBSD=$FREEBSD" >> config.mak
 echo "QT_IM=$QT_IM" >> config.mak
-echo "QT_IM_DIR=$QT_IM_DIR" >> config.mak
+echo "QT_IM_DIR=\$(libdir)$QT_IM_DIR" >> config.mak
 echo "QT4_IM=$QT4_IM" >> config.mak
-echo "QT4_IM_DIR=$QT4_IM_DIR" >> config.mak
+echo "QT4_IM_DIR=\$(libdir)$QT4_IM_DIR" >> config.mak
 echo "QT3_MOC_PATH=$QT3_MOC_PATH" >> config.mak
 echo "QT4_MOC_PATH=$QT4_MOC_PATH" >> config.mak
 echo "QT3_QMAKE_PATH=$QT3_MOC_PATH" | sed 's/moc/qmake/' >> config.mak
