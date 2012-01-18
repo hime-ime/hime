@@ -62,10 +62,10 @@ void cb_toggle_im_enabled(GtkCheckMenuItem *checkmenuitem, gpointer dat)
 static MITEM mitems[] = {
   {N_("開關輸入法"), NULL, cb_toggle_im_enabled, NULL},
   {N_("設定"), GTK_STOCK_PREFERENCES, exec_hime_setup_, NULL},
-  {N_("重新執行hime"), GTK_STOCK_QUIT, restart_hime, NULL},
+  {N_("結束hime"), GTK_STOCK_QUIT, restart_hime, NULL},
   {N_("念出發音"), NULL, cb_tog_phospeak, &phonetic_speak},
-  {N_("外部繁轉簡工具"), NULL, cb_trad2sim, NULL},
-  {N_("外部簡轉繁工具"), NULL, cb_sim2trad, NULL},
+  {N_("繁轉簡工具"), NULL, cb_trad2sim, NULL},
+  {N_("簡轉繁工具"), NULL, cb_sim2trad, NULL},
   {N_("選擇輸入法"), NULL, cb_inmd_menu, NULL},
   {N_("小鍵盤"), NULL, kbm_toggle_, &win_kbm_on},
   {N_("輸出成簡體"), NULL, cb_trad_sim_toggle_, &gb_output},

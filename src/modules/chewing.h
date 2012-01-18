@@ -41,6 +41,7 @@
 
 #define HIME_CHEWING_DEFAULT_KEY_MIN (XK_space)
 #define HIME_CHEWING_DEFAULT_KEY_MAX (XK_asciitilde + 1)
+#define HIME_CHEWING_KEY_MIN         (0x00)
 #define HIME_CHEWING_KEY_MAX         (XK_Delete + 1)
 
 #define HIME_CHEWING_WRAPPER_FUNC(FUNC_NAME) return (chewing_buffer_Len (g_pChewingCtx) \

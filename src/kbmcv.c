@@ -69,9 +69,6 @@ int main(int argc, char **argv)
   char fnamesrc[40];
   char fnameout[40];
 
-  if (!getenv("NO_GTK_INIT"))
-    gtk_init(&argc, &argv);
-
   if (argc < 2) {
     puts("file name expected");
     exit(1);

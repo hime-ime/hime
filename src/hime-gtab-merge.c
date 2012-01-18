@@ -26,7 +26,6 @@
 #include "hime.h"
 #include "gtab.h"
 #include "hime-endian.h"
-#include "hime-version.h"
 
 FILE *fr, *fw;
 int lineno;
@@ -177,8 +176,6 @@ int main(int argc, char **argv)
   int *phridx=NULL, phr_cou=0;
   char *phrbuf = NULL;
   int prbf_cou=0;
-
-  gtk_init(&argc, &argv);
 
   INMD tinmd, *inp = &tinmd, *cur_inmd = &tinmd;
 

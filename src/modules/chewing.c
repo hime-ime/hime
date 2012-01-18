@@ -214,7 +214,8 @@ hime_key_filter (int *pnKeyVal)
     if ((*pnKeyVal) > HIME_CHEWING_DEFAULT_KEY_MIN && 
         (*pnKeyVal) < HIME_CHEWING_DEFAULT_KEY_MAX)
         chewing_handle_Default (g_pChewingCtx, (*pnKeyVal));
-    else 
+    else if ((*pnKeyVal) < HIME_CHEWING_KEY_MAX && 
+             (*pnKeyVal) >= HIME_CHEWING_KEY_MIN)
         if ((int)(g_pKeyHandler[(*pnKeyVal)] (g_pChewingCtx)) == -1)
             return FALSE;
 
@@ -423,7 +424,7 @@ hime_chewing_wrapper_del (ChewingContext *pCtx)
 static void 
 hime_chewing_cb_register (void)
 {
-    int nIdx = 0;
+    int nIdx = HIME_CHEWING_KEY_MIN;
 
     for (; nIdx < HIME_CHEWING_KEY_MAX; nIdx++)
         g_pKeyHandler[nIdx] = (void *)hime_chewing_handler_default;

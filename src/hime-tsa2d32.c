@@ -214,11 +214,8 @@ int main(int argc, char **argv)
   if (reload) {
     dbg("need reload\n");
   } else {
-    dbg("NO_GTK_INIT\n");
+    dbg("need not reload\n");
   }
-
-  if (getenv("NO_GTK_INIT")==NULL)
-    gtk_init(&argc, &argv);
 
   dbg("enter %s\n", argv[0]);
 

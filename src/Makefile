@@ -8,11 +8,10 @@ CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I./IMdkit/include -I./im-client 
         -DHIME_ICON_DIR=\"$(HIME_ICON_DIR)\" \
         -DHIME_SCRIPT_DIR=\"$(HIME_SCRIPT_DIR)\" -DHIME_BIN_DIR=\"$(HIME_BIN_DIR)\" \
         -DSYS_ICON_DIR=\"$(SYS_ICON_DIR)\" -DFREEBSD=$(FREEBSD) -DMAC_OS=$(MAC_OS) \
+        -DHIME_VERSION=\"$(shell head -n 1 ../ChangeLog)\" \
         -DG_DISABLE_SINGLE_INCLUDES -DG_DISABLE_DEPRECATED \
         -DGDK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED \
         -DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE
-
-VERSION_FILE = ../VERSION.hime
 
 OBJ_IMSRV = im-addr.o im-dispatch.o im-srv.o hime-crypt.o
 
@@ -161,7 +160,7 @@ PROGS_CV  = kbmcv pin-juyin
 	@$(CCX) $(CFLAGS) -E -o $@ $<
 
 
-all: hime-version.h $(PROGS) $(PROGS_SYM) $(DATA) $(PROGS_CV)
+all: $(PROGS) $(PROGS_SYM) $(DATA) $(PROGS_CV)
 	if [ $(BUILD_MODULE) = 'Y' ]; then $(MAKE) -C modules; fi
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im; fi
@@ -279,11 +278,6 @@ pin-juyin: $(OBJS_pin_juyin)
 hime-tsin2gtab-phrase: $(OBJS_tsin2gtab_phrase)
 	@echo "linking $@ ..."
 	@$(CCLD) -o $@ $^ $(LDFLAGS)
-
-
-hime-version.h: $(VERSION_FILE)
-	@echo "building $@ ... current version is '"`cat $<`"'"
-	@echo '#define HIME_VERSION "'`cat $<`'"' > $@
 
 install:
 	install -d $(bindir)

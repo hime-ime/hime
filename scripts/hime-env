@@ -43,7 +43,8 @@ echo
 echo "Running hime number: "`pgrep hime | wc -l`
 
 echo
-echo "hime socket number: "`ls /tmp/hime-$USER/socket-:* | wc -l`
+# TODO: get tempdir from TMPDIR, TMP, and TEMP
+echo "hime socket number: "`ls /tmp/.hime-$USER/socket-:* | wc -l`
 
 echo
 echo -n "System library path: "

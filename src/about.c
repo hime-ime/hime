@@ -16,7 +16,6 @@
  */
 
 #include "hime.h"
-#include "hime-version.h"
 
 static GtkWidget *about_window;
 

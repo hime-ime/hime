@@ -38,8 +38,6 @@ int main(int argc, char **argv)
   char *fname;
   char *fname_out = NULL;
 
-  gtk_init(&argc, &argv);
-
   if (argc <= 1) {
     printf("%s: file name expected\n", argv[0]);
     exit(1);
