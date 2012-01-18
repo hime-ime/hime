@@ -35,7 +35,7 @@ if [ -d '.git' ] ; then
     git archive --format=tar --prefix=${TAR_NAME}/ HEAD | xz > ${SRCDIR}/${TAR_NAME}.tar.xz
 else
     VERSION=`head -n 1 ${VERSION_FILE}`
-    XZ_OPT=${XZ_OPT-"-7e"}
+    XZ_OPT=${XZ_OPT-"-5e"}
     TAR_NAME=hime-${VERSION}
     cd ..
     cp -r $GIT_DIR_NAME $TAR_NAME
