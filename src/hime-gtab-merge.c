@@ -26,7 +26,6 @@
 #include "hime.h"
 #include "gtab.h"
 #include "hime-endian.h"
-#include "hime-version.h"
 
 FILE *fr, *fw;
 int lineno;

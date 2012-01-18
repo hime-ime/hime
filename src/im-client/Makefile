@@ -25,7 +25,8 @@ OBJS = hime-im-client.o hime-send.o im-addr.o hime-conf.o util.o hime-crypt-fpic
 
 $(SOFILEVER):   $(OBJS)
 	@echo "linking $@ ..."
-	@$(CC) $(SO_FLAGS) -Wl,-soname,libhime-im-client.so.1 $(OBJS) -lX11 -o $@ -L/usr/X11R6/lib
+# TODO: Drop g_get_tmp_dir() and -lglib-2.0
+	@$(CC) $(SO_FLAGS) -Wl,-soname,libhime-im-client.so.1 $(OBJS) -lX11 -lglib-2.0 -o $@ -L/usr/X11R6/lib
 	ln -sf $(SOFILEVER) $(SOFILE)
 	ln -sf $(SOFILEVER) $(SOFILE).1
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C ../gtk-im; fi

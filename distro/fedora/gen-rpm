@@ -18,7 +18,7 @@
 
 [ ! -e distro/fedora ] && exec echo Please execute '"[1m[32mdistro/fedora/gen-rpm[0m"' under hime directory, thanks.
 
-VERSION_FILE=VERSION.hime
+VERSION_FILE=ChangeLog
 SPEC_FILE=hime-fedora.spec
 DISTRODIR=distro/fedora
 DISTROROOT=`basename ${DISTRODIR}`
@@ -30,11 +30,11 @@ rm -fr ${DISTROROOT}
 cp -r ${DISTRODIR} ${DISTROROOT}
 echo "building ${SPEC_FILE} ..."
 if [ -d '.git' ] ; then
-    VERSION=`cat ${VERSION_FILE}`+`date +git%y%m%d`
+    VERSION=`head -n 1 ${VERSION_FILE}`+`date +git%y%m%d`
     TAR_NAME=hime-${VERSION}
     git archive --format=tar --prefix=${TAR_NAME}/ HEAD | xz > ${SRCDIR}/${TAR_NAME}.tar.xz
 else
-    VERSION=`cat ${VERSION_FILE}`
+    VERSION=`head -n 1 ${VERSION_FILE}`
     XZ_OPT=${XZ_OPT-"-7e"}
     TAR_NAME=hime-${VERSION}
     cd ..
