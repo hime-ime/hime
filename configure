@@ -181,7 +181,7 @@ for opt do
   ;;
   --qt4-moc-path=*) QT4_MOC_PATH=`echo $opt | cut -d '=' -f 2`
   ;;
-  --qt4-install-to=*|--qt4-im-module-path) QT4_IM_DIR=`echo $opt | cut -d '=' -f 2`
+  --qt4-install-to=*|--qt4-im-module-path=*) QT4_IM_DIR=`echo $opt | cut -d '=' -f 2`
   ;;
   esac
 done
