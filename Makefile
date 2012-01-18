@@ -1,6 +1,6 @@
 include config.mak
 
-VERSION_FILE = VERSION.hime
+VERSION_FILE = ChangeLog
 
 DIR    = src data filter scripts icons man menu
 
