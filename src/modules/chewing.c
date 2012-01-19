@@ -313,6 +313,7 @@ hime_buffer_label_show (void)
             else if (((*pHead) & 0xf0) == 0xf0)   // 4 bytes utf-8 data
                 nWordSize = 4;
 
+            memset (pszWord, 0x00, 8);
             memcpy (pszWord, pHead, nWordSize);
             hime_label_show (pszWord, nIdx++);
         }
