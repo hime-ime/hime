@@ -609,9 +609,6 @@ void create_appearance_conf_window()
   hime_appearance_conf_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_position(GTK_WINDOW(hime_appearance_conf_window), GTK_WIN_POS_MOUSE);
 
-
-  gtk_window_set_has_resize_grip(GTK_WINDOW(hime_appearance_conf_window), FALSE);
-
   g_signal_connect (G_OBJECT (hime_appearance_conf_window), "delete_event",
                     G_CALLBACK (close_appearance_conf_window),
                     NULL);
