@@ -48,7 +48,7 @@ if [ $? = 0 ]; then
   FREEBSD=1
 fi
 
-SO_FLAGS="-shared"
+SO_FLAGS="-shared -Wl,--as-needed"
 MAC_OS=0
 uname | grep Darwin > /dev/null 2> /dev/null
 if [ $? = 0 ]; then
