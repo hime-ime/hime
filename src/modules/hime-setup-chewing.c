@@ -96,7 +96,7 @@ void module_setup_window_create ()
     }
 
     hime_chewing_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
+    gtk_window_set_type_hint(GTK_WINDOW(hime_chewing_window), GDK_WINDOW_TYPE_HINT_UTILITY);
     /* main setup win setting */
     gtk_window_set_position (GTK_WINDOW (hime_chewing_window),
                              GTK_WIN_POS_MOUSE);
