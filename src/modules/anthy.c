@@ -708,7 +708,7 @@ static void send_seg()
   }
 
 //  printf("sent convert '%s'\n", out);
-  gmf.mf_send_text(out);
+  if (out[0] != '\0') gmf.mf_send_text(out);
   clear_all();
 }
 

@@ -788,7 +788,7 @@ void update_active_in_win_geom()
   }
 }
 
-extern GtkWidget *gwin_pho, *gwin0, *gwin_gtab;
+extern GtkWidget *gwin_pho, *gwin0, *gwin_gtab, *gwin_sym;
 
 gboolean win_is_visible()
 {
@@ -805,6 +805,8 @@ gboolean win_is_visible()
       if (!module_cb())
         return FALSE;
       return module_cb()->module_win_visible();
+    case method_type_SYMBOL_TABLE:
+      return gwin_sym && GTK_WIDGET_VISIBLE(gwin_sym);
     default:
       if (!gwin_gtab)
         return FALSE;
@@ -927,6 +929,7 @@ gboolean init_in_method(int in_no)
       init_tab_pp(init_im);
       break;
     case method_type_SYMBOL_TABLE:
+      current_CS->in_method = in_no;
       toggle_symbol_table();
       break;
     case method_type_MODULE:
@@ -997,6 +1000,12 @@ gboolean init_in_method(int in_no)
 
 static void cycle_next_in_method()
 {
+  if (current_method_type() == method_type_SYMBOL_TABLE)
+  {
+    hide_win_sym();
+    win_sym_enabled=0;
+  }
+  
   int i;
   for(i=0; i < inmdN; i++) {
     int v = (current_CS->in_method + 1 + i) % inmdN;
@@ -1224,13 +1233,13 @@ gboolean ProcessKeyPress(KeySym keysym, u_int kev_state)
   }
 
   if (!current_CS->b_hime_protocol) {
-  if (((keysym == XK_Control_L || keysym == XK_Control_R)
-                   && (kev_state & ShiftMask)) ||
-      ((keysym == XK_Shift_L || keysym == XK_Shift_R)
-                   && (kev_state & ControlMask))) {
-     cycle_next_in_method();
-     return TRUE;
-  }
+    if (((keysym == XK_Control_L || keysym == XK_Control_R)
+                     && (kev_state & ShiftMask)) ||
+        ((keysym == XK_Shift_L || keysym == XK_Shift_R)
+                     && (kev_state & ControlMask))) {
+       cycle_next_in_method();
+       return TRUE;
+    }
   }
 
   if (current_CS->b_raise_window && keysym>=' ' && keysym < 127) {
