@@ -222,14 +222,16 @@ OPTIONS     MEANINGS
 \fB1           ON\fP
 .br
 0           OFF
-.IP "\fB$HOME/.config/hime/config/gtab-auto-select-by_phrase\fP \fIboolean\fP"
+.IP "\fB$HOME/.config/hime/config/gtab-auto-select-by_phrase\fP \fInumber\fP"
 Auto-select according to Tsin phrase database in gtab input methods.
 .PP
 OPTIONS     MEANINGS
 .br
+\fB0           Auto-selected by definition in .gtab file.\fP
+.br
 1           ON
 .br
-\fB0           OFF\fP
+2           OFF
 .IP "\fB$HOME/.config/hime/config/gtab-disp-im-name\fP \fIboolean\fP"
 Display input method name in gtab input methods.
 .PP
@@ -246,14 +248,16 @@ OPTIONS     MEANINGS
 \fB1           ON\fP
 .br
 0           OFF
-.IP "\fB$HOME/.config/hime/config/gtab-disp-partial-match\fP \fIboolean\fP"
+.IP "\fB$HOME/.config/hime/config/gtab-disp-partial-match\fP \fInumber\fP"
 Display partial matched characters in gtab input methods.
 .PP
 OPTIONS     MEANINGS
 .br
-\fB1           ON\fP
+0           Auto-selected by definition in .gtab file.
 .br
-0           OFF
+1           ON
+.br
+\fB2           OFF\fP
 .IP "\fB$HOME/.config/hime/config/gtab-dup-select-bell\fP \fIboolean\fP"
 Bell ring when multiple selections are available in gtab input methods.
 .PP
@@ -286,30 +290,58 @@ OPTIONS     MEANINGS
 \fB1           ON\fP
 .br
 0           OFF
-.IP "\fB$HOME/.config/hime/config/gtab-pre-select\fP \fIboolean\fP"
+.IP "\fB$HOME/.config/hime/config/gtab-pho-query\fP \fIboolean\fP"
+Use ` to query same pronunciation characters. For gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/gtab-phrase-pre-select\fP \fIboolean\fP"
+Show candidate phrases before pressing endkey (Space key). For gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
+.IP "\fB$HOME/.config/hime/config/gtab-pre-select\fP \fInumber\fP"
 Show candidate characters before pressing endkey (Space key). For gtab input methods.
 .PP
 OPTIONS     MEANINGS
 .br
+0           Auto-selected by definition in .gtab file.
+.br
 \fB1           ON\fP
 .br
-0           OFF
-.IP "\fB$HOME/.config/hime/config/gtab-press-full-auto-send\fP \fIboolean\fP"
+2           OFF
+.IP "\fB$HOME/.config/hime/config/gtab-press-full-auto-send\fP \fInumber\fP"
 Auto-send character when key codes input area is filled in gtab input methods.
 .PP
 OPTIONS     MEANINGS
 .br
-\fB1           ON\fP
+0           Auto-selected by definition in .gtab file.
 .br
-0           OFF
+1           ON
+.br
+\fB2           OFF\fP
 .IP "\fB$HOME/.config/hime/config/gtab-que-wild-card\fP \fIboolean\fP"
-Use ? as wildcard.
+Use ? as wildcard. For gtab input methods.
 .PP
 OPTIONS     MEANINGS
 .br
 1           ON
 .br
 \fB0           OFF\fP
+.IP "\fB$HOME/.config/hime/config/gtab-que-wild-card-asterisk\fP \fIboolean\fP"
+Use * as wildcard. For gtab input methods.
+.PP
+OPTIONS     MEANINGS
+.br
+\fB1           ON\fP
+.br
+0           OFF
 .IP "\fB$HOME/.config/hime/config/gtab-shift-phrase-key\fP \fIboolean\fP"
 Use single Shift key to input Alt-Shift phrases in gtab input methods.
 .PP
@@ -330,22 +362,26 @@ OPTIONS     MEANINGS
 2           Send first character in character-selection area.
 .br
 4           Does not send first character. (For Array input method.)
-.IP "\fB$HOME/.config/hime/config/gtab-unique-auto-send\fP \fIboolean\fP"
+.IP "\fB$HOME/.config/hime/config/gtab-unique-auto-send\fP \fInumber\fP"
 Auto send characters when there is only one choice in gtab input methods.
 .PP
 OPTIONS     MEANINGS
 .br
+0           Auto-selected by definition in .gtab file.
+.br
 1           ON
 .br
-\fB0           OFF\fP
-.IP "\fB$HOME/.config/hime/config/gtab-vertical-select\fP \fIboolean\fP"
+\fB2           OFF\fP
+.IP "\fB$HOME/.config/hime/config/gtab-vertical-select\fP \fInumber\fP"
 Vertical selection window in gtab input methods.
 .PP
 OPTIONS     MEANINGS
 .br
+0           Auto-selected by definition in .gtab file.
+.br
 1           ON
 .br
-\fB0           OFF\fP
+\fB2           OFF\fP
 .IP "\fB$HOME/.config/hime/config/pho-hide-row2\fP \fIboolean\fP"
 Hide second row of window in Bopomofo and Tsin IM.
 .PP
