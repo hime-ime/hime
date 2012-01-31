@@ -253,6 +253,14 @@ else
   echo "found."
 fi
 
+if [ "$GTK" = gtk+-2.0 ]; then
+  pkg-config --exists 'gtk+-2.0 >= 2.10' 2> /dev/null
+  if [ $? != 0 ]; then
+    echo ".... Testing system-tray :  disabled. gtk > 2.10 is needed to enable system-tray."
+    use_tray=N
+  fi
+fi
+
 echo -n ".... Testing anthy       :  "
 USE_ANTHY=`pkg-config --libs anthy 2> /dev/null`
 if [ $? != 0 ]; then
@@ -281,6 +289,11 @@ else
     USE_CHEWING='Y'
     echo "found."
   fi
+fi
+pkg-config --exists 'chewing >= 0.3.2' 2> /dev/null
+if [ $? != 0 ]; then
+  echo ".... Testing chewing     :  disabled. chewing > 0.3.2 is needed to enable chewing."
+  USE_CHEWING='N'
 fi
 
 if [ "$use_unity" = "Y" ]; then

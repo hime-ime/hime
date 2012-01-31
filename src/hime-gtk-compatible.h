@@ -108,3 +108,7 @@
 #define     gtk_table_attach_defaults(u,v,w,x,y,z) gtk_grid_attach(u,v,w,y,1,1)
 #define     gtk_table_new(x,y,z) gtk_grid_new()
 #endif
+
+#ifndef PANGO_VERSION_CHECK
+#define PANGO_VERSION_CHECK(x,y,z) FALSE
+#endif
