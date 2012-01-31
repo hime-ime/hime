@@ -961,6 +961,7 @@ gboolean init_in_method(int in_no)
     {
       if (current_CS && current_CS->im_state==HIME_STATE_CHINESE)
         toggle_im_enabled();
+      current_CS->in_method = in_no;
       return TRUE;
     }
     default:
