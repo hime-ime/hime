@@ -189,9 +189,9 @@ void update_item_active(MITEM *mitems)
       if (!item)
         continue;
 
-      g_signal_handler_block(item, mitems[i].handler);
+      if (mitems[i].handler) g_signal_handler_block(item, mitems[i].handler);
       gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), *mitems[i].check_dat);
-      g_signal_handler_unblock(item, mitems[i].handler);
+      if (mitems[i].handler) g_signal_handler_unblock(item, mitems[i].handler);
     }
 }
 
