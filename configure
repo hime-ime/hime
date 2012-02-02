@@ -126,9 +126,9 @@ for opt do
   ;;
   --use_unity=*) use_unity=`echo $opt | cut -d '=' -f 2`
   ;;
-  --enable_appindicator) use_tray=Y
+  --enable_appindicator) use_unity=Y
   ;;
-  --disable-appindicator) use_tray=N
+  --disable-appindicator) use_unity=N
   ;;
   --use_i18n=*) use_i18n=`echo $opt | cut -d '=' -f 2`
   ;;
