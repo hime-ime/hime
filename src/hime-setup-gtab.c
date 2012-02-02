@@ -220,7 +220,6 @@ void create_gtab_conf_window()
   load_setttings();
 
   hime_gtab_conf_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_type_hint(GTK_WINDOW(hime_gtab_conf_window), GDK_WINDOW_TYPE_HINT_UTILITY);
   gtk_window_set_position(GTK_WINDOW(hime_gtab_conf_window), GTK_WIN_POS_MOUSE);
   gtk_window_set_has_resize_grip(GTK_WINDOW(hime_gtab_conf_window), FALSE);
 

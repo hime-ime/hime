@@ -123,7 +123,6 @@ static void create_result_win(int res, char *cmd)
     strcpy(tt, _("結果成功"));
 
   main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_type_hint(GTK_WINDOW(main_window), GDK_WINDOW_TYPE_HINT_UTILITY);
   gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_MOUSE);
   gtk_window_set_has_resize_grip(GTK_WINDOW(main_window), FALSE);
 
@@ -608,7 +607,6 @@ void create_appearance_conf_window()
   load_setttings();
 
   hime_appearance_conf_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_type_hint(GTK_WINDOW(hime_appearance_conf_window), GDK_WINDOW_TYPE_HINT_UTILITY);
   gtk_window_set_position(GTK_WINDOW(hime_appearance_conf_window), GTK_WIN_POS_MOUSE);
 
   g_signal_connect (G_OBJECT (hime_appearance_conf_window), "delete_event",
@@ -901,7 +899,6 @@ HIME_module_callback_functions *init_HIME_module_callback_functions(char *sofile
 static void create_main_win()
 {
   main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_type_hint(GTK_WINDOW(main_window), GDK_WINDOW_TYPE_HINT_UTILITY);
   gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_CENTER);
 
   gtk_window_set_has_resize_grip(GTK_WINDOW(main_window), FALSE);
