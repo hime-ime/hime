@@ -125,8 +125,12 @@ void load_setttings()
   hime_im_toggle_keys = get_hime_conf_int(HIME_IM_TOGGLE_KEYS, 0);
   hime_win_sym_click_close = get_hime_conf_int(HIME_WIN_SYM_CLICK_CLOSE, 1);
 #if TRAY_ENABLED
-  hime_status_tray = get_hime_conf_int(HIME_STATUS_TRAY, 1);
-  hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, 2);
+  hime_status_tray = get_hime_conf_int(HIME_STATUS_TRAY, HIME_TRAY_DISPLAY_SINGLE);
+#if TRAY_UNITY
+  hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, HIME_TRAY_DISPLAY_APPINDICATOR);
+#else
+  hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, HIME_TRAY_DISPLAY_DOUBLE);
+#endif
 #else
 // TODO: remove it
   hime_status_tray = 0;
