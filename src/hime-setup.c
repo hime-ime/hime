@@ -1017,8 +1017,7 @@ static void create_main_win()
   g_signal_connect (G_OBJECT (button_ts_edit), "clicked",
                     G_CALLBACK (cb_ts_edit), NULL);
 
-  if (inmd[default_input_method].method_type == method_type_TSIN) {
-  GtkWidget *button_hime_tslearn = gtk_button_new_with_label(_("讓詞音從文章學習詞"));
+  GtkWidget *button_hime_tslearn = gtk_button_new_with_label(_("從文章學習詞"));
   gtk_box_pack_start (GTK_BOX (vbox_ts), button_hime_tslearn, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_hime_tslearn), "clicked",
                     G_CALLBACK (cb_tslearn), NULL);
@@ -1027,7 +1026,6 @@ static void create_main_win()
   gtk_box_pack_start (GTK_BOX (vbox_ts), button_ts_import_sys, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_ts_import_sys), "clicked",
                     G_CALLBACK (cb_ts_import_sys), NULL);
-  }
 
   GtkWidget *button_about = gtk_button_new_with_label(_("關於 hime"));
   gtk_box_pack_start (GTK_BOX (vbox), button_about, FALSE, FALSE, 0);

@@ -189,9 +189,9 @@ void update_item_active(MITEM *mitems)
       if (!item)
         continue;
 
-      g_signal_handler_block(item, mitems[i].handler);
+      if (mitems[i].handler) g_signal_handler_block(item, mitems[i].handler);
       gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), *mitems[i].check_dat);
-      g_signal_handler_unblock(item, mitems[i].handler);
+      if (mitems[i].handler) g_signal_handler_unblock(item, mitems[i].handler);
     }
 }
 
@@ -238,7 +238,7 @@ static void cb_popup(GtkStatusIcon *status_icon, guint button, guint activate_ti
 //      dbg("tray_menu %x\n", tray_menu);
       if (!tray_menu)
         tray_menu = create_tray_menu(mitems_main);
-#if 0
+#if 1
       gtk_menu_popup(GTK_MENU(tray_menu), NULL, NULL, gtk_status_icon_position_menu, status_icon, button, activate_time);
 #else
       gtk_menu_popup(GTK_MENU(tray_menu), NULL, NULL, NULL, NULL, button, activate_time);
@@ -306,7 +306,11 @@ static void cb_popup_state(GtkStatusIcon *status_icon, guint button, guint activ
       if (!tray_menu_state)
         tray_menu_state = create_tray_menu(mitems_state);
 
+#if 1
+      gtk_menu_popup(GTK_MENU(tray_menu_state), NULL, NULL, gtk_status_icon_position_menu, status_icon, button, activate_time);
+#else
       gtk_menu_popup(GTK_MENU(tray_menu_state), NULL, NULL, NULL, NULL, button, activate_time);
+#endif
       break;
     }
   }

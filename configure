@@ -126,9 +126,9 @@ for opt do
   ;;
   --use_unity=*) use_unity=`echo $opt | cut -d '=' -f 2`
   ;;
-  --enable_appindicator) use_tray=Y
+  --enable_appindicator) use_unity=Y
   ;;
-  --disable-appindicator) use_tray=N
+  --disable-appindicator) use_unity=N
   ;;
   --use_i18n=*) use_i18n=`echo $opt | cut -d '=' -f 2`
   ;;
@@ -253,6 +253,14 @@ else
   echo "found."
 fi
 
+if [ "$GTK" = gtk+-2.0 ]; then
+  pkg-config --exists 'gtk+-2.0 >= 2.10' 2> /dev/null
+  if [ $? != 0 ]; then
+    echo ".... Testing system-tray :  disabled. gtk > 2.10 is needed to enable system-tray."
+    use_tray=N
+  fi
+fi
+
 echo -n ".... Testing anthy       :  "
 USE_ANTHY=`pkg-config --libs anthy 2> /dev/null`
 if [ $? != 0 ]; then
@@ -278,18 +286,25 @@ else
     USE_CHEWING='N'
     echo "disabled."
   else
-    USE_CHEWING='Y'
-    echo "found."
+    pkg-config --exists 'chewing >= 0.3.2' 2> /dev/null
+    if [ $? != 0 ]; then
+      USE_CHEWING='N'
+      echo "disabled. chewing > 0.3.2 is needed to enable chewing."
+    else
+      USE_CHEWING='Y'
+      echo "found."
+    fi
   fi
 fi
 
+if [ "$GTK" = "gtk+-3.0" ]; then
+  APPINDICATOR=appindicator3-0.1
+else
+  APPINDICATOR=appindicator-0.1
+fi
 if [ "$use_unity" = "Y" ]; then
   echo -n ".... Testing appindicator:  "
-  if [ "$GTK" = "gtk+-3.0" ]; then
-    USE_UNITY=`pkg-config --libs appindicator3-0.1 2> /dev/null`
-  else
-    USE_UNITY=`pkg-config --libs appindicator-0.1 2> /dev/null`
-  fi
+  USE_UNITY=`pkg-config --libs $APPINDICATOR 2> /dev/null`
   if [ $? != 0 ]; then
     echo not found, unity tray is turned off.
     USE_UNITY=N
@@ -298,15 +313,16 @@ if [ "$use_unity" = "Y" ]; then
       USE_UNITY='N'
       echo "disabled."
     else
-      USE_UNITY='Y'
-      echo "found."
-      UNITY_INC="-I/usr/include/libappindicator-0.1"
-      if [ "$GTK" = "gtk+-3.0" ]; then
-        GTKINC=`pkg-config --cflags $GTK appindicator3-0.1`
-        GTKLDFLAGS=`pkg-config --libs $GTK appindicator3-0.1`
+      pkg-config --exists "$APPINDICATOR >= 0.4.0" 2> /dev/null
+      if [ $? != 0 ]; then
+        echo "disabled. appindicator > 0.4.0 is needed to enable appindicator."
+        USE_UNITY='N'
       else
-        GTKINC=`pkg-config --cflags $GTK appindicator-0.1`
-        GTKLDFLAGS=`pkg-config --libs $GTK appindicator-0.1`
+        USE_UNITY='Y'
+        echo "found."
+        UNITY_INC="-I/usr/include/libappindicator-0.1"
+        GTKINC=`pkg-config --cflags $GTK $APPINDICATOR`
+        GTKLDFLAGS=`pkg-config --libs $GTK $APPINDICATOR`
       fi
     fi
   fi

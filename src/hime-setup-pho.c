@@ -56,11 +56,12 @@ static struct {
   unich_t *name;
   int key;
 } tsin_eng_ch_sw[]={
+  {N_("(關閉)"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_None},
   {N_("CapsLock"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock},
 //  {N_("Tab"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Tab},
   {N_("Shift"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Shift},
-  {N_("左Shift"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftL},
-  {N_("右Shift"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR},
+  {N_("左 Shift"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftL},
+  {N_("右 Shift"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR},
 };
 int tsin_eng_ch_swN = sizeof(tsin_eng_ch_sw) / sizeof(tsin_eng_ch_sw[0]);
 
