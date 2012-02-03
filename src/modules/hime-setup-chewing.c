@@ -107,7 +107,7 @@ void module_setup_window_create ()
                       NULL);
 
     gtk_window_set_title (GTK_WINDOW (hime_chewing_window),
-                          _("hime 新酷音設定"));
+                          _("新酷音設定"));
     gtk_container_set_border_width (GTK_CONTAINER (hime_chewing_window), 1);
 
     vbox_top = gtk_vbox_new (FALSE, 3);

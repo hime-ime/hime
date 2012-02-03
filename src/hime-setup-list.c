@@ -583,7 +583,7 @@ void create_gtablist_window (void)
   gtk_window_set_position(GTK_WINDOW(gtablist_window), GTK_WIN_POS_MOUSE);
 
   gtk_window_set_has_resize_grip(GTK_WINDOW(gtablist_window), FALSE);
- gtk_window_set_title (GTK_WINDOW (gtablist_window), _("輸入法選擇"));
+ gtk_window_set_title (GTK_WINDOW (gtablist_window), _("內定輸入法 & 開啟/關閉"));
   gtk_container_set_border_width (GTK_CONTAINER (gtablist_window), 1);
 
   g_signal_connect (G_OBJECT (gtablist_window), "destroy",

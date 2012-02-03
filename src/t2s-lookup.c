@@ -77,7 +77,7 @@ static int translate(char *fname, char *str, int strN, char **out)
 
   fclose(fp);
   *out = op;
-  op[opN]=0;
+  if (op) op[opN]=0;
   return opN;
 }
 

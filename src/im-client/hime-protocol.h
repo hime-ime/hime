@@ -18,6 +18,8 @@
 #include <X11/Xlib.h>
 #include "../hime-endian.h"
 
+#define UNIX_PATH_MAX 108
+
 typedef enum {
   HIME_req_key_press = 1,
   HIME_req_key_release = 2,

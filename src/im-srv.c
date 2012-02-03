@@ -183,10 +183,10 @@ void init_hime_im_serv(Window win)
   // unix socket
   bzero(&serv_addr,sizeof(serv_addr));
   serv_addr.sun_family = AF_UNIX;
-  // the max size of saddr.sun_path in Linux is 108!
-  char sock_path[108];
+  char sock_path[UNIX_PATH_MAX];
   get_hime_im_srv_sock_path(sock_path, sizeof(sock_path));
   strcpy(serv_addr.sun_path, sock_path);
+  serv_addr.sun_path[UNIX_PATH_MAX-1]=serv_addr.sun_path[UNIX_PATH_MAX-2]='\0';
 
 #ifdef SUN_LEN
   servlen = SUN_LEN (&serv_addr);
@@ -227,6 +227,7 @@ void init_hime_im_serv(Window win)
 
   Server_sock_path srv_sockpath;
   strcpy(srv_sockpath.sock_path, sock_path);
+  srv_sockpath.sock_path[UNIX_PATH_MAX-1]=srv_sockpath.sock_path[UNIX_PATH_MAX-2]='\0';
   Atom sockpath_atom = get_hime_sockpath_atom(dpy);
   XChangeProperty(dpy, prop_win , sockpath_atom, XA_STRING, 8,
      PropModeReplace, (unsigned char *)&srv_sockpath, sizeof(srv_sockpath));
