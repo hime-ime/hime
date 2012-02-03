@@ -423,7 +423,7 @@ void create_kbm_window()
                     G_CALLBACK (close_kbm_window),
                     NULL);
 
-  gtk_window_set_title (GTK_WINDOW (hime_kbm_window), _("HIME 注音/詞音設定"));
+  gtk_window_set_title (GTK_WINDOW (hime_kbm_window), _("注音/詞音/拼音設定"));
   gtk_container_set_border_width (GTK_CONTAINER (hime_kbm_window), 1);
 
   GtkWidget *vbox_top = gtk_vbox_new (FALSE, 3);
