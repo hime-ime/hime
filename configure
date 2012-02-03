@@ -521,7 +521,7 @@ echo "QT4_IM=$QT4_IM" >> config.mak
 if [ -z "$QT4_IM_DIR_CUSTOM" ]; then
 	echo "QT4_IM_DIR=\$(libdir)$QT4_IM_DIR" >> config.mak
 else
-	echo "QT4_IM_DIR=$QT4_IM_DIR_CUSTOM" >> config.mak
+	echo "QT4_IM_DIR=\$(DESTDIR)$QT4_IM_DIR_CUSTOM" >> config.mak
 fi
 echo "QT3_MOC_PATH=$QT3_MOC_PATH" >> config.mak
 echo "QT4_MOC_PATH=$QT4_MOC_PATH" >> config.mak
