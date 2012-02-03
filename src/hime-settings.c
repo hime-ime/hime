@@ -86,6 +86,9 @@ int get_hime_conf_int(char *name, int default_value);
 
 void load_setttings()
 {
+#if TRAY_UNITY
+  const char* desktop = getenv("XDG_CURRENT_DESKTOP");
+#endif
   hime_font_size = get_hime_conf_int(HIME_FONT_SIZE, 16);
   get_hime_conf_str(HIME_FONT_NAME, &hime_font_name, "Sans");
   hime_font_size_tsin_presel = get_hime_conf_int(HIME_FONT_SIZE_TSIN_PRESEL, 16);
@@ -125,8 +128,17 @@ void load_setttings()
   hime_im_toggle_keys = get_hime_conf_int(HIME_IM_TOGGLE_KEYS, 0);
   hime_win_sym_click_close = get_hime_conf_int(HIME_WIN_SYM_CLICK_CLOSE, 1);
 #if TRAY_ENABLED
-  hime_status_tray = get_hime_conf_int(HIME_STATUS_TRAY, 1);
-  hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, 2);
+  hime_status_tray = get_hime_conf_int(HIME_STATUS_TRAY, HIME_TRAY_DISPLAY_SINGLE);
+#if TRAY_UNITY
+  if (desktop != NULL && strcmp("Unity", desktop) == 0) {
+    hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, HIME_TRAY_DISPLAY_APPINDICATOR);
+  }
+  else {
+    hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, HIME_TRAY_DISPLAY_DOUBLE);
+  }
+#else
+  hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, HIME_TRAY_DISPLAY_DOUBLE);
+#endif
 #else
 // TODO: remove it
   hime_status_tray = 0;
