@@ -580,6 +580,8 @@ void create_gtablist_window (void)
 
   /* create gtab_list_window, etc */
   gtablist_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  if (hime_setup_window_type_utility)
+    gtk_window_set_type_hint(GTK_WINDOW(gtablist_window), GDK_WINDOW_TYPE_HINT_UTILITY);
   gtk_window_set_position(GTK_WINDOW(gtablist_window), GTK_WIN_POS_MOUSE);
 
   gtk_window_set_has_resize_grip(GTK_WINDOW(gtablist_window), FALSE);

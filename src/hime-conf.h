@@ -8,6 +8,7 @@
 #define HIME_EXIT_MESSAGE "hime exit"
 
 
+#define HIME_SETUP_WINDOW_TYPE_UTILITY "hime-setup-window-type-utility"
 #define HIME_FONT_SIZE "hime-font-size"
 #define HIME_FONT_NAME "hime-font-name"
 #define HIME_FONT_SIZE_TSIN_PRESEL "hime-font-size-tsin-presel"
@@ -95,7 +96,8 @@
 #define PHONETIC_SPEAK "phonetic-speak"
 #define PHONETIC_SPEAK_SEL "phonetic-speak-sel"
 
-extern int hime_font_size, hime_font_size_tsin_presel, hime_font_size_symbol,
+extern int hime_setup_window_type_utility,
+           hime_font_size, hime_font_size_tsin_presel, hime_font_size_symbol,
            hime_font_size_tsin_pho_in, hime_font_size_pho_near,
            hime_font_size_gtab_in, hime_font_size_win_kbm, hime_font_size_win_kbm_en,
            hime_inner_frame, hime_single_state,

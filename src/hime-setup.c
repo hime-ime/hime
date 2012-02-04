@@ -27,7 +27,8 @@
 
 char utf8_edit[]=HIME_SCRIPT_DIR"/utf8-edit";
 
-static GtkWidget *check_button_root_style_use,
+static GtkWidget *check_button_hime_setup_window_type_utility,
+                 *check_button_root_style_use,
                  *check_button_hime_pop_up_win,
                  *check_button_hime_inner_frame,
 #if TRAY_ENABLED
@@ -123,6 +124,8 @@ static void create_result_win(int res, char *cmd)
     strcpy(tt, _("結果成功"));
 
   main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  if (hime_setup_window_type_utility)
+    gtk_window_set_type_hint(GTK_WINDOW(main_window), GDK_WINDOW_TYPE_HINT_UTILITY);
   gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_MOUSE);
   gtk_window_set_has_resize_grip(GTK_WINDOW(main_window), FALSE);
 
@@ -346,6 +349,7 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
   cstr = gtk_color_selection_palette_to_string(&hime_sel_key_gcolor, 1);
   dbg("selkey color %s\n", cstr);
   save_hime_conf_str(HIME_SEL_KEY_COLOR, cstr);
+  g_free(cstr);
 
   int idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_edit_display));
   save_hime_conf_int(HIME_EDIT_DISPLAY, edit_disp[idx].keynum);
@@ -355,7 +359,7 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
   save_hime_conf_int(HIME_TRAY_DISPLAY, tray_disp[idx].keynum);
 #endif
 
-  g_free(cstr);
+  save_hime_conf_int(HIME_SETUP_WINDOW_TYPE_UTILITY, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_setup_window_type_utility)));
 
   send_hime_message(GDK_DISPLAY(), CHANGE_FONT_SIZE);
 #if TRAY_ENABLED
@@ -607,6 +611,8 @@ void create_appearance_conf_window()
   load_setttings();
 
   hime_appearance_conf_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  if (hime_setup_window_type_utility)
+    gtk_window_set_type_hint(GTK_WINDOW(hime_appearance_conf_window), GDK_WINDOW_TYPE_HINT_UTILITY);
   gtk_window_set_position(GTK_WINDOW(hime_appearance_conf_window), GTK_WIN_POS_MOUSE);
 
   g_signal_connect (G_OBJECT (hime_appearance_conf_window), "delete_event",
@@ -754,6 +760,12 @@ void create_appearance_conf_window()
   gtk_box_pack_start (GTK_BOX(vbox_top), check_button_hime_tray_hf_win_kbm, FALSE, FALSE, 0);
 #endif
 
+  check_button_hime_setup_window_type_utility = gtk_check_button_new_with_label (_("把設定視窗設為 UTILITY"));
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_setup_window_type_utility),
+       hime_setup_window_type_utility);
+  gtk_box_pack_start (GTK_BOX(vbox_top), check_button_hime_setup_window_type_utility, FALSE, FALSE, 0);
+  
+
   GtkWidget *frame_win_color = gtk_frame_new(_("顏色選擇"));
   gtk_box_pack_start (GTK_BOX (vbox_top), frame_win_color, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame_win_color), 1);
@@ -899,6 +911,8 @@ HIME_module_callback_functions *init_HIME_module_callback_functions(char *sofile
 static void create_main_win()
 {
   main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  if (hime_setup_window_type_utility)
+    gtk_window_set_type_hint(GTK_WINDOW(main_window), GDK_WINDOW_TYPE_HINT_UTILITY);
   gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_CENTER);
 
   gtk_window_set_has_resize_grip(GTK_WINDOW(main_window), FALSE);
