@@ -504,7 +504,7 @@ gboolean delayed_start_cb(gpointer data)
       init_tray_double();
 #if TRAY_UNITY
     else if (hime_tray_display == HIME_TRAY_DISPLAY_APPINDICATOR)
-    init_tray_appindicator();
+      init_tray_appindicator();
 #endif
   }
 #endif

@@ -273,7 +273,6 @@ gboolean create_tray(gpointer data)
     return FALSE;
 
   destroy_other_tray();
-  destroy_tray_icon();
 
   tray_icon = gtk_status_icon_new();
 
