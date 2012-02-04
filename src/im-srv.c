@@ -227,7 +227,6 @@ void init_hime_im_serv(Window win)
 
   Server_sock_path srv_sockpath;
   strcpy(srv_sockpath.sock_path, sock_path);
-  srv_sockpath.sock_path[UNIX_PATH_MAX-1]=srv_sockpath.sock_path[UNIX_PATH_MAX-2]='\0';
   Atom sockpath_atom = get_hime_sockpath_atom(dpy);
   XChangeProperty(dpy, prop_win , sockpath_atom, XA_STRING, 8,
      PropModeReplace, (unsigned char *)&srv_sockpath, sizeof(srv_sockpath));
