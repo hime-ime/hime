@@ -416,6 +416,8 @@ void create_kbm_window()
   load_setttings();
 
   hime_kbm_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  if (hime_setup_window_type_utility)
+    gtk_window_set_type_hint(GTK_WINDOW(hime_kbm_window), GDK_WINDOW_TYPE_HINT_UTILITY);
   gtk_window_set_position(GTK_WINDOW(hime_kbm_window), GTK_WIN_POS_MOUSE);
   gtk_window_set_has_resize_grip(GTK_WINDOW(hime_kbm_window), FALSE);
 

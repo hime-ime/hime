@@ -18,6 +18,8 @@
 #include "hime.h"
 #include "gtab.h"
 
+int hime_setup_window_type_utility;
+
 int hime_font_size, hime_font_size_tsin_presel, hime_font_size_symbol;
 int hime_font_size_pho_near, hime_font_size_gtab_in, hime_font_size_win_kbm, hime_font_size_win_kbm_en;
 int hime_win_color_use, hime_single_state;
@@ -89,6 +91,9 @@ void load_setttings()
 #if TRAY_UNITY
   const char* desktop = getenv("XDG_CURRENT_DESKTOP");
 #endif
+
+  hime_setup_window_type_utility = get_hime_conf_int(HIME_SETUP_WINDOW_TYPE_UTILITY, 0);
+
   hime_font_size = get_hime_conf_int(HIME_FONT_SIZE, 16);
   get_hime_conf_str(HIME_FONT_NAME, &hime_font_name, "Sans");
   hime_font_size_tsin_presel = get_hime_conf_int(HIME_FONT_SIZE_TSIN_PRESEL, 16);
