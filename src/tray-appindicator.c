@@ -159,24 +159,28 @@ gboolean tray_appindicator_create(gpointer data)
 {
   if (is_exist_tray_appindicator())
     return FALSE;
-  if (IS_APP_INDICATOR(tray_appindicator) && tray_appindicator) {
-    if (app_indicator_get_status (tray_appindicator) == APP_INDICATOR_STATUS_PASSIVE) {
-       app_indicator_set_status (tray_appindicator, APP_INDICATOR_STATUS_ACTIVE);
-       load_tray_appindicator();
-    }
-    return FALSE;
-  }
-  destroy_other_tray();
-  
-  if (!tray_appindicator_load_icon(HIME_TRAY_PNG, HIME_TRAY_PNG, iconame, icondir))
+
+  if (!getenv("DBUS_SESSION_BUS_ADDRESS"))
     return FALSE;
 
-  tray_appindicator = app_indicator_new_with_path ("hime", iconame, APP_INDICATOR_CATEGORY_APPLICATION_STATUS, icondir);
-  app_indicator_set_status (tray_appindicator, APP_INDICATOR_STATUS_ACTIVE);
-  GtkWidget *menu = NULL;
-  menu = create_tray_menu(mitems);
-  app_indicator_set_secondary_activate_target(tray_appindicator, mitems[0].item);
-  app_indicator_set_menu (tray_appindicator, GTK_MENU (menu));
+  if (tray_appindicator) {
+    if (app_indicator_get_status (tray_appindicator) != APP_INDICATOR_STATUS_ACTIVE) {
+      app_indicator_set_status (tray_appindicator, APP_INDICATOR_STATUS_ACTIVE);
+      destroy_other_tray();
+    }
+  } else {
+    destroy_other_tray();
+
+    if (!tray_appindicator_load_icon(HIME_TRAY_PNG, HIME_TRAY_PNG, iconame, icondir))
+      return FALSE;
+
+    tray_appindicator = app_indicator_new_with_path ("hime", iconame, APP_INDICATOR_CATEGORY_APPLICATION_STATUS, icondir);
+    app_indicator_set_status (tray_appindicator, APP_INDICATOR_STATUS_ACTIVE);
+    GtkWidget *menu = NULL;
+    menu = create_tray_menu(mitems);
+    app_indicator_set_secondary_activate_target(tray_appindicator, mitems[0].item);
+    app_indicator_set_menu (tray_appindicator, GTK_MENU (menu));
+  }
 
   load_tray_appindicator();
   return FALSE;
@@ -192,7 +196,7 @@ void destroy_tray_appindicator()
 
 gboolean is_exist_tray_appindicator()
 {
-  return tray_appindicator != NULL && app_indicator_get_status (tray_appindicator) == APP_INDICATOR_STATUS_ACTIVE;
+  return tray_appindicator != NULL && app_indicator_get_status (tray_appindicator) != APP_INDICATOR_STATUS_PASSIVE;
 }
 
 void init_tray_appindicator()
