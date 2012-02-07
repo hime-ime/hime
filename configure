@@ -114,7 +114,7 @@ for opt do
   ;;
   --use_xim=*) use_xim=`echo $opt | cut -d '=' -f 2`
   ;;
-  --enable_xim) use_xim=Y
+  --enable-xim) use_xim=Y
   ;;
   --disable-xim) use_xim=N
   ;;
@@ -126,31 +126,31 @@ for opt do
   ;;
   --use_unity=*) use_unity=`echo $opt | cut -d '=' -f 2`
   ;;
-  --enable_appindicator) use_unity=Y
+  --enable-appindicator) use_unity=Y
   ;;
   --disable-appindicator) use_unity=N
   ;;
   --use_i18n=*) use_i18n=`echo $opt | cut -d '=' -f 2`
   ;;
-  --enable_nls) use_i18n=Y
+  --enable-nls) use_i18n=Y
   ;;
   --disable-nls) use_i18n=N
   ;;
   --use_tsin=*) use_tsin=`echo $opt | cut -d '=' -f 2`
   ;;
-  --enable_tsin) use_tsin=Y
+  --enable-tsin) use_tsin=Y
   ;;
   --disable-tsin) use_tsin=N
   ;;
   --use_anthy=*) use_anthy=`echo $opt | cut -d '=' -f 2`
   ;;
-  --enable_anthy) use_anthy=Y
+  --enable-anthy) use_anthy=Y
   ;;
   --disable-anthy) use_anthy=N
   ;;
   --use_chewing=*) use_chewing=`echo $opt | cut -d '=' -f 2`
   ;;
-  --enable_chewing) use_chewing=Y
+  --enable-chewing) use_chewing=Y
   ;;
   --disable-chewing) use_chewing=N
   ;;
@@ -158,23 +158,23 @@ for opt do
   ;;
   --enable-qt3-immodule) use_qt3=Y
   ;;
-  --disable_qt3-immodule) use_qt3=N
+  --disable-qt3-immodule) use_qt3=N
   ;;
   --use_qt4=*) use_qt4=`echo $opt | cut -d '=' -f 2`
   ;;
-  --enable_qt4-immodule) use_qt4=Y
+  --enable-qt4-immodule) use_qt4=Y
   ;;
   --disable-qt4-immodule) use_qt4=N
   ;;
   --use_gtk=*) use_gtk=`echo $opt | cut -d '=' -f 2`
   ;;
-  --enable_gtk2-im-module) use_gtk=Y
+  --enable-gtk2-im-module) use_gtk=Y
   ;;
   --disable-gtk2-im-module) use_gtk=N
   ;;
   --use_gtk3=*) use_gtk3=`echo $opt | cut -d '=' -f 2`
   ;;
-  --enable_gtk3-im-module) use_gtk3=Y
+  --enable-gtk3-im-module) use_gtk3=Y
   ;;
   --disable-gtk3-im-module) use_gtk3=N
   ;;
