@@ -193,7 +193,7 @@ echo -n ".... Testing Xtst        :  "
 XTST=`pkg-config --exists xtst 2> /dev/null`
 if [ $? != 0 ]; then
   echo "please install rpm/package xtest-devel. abort!"
-  exit -1;
+  exit 1
 else
   echo "found."
 fi
@@ -213,12 +213,15 @@ if [ $? != 0 ]; then
     echo -n ".... Testing $GTK    :  "
   
     GTKINC=`pkg-config --cflags $GTK 2> /dev/null`
-  fi
-
-  if [ $? != 0 ]; then
+    if [ $? != 0 ]; then
+      echo "$GTK or above required --cflags. abort!"
+      rm -f config.mak
+      exit 1
+    fi
+  else
     echo "$GTK or above required --cflags. abort!"
     rm -f config.mak
-    exit -1;
+    exit 1
   fi
 fi
 
@@ -248,7 +251,7 @@ if [ $? != 0 ]; then
   echo "$GTK or above required --libs"
   echo "please install rpm/package libgtk+2.0_0-devel/libgtk+3.0_0-devel. abort!"
   rm -f config.mak
-  exit -1;
+  exit 1
 else
   echo "found."
 fi
