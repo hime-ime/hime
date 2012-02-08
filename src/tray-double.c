@@ -326,10 +326,6 @@ void load_tray_icon_double()
 {
   if (!hime_status_tray)
     return;
-  if (hime_tray_display != HIME_TRAY_DISPLAY_DOUBLE)
-    return;
-
-  destroy_other_tray();
 
 //  dbg("load_tray_icon_double\n");
   char *tip;
@@ -399,6 +395,7 @@ void load_tray_icon_double()
     gtk_status_icon_set_from_file(icon_state, fname_state);
   }
   else {
+    destroy_other_tray();
 //    dbg("gtk_status_icon_new_from_file a\n");
     icon_main = gtk_status_icon_new_from_file(fname);
     g_signal_connect(G_OBJECT(icon_main),"activate", G_CALLBACK (cb_activate), NULL);
@@ -440,7 +437,7 @@ gboolean is_exist_tray_double()
 gboolean create_tray_double(gpointer data)
 {
   load_tray_icon_double();
-  return TRUE;
+  return FALSE;
 }
 
 void init_tray_double()

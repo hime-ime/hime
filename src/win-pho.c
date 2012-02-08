@@ -66,6 +66,7 @@ gboolean win_size_exceed(GtkWidget *win)
 
 void disp_pho_sel(char *s)
 {
+  if (! label_pho_sele) return;
   gtk_label_set_markup(GTK_LABEL(label_pho_sele), s);
 
   minimize_win_pho();

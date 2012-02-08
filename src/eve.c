@@ -717,7 +717,8 @@ void toggle_im_enabled()
       }
       else if (current_method_type () == method_type_MODULE)
       {
-          module_cb ()->module_flush_input ();
+	  HIME_module_callback_functions *mod_cbs = module_cb();
+	  if (mod_cbs) mod_cbs->module_flush_input();
       }
       else {
         output_gbuf();
