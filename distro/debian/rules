@@ -4,7 +4,7 @@
 	dh $@
 
 override_dh_auto_configure:
-	dh_auto_configure -- --use_qt3=Y
+	dh_auto_configure -- --enable-qt3-immodule
 
 override_dh_shlibdeps:
 	dh_shlibdeps --exclude=im-hime.so --exclude=anthy-module.so --exclude=chewing-module.so
