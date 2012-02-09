@@ -960,6 +960,7 @@ gboolean init_in_method(int in_no)
     }
     case method_type_EN:
     {
+      current_CS->in_method = in_no;
       if (current_CS && current_CS->im_state==HIME_STATE_CHINESE)
         toggle_im_enabled();
       current_CS->in_method = in_no;
@@ -1015,6 +1016,19 @@ static void cycle_next_in_method()
       continue;
     if (!inmd[v].cname || !inmd[v].cname[0])
       continue;
+
+    if(v != current_CS->in_method) {
+      switch(current_method_type()) {
+        case method_type_EN:
+          toggle_im_enabled();
+          break;
+        case method_type_SYMBOL_TABLE:
+          toggle_symbol_table();
+          break;
+        default:
+          break;
+      }
+    }
 
     if (!init_in_method(v))
       continue;
@@ -1286,8 +1300,6 @@ gboolean ProcessKeyRelease(KeySym keysym, u_int kev_state)
   dbg_time("key release %x %x\n", keysym, kev_state);
 #endif
 
-  if (current_CS->im_state == HIME_STATE_DISABLED)
-    return FALSE;
 
 #if 1
   if (current_CS->b_hime_protocol && (last_keysym == XK_Shift_L ||
