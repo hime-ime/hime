@@ -921,6 +921,7 @@ static void create_main_win()
                      G_CALLBACK (close_application),
                      NULL);
 
+  gtk_window_set_title (GTK_WINDOW (main_window), _("hime 設定/工具"));
   set_window_hime_icon(main_window);
   gtk_window_set_resizable (GTK_WINDOW (main_window), FALSE);
 
