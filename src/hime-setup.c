@@ -990,7 +990,7 @@ static void create_main_win()
   g_signal_connect (G_OBJECT (button_ts_import_sys), "clicked",
                     G_CALLBACK (cb_ts_import_sys), NULL);
 
-  GtkWidget *button_about = gtk_button_new_with_label(_("關於 hime"));
+  GtkWidget *button_about = gtk_button_new_from_stock (GTK_STOCK_ABOUT);
   gtk_box_pack_start (GTK_BOX (vbox), button_about, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_about), "clicked",
                     G_CALLBACK (create_about_window),  NULL);
