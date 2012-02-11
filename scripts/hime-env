@@ -40,7 +40,7 @@ echo
 fi
 
 echo
-echo "Running hime number: "`pgrep hime | wc -l`
+echo "Running hime number: "`pgrep ^hime$ | wc -l`
 
 echo
 # TODO: get tempdir from TMPDIR, TMP, and TEMP
