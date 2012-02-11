@@ -1612,7 +1612,10 @@ int feedkey_pp(KeySym xkey, int kbstate)
           int idx0 = tss.c_idx;
           if (tss.c_len == tss.c_idx)
             idx0 = 0;
-          tsin_create_win_save_phrase(idx0,  tss.c_len - idx0);
+          int len = tss.c_len - idx0;
+          if (len > MAX_PHRASE_LEN)
+            return 0;
+          tsin_create_win_save_phrase(idx0, len);
           move_cursor_end();
           return 1;
         } else {
