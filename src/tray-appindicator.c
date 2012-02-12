@@ -160,9 +160,6 @@ gboolean tray_appindicator_create(gpointer data)
   if (is_exist_tray_appindicator())
     return FALSE;
 
-  if (!getenv("DBUS_SESSION_BUS_ADDRESS"))
-    return FALSE;
-
   if (tray_appindicator) {
     if (app_indicator_get_status (tray_appindicator) != APP_INDICATOR_STATUS_ACTIVE) {
       app_indicator_set_status (tray_appindicator, APP_INDICATOR_STATUS_ACTIVE);
