@@ -607,7 +607,7 @@ static void cursor_markup(int idx, char *s)
 {
   char cur[256];
   GtkWidget *lab = seg[idx].label;
-  sprintf(cur, "<span background=\"%s\">%s</span>", *gmf.mf_tsin_cursor_color, s);
+  sprintf(cur, "<span foreground=\"#FFFFFF\" background=\"%s\">%s</span>", *gmf.mf_tsin_cursor_color, s);
   gtk_label_set_markup(GTK_LABEL(lab), cur);
 }
 

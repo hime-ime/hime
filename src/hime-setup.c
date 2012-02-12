@@ -42,7 +42,7 @@ static GtkWidget *check_button_hime_setup_window_type_utility,
 static GtkWidget *hime_kbm_window = NULL, *hime_appearance_conf_window;
 static GtkWidget *opt_hime_edit_display;
 GtkWidget *main_window;
-static GdkColor hime_win_gcolor_fg, hime_win_gcolor_bg, hime_sel_key_gcolor;
+static GdkColor hime_win_gcolor_fg, hime_win_gcolor_bg, hime_sel_key_gcolor, tsin_cursor_gcolor;
 gboolean button_order;
 #if TRAY_ENABLED
 static GtkWidget *opt_hime_tray_display;
@@ -55,9 +55,11 @@ typedef struct {
   unich_t *title;
 } COLORSEL;
 
-COLORSEL colorsel[2] =
+COLORSEL colorsel[4] =
   { {&hime_win_gcolor_fg, &hime_win_color_fg, NULL, N_("前景顏色")},
-    {&hime_win_gcolor_bg, &hime_win_color_bg, NULL, N_("背景顏色")}
+    {&hime_win_gcolor_bg, &hime_win_color_bg, NULL, N_("背景顏色")},
+    {&hime_sel_key_gcolor, &hime_sel_key_color, NULL, N_("選擇鍵顏色")},
+    {&tsin_cursor_gcolor, &tsin_cursor_color, NULL, N_("游標顏色")}
   };
 
 struct {
@@ -330,26 +332,16 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
   save_hime_conf_int(HIME_STATUS_TRAY, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_status_tray)));
 #endif
 
-  gchar *cstr = gtk_color_selection_palette_to_string(&hime_win_gcolor_fg, 1);
-  dbg("color fg %s\n", cstr);
-  save_hime_conf_str(HIME_WIN_COLOR_FG, cstr);
-  g_free(cstr);
-
-  cstr = gtk_color_selection_palette_to_string(&hime_win_gcolor_bg, 1);
-  dbg("color bg %s\n", cstr);
-  save_hime_conf_str(HIME_WIN_COLOR_BG, cstr);
-  g_free(cstr);
-
   save_hime_conf_int(HIME_WIN_COLOR_USE, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_win_color_use)));
+  save_hime_conf_str(HIME_WIN_COLOR_FG, hime_win_color_fg);
+  save_hime_conf_str(HIME_WIN_COLOR_BG, hime_win_color_bg);
+  save_hime_conf_str(HIME_SEL_KEY_COLOR, hime_sel_key_color);
+  save_hime_conf_str(TSIN_CURSOR_COLOR, tsin_cursor_color);
+
   save_hime_conf_int(HIME_ON_THE_SPOT_KEY, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_on_the_spot_key)));
 #if TRAY_ENABLED
   save_hime_conf_int(HIME_TRAY_HF_WIN_KBM, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_tray_hf_win_kbm)));
 #endif
-
-  cstr = gtk_color_selection_palette_to_string(&hime_sel_key_gcolor, 1);
-  dbg("selkey color %s\n", cstr);
-  save_hime_conf_str(HIME_SEL_KEY_COLOR, cstr);
-  g_free(cstr);
 
   int idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_edit_display));
   save_hime_conf_int(HIME_EDIT_DISPLAY, edit_disp[idx].keynum);
@@ -378,34 +370,18 @@ static gboolean close_appearance_conf_window( GtkWidget *widget,
   return TRUE;
 }
 
-
-static void cb_savecb_hime_win_color_fg(GtkWidget *widget, gpointer user_data)
+void disp_win_sample();
+static void cb_save_hime_win_color(GtkWidget *widget, gpointer user_data)
 {
   COLORSEL *sel = (COLORSEL *)user_data;
   GtkWidget *color_selector = sel->color_selector;
-  GdkColor *col = sel->color;
-  gtk_color_selection_get_current_color(GTK_COLOR_SELECTION(gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(color_selector))), col);
-
-  if (sel->color == &hime_win_gcolor_fg) {
-#if !GTK_CHECK_VERSION(2,91,6)
-    gtk_widget_modify_fg(label_win_color_test, GTK_STATE_NORMAL, col);
-#else
-    GdkRGBA rgbfg;
-    gdk_rgba_parse(&rgbfg, gdk_color_to_string(col));
-    gtk_widget_override_color(label_win_color_test, GTK_STATE_FLAG_NORMAL, &rgbfg);
-#endif
-  } else {
-#if !GTK_CHECK_VERSION(2,91,6)
-    gtk_widget_modify_bg(event_box_win_color_test, GTK_STATE_NORMAL, col);
-#else
-    GdkRGBA rgbbg;
-    gdk_rgba_parse(&rgbbg, gdk_color_to_string(col));
-    gtk_widget_override_background_color(event_box_win_color_test, GTK_STATE_FLAG_NORMAL, &rgbbg);
-#endif
-  }
+  gtk_color_selection_get_current_color(GTK_COLOR_SELECTION(gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(color_selector))), sel->color);
+  *sel->color_str = gtk_color_selection_palette_to_string(sel->color, 1);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_win_color_use), TRUE);
+  disp_win_sample();
 }
 
-static gboolean cb_hime_win_color_fg( GtkWidget *widget,
+static gboolean cb_hime_win_color( GtkWidget *widget,
                                    gpointer   data)
 {
   COLORSEL *sel = (COLORSEL *)data;
@@ -417,93 +393,57 @@ static gboolean cb_hime_win_color_fg( GtkWidget *widget,
           GTK_COLOR_SELECTION(gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(color_selector))),
           sel->color);
 
-
   sel->color_selector = color_selector;
 
   gtk_widget_show((GtkWidget*)color_selector);
-#if 1
+
   if (gtk_dialog_run(GTK_DIALOG(color_selector)) == GTK_RESPONSE_OK)
-    cb_savecb_hime_win_color_fg((GtkWidget *)color_selector, (gpointer) sel);
+    cb_save_hime_win_color((GtkWidget *)color_selector, (gpointer) sel);
   gtk_widget_destroy(color_selector);
-#endif
+
   return TRUE;
 }
 
-void disp_fg_bg_color()
+void disp_win_sample()
 {
-  dbg("disp_fg_bg_color\n");
+  dbg("disp_win_sample\n");
+  unich_t tt[512];
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(check_button_hime_win_color_use))) {
 #if !GTK_CHECK_VERSION(2,91,6)
-    gtk_widget_modify_fg(label_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_fg);
-    dbg("hime_win_gcolor_bg %d\n", hime_win_gcolor_bg);
     gtk_widget_modify_bg(event_box_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_bg);
 #else
-    GdkRGBA rgbfg, rgbbg;
-    gdk_rgba_parse(&rgbfg, gdk_color_to_string(&hime_win_gcolor_fg));
+    GdkRGBA rgbbg;
     gdk_rgba_parse(&rgbbg, gdk_color_to_string(&hime_win_gcolor_bg));
-    gtk_widget_override_color(label_win_color_test, GTK_STATE_FLAG_NORMAL, &rgbfg);
     gtk_widget_override_background_color(event_box_win_color_test, GTK_STATE_FLAG_NORMAL, &rgbbg);
+#endif
+
+#if PANGO_VERSION_CHECK(1,22,0)
+  sprintf
+(tt, _("<span foreground=\"%s\" font=\"%d\">7</span><span foreground=\"%s\" font=\"%d\">測</span><span font=\"%d\" foreground=\"#FFFFFF\" background=\"%s\">試</span>"), hime_sel_key_color,
+hime_font_size_tsin_presel, hime_win_color_fg, hime_font_size_tsin_presel, hime_font_size_tsin_presel, tsin_cursor_color);
+#else
+  sprintf
+(tt, _("<span foreground=\"%s\" font_desc=\"%d\">7</span><span foreground=\"%s\" font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"#FFFFFF\" background=\"%s\">試</span>"), hime_sel_key_color,
+hime_font_size_tsin_presel, hime_win_color_fg, hime_font_size_tsin_presel, hime_font_size_tsin_presel, tsin_cursor_color);
 #endif
   } else {
 #if !GTK_CHECK_VERSION(2,91,6)
-    gtk_widget_modify_fg(label_win_color_test, GTK_STATE_NORMAL, NULL);
     gtk_widget_modify_bg(event_box_win_color_test, GTK_STATE_NORMAL, NULL);
 #else
-    gtk_widget_override_color(label_win_color_test, GTK_STATE_FLAG_NORMAL, NULL);
     gtk_widget_override_background_color(event_box_win_color_test, GTK_STATE_FLAG_NORMAL, NULL);
 #endif
-  }
 
-  char *key_color = gtk_color_selection_palette_to_string(&hime_sel_key_gcolor, 1);
-  unich_t tt[512];
 #if PANGO_VERSION_CHECK(1,22,0)
   sprintf
-(tt, _("<span foreground=\"%s\" font=\"%d\">7</span><span font=\"%d\">測試</span>"), key_color,
-hime_font_size_tsin_presel, hime_font_size_tsin_presel);
+(tt, _("<span foreground=\"blue\" font=\"%d\">7</span><span font=\"%d\">測</span><span font=\"%d\" foreground=\"#FFFFFF\" background=\"blue\">試</span>"), hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_font_size_tsin_presel);
 #else
   sprintf
-(tt, _("<span foreground=\"%s\" font_desc=\"%d\">7</span><span font_desc=\"%d\">測試</span>"), key_color,
-hime_font_size_tsin_presel, hime_font_size_tsin_presel);
+(tt, _("<span foreground=\"blue\" font_desc=\"%d\">7</span><span font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"#FFFFFF\" background=\"blue\">試</span>"), hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_font_size_tsin_presel);
 #endif
 
-  gtk_label_set_markup(GTK_LABEL(label_win_color_test), _(tt));
-}
-
-static void cb_save_hime_sel_key_color(GtkWidget *widget, gpointer user_data)
-{
-  GtkColorSelectionDialog *color_selector = (GtkColorSelectionDialog *)user_data;
-  gtk_color_selection_get_current_color(GTK_COLOR_SELECTION(gtk_color_selection_dialog_get_color_selection(color_selector)), &hime_sel_key_gcolor);
-  hime_sel_key_color = gtk_color_selection_palette_to_string(&hime_sel_key_gcolor, 1);
-
-  if (eng_color_full_str) {
-    g_free(eng_color_full_str);
-    g_free(eng_color_half_str);
-    g_free(cht_color_full_str);
   }
 
-  eng_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_full_str));
-  eng_color_half_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_half_str));
-  cht_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(cht_full_str));
-
-  disp_fg_bg_color();
-}
-
-
-static gboolean cb_hime_sel_key_color( GtkWidget *widget, gpointer data)
-{
-   GtkWidget *color_selector = gtk_color_selection_dialog_new (_("選擇鍵的顏色"));
-
-   gtk_color_selection_set_current_color(
-           GTK_COLOR_SELECTION(gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(color_selector))),
-           &hime_sel_key_gcolor);
-
-
-   gtk_widget_show(color_selector);
-   if (gtk_dialog_run(GTK_DIALOG(color_selector)) == GTK_RESPONSE_OK)
-     cb_save_hime_sel_key_color(color_selector, (gpointer) color_selector);
-   gtk_widget_destroy(color_selector);
-
-   return TRUE;
+  gtk_label_set_markup(GTK_LABEL(label_win_color_test), _(tt));
 }
 
 void cb_button_hime_on_the_spot_key(GtkToggleButton *togglebutton, gpointer user_data)
@@ -596,7 +536,7 @@ static GtkWidget *create_hime_tray_display()
 static gboolean cb_hime_win_color_use(GtkToggleButton *togglebutton, gpointer user_data)
 {
   dbg("cb_hime_win_color_use\n");
-  disp_fg_bg_color();
+  disp_win_sample();
   return TRUE;
 }
 
@@ -796,7 +736,7 @@ void create_appearance_conf_window()
   gtk_widget_set_halign (button_fg, GTK_ALIGN_FILL);
   gtk_box_pack_start (GTK_BOX(hbox_win_color_fbg), button_fg, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (button_fg), "clicked",
-                    G_CALLBACK (cb_hime_win_color_fg), &colorsel[0]);
+                    G_CALLBACK (cb_hime_win_color), &colorsel[0]);
   gdk_color_parse(hime_win_color_fg, &hime_win_gcolor_fg);
 //  gtk_widget_modify_fg(label_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_fg);
   gdk_color_parse(hime_win_color_bg, &hime_win_gcolor_bg);
@@ -807,17 +747,25 @@ void create_appearance_conf_window()
   gtk_widget_set_halign (button_bg, GTK_ALIGN_FILL);
   gtk_box_pack_start (GTK_BOX(hbox_win_color_fbg), button_bg, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (button_bg), "clicked",
-                    G_CALLBACK (cb_hime_win_color_fg), &colorsel[1]);
+                    G_CALLBACK (cb_hime_win_color), &colorsel[1]);
 
   GtkWidget *button_hime_sel_key_color = gtk_button_new_with_label(_("選擇鍵顏色"));
   gtk_widget_set_hexpand (button_hime_sel_key_color, TRUE);
   gtk_widget_set_halign (button_hime_sel_key_color, GTK_ALIGN_FILL);
   g_signal_connect (G_OBJECT (button_hime_sel_key_color), "clicked",
-                    G_CALLBACK (cb_hime_sel_key_color), G_OBJECT (hime_kbm_window));
+                    G_CALLBACK (cb_hime_win_color), &colorsel[2]);
   gdk_color_parse(hime_sel_key_color, &hime_sel_key_gcolor);
   gtk_box_pack_start (GTK_BOX(hbox_win_color_fbg), button_hime_sel_key_color, TRUE, TRUE, 0);
 
-  disp_fg_bg_color();
+  GtkWidget *button_tsin_cursor_color = gtk_button_new_with_label(_("游標顏色"));
+  gtk_widget_set_hexpand (button_tsin_cursor_color, TRUE);
+  gtk_widget_set_halign (button_tsin_cursor_color, GTK_ALIGN_FILL);
+  g_signal_connect (G_OBJECT (button_tsin_cursor_color), "clicked",
+                    G_CALLBACK (cb_hime_win_color), &colorsel[3]);
+  gdk_color_parse(tsin_cursor_color, &tsin_cursor_gcolor);
+  gtk_box_pack_start (GTK_BOX(hbox_win_color_fbg), button_tsin_cursor_color, TRUE, TRUE, 0);
+
+  disp_win_sample();
 
   GtkWidget *hbox_cancel_ok = gtk_hbox_new (FALSE, 10);
   gtk_grid_set_column_homogeneous(GTK_GRID(hbox_cancel_ok), TRUE);
