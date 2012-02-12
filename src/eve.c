@@ -1623,3 +1623,19 @@ void flush_edit_buffer()
   }
 #endif
 }
+
+void change_module_font_size()
+{
+  int i;
+  for (i=0; i < inmdN; i++) {
+    INMD *pinmd = &inmd[i];
+    if (pinmd->method_type != method_type_MODULE || pinmd->disabled)
+      continue;
+    HIME_module_callback_functions *f = pinmd->mod_cb_funcs;
+    if (!f)
+      continue;
+    if (!f->module_change_font_size)
+      continue;
+    f->module_change_font_size();
+  }
+}
