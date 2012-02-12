@@ -921,6 +921,7 @@ static void create_main_win()
                      G_CALLBACK (close_application),
                      NULL);
 
+  gtk_window_set_title (GTK_WINDOW (main_window), _("hime 設定/工具"));
   set_window_hime_icon(main_window);
   gtk_window_set_resizable (GTK_WINDOW (main_window), FALSE);
 
@@ -969,7 +970,7 @@ static void create_main_win()
     GtkWidget *button_chewing_input_method = gtk_button_new_with_label(tt);
     gtk_box_pack_start (GTK_BOX (vbox), button_chewing_input_method, FALSE, FALSE, 0);
     g_signal_connect (G_OBJECT (button_chewing_input_method), "clicked",
-                    G_CALLBACK (f->module_setup_window_create), NULL);
+                    G_CALLBACK (f->module_setup_window_create), hime_setup_window_type_utility);
   }
 
 
