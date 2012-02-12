@@ -158,6 +158,7 @@ void change_win_bg(GtkWidget *win)
 
 void change_win_fg_bg(GtkWidget *win, GtkWidget *label)
 {
+  change_win_bg(win);
   if (!hime_win_color_use) {
     if (label)
 #if !GTK_CHECK_VERSION(2,91,6)
@@ -183,8 +184,6 @@ void change_win_fg_bg(GtkWidget *win, GtkWidget *label)
   if (label_edit)
     gtk_widget_override_color(label_edit, GTK_STATE_FLAG_NORMAL, &rgbfg);
 #endif
-
-  change_win_bg(win);
 }
 
 
