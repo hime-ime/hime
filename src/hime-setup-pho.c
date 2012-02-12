@@ -171,8 +171,8 @@ static gboolean cb_ok( GtkWidget *widget,
   tsin_buffer_size = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_tsin_buffer_size));
   save_hime_conf_int(TSIN_BUFFER_SIZE, tsin_buffer_size);
 
-  gchar *cstr;
 #if 0
+  gchar *cstr;
   cstr = gtk_color_selection_palette_to_string(&tsin_phrase_line_gcolor, 1);
   dbg("color %s\n", cstr);
   save_hime_conf_str(TSIN_PHRASE_LINE_COLOR, cstr);
