@@ -153,7 +153,9 @@ void load_tray_icon()
     pixbuf = gdk_pixbuf_new_from_file_at_size(icon_fname, iw, ih, NULL);
   }
   char *iconame = HIME_TRAY_PNG;
-  if (current_CS && current_CS->in_method && inmd)
+//  if (current_CS && current_CS->in_method && inmd)
+// Workaround due to issue #161 (caleb-/hime) :
+  if (current_CS && current_CS->im_state != HIME_STATE_DISABLED && current_CS->im_state != HIME_STATE_ENG_FULL)
     iconame = inmd[current_CS->in_method].icon;
   char fname[512];
   if (iconame)
