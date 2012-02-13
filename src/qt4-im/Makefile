@@ -14,11 +14,11 @@ all:    im-hime.so
 
 .cpp.o:
 	@echo "  $< -> $@"
-	@$(CXX) -c -o $@ $(CXXFLAGS) $(INCS) $<
+	@$(CXX) -c -o $@ $(CXXFLAGS) $<
 
 moc_hime-qt.cpp:	hime-qt.h
 	@echo "  $< -> $@"
-	$(QT4_MOC_PATH) $< -o moc_hime-qt.cpp
+	@$(QT4_MOC_PATH) $< -o moc_hime-qt.cpp
 
 im-hime.so: $(OBJS)
 	@echo "linking $@ ..."
