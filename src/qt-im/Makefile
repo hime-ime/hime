@@ -13,10 +13,14 @@ all:	im-hime.so
 	@echo "  $< -> $@"
 	@$(CXX) -E $(CFLAGS) $(INCS) $< > $@
 
+.cpp.o:
+	@echo "  $< -> $@"
+	@$(CXX) -c -o $@ $(CXXFLAGS) $<
+
 .h.o:
 	@echo "  $< -> $@"
-	$(QT3_MOC_PATH) $< -o $<_moc.cpp
-	$(CXX) -c -pipe $(CXXFLAGS) $(INCS) $<_moc.cpp -o $@
+	@$(QT3_MOC_PATH) $< -o $<_moc.cpp
+	@$(CXX) -c -pipe $(CXXFLAGS) $<_moc.cpp -o $@
 
 im-hime.so: $(OBJS)
 	@echo "linking $@ ..."
