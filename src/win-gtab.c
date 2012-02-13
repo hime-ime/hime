@@ -158,13 +158,24 @@ void change_win_bg(GtkWidget *win)
 
 void change_win_fg_bg(GtkWidget *win, GtkWidget *label)
 {
-  change_win_bg(win);
+  if (win)
+    change_win_bg(win);
+// TODO: Simplify repeating codes below.
   if (!hime_win_color_use) {
-    if (label)
 #if !GTK_CHECK_VERSION(2,91,6)
+    if (label)
       gtk_widget_modify_fg(label, GTK_STATE_NORMAL, NULL);
+    if (label_edit)
+      gtk_widget_modify_fg(label_edit, GTK_STATE_NORMAL, NULL);
+    if (label_gtab_pre_sel)
+      gtk_widget_modify_fg(label_gtab_pre_sel, GTK_STATE_NORMAL, NULL);
 #else
+    if (label)
       gtk_widget_override_color(label, GTK_STATE_FLAG_NORMAL, NULL);
+    if (label_edit)
+      gtk_widget_override_color(label_edit, GTK_STATE_FLAG_NORMAL, NULL);
+    if (label_gtab_pre_sel)
+      gtk_widget_override_color(label_gtab_pre_sel, GTK_STATE_FLAG_NORMAL, NULL);
 #endif
     return;
   }
@@ -176,6 +187,8 @@ void change_win_fg_bg(GtkWidget *win, GtkWidget *label)
     gtk_widget_modify_fg(label, GTK_STATE_NORMAL, &col);
   if (label_edit)
     gtk_widget_modify_fg(label_edit, GTK_STATE_NORMAL, &col);
+  if (label_gtab_pre_sel)
+    gtk_widget_modify_fg(label_gtab_pre_sel, GTK_STATE_NORMAL, &col);
 #else
   GdkRGBA rgbfg;
   gdk_rgba_parse(&rgbfg, gdk_color_to_string(&col));
@@ -183,6 +196,8 @@ void change_win_fg_bg(GtkWidget *win, GtkWidget *label)
     gtk_widget_override_color(label, GTK_STATE_FLAG_NORMAL, &rgbfg);
   if (label_edit)
     gtk_widget_override_color(label_edit, GTK_STATE_FLAG_NORMAL, &rgbfg);
+  if (label_gtab_pre_sel)
+    gtk_widget_override_color(label_gtab_pre_sel, GTK_STATE_FLAG_NORMAL, &rgbfg);
 #endif
 }
 

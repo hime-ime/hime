@@ -419,11 +419,11 @@ void disp_win_sample()
 
 #if PANGO_VERSION_CHECK(1,22,0)
   sprintf
-(tt, _("<span foreground=\"%s\" font=\"%d\">7</span><span foreground=\"%s\" font=\"%d\">測</span><span font=\"%d\" foreground=\"#FFFFFF\" background=\"%s\">試</span>"), hime_sel_key_color,
+(tt, _("<span foreground=\"%s\" font=\"%d\">7</span><span foreground=\"%s\" font=\"%d\">測</span><span font=\"%d\" foreground=\"white\" background=\"%s\">試</span>"), hime_sel_key_color,
 hime_font_size_tsin_presel, hime_win_color_fg, hime_font_size_tsin_presel, hime_font_size_tsin_presel, tsin_cursor_color);
 #else
   sprintf
-(tt, _("<span foreground=\"%s\" font_desc=\"%d\">7</span><span foreground=\"%s\" font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"#FFFFFF\" background=\"%s\">試</span>"), hime_sel_key_color,
+(tt, _("<span foreground=\"%s\" font_desc=\"%d\">7</span><span foreground=\"%s\" font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"white\" background=\"%s\">試</span>"), hime_sel_key_color,
 hime_font_size_tsin_presel, hime_win_color_fg, hime_font_size_tsin_presel, hime_font_size_tsin_presel, tsin_cursor_color);
 #endif
   } else {
@@ -435,10 +435,10 @@ hime_font_size_tsin_presel, hime_win_color_fg, hime_font_size_tsin_presel, hime_
 
 #if PANGO_VERSION_CHECK(1,22,0)
   sprintf
-(tt, _("<span foreground=\"blue\" font=\"%d\">7</span><span font=\"%d\">測</span><span font=\"%d\" foreground=\"#FFFFFF\" background=\"blue\">試</span>"), hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_font_size_tsin_presel);
+(tt, _("<span foreground=\"blue\" font=\"%d\">7</span><span font=\"%d\">測</span><span font=\"%d\" foreground=\"white\" background=\"blue\">試</span>"), hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_font_size_tsin_presel);
 #else
   sprintf
-(tt, _("<span foreground=\"blue\" font_desc=\"%d\">7</span><span font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"#FFFFFF\" background=\"blue\">試</span>"), hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_font_size_tsin_presel);
+(tt, _("<span foreground=\"blue\" font_desc=\"%d\">7</span><span font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"white\" background=\"blue\">試</span>"), hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_font_size_tsin_presel);
 #endif
 
   }
