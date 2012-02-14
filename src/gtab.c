@@ -707,7 +707,10 @@ void disp_selection0(gboolean phrase_selected, gboolean force_disp)
       utf8cpy(uu, &cur_inmd->selkey[i - ofs]);
       char vvv[16];
       char www[1024];
-      sprintf(www, "<span foreground=\"%s\">%s</span>", hime_sel_key_color, htmlspecialchars(uu, vvv));
+      if (hime_win_color_use)
+        sprintf(www, "<span foreground=\"%s\">%s</span>", hime_sel_key_color, htmlspecialchars(uu, vvv));
+      else
+        sprintf(www, "<span foreground=\""HIME_SEL_KEY_COLOR_DEFAULT"\">%s</span>", htmlspecialchars(uu, vvv));
       strcat(tt, www);
 
       if (gtab_vertical_select_on())

@@ -201,7 +201,10 @@ static char *gen_buf_str_disp()
     char *t = spec;
 
     if (i==ggg.gbuf_cursor) {
-      sprintf(www, "<span background=\"%s\">%s</span>", tsin_cursor_color, spec);
+      if (hime_win_color_use)
+        sprintf(www, "<span foreground=\"white\" background=\"%s\">%s</span>", tsin_cursor_color, spec);
+      else
+        sprintf(www, "<span foreground=\"white\" background=\""TSIN_CURSOR_COLOR_DEFAULT"\">%s</span>", spec);
       t = www;
     }
 
@@ -1052,9 +1055,10 @@ void gtab_scan_pre_select(gboolean b_incr)
   for(i=0;i<tss.pre_selN; i++) {
     char ts[(MAX_PHRASE_LEN+3) * CH_SZ + 1];
     char *br= (i < tss.pre_selN-1 && gtab_vertical_select_on())?"\n":"";
-
-    sprintf(ts, "<span foreground=\"%s\">%c</span>%s%s", hime_sel_key_color,
-      cur_inmd->selkey[i], tss.pre_sel[i].str, br);
+    if (hime_win_color_use)
+      sprintf(ts, "<span foreground=\"%s\">%c</span>%s%s", hime_sel_key_color, cur_inmd->selkey[i], tss.pre_sel[i].str, br);
+    else
+      sprintf(ts, "<span foreground=\""HIME_SEL_KEY_COLOR_DEFAULT"\">%c</span>%s%s", cur_inmd->selkey[i], tss.pre_sel[i].str, br);
     strcat(tt, ts);
     if (!gtab_vertical_select_on() && i < tss.pre_selN-1)
       strcat(tt, " ");
