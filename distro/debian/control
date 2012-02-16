@@ -10,8 +10,8 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Recommends: im-switch | im-config, anthy, libchewing3
 Suggests: kasumi
-Conflicts: hime-dev, hime-gtk3-immodule, hime-qt4-immodule, hime-qt3-immodule, hime-anthy, hime-chewing, hime-icon-themes
-Replaces: hime-dev, hime-gtk3-immodule, hime-qt4-immodule, hime-qt3-immodule, hime-anthy, hime-chewing, hime-icon-themes
-Provides: hime-dev, hime-gtk3-immodule, hime-qt4-immodule, hime-qt3-immodule, hime-anthy, hime-chewing, hime-icon-themes
+Conflicts: hime-dev, hime-gtk3-immodule, hime-qt4-immodule, hime-qt3-immodule, hime-anthy, hime-chewing, hime-icon-themes, hime-data, hime-tables
+Replaces: hime-dev, hime-gtk3-immodule, hime-qt4-immodule, hime-qt3-immodule, hime-anthy, hime-chewing, hime-icon-themes, hime-data, hime-tables
+Provides: hime-dev, hime-gtk3-immodule, hime-qt4-immodule, hime-qt3-immodule, hime-anthy, hime-chewing, hime-icon-themes, hime-data, hime-tables
 Description: input method server
  Hime is an input method server, supports GTK+ / Qt immodules and XIM.
