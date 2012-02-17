@@ -772,6 +772,7 @@ void hide_win_gtab()
 
   close_gtab_pho_win();
   hide_win_sym();
+  hide_win_kbm();
 }
 
 void minimize_win_gtab()
