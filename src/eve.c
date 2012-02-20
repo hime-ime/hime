@@ -744,7 +744,13 @@ void toggle_im_enabled()
       init_state_chinese(current_CS);
       reset_current_in_win_xy();
 #if 1
-      show_in_win(current_CS);
+      if ((inmd[current_CS->in_method].flag & FLAG_GTAB_SYM_KBM))
+      {
+        win_kbm_inited = 1;
+        show_win_kbm();
+      }
+      else
+        show_in_win(current_CS);
       update_in_win_pos();
 #else
       update_in_win_pos();
@@ -960,21 +966,27 @@ gboolean init_in_method(int in_no)
     }
     case method_type_EN:
     {
-      current_CS->in_method = in_no;
       if (current_CS && current_CS->im_state==HIME_STATE_CHINESE)
         toggle_im_enabled();
+      current_CS->in_method = in_no;
       return TRUE;
     }
     default:
       init_gtab(in_no);
       if (!inmd[in_no].DefChars)
         return FALSE;
-      current_CS->in_method = in_no;
       if (!(inmd[in_no].flag & FLAG_GTAB_SYM_KBM)) {
+	// in case WIN_SYN and SYM_KBM show at the same time.
+        current_CS->in_method = in_no;
+        hide_win_sym();
+        win_sym_enabled=0;
+
         show_win_gtab();
 	show_input_method_name_on_gtab();
       }
       else {
+        hide_in_win(current_CS);
+        current_CS->in_method = in_no;
         win_kbm_inited = 1;
         show_win_kbm();
       }
@@ -1002,6 +1014,8 @@ gboolean init_in_method(int in_no)
 
 static void cycle_next_in_method()
 {
+  int im_state = current_CS->im_state;
+
   if (current_method_type() == method_type_SYMBOL_TABLE)
   {
     hide_win_sym();
@@ -1013,24 +1027,15 @@ static void cycle_next_in_method()
     int v = (current_CS->in_method + 1 + i) % inmdN;
     if (!inmd[v].in_cycle)
       continue;
+
     if (!inmd[v].cname || !inmd[v].cname[0])
       continue;
 
-    if(v != current_CS->in_method) {
-      switch(current_method_type()) {
-        case method_type_EN:
-          toggle_im_enabled();
-          break;
-        case method_type_SYMBOL_TABLE:
-          toggle_symbol_table();
-          break;
-        default:
-          break;
-      }
-    }
-
     if (!init_in_method(v))
       continue;
+
+    if ((im_state == HIME_STATE_DISABLED) && (inmd[current_CS->in_method].method_type != method_type_EN))
+      toggle_im_enabled();
 
     return;
   }
