@@ -1244,7 +1244,7 @@ gboolean ProcessKeyPress(KeySym keysym, u_int kev_state)
     return full_char_proc(keysym);
   }
 
-  if (current_CS->im_state == HIME_STATE_DISABLED) {
+  if (current_CS->im_state == HIME_STATE_DISABLED || current_CS->im_state == HIME_STATE_ENG_FULL) {
     return FALSE;
   }
 
@@ -1300,7 +1300,7 @@ gboolean ProcessKeyRelease(KeySym keysym, u_int kev_state)
   dbg_time("key release %x %x\n", keysym, kev_state);
 #endif
 
- if (current_CS->im_state == HIME_STATE_DISABLED) return FALSE;
+ if (current_CS->im_state == HIME_STATE_DISABLED || current_CS->im_state == HIME_STATE_ENG_FULL) return FALSE;
 
 #if 1
   if (current_CS->b_hime_protocol && (last_keysym == XK_Shift_L ||
