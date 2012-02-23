@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -1034,9 +1034,6 @@ static void cycle_next_in_method()
     if (!init_in_method(v))
       continue;
 
-    if ((im_state == HIME_STATE_DISABLED) && (inmd[current_CS->in_method].method_type != method_type_EN))
-      toggle_im_enabled();
-
     return;
   }
 }
@@ -1304,6 +1301,7 @@ gboolean ProcessKeyRelease(KeySym keysym, u_int kev_state)
   dbg_time("key release %x %x\n", keysym, kev_state);
 #endif
 
+ if (current_CS->im_state == HIME_STATE_DISABLED) return FALSE;
 
 #if 1
   if (current_CS->b_hime_protocol && (last_keysym == XK_Shift_L ||
