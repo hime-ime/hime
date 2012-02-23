@@ -1211,11 +1211,6 @@ gboolean ProcessKeyPress(KeySym keysym, u_int kev_state)
   }
 
 //  dbg("state %x\n", kev_state);
-  if (current_CS->im_state == HIME_STATE_ENG_FULL) {
-    return full_char_proc(keysym);
-  }
-
-
   if ((kev_state & ControlMask) && (kev_state&(Mod1Mask|Mod5Mask))) {
     if (keysym == 'g' || keysym == 'r') {
       send_output_buffer_bak();
@@ -1244,6 +1239,10 @@ gboolean ProcessKeyPress(KeySym keysym, u_int kev_state)
   }
 
   last_keysym = keysym;
+
+  if (current_CS->im_state == HIME_STATE_ENG_FULL && !(kev_state & (ControlMask|Mod1Mask))) {
+    return full_char_proc(keysym);
+  }
 
   if (current_CS->im_state == HIME_STATE_DISABLED) {
     return FALSE;
