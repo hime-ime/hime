@@ -753,6 +753,8 @@ void destroy_win_gtab()
   gwin_gtab = NULL;
 }
 
+void hide_win_kbm();
+
 void hide_win_gtab()
 {
   win_gtab_max_key_press = 0;
@@ -864,10 +866,11 @@ void win_gtab_disp_half_full()
 
   if (label_gtab && (gtab_hide_row2))
   {
-    if (hime_win_color_use)
+    if (hime_win_color_use) {
       if (label_gtab) gtk_label_set_markup(GTK_LABEL(label_gtab), get_full_str());
-    else
+    } else {
       if (label_gtab) gtk_label_set_text(GTK_LABEL(label_gtab), get_full_str());
+    }
   }
 
   minimize_win_gtab();

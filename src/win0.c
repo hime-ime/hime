@@ -165,6 +165,8 @@ extern gboolean b_use_full_space;
 void set_label_space();
 void set_label_space(GtkWidget *label);
 
+void show_win0();
+
 void disp_char(int index, char *ch)
 {
   if (hime_edit_display_ap_only())

@@ -691,6 +691,7 @@ void init_state_chinese(ClientState *cs)
 
 gboolean output_gbuf();
 void update_win_kbm();
+void show_win_kbm();
 
 // <Ctrl><Space> is pressed
 void toggle_im_enabled()
@@ -875,7 +876,7 @@ void init_tab_pho();
 extern int b_show_win_kbm;
 
 void hide_win_kbm();
-void show_win_kbm();
+// void show_win_kbm();
 extern char *TableDir;
 void set_gtab_input_method_name(char *s);
 HIME_module_callback_functions *init_HIME_module_callback_functions(char *sofile);
@@ -1014,7 +1015,7 @@ gboolean init_in_method(int in_no)
 
 static void cycle_next_in_method()
 {
-  int im_state = current_CS->im_state;
+//  int im_state = current_CS->im_state;
 
   if (current_method_type() == method_type_SYMBOL_TABLE)
   {
