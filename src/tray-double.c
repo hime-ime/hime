@@ -366,7 +366,7 @@ void load_tray_icon_double()
 
   if (current_CS && (current_CS->im_state == HIME_STATE_ENG_FULL ||
       (current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char) ||
-      (current_method_type()==method_type_TSIN && tss.tsin_half_full))) {
+      (current_CS->im_state == HIME_STATE_CHINESE && current_method_type()==method_type_TSIN && tss.tsin_half_full))) {
       if (gb_output) {
         icon_st="full-simp.png";
         tip = _("全形/簡體輸出");

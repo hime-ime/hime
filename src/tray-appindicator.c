@@ -133,7 +133,7 @@ static char st_gb[]=N_("/簡"), st_half[]=N_("半"), st_full[]=N_("全"), st_str
 static char * tray_appindicator_label_create()
 {
   strcpy(st_str, "");
-  if (current_CS && (current_CS->im_state == HIME_STATE_ENG_FULL || (current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char) || (current_method_type()==method_type_TSIN && tss.tsin_half_full)))
+  if (current_CS && (current_CS->im_state == HIME_STATE_ENG_FULL || (current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char) || (current_CS->im_state == HIME_STATE_CHINESE && current_method_type()==method_type_TSIN && tss.tsin_half_full)))
     strcat(st_str, st_full);
   else
     strcat(st_str, st_half);
