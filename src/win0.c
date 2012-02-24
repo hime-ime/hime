@@ -170,7 +170,7 @@ void disp_char(int index, char *ch)
   if (hime_edit_display_ap_only())
     return;
   if (!top_bin)
-    return;
+    create_win0();
 
 //  dbg("disp_char %d %s\n", index, ch);
   create_char(index);
