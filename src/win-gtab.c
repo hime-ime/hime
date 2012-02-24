@@ -839,6 +839,8 @@ char *get_full_str()
 
 void win_gtab_disp_half_full()
 {
+  if (!gwin_gtab)
+    return;
   if (label_full) {
     if ((current_CS->im_state == HIME_STATE_CHINESE && (!current_CS->b_half_full_char)) ||
         (current_CS->tsin_pho_mode == 0))
@@ -851,21 +853,21 @@ void win_gtab_disp_half_full()
   {
     if (label_gtab_sele) gtk_widget_show(label_gtab_sele);
     if (hime_status_tray || (! gtab_hide_row2))
-      gtk_widget_show(label_gtab);
+      if (label_gtab) gtk_widget_show(label_gtab);
   }
   else
   {
     if (label_gtab_sele) gtk_widget_hide(label_gtab_sele);
     if (hime_status_tray || (! gtab_hide_row2))
-      gtk_widget_hide(label_gtab);
+      if (label_gtab) gtk_widget_hide(label_gtab);
   }
 
   if (label_gtab && (gtab_hide_row2))
   {
     if (hime_win_color_use)
-      gtk_label_set_markup(GTK_LABEL(label_gtab), get_full_str());
+      if (label_gtab) gtk_label_set_markup(GTK_LABEL(label_gtab), get_full_str());
     else
-      gtk_label_set_text(GTK_LABEL(label_gtab), get_full_str());
+      if (label_gtab) gtk_label_set_text(GTK_LABEL(label_gtab), get_full_str());
   }
 
   minimize_win_gtab();
