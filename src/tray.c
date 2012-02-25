@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -105,7 +105,7 @@ static void draw_icon()
       get_text_w_h(efull,  &w, &h);
       cairo_move_to (cr, 0, 0);
       pango_cairo_show_layout (cr, pango);
-    } else if ((current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char) || (current_method_type()==method_type_TSIN && tss.tsin_half_full)) {
+    } else if ((current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char) || (current_CS->im_state == HIME_STATE_CHINESE && current_method_type()==method_type_TSIN && tss.tsin_half_full)) {
       get_text_w_h(full,  &w, &h);
       cairo_move_to (cr, iw - w, ih - h);
       pango_cairo_show_layout (cr, pango);
@@ -153,10 +153,8 @@ void load_tray_icon()
     pixbuf = gdk_pixbuf_new_from_file_at_size(icon_fname, iw, ih, NULL);
   }
   char *iconame = HIME_TRAY_PNG;
-//  if (current_CS && current_CS->in_method && inmd)
-// Workaround due to issue #161 (caleb-/hime) :
-  if (current_CS && current_CS->im_state != HIME_STATE_DISABLED && current_CS->im_state != HIME_STATE_ENG_FULL)
-    iconame = inmd[current_CS->in_method].icon;
+  if (cur_inmd)
+    iconame = cur_inmd->icon;
   char fname[512];
   if (iconame)
     get_icon_path(iconame, fname);

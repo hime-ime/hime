@@ -1,4 +1,4 @@
-/* Copyright (C) 2011 cwlin <https://github.com/cwlin>
+/* Copyright (C) 2011-2012 cwlin <https://github.com/cwlin>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

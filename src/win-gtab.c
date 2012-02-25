@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -753,6 +753,8 @@ void destroy_win_gtab()
   gwin_gtab = NULL;
 }
 
+void hide_win_kbm();
+
 void hide_win_gtab()
 {
   win_gtab_max_key_press = 0;
@@ -772,6 +774,7 @@ void hide_win_gtab()
 
   close_gtab_pho_win();
   hide_win_sym();
+  hide_win_kbm();
 }
 
 void minimize_win_gtab()
@@ -838,6 +841,8 @@ char *get_full_str()
 
 void win_gtab_disp_half_full()
 {
+  if (!gwin_gtab)
+    return;
   if (label_full) {
     if ((current_CS->im_state == HIME_STATE_CHINESE && (!current_CS->b_half_full_char)) ||
         (current_CS->tsin_pho_mode == 0))
@@ -850,21 +855,22 @@ void win_gtab_disp_half_full()
   {
     if (label_gtab_sele) gtk_widget_show(label_gtab_sele);
     if (hime_status_tray || (! gtab_hide_row2))
-      gtk_widget_show(label_gtab);
+      if (label_gtab) gtk_widget_show(label_gtab);
   }
   else
   {
     if (label_gtab_sele) gtk_widget_hide(label_gtab_sele);
     if (hime_status_tray || (! gtab_hide_row2))
-      gtk_widget_hide(label_gtab);
+      if (label_gtab) gtk_widget_hide(label_gtab);
   }
 
   if (label_gtab && (gtab_hide_row2))
   {
-    if (hime_win_color_use)
-      gtk_label_set_markup(GTK_LABEL(label_gtab), get_full_str());
-    else
-      gtk_label_set_text(GTK_LABEL(label_gtab), get_full_str());
+    if (hime_win_color_use) {
+      if (label_gtab) gtk_label_set_markup(GTK_LABEL(label_gtab), get_full_str());
+    } else {
+      if (label_gtab) gtk_label_set_text(GTK_LABEL(label_gtab), get_full_str());
+    }
   }
 
   minimize_win_gtab();

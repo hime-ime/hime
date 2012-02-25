@@ -3,8 +3,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -555,6 +555,8 @@ void create_appearance_conf_window()
     gtk_window_set_type_hint(GTK_WINDOW(hime_appearance_conf_window), GDK_WINDOW_TYPE_HINT_UTILITY);
   gtk_window_set_position(GTK_WINDOW(hime_appearance_conf_window), GTK_WIN_POS_MOUSE);
 
+  gtk_window_set_has_resize_grip(GTK_WINDOW(hime_appearance_conf_window), FALSE);
+
   g_signal_connect (G_OBJECT (hime_appearance_conf_window), "delete_event",
                     G_CALLBACK (close_appearance_conf_window),
                     NULL);
@@ -863,8 +865,6 @@ static void create_main_win()
     gtk_window_set_type_hint(GTK_WINDOW(main_window), GDK_WINDOW_TYPE_HINT_UTILITY);
   gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_CENTER);
 
-  gtk_window_set_has_resize_grip(GTK_WINDOW(main_window), FALSE);
-
   g_signal_connect (G_OBJECT (main_window), "delete_event",
                      G_CALLBACK (close_application),
                      NULL);
@@ -990,7 +990,7 @@ static void create_main_win()
   g_signal_connect (G_OBJECT (button_ts_import_sys), "clicked",
                     G_CALLBACK (cb_ts_import_sys), NULL);
 
-  GtkWidget *button_about = gtk_button_new_with_label(_("關於 hime"));
+  GtkWidget *button_about = gtk_button_new_from_stock (GTK_STOCK_ABOUT);
   gtk_box_pack_start (GTK_BOX (vbox), button_about, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_about), "clicked",
                     G_CALLBACK (create_about_window),  NULL);

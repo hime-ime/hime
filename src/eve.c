@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -484,7 +484,7 @@ void move_in_win(ClientState *cs, int x, int y)
         module_cb1(cs)->module_move_win(x, y);
       break;
     default:
-      if (!cs->in_method)
+      if (!cur_inmd)
         return;
       move_win_gtab(x, y);
   }
@@ -683,7 +683,7 @@ void init_state_chinese(ClientState *cs)
 {
   cs->im_state = HIME_STATE_CHINESE;
   set_tsin_pho_mode0(cs);
-  if (!cs->in_method)
+  if (!cur_inmd)
     init_in_method(default_input_method);
 
   save_CS_current_to_temp();
@@ -691,6 +691,7 @@ void init_state_chinese(ClientState *cs)
 
 gboolean output_gbuf();
 void update_win_kbm();
+void show_win_kbm();
 
 // <Ctrl><Space> is pressed
 void toggle_im_enabled()
@@ -744,7 +745,13 @@ void toggle_im_enabled()
       init_state_chinese(current_CS);
       reset_current_in_win_xy();
 #if 1
-      show_in_win(current_CS);
+      if ((inmd[current_CS->in_method].flag & FLAG_GTAB_SYM_KBM))
+      {
+        win_kbm_inited = 1;
+        show_win_kbm();
+      }
+      else
+        show_in_win(current_CS);
       update_in_win_pos();
 #else
       update_in_win_pos();
@@ -869,7 +876,7 @@ void init_tab_pho();
 extern int b_show_win_kbm;
 
 void hide_win_kbm();
-void show_win_kbm();
+// void show_win_kbm();
 extern char *TableDir;
 void set_gtab_input_method_name(char *s);
 HIME_module_callback_functions *init_HIME_module_callback_functions(char *sofile);
@@ -960,21 +967,27 @@ gboolean init_in_method(int in_no)
     }
     case method_type_EN:
     {
-      current_CS->in_method = in_no;
       if (current_CS && current_CS->im_state==HIME_STATE_CHINESE)
         toggle_im_enabled();
+      current_CS->in_method = in_no;
       return TRUE;
     }
     default:
       init_gtab(in_no);
       if (!inmd[in_no].DefChars)
         return FALSE;
-      current_CS->in_method = in_no;
       if (!(inmd[in_no].flag & FLAG_GTAB_SYM_KBM)) {
+	// in case WIN_SYN and SYM_KBM show at the same time.
+        current_CS->in_method = in_no;
+        hide_win_sym();
+        win_sym_enabled=0;
+
         show_win_gtab();
 	show_input_method_name_on_gtab();
       }
       else {
+        hide_in_win(current_CS);
+        current_CS->in_method = in_no;
         win_kbm_inited = 1;
         show_win_kbm();
       }
@@ -1002,6 +1015,8 @@ gboolean init_in_method(int in_no)
 
 static void cycle_next_in_method()
 {
+//  int im_state = current_CS->im_state;
+
   if (current_method_type() == method_type_SYMBOL_TABLE)
   {
     hide_win_sym();
@@ -1013,21 +1028,9 @@ static void cycle_next_in_method()
     int v = (current_CS->in_method + 1 + i) % inmdN;
     if (!inmd[v].in_cycle)
       continue;
+
     if (!inmd[v].cname || !inmd[v].cname[0])
       continue;
-
-    if(v != current_CS->in_method) {
-      switch(current_method_type()) {
-        case method_type_EN:
-          toggle_im_enabled();
-          break;
-        case method_type_SYMBOL_TABLE:
-          toggle_symbol_table();
-          break;
-        default:
-          break;
-      }
-    }
 
     if (!init_in_method(v))
       continue;
@@ -1209,11 +1212,6 @@ gboolean ProcessKeyPress(KeySym keysym, u_int kev_state)
   }
 
 //  dbg("state %x\n", kev_state);
-  if (current_CS->im_state == HIME_STATE_ENG_FULL) {
-    return full_char_proc(keysym);
-  }
-
-
   if ((kev_state & ControlMask) && (kev_state&(Mod1Mask|Mod5Mask))) {
     if (keysym == 'g' || keysym == 'r') {
       send_output_buffer_bak();
@@ -1243,7 +1241,11 @@ gboolean ProcessKeyPress(KeySym keysym, u_int kev_state)
 
   last_keysym = keysym;
 
-  if (current_CS->im_state == HIME_STATE_DISABLED) {
+  if (current_CS->im_state == HIME_STATE_ENG_FULL && !(kev_state & (ControlMask|Mod1Mask))) {
+    return full_char_proc(keysym);
+  }
+
+  if (current_CS->im_state == HIME_STATE_DISABLED || current_CS->im_state == HIME_STATE_ENG_FULL) {
     return FALSE;
   }
 
@@ -1299,6 +1301,7 @@ gboolean ProcessKeyRelease(KeySym keysym, u_int kev_state)
   dbg_time("key release %x %x\n", keysym, kev_state);
 #endif
 
+ if (current_CS->im_state == HIME_STATE_DISABLED || current_CS->im_state == HIME_STATE_ENG_FULL) return FALSE;
 
 #if 1
   if (current_CS->b_hime_protocol && (last_keysym == XK_Shift_L ||
