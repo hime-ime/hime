@@ -578,6 +578,8 @@ void create_gtablist_window (void)
     return;
   }
 
+  load_setttings();
+
   /* create gtab_list_window, etc */
   gtablist_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   if (hime_setup_window_type_utility)
