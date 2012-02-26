@@ -21,7 +21,7 @@
 int hime_setup_window_type_utility;
 
 int hime_font_size, hime_font_size_tsin_presel, hime_font_size_symbol;
-int hime_font_size_pho_near, hime_font_size_gtab_in, hime_font_size_win_kbm, hime_font_size_win_kbm_en;
+int hime_font_size_pho_near, hime_font_size_gtab_in, hime_font_size_win_kbm, hime_font_size_win_kbm_en, hime_show_win_kbm;
 int hime_win_color_use, hime_single_state;
 int hime_remote_client;
 char *default_input_method_str;
@@ -112,6 +112,7 @@ void load_setttings()
 #if TRAY_ENABLED
   hime_tray_hf_win_kbm = get_hime_conf_int(HIME_TRAY_HF_WIN_KBM, 0);
 #endif
+  hime_show_win_kbm = get_hime_conf_int(KBM_TOGGLE, 0);
   hime_init_im_enabled = get_hime_conf_int(HIME_INIT_IM_ENABLED, 0);
 
   hime_single_state = get_hime_conf_int(HIME_SINGLE_STATE, 0);

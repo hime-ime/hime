@@ -122,7 +122,7 @@ extern int gtab_shift_phrase_key, gtab_in_area_button;
 extern int gtab_vertical_select, gtab_unique_auto_send;
 extern int tsin_buffer_size;
 extern int hime_input_style, hime_root_x, hime_root_y, hime_pop_up_win;
-extern int hime_status_tray, hime_tray_hf_win_kbm;
+extern int hime_status_tray, hime_show_win_kbm, hime_tray_hf_win_kbm;
 extern int hime_punc_auto_send;
 
 extern int tsin_phrase_pre_select;

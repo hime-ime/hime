@@ -86,10 +86,10 @@ void exec_hime_setup_(GtkCheckMenuItem *checkmenuitem, gpointer dat)
   exec_hime_setup();
 }
 
-void kbm_open_close(gboolean b_show);
+void kbm_open_close(GtkButton *checkmenuitem, gboolean b_show);
 void kbm_toggle_(GtkCheckMenuItem *checkmenuitem, gpointer dat)
 {
-  kbm_open_close(gtk_check_menu_item_get_active(checkmenuitem));
+  kbm_open_close(NULL, gtk_check_menu_item_get_active(checkmenuitem));
 }
 
 void create_about_window();
@@ -110,7 +110,7 @@ static MITEM mitems_main[] = {
   {N_("設定/工具"), GTK_STOCK_PREFERENCES, exec_hime_setup_},
   {N_("結束hime"), GTK_STOCK_QUIT, restart_hime},
   {N_("念出發音"), NULL, cb_tog_phospeak, &phonetic_speak},
-  {N_("小鍵盤"), NULL, kbm_toggle_, &win_kbm_on},
+  {N_("小鍵盤"), NULL, kbm_toggle_, &hime_show_win_kbm},
   {N_("選擇輸入法"), GTK_STOCK_INDEX, cb_inmd_menu, NULL},
   {NULL}
 };

@@ -474,9 +474,9 @@ static void putstr_inp(char *p)
   clear_after_put();
 
   if ((cur_inmd->flag & FLAG_GTAB_SYM_KBM)) {
-    extern int win_kbm_inited, b_show_win_kbm;
+    extern int win_kbm_inited, hime_show_win_kbm;
     init_in_method(default_input_method);
-    if (win_kbm_inited && !b_show_win_kbm)
+    if (win_kbm_inited && !hime_show_win_kbm)
       hide_win_kbm();
   }
 }

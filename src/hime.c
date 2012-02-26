@@ -344,13 +344,14 @@ void cb_trad_sim_toggle()
 #endif
 }
 void execute_message(char *message), show_win_kbm(), hide_win_kbm();
-int b_show_win_kbm=0;
 void disp_win_kbm_capslock_init();
 
-void kbm_open_close(gboolean b_show)
+extern int hime_show_win_kbm;
+void kbm_open_close(GtkButton *checkmenuitem, gboolean b_show)
 {
-  b_show_win_kbm=b_show;
-  if (b_show) {
+  hime_show_win_kbm=b_show;
+
+  if (hime_show_win_kbm) {
     show_win_kbm();
     disp_win_kbm_capslock_init();
   } else
@@ -360,7 +361,7 @@ void kbm_open_close(gboolean b_show)
 void kbm_toggle()
 {
   win_kbm_inited = 1;
-  kbm_open_close(!b_show_win_kbm);
+  kbm_open_close(NULL, ! hime_show_win_kbm);
 }
 
 
