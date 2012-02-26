@@ -1045,27 +1045,31 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
   lcase = tolower(key);
   int ucase;
   ucase = toupper(key);
-  if (key < 127 && cur_inmd->keymap[key]) {
-     if (key < 'A' || key > 'z' || (key > 'Z'  && key < 'a') )
-       goto shift_proc;
-     if (cur_inmd->keymap[lcase] != cur_inmd->keymap[ucase])
-       goto next;
-
+  if (cur_inmd->keymap)
+  {
+    if (key < 127 && cur_inmd->keymap[key]) {
+      if (key < 'A' || key > 'z' || (key > 'Z'  && key < 'a') )
+        goto shift_proc;
+      if (cur_inmd->keymap[lcase] != cur_inmd->keymap[ucase])
+        goto next;
+    }
   }
 
 
 shift_proc:
-  if (shift_m && !strchr(cur_inmd->selkey, key) && !ggg.more_pg && key>=' ' && key < 0x7e &&
-       key!='*' && (key!='?' || (gtab_shift_phrase_key && !ggg.ci))) {
-    if (gtab_shift_phrase_key) {
-      if (tss.pre_selN && shift_char_proc(key, kbstate))
-        return TRUE;
-      if (feed_phrase(key, kbstate))
-        return TRUE;
-    } else {
-      if (!cur_inmd->keymap[key] || (lcase != ucase &&
-           cur_inmd->keymap[lcase]==cur_inmd->keymap[ucase]))
-        return shift_char_proc(key, kbstate);
+  if (cur_inmd->selkey) {
+    if (shift_m && !strchr(cur_inmd->selkey, key) && !ggg.more_pg && key>=' ' && key < 0x7e &&
+        key!='*' && (key!='?' || (gtab_shift_phrase_key && !ggg.ci))) {
+      if (gtab_shift_phrase_key) {
+        if (tss.pre_selN && shift_char_proc(key, kbstate))
+          return TRUE;
+        if (feed_phrase(key, kbstate))
+          return TRUE;
+      } else {
+        if (!cur_inmd->keymap[key] || (lcase != ucase &&
+             cur_inmd->keymap[lcase]==cur_inmd->keymap[ucase]))
+          return shift_char_proc(key, kbstate);
+      }
     }
   }
 

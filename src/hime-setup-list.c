@@ -41,6 +41,7 @@ static GtkWidget *button, *button2, *check_button_phonetic_speak, *opt_speaker_o
 static GtkWidget *opt_im_toggle_keys, *check_button_hime_remote_client,
        *check_button_hime_shift_space_eng_full,
        *check_button_hime_init_im_enabled,
+       *check_button_hime_init_full_mode,
        *check_button_hime_eng_phrase_enabled,
        *check_button_hime_win_sym_click_close,
        *check_button_hime_punc_auto_send;
@@ -267,6 +268,9 @@ static void cb_ok (GtkWidget *button, gpointer data)
 
   save_hime_conf_int(HIME_INIT_IM_ENABLED,
     gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_init_im_enabled)));
+
+  save_hime_conf_int(HIME_INIT_FULL_MODE,
+    gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_init_full_mode)));
 
   save_hime_conf_int(HIME_ENG_PHRASE_ENABLED,
     gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_eng_phrase_enabled)));
@@ -642,6 +646,13 @@ void create_gtablist_window (void)
   gtk_box_pack_start (GTK_BOX (hbox_hime_init_im_enabled),check_button_hime_init_im_enabled,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_init_im_enabled),
      hime_init_im_enabled);
+
+  GtkWidget *hbox_hime_init_full_mode = gtk_hbox_new (FALSE, 10);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_init_full_mode, FALSE, FALSE, 0);
+  check_button_hime_init_full_mode = gtk_check_button_new_with_label (_("直接進入全型輸入狀態"));
+  gtk_box_pack_start (GTK_BOX (hbox_hime_init_full_mode),check_button_hime_init_full_mode,  FALSE, FALSE, 0);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_init_full_mode),
+     hime_init_full_mode);
 
   GtkWidget *hbox_hime_shift_space_eng_full = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_shift_space_eng_full, FALSE, FALSE, 0);

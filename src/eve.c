@@ -1002,6 +1002,19 @@ gboolean init_in_method(int in_no)
 
   cur_inmd=&inmd[in_no];
 
+  if (hime_init_full_mode)
+  {
+    switch (current_method_type())
+    {
+      case method_type_TSIN:
+        if (tss.tsin_half_full==0) toggle_half_full_char();
+        break;
+      default:
+        if (current_CS->b_half_full_char==0) toggle_half_full_char();
+        break;
+    }
+  }
+
 #if TRAY_ENABLED
   disp_tray_icon();
 #endif
