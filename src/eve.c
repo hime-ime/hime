@@ -996,6 +996,8 @@ gboolean init_in_method(int in_no)
       break;
   }
 
+  cur_inmd=&inmd[in_no];
+
 #if TRAY_ENABLED
   disp_tray_icon();
 #endif
