@@ -1009,6 +1009,10 @@ gboolean init_in_method(int in_no)
       case method_type_TSIN:
         if (tss.tsin_half_full==0) toggle_half_full_char();
         break;
+      case method_type_MODULE:
+      case method_type_SYMBOL_TABLE:
+      case method_type_EN:
+        break;
       default:
         if (current_CS->b_half_full_char==0) toggle_half_full_char();
         break;
