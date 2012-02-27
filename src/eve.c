@@ -35,6 +35,7 @@ static IMForwardEventStruct *current_forward_eve;
 #endif
 extern gboolean win_kbm_inited;
 extern int hime_show_win_kbm;
+extern gboolean win_kbm_on;
 void show_win_kbm();
 void hide_win_kbm();
 void update_win_kbm();
@@ -444,12 +445,13 @@ void show_in_win(ClientState *cs)
       show_input_method_name_on_gtab();
       break;
   }
-  
-  if (hime_show_win_kbm && 
+
+  if (hime_show_win_kbm &&
       (current_CS->im_state == HIME_STATE_CHINESE) &&
-      (current_method_type() != method_type_MODULE))
+      (current_method_type() != method_type_MODULE) &&
+      (current_method_type() != method_type_SYMBOL_TABLE))
   {
-    show_win_kbm();                                                                                                                                 
+    show_win_kbm();
     update_win_kbm();
   }
 
@@ -762,7 +764,7 @@ void toggle_im_enabled()
       }
       else
         show_in_win(current_CS);
-      
+
       update_in_win_pos();
 #else
       update_in_win_pos();
@@ -982,7 +984,22 @@ gboolean init_in_method(int in_no)
       init_gtab(in_no);
       if (!inmd[in_no].DefChars)
         return FALSE;
-      if (!(inmd[in_no].flag & FLAG_GTAB_SYM_KBM)) {
+      if (inmd[in_no].flag & FLAG_GTAB_SYM_KBM) {
+	if (win_kbm_on)
+	{
+          init_in_method(default_input_method);
+	  hide_win_kbm();
+	}
+	else
+	{
+          // Show SYM_KBM
+          hide_in_win(current_CS);
+          win_kbm_inited = 1;
+          show_win_kbm();
+          current_CS->in_method = in_no;
+	}
+      }
+      else {
 	// in case WIN_SYN and SYM_KBM show at the same time.
         current_CS->in_method = in_no;
         hide_win_sym();
@@ -990,10 +1007,6 @@ gboolean init_in_method(int in_no)
 
         show_win_gtab();
 	show_input_method_name_on_gtab();
-      }
-      else {
-        hide_in_win(current_CS);
-        current_CS->in_method = in_no;
       }
 
       // set_gtab_input_method_name(inmd[in_no].cname);
@@ -1056,7 +1069,7 @@ static void cycle_next_in_method()
     hide_win_sym();
     win_sym_enabled=0;
   }
-  
+
   int i;
   for(i=0; i < inmdN; i++) {
     int v = (current_CS->in_method + 1 + i) % inmdN;
@@ -1093,7 +1106,7 @@ gboolean full_char_proc(KeySym keysym)
     return 1;
   }
 
-  if ((current_method_type() == method_type_TSIN) && 
+  if ((current_method_type() == method_type_TSIN) &&
       (current_CS->im_state == HIME_STATE_CHINESE))
     add_to_tsin_buf_str(tt);
   else
