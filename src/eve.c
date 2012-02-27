@@ -1445,6 +1445,7 @@ int hime_FocusIn(ClientState *cs)
 
   current_CS = cs;
   save_CS_temp_to_current();
+  cur_inmd=&inmd[cs->in_method];
 
 //  dbg("current_CS %x %d %d\n", cs, cs->im_state, current_CS->im_state);
 
