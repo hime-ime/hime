@@ -744,15 +744,10 @@ void toggle_im_enabled()
       hide_win_status();
 #endif
       current_CS->im_state = HIME_STATE_DISABLED;
-
-#if TRAY_ENABLED
-      disp_tray_icon();
-#endif
     } else {
+      init_state_chinese(current_CS);
       if (!current_method_type())
         init_gtab(current_CS->in_method);
-
-      init_state_chinese(current_CS);
       reset_current_in_win_xy();
 #if 1
       if ((inmd[current_CS->in_method].flag & FLAG_GTAB_SYM_KBM))
@@ -768,12 +763,11 @@ void toggle_im_enabled()
       update_in_win_pos();
       show_in_win(current_CS);
 #endif
-
-#if TRAY_ENABLED
-      disp_tray_icon();
-#endif
     }
 
+#if TRAY_ENABLED
+    disp_tray_icon();
+#endif
     save_CS_current_to_temp();
 }
 
@@ -999,8 +993,8 @@ gboolean init_in_method(int in_no)
       // set_gtab_input_method_name(inmd[in_no].cname);
       break;
   }
-
-  cur_inmd=&inmd[in_no];
+  if (current_CS->im_state == HIME_STATE_CHINESE)
+    cur_inmd=&inmd[in_no];
 
   if (hime_init_full_mode)
   {
@@ -1445,7 +1439,8 @@ int hime_FocusIn(ClientState *cs)
 
   current_CS = cs;
   save_CS_temp_to_current();
-  cur_inmd=&inmd[cs->in_method];
+  if (cs->im_state == HIME_STATE_CHINESE)
+    cur_inmd=&inmd[cs->in_method];
 
 //  dbg("current_CS %x %d %d\n", cs, cs->im_state, current_CS->im_state);
 
