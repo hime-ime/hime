@@ -27,8 +27,6 @@
 #include "hime-im-client.h"
 #include "im-srv.h"
 #include <gtk/gtk.h>
-/* gtab.h -> INMD */
-#include "gtab.h"
 
 #define DBG 0
 
@@ -115,8 +113,6 @@ static void shutdown_client(int fd)
 void message_cb(char *message);
 void save_CS_temp_to_current();
 
-extern INMD *cur_inmd;
-
 void process_client_req(int fd)
 {
   HIME_req req;
@@ -162,7 +158,6 @@ void process_client_req(int fd)
     {
       current_CS = cs;
       dbg("new_cli default_input_method:%d\n", default_input_method);
-      cur_inmd=NULL;
       save_CS_temp_to_current();
       init_state_chinese(cs);
       cs->in_method = default_input_method;
