@@ -105,7 +105,7 @@ static void draw_icon()
       get_text_w_h(efull,  &w, &h);
       cairo_move_to (cr, 0, 0);
       pango_cairo_show_layout (cr, pango);
-    } else if ((current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char) || (current_method_type()==method_type_TSIN && tss.tsin_half_full)) {
+    } else if ((current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char) || (current_CS->im_state == HIME_STATE_CHINESE && current_method_type()==method_type_TSIN && tss.tsin_half_full)) {
       get_text_w_h(full,  &w, &h);
       cairo_move_to (cr, iw - w, ih - h);
       pango_cairo_show_layout (cr, pango);
@@ -197,7 +197,7 @@ static MITEM mitems[] = {
   {N_("繁轉簡工具"), NULL, cb_trad2sim, NULL},
   {N_("簡轉繁工具"), NULL, cb_sim2trad, NULL},
   {N_("選擇輸入法"), NULL, cb_inmd_menu, NULL},
-  {N_("小鍵盤"), NULL, kbm_toggle_, &win_kbm_on},
+  {N_("小鍵盤"), NULL, kbm_toggle_, &hime_show_win_kbm},
   {N_("輸出成簡體"), NULL, cb_trad_sim_toggle_, &gb_output},
   {NULL, NULL, NULL, NULL}
 };

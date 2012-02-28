@@ -165,12 +165,14 @@ extern gboolean b_use_full_space;
 void set_label_space();
 void set_label_space(GtkWidget *label);
 
+void show_win0();
+
 void disp_char(int index, char *ch)
 {
   if (hime_edit_display_ap_only())
     return;
   if (!top_bin)
-    return;
+    show_win0();
 
 //  dbg("disp_char %d %s\n", index, ch);
   create_char(index);
@@ -702,8 +704,11 @@ char *get_full_str();
 
 void win_tsin_disp_half_full()
 {
+  if (label_pho==NULL)
+    show_win0();
+
   if (hime_win_color_use)
-   gtk_label_set_markup(GTK_LABEL(label_pho), get_full_str());
+    gtk_label_set_markup(GTK_LABEL(label_pho), get_full_str());
   else
     gtk_label_set_text(GTK_LABEL(label_pho), get_full_str());
   compact_win0();
