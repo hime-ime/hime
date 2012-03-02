@@ -208,7 +208,7 @@ is_empty (void)
 {
     if (!g_pChewingCtx)
         return FALSE;
-    return chewing_zuin_Check (g_pChewingCtx) ? FALSE : TRUE;
+    return !chewing_buffer_Len (g_pChewingCtx) && chewing_zuin_Check (g_pChewingCtx);
 }
 
 static gboolean 
@@ -350,6 +350,9 @@ hime_buffer_commit (void)
         // so we could free the ptr here
         free (pszTmp);
     }
+
+    if (*g_himeModMainFuncs.mf_hime_pop_up_win && is_empty())
+        module_hide_win();
 
     return TRUE;
 }
@@ -717,7 +720,7 @@ module_show_win (void)
     if (g_himeModMainFuncs.mf_hime_edit_display_ap_only ())
         return;
 
-    if (is_empty ())
+    if (*g_himeModMainFuncs.mf_hime_pop_up_win && is_empty ())
         return;
 
     gtk_window_resize (GTK_WINDOW (g_pWinChewing),
@@ -777,6 +780,9 @@ module_flush_input (void)
     chewing_handle_Esc (g_pChewingCtx);
 
     hime_label_clear (MAX_SEG_NUM);
+
+    if (*g_himeModMainFuncs.mf_hime_pop_up_win && is_empty())
+        module_hide_win();
 
     return 0;
 }
