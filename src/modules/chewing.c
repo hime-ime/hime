@@ -217,6 +217,8 @@ hime_key_filter (int *pnKeyVal)
     if ((*pnKeyVal) > HIME_CHEWING_DEFAULT_KEY_MIN && 
         (*pnKeyVal) < HIME_CHEWING_DEFAULT_KEY_MAX)
         chewing_handle_Default (g_pChewingCtx, (*pnKeyVal));
+    else if ((*pnKeyVal) >= XK_KP_0 && (*pnKeyVal) <= XK_KP_9)
+        chewing_handle_Numlock (g_pChewingCtx, (*pnKeyVal) - XK_KP_0 + '0');
     else if ((*pnKeyVal) < HIME_CHEWING_KEY_MAX && 
              (*pnKeyVal) >= HIME_CHEWING_KEY_MIN)
         if ((int)(g_pKeyHandler[(*pnKeyVal)] (g_pChewingCtx)) == -1)
