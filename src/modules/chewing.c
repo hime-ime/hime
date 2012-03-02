@@ -571,10 +571,12 @@ module_get_preedit (char *pszStr, HIME_PREEDIT_ATTR himePreeditAttr[],
                     int *pnCursor, int *pCompFlag)
 {
     char *pszTmpStr = NULL;
+    char *pszZuinStr = NULL;
     int nIdx;
     int nLength;
     int nTotalLen = 0;
     int nAttr = 0;
+    int nZuinLen = 0;
 
     pszStr[0] = 0;
     *pnCursor = 0;
@@ -604,6 +606,13 @@ module_get_preedit (char *pszStr, HIME_PREEDIT_ATTR himePreeditAttr[],
 #endif
 
         strcat (pszStr, pszTmpStr);
+    }
+
+    if (g_himeModMainFuncs.mf_hime_display_on_the_spot_key()) {
+        pszZuinStr = chewing_zuin_String (g_pChewingCtx, &nZuinLen);
+	    strcat (pszStr, pszZuinStr);
+        free (pszZuinStr);
+        nTotalLen += nZuinLen;
     }
 
     himePreeditAttr[0].ofs1 = nTotalLen;

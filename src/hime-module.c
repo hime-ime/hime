@@ -67,6 +67,7 @@ void init_HIME_module_main_functions(HIME_module_main_functions *func)
 
   func->mf_exec_hime_setup = exec_hime_setup;
   func->mf_hime_edit_display_ap_only = hime_edit_display_ap_only;
+  func->mf_hime_display_on_the_spot_key = hime_display_on_the_spot_key;
   func->mf_inmd_switch_popup_handler = inmd_switch_popup_handler;
   func->mf_load_tab_pho_file = load_tab_pho_file;
   func->mf_send_text = send_text;

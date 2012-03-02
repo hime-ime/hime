@@ -51,6 +51,7 @@ typedef struct {
 
   void (*mf_exec_hime_setup)();
   gboolean (*mf_hime_edit_display_ap_only)();
+  gboolean (*mf_hime_display_on_the_spot_key)();
   gint (*mf_inmd_switch_popup_handler)(GtkWidget *widget, GdkEvent *event);
   void (*mf_load_tab_pho_file)();
   int (*mf_utf8_str_N)(char *str);
