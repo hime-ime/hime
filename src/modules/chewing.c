@@ -643,13 +643,13 @@ module_feedkey (int nKeyVal, int nKeyState)
     if (!hime_key_filter (&nKeyVal))
         return FALSE;
 
-    if (!hime_zuin_label_show ())
+    if (!hime_buffer_commit ())
         return FALSE;
 
     if (!hime_buffer_label_show ())
         return FALSE;
 
-    if (!hime_buffer_commit ())
+    if (!hime_zuin_label_show ())
         return FALSE;
 
     module_show_win ();
