@@ -103,9 +103,9 @@ chewing_config_set (ChewingContext *pChewingCtx)
         chewing_set_selKey (pChewingCtx, 
                             g_chewingConfig.selKey, 
                             MAX_SELKEY);
+        chewing_set_candPerPage (pChewingCtx, g_chewingConfig.candPerPage > HIME_CHEWING_DEFAULT_NUMBER_OF_SELECT_KEYS ? HIME_CHEWING_DEFAULT_NUMBER_OF_SELECT_KEYS : g_chewingConfig.candPerPage);
     }
 
-    chewing_set_candPerPage (pChewingCtx, g_chewingConfig.candPerPage);
     chewing_set_maxChiSymbolLen (pChewingCtx, g_chewingConfig.maxChiSymbolLen);
     chewing_set_addPhraseDirection (pChewingCtx, g_chewingConfig.bAddPhraseForward);
     chewing_set_spaceAsSelection (pChewingCtx, g_chewingConfig.bSpaceAsSelection);
@@ -192,6 +192,7 @@ hime_kb_config_set (ChewingContext *pChewingCtx)
     for (nIdx = 0; nIdx < strlen (szKbSelKey); nIdx++)
         g_chewingConfig.selKey[nIdx] = szKbSelKey[nIdx];
     chewing_set_selKey (pChewingCtx, g_chewingConfig.selKey, strlen (szKbSelKey));
+    chewing_set_candPerPage (pChewingCtx, g_chewingConfig.candPerPage > strlen (szKbSelKey) ? strlen (szKbSelKey) : g_chewingConfig.candPerPage);
 
     nIdx = 0;
     while (g_kbMappingTable[nIdx].pszHimeKbName)

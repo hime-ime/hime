@@ -140,6 +140,16 @@ void save_CS_temp_to_current()
   current_CS->tsin_pho_mode = temp_CS.tsin_pho_mode;
 }
 
+int current_shape_mode()
+{
+// INFO: 1: Full 0: Half / Error: !current_CS
+  return current_CS &&
+    (
+      current_CS->im_state == HIME_STATE_ENG_FULL ||
+      (current_CS->im_state != HIME_STATE_DISABLED && current_method_type()!=method_type_TSIN && current_CS->b_half_full_char) ||
+      (current_CS->im_state == HIME_STATE_CHINESE && current_method_type()==method_type_TSIN && tss.tsin_half_full)
+    );
+}
 
 gboolean init_in_method(int in_no);
 
@@ -944,7 +954,6 @@ gboolean init_in_method(int in_no)
       init_tab_pp(init_im);
       break;
     case method_type_SYMBOL_TABLE:
-      current_CS->in_method = in_no;
       toggle_symbol_table();
       break;
     case method_type_MODULE:
@@ -1073,6 +1082,9 @@ static void cycle_next_in_method()
   int i;
   for(i=0; i < inmdN; i++) {
     int v = (current_CS->in_method + 1 + i) % inmdN;
+    if (win_sym_enabled && inmd[v].method_type == method_type_SYMBOL_TABLE)
+      continue;
+
     if (!inmd[v].in_cycle)
       continue;
 

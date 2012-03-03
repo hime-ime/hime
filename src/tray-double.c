@@ -320,7 +320,7 @@ static void cb_popup_state(GtkStatusIcon *status_icon, guint button, guint activ
 
 
 #define HIME_TRAY_PNG "hime-tray.png"
-
+extern int current_shape_mode();
 
 void load_tray_icon_double()
 {
@@ -364,9 +364,7 @@ void load_tray_icon_double()
 
 //  dbg("%d %d\n",current_CS->im_state,current_CS->b_half_full_char);
 
-  if (current_CS && (current_CS->im_state == HIME_STATE_ENG_FULL ||
-      (current_CS->im_state != HIME_STATE_DISABLED && (current_method_type()!=method_type_TSIN) && current_CS->b_half_full_char) ||
-      (current_CS->im_state == HIME_STATE_CHINESE && (current_method_type()==method_type_TSIN) && tss.tsin_half_full))) {
+  if (current_shape_mode()) {
       if (gb_output) {
         icon_st="full-simp.png";
         tip = _("全形/簡體輸出");
