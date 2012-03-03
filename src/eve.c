@@ -140,6 +140,11 @@ void save_CS_temp_to_current()
   current_CS->tsin_pho_mode = temp_CS.tsin_pho_mode;
 }
 
+int current_shape_mode()
+{
+// INFO: 1: Full 0: Half
+  return (current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char) || (current_CS->im_state == HIME_STATE_CHINESE && current_method_type()==method_type_TSIN && tss.tsin_half_full) || current_CS->im_state == HIME_STATE_ENG_FULL;
+}
 
 gboolean init_in_method(int in_no);
 

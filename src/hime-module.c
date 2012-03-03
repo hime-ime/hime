@@ -35,6 +35,7 @@ void load_tab_pho_file();
 void clear_sele();
 void send_utf8_ch(char *s);
 extern gboolean force_show;
+int current_shape_mode();
 
 void init_HIME_module_main_functions(HIME_module_main_functions *func)
 {
@@ -64,6 +65,7 @@ void init_HIME_module_main_functions(HIME_module_main_functions *func)
 
 
   func->mf_current_time = current_time;
+  func->mf_current_shape_mode = current_shape_mode;
 
   func->mf_exec_hime_setup = exec_hime_setup;
   func->mf_hime_edit_display_ap_only = hime_edit_display_ap_only;

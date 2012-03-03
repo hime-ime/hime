@@ -636,6 +636,8 @@ module_feedkey (int nKeyVal, int nKeyState)
 
     hime_label_clear (MAX_SEG_NUM);
 
+    chewing_set_ShapeMode (g_pChewingCtx, g_himeModMainFuncs.mf_current_shape_mode());
+
     if (!hime_key_filter (&nKeyVal))
         return FALSE;
 
