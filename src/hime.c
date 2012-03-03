@@ -277,9 +277,52 @@ void change_win1_font();
 void set_wselkey(char *s);
 void create_win_gtab();
 
+#if TRAY_ENABLED
+void disp_tray_icon();
+#endif
+gboolean init_in_method(int in_no);
+#include "hime-protocol.h"
+#include "im-srv.h"
+
+static int get_in_method_by_filename(char filename[])
+{
+    int i, in_method = 0;
+    gboolean found = FALSE;
+    for(i=0; i < inmdN; i++) {
+      if (strcmp(filename, inmd[i].filename))
+        continue;
+      found = TRUE;
+      in_method = i;
+      break;
+    }
+    if (!found)
+      in_method = default_input_method;
+    return in_method;
+}
+
 static void reload_data()
 {
   dbg("reload_data\n");
+//  Save input method state before reload
+  char temp_inmd_filenames[hime_clientsN][128];
+  HIME_STATE_E temp_CS_im_states[hime_clientsN];
+  char temp_current_CS_inmd_filename[128] = "";
+  HIME_STATE_E temp_current_CS_im_state = 0;
+  if (current_CS) {
+    temp_current_CS_im_state = current_CS->im_state;
+    strcpy(temp_current_CS_inmd_filename, inmd[current_CS->in_method].filename);
+  }
+  int c;
+  for(c=0;c<hime_clientsN;c++) {
+    strcpy(temp_inmd_filenames[c], "");
+    temp_CS_im_states[c] = HIME_STATE_DISABLED;
+    if (!hime_clients[c].cs)
+      continue;
+    ClientState *cs = hime_clients[c].cs;
+    temp_CS_im_states[c] = cs->im_state;
+    strcpy(temp_inmd_filenames[c], inmd[cs->in_method].filename);
+  }
+
   load_setttings();
   if (current_method_type()==method_type_TSIN)
     set_wselkey(pho_selkey);
@@ -300,6 +343,24 @@ static void reload_data()
 #if TRAY_ENABLED
   update_item_active_all();
 #endif
+
+//  Load input method state after reload, which may change inmd
+  // load clientstate properties back
+  for(c=0;c<hime_clientsN;c++) {
+    if (!hime_clients[c].cs)
+      continue;
+    hime_clients[c].cs->im_state = HIME_STATE_CHINESE;
+    hime_clients[c].cs->in_method = get_in_method_by_filename(temp_inmd_filenames[c]);
+    init_in_method(hime_clients[c].cs->in_method);
+    if (temp_CS_im_states[c] == HIME_STATE_DISABLED)
+      toggle_im_enabled();
+    hime_clients[c].cs->im_state = temp_CS_im_states[c];
+  }
+  current_CS->im_state = HIME_STATE_CHINESE;
+  init_in_method(get_in_method_by_filename(temp_current_CS_inmd_filename));
+  if (temp_current_CS_im_state == HIME_STATE_DISABLED)
+    toggle_im_enabled();
+  current_CS->im_state = temp_current_CS_im_state;
 }
 
 void change_tsin_font_size();
@@ -331,9 +392,7 @@ static int xerror_handler(Display *d, XErrorEvent *eve)
 }
 
 Atom hime_atom;
-#if TRAY_ENABLED
-void disp_tray_icon();
-#endif
+
 void toggle_gb_output();
 
 void cb_trad_sim_toggle()
