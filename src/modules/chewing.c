@@ -368,6 +368,9 @@ hime_chewing_handler_default (ChewingContext *pCtx)
 static int 
 hime_chewing_wrapper_bs (ChewingContext *pCtx)
 {
+//  If zuin is present, let libchewing handles Backspace for removing last zuin
+    if (!chewing_zuin_Check (g_pChewingCtx))
+        return chewing_handle_Backspace (g_pChewingCtx);
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Backspace);
 }
 
