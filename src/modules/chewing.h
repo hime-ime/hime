@@ -38,6 +38,7 @@
 #define HIME_CHEWING_DEFAULT_SELECT_KEYS { '1', '2', '3', '4', \
                                            '5', '6', '7', '8', \
                                            '9', '0' }
+#define HIME_CHEWING_DEFAULT_NUMBER_OF_SELECT_KEYS 10
 
 #define HIME_CHEWING_DEFAULT_KEY_MIN (XK_space)
 #define HIME_CHEWING_DEFAULT_KEY_MAX (XK_asciitilde + 1)

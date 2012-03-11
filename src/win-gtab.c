@@ -474,6 +474,8 @@ void create_win_gtab_gui_simple()
 
   gtk_container_set_border_width (GTK_CONTAINER (event_box_gtab), 0);
 
+  if (gwin_gtab==NULL) create_win_gtab();
+
   if (hime_inner_frame) {
     GtkWidget *frame = top_bin = gtk_frame_new(NULL);
     gtk_container_set_border_width (GTK_CONTAINER (frame), 0);

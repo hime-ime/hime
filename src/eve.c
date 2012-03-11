@@ -34,6 +34,11 @@ extern XIMS current_ims;
 static IMForwardEventStruct *current_forward_eve;
 #endif
 extern gboolean win_kbm_inited;
+extern int hime_show_win_kbm;
+extern gboolean win_kbm_on;
+void show_win_kbm();
+void hide_win_kbm();
+void update_win_kbm();
 
 static char *callback_str_buffer;
 Window focus_win;
@@ -135,6 +140,16 @@ void save_CS_temp_to_current()
   current_CS->tsin_pho_mode = temp_CS.tsin_pho_mode;
 }
 
+int current_shape_mode()
+{
+// INFO: 1: Full 0: Half / Error: !current_CS
+  return current_CS &&
+    (
+      current_CS->im_state == HIME_STATE_ENG_FULL ||
+      (current_CS->im_state != HIME_STATE_DISABLED && current_method_type()!=method_type_TSIN && current_CS->b_half_full_char) ||
+      (current_CS->im_state == HIME_STATE_CHINESE && current_method_type()==method_type_TSIN && tss.tsin_half_full)
+    );
+}
 
 gboolean init_in_method(int in_no);
 
@@ -360,11 +375,13 @@ void hide_in_win(ClientState *cs)
 
   switch (current_method_type()) {
     case method_type_PHO:
+      hide_win_kbm();
       hide_win_pho();
       break;
 #if USE_TSIN
     case method_type_TSIN:
 //      flush_tsin_buffer();
+      hide_win_kbm();
       hide_win0();
       break;
 #endif
@@ -438,6 +455,16 @@ void show_in_win(ClientState *cs)
       show_input_method_name_on_gtab();
       break;
   }
+
+  if (hime_show_win_kbm &&
+      (current_CS->im_state == HIME_STATE_CHINESE) &&
+      (current_method_type() != method_type_MODULE) &&
+      (current_method_type() != method_type_SYMBOL_TABLE))
+  {
+    show_win_kbm();
+    update_win_kbm();
+  }
+
 #if 0
   show_win_stautus();
 #endif
@@ -484,7 +511,7 @@ void move_in_win(ClientState *cs, int x, int y)
         module_cb1(cs)->module_move_win(x, y);
       break;
     default:
-      if (!cur_inmd)
+      if (!cs->in_method)
         return;
       move_win_gtab(x, y);
   }
@@ -683,15 +710,13 @@ void init_state_chinese(ClientState *cs)
 {
   cs->im_state = HIME_STATE_CHINESE;
   set_tsin_pho_mode0(cs);
-  if (!cur_inmd)
+  if (!cs->in_method)
     init_in_method(default_input_method);
 
   save_CS_current_to_temp();
 }
 
 gboolean output_gbuf();
-void update_win_kbm();
-void show_win_kbm();
 
 // <Ctrl><Space> is pressed
 void toggle_im_enabled()
@@ -732,15 +757,12 @@ void toggle_im_enabled()
 #endif
       current_CS->im_state = HIME_STATE_DISABLED;
 
-      update_win_kbm();
-
 #if TRAY_ENABLED
       disp_tray_icon();
 #endif
     } else {
       if (!current_method_type())
         init_gtab(current_CS->in_method);
-
 
       init_state_chinese(current_CS);
       reset_current_in_win_xy();
@@ -752,13 +774,12 @@ void toggle_im_enabled()
       }
       else
         show_in_win(current_CS);
+
       update_in_win_pos();
 #else
       update_in_win_pos();
       show_in_win(current_CS);
 #endif
-
-      update_win_kbm();
 
 #if TRAY_ENABLED
       disp_tray_icon();
@@ -853,9 +874,14 @@ void toggle_half_full_char()
         hide_in_win(current_CS);
 	break;
       case HIME_STATE_DISABLED:
-        toggle_im_enabled();
-        current_CS->im_state = HIME_STATE_ENG_FULL;
+      {
+	gint show_win_kbm = hime_show_win_kbm;
+	hime_show_win_kbm = FALSE;
+	toggle_im_enabled();
+	current_CS->im_state = HIME_STATE_ENG_FULL;
+	hime_show_win_kbm = show_win_kbm;
 	break;
+      }
       case HIME_STATE_CHINESE:
         current_CS->b_half_full_char = !current_CS->b_half_full_char;
 	break;
@@ -872,11 +898,6 @@ void toggle_half_full_char()
 void init_tab_pp(gboolean init);
 void init_tab_pho();
 
-
-extern int b_show_win_kbm;
-
-void hide_win_kbm();
-// void show_win_kbm();
 extern char *TableDir;
 void set_gtab_input_method_name(char *s);
 HIME_module_callback_functions *init_HIME_module_callback_functions(char *sofile);
@@ -914,11 +935,7 @@ gboolean init_in_method(int in_no)
 
       hide_in_win(current_CS);
     }
-
-    if (cur_inmd && (cur_inmd->flag & FLAG_GTAB_SYM_KBM))
-      hide_win_kbm();
   }
-
 
   reset_current_in_win_xy();
 
@@ -937,7 +954,6 @@ gboolean init_in_method(int in_no)
       init_tab_pp(init_im);
       break;
     case method_type_SYMBOL_TABLE:
-      current_CS->in_method = in_no;
       toggle_symbol_table();
       break;
     case method_type_MODULE:
@@ -970,13 +986,29 @@ gboolean init_in_method(int in_no)
       if (current_CS && current_CS->im_state==HIME_STATE_CHINESE)
         toggle_im_enabled();
       current_CS->in_method = in_no;
+      hide_win_kbm();
       return TRUE;
     }
     default:
       init_gtab(in_no);
       if (!inmd[in_no].DefChars)
         return FALSE;
-      if (!(inmd[in_no].flag & FLAG_GTAB_SYM_KBM)) {
+      if (inmd[in_no].flag & FLAG_GTAB_SYM_KBM) {
+	if (win_kbm_on)
+	{
+          init_in_method(default_input_method);
+	  hide_win_kbm();
+	}
+	else
+	{
+          // Show SYM_KBM
+          hide_in_win(current_CS);
+          win_kbm_inited = 1;
+          show_win_kbm();
+          current_CS->in_method = in_no;
+	}
+      }
+      else {
 	// in case WIN_SYN and SYM_KBM show at the same time.
         current_CS->in_method = in_no;
         hide_win_sym();
@@ -985,15 +1017,26 @@ gboolean init_in_method(int in_no)
         show_win_gtab();
 	show_input_method_name_on_gtab();
       }
-      else {
-        hide_in_win(current_CS);
-        current_CS->in_method = in_no;
-        win_kbm_inited = 1;
-        show_win_kbm();
-      }
 
       // set_gtab_input_method_name(inmd[in_no].cname);
       break;
+  }
+
+  if (hime_init_full_mode)
+  {
+    switch (current_method_type())
+    {
+      case method_type_TSIN:
+        if (tss.tsin_half_full==0) toggle_half_full_char();
+        break;
+      case method_type_MODULE:
+      case method_type_SYMBOL_TABLE:
+      case method_type_EN:
+        break;
+      default:
+        if (current_CS->b_half_full_char==0) toggle_half_full_char();
+        break;
+    }
   }
 
 #if TRAY_ENABLED
@@ -1009,6 +1052,19 @@ gboolean init_in_method(int in_no)
   update_in_win_pos();
   update_win_kbm_inited();
 
+  if (hime_show_win_kbm)
+  {
+    if ((current_CS->im_state == HIME_STATE_ENG_FULL) ||
+        (current_method_type() == method_type_MODULE) ||
+        (current_method_type() == method_type_SYMBOL_TABLE))
+      hide_win_kbm();
+    else
+    {
+      show_win_kbm();
+      update_win_kbm();
+    }
+  }
+
   return TRUE;
 }
 
@@ -1022,10 +1078,13 @@ static void cycle_next_in_method()
     hide_win_sym();
     win_sym_enabled=0;
   }
-  
+
   int i;
   for(i=0; i < inmdN; i++) {
     int v = (current_CS->in_method + 1 + i) % inmdN;
+    if (win_sym_enabled && inmd[v].method_type == method_type_SYMBOL_TABLE)
+      continue;
+
     if (!inmd[v].in_cycle)
       continue;
 
@@ -1059,7 +1118,7 @@ gboolean full_char_proc(KeySym keysym)
     return 1;
   }
 
-  if ((current_method_type() == method_type_TSIN) && 
+  if ((current_method_type() == method_type_TSIN) &&
       (current_CS->im_state == HIME_STATE_CHINESE))
     add_to_tsin_buf_str(tt);
   else
@@ -1104,7 +1163,7 @@ gboolean get_caps_lock_state()
 
 void disp_win_kbm_capslock()
 {
-  if (!b_show_win_kbm)
+  if (!hime_show_win_kbm)
     return;
 
   gboolean o_state = old_capslock_on;
@@ -1123,7 +1182,7 @@ void disp_win_kbm_capslock_init()
   old_capslock_on = gdk_keymap_get_caps_lock_state(gdk_keymap_get_default());
 //  dbg("disp_win_kbm_capslock_init %d\n",old_capslock_on);
 
-  if (b_show_win_kbm)
+  if (hime_show_win_kbm)
     win_kbm_disp_caplock();
 }
 
@@ -1144,6 +1203,8 @@ void toggle_symbol_table()
       show_in_win(current_CS);
     force_show = FALSE;
   }
+
+  hide_win_kbm();
 }
 
 void destroy_phrase_save_menu();

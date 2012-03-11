@@ -31,6 +31,7 @@ static GtkWidget *check_button_hime_setup_window_type_utility,
                  *check_button_root_style_use,
                  *check_button_hime_pop_up_win,
                  *check_button_hime_inner_frame,
+		 *check_button_hime_show_win_kbm,
 #if TRAY_ENABLED
                  *check_button_hime_status_tray,
                  *check_button_hime_tray_hf_win_kbm,
@@ -339,6 +340,7 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
   save_hime_conf_str(TSIN_CURSOR_COLOR, tsin_cursor_color);
 
   save_hime_conf_int(HIME_ON_THE_SPOT_KEY, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_on_the_spot_key)));
+  save_hime_conf_int(KBM_TOGGLE, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_show_win_kbm)));
 #if TRAY_ENABLED
   save_hime_conf_int(HIME_TRAY_HF_WIN_KBM, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_tray_hf_win_kbm)));
 #endif
@@ -696,11 +698,14 @@ void create_appearance_conf_window()
 
 #if TRAY_ENABLED
   gtk_box_pack_start (GTK_BOX(vbox_top), create_hime_tray_display(), FALSE, FALSE, 0);
-  check_button_hime_tray_hf_win_kbm = gtk_check_button_new_with_label (_("在全/半形圖示上按滑鼠左鍵可顯示/關閉螢幕小鍵盤"));
+  check_button_hime_tray_hf_win_kbm = gtk_check_button_new_with_label (_("在全/半形圖示上按左鍵可顯示/關閉螢幕小鍵盤"));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_tray_hf_win_kbm),
        hime_tray_hf_win_kbm);
   gtk_box_pack_start (GTK_BOX(vbox_top), check_button_hime_tray_hf_win_kbm, FALSE, FALSE, 0);
 #endif
+  check_button_hime_show_win_kbm = gtk_check_button_new_with_label (_("啟動時顯示螢幕小鍵盤"));
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_show_win_kbm), hime_show_win_kbm);
+  gtk_box_pack_start (GTK_BOX(vbox_top), check_button_hime_show_win_kbm, FALSE, FALSE, 0);
 
   check_button_hime_setup_window_type_utility = gtk_check_button_new_with_label (_("把設定視窗設為 UTILITY"));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_setup_window_type_utility),
@@ -828,6 +833,12 @@ static void cb_gb_output_toggle()
   exit(0);
 }
 
+static void cb_win_kbm_toggle()
+{
+  send_hime_message(GDK_DISPLAY(), KBM_TOGGLE);
+  exit(0);
+}
+
 static void cb_gb_translate_toggle()
 {
   system(HIME_BIN_DIR"/hime-sim2trad &");
@@ -918,7 +929,7 @@ static void create_main_win()
     GtkWidget *button_chewing_input_method = gtk_button_new_with_label(tt);
     gtk_box_pack_start (GTK_BOX (vbox), button_chewing_input_method, FALSE, FALSE, 0);
     g_signal_connect (G_OBJECT (button_chewing_input_method), "clicked",
-                    G_CALLBACK (f->module_setup_window_create), (void *)hime_setup_window_type_utility);
+                    G_CALLBACK (f->module_setup_window_create), GINT_TO_POINTER(hime_setup_window_type_utility));
   }
 
 
@@ -936,10 +947,16 @@ static void create_main_win()
   if (!hime_status_tray)
   {
 #endif
-    GtkWidget *button_gb_output_toggle = gtk_button_new_with_label(_("簡體字輸出切換"));
+    GtkWidget *button_gb_output_toggle = gtk_button_new_with_label(_("啟用/關閉簡體字輸出"));
     gtk_box_pack_start (GTK_BOX (vbox), button_gb_output_toggle, FALSE, FALSE, 0);
     g_signal_connect (G_OBJECT (button_gb_output_toggle), "clicked",
                       G_CALLBACK (cb_gb_output_toggle), NULL);
+
+    void kbm_open_close(GtkButton *checkmenuitem, gboolean b_show);
+    GtkWidget *button_win_kbm_toggle = gtk_button_new_with_label(_("顯示/隱藏輸入法鍵盤"));
+    gtk_box_pack_start (GTK_BOX (vbox), button_win_kbm_toggle, FALSE, FALSE, 0);
+    g_signal_connect (G_OBJECT (button_win_kbm_toggle), "clicked",
+                      G_CALLBACK (cb_win_kbm_toggle), NULL);
 #if TRAY_ENABLED
   }
 #endif

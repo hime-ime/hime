@@ -474,9 +474,9 @@ static void putstr_inp(char *p)
   clear_after_put();
 
   if ((cur_inmd->flag & FLAG_GTAB_SYM_KBM)) {
-    extern int win_kbm_inited, b_show_win_kbm;
+    extern int win_kbm_inited, hime_show_win_kbm;
     init_in_method(default_input_method);
-    if (win_kbm_inited && !b_show_win_kbm)
+    if (win_kbm_inited && !hime_show_win_kbm)
       hide_win_kbm();
   }
 }
@@ -1046,17 +1046,16 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
   int ucase;
   ucase = toupper(key);
   if (key < 127 && cur_inmd->keymap[key]) {
-     if (key < 'A' || key > 'z' || (key > 'Z'  && key < 'a') )
-       goto shift_proc;
-     if (cur_inmd->keymap[lcase] != cur_inmd->keymap[ucase])
-       goto next;
-
+    if (key < 'A' || key > 'z' || (key > 'Z'  && key < 'a') )
+      goto shift_proc;
+    if (cur_inmd->keymap[lcase] != cur_inmd->keymap[ucase])
+      goto next;
   }
 
 
 shift_proc:
   if (shift_m && !strchr(cur_inmd->selkey, key) && !ggg.more_pg && key>=' ' && key < 0x7e &&
-       key!='*' && (key!='?' || (gtab_shift_phrase_key && !ggg.ci))) {
+      key!='*' && (key!='?' || (gtab_shift_phrase_key && !ggg.ci))) {
     if (gtab_shift_phrase_key) {
       if (tss.pre_selN && shift_char_proc(key, kbstate))
         return TRUE;

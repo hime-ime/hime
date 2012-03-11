@@ -704,8 +704,11 @@ char *get_full_str();
 
 void win_tsin_disp_half_full()
 {
+  if (label_pho==NULL)
+    show_win0();
+
   if (hime_win_color_use)
-   gtk_label_set_markup(GTK_LABEL(label_pho), get_full_str());
+    gtk_label_set_markup(GTK_LABEL(label_pho), get_full_str());
   else
     gtk_label_set_text(GTK_LABEL(label_pho), get_full_str());
   compact_win0();

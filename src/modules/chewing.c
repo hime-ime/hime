@@ -208,7 +208,7 @@ is_empty (void)
 {
     if (!g_pChewingCtx)
         return FALSE;
-    return chewing_zuin_Check (g_pChewingCtx) ? FALSE : TRUE;
+    return !chewing_buffer_Len (g_pChewingCtx) && chewing_zuin_Check (g_pChewingCtx);
 }
 
 static gboolean 
@@ -217,6 +217,8 @@ hime_key_filter (int *pnKeyVal)
     if ((*pnKeyVal) > HIME_CHEWING_DEFAULT_KEY_MIN && 
         (*pnKeyVal) < HIME_CHEWING_DEFAULT_KEY_MAX)
         chewing_handle_Default (g_pChewingCtx, (*pnKeyVal));
+    else if ((*pnKeyVal) >= XK_KP_0 && (*pnKeyVal) <= XK_KP_9)
+        chewing_handle_Numlock (g_pChewingCtx, (*pnKeyVal) - XK_KP_0 + '0');
     else if ((*pnKeyVal) < HIME_CHEWING_KEY_MAX && 
              (*pnKeyVal) >= HIME_CHEWING_KEY_MIN)
         if ((int)(g_pKeyHandler[(*pnKeyVal)] (g_pChewingCtx)) == -1)
@@ -351,6 +353,9 @@ hime_buffer_commit (void)
         free (pszTmp);
     }
 
+    if (*g_himeModMainFuncs.mf_hime_pop_up_win && is_empty())
+        module_hide_win();
+
     return TRUE;
 }
 
@@ -363,6 +368,9 @@ hime_chewing_handler_default (ChewingContext *pCtx)
 static int 
 hime_chewing_wrapper_bs (ChewingContext *pCtx)
 {
+//  If zuin is present, let libchewing handles Backspace for removing last zuin
+    if (!chewing_zuin_Check (g_pChewingCtx))
+        return chewing_handle_Backspace (g_pChewingCtx);
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Backspace);
 }
 
@@ -571,10 +579,12 @@ module_get_preedit (char *pszStr, HIME_PREEDIT_ATTR himePreeditAttr[],
                     int *pnCursor, int *pCompFlag)
 {
     char *pszTmpStr = NULL;
+    char *pszZuinStr = NULL;
     int nIdx;
     int nLength;
     int nTotalLen = 0;
     int nAttr = 0;
+    int nZuinLen = 0;
 
     pszStr[0] = 0;
     *pnCursor = 0;
@@ -606,6 +616,13 @@ module_get_preedit (char *pszStr, HIME_PREEDIT_ATTR himePreeditAttr[],
         strcat (pszStr, pszTmpStr);
     }
 
+    if (g_himeModMainFuncs.mf_hime_display_on_the_spot_key()) {
+        pszZuinStr = chewing_zuin_String (g_pChewingCtx, &nZuinLen);
+	    strcat (pszStr, pszZuinStr);
+        free (pszZuinStr);
+        nTotalLen += nZuinLen;
+    }
+
     himePreeditAttr[0].ofs1 = nTotalLen;
 
     pCompFlag = 0;
@@ -624,16 +641,18 @@ module_feedkey (int nKeyVal, int nKeyState)
 
     hime_label_clear (MAX_SEG_NUM);
 
+    chewing_set_ShapeMode (g_pChewingCtx, g_himeModMainFuncs.mf_current_shape_mode());
+
     if (!hime_key_filter (&nKeyVal))
         return FALSE;
 
-    if (!hime_zuin_label_show ())
+    if (!hime_buffer_commit ())
         return FALSE;
 
     if (!hime_buffer_label_show ())
         return FALSE;
 
-    if (!hime_buffer_commit ())
+    if (!hime_zuin_label_show ())
         return FALSE;
 
     module_show_win ();
@@ -708,7 +727,7 @@ module_show_win (void)
     if (g_himeModMainFuncs.mf_hime_edit_display_ap_only ())
         return;
 
-    if (is_empty ())
+    if (*g_himeModMainFuncs.mf_hime_pop_up_win && is_empty ())
         return;
 
     gtk_window_resize (GTK_WINDOW (g_pWinChewing),
@@ -768,6 +787,9 @@ module_flush_input (void)
     chewing_handle_Esc (g_pChewingCtx);
 
     hime_label_clear (MAX_SEG_NUM);
+
+    if (*g_himeModMainFuncs.mf_hime_pop_up_win && is_empty())
+        module_hide_win();
 
     return 0;
 }

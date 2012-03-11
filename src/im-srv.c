@@ -99,9 +99,13 @@ static gboolean cb_new_hime_client(GIOChannel *source, GIOCondition condition, g
 
 //  dbg("newsockfd %d\n", newsockfd);
 
-  if (newsockfd >= hime_clientsN) {
-    hime_clients = trealloc(hime_clients, HIME_ENT, newsockfd+1);
-    hime_clientsN = newsockfd;
+  if (newsockfd >= hime_clientsN - 1) {
+    int prev_hime_clientsN = hime_clientsN, c;
+    hime_clientsN = newsockfd + 1;
+    hime_clients = trealloc(hime_clients, HIME_ENT, hime_clientsN);
+    // Initialize clientstate in useless hime_clients for recognition
+    for(c=prev_hime_clientsN;c<hime_clientsN;c++)
+      hime_clients[c].cs = NULL;
   }
 
   bzero(&hime_clients[newsockfd], sizeof(hime_clients[0]));

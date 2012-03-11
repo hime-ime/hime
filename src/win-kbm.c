@@ -61,6 +61,7 @@ void update_win_kbm();
 #if !GTK_CHECK_VERSION(2,91,6)
 void mod_fg_all(GtkWidget *lab, GdkColor *col)
 {
+  if (lab==NULL) return;
   gtk_widget_modify_fg(lab, GTK_STATE_NORMAL, col);
   gtk_widget_modify_fg(lab, GTK_STATE_ACTIVE, col);
   gtk_widget_modify_fg(lab, GTK_STATE_SELECTED, col);
