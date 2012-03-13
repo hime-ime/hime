@@ -546,7 +546,7 @@ static gboolean cb_hime_win_color_use(GtkToggleButton *togglebutton, gpointer us
 void create_appearance_conf_window()
 {
   if (hime_appearance_conf_window) {
-    system(HIME_BIN_DIR"/hime-appearance &");
+    gtk_window_present(GTK_WINDOW(hime_appearance_conf_window));
     return;
   }
 
