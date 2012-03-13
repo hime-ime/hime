@@ -71,7 +71,7 @@ OBJS_gtab2cin     = gtab2cin.o gtab-util.o util.o locale.o
 OBJS_gtab_merge   = hime-gtab-merge.o gtab-util.o util.o locale.o
 OBJS_hime_setup   = hime-setup.o hime-conf.o util.o hime-settings.o \
 	hime-setup-list.o locale.o hime-setup-pho.o about.o \
-	lang.o hime-icon.o hime-setup-gtab.o gtab-list.o hime-exec-script.o \
+	lang.o hime-icon.o hime-setup-gtab.o hime-setup-appearance.o gtab-list.o hime-exec-script.o \
 	pho-kbm-name.o hime-module-cb.o
 
 OBJS_hime_gb_toggle  = hime-gb-toggle.o  hime-conf.o util.o
