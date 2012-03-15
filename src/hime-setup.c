@@ -259,6 +259,10 @@ HIME_module_callback_functions *init_HIME_module_callback_functions(char *sofile
 
 static void create_main_win()
 {
+  if (main_window) {
+    gtk_window_present(GTK_WINDOW(main_window));
+    return;
+  }
   main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   if (hime_setup_window_type_utility)
     gtk_window_set_type_hint(GTK_WINDOW(main_window), GDK_WINDOW_TYPE_HINT_UTILITY);
