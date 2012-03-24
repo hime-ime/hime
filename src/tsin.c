@@ -1710,10 +1710,14 @@ tab_phrase_end:
        N = phrase_count + pho_count - tss.current_page;
        if (N > phkbm.selkeyN)
          N = phkbm.selkeyN;
-       tss.pho_menu_idx--;
-       if (tss.pho_menu_idx < 0)
-         tss.pho_menu_idx = N-1;
-       disp_current_sel_page();
+       if (tss.pho_menu_idx == 0)
+         tsin_page_up();
+       else {
+         tss.pho_menu_idx--;
+         if (tss.pho_menu_idx < 0)
+           tss.pho_menu_idx = N-1;
+         disp_current_sel_page();
+       }
        return 1;
      case XK_Prior:
      case XK_KP_Prior:
@@ -1767,12 +1771,12 @@ change_char:
        if (!tss.sel_pho) {
          open_select_pho();
        } else {
-         if (xkey == XK_space)
+         int N = phrase_count + pho_count - tss.current_page;
+         if (N > phkbm.selkeyN)
+           N = phkbm.selkeyN;
+         if (tss.pho_menu_idx == N-1 || xkey == XK_space)
            tsin_page_down();
          else {
-           int N = phrase_count + pho_count - tss.current_page;
-           if (N > phkbm.selkeyN)
-             N = phkbm.selkeyN;
            tss.pho_menu_idx = (tss.pho_menu_idx+1) % N;
            disp_current_sel_page();
          }

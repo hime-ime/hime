@@ -314,9 +314,9 @@ static void create_main_win()
     char tt[128];
     strcpy(tt, pinmd->cname);
     strcat(tt, _("設定"));
-    GtkWidget *button_chewing_input_method = gtk_button_new_with_label(tt);
-    gtk_box_pack_start (GTK_BOX (vbox), button_chewing_input_method, FALSE, FALSE, 0);
-    g_signal_connect (G_OBJECT (button_chewing_input_method), "clicked",
+    GtkWidget *button_module_input_method = gtk_button_new_with_label(tt);
+    gtk_box_pack_start (GTK_BOX (vbox), button_module_input_method, FALSE, FALSE, 0);
+    g_signal_connect (G_OBJECT (button_module_input_method), "clicked",
                     G_CALLBACK (f->module_setup_window_create), GINT_TO_POINTER(hime_setup_window_type_utility));
   }
 

@@ -1089,7 +1089,7 @@ gboolean gtab_pre_select_idx(int c)
   gbuf[ggg.gbufN-1].flag |= FLAG_CHPHO_PHRASE_TAIL;
 
   hide_gtab_pre_sel();
-  if (hime_edit_display_ap_only())
+  if (hime_pop_up_win)
     hide_win_gtab();
 
   return TRUE;
