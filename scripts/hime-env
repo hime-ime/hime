@@ -14,6 +14,7 @@ uname -a | sed -e "s/$USER//" -e "s/$(hostname)//" | tr -s ' ' ' '
 
 echo
 ls /etc/*[-_]version | while read ver; do echo $ver: `cat $ver`; done
+ls /etc/*[-_]release | while read ver; do echo $ver: `cat $ver`; done
 
 echo
 echo -n "/etc/issue: "
