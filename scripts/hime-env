@@ -10,6 +10,13 @@ else
   echo
   exit
 fi
+if [ -x "$HIME_BINARY" ]; then
+  echo
+  echo -n "==>$HIME_BINARY:"`$HIME_BINARY -v 2>&1 | grep version | sed -e 's/$/, linked to /'`
+  ldd "$HIME_BINARY" | grep -i gtk | cut -d '>' -f 2 | cut -d '(' -f 1 | tr -s '\t' ' '
+  ls /usr/share/doc/hime*/changelog.Debian.gz 2> /dev/null | while read ver; do echo "==>$ver: `zcat $ver | head -n 1`"; done
+  ls /usr/share/doc/hime*/ChangeLog 2> /dev/null | while read ver; do echo "==>$ver: `cat $ver | head -n 1`"; done
+fi
 echo
 echo
 echo "====Detecting OS/Distribution===="
@@ -17,37 +24,33 @@ echo "====Detecting OS/Distribution===="
 uname -a | sed -e "s/$USER//" -e "s/$(hostname)//" | tr -s ' ' ' '
 
 echo
-ls /etc/*[-_]version | while read ver; do echo $ver: `cat $ver`; done 
-ls /etc/*[-_]release | while read ver; do echo $ver: `cat $ver`; done
+ls /etc/*[-_]version 2> /dev/null | while read ver; do echo $ver: `cat $ver`; done
+ls /etc/*[-_]release 2> /dev/null | while read ver; do echo $ver: `cat $ver`; done
+
 
 echo
 echo -n "/etc/issue: "
 grep -v '^$' /etc/issue | head -n 1 | sed 's/$/\\/' | cut -d '\' -f 1
 
-if [ -x "$HIME_BINARY" ]; then
-  echo
-  echo -n "$HIME_BINARY:"`$HIME_BINARY -v 2>&1 | grep version | sed -e 's/$/, linked to /'`
-  ldd "$HIME_BINARY" | grep -i gtk | cut -d '>' -f 2 | cut -d '(' -f 1 | tr -s '\t' ' '
-  ls /usr/share/doc/hime*/changelog.Debian.gz | while read ver; do echo $ver: `zcat $ver | head -n 1`; done
-fi
+
 echo
 echo
 echo "====Detecting Environment Variables===="
 if [ -n "$XMODIFIERS" -o -n "$LC_ALL" -o -n "$LC_CTYPE" -o -n "$LANG" -o -n "$LANGUAGE" -o -n "$GTK_IM_MODULE" -o -n "$QT_IM_MODULE" -o -n "$QT4_IM_MODULE" ]; then
 echo
-  [ -n "$XMODIFIERS" ]    && echo "XMODIFIERS   : XMODIFIERS=$XMODIFIERS"
-  [ -n "$LANG" ]          && echo "LANG         : LANG=$LANG"
-  [ -n "$LANGUAGE" ]      && echo "LANGUAGE     : LANGUAGE=$LANGUAGE"
-  [ -n "$LC_CTYPE" ]      && echo "LC_CTYPE     : LC_CTYPE=$LC_CTYPE"
-  [ -n "$LC_ALL" ]        && echo "LC_ALL       : LC_ALL=$LC_ALL"
-  locale 2> /dev/null | grep -v '"' | sed 's/=/\t     : /' | grep -v ': $'
+  [ -n "$XMODIFIERS" ] && echo "XMODIFIERS : XMODIFIERS=$XMODIFIERS"
+  [ -n "$LANG" ] && echo "LANG : LANG=$LANG"
+  [ -n "$LANGUAGE" ] && echo "LANGUAGE : LANGUAGE=$LANGUAGE"
+  [ -n "$LC_CTYPE" ] && echo "LC_CTYPE : LC_CTYPE=$LC_CTYPE"
+  [ -n "$LC_ALL" ] && echo "LC_ALL : LC_ALL=$LC_ALL"
+  locale 2> /dev/null | grep -v '"' | sed 's/=/\t : /' | grep -v ': $'
   [ -n "$GTK_IM_MODULE" ] && echo "GTK_IM_MODULE: GTK_IM_MODULE=$GTK_IM_MODULE"
-  [ -n "$QT_IM_MODULE" ]  && echo "QT_IM_MODULE : QT_IM_MODULE=$QT_IM_MODULE"
+  [ -n "$QT_IM_MODULE" ] && echo "QT_IM_MODULE : QT_IM_MODULE=$QT_IM_MODULE"
   [ -n "$QT4_IM_MODULE" ] && echo "QT4_IM_MODULE: QT4_IM_MODULE=$QT4_IM_MODULE"
 fi
 
 echo
-echo 
+echo
 echo "====Detecting hime status===="
 echo "==>Running hime number: "`pgrep ^hime$ | wc -l`
 
@@ -58,13 +61,13 @@ echo "==>hime socket number: "`ls /tmp/.hime-$USER/socket-:* | wc -l`
 echo
 echo -n "==>System library path: "
 ls -d /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64 2> /dev/null
-echo "==>immodule status"
+echo "====Immodule status===="
 # TODO: detect more binary name of gtk-query-immodules-2.0
 GTK_QUERY_2=`whereis gtk-query-immodules-2.0 | cut -d ' ' -f 2`
 if [ -x "$GTK_QUERY_2" ]; then
   echo
   echo "==>gtk-query-immodules-2.0:"
-  ls -d `$GTK_QUERY_2 | grep hime | cut -d '"' -f 2 | grep '/'` 
+  ls -d `$GTK_QUERY_2 | grep hime | cut -d '"' -f 2 | grep '/'`
 fi
   echo
   echo "==>gtk-2.0 immodule cache"
@@ -92,9 +95,9 @@ fi
 #
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 # Lesser General Public License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
