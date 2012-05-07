@@ -21,7 +21,7 @@ echo
 echo
 echo "====Detecting OS/Distribution===="
 # OS / distribution
-uname -a | sed -e "s/$USER//" -e "s/$(hostname)//" | tr -s ' ' ' '
+uname -a | sed -e "s/$(hostname)//" -e "s/$USER//" | tr -s ' ' ' '
 
 echo
 ls /etc/*[-_]version 2> /dev/null | while read ver; do echo $ver: `cat $ver`; done
