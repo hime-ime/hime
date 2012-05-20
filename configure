@@ -309,7 +309,7 @@ if [ "$use_unity" = "Y" ]; then
   echo -n ".... Testing appindicator       :  "
   USE_UNITY=`pkg-config --libs $APPINDICATOR 2> /dev/null`
   if [ $? != 0 ]; then
-    echo Not found, unity tray is turned off.
+    echo "Not found, unity tray is turned off."
     USE_UNITY=N
   else
     if [ "$use_unity" = "N" ]; then
@@ -429,7 +429,7 @@ if [ "$GTK"=gtk+-3.0 ]; then
           echo "Found."
       fi
   else
-      echo "Not found, you don't have. It's ok if you don't want GTK+ 2.x immodule."
+      echo "Not found. It's ok if you don't want GTK+ 2.x immodule."
   fi
 fi
 
@@ -448,7 +448,7 @@ if [ "$GTK3_IM" = "Y" ]; then
         echo "Found."
     fi
 else
-    echo "Not found, you don't have. It's ok if you don't want GTK+ 3.x immodule."
+    echo "Not found. It's ok if you don't want GTK+ 3.x immodule."
 fi
 
 [ -f "data/dayi3.cin" ] && INSTALL_DFSG_INCOMPATIBLE=Y
