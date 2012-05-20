@@ -404,8 +404,8 @@ fi
 
 # --- MOC INFO START ---
 
-if [ "$QT_IM" = "Y" ]; then echo -e ".... Path of Qt3 moc            : ${QT3_MOC_PATH}"; fi
-if [ "$QT4_IM" = "Y" ]; then echo -e ".... Path of Qt4 moc            : ${QT4_MOC_PATH}"; fi
+if [ "$QT_IM" = "Y" ]; then echo -e ".... Path of Qt3 moc            :  ${QT3_MOC_PATH}"; fi
+if [ "$QT4_IM" = "Y" ]; then echo -e ".... Path of Qt4 moc            :  ${QT4_MOC_PATH}"; fi
 
 # --- MOC INFO END ---
 
