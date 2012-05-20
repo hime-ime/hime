@@ -259,7 +259,7 @@ fi
 if [ "$GTK" = gtk+-2.0 ]; then
   pkg-config --exists 'gtk+-2.0 >= 2.10' 2> /dev/null
   if [ $? != 0 ]; then
-    echo ".... Testing system-tray     :  disabled. gtk > 2.10 is needed to enable system-tray."
+    echo ".... Testing system-tray     :  Disabled. gtk > 2.10 is needed to enable system-tray."
     use_tray=N
   fi
 fi
@@ -267,12 +267,12 @@ fi
 echo -n ".... Testing anthy              :  "
 USE_ANTHY=`pkg-config --libs anthy 2> /dev/null`
 if [ $? != 0 ]; then
-  echo Not found, anthy module is turned off.
+  echo "Not found, anthy module is turned off."
   USE_ANTHY=N
 else
   if [ "$use_anthy" = "N" ]; then
     USE_ANTHY='N'
-    echo "disabled."
+    echo "Found, but disabled."
   else
     USE_ANTHY='Y'
     echo "Found."
@@ -287,7 +287,7 @@ if [ $? != 0 ]; then
 else
   if [ $use_chewing = "N" ]; then
     USE_CHEWING='N'
-    echo "Disabled."
+    echo "Found, but disabled."
   else
     pkg-config --exists 'chewing >= 0.3.2' 2> /dev/null
     if [ $? != 0 ]; then
@@ -314,7 +314,7 @@ if [ "$use_unity" = "Y" ]; then
   else
     if [ "$use_unity" = "N" ]; then
       USE_UNITY='N'
-      echo "Disabled."
+      echo "Found, but disabled."
     else
       pkg-config --exists "$APPINDICATOR >= 0.4.0" 2> /dev/null
       if [ $? != 0 ]; then
