@@ -227,7 +227,7 @@ fi
 
 ## problem in MacOS, by candyz
 if [ $MAC_OS = 1 ]; then
-  GTKINC="-I/sw/include `pkg-config --cflags $GTK`"
+  GTKINC="-I/sw/include `pkg-config --cflags $GTK` 2> /dev/null"
 fi
 
 # TODO: Do we really need these craps?
@@ -324,8 +324,8 @@ if [ "$use_unity" = "Y" ]; then
         USE_UNITY='Y'
         echo "Found."
         UNITY_INC="-I/usr/include/libappindicator-0.1"
-        GTKINC=`pkg-config --cflags $GTK $APPINDICATOR`
-        GTKLDFLAGS=`pkg-config --libs $GTK $APPINDICATOR`
+        GTKINC=`pkg-config --cflags $GTK $APPINDICATOR 2> /dev/null`
+        GTKLDFLAGS=`pkg-config --libs $GTK $APPINDICATOR 2> /dev/null`
       fi
     fi
   fi
