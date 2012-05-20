@@ -189,28 +189,28 @@ done
 
 echo "prefix: $prefix"
 
-echo -n ".... Testing Xtst        :  "
+echo -n ".... Testing Xtst               :  "
 XTST=`pkg-config --exists xtst 2> /dev/null`
 if [ $? != 0 ]; then
   echo "please install rpm/package xtest-devel. abort!"
   exit 1
 else
-  echo "found."
+  echo "Found."
 fi
 
 if [ -z "$GTK" ]; then
   GTK=gtk+-2.0
 fi
 
-echo -n ".... Testing $GTK    :  "
+echo -n ".... Testing $GTK           :  "
 
 GTKINC=`pkg-config --cflags $GTK 2> /dev/null`
 
 if [ $? != 0 ]; then
   if [ "$GTK" = gtk+-2.0 ]; then
-    echo "not found, trying gtk+-3.0..."
+    echo "Not found, trying gtk+-3.0..."
     GTK=gtk+-3.0
-    echo -n ".... Testing $GTK    :  "
+    echo -n ".... Testing $GTK           :  "
   
     GTKINC=`pkg-config --cflags $GTK 2> /dev/null`
     if [ $? != 0 ]; then
@@ -253,21 +253,21 @@ if [ $? != 0 ]; then
   rm -f config.mak
   exit 1
 else
-  echo "found."
+  echo "Found."
 fi
 
 if [ "$GTK" = gtk+-2.0 ]; then
   pkg-config --exists 'gtk+-2.0 >= 2.10' 2> /dev/null
   if [ $? != 0 ]; then
-    echo ".... Testing system-tray :  disabled. gtk > 2.10 is needed to enable system-tray."
+    echo ".... Testing system-tray     :  disabled. gtk > 2.10 is needed to enable system-tray."
     use_tray=N
   fi
 fi
 
-echo -n ".... Testing anthy       :  "
+echo -n ".... Testing anthy              :  "
 USE_ANTHY=`pkg-config --libs anthy 2> /dev/null`
 if [ $? != 0 ]; then
-  echo not found, anthy module is turned off.
+  echo Not found, anthy module is turned off.
   USE_ANTHY=N
 else
   if [ "$use_anthy" = "N" ]; then
@@ -275,27 +275,27 @@ else
     echo "disabled."
   else
     USE_ANTHY='Y'
-    echo "found."
+    echo "Found."
   fi
 fi
 
-echo -n ".... Testing chewing     :  "
+echo -n ".... Testing chewing            :  "
 USE_CHEWING=`pkg-config --libs chewing 2> /dev/null`
 if [ $? != 0 ]; then
-  echo not found, chewing module is turned off.
+  echo Not found, chewing module is turned off.
   USE_CHEWING=N
 else
   if [ $use_chewing = "N" ]; then
     USE_CHEWING='N'
-    echo "disabled."
+    echo "Disabled."
   else
     pkg-config --exists 'chewing >= 0.3.2' 2> /dev/null
     if [ $? != 0 ]; then
       USE_CHEWING='N'
-      echo "disabled. chewing > 0.3.2 is needed to enable chewing."
+      echo "Disabled. chewing > 0.3.2 is needed to enable chewing."
     else
       USE_CHEWING='Y'
-      echo "found."
+      echo "Found."
     fi
   fi
 fi
@@ -306,23 +306,23 @@ else
   APPINDICATOR=appindicator-0.1
 fi
 if [ "$use_unity" = "Y" ]; then
-  echo -n ".... Testing appindicator:  "
+  echo -n ".... Testing appindicator       :  "
   USE_UNITY=`pkg-config --libs $APPINDICATOR 2> /dev/null`
   if [ $? != 0 ]; then
-    echo not found, unity tray is turned off.
+    echo Not found, unity tray is turned off.
     USE_UNITY=N
   else
     if [ "$use_unity" = "N" ]; then
       USE_UNITY='N'
-      echo "disabled."
+      echo "Disabled."
     else
       pkg-config --exists "$APPINDICATOR >= 0.4.0" 2> /dev/null
       if [ $? != 0 ]; then
-        echo "disabled. appindicator > 0.4.0 is needed to enable appindicator."
+        echo "Disabled. appindicator > 0.4.0 is needed to enable appindicator."
         USE_UNITY='N'
       else
         USE_UNITY='Y'
-        echo "found."
+        echo "Found."
         UNITY_INC="-I/usr/include/libappindicator-0.1"
         GTKINC=`pkg-config --cflags $GTK $APPINDICATOR`
         GTKLDFLAGS=`pkg-config --libs $GTK $APPINDICATOR`
@@ -344,7 +344,7 @@ fi
 # --- QT3 START ---
 QT_IM='N'
 QT_IM_DIR=/qt3/plugins/inputmethods
-echo -n ".... Testing Qt 3.x      :  "
+echo -n ".... Testing Qt 3.x             :  "
 pkg-config --libs qt-mt > /dev/null 2> /dev/null
 if [ $? = 0 ]; then
   QT_IM='Y'
@@ -357,17 +357,17 @@ fi
 if [ "$QT_IM" = "Y" ]; then
     if [ "$use_qt3" = "N" ]; then
         QT_IM='N'
-        echo "found, but disabled."
+        echo "Found, but disabled."
     else
 		  if [ ! -x "$QT3_MOC_PATH" ]; then
-				echo "not found, cannot find \"moc\" tool for Qt 3.x."
+				echo "Not found, cannot find \"moc\" tool for Qt 3.x."
 				echo "Hint: use the --qt3-moc-path option. abort!"
 				exit 1
 		  fi
-        echo "found."
+        echo "Found."
     fi
 else
-    echo "not found, Qt 3.x immodule is turned off."
+    echo "Not found, Qt 3.x immodule is turned off."
 fi
 # --- QT3 END ---
 
@@ -375,7 +375,7 @@ fi
 QT4_IM='N'
 if [ -z "$QT4_IM_DIR" ]; then QT4_IM_DIR=/qt4/plugins/inputmethods; fi
 
-echo -n ".... Testing Qt 4.x      :  "
+echo -n ".... Testing Qt 4.x             :  "
 pkg-config --libs QtCore QtGui > /dev/null 2> /dev/null
 if [ $? = 0 ]; then
   QT4_IM='Y'
@@ -388,17 +388,17 @@ fi
 if [ "$QT4_IM" = "Y" ]; then
     if [ "$use_qt4" = "N" ]; then
         QT4_IM='N'
-        echo "found, but disabled."
+        echo "Found, but disabled."
     else
 		  if [ ! -x "$QT4_MOC_PATH" ]; then
-				echo "not found, cannot find \"moc\" tool for Qt 4.x."
+				echo "Not found, cannot find \"moc\" tool for Qt 4.x."
 				echo "Hint: use the --qt4-moc-path option. abort!"
 				exit 1
 		  fi		  
-        echo "found."
+        echo "Found."
     fi
 else
-    echo "not found, Qt 4.x immodule is turned off."
+    echo "Not found, Qt 4.x immodule is turned off."
 fi
 # --- QT4 END ---
 
@@ -415,7 +415,7 @@ echo
 
 if [ "$GTK"=gtk+-3.0 ]; then
   GTK_IM='N'
-  echo "testing if you have GTK+ 2.x support"
+  echo -n ".... Testing GTK+ 2.x immodule  :  "
   pkg-config --libs gtk+-2.0 > /dev/null 2> /dev/null
   if [ $? = 0 ]; then
     GTK_IM='Y'
@@ -424,17 +424,17 @@ if [ "$GTK"=gtk+-3.0 ]; then
   if [ "$GTK_IM" = "Y" ]; then
       if [ "$use_gtk" = "N" ]; then
           GTK_IM='N'
-          echo "-> Yes, but disabled."
+          echo "Found, but disabled."
       else
-          echo "-> Yes, you have GTK+ 2.x support."
+          echo "Found."
       fi
   else
-      echo "-> No, you don't have. It's ok if you don't want GTK+ 2.x immodule."
+      echo "Not found, you don't have. It's ok if you don't want GTK+ 2.x immodule."
   fi
 fi
 
 GTK3_IM='N'
-echo "testing if you have GTK+ 3.x support"
+echo -n ".... Testing GTK+ 3.x immodule  :  "
 pkg-config --libs gtk+-3.0 > /dev/null 2> /dev/null
 if [ $? = 0 ]; then
   GTK3_IM='Y'
@@ -443,12 +443,12 @@ fi
 if [ "$GTK3_IM" = "Y" ]; then
     if [ "$use_gtk3" = "N" ]; then
         GTK3_IM='N'
-        echo "-> Yes, but disabled."
+        echo "Found, but disabled."
     else
-        echo "-> Yes, you have GTK+ 3.x support."
+        echo "Found."
     fi
 else
-    echo "-> No, you don't have. It's ok if you don't want GTK+ 3.x immodule."
+    echo "Not found, you don't have. It's ok if you don't want GTK+ 3.x immodule."
 fi
 
 [ -f "data/dayi3.cin" ] && INSTALL_DFSG_INCOMPATIBLE=Y
