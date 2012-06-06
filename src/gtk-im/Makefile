@@ -4,6 +4,9 @@ OBJS = imhime.o gtkimcontexthime.o
 GTK2IM=gtk-2.0/immodules
 GTKINC=`pkg-config --cflags gtk+-2.0`
 LDFLAGS=`pkg-config --libs gtk+-2.0`
+GTK_LIBDIR=`pkg-config --variable=libdir gtk+-2.0`
+GTK_BINARY_VERSION=`pkg-config --variable=gtk_binary_version gtk+-2.0`
+MODULEDIR=$(DESTDIR)/$(GTK_LIBDIR)/gtk-2.0/$(GTK_BINARY_VERSION)/immodules
 IMMODULES=$(libdir)/$(GTK2IM)
 IMMODULES_LOCAL=/usr/$(LIB)/$(GTK2IM)
 
@@ -36,10 +39,12 @@ clean:
 	@rm -f *.o *.so *~ core.* .depend *.E
 
 install:
-	if [ $(prefix) = /usr/local ]; then \
-		install -d $(IMMODULES_LOCAL); \
-		install -m 755 im-hime.so $(IMMODULES_LOCAL); \
-		cd /etc/gtk-2.0; gtk-query-immodules-2.0 > gtk.immodules; \
+	if [ "$(prefix)" = "/usr/local" -o "$(prefix)" = "/usr" ]; then \
+		install -d $(MODULEDIR); \
+		install -m 755 im-hime.so $(MODULEDIR); \
+		if [ "$(prefix)" = "/usr/local" ]; then \
+			cd /etc/gtk-2.0; gtk-query-immodules-2.0 > gtk.immodules; \
+		fi \
 	else \
 		install -d $(IMMODULES); \
 		install -m 755 im-hime.so $(IMMODULES); \
