@@ -41,6 +41,7 @@ else
     cp -r $GIT_DIR_NAME $TAR_NAME
     tar --owner=0 --group=0 -Jcf "$TAR_NAME".tar.xz $TAR_NAME --exclude=.git
     cp ${TAR_NAME}.tar.xz ${SRCDIR}/${TAR_NAME}.tar.xz
+    cd ${GIT_DIR_NAME}
 fi
 
 cd ${DISTROROOT}
