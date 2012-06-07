@@ -6,6 +6,7 @@ GTKINC=`pkg-config --cflags gtk+-3.0`
 LDFLAGS=`pkg-config --libs gtk+-3.0`
 IMMODULES=$(libdir)/$(GTK3IM)
 IMMODULES_LOCAL=/usr/$(LIB)/$(GTK3IM)
+IMMODULES_QUERY=`whereis gtk-query-immodules-3.0 | cut -d ' ' -f 2`
 
 
 ifeq ($(MAC_OS),1)
@@ -39,7 +40,7 @@ install:
 	if [ $(prefix) = /usr/local ]; then \
 		install -d $(IMMODULES_LOCAL); \
 		install -m 755 im-hime.so $(IMMODULES_LOCAL); \
-		gtk-query-immodules-3.0 --update-cache; \
+		$(IMMODULES_QUERY) --update-cache; \
 	else \
 		install -d $(IMMODULES); \
 		install -m 755 im-hime.so $(IMMODULES); \

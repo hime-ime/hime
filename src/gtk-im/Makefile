@@ -6,7 +6,7 @@ GTKINC=`pkg-config --cflags gtk+-2.0`
 LDFLAGS=`pkg-config --libs gtk+-2.0`
 IMMODULES=$(libdir)/$(GTK2IM)
 IMMODULES_LOCAL=/usr/$(LIB)/$(GTK2IM)
-
+IMMODULES_QUERY=`whereis gtk-query-immodules-2.0 | cut -d ' ' -f 2`
 
 ifeq ($(MAC_OS),1)
 EXTRA_INC=-I/sw/include
@@ -39,7 +39,7 @@ install:
 	if [ $(prefix) = /usr/local ]; then \
 		install -d $(IMMODULES_LOCAL); \
 		install -m 755 im-hime.so $(IMMODULES_LOCAL); \
-		cd /etc/gtk-2.0; gtk-query-immodules-2.0 > gtk.immodules; \
+		cd /etc/gtk-2.0; $(IMMODULES_QUERY) > gtk.immodules; \
 	else \
 		install -d $(IMMODULES); \
 		install -m 755 im-hime.so $(IMMODULES); \
