@@ -4,6 +4,9 @@ OBJS = imhime.o gtkimcontexthime.o
 GTK3IM=gtk-3.0/immodules
 GTKINC=`pkg-config --cflags gtk+-3.0`
 LDFLAGS=`pkg-config --libs gtk+-3.0`
+GTK3_LIBDIR=`pkg-config --variable=libdir gtk+-3.0`
+GTK3_BINARY_VERSION=`pkg-config --variable=gtk_binary_version gtk+-3.0`
+MODULEDIR=$(DESTDIR)/$(GTK3_LIBDIR)/gtk-3.0/$(GTK3_BINARY_VERSION)/immodules
 IMMODULES=$(libdir)/$(GTK3IM)
 IMMODULES_LOCAL=/usr/$(LIB)/$(GTK3IM)
 
@@ -36,10 +39,12 @@ clean:
 	@rm -f *.o *.so *~ core.* .depend *.E
 
 install:
-	if [ $(prefix) = /usr/local ]; then \
-		install -d $(IMMODULES_LOCAL); \
-		install -m 755 im-hime.so $(IMMODULES_LOCAL); \
-		gtk-query-immodules-3.0 --update-cache; \
+	if [ "$(prefix)" = "/usr/local" -o "$(prefix)" = "/usr" ]; then \
+		install -d $(MODULEDIR); \
+		install -m 755 im-hime.so $(MODULEDIR); \
+		if [ "$(prefix)" = "/usr/local" ]; then \
+			gtk-query-immodules-3.0 --update-cache; \
+		fi \
 	else \
 		install -d $(IMMODULES); \
 		install -m 755 im-hime.so $(IMMODULES); \
