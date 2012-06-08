@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 {
   int i;
 
-  load_setttings();
+  load_settings();
 
   if (argc > 1) {
     p_err("Currently only support ~/.config/hime/pho.tab2");

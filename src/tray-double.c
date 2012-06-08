@@ -115,7 +115,7 @@ static MITEM mitems_main[] = {
   {NULL}
 };
 
-void load_setttings(), load_tab_pho_file();;
+void load_settings(), load_tab_pho_file();;
 void update_win_kbm();
 void update_win_kbm_inited();
 extern gboolean win_kbm_inited, stat_enabled;
@@ -127,7 +127,7 @@ static void cb_fast_phonetic_kbd_switch(GtkCheckMenuItem *checkmenuitem, gpointe
 
   save_hime_conf_str(PHONETIC_KEYBOARD, bak);
   save_hime_conf_str(PHONETIC_KEYBOARD_BAK, cur);
-  load_setttings();
+  load_settings();
   load_tab_pho_file();
   update_win_kbm_inited();
 }
