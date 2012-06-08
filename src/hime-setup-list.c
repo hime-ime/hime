@@ -582,7 +582,7 @@ void create_gtablist_window (void)
     return;
   }
 
-  load_setttings();
+  load_settings();
 
   /* create gtab_list_window, etc */
   gtablist_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
