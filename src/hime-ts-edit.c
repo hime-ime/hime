@@ -586,7 +586,7 @@ int main(int argc, char **argv)
   b_pinyin = is_pinyin_kbm();
 
   gtk_init (&argc, &argv);
-  load_setttings();
+  load_settings();
   load_gtab_list(TRUE);
 
   char hime_dir[512];

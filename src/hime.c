@@ -263,7 +263,7 @@ void open_xim()
 #endif // if USE_XIM
 
 void load_tsin_db();
-void load_tsin_conf(), load_setttings(), load_tab_pho_file();
+void load_tsin_conf(), load_settings(), load_tab_pho_file();
 
 void disp_hide_tsin_status_row(), update_win_kbm_inited();
 void change_tsin_line_color(), change_win0_style(), change_tsin_color();
@@ -323,7 +323,7 @@ static void reload_data()
     strcpy(temp_inmd_filenames[c], inmd[cs->in_method].filename);
   }
 
-  load_setttings();
+  load_settings();
   if (current_method_type()==method_type_TSIN)
     set_wselkey(pho_selkey);
 
@@ -373,7 +373,7 @@ extern void change_module_font_size();
 
 static void change_font_size()
 {
-  load_setttings();
+  load_settings();
   change_tsin_font_size();
   change_gtab_font_size();
   change_pho_font_size();
@@ -652,7 +652,7 @@ int main(int argc, char **argv)
   }
 
   init_TableDir();
-  load_setttings();
+  load_settings();
   load_gtab_list(TRUE);
 
 
