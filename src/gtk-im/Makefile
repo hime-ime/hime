@@ -9,6 +9,7 @@ GTK_BINARY_VERSION=`pkg-config --variable=gtk_binary_version gtk+-2.0`
 MODULEDIR=$(DESTDIR)/$(GTK_LIBDIR)/gtk-2.0/$(GTK_BINARY_VERSION)/immodules
 IMMODULES=$(libdir)/$(GTK2IM)
 IMMODULES_LOCAL=/usr/$(LIB)/$(GTK2IM)
+IMMODULES_QUERY=`whereis gtk-query-immodules-2.0 | cut -d ' ' -f 2`
 
 
 ifeq ($(MAC_OS),1)
@@ -43,7 +44,7 @@ install:
 		install -d $(MODULEDIR); \
 		install -m 755 im-hime.so $(MODULEDIR); \
 		if [ "$(prefix)" = "/usr/local" ]; then \
-			cd /etc/gtk-2.0; gtk-query-immodules-2.0 > gtk.immodules; \
+			cd /etc/gtk-2.0; $(IMMODULES_QUERY) > gtk.immodules; \
 		fi \
 	else \
 		install -d $(IMMODULES); \
