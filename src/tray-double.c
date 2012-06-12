@@ -59,12 +59,12 @@ void cb_inmd_menu(GtkCheckMenuItem *checkmenuitem, gpointer dat)
 void close_all_clients();
 void do_exit();
 
-void restart_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat)
+void quit_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat)
 {
   do_exit();
 }
 
-void kbm_toggle(), exec_hime_setup(), restart_hime(), cb_trad2sim(), cb_sim2trad();
+void kbm_toggle(), exec_hime_setup(), quit_hime(), cb_trad2sim(), cb_sim2trad();
 
 void cb_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
@@ -108,14 +108,14 @@ extern gboolean win_kbm_on;
 static MITEM mitems_main[] = {
   {N_("關於hime"), GTK_STOCK_ABOUT, cb_about_window},
   {N_("設定/工具"), GTK_STOCK_PREFERENCES, exec_hime_setup_},
-  {N_("結束hime"), GTK_STOCK_QUIT, restart_hime},
+  {N_("結束hime"), GTK_STOCK_QUIT, quit_hime},
   {N_("念出發音"), NULL, cb_tog_phospeak, &phonetic_speak},
   {N_("小鍵盤"), NULL, kbm_toggle_, &hime_show_win_kbm},
   {N_("選擇輸入法"), GTK_STOCK_INDEX, cb_inmd_menu, NULL},
   {NULL}
 };
 
-void load_setttings(), load_tab_pho_file();;
+void load_settings(), load_tab_pho_file();;
 void update_win_kbm();
 void update_win_kbm_inited();
 extern gboolean win_kbm_inited, stat_enabled;
@@ -127,7 +127,7 @@ static void cb_fast_phonetic_kbd_switch(GtkCheckMenuItem *checkmenuitem, gpointe
 
   save_hime_conf_str(PHONETIC_KEYBOARD, bak);
   save_hime_conf_str(PHONETIC_KEYBOARD_BAK, cur);
-  load_setttings();
+  load_settings();
   load_tab_pho_file();
   update_win_kbm_inited();
 }

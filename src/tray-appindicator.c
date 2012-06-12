@@ -39,7 +39,7 @@ void cb_trad_sim_toggle_(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 void cb_sim2trad(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 void cb_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
-void restart_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat);
+void quit_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
 void cb_tog_phospeak(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
@@ -62,7 +62,7 @@ void cb_toggle_im_enabled(GtkCheckMenuItem *checkmenuitem, gpointer dat)
 static MITEM mitems[] = {
   {N_("開關輸入法"), NULL, cb_toggle_im_enabled, NULL},
   {N_("設定"), GTK_STOCK_PREFERENCES, exec_hime_setup_, NULL},
-  {N_("結束hime"), GTK_STOCK_QUIT, restart_hime, NULL},
+  {N_("結束hime"), GTK_STOCK_QUIT, quit_hime, NULL},
   {N_("念出發音"), NULL, cb_tog_phospeak, &phonetic_speak},
   {N_("繁轉簡工具"), NULL, cb_trad2sim, NULL},
   {N_("簡轉繁工具"), NULL, cb_sim2trad, NULL},

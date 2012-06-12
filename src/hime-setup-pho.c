@@ -345,7 +345,7 @@ GtkWidget *create_en_pho_key_sel(char *s)
 }
 
 
-void load_setttings();
+void load_settings();
 
 void create_kbm_window()
 {
@@ -354,7 +354,7 @@ void create_kbm_window()
     return;
   }
 
-  load_setttings();
+  load_settings();
 
   hime_kbm_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   if (hime_setup_window_type_utility)

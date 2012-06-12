@@ -369,7 +369,7 @@ void create_appearance_conf_window()
     return;
   }
 
-  load_setttings();
+  load_settings();
 
   hime_appearance_conf_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   if (hime_setup_window_type_utility)
