@@ -26,8 +26,6 @@ install:
 	   $(MAKE) -C $$d install || exit 1; \
 	done
 	@if [ $(prefix) = /usr/local ]; then \
-	   install -d $(DESTDIR)/usr/share/pixmaps; \
-	   install -m 644 icons/hime.png $(DESTDIR)/usr/share/pixmaps; \
 	   install -d $(DOC_DIR); \
 	   install -m 644 ChangeLog $(DOC_DIR); \
 	else \

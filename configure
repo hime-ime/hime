@@ -87,8 +87,8 @@ find_in_path_list_to_variable() {
 	 return 1
 }
 
-#                  debian                 fedora               fedora           slackware          arch         freebsd
-qt4_moc_path_list="/usr/share/qt4/bin/moc /usr/lib/qt4/bin/moc /usr/bin/moc-qt4 /usr/local/bin/moc /usr/bin/moc /usr/local/bin/moc-qt4"
+#                  debian                 fedora               fedora           freebsd                slackware          arch
+qt4_moc_path_list="/usr/share/qt4/bin/moc /usr/lib/qt4/bin/moc /usr/bin/moc-qt4 /usr/local/bin/moc-qt4 /usr/local/bin/moc /usr/bin/moc"
 
 #                  debian                 others
 qt3_moc_path_list="/usr/share/qt3/bin/moc /opt/qt/bin/moc"
@@ -491,7 +491,7 @@ echo "man1dir=\$(mandir)/man1" >> config.mak
 echo "bindir_r=\$(DESTDIR)$bindir" >> config.mak
 echo "datadir=\$(DESTDIR)$datadir" >> config.mak
 echo "datadir_r=\$(DESTDIR)$datadir" >> config.mak
-echo "filterdir=\$(datadir_r)hime/filter" >> config.mak
+echo "filterdir=\$(datadir_r)/hime/filter" >> config.mak
 echo "libdir=\$(DESTDIR)$libdir" >> config.mak
 echo "himelibdir=\$(libdir)/hime" >> config.mak
 echo "includedir=\$(DESTDIR)$includedir" >> config.mak
