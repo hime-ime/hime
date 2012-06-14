@@ -185,7 +185,11 @@ im-client/libhime-im-client.so:
 
 hime: $(HIME_SO) $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
 	@echo "linking $@ ..."
+ifeq ($(FREEBSD), 0)
 	@$(CCLD) $(EXTRA_LDFLAGS) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) $(HIME_SO) -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
+else
+	@$(CCLD) $(EXTRA_LDFLAGS) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) $(HIME_SO) -lXtst $(LDFLAGS) -L/usr/local/$(LIB)
+endif
 	@rm -f core.* vgcore.*
 
 hime-tslearn: $(OBJS_TSLEARN) im-client/libhime-im-client.so

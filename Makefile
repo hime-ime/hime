@@ -5,7 +5,7 @@ VERSION_FILE = ChangeLog
 DIR    = src data filter scripts icons man menu
 
 ifeq ($(ECHO),)
-ECHO  := $(shell whereis -b echo|sed 's/^echo: *\([^ ]\+\).*/\1/')
+ECHO  := $(shell whereis -b echo | awk '{print $$2}')
 ifeq ($(ECHO),)
 ECHO   = echo
 endif
@@ -26,7 +26,8 @@ install:
 	   $(MAKE) -C $$d install || exit 1; \
 	done
 	@if [ $(prefix) = /usr/local ]; then \
-	   install -m 644 icons/hime.png /usr/share/pixmaps; \
+	   install -d $(DESTDIR)/usr/share/pixmaps; \
+	   install -m 644 icons/hime.png $(DESTDIR)/usr/share/pixmaps; \
 	   install -d $(DOC_DIR); \
 	   install -m 644 ChangeLog $(DOC_DIR); \
 	else \

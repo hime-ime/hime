@@ -44,7 +44,9 @@ install:
 		install -d $(MODULEDIR); \
 		install -m 755 im-hime.so $(MODULEDIR); \
 		if [ "$(prefix)" = "/usr/local" ]; then \
-			cd /etc/gtk-2.0; $(IMMODULES_QUERY) > gtk.immodules; \
+			if [ -d $(DESTDIR)/etc/gtk-2.0 ]; then \
+				cd $(DESTDIR)/etc/gtk-2.0; $(IMMODULES_QUERY) > gtk.immodules; \
+			fi \
 		fi \
 	else \
 		install -d $(IMMODULES); \

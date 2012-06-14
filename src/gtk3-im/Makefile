@@ -10,7 +10,7 @@ MODULEDIR=$(DESTDIR)/$(GTK3_LIBDIR)/gtk-3.0/$(GTK3_BINARY_VERSION)/immodules
 IMMODULES=$(libdir)/$(GTK3IM)
 IMMODULES_LOCAL=/usr/$(LIB)/$(GTK3IM)
 IMMODULES_QUERY=`whereis gtk-query-immodules-3.0 | cut -d ' ' -f 2`
-
+IMMODULES_CACHE=$(DESTDIR)/$(GTK3_LIBDIR)/gtk-3.0/$(GTK3_BINARY_VERSION)/immodules.cache
 
 ifeq ($(MAC_OS),1)
 EXTRA_INC=-I/sw/include
@@ -44,7 +44,7 @@ install:
 		install -d $(MODULEDIR); \
 		install -m 755 im-hime.so $(MODULEDIR); \
 		if [ "$(prefix)" = "/usr/local" ]; then \
-			$(IMMODULES_QUERY) --update-cache; \
+			GTK_IM_MODULE_FILE=$(IMMODULES_CACHE) $(IMMODULES_QUERY) --update-cache; \
 		fi \
 	else \
 		install -d $(IMMODULES); \
