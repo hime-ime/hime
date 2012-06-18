@@ -48,7 +48,7 @@ if [ $? = 0 ]; then
   FREEBSD=1
 fi
 
-SO_FLAGS="-shared -Wl,--as-needed"
+SO_FLAGS="$LDFLAGS -shared -Wl,--as-needed"
 MAC_OS=0
 uname | grep Darwin > /dev/null 2> /dev/null
 if [ $? = 0 ]; then
@@ -495,7 +495,8 @@ echo "filterdir=\$(datadir_r)/hime/filter" >> config.mak
 echo "libdir=\$(DESTDIR)$libdir" >> config.mak
 echo "himelibdir=\$(libdir)/hime" >> config.mak
 echo "includedir=\$(DESTDIR)$includedir" >> config.mak
-echo "LDFLAGS=-Wl,--as-needed -lX11 -lm" >> config.mak
+echo "LDFLAGS_ENV=$LDFLAGS" >> config.mak
+echo "LDFLAGS=$LDFLAGS -Wl,--as-needed -lX11 -lm" >> config.mak
 if [ $FREEBSD -eq 0 ]; then
 	echo "LDFLAGS+=$GTKLDFLAGS -lX11 -ldl" >> config.mak
 else
