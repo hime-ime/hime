@@ -9,7 +9,7 @@ CXXFLAGS=$(OPTFLAGS) $(INCS) -Wall -D_REENTRANT -DUNIX=1 -fPIC  -DQT4 -DQT_SHARE
 -DQT_IMMODULE -DPIC
 OBJS= moc_hime-qt.o hime-qt.o im-hime-qt.o hime-imcontext-qt.o
 .SUFFIXES:	.c .cpp .a .so .E .h
-LDFLAGS=-L../im-client -lhime-im-client `pkg-config QtCore QtGui --libs`
+LDFLAGS=$(LDFLAGS_ENV) -L../im-client -lhime-im-client `pkg-config QtCore QtGui --libs`
 all:    im-hime.so
 
 .cpp.E:
