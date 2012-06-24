@@ -142,22 +142,22 @@ PROGS_CV  = kbmcv pin-juyin
 
 .cpp.o:
 	@echo "  $< -> $@"
-	@$(CCX) $(CFLAGS) -c $<
+	@$(CCX) $(CPPFLAGS) $(CFLAGS) -c $<
 .c.o:
 	@echo "  $< -> $@"
-	@$(CC) $(CFLAGS) -c $<
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
 .c.pico:
 	@echo "  $< -> $@"
-	@$(CC) $(CFLAGS) -c -fpic -o $@ $<
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
 .cpp.pico:
 	@echo "  $< -> $@"
-	@$(CCX) $(CFLAGS) -c -fpic -o $@ $<
+	@$(CCX) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
 .c.E:
 	@echo "  $< -> $@"
-	@$(CC) $(CFLAGS) -E -o $@ $<
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
 .cpp.E:
 	@echo "  $< -> $@"
-	@$(CCX) $(CFLAGS) -E -o $@ $<
+	@$(CCX) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
 
 
 all: $(PROGS) $(PROGS_SYM) $(DATA) $(PROGS_CV)
@@ -317,7 +317,7 @@ clean:
 
 .depend:
 	@echo "building $@ ..."
-	@$(CCX) $(CFLAGS) -MM *.c > $@
+	@$(CCX) $(CPPFLAGS) $(CFLAGS) -MM *.c > $@
 
 
 

@@ -21,7 +21,7 @@ libXimd.a: $(OBJ)
 
 .c.o:
 	@echo "  $< -> $@"
-	@$(CC) $(CFLAGS) $(INC) -c $<
+	@$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c $<
 
 clean:
 	@echo "clean up"

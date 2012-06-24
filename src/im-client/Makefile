@@ -13,15 +13,15 @@ OBJS = hime-im-client.o hime-send.o im-addr.o hime-conf.o util.o hime-crypt-fpic
 
 .cpp.E:
 	@echo "  $< -> $@"
-	@$(CC) $(CFLAGS) -E -o $@ $<
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
 
 .c.o:
 	@echo "  $< -> $@"
-	@$(CC) -c $(CFLAGS) $<
+	@$(CC) -c $(CPPFLAGS) $(CFLAGS) $<
 
 .cpp.o:
 	@echo "  $< -> $@"
-	@$(CC) -x c -c $(CFLAGS) $<
+	@$(CC) -x c -c $(CPPFLAGS) $(CFLAGS) $<
 
 $(SOFILEVER):   $(OBJS)
 	@echo "linking $@ ..."
@@ -45,19 +45,19 @@ install:
 
 hime-conf.o: ../hime-conf.c
 	@echo "  $^ -> $@"
-	@$(CCX) -c $(CFLAGS) -o $@ $<
+	@$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 util.o: ../util.c
 	@echo "  $^ -> $@"
-	@$(CCX) -c $(CFLAGS) -o $@ $<
+	@$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 im-addr.o: ../im-addr.c
 	@echo "  $^ -> $@"
-	@$(CCX) -c $(CFLAGS) -o $@ $<
+	@$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 hime-crypt-fpic.o: ../hime-crypt.c
 	@echo "  $^ -> $@"
-	@$(CCX) -c $(CFLAGS) -o $@ $<
+	@$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 clean:
 	@echo "clean up"
@@ -65,6 +65,6 @@ clean:
 
 .depend:
 	@echo "building $@ ..."
-	@$(CCX) $(CFLAGS) -MM *.c > $@
+	@$(CCX) $(CPPFLAGS) $(CFLAGS) -MM *.c > $@
 
 include .depend

@@ -6,7 +6,7 @@ INCS=-I../im-client -I/usr/include `pkg-config --cflags qt-mt` -I/usr/include/Xf
 CXXFLAGS=$(OPTFLAGS) $(INCS) -Wall -D_REENTRANT -DUNIX=1 -fPIC  -DQT_THREAD_SUPPORT -DQT_PLUGIN -DQT_SHARED -DQT_NO_DEBUG
 OBJS=qhimeinputcontextplugin.o qhimeinputcontextplugin_my.o qhimeinputcontext.o qhimeinputcontext_x11.o
 .SUFFIXES:	.c .cpp .a .so .E .h
-LDFLAGS=-L../im-client -lhime-im-client -Wl,-rpath,$(himelibdir) `pkg-config qt-mt --libs`
+LDFLAGS=$(LDFLAGS_ENV) -L../im-client -lhime-im-client -Wl,-rpath,$(himelibdir) `pkg-config qt-mt --libs`
 all:	im-hime.so
 
 .cpp.E:

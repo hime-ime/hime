@@ -25,7 +25,7 @@ install:
 	@for d in $(DIR); do $(ECHO) -e "\x1b[1;32m** installing $$d\x1b[0m"; \
 	   $(MAKE) -C $$d install || exit 1; \
 	done
-	@if [ $(prefix) = /usr/local ]; then \
+	@if [ "$(prefix)" = /usr/local ]; then \
 	   install -d $(DOC_DIR); \
 	   install -m 644 ChangeLog $(DOC_DIR); \
 	else \
