@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # hime filter big5only version 0.0.1
   read -r -t 1 aa
   echo -n $aa        | \

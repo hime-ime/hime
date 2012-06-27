@@ -222,21 +222,6 @@ if [ $MAC_OS = 1 ]; then
   GTKINC="-I/sw/include `pkg-config --cflags $GTK` 2> /dev/null"
 fi
 
-# TODO: Do we really need these craps?
-if [ ! -x /bin/bash ]; then
-  for i in /usr/bin/bash /usr/local/bin/bash
-  do
-    [ -x $i ] || continue
-    echo "/bin/bash -> $i"
-    for i in scripts/*
-    do
-      sed -e "s~/bin/bash~$i~" < $i > $i.tmp
-      mv $i.tmp $i
-    done
-  done
-fi
-
-
 GTKLDFLAGS=`pkg-config --libs $GTK 2> /dev/null`
 
 if [ $? != 0 ]; then

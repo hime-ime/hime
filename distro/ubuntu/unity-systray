@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 GSETTINGS=`whereis -b gsettings | awk '{print $2}'`
 SED=`whereis -b sed | awk '{print $2}'`

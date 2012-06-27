@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # hime filter tw2jp version 0.0.2
   read -r aa
   MATCH=`tail -n 332 $0 | grep $aa | head -n 1`

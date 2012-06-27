@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 PATH=$PATH:/opt/gnome/bin:/usr/local/bin
 
