@@ -312,13 +312,24 @@ LIB='lib'
 if [ -d /usr/lib64 -a -d /lib64 ]; then
 LIB='lib64'
 fi
+
 if [ `uname -s` = Linux ]; then
-   distid=`lsb_release -is`
-   case $distid in
-       Ubuntu | Debian | Arch | archlinux)
-         LIB='lib'
-         ;;
-   esac
+   distid=`lsb_release -is 2> /dev/null`
+   if [ $? != 0 ]; then
+     case $distid in
+         Ubuntu | Debian | Arch | archlinux)
+           LIB='lib'
+           ;;
+     esac
+   else
+     DEBIAN_LD=`ld -v 2>&1 | grep -i debian`
+     UBUNTU_LD=`ld -v 2>&1 | grep -i ubuntu`
+     if [ "$DEBIAN_LD" != "" -o "$UBUNTU_LD" != "" ]; then
+       LIB='lib'
+         elif [ -e /etc/arch-release ]; then
+           LIB='lib'
+     fi
+   fi
 fi
 # --- QT3 START ---
 QT_IM='N'
