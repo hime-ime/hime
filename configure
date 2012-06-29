@@ -455,11 +455,6 @@ libdir=$prefix/$LIB
 includedir=$prefix/include
 optdir=/opt
 
-BUILD_MODULE='N'
-if [ "$USE_ANTHY" = 'Y' ] || [ "$USE_CHEWING" = 'Y' ]; then
-  BUILD_MODULE='Y'
-fi
-
 if [ -z "$CFLAGS" ]; then
   OPTFLAGS="-Wall"
 else
@@ -540,6 +535,5 @@ echo "USE_UNITY=$USE_UNITY" >> config.mak
 echo "INSTALL_DFSG_INCOMPATIBLE=$INSTALL_DFSG_INCOMPATIBLE" >> config.mak
 echo "GIT_HAVE=$GIT_HAVE" >> config.mak
 echo "GIT_HASH=$GIT_HASH" >> config.mak
-echo "BUILD_MODULE=$BUILD_MODULE" >> config.mak
 echo "hime_ld_run_path=\$(himelibdir)" >> config.mak
 echo "gcc_ld_run_path=-Wl,-rpath,\$(hime_ld_run_path)" >> config.mak
