@@ -315,7 +315,7 @@ fi
 
 if [ `uname -s` = Linux ]; then
    distid=`lsb_release -is 2> /dev/null`
-   if [ $? != 0 ]; then
+   if [ $? = 0 ]; then
      case $distid in
          Ubuntu | Debian | Arch | archlinux)
            LIB='lib'
