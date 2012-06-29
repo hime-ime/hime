@@ -9,9 +9,8 @@ depends=('gtk2' 'libxtst')
 makedepends=('git' 'gettext' 'gtk3' 'qt' 'anthy' 'libchewing')
 optdepends=('gtk3: enable gtk3 im module' 'qt: enable qt4 im module' 'anthy: enable Anthy input method' 'libchewing: enable Chewing input method')
 options=(!strip)
-source=(install ignore-lib64.patch)
-sha512sums=('ef30f014f3d35d1e8136e6f867bc943c13ebfe3844e7be2756105bb41e7563a309cba0986be2ad046aa36d5a1ae76f548f5f3f2f82645d6aa69b683e4836bee2' \
-	    '2d96fb06e6c9b83dd63959c155c21cf4d2393771e9aa97c5a98127037419c2f0597ce04ee6fef03e66bcd250b824b2eaefa8c03eade9314eb31f932c3579c220')
+source=(install)
+sha512sums=('ef30f014f3d35d1e8136e6f867bc943c13ebfe3844e7be2756105bb41e7563a309cba0986be2ad046aa36d5a1ae76f548f5f3f2f82645d6aa69b683e4836bee2')
 _gitroot="git://github.com/caleb-/hime.git"
 _gitname="hime"
 
