@@ -29,8 +29,8 @@ im-hime.so: $(OBJS)
 
 install:
 	if [ $(prefix) = /usr/local ]; then \
-		install -d $(DESTDIR)/$(QT_IM_DIR); \
-		install -m 755 im-hime.so $(DESTDIR)/$(QT_IM_DIR); \
+		install -d $(QT_IM_DIR); \
+		install -m 755 im-hime.so $(QT_IM_DIR); \
 	else \
 		install -d $(IMMODULES); \
                 install -m 755 im-hime.so $(IMMODULES); \
