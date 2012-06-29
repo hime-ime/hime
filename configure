@@ -21,6 +21,7 @@ if [ "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]; then
     echo "  --disable-anthy          : disable Anthy input method [default: auto-detect]"
     echo "  --disable-chewing        : disable Chewing input method [default: auto-detect]"
     echo "  --disable-appindicator   : disable Ubuntu unity tray [default: auto-detect]"
+    echo "  --disable-lib64          : disable the use of lib64 dir [default: auto-detect]"
     echo ""
     echo "System Specific Pathes:"
     echo "  --qt3-moc-path=PATH       : specify the path of \"moc\" command for Qt 3.x"
@@ -176,6 +177,8 @@ for opt do
   ;;
   --qt4-install-to=*|--qt4-im-module-path=*) QT4_IM_DIR_CUSTOM=`echo $opt | cut -d '=' -f 2`
   ;;
+  --disable-lib64) LIB='lib'
+  ;;
   esac
 done
 
@@ -307,30 +310,32 @@ if [ "$use_unity" = "Y" ]; then
     fi
   fi
 fi
+if [ -z "$LIB" ];then
+  LIB='lib'
+  if [ -d /usr/lib64 -a -d /lib64 ]; then
+    LIB='lib64'
+  fi
 
-LIB='lib'
-if [ -d /usr/lib64 -a -d /lib64 ]; then
-LIB='lib64'
-fi
-
-if [ `uname -s` = Linux ]; then
-   distid=`lsb_release -is 2> /dev/null`
-   if [ $? = 0 ]; then
-     case $distid in
-         Ubuntu | Debian | Arch | archlinux)
-           LIB='lib'
-           ;;
-     esac
-   else
-     DEBIAN_LD=`ld -v 2>&1 | grep -i debian`
-     UBUNTU_LD=`ld -v 2>&1 | grep -i ubuntu`
-     if [ "$DEBIAN_LD" != "" -o "$UBUNTU_LD" != "" ]; then
-       LIB='lib'
-         elif [ -e /etc/arch-release ]; then
-           LIB='lib'
+  if [ `uname -s` = Linux ]; then
+     distid=`lsb_release -is 2> /dev/null`
+     if [ $? = 0 ]; then
+       case $distid in
+           Ubuntu | Debian | Arch | archlinux)
+             LIB='lib'
+             ;;
+       esac
+     else
+       DEBIAN_LD=`ld -v 2>&1 | grep -i debian`
+       UBUNTU_LD=`ld -v 2>&1 | grep -i ubuntu`
+       if [ "$DEBIAN_LD" != "" -o "$UBUNTU_LD" != "" ]; then
+         LIB='lib'
+           elif [ -e /etc/arch-release ]; then
+             LIB='lib'
+       fi
      fi
-   fi
+  fi
 fi
+
 # --- QT3 START ---
 QT_IM='N'
 QT_IM_DIR=/qt3/plugins/inputmethods
@@ -455,11 +460,6 @@ libdir=$prefix/$LIB
 includedir=$prefix/include
 optdir=/opt
 
-BUILD_MODULE='N'
-if [ "$USE_ANTHY" = 'Y' ] || [ "$USE_CHEWING" = 'Y' ]; then
-  BUILD_MODULE='Y'
-fi
-
 if [ -z "$CFLAGS" ]; then
   OPTFLAGS="-Wall"
 else
@@ -540,6 +540,5 @@ echo "USE_UNITY=$USE_UNITY" >> config.mak
 echo "INSTALL_DFSG_INCOMPATIBLE=$INSTALL_DFSG_INCOMPATIBLE" >> config.mak
 echo "GIT_HAVE=$GIT_HAVE" >> config.mak
 echo "GIT_HASH=$GIT_HASH" >> config.mak
-echo "BUILD_MODULE=$BUILD_MODULE" >> config.mak
 echo "hime_ld_run_path=\$(himelibdir)" >> config.mak
 echo "gcc_ld_run_path=-Wl,-rpath,\$(hime_ld_run_path)" >> config.mak

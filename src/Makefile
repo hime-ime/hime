@@ -156,7 +156,7 @@ PROGS_CV  = kbmcv pin-juyin
 
 
 all: $(PROGS) $(PROGS_SYM) $(DATA) $(PROGS_CV)
-	if [ $(BUILD_MODULE) = 'Y' ]; then $(MAKE) -C modules; fi
+	$(MAKE) -C modules
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im; fi
 	if [ $(QT_IM) = 'Y' ]; then $(MAKE) -C qt-im; fi
@@ -282,7 +282,7 @@ install:
 	install -d $(includedir)
 	install -m 644 im-client/hime-im-client.h im-client/hime-im-client-attr.h $(includedir)
 	$(MAKE) -C im-client install
-	if [ $(BUILD_MODULE) = 'Y' ]; then $(MAKE) -C modules install; fi
+	$(MAKE) -C modules install
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im install; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im install; fi
 	if [ $(QT_IM) = 'Y' ]; then $(MAKE) -C qt-im install; fi
