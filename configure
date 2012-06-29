@@ -317,7 +317,12 @@ UBUNTU_LD=`ld -v 2>&1 | grep -i ubuntu`
 if [ "$DEBIAN_LD" != "" -o "$UBUNTU_LD" != "" ]; then
   LIB='lib'
 fi
-
+if [ `uname -s` = Linux ]; then
+  distid=`lsb_release -is`
+  if [ $distid = Arch -o $distid = archlinux ]; then
+    LIB='lib'
+  fi
+fi
 # --- QT3 START ---
 QT_IM='N'
 QT_IM_DIR=/qt3/plugins/inputmethods
