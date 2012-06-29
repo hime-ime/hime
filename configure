@@ -21,7 +21,7 @@ if [ "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]; then
     echo "  --disable-anthy          : disable Anthy input method [default: auto-detect]"
     echo "  --disable-chewing        : disable Chewing input method [default: auto-detect]"
     echo "  --disable-appindicator   : disable Ubuntu unity tray [default: auto-detect]"
-    echo "  --disable-lib64          : disable the check for lib64 [default: auto-detect]"
+    echo "  --disable-lib64          : disable the use of lib64 dir [default: auto-detect]"
     echo ""
     echo "System Specific Pathes:"
     echo "  --qt3-moc-path=PATH       : specify the path of \"moc\" command for Qt 3.x"
