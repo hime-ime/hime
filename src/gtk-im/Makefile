@@ -22,11 +22,11 @@ CFLAGS = $(OPTFLAGS) $(EXTRA_INC) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
 
 .c.o:
 	@echo "  $< -> $@"
-	@$(CC) -c -fPIC $(CFLAGS) -o $@ $<
+	@$(CC) -c -fPIC $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 .c.E:
 	@echo "  $< -> $@"
-	@$(CC) -E $(CFLAGS) -o $@ $<
+	@$(CC) -E $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 all:	im-hime.so
 
@@ -44,7 +44,9 @@ install:
 		install -d $(MODULEDIR); \
 		install -m 755 im-hime.so $(MODULEDIR); \
 		if [ "$(prefix)" = "/usr/local" ]; then \
-			cd /etc/gtk-2.0; $(IMMODULES_QUERY) > gtk.immodules; \
+			if [ -d $(DESTDIR)/etc/gtk-2.0 ]; then \
+				cd $(DESTDIR)/etc/gtk-2.0; $(IMMODULES_QUERY) > gtk.immodules; \
+			fi \
 		fi \
 	else \
 		install -d $(IMMODULES); \
@@ -53,6 +55,6 @@ install:
 
 .depend:
 	@echo "building $@ ..."
-	@$(CC) $(CFLAGS) -MM *.c > $@
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -MM *.c > $@
 
 include .depend

@@ -3,7 +3,7 @@ include ../config.mak
 LANG_FILE = $(shell ls -d *.po | sed 's/\.po//g')
 
 ifeq ($(ECHO),)
-ECHO  := $(shell whereis -b echo|sed 's/^echo: *\([^ ]\+\).*/\1/')
+ECHO  := $(shell whereis -b echo | awk '{print $$2}')
 ifeq ($(ECHO),)
 ECHO   = echo
 endif

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]; then
     echo "Usage: $0 [OPTION]... [VAR=VALUE]..."
@@ -48,7 +48,7 @@ if [ $? = 0 ]; then
   FREEBSD=1
 fi
 
-SO_FLAGS="-shared -Wl,--as-needed"
+SO_FLAGS="$LDFLAGS -shared -Wl,--as-needed"
 MAC_OS=0
 uname | grep Darwin > /dev/null 2> /dev/null
 if [ $? = 0 ]; then
@@ -73,13 +73,12 @@ use_qt4='Y'
 use_gtk='Y'
 use_gtk3='Y'
 
-function find_in_path_list_to_variable() {
+find_in_path_list_to_variable() {
     # find_in_path_list_to_variable() will find all elements in the array name stored in $1
     # if found, set the found path to variable name in $2 and return 0
     # otherwise return 1.
 	 
-	 eval "L=(\${"${1}"[@]})"
-	 for path in ${L[@]}; do
+	 for path in $1; do
 		  if [ -x "$path" ]; then
 				eval $2=\"$path\"
 				return 0
@@ -88,18 +87,11 @@ function find_in_path_list_to_variable() {
 	 return 1
 }
 
-qt4_moc_path_list=(
-	 "/usr/share/qt4/bin/moc"	#debian (Thanks to medicalwei)
-	 "/usr/lib/qt4/bin/moc"	# fedora (Thanks to petercommand)
-	 "/usr/bin/moc-qt4"	# fedora (Thanks to petercommand)
-	 "/usr/local/bin/moc"	# slackware	# always keep generic name with lower priority
-	 "/usr/bin/moc"			# arch	# always keep generic name with lower priority
-)
+#                  debian                 fedora               fedora           freebsd                slackware          arch
+qt4_moc_path_list="/usr/share/qt4/bin/moc /usr/lib/qt4/bin/moc /usr/bin/moc-qt4 /usr/local/bin/moc-qt4 /usr/local/bin/moc /usr/bin/moc"
 
-qt3_moc_path_list=(
-	 "/usr/share/qt3/bin/moc"	#debian
-	 "/opt/qt/bin/moc"			# always keep generic name with lower priority
-)
+#                  debian                 others
+qt3_moc_path_list="/usr/share/qt3/bin/moc /opt/qt/bin/moc"
 
 if [ "$HIME_USE_XIM" ]; then
   use_xim=$HIME_USE_XIM
@@ -230,21 +222,6 @@ if [ $MAC_OS = 1 ]; then
   GTKINC="-I/sw/include `pkg-config --cflags $GTK` 2> /dev/null"
 fi
 
-# TODO: Do we really need these craps?
-if [ ! -x /bin/bash ]; then
-  for i in /usr/bin/bash /usr/local/bin/bash
-  do
-    [ -x $i ] || continue
-    echo "/bin/bash -> $i"
-    for i in scripts/*
-    do
-      sed -e "s~/bin/bash~$i~" < $i > $i.tmp
-      mv $i.tmp $i
-    done
-  done
-fi
-
-
 GTKLDFLAGS=`pkg-config --libs $GTK 2> /dev/null`
 
 if [ $? != 0 ]; then
@@ -351,7 +328,7 @@ if [ $? = 0 ]; then
 fi
 
 if [ ! -x "$QT3_MOC_PATH" ]; then
-	 find_in_path_list_to_variable "qt3_moc_path_list" "QT3_MOC_PATH"
+	 find_in_path_list_to_variable "$qt3_moc_path_list" "QT3_MOC_PATH"
 fi
 
 if [ "$QT_IM" = "Y" ]; then
@@ -382,7 +359,7 @@ if [ $? = 0 ]; then
 fi
 
 if [ ! -x "${QT4_MOC_PATH}" ]; then
-	 find_in_path_list_to_variable "qt4_moc_path_list" "QT4_MOC_PATH"
+	 find_in_path_list_to_variable "$qt4_moc_path_list" "QT4_MOC_PATH"
 fi
 
 if [ "$QT4_IM" = "Y" ]; then
@@ -456,7 +433,11 @@ fi
 
 bindir=$prefix/bin
 datadir=$prefix/share
-mandir=$datadir/man
+if [ $FREEBSD -eq 0 ]; then
+  mandir=$datadir/man
+else
+  mandir=$prefix/man
+fi
 libdir=$prefix/$LIB
 includedir=$prefix/include
 optdir=/opt
@@ -492,15 +473,20 @@ echo "prefix=$prefix" >> config.mak
 echo "bindir=\$(DESTDIR)$bindir" >> config.mak
 echo "mandir=\$(DESTDIR)$mandir" >> config.mak
 echo "man1dir=\$(mandir)/man1" >> config.mak
-echo "bindir_r=$bindir" >> config.mak
+echo "bindir_r=\$(DESTDIR)$bindir" >> config.mak
 echo "datadir=\$(DESTDIR)$datadir" >> config.mak
-echo "datadir_r=$datadir" >> config.mak
+echo "datadir_r=\$(DESTDIR)$datadir" >> config.mak
 echo "filterdir=\$(datadir_r)/hime/filter" >> config.mak
 echo "libdir=\$(DESTDIR)$libdir" >> config.mak
 echo "himelibdir=\$(libdir)/hime" >> config.mak
 echo "includedir=\$(DESTDIR)$includedir" >> config.mak
-echo "LDFLAGS=-Wl,--as-needed -lX11 -lm" >> config.mak
-echo "LDFLAGS+=$GTKLDFLAGS -lX11 -ldl" >> config.mak
+echo "LDFLAGS_ENV=$LDFLAGS" >> config.mak
+echo "LDFLAGS=$LDFLAGS -Wl,--as-needed -lX11 -lm" >> config.mak
+if [ $FREEBSD -eq 0 ]; then
+	echo "LDFLAGS+=$GTKLDFLAGS -lX11 -ldl" >> config.mak
+else
+	echo "LDFLAGS+=$GTKLDFLAGS -lX11" >> config.mak
+fi
 echo "HIME_TABLE_DIR=\$(datadir_r)/hime/table" >> config.mak
 echo "HIME_OGG_DIR=\$(datadir_r)/hime/ogg" >> config.mak
 echo "HIME_TABLE_DIR_i=\$(datadir)/hime/table" >> config.mak

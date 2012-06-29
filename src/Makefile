@@ -15,11 +15,6 @@ CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I./IMdkit/include -I./im-client 
 
 OBJ_IMSRV = im-addr.o im-dispatch.o im-srv.o hime-crypt.o
 
-HIME1_OBJ = win-message.pico win-sym.pico win-inmd-switch.pico pinyin.pico \
-	win-pho-near.pico win-kbm.pico hime-module.pico pho2pinyin.pico
-HIME2_OBJ = t2s-lookup.pico
-
-
 hime_pho_o  = win-pho.o pho.o pho-util.o pho-sym.o table-update.o pho-dbg.o
 hime_gtab_o = gtab.o win-gtab.o gtab-util.o gtab-list.o gtab-buf.o
 
@@ -32,7 +27,9 @@ OBJS      = hime.o eve.o util.o hime-conf.o hime-settings.o locale.o \
 	hime-common.o phrase.o t2s-lookup.o gtab-use-count.o \
 	win-save-phrase.o unix-exec.o pho-kbm-name.o statistic.o tsin-scan.o \
 	hime-module.o lang.o \
-	hime-module-cb.o gtab-init.o fullchar.o gtab-tsin-fname.o
+	hime-module-cb.o gtab-init.o fullchar.o gtab-tsin-fname.o \
+	win-message.o win-sym.o win-inmd-switch.o pinyin.o \
+	win-pho-near.o win-kbm.o pho2pinyin.o
 
 OBJS_TSLEARN = hime-tslearn.o util.o hime-conf.o pho-util.o tsin-util.o \
 	pho-sym.o table-update.o locale.o \
@@ -50,7 +47,7 @@ OBJS_JUYIN_LEARN = hime-juyin-learn.o locale.o util.o pho-util.o pho-sym.o \
 	pho2pinyin.o hime-settings.o hime-conf.o table-update.o pinyin.o \
 	hime-icon.o pho-dbg.o
 
-OBJS_hime-sim2trad = hime-sim2trad.o util.o hime2.so locale.o hime-conf.o hime-icon.o
+OBJS_hime-sim2trad = hime-sim2trad.o util.o locale.o hime-conf.o hime-icon.o t2s-lookup.o
 
 OBJS_hime-phod2a = hime-phod2a.o pho-util.o hime-conf.o pho-sym.o table-update.o \
 	pho-dbg.o locale.o hime-settings.o util.o
@@ -126,8 +123,6 @@ ifeq ($(GIT_HAVE),Y)
 CFLAGS     += -DGIT_HASH=\"$(GIT_HASH)\" -DGIT_HAVE=1
 endif
 
-HIME_SO   = hime1.so hime2.so
-
 PROGS     = hime \
 	hime-tsd2a32 hime-tsa2d32 hime-phoa2d hime-phod2a \
 	hime-tslearn hime-setup cin2gtab gtab2cin \
@@ -142,22 +137,22 @@ PROGS_CV  = kbmcv pin-juyin
 
 .cpp.o:
 	@echo "  $< -> $@"
-	@$(CCX) $(CFLAGS) -c $<
+	@$(CCX) $(CPPFLAGS) $(CFLAGS) -c $<
 .c.o:
 	@echo "  $< -> $@"
-	@$(CC) $(CFLAGS) -c $<
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
 .c.pico:
 	@echo "  $< -> $@"
-	@$(CC) $(CFLAGS) -c -fpic -o $@ $<
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
 .cpp.pico:
 	@echo "  $< -> $@"
-	@$(CCX) $(CFLAGS) -c -fpic -o $@ $<
+	@$(CCX) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
 .c.E:
 	@echo "  $< -> $@"
-	@$(CC) $(CFLAGS) -E -o $@ $<
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
 .cpp.E:
 	@echo "  $< -> $@"
-	@$(CCX) $(CFLAGS) -E -o $@ $<
+	@$(CCX) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
 
 
 all: $(PROGS) $(PROGS_SYM) $(DATA) $(PROGS_CV)
@@ -167,14 +162,6 @@ all: $(PROGS) $(PROGS_SYM) $(DATA) $(PROGS_CV)
 	if [ $(QT_IM) = 'Y' ]; then $(MAKE) -C qt-im; fi
 	if [ $(QT4_IM) = 'Y' ]; then $(MAKE) -C qt4-im; fi
 
-hime1.so: $(HIME1_OBJ)
-	@echo "linking $@ ..."
-	@$(CCLD) $(SO_FLAGS) -o $@ $^ $(LDFLAGS)
-
-hime2.so: $(HIME2_OBJ)
-	@echo "linking $@ ..."
-	@$(CCLD) $(SO_FLAGS) -o $@ $^ $(LDFLAGS)
-
 $(IMdkitLIB):
 	@echo "building $@ ..."
 	$(MAKE) -C IMdkit/lib
@@ -183,9 +170,13 @@ im-client/libhime-im-client.so:
 	@echo "building $@ ..."
 	$(MAKE) -C im-client
 
-hime: $(HIME_SO) $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
+hime: $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
 	@echo "linking $@ ..."
-	@$(CCLD) $(EXTRA_LDFLAGS) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) $(HIME_SO) -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
+ifeq ($(FREEBSD), 0)
+	@$(CCLD) $(EXTRA_LDFLAGS) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
+else
+	@$(CCLD) $(EXTRA_LDFLAGS) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) -lXtst $(LDFLAGS) -L/usr/local/$(LIB)
+endif
 	@rm -f core.* vgcore.*
 
 hime-tslearn: $(OBJS_TSLEARN) im-client/libhime-im-client.so
@@ -288,7 +279,6 @@ install:
 	rm -f $(bindir)/hime-sim; ln -sf hime-gb-toggle $(bindir)/hime-sim
 	rm -f $(bindir)/hime-kbm-toggle; ln -sf hime-gb-toggle $(bindir)/hime-kbm-toggle
 	install -d $(himelibdir)
-	install $(HIME_SO) $(himelibdir)
 	install -d $(includedir)
 	install -m 644 im-client/hime-im-client.h im-client/hime-im-client-attr.h $(includedir)
 	$(MAKE) -C im-client install
@@ -313,7 +303,7 @@ clean:
 
 .depend:
 	@echo "building $@ ..."
-	@$(CCX) $(CFLAGS) -MM *.c > $@
+	@$(CCX) $(CPPFLAGS) $(CFLAGS) -MM *.c > $@
 
 
 

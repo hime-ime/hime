@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # hime filter zh2jp version 0.0.2
   read -r aa
   MATCH=`tail -n 787 $0 | grep $aa | head -n 1`

@@ -21,7 +21,7 @@
 #include "gst.h"
 #include "pho-status.h"
 
-extern void key_typ_pho(phokey_t phokey, u_char rtyp_pho[]);
+extern void fake_key_typ_pho(phokey_t phokey, u_char rtyp_pho[]);
 
 gboolean pin2juyin(gboolean full_match)
 {
@@ -61,7 +61,7 @@ gboolean pin2juyin(gboolean full_match)
 
   bzero(poo.typ_pho, sizeof(poo.typ_pho));
 //  prph(pin_juyin[i].key); dbg(" %x ph\n", pin_juyin[i].key);
-  key_typ_pho(pin_juyin[i].key, (u_char *)poo.typ_pho);
+  fake_key_typ_pho(pin_juyin[i].key, (u_char *)poo.typ_pho);
 
 //  dbg("pin2juyin found %d\n", poo.typ_pho[0]);
 
