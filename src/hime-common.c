@@ -108,7 +108,7 @@ void set_label_font_size(GtkWidget *label, int size)
   pango_font_description_set_size(font, PANGO_SCALE * size);
 #else
   char tt[256];
-  sprintf(tt, "%s %d", hime_font_name, size);
+  snprintf(tt, sizeof(tt), "%s %d", hime_font_name, size);
   PangoFontDescription* nfont = pango_font_description_from_string(tt);
   pango_font_description_merge(font, nfont, TRUE);
   pango_font_description_free(nfont);

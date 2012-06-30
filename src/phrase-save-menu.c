@@ -85,7 +85,7 @@ void create_phrase_save_menu(GdkEventButton * event)
     phokey_t phs[MAX_PHRASE_LEN];
     char str[MAX_PHRASE_STR_LEN];
     chpho_extract(&tss.chpho[tss.c_idx], len, phs, str);
-    sprintf(tt, _("%s shift-Enter"), str);
+    snprintf(tt, sizeof(tt), _("%s shift-Enter"), str);
     add_button(vbox, tt, tss.c_idx, len);
   }
 
@@ -94,7 +94,7 @@ void create_phrase_save_menu(GdkEventButton * event)
       phokey_t phs[MAX_PHRASE_LEN];
       char str[MAX_PHRASE_STR_LEN];
       chpho_extract(&tss.chpho[tss.c_idx - len], len, phs, str);
-      sprintf(tt, _("%s Ctrl-%d"), str, len);
+      snprintf(tt, sizeof(tt), _("%s Ctrl-%d"), str, len);
       add_button(vbox, tt, tss.c_idx, len);
     }
   }
