@@ -241,12 +241,10 @@ void disp_win_sample()
 #endif
 
 #if PANGO_VERSION_CHECK(1,22,0)
-  sprintf
-(tt, _("<span foreground=\"%s\" font=\"%d\">7</span><span foreground=\"%s\" font=\"%d\">測</span><span font=\"%d\" foreground=\"white\" background=\"%s\">試</span>"), hime_sel_key_color,
+  snprintf(tt, sizeof(tt), _("<span foreground=\"%s\" font=\"%d\">7</span><span foreground=\"%s\" font=\"%d\">測</span><span font=\"%d\" foreground=\"white\" background=\"%s\">試</span>"), hime_sel_key_color,
 hime_font_size_tsin_presel, hime_win_color_fg, hime_font_size_tsin_presel, hime_font_size_tsin_presel, tsin_cursor_color);
 #else
-  sprintf
-(tt, _("<span foreground=\"%s\" font_desc=\"%d\">7</span><span foreground=\"%s\" font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"white\" background=\"%s\">試</span>"), hime_sel_key_color,
+  snprintf(tt, sizeof(tt), _("<span foreground=\"%s\" font_desc=\"%d\">7</span><span foreground=\"%s\" font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"white\" background=\"%s\">試</span>"), hime_sel_key_color,
 hime_font_size_tsin_presel, hime_win_color_fg, hime_font_size_tsin_presel, hime_font_size_tsin_presel, tsin_cursor_color);
 #endif
   } else {
@@ -257,11 +255,9 @@ hime_font_size_tsin_presel, hime_win_color_fg, hime_font_size_tsin_presel, hime_
 #endif
 
 #if PANGO_VERSION_CHECK(1,22,0)
-  sprintf
-(tt, _("<span foreground=\"blue\" font=\"%d\">7</span><span font=\"%d\">測</span><span font=\"%d\" foreground=\"white\" background=\"blue\">試</span>"), hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_font_size_tsin_presel);
+  snprintf(tt, sizeof(tt), _("<span foreground=\"blue\" font=\"%d\">7</span><span font=\"%d\">測</span><span font=\"%d\" foreground=\"white\" background=\"blue\">試</span>"), hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_font_size_tsin_presel);
 #else
-  sprintf
-(tt, _("<span foreground=\"blue\" font_desc=\"%d\">7</span><span font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"white\" background=\"blue\">試</span>"), hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_font_size_tsin_presel);
+  snprintf(tt, sizeof(tt), _("<span foreground=\"blue\" font_desc=\"%d\">7</span><span font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"white\" background=\"blue\">試</span>"), hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_font_size_tsin_presel);
 #endif
 
   }
@@ -464,7 +460,7 @@ void create_appearance_conf_window()
   gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), spinner_hime_font_size_win_kbm_en, FALSE, FALSE, 0);
 
   char tt[128];
-  sprintf(tt, "%s %d", hime_font_name, hime_font_size);
+  snprintf(tt, sizeof(tt), "%s %d", hime_font_name, hime_font_size);
   font_sel = gtk_font_button_new_with_font (tt);
   gtk_box_pack_start (GTK_BOX (vbox_top), font_sel, FALSE, FALSE, 0);
 

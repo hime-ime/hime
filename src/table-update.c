@@ -56,7 +56,7 @@ void update_table_file(char *name, int version)
   }
 
   char cmd[256];
-  sprintf(cmd, "mv -f %s %s.old && cp %s %s && echo %d > %s", fname_user, fname_user,
+  snprintf(cmd, sizeof(cmd), "mv -f %s %s.old && cp %s %s && echo %d > %s", fname_user, fname_user,
       fname_sys, fname_user, version, fname_version);
   dbg("exec %s\n", cmd);
   system(cmd);

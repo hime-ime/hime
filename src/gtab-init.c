@@ -178,7 +178,7 @@ void init_gtab(int inmdno)
     if (mtime_append_gtab < mtime || mtime_append_gtab < mtime_append) {
       char exe[256];
 
-      sprintf(exe, HIME_BIN_DIR"/hime-gtab-merge %s %s %s", ttt, append_user, append_user_gtab);
+      snprintf(exe, sizeof(exe), HIME_BIN_DIR"/hime-gtab-merge %s %s %s", ttt, append_user, append_user_gtab);
       dbg("exe %s\n", exe);
       system(exe);
 

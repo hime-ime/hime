@@ -120,7 +120,7 @@ static void disp_countdown(SAVE_SESS *sess)
 {
   char tt[64];
 
-  sprintf(tt, _("%d 秒後自動加入"), sess->countdown);
+  snprintf(tt, sizeof(tt), _("%d 秒後自動加入"), sess->countdown);
   gtk_label_set_text(GTK_LABEL(sess->label_countdown), tt);
 }
 

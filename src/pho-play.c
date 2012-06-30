@@ -41,7 +41,7 @@ int pho_play(phokey_t key)
   char tt[512];
 
   last_time = t;
-  sprintf(tt, HIME_OGG_DIR"/%s/%s", ph, phonetic_speak_sel);
+  snprintf(tt, sizeof(tt), HIME_OGG_DIR"/%s/%s", ph, phonetic_speak_sel);
 
   if (access(tt, R_OK))
     return 0;

@@ -32,7 +32,7 @@
 static void exec_script(char *name)
 {
   char scr[512];
-  sprintf(scr, HIME_SCRIPT_DIR"/%s", name);
+  snprintf(scr, sizeof(scr), HIME_SCRIPT_DIR"/%s", name);
   dbg("do %s\n", scr);
   system(scr);
 }
