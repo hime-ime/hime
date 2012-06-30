@@ -47,7 +47,7 @@ void create_inmd_switch()
       continue;
 
     char tt[64];
-    sprintf(tt, "%s ctrl-alt-%c", inmd[i].cname, inmd[i].key_ch);
+    snprintf(tt, sizeof(tt), "%s ctrl-alt-%c", inmd[i].cname, inmd[i].key_ch);
 
     GtkWidget *item = gtk_image_menu_item_new_with_label (tt);
     if (inmd[i].icon) {
