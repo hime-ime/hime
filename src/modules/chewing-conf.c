@@ -49,7 +49,7 @@ chewing_config_open (gboolean bWrite)
 
     pszChewingConfig = malloc (strlen (pszHome) + strlen (HIME_CHEWING_CONFIG) + 1);
     memset (pszChewingConfig, 0x00, strlen (pszHome) + strlen (HIME_CHEWING_CONFIG) + 1);
-    sprintf (pszChewingConfig, "%s%s", pszHome, HIME_CHEWING_CONFIG);
+    snprintf(pszChewingConfig, sizeof(pszChewingConfig), "%s%s", pszHome, HIME_CHEWING_CONFIG);
 
     g_nFd = open (pszChewingConfig,
                   bWrite == TRUE ? (O_RDWR | O_CREAT) : (O_RDONLY),
@@ -169,7 +169,7 @@ hime_kb_config_set (ChewingContext *pChewingCtx)
 
     pszHimeKBConfig = malloc (strlen (pszHome) + strlen (HIME_KB_CONFIG) + 1);
     memset (pszHimeKBConfig, 0x00, strlen (pszHome) + strlen (HIME_KB_CONFIG) + 1);
-    sprintf (pszHimeKBConfig, "%s%s", pszHome, HIME_KB_CONFIG);
+    snprintf(pszHimeKBConfig, sizeof(pszHimeKBConfig), "%s%s", pszHome, HIME_KB_CONFIG);
 
     nFd = open (pszHimeKBConfig, 
           O_RDONLY, 
