@@ -382,7 +382,7 @@ void create_appearance_conf_window()
                     G_CALLBACK (close_appearance_conf_window),
                     NULL);
 
-  gtk_window_set_title (GTK_WINDOW (hime_appearance_conf_window), _("輸入視窗外觀設定"));
+  gtk_window_set_title (GTK_WINDOW (hime_appearance_conf_window), _("外觀設定"));
   gtk_container_set_border_width (GTK_CONTAINER (hime_appearance_conf_window), 3);
 
   GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
