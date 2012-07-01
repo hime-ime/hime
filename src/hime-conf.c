@@ -103,7 +103,7 @@ int get_hime_conf_int(char *name, int default_value)
   char tt[32];
   char default_value_str[MAX_HIME_STR];
 
-  snprintf(default_value_str, sizeof(default_value_str), "%d", default_value);
+  sprintf(default_value_str, "%d", default_value);
   get_hime_conf_fstr(name, tt, default_value_str);
 
   return atoi(tt);
@@ -130,13 +130,13 @@ void save_hime_conf_int(char *name, int val)
 {
   char tt[16];
 
-  snprintf(tt, sizeof(tt), "%d", val);
+  sprintf(tt, "%d", val);
   save_hime_conf_str(name, tt);
 }
 
 void get_sys_table_file_name(char *name, char *fname)
 {
-  snprintf(fname, sizeof(fname), "%s/%s", TableDir, name);
+  sprintf(fname, "%s/%s", TableDir, name);
 }
 #endif /* !CLIENT_LIB */
 

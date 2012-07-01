@@ -19,13 +19,13 @@
 
 void sys_icon_fname(char *iconame, char fname[])
 {
-  snprintf(fname, sizeof(fname), HIME_ICON_DIR"/%s", iconame);
+  sprintf(fname, HIME_ICON_DIR"/%s", iconame);
 }
 
 void get_icon_path(char *iconame, char fname[])
 {
   char uu[128];
-  snprintf(uu, sizeof(uu), "icons/%s", iconame);
+  sprintf(uu, "icons/%s", iconame);
 
   if (!get_hime_user_fname(uu, fname)) {
     sys_icon_fname(iconame, fname);

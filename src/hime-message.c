@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 
   char message[512];
 
-  snprintf(message, sizeof(message), "#hime_message %s %s %d", icon, text, duration);
+  sprintf(message, "#hime_message %s %s %d", icon, text, duration);
 
   send_hime_message(GDK_DISPLAY(), message);
 
