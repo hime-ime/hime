@@ -64,7 +64,7 @@ static void create_result_win(int res, char *cmd)
   char tt[512];
 
   if (res) {
-    snprintf(tt, sizeof(tt), "%s code:%d '%s'\n%s", _("結果失敗"), res, strerror(res), cmd);
+    sprintf(tt, "%s code:%d '%s'\n%s", _("結果失敗"), res, strerror(res), cmd);
   }
   else
     strcpy(tt, _("結果成功"));
@@ -144,7 +144,7 @@ static void ts_import(const gchar *selected_filename)
      create_result_win(res, cmd);
    } else {
      char tt[512];
-     snprintf(tt, sizeof(tt), HIME_SCRIPT_DIR"/tsin-gtab-import %s '%s'", inmd[default_input_method].filename,
+     sprintf(tt, HIME_SCRIPT_DIR"/tsin-gtab-import %s '%s'", inmd[default_input_method].filename,
      selected_filename);
      system(tt);
    }
@@ -186,7 +186,7 @@ static void cb_ts_edit()
 static void cb_ts_import_sys()
 {
   char tt[512];
-  snprintf(tt, sizeof(tt), "cd ~/.config/hime && "HIME_BIN_DIR"/hime-tsd2a32 %s > tmpfile && "HIME_BIN_DIR"/hime-tsd2a32 %s/%s >> tmpfile && "HIME_BIN_DIR"/hime-tsa2d32 tmpfile",
+  sprintf(tt, "cd ~/.config/hime && "HIME_BIN_DIR"/hime-tsd2a32 %s > tmpfile && "HIME_BIN_DIR"/hime-tsd2a32 %s/%s >> tmpfile && "HIME_BIN_DIR"/hime-tsa2d32 tmpfile",
     tsin32_f, HIME_TABLE_DIR, tsin32_f);
   dbg("exec %s\n", tt);
   system(tt);
@@ -196,7 +196,7 @@ static void cb_ts_import_sys()
 static void cb_alt_shift()
 {
   char tt[512];
-  snprintf(tt, sizeof(tt), "( cd ~/.config/hime && %s phrase.table ) &", utf8_edit);
+  sprintf(tt, "( cd ~/.config/hime && %s phrase.table ) &", utf8_edit);
   system(tt);
 }
 
@@ -204,7 +204,7 @@ static void cb_alt_shift()
 static void cb_symbol_table()
 {
   char tt[512];
-  snprintf(tt, sizeof(tt), "( cd ~/.config/hime && %s symbol-table ) &", utf8_edit);
+  sprintf(tt, "( cd ~/.config/hime && %s symbol-table ) &", utf8_edit);
   system(tt);
 }
 void create_gtab_conf_window();
