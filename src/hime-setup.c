@@ -281,7 +281,7 @@ static void create_main_win()
   g_signal_connect (G_OBJECT (button_default_input_method), "clicked",
                     G_CALLBACK (cb_default_input_method), NULL);
 
-  GtkWidget *button_appearance_conf = gtk_button_new_with_label(_("輸入視窗外觀設定"));
+  GtkWidget *button_appearance_conf = gtk_button_new_with_label(_("外觀設定"));
   gtk_box_pack_start (GTK_BOX (vbox), button_appearance_conf, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_appearance_conf), "clicked",
                     G_CALLBACK (cb_appearance_conf), NULL);
