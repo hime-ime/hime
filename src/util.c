@@ -28,7 +28,7 @@ void p_err(char *fmt,...)
   char out[4096];
 
   va_start(args, fmt);
-  vsnprintf(out, sizeof(out), fmt, args);
+  vsprintf(out, fmt, args);
   va_end(args);
 
   fprintf(stderr, "%s\n", out);
@@ -48,7 +48,7 @@ static void init_out_fp()
   if (!out_fp) {
     if (getenv("HIME_DBG_TMP") || 0) {
       char fname[64];
-      snprintf(fname, sizeof(fname), "%s/himedbg-%d-%d", g_get_tmp_dir(), getuid(), getpid());
+      sprintf(fname, "%s/himedbg-%d-%d", g_get_tmp_dir(), getuid(), getpid());
       out_fp = fopen(fname, "w");
     }
 

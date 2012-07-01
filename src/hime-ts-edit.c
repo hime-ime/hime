@@ -262,7 +262,7 @@ void disp_page()
       strcat(line, " ");
     }
 
-    snprintf(tt, sizeof(tt), " %d", usecount);
+    sprintf(tt, " %d", usecount);
     strcat(line, tt);
     strcat(line, "</span>");
 
@@ -272,7 +272,7 @@ void disp_page()
   }
 
   char tt[32];
-  snprintf(tt, sizeof(tt), "%d", page_ofs+1);
+  sprintf(tt, "%d", page_ofs+1);
   gtk_label_set_text(GTK_LABEL(label_page_ofs), tt);
 }
 

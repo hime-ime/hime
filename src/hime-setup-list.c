@@ -365,7 +365,7 @@ static gboolean toggled_default_inmd(GtkCellRendererToggle *cell, gchar *path_st
   char *file;
   gtk_tree_model_get (model, &iter, COLUMN_FILE, &file, -1);
   char tt[128];
-  snprintf(tt, sizeof(tt), "%s %s", key, file);
+  sprintf(tt, "%s %s", key, file);
   free(default_input_method_str);
   default_input_method_str = strdup(tt);
   dbg("default_input_method_str %s\n", default_input_method_str);
