@@ -63,8 +63,8 @@ OBJS_kbmcv = kbmcv.o pho-sym.o util.o locale.o
 OBJS_hime-tsd2a32 = hime-tsd2a32.o pho-sym.o pho-dbg.o locale.o util.o \
 	gtab-dbg.o pho2pinyin.o hime-conf.o pinyin.o
 
-OBJS_cin2gtab     = cin2gtab.o gtab-util.o util.o locale.o
-OBJS_gtab2cin     = gtab2cin.o gtab-util.o util.o locale.o
+OBJS_cin2gtab     = hime-cin2gtab.o gtab-util.o util.o locale.o
+OBJS_gtab2cin     = hime-gtab2cin.o gtab-util.o util.o locale.o
 OBJS_gtab_merge   = hime-gtab-merge.o gtab-util.o util.o locale.o
 OBJS_hime_setup   = hime-setup.o hime-conf.o util.o hime-settings.o \
 	hime-setup-list.o locale.o hime-setup-pho.o about.o \
@@ -125,7 +125,7 @@ endif
 
 PROGS     = hime \
 	hime-tsd2a32 hime-tsa2d32 hime-phoa2d hime-phod2a \
-	hime-tslearn hime-setup cin2gtab gtab2cin \
+	hime-tslearn hime-setup hime-cin2gtab hime-gtab2cin \
 	hime-juyin-learn hime-sim2trad hime-gb-toggle hime-message hime-gtab-merge \
 	hime-tsin2gtab-phrase hime-ts-edit
 
@@ -225,12 +225,12 @@ hime-tsd2a32: $(OBJS_hime-tsd2a32)
 	@$(CCLD) -o $@ $^ $(LDFLAGS)
 
 
-cin2gtab: $(OBJS_cin2gtab)
+hime-cin2gtab: $(OBJS_cin2gtab)
 	@echo "linking $@ ..."
 	@$(CCLD) -o $@ $^ $(LDFLAGS)
 	@rm -f data/*.gtab
 
-gtab2cin: $(OBJS_gtab2cin)
+hime-gtab2cin: $(OBJS_gtab2cin)
 	@echo "linking $@ ..."
 	@$(CCLD) -o $@ $^ $(LDFLAGS)
 

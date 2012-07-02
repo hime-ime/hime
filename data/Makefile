@@ -19,7 +19,7 @@ DATAKEEP = symbol-table phrase.table phrase-ctrl.table
 
 PHO_A2D    = $(SRC_DIR)/hime-phoa2d
 TS_A2D     = $(SRC_DIR)/hime-tsa2d32
-CIN2GTAB   = $(SRC_DIR)/cin2gtab
+CIN2GTAB   = $(SRC_DIR)/hime-cin2gtab
 KBMCV      = $(SRC_DIR)/kbmcv
 PIN_JUYIN  = $(SRC_DIR)/pin-juyin
 
@@ -44,7 +44,7 @@ $(TS_A2D):
 	$(MAKE) -C $(SRC_DIR) hime-tsa2d32
 
 $(CIN2GTAB):
-	$(MAKE) -C $(SRC_DIR) cin2gtab
+	$(MAKE) -C $(SRC_DIR) hime-cin2gtab
 
 $(KBMCV):
 	$(MAKE) -C $(SRC_DIR) kbmcv

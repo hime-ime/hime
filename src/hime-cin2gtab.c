@@ -183,7 +183,7 @@ int main(int argc, char **argv)
   char *phrbuf = NULL;
   int prbf_cou=0;
 
-  printf("-- cin2gtab encoding UTF-8 --\n");
+  printf("-- hime-cin2gtab encoding UTF-8 --\n");
   printf("--- please use iconv -f big5 -t utf-8 if your file is in big5 encoding\n");
 
   if (argc<=1) {
@@ -193,7 +193,7 @@ int main(int argc, char **argv)
 
 
   if (!strcmp(fname, "-v") || !strcmp(fname, "--version")) {
-    dbg("cin2gtab for hime " HIME_VERSION "\n");
+    dbg("hime-cin2gtab for hime " HIME_VERSION "\n");
     exit(0);
   }
 
