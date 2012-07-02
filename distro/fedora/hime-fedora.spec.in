@@ -119,8 +119,8 @@ fi
 %config %{_sysconfdir}/X11/xinit/xinput.d/hime.conf
 %{_bindir}/hime
 %{_bindir}/hime-*
-%{_bindir}/cin2gtab
-%{_bindir}/gtab2cin
+%{_bindir}/hime-cin2gtab
+%{_bindir}/hime-gtab2cin
 %{_datadir}/applications/fedora-hime-setup.desktop
 %{_datadir}/hime/
 %{_datadir}/pixmaps/hime/

@@ -88,8 +88,8 @@ void bot_output(int status, struct TableHead *th)
 void usage()
 {
   printf(
-    "gtab2cin usages:\n"
-    "  gtab2cin -i <gtab> -o <cin>\n\n"
+    "hime-gtab2cin usages:\n"
+    "  hime-gtab2cin -i <gtab> -o <cin>\n\n"
     "    -h         Help message\n"
     "    -i         Table(gtab) filename\n"
     "    -o         Table(cin) filename\n"
@@ -99,7 +99,7 @@ void usage()
 
 int main(int argc, char **argv)
 {
-  const char CIN_HEADER[] = "#\n# cin file created via gtab2cin\n#\n";
+  const char CIN_HEADER[] = "#\n# cin file created via hime-gtab2cin\n#\n";
   FILE *fr, *fw;
   char fname[256];
   char fname_cin[256];
@@ -356,7 +356,7 @@ int main(int argc, char **argv)
   if (bot)
     bot_output(0, th);
   else
-    printf("gtab2cin done\n");
+    printf("hime-gtab2cin done\n");
   free(gtabbuf);
   fclose(fw);
   return 0;

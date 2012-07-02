@@ -7,7 +7,7 @@
 *.so.*
 *~
 .depend
-cin2gtab
+hime-cin2gtab
 config.mak
 data/ar30-big.gtab
 data/ar30.gtab
@@ -49,7 +49,7 @@ data/tsin-1.src
 data/tsin32
 data/tsin32.idx
 data/zo.kbm
-gtab2cin
+hime-gtab2cin
 hime
 kbmcv
 pin-juyin
