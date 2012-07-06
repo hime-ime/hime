@@ -31,7 +31,7 @@ build() {
         fi
 
         cd "${srcdir}/${_gitname}"
-	./configure --prefix=/usr
+	./configure --prefix=/usr --disable-lib64
 	make
 }
 
