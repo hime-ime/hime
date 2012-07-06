@@ -59,6 +59,7 @@ if [ $? = 0 ]; then
 fi
 
 prefix="/usr/local"
+LIB=
 use_xim='Y'
 use_tray='Y'
 use_unity='Y'
