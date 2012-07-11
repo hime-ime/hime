@@ -24,6 +24,7 @@ echo "====Detecting OS/Distribution===="
 uname -a | sed -e "s/$(hostname)//" -e "s/$USER//" | tr -s ' ' ' '
 
 echo
+lsb_release -a 2> /dev/null|grep -v "LSB Version"
 ls /etc/*[-_]version 2> /dev/null | while read ver; do echo $ver: `cat $ver`; done
 ls /etc/*[-_]release 2> /dev/null | while read ver; do echo $ver: `cat $ver`; done
 
