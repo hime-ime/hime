@@ -191,7 +191,7 @@ void create_win_intcode()
   gtk_widget_show_all (gwin_int);
 
   gtk_widget_realize (gwin_int);
-  set_no_focus(gwin_int);
+  gmf.mf_set_no_focus(gwin_int);
 
   adj_intcode_buttons();
   minimize_win();
