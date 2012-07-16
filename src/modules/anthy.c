@@ -937,6 +937,7 @@ gboolean module_feedkey(int kv, int kvstate)
       }
       return TRUE;
     case XK_Return:
+    case XK_KP_Enter:
       if (b_is_empty)
         return FALSE;
       if (state==STATE_SELECT) {
