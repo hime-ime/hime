@@ -290,7 +290,10 @@ void combo_selected(GtkWidget *widget, gpointer window)
 static GtkWidget *create_hime_edit_display()
 {
 
+  GtkWidget *box = gtk_vbox_new (FALSE, 1);
+
   GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
+  gtk_box_pack_start (GTK_BOX (box), hbox, FALSE, FALSE, 0);
   GtkWidget *label = gtk_label_new(_("編輯區顯示"));
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
@@ -307,17 +310,17 @@ static GtkWidget *create_hime_edit_display()
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_hime_edit_display), current_idx);
 
-  check_button_hime_on_the_spot_key = gtk_check_button_new_with_label (_("顯示字根於應用程式中\n(OnTheSpot)"));
+  check_button_hime_on_the_spot_key = gtk_check_button_new_with_label (_("顯示字根於應用程式中 (OnTheSpot)"));
   g_signal_connect (G_OBJECT (check_button_hime_on_the_spot_key), "toggled",
                     G_CALLBACK (cb_button_hime_on_the_spot_key), NULL);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_on_the_spot_key),
        hime_on_the_spot_key);
-  gtk_box_pack_start (GTK_BOX (hbox), check_button_hime_on_the_spot_key, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), check_button_hime_on_the_spot_key, FALSE, FALSE, 0);
 
   g_signal_connect(G_OBJECT(opt_hime_edit_display), "changed",
         G_CALLBACK(combo_selected), (gpointer) NULL);
 
-  return hbox;
+  return box;
 }
 
 #if TRAY_ENABLED
@@ -355,13 +358,13 @@ static GtkWidget *create_hime_tray_display()
 }
 #endif
 
-
 static gboolean cb_hime_win_color_use(GtkToggleButton *togglebutton, gpointer user_data)
 {
   dbg("cb_hime_win_color_use\n");
   disp_win_sample();
   return TRUE;
 }
+
 void create_appearance_conf_window()
 {
   if (hime_appearance_conf_window) {
@@ -387,7 +390,17 @@ void create_appearance_conf_window()
 
   GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_top), GTK_ORIENTATION_VERTICAL);
+#ifdef USE_WIDE
+  GtkWidget *box = gtk_vbox_new (FALSE, 10);
+  gtk_container_add (GTK_CONTAINER (hime_appearance_conf_window), box);
+
+  GtkWidget *hbox = gtk_hbox_new (FALSE, 10);
+  gtk_container_add (GTK_CONTAINER (box), hbox);
+
+  gtk_box_pack_start (GTK_BOX (hbox), vbox_top, FALSE, FALSE, 0);
+#else
   gtk_container_add (GTK_CONTAINER (hime_appearance_conf_window), vbox_top);
+#endif
 
   GtkWidget *hbox_hime_font_size = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size, FALSE, FALSE, 0);
@@ -475,6 +488,23 @@ void create_appearance_conf_window()
        hime_pop_up_win);
   gtk_box_pack_start (GTK_BOX(hbox_hime_pop_up_win), check_button_hime_pop_up_win, FALSE, FALSE, 0);
 
+#if TRAY_ENABLED
+  gtk_box_pack_start (GTK_BOX(vbox_top), create_hime_tray_display(), FALSE, FALSE, 0);
+  check_button_hime_tray_hf_win_kbm = gtk_check_button_new_with_label (_("在全/半形圖示上按左鍵可顯示/關閉螢幕小鍵盤"));
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_tray_hf_win_kbm),
+       hime_tray_hf_win_kbm);
+  gtk_box_pack_start (GTK_BOX(vbox_top), check_button_hime_tray_hf_win_kbm, FALSE, FALSE, 0);
+#endif
+  check_button_hime_show_win_kbm = gtk_check_button_new_with_label (_("啟動時顯示螢幕小鍵盤"));
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_show_win_kbm), hime_show_win_kbm);
+  gtk_box_pack_start (GTK_BOX(vbox_top), check_button_hime_show_win_kbm, FALSE, FALSE, 0);
+
+#ifdef USE_WIDE
+  vbox_top = gtk_vbox_new (FALSE, 0);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_top), GTK_ORIENTATION_VERTICAL);
+  gtk_container_add (GTK_CONTAINER (hbox), vbox_top);
+#endif
+
   GtkWidget *frame_root_style = gtk_frame_new(_("固定輸入視窗位置"));
   gtk_box_pack_start (GTK_BOX (vbox_top), frame_root_style, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame_root_style), 3);
@@ -515,17 +545,6 @@ void create_appearance_conf_window()
        hime_inner_frame);
   gtk_box_pack_start (GTK_BOX(hbox_hime_inner_frame), check_button_hime_inner_frame, FALSE, FALSE, 0);
 
-#if TRAY_ENABLED
-  gtk_box_pack_start (GTK_BOX(vbox_top), create_hime_tray_display(), FALSE, FALSE, 0);
-  check_button_hime_tray_hf_win_kbm = gtk_check_button_new_with_label (_("在全/半形圖示上按左鍵可顯示/關閉螢幕小鍵盤"));
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_tray_hf_win_kbm),
-       hime_tray_hf_win_kbm);
-  gtk_box_pack_start (GTK_BOX(vbox_top), check_button_hime_tray_hf_win_kbm, FALSE, FALSE, 0);
-#endif
-  check_button_hime_show_win_kbm = gtk_check_button_new_with_label (_("啟動時顯示螢幕小鍵盤"));
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_show_win_kbm), hime_show_win_kbm);
-  gtk_box_pack_start (GTK_BOX(vbox_top), check_button_hime_show_win_kbm, FALSE, FALSE, 0);
-
   check_button_hime_setup_window_type_utility = gtk_check_button_new_with_label (_("把設定視窗設為 UTILITY"));
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_setup_window_type_utility),
        hime_setup_window_type_utility);
@@ -557,7 +576,11 @@ void create_appearance_conf_window()
   gtk_container_add (GTK_CONTAINER(event_box_win_color_test), label_win_color_test);
   GtkWidget *hbox_win_color_fbg = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX(vbox_win_color), hbox_win_color_fbg, FALSE, FALSE, 0);
+#ifdef USE_WIDE
+  GtkWidget *button_fg = gtk_button_new_with_label(_("前景"));
+#else
   GtkWidget *button_fg = gtk_button_new_with_label(_("前景顏色"));
+#endif
   gtk_widget_set_hexpand (button_fg, TRUE);
   gtk_widget_set_halign (button_fg, GTK_ALIGN_FILL);
   gtk_box_pack_start (GTK_BOX(hbox_win_color_fbg), button_fg, TRUE, TRUE, 0);
@@ -568,14 +591,22 @@ void create_appearance_conf_window()
   gdk_color_parse(hime_win_color_bg, &hime_win_gcolor_bg);
 //  gtk_widget_modify_bg(event_box_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_bg);
 
+#ifdef USE_WIDE
+  GtkWidget *button_bg = gtk_button_new_with_label(_("背景"));
+#else
   GtkWidget *button_bg = gtk_button_new_with_label(_("背景顏色"));
+#endif
   gtk_widget_set_hexpand (button_bg, TRUE);
   gtk_widget_set_halign (button_bg, GTK_ALIGN_FILL);
   gtk_box_pack_start (GTK_BOX(hbox_win_color_fbg), button_bg, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (button_bg), "clicked",
                     G_CALLBACK (cb_hime_win_color), &colorsel[1]);
 
+#ifdef USE_WIDE
+  GtkWidget *button_hime_sel_key_color = gtk_button_new_with_label(_("選擇鍵"));
+#else
   GtkWidget *button_hime_sel_key_color = gtk_button_new_with_label(_("選擇鍵顏色"));
+#endif
   gtk_widget_set_hexpand (button_hime_sel_key_color, TRUE);
   gtk_widget_set_halign (button_hime_sel_key_color, GTK_ALIGN_FILL);
   g_signal_connect (G_OBJECT (button_hime_sel_key_color), "clicked",
@@ -583,7 +614,11 @@ void create_appearance_conf_window()
   gdk_color_parse(hime_sel_key_color, &hime_sel_key_gcolor);
   gtk_box_pack_start (GTK_BOX(hbox_win_color_fbg), button_hime_sel_key_color, TRUE, TRUE, 0);
 
+#ifdef USE_WIDE
+  GtkWidget *button_tsin_cursor_color = gtk_button_new_with_label(_("游標"));
+#else
   GtkWidget *button_tsin_cursor_color = gtk_button_new_with_label(_("游標顏色"));
+#endif
   gtk_widget_set_hexpand (button_tsin_cursor_color, TRUE);
   gtk_widget_set_halign (button_tsin_cursor_color, GTK_ALIGN_FILL);
   g_signal_connect (G_OBJECT (button_tsin_cursor_color), "clicked",
@@ -593,9 +628,14 @@ void create_appearance_conf_window()
 
   disp_win_sample();
 
+#ifdef USE_WIDE
+  vbox_top = gtk_hbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (box), vbox_top);
+#endif
+
   GtkWidget *hbox_cancel_ok = gtk_hbox_new (FALSE, 10);
   gtk_grid_set_column_homogeneous(GTK_GRID(hbox_cancel_ok), TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox_top), hbox_cancel_ok, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox_top), hbox_cancel_ok, TRUE, TRUE, 0);
 
   GtkWidget *button_cancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   if (button_order)

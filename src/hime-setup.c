@@ -240,12 +240,7 @@ static void cb_juying_learn()
   exit(0);
 }
 
-void create_gtablist_window();
-static void cb_default_input_method()
-{
-  create_gtablist_window();
-}
-
+void create_gtablist_window(gsize type);
 void create_about_window();
 void set_window_hime_icon(GtkWidget *window);
 
@@ -274,12 +269,29 @@ static void create_main_win()
 
   GtkWidget *vbox = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
+
+#ifdef USE_WIDE
+  GtkWidget *box = gtk_hbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (main_window), box);
+  gtk_box_pack_start (GTK_BOX (box), vbox, FALSE, FALSE, 0);
+
+  GtkWidget *button_default_input_method1 = gtk_button_new_with_label(_("開啟/關閉/預設輸入法"));
+  gtk_box_pack_start (GTK_BOX (vbox), button_default_input_method1, FALSE, FALSE, 0);
+  g_signal_connect (G_OBJECT (button_default_input_method1), "clicked",
+                    G_CALLBACK (create_gtablist_window), GINT_TO_POINTER(1));
+
+  GtkWidget *button_default_input_method2 = gtk_button_new_with_label(_("輸入法伺服器"));
+  gtk_box_pack_start (GTK_BOX (vbox), button_default_input_method2, FALSE, FALSE, 0);
+  g_signal_connect (G_OBJECT (button_default_input_method2), "clicked",
+                    G_CALLBACK (create_gtablist_window), GINT_TO_POINTER(2));
+#else
   gtk_container_add (GTK_CONTAINER (main_window), vbox);
 
-  GtkWidget *button_default_input_method = gtk_button_new_with_label(_("內定輸入法 & 開啟/關閉"));
+  GtkWidget *button_default_input_method = gtk_button_new_with_label(_("開啟/關閉/預設輸入法"));
   gtk_box_pack_start (GTK_BOX (vbox), button_default_input_method, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_default_input_method), "clicked",
-                    G_CALLBACK (cb_default_input_method), NULL);
+                    G_CALLBACK (create_gtablist_window), GINT_TO_POINTER(0));
+#endif
 
   GtkWidget *button_appearance_conf = gtk_button_new_with_label(_("外觀設定"));
   gtk_box_pack_start (GTK_BOX (vbox), button_appearance_conf, FALSE, FALSE, 0);
@@ -331,10 +343,8 @@ static void create_main_win()
   g_signal_connect (G_OBJECT (button_symbol_table), "clicked",
                     G_CALLBACK (cb_symbol_table), NULL);
 
-#if TRAY_ENABLED
   if (!hime_status_tray)
   {
-#endif
     GtkWidget *button_gb_output_toggle = gtk_button_new_with_label(_("啟用/關閉簡體字輸出"));
     gtk_box_pack_start (GTK_BOX (vbox), button_gb_output_toggle, FALSE, FALSE, 0);
     g_signal_connect (G_OBJECT (button_gb_output_toggle), "clicked",
@@ -345,9 +355,15 @@ static void create_main_win()
     gtk_box_pack_start (GTK_BOX (vbox), button_win_kbm_toggle, FALSE, FALSE, 0);
     g_signal_connect (G_OBJECT (button_win_kbm_toggle), "clicked",
                       G_CALLBACK (cb_win_kbm_toggle), NULL);
-#if TRAY_ENABLED
   }
+
+
+#ifdef USE_WIDE
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
+  gtk_box_pack_start (GTK_BOX (box), vbox, FALSE, FALSE, 0);
 #endif
+
   GtkWidget *button_gb_translate_toggle = gtk_button_new_with_label(_("剪貼區 簡體字->正體字"));
   gtk_box_pack_start (GTK_BOX (vbox), button_gb_translate_toggle, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_gb_translate_toggle), "clicked",
@@ -358,13 +374,18 @@ static void create_main_win()
   g_signal_connect (G_OBJECT (button_juying_learn_toggle), "clicked",
                     G_CALLBACK (cb_juying_learn), NULL);
 
-  GtkWidget *expander_ts = gtk_expander_new (_("詞庫選項"));
-  gtk_box_pack_start (GTK_BOX (vbox), expander_ts, FALSE, FALSE, 0);
 
-  GtkWidget *vbox_ts = gtk_vbox_new (FALSE, 0);
+  GtkWidget *expander_ts;
+  GtkWidget *vbox_ts;
+#ifdef USE_WIDE
+  vbox_ts = vbox;
+#else
+  expander_ts = gtk_expander_new (_("詞庫選項"));
+  gtk_box_pack_start (GTK_BOX (vbox), expander_ts, FALSE, FALSE, 0);
+  vbox_ts = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_ts), GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (expander_ts), vbox_ts);
-
+#endif
 
   GtkWidget *button_ts_export = gtk_button_new_with_label(_("詞庫匯出"));
   gtk_widget_set_hexpand (button_ts_export, TRUE);

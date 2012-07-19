@@ -236,7 +236,11 @@ void create_gtab_conf_window()
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_top), GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (hime_gtab_conf_window), vbox_top);
 
+#ifdef USE_WIDE
+  GtkWidget *hbox_lr = gtk_vbox_new (FALSE, 10);
+#else
   GtkWidget *hbox_lr = gtk_hbox_new (FALSE, 10);
+#endif
   gtk_box_pack_start (GTK_BOX (vbox_top), hbox_lr, FALSE, FALSE, 0);
 
 
@@ -246,6 +250,13 @@ void create_gtab_conf_window()
   GtkWidget *vbox_gtab_l = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_gtab_l), GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (frame_gtab_l), vbox_gtab_l);
+#ifdef USE_WIDE
+  GtkWidget *box = vbox_gtab_l;
+  GtkWidget *hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), hbox, FALSE, FALSE, 0);
+  vbox_gtab_l= gtk_vbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox_gtab_l, FALSE, FALSE, 0);
+#endif
   gtk_container_set_border_width (GTK_CONTAINER (vbox_gtab_l), 10);
 
 
@@ -259,6 +270,7 @@ void create_gtab_conf_window()
 
 #define SPC 1
 
+
   GtkWidget *hbox_gtab_pre_select = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_pre_select, FALSE, FALSE, 0);
   opt_gtab_pre_select = gtk_label_new (_("預覽/預選 字"));
@@ -271,6 +283,19 @@ void create_gtab_conf_window()
   gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_partial_match), opt_gtab_disp_partial_match,  FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_partial_match), create_auto_select_by_phrase_opts(&opt_gtab_disp_partial_match, gtab_disp_partial_match), FALSE, FALSE, 0);
 
+  GtkWidget *hbox_gtab_vertical_select = gtk_hbox_new (FALSE, SPC);
+  gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_vertical_select, FALSE, FALSE, 0);
+  GtkWidget *label_gtab_vertical_select = gtk_label_new (_("垂直選擇"));
+  gtk_box_pack_start (GTK_BOX (hbox_gtab_vertical_select), label_gtab_vertical_select,  FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox_gtab_vertical_select), create_auto_select_by_phrase_opts(&opt_gtab_vertical_select, gtab_vertical_select),  FALSE, FALSE, 0);
+
+
+#ifdef USE_WIDE
+  gtk_box_pack_start (GTK_BOX (hbox), gtk_vseparator_new (), FALSE, FALSE, 10);
+  vbox_gtab_l= gtk_vbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox_gtab_l, FALSE, FALSE, 0);
+#endif
+
   GtkWidget *hbox_gtab_disp_key_codes = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_disp_key_codes, FALSE, FALSE, 0);
   check_button_gtab_disp_key_codes = gtk_check_button_new_with_label (_("顯示字根"));
@@ -278,8 +303,6 @@ void create_gtab_conf_window()
 
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_disp_key_codes),
      gtab_disp_key_codes);
-
-
   GtkWidget *hbox_gtab_disp_im_name = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_disp_im_name, FALSE, FALSE, 0);
   check_button_gtab_disp_im_name = gtk_check_button_new_with_label (_("顯示輸入法名稱"));
@@ -303,11 +326,13 @@ void create_gtab_conf_window()
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_in_row1),
      gtab_in_row1);
 
-  GtkWidget *hbox_gtab_vertical_select = gtk_hbox_new (FALSE, SPC);
-  gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_vertical_select, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_vertical_select = gtk_label_new (_("垂直選擇"));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_vertical_select), label_gtab_vertical_select,  FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_vertical_select), create_auto_select_by_phrase_opts(&opt_gtab_vertical_select, gtab_vertical_select),  FALSE, FALSE, 0);
+#ifdef USE_WIDE
+  box = vbox_gtab_r;
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), hbox, FALSE, FALSE, 0);
+  vbox_gtab_r= gtk_vbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox_gtab_r, FALSE, FALSE, 0);
+#endif
 
   GtkWidget *hbox_gtab_press_full_auto_send = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_press_full_auto_send, FALSE, FALSE, 0);
@@ -349,6 +374,12 @@ void create_gtab_conf_window()
   gtk_box_pack_start (GTK_BOX (hbox_gtab_shift_phrase_key), check_button_gtab_shift_phrase_key,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_shift_phrase_key),
      gtab_shift_phrase_key);
+
+#ifdef USE_WIDE
+  gtk_box_pack_start (GTK_BOX (hbox), gtk_vseparator_new (), FALSE, FALSE, 10);
+  vbox_gtab_r= gtk_vbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox_gtab_r, FALSE, FALSE, 0);
+#endif
 
   gtk_box_pack_start (GTK_BOX (vbox_gtab_r), create_en_pho_key_sel(_("切換[中/英]輸入")), FALSE, FALSE, 0);
 

@@ -575,7 +575,7 @@ static GtkWidget *create_speaker_opts()
 
 #include <dirent.h>
 
-void create_gtablist_window (void)
+void create_gtablist_window (GtkWidget *widget, gsize type)
 {
   if (gtablist_window) {
     gtk_window_present(GTK_WINDOW(gtablist_window));
@@ -589,9 +589,10 @@ void create_gtablist_window (void)
   if (hime_setup_window_type_utility)
     gtk_window_set_type_hint(GTK_WINDOW(gtablist_window), GDK_WINDOW_TYPE_HINT_UTILITY);
   gtk_window_set_position(GTK_WINDOW(gtablist_window), GTK_WIN_POS_MOUSE);
+  if (type==2) gtk_window_set_resizable(GTK_WINDOW(gtablist_window), FALSE);
 
   gtk_window_set_has_resize_grip(GTK_WINDOW(gtablist_window), FALSE);
- gtk_window_set_title (GTK_WINDOW (gtablist_window), _("內定輸入法 & 開啟/關閉"));
+  gtk_window_set_title (GTK_WINDOW (gtablist_window), _("開啟/關閉/預設輸入法"));
   gtk_container_set_border_width (GTK_CONTAINER (gtablist_window), 1);
 
   g_signal_connect (G_OBJECT (gtablist_window), "destroy",
@@ -600,15 +601,18 @@ void create_gtablist_window (void)
   g_signal_connect (G_OBJECT (gtablist_window), "delete_event",
                       G_CALLBACK (callback_win_delete), NULL);
 
+  GtkWidget *box = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (gtablist_window), box);
+
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
-  gtk_container_add (GTK_CONTAINER (gtablist_window), vbox);
+  gtk_box_pack_start (GTK_BOX (box), vbox, TRUE, TRUE, 0);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
                                        GTK_SHADOW_ETCHED_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
   gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE, 0);
 
@@ -629,6 +633,22 @@ void create_gtablist_window (void)
   add_columns (GTK_TREE_VIEW (treeview));
 
   gtk_container_add (GTK_CONTAINER (sw), treeview);
+
+  if (type ==2)
+    gtk_widget_set_no_show_all (vbox, TRUE);
+  else
+  {
+    // Trying to get correct size of dialog_data->treeview, then put it into a gtk_scrolled_window
+    gtk_widget_show_all (gtablist_window);
+
+    GtkRequisition requisition;
+    gtk_widget_get_child_requisition (treeview, &requisition);
+    gtk_widget_set_size_request(vbox, requisition.width, 360);
+  }
+
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
+  gtk_box_pack_start (GTK_BOX (box), vbox, FALSE, FALSE, 0);
 
   gtk_box_pack_start (GTK_BOX (vbox), create_im_toggle_keys(), FALSE, FALSE, 0);
 
@@ -728,6 +748,13 @@ void create_gtablist_window (void)
     gtk_container_add (GTK_CONTAINER (hbox_phonetic_speak), create_speaker_opts());
   }
 
+  if (type ==1) gtk_widget_set_no_show_all (vbox, TRUE);
+
+
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
+  gtk_box_pack_start (GTK_BOX (box), vbox, FALSE, FALSE, 0);
+
   hbox = gtk_hbox_new (TRUE, 4);
   gtk_grid_set_column_homogeneous(GTK_GRID(hbox), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
@@ -754,7 +781,6 @@ void create_gtablist_window (void)
   else
     gtk_grid_attach_next_to (GTK_BOX (hbox), button2, button, GTK_POS_RIGHT, 1, 1);
 #endif
-  gtk_window_set_default_size (GTK_WINDOW (gtablist_window), 620, 450);
 
   g_signal_connect (G_OBJECT (gtablist_window), "delete_event",
                     G_CALLBACK (gtk_main_quit), NULL);

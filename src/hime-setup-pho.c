@@ -438,7 +438,7 @@ void create_kbm_window()
 
 
   GtkWidget *hbox_pho_hide_row2 = gtk_hbox_new(FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox_l), hbox_pho_hide_row2 , FALSE, FALSE, 1);
+  gtk_box_pack_start (GTK_BOX (vbox_r), hbox_pho_hide_row2 , FALSE, FALSE, 1);
   check_button_pho_hide_row2 = gtk_check_button_new_with_label(_("注音隱藏第二列 (注音符號)"));
   gtk_box_pack_start (GTK_BOX (hbox_pho_hide_row2), check_button_pho_hide_row2, FALSE, FALSE, 0);
   gtk_toggle_button_set_active(
@@ -446,7 +446,7 @@ void create_kbm_window()
 
 
   GtkWidget *hbox_pho_in_row1 = gtk_hbox_new(FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox_l), hbox_pho_in_row1 , FALSE, FALSE, 1);
+  gtk_box_pack_start (GTK_BOX (vbox_r), hbox_pho_in_row1 , FALSE, FALSE, 1);
   check_button_pho_in_row1 = gtk_check_button_new_with_label(_("注音符號移至第一列"));
   gtk_box_pack_start (GTK_BOX (hbox_pho_in_row1), check_button_pho_in_row1, FALSE, FALSE, 0);
   gtk_toggle_button_set_active(
