@@ -404,13 +404,13 @@ void create_appearance_conf_window()
 
   GtkWidget *hbox_hime_font_size = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size, FALSE, FALSE, 0);
-  GtkWidget *label_hime_font_size = gtk_label_new(_("字型大小"));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size), label_hime_font_size, FALSE, FALSE, 0);
-  GtkAdjustment *adj_hime_font_size =
-   (GtkAdjustment *) gtk_adjustment_new (hime_font_size, 8.0, 32.0, 1.0, 1.0, 0.0);
-  spinner_hime_font_size = gtk_spin_button_new (adj_hime_font_size, 0, 0);
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size), spinner_hime_font_size, FALSE, FALSE, 0);
 
+  GtkWidget *label_hime_font_size = gtk_label_new(_("主要字型"));
+  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size), label_hime_font_size, FALSE, FALSE, 0);
+  char tt[128];
+  sprintf(tt, "%s %d", hime_font_name, hime_font_size);
+  font_sel = gtk_font_button_new_with_font (tt);
+  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size), font_sel, FALSE, FALSE, 0);
 
   GtkWidget *hbox_hime_font_size_symbol = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_symbol, FALSE, FALSE, 0);
@@ -476,11 +476,6 @@ void create_appearance_conf_window()
   spinner_hime_font_size_win_kbm_en = gtk_spin_button_new (adj_hime_font_size_win_kbm_en, 0, 0);
   gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), spinner_hime_font_size_win_kbm_en, FALSE, FALSE, 0);
 
-  char tt[128];
-  sprintf(tt, "%s %d", hime_font_name, hime_font_size);
-  font_sel = gtk_font_button_new_with_font (tt);
-  gtk_box_pack_start (GTK_BOX (vbox_top), font_sel, FALSE, FALSE, 0);
-
   GtkWidget *hbox_hime_pop_up_win = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX(vbox_top), hbox_hime_pop_up_win, FALSE, FALSE, 0);
   check_button_hime_pop_up_win = gtk_check_button_new_with_label (_("在有輸入字根時才會彈出輸入視窗"));
@@ -519,22 +514,20 @@ void create_appearance_conf_window()
        hime_input_style == InputStyleRoot);
   gtk_box_pack_start (GTK_BOX(hbox_root_style_use), check_button_root_style_use, FALSE, FALSE, 0);
 
-
-  GtkWidget *hbox_root_style = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX(vbox_root_style), hbox_root_style, FALSE, FALSE, 0);
+  GtkWidget *label_fix_location = gtk_label_new(_("固定位置："));
+  gtk_box_pack_start (GTK_BOX (hbox_root_style_use), label_fix_location, FALSE, FALSE, 0);
 
   GtkAdjustment *adj_root_style_x =
    (GtkAdjustment *) gtk_adjustment_new (hime_root_x, 0.0, 5120.0, 1.0, 1.0, 0.0);
   spinner_root_style_x = gtk_spin_button_new (adj_root_style_x, 0, 0);
   gtk_widget_set_hexpand (spinner_root_style_x, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox_root_style), spinner_root_style_x);
+  gtk_box_pack_start (GTK_BOX(hbox_root_style_use), spinner_root_style_x, FALSE, FALSE, 0);
 
   GtkAdjustment *adj_root_style_y =
    (GtkAdjustment *) gtk_adjustment_new (hime_root_y, 0.0, 2880.0, 1.0, 1.0, 0.0);
   spinner_root_style_y = gtk_spin_button_new (adj_root_style_y, 0, 0);
   gtk_widget_set_hexpand (spinner_root_style_y, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox_root_style), spinner_root_style_y);
-
+  gtk_box_pack_start (GTK_BOX(hbox_root_style_use), spinner_root_style_y, FALSE, FALSE, 0);
 
   gtk_box_pack_start (GTK_BOX(vbox_top), create_hime_edit_display(), FALSE, FALSE, 0);
 

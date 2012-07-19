@@ -170,12 +170,10 @@ static gboolean cb_gtab_edit_append( GtkWidget *widget,
 
 static GtkWidget *create_spc_opts()
 {
-  GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
-  GtkWidget *label = gtk_label_new(_("空白鍵選項"));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+  GtkWidget *frame = gtk_frame_new(_("空白鍵選項"));
 
   opt_spc_opts = gtk_combo_box_new_text ();
-  gtk_box_pack_start (GTK_BOX (hbox), opt_spc_opts, FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (frame), opt_spc_opts);
 
   int i, current_idx=0;
 
@@ -187,7 +185,7 @@ static GtkWidget *create_spc_opts()
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_spc_opts), current_idx);
 
-  return hbox;
+  return frame;
 }
 
 static GtkWidget *create_auto_select_by_phrase_opts(GtkWidget **out, int val)
@@ -210,7 +208,7 @@ static GtkWidget *create_auto_select_by_phrase_opts(GtkWidget **out, int val)
 
 GtkWidget *create_en_pho_key_sel(char *s);
 
-void create_gtab_conf_window()
+void create_gtab_conf_window(GtkWidget *widget, gsize type)
 {
   if (hime_gtab_conf_window) {
     gtk_window_present(GTK_WINDOW(hime_gtab_conf_window));
@@ -243,29 +241,39 @@ void create_gtab_conf_window()
 #endif
   gtk_box_pack_start (GTK_BOX (vbox_top), hbox_lr, FALSE, FALSE, 0);
 
-
+#if !USE_WIDE
   GtkWidget *frame_gtab_l = gtk_frame_new(_("外觀"));
   gtk_container_set_border_width (GTK_CONTAINER (frame_gtab_l), 5);
   gtk_box_pack_start (GTK_BOX (hbox_lr), frame_gtab_l, TRUE, TRUE, 0);
+#endif
   GtkWidget *vbox_gtab_l = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_gtab_l), GTK_ORIENTATION_VERTICAL);
-  gtk_container_add (GTK_CONTAINER (frame_gtab_l), vbox_gtab_l);
 #ifdef USE_WIDE
+  gtk_box_pack_start (GTK_BOX (hbox_lr), vbox_gtab_l, TRUE, TRUE, 0);
+  if (type==2) gtk_widget_set_no_show_all(vbox_gtab_l, TRUE);
   GtkWidget *box = vbox_gtab_l;
   GtkWidget *hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (box), hbox, FALSE, FALSE, 0);
   vbox_gtab_l= gtk_vbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), vbox_gtab_l, FALSE, FALSE, 0);
+#else
+  gtk_container_add (GTK_CONTAINER (frame_gtab_l), vbox_gtab_l);
 #endif
   gtk_container_set_border_width (GTK_CONTAINER (vbox_gtab_l), 10);
 
-
+#if !USE_WIDE
   GtkWidget *frame_gtab_r = gtk_frame_new(_("行為"));
   gtk_container_set_border_width (GTK_CONTAINER (frame_gtab_r), 5);
   gtk_box_pack_start (GTK_BOX (hbox_lr), frame_gtab_r, TRUE, TRUE, 0);
+#endif
   GtkWidget *vbox_gtab_r = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_gtab_r), GTK_ORIENTATION_VERTICAL);
+#ifdef USE_WIDE
+  gtk_box_pack_start (GTK_BOX (hbox_lr), vbox_gtab_r, TRUE, TRUE, 0);
+  if (type==1) gtk_widget_set_no_show_all(vbox_gtab_r, TRUE);
+#else
   gtk_container_add (GTK_CONTAINER (frame_gtab_r), vbox_gtab_r);
+#endif
   gtk_container_set_border_width (GTK_CONTAINER (vbox_gtab_r), 10);
 
 #define SPC 1

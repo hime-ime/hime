@@ -207,13 +207,8 @@ static void cb_symbol_table()
   sprintf(tt, "( cd ~/.config/hime && %s symbol-table ) &", utf8_edit);
   system(tt);
 }
-void create_gtab_conf_window();
 
-static void cb_gtab_conf()
-{
-  create_gtab_conf_window();
-}
-
+void create_gtab_conf_window(gsize type);
 
 static void cb_gb_output_toggle()
 {
@@ -303,35 +298,21 @@ static void create_main_win()
   g_signal_connect (G_OBJECT (button_kbm), "clicked",
                     G_CALLBACK (cb_kbm), NULL);
 
+#ifdef USE_WIDE
+  GtkWidget *button_gtab_conf = gtk_button_new_with_label(_("倉頡/行列/大易 外觀設定"));
+  gtk_box_pack_start (GTK_BOX (vbox), button_gtab_conf, FALSE, FALSE, 0);
+  g_signal_connect (G_OBJECT (button_gtab_conf), "clicked",
+                    G_CALLBACK (create_gtab_conf_window), GINT_TO_POINTER(1));
+  button_gtab_conf = gtk_button_new_with_label(_("倉頡/行列/大易 行為設定"));
+  gtk_box_pack_start (GTK_BOX (vbox), button_gtab_conf, FALSE, FALSE, 0);
+  g_signal_connect (G_OBJECT (button_gtab_conf), "clicked",
+                    G_CALLBACK (create_gtab_conf_window), GINT_TO_POINTER(2));
+#else
   GtkWidget *button_gtab_conf = gtk_button_new_with_label(_("倉頡/行列/大易設定"));
   gtk_box_pack_start (GTK_BOX (vbox), button_gtab_conf, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_gtab_conf), "clicked",
-                    G_CALLBACK (cb_gtab_conf), NULL);
-
-  int i;
-  for (i=0; i < inmdN; i++) {
-    INMD *pinmd = &inmd[i];
-    if (pinmd->method_type != method_type_MODULE || pinmd->disabled)
-      continue;
-
-    HIME_module_callback_functions *f = init_HIME_module_callback_functions(pinmd->filename);
-    if (!f)
-      continue;
-
-    if (!f->module_setup_window_create) {
-      free(f);
-      continue;
-    }
-
-    char tt[128];
-    strcpy(tt, pinmd->cname);
-    strcat(tt, _("設定"));
-    GtkWidget *button_module_input_method = gtk_button_new_with_label(tt);
-    gtk_box_pack_start (GTK_BOX (vbox), button_module_input_method, FALSE, FALSE, 0);
-    g_signal_connect (G_OBJECT (button_module_input_method), "clicked",
-                    G_CALLBACK (f->module_setup_window_create), GINT_TO_POINTER(hime_setup_window_type_utility));
-  }
-
+                    G_CALLBACK (create_gtab_conf_window), GINT_TO_POINTER(0));
+#endif
 
   GtkWidget *button_alt_shift = gtk_button_new_with_label(_("alt-shift 片語編輯"));
   gtk_box_pack_start (GTK_BOX (vbox), button_alt_shift, FALSE, FALSE, 0);
@@ -414,6 +395,30 @@ static void create_main_win()
   gtk_box_pack_start (GTK_BOX (vbox_ts), button_ts_import_sys, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_ts_import_sys), "clicked",
                     G_CALLBACK (cb_ts_import_sys), NULL);
+
+  int i;
+  for (i=0; i < inmdN; i++) {
+    INMD *pinmd = &inmd[i];
+    if (pinmd->method_type != method_type_MODULE || pinmd->disabled)
+      continue;
+
+    HIME_module_callback_functions *f = init_HIME_module_callback_functions(pinmd->filename);
+    if (!f)
+      continue;
+
+    if (!f->module_setup_window_create) {
+      free(f);
+      continue;
+    }
+
+    char tt[128];
+    strcpy(tt, pinmd->cname);
+    strcat(tt, _("設定"));
+    GtkWidget *button_module_input_method = gtk_button_new_with_label(tt);
+    gtk_box_pack_start (GTK_BOX (vbox), button_module_input_method, FALSE, FALSE, 0);
+    g_signal_connect (G_OBJECT (button_module_input_method), "clicked",
+                    G_CALLBACK (f->module_setup_window_create), GINT_TO_POINTER(hime_setup_window_type_utility));
+  }
 
   GtkWidget *button_about = gtk_button_new_from_stock (GTK_STOCK_ABOUT);
   gtk_box_pack_start (GTK_BOX (vbox), button_about, FALSE, FALSE, 0);
