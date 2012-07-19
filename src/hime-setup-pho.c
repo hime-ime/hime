@@ -374,16 +374,17 @@ void create_kbm_window()
   gtk_container_add (GTK_CONTAINER (hime_kbm_window), vbox_top);
 
 
-  GtkWidget *hbox_lr = gtk_hbox_new (FALSE, 3);
+  GtkWidget *hbox_lr = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox_top), hbox_lr, FALSE, FALSE, 0);
 
-
-  GtkWidget *vbox_l = gtk_vbox_new (FALSE, 3);
+  GtkWidget *vbox_l = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_l), GTK_ORIENTATION_VERTICAL);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox_l), 10);
   gtk_box_pack_start (GTK_BOX (hbox_lr), vbox_l, TRUE, TRUE, 10);
 
-  GtkWidget *vbox_r = gtk_vbox_new (FALSE, 3);
+  GtkWidget *vbox_r = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_r), GTK_ORIENTATION_VERTICAL);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox_r), 10);
   gtk_box_pack_start (GTK_BOX (hbox_lr), vbox_r, TRUE, TRUE, 10);
 
 

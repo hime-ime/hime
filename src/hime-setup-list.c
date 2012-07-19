@@ -602,6 +602,7 @@ void create_gtablist_window (GtkWidget *widget, gsize type)
                       G_CALLBACK (callback_win_delete), NULL);
 
   GtkWidget *box = gtk_vbox_new (FALSE, 0);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(box), GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (gtablist_window), box);
 
   vbox = gtk_vbox_new (FALSE, 0);
@@ -635,7 +636,10 @@ void create_gtablist_window (GtkWidget *widget, gsize type)
   gtk_container_add (GTK_CONTAINER (sw), treeview);
 
   if (type ==2)
+  {
+    gtk_container_set_border_width (GTK_CONTAINER (gtablist_window), 10);
     gtk_widget_set_no_show_all (vbox, TRUE);
+  }
   else
   {
     // Trying to get correct size of dialog_data->treeview, then put it into a gtk_scrolled_window
@@ -750,14 +754,9 @@ void create_gtablist_window (GtkWidget *widget, gsize type)
 
   if (type ==1) gtk_widget_set_no_show_all (vbox, TRUE);
 
-
-  vbox = gtk_vbox_new (FALSE, 0);
-  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
-  gtk_box_pack_start (GTK_BOX (box), vbox, FALSE, FALSE, 0);
-
   hbox = gtk_hbox_new (TRUE, 4);
   gtk_grid_set_column_homogeneous(GTK_GRID(hbox), TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), hbox, FALSE, FALSE, 0);
 
   button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   g_signal_connect (G_OBJECT (button), "clicked",

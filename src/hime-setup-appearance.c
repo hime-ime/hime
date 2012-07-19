@@ -291,6 +291,7 @@ static GtkWidget *create_hime_edit_display()
 {
 
   GtkWidget *box = gtk_vbox_new (FALSE, 1);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(box), GTK_ORIENTATION_VERTICAL);
 
   GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
   gtk_box_pack_start (GTK_BOX (box), hbox, FALSE, FALSE, 0);
@@ -390,8 +391,10 @@ void create_appearance_conf_window()
 
   GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_top), GTK_ORIENTATION_VERTICAL);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox_top), 10);
 #ifdef USE_WIDE
   GtkWidget *box = gtk_vbox_new (FALSE, 10);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(box), GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (hime_appearance_conf_window), box);
 
   GtkWidget *hbox = gtk_hbox_new (FALSE, 10);
@@ -497,6 +500,7 @@ void create_appearance_conf_window()
 #ifdef USE_WIDE
   vbox_top = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_top), GTK_ORIENTATION_VERTICAL);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox_top), 10);
   gtk_container_add (GTK_CONTAINER (hbox), vbox_top);
 #endif
 
@@ -622,8 +626,7 @@ void create_appearance_conf_window()
   disp_win_sample();
 
 #ifdef USE_WIDE
-  vbox_top = gtk_hbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (box), vbox_top);
+  vbox_top = box;
 #endif
 
   GtkWidget *hbox_cancel_ok = gtk_hbox_new (FALSE, 10);

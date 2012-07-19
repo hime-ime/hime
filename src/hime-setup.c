@@ -324,8 +324,10 @@ static void create_main_win()
   g_signal_connect (G_OBJECT (button_symbol_table), "clicked",
                     G_CALLBACK (cb_symbol_table), NULL);
 
+#if !USE_WIDE
   if (!hime_status_tray)
   {
+#endif
     GtkWidget *button_gb_output_toggle = gtk_button_new_with_label(_("啟用/關閉簡體字輸出"));
     gtk_box_pack_start (GTK_BOX (vbox), button_gb_output_toggle, FALSE, FALSE, 0);
     g_signal_connect (G_OBJECT (button_gb_output_toggle), "clicked",
@@ -336,7 +338,9 @@ static void create_main_win()
     gtk_box_pack_start (GTK_BOX (vbox), button_win_kbm_toggle, FALSE, FALSE, 0);
     g_signal_connect (G_OBJECT (button_win_kbm_toggle), "clicked",
                       G_CALLBACK (cb_win_kbm_toggle), NULL);
+#if !USE_WIDE
   }
+#endif
 
 
 #ifdef USE_WIDE

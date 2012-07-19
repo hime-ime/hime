@@ -243,7 +243,7 @@ void create_gtab_conf_window(GtkWidget *widget, gsize type)
 
 #if !USE_WIDE
   GtkWidget *frame_gtab_l = gtk_frame_new(_("外觀"));
-  gtk_container_set_border_width (GTK_CONTAINER (frame_gtab_l), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (frame_gtab_l), 10);
   gtk_box_pack_start (GTK_BOX (hbox_lr), frame_gtab_l, TRUE, TRUE, 0);
 #endif
   GtkWidget *vbox_gtab_l = gtk_vbox_new (FALSE, 0);
@@ -255,26 +255,27 @@ void create_gtab_conf_window(GtkWidget *widget, gsize type)
   GtkWidget *hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (box), hbox, FALSE, FALSE, 0);
   vbox_gtab_l= gtk_vbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox_gtab_l), 10);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_gtab_l), GTK_ORIENTATION_VERTICAL);
   gtk_box_pack_start (GTK_BOX (hbox), vbox_gtab_l, FALSE, FALSE, 0);
 #else
   gtk_container_add (GTK_CONTAINER (frame_gtab_l), vbox_gtab_l);
 #endif
-  gtk_container_set_border_width (GTK_CONTAINER (vbox_gtab_l), 10);
 
 #if !USE_WIDE
   GtkWidget *frame_gtab_r = gtk_frame_new(_("行為"));
-  gtk_container_set_border_width (GTK_CONTAINER (frame_gtab_r), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (frame_gtab_r), 10);
   gtk_box_pack_start (GTK_BOX (hbox_lr), frame_gtab_r, TRUE, TRUE, 0);
 #endif
   GtkWidget *vbox_gtab_r = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_gtab_r), GTK_ORIENTATION_VERTICAL);
+
 #ifdef USE_WIDE
   gtk_box_pack_start (GTK_BOX (hbox_lr), vbox_gtab_r, TRUE, TRUE, 0);
   if (type==1) gtk_widget_set_no_show_all(vbox_gtab_r, TRUE);
 #else
   gtk_container_add (GTK_CONTAINER (frame_gtab_r), vbox_gtab_r);
 #endif
-  gtk_container_set_border_width (GTK_CONTAINER (vbox_gtab_r), 10);
 
 #define SPC 1
 
@@ -299,8 +300,9 @@ void create_gtab_conf_window(GtkWidget *widget, gsize type)
 
 
 #ifdef USE_WIDE
-  gtk_box_pack_start (GTK_BOX (hbox), gtk_vseparator_new (), FALSE, FALSE, 10);
   vbox_gtab_l= gtk_vbox_new (FALSE, 0);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_gtab_l), GTK_ORIENTATION_VERTICAL);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox_gtab_l), 10);
   gtk_box_pack_start (GTK_BOX (hbox), vbox_gtab_l, FALSE, FALSE, 0);
 #endif
 
@@ -339,6 +341,8 @@ void create_gtab_conf_window(GtkWidget *widget, gsize type)
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (box), hbox, FALSE, FALSE, 0);
   vbox_gtab_r= gtk_vbox_new (FALSE, 0);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_gtab_r), GTK_ORIENTATION_VERTICAL);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox_gtab_r), 10);
   gtk_box_pack_start (GTK_BOX (hbox), vbox_gtab_r, FALSE, FALSE, 0);
 #endif
 
@@ -384,8 +388,9 @@ void create_gtab_conf_window(GtkWidget *widget, gsize type)
      gtab_shift_phrase_key);
 
 #ifdef USE_WIDE
-  gtk_box_pack_start (GTK_BOX (hbox), gtk_vseparator_new (), FALSE, FALSE, 10);
   vbox_gtab_r= gtk_vbox_new (FALSE, 0);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_gtab_r), GTK_ORIENTATION_VERTICAL);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox_gtab_r), 10);
   gtk_box_pack_start (GTK_BOX (hbox), vbox_gtab_r, FALSE, FALSE, 0);
 #endif
 
