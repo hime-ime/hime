@@ -266,9 +266,9 @@ static void create_main_win()
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
 
 #ifdef USE_WIDE
-  GtkWidget *box = gtk_hbox_new (FALSE, 0);
+  GtkWidget *box = gtk_hbox_new (TRUE, 0);
   gtk_container_add (GTK_CONTAINER (main_window), box);
-  gtk_box_pack_start (GTK_BOX (box), vbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), vbox, TRUE, TRUE, 0);
 
   GtkWidget *button_default_input_method1 = gtk_button_new_with_label(_("開啟/關閉/預設輸入法"));
   gtk_box_pack_start (GTK_BOX (vbox), button_default_input_method1, FALSE, FALSE, 0);
@@ -314,6 +314,12 @@ static void create_main_win()
                     G_CALLBACK (create_gtab_conf_window), GINT_TO_POINTER(0));
 #endif
 
+#ifdef USE_WIDE
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
+  gtk_box_pack_start (GTK_BOX (box), vbox, TRUE, TRUE, 0);
+#endif
+
   GtkWidget *button_alt_shift = gtk_button_new_with_label(_("alt-shift 片語編輯"));
   gtk_box_pack_start (GTK_BOX (vbox), button_alt_shift, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_alt_shift), "clicked",
@@ -342,13 +348,6 @@ static void create_main_win()
   }
 #endif
 
-
-#ifdef USE_WIDE
-  vbox = gtk_vbox_new (FALSE, 0);
-  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
-  gtk_box_pack_start (GTK_BOX (box), vbox, FALSE, FALSE, 0);
-#endif
-
   GtkWidget *button_gb_translate_toggle = gtk_button_new_with_label(_("剪貼區 簡體字->正體字"));
   gtk_box_pack_start (GTK_BOX (vbox), button_gb_translate_toggle, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_gb_translate_toggle), "clicked",
@@ -359,6 +358,11 @@ static void create_main_win()
   g_signal_connect (G_OBJECT (button_juying_learn_toggle), "clicked",
                     G_CALLBACK (cb_juying_learn), NULL);
 
+#ifdef USE_WIDE
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
+  gtk_box_pack_start (GTK_BOX (box), vbox, TRUE, TRUE, 0);
+#endif
 
   GtkWidget *expander_ts;
   GtkWidget *vbox_ts;
@@ -400,6 +404,7 @@ static void create_main_win()
   g_signal_connect (G_OBJECT (button_ts_import_sys), "clicked",
                     G_CALLBACK (cb_ts_import_sys), NULL);
 
+  gboolean show_about=TRUE;
   int i;
   for (i=0; i < inmdN; i++) {
     INMD *pinmd = &inmd[i];
@@ -422,17 +427,25 @@ static void create_main_win()
     gtk_box_pack_start (GTK_BOX (vbox), button_module_input_method, FALSE, FALSE, 0);
     g_signal_connect (G_OBJECT (button_module_input_method), "clicked",
                     G_CALLBACK (f->module_setup_window_create), GINT_TO_POINTER(hime_setup_window_type_utility));
+#ifdef USE_WIDE
+    show_about=FALSE;
+#endif
   }
 
-  GtkWidget *button_about = gtk_button_new_from_stock (GTK_STOCK_ABOUT);
-  gtk_box_pack_start (GTK_BOX (vbox), button_about, FALSE, FALSE, 0);
-  g_signal_connect (G_OBJECT (button_about), "clicked",
-                    G_CALLBACK (create_about_window),  NULL);
+  if (show_about)
+  {
+    GtkWidget *button_about = gtk_button_new_from_stock (GTK_STOCK_ABOUT);
+    gtk_box_pack_start (GTK_BOX (vbox), button_about, FALSE, FALSE, 0);
+    g_signal_connect (G_OBJECT (button_about), "clicked",
+                      G_CALLBACK (create_about_window),  NULL);
+  }
 
+#if !USE_WIDE
   GtkWidget *button_quit = gtk_button_new_from_stock (GTK_STOCK_QUIT);
   gtk_box_pack_start (GTK_BOX (vbox), button_quit, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_quit), "clicked",
                     G_CALLBACK (close_application), NULL);
+#endif
 
   gtk_widget_show_all(main_window);
 }
