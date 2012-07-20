@@ -86,7 +86,7 @@ struct {
 #endif
 
 
-static GtkWidget *spinner_hime_font_size, *spinner_hime_font_size_tsin_presel,
+static GtkWidget *spinner_hime_font_size_tsin_presel,
                  *spinner_hime_font_size_symbol,*spinner_hime_font_size_pho_near,
                  *spinner_hime_font_size_win_kbm,
                  *spinner_hime_font_size_win_kbm_en,
@@ -99,21 +99,19 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
                                    GdkEvent  *event,
                                    gpointer   data )
 {
-  int font_size = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_hime_font_size));
-  save_hime_conf_int(HIME_FONT_SIZE, font_size);
-
   char fname[128];
   strcpy(fname, gtk_font_button_get_font_name(GTK_FONT_BUTTON(font_sel)));
   int len = strlen(fname)-1;
+  
 
   while (len > 0 && isdigit(fname[len])) {
-       fname[len--]=0;
+       len--;
   }
+  save_hime_conf_int(HIME_FONT_SIZE, atoi(&(fname[len+1])));
 
   while (len > 0 && fname[len]==' ') {
        fname[len--]=0;
   }
-
   save_hime_conf_str(HIME_FONT_NAME, fname);
 
   int font_size_tsin_presel = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_hime_font_size_tsin_presel));
