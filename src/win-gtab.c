@@ -879,12 +879,20 @@ void win_gtab_disp_half_full()
       if (label_gtab) gtk_widget_hide(label_gtab);
   }
 
-  if (label_gtab && (gtab_hide_row2))
+  if (gtab_hide_row2)
   {
-    if (hime_win_color_use) {
-      if (label_gtab) gtk_label_set_markup(GTK_LABEL(label_gtab), get_full_str());
-    } else {
-      if (label_gtab) gtk_label_set_text(GTK_LABEL(label_gtab), get_full_str());
+    if (GTK_IS_WIDGET(label_gtab))
+    {
+      if (hime_win_color_use) gtk_label_set_markup(GTK_LABEL(label_gtab), get_full_str());
+      else  gtk_label_set_text(GTK_LABEL(label_gtab), get_full_str());
+    }
+    else
+    {
+      gchar *full_str = get_full_str();
+      if (full_str && full_str[0])
+        disp_gtab_sel(full_str);
+      else
+        disp_gtab_sel(inmd[current_CS->in_method].cname);
     }
   }
 
