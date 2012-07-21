@@ -233,17 +233,16 @@ void disp_gtab_sel(char *s)
       return;
   }
 
-  if (!s[0])
-    gtk_widget_hide(label_gtab_sele);
+  if ( (!s[0]) && (hime_edit_display == HIME_EDIT_DISPLAY_ON_THE_SPOT) && gtab_hide_row2 && (! gtab_in_row1))
+    gtk_widget_hide(gwin_gtab);
   else {
     if (gwin_gtab && !GTK_WIDGET_VISIBLE(gwin_gtab))
-       show_win_gtab();
+      show_win_gtab();
     gtk_widget_show(label_gtab_sele);
   }
 
 //  dbg("disp_gtab_sel '%s'\n", s);
   gtk_label_set_markup(GTK_LABEL(label_gtab_sele), s);
-  minimize_win_gtab();
   adj_gtab_win_pos();
 }
 
