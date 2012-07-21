@@ -308,7 +308,7 @@ void create_gtab_conf_window(GtkWidget *widget, gsize type)
 
   GtkWidget *hbox_gtab_disp_key_codes = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_disp_key_codes, FALSE, FALSE, 0);
-  check_button_gtab_disp_key_codes = gtk_check_button_new_with_label (_("顯示字根"));
+  check_button_gtab_disp_key_codes = gtk_check_button_new_with_label (_("顯示拆碼"));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_key_codes), check_button_gtab_disp_key_codes,  FALSE, FALSE, 0);
 
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_disp_key_codes),
@@ -323,7 +323,7 @@ void create_gtab_conf_window(GtkWidget *widget, gsize type)
 
   GtkWidget *hbox_gtab_hide_row2 = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_hide_row2, FALSE, FALSE, 0);
-  check_button_gtab_hide_row2 = gtk_check_button_new_with_label (_("隱藏第二列 (輸入鍵…)"));
+  check_button_gtab_hide_row2 = gtk_check_button_new_with_label (_("隱藏第二列 (輸入字根…)"));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_hide_row2), check_button_gtab_hide_row2,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_hide_row2),
      gtab_hide_row2);
@@ -331,7 +331,7 @@ void create_gtab_conf_window(GtkWidget *widget, gsize type)
 
   GtkWidget *hbox_gtab_in_row1 = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_in_row1, FALSE, FALSE, 0);
-  check_button_gtab_in_row1 = gtk_check_button_new_with_label (_("將字根移至第一列"));
+  check_button_gtab_in_row1 = gtk_check_button_new_with_label (_("將輸入字根移至第一列"));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_in_row1), check_button_gtab_in_row1,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_in_row1),
      gtab_in_row1);
