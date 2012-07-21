@@ -213,7 +213,7 @@ void change_gtab_font_size()
 
   set_label_font_size(label_edit, hime_font_size);
 
-  set_label_font_size(label_gtab, hime_font_size_gtab_in);
+  if (GTK_IS_WIDGET (label_gtab)) set_label_font_size(label_gtab, hime_font_size_gtab_in);
 
   set_disp_im_name();
 
@@ -728,7 +728,7 @@ void show_win_gtab()
     else
       set_gtab_input_method_name(inmd[current_CS->in_method].cname);
 
-    if (hime_status_tray || (! gtab_hide_row2))
+    if ((GTK_IS_WIDGET (label_gtab)) && (hime_status_tray || (! gtab_hide_row2)))
       gtk_widget_hide(label_gtab);
     
     win_gtab_disp_half_full();
@@ -869,7 +869,7 @@ void win_gtab_disp_half_full()
   {
     if (label_gtab_sele) gtk_widget_show(label_gtab_sele);
     if (hime_status_tray || (! gtab_hide_row2))
-      if (label_gtab) gtk_widget_show(label_gtab);
+      if (GTK_IS_WIDGET(label_gtab)) gtk_widget_show(label_gtab);
   }
   else
   {
