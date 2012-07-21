@@ -642,11 +642,13 @@ void create_win_gtab_gui_simple()
 void show_input_method_name_on_gtab()
 {
   // label_gtab = NULL under onthespot mode.
-  if ((label_gtab==NULL) && (hime_edit_display == HIME_EDIT_DISPLAY_ON_THE_SPOT))
+
+  if ((hime_edit_display == HIME_EDIT_DISPLAY_ON_THE_SPOT) &&
+      current_CS && (! hime_status_tray) && gtab_disp_im_name &&
+      (current_CS->im_state == HIME_STATE_CHINESE) && (current_CS->b_half_full_char == 0) &&
+      (current_CS->tsin_pho_mode) && gtab_hide_row2)
   {
-    if (current_CS && (! hime_status_tray) && gtab_disp_im_name &&
-        (current_CS->im_state == HIME_STATE_CHINESE) && (current_CS->b_half_full_char == 0) &&
-        (current_CS->tsin_pho_mode))
+    if (label_gtab == NULL) create_win_gtab_gui_simple();
       disp_gtab_sel(inmd[current_CS->in_method].cname);
     return;
   }
