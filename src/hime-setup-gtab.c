@@ -71,9 +71,19 @@ void save_menu_val(char *config, GtkWidget *opt)
   save_hime_conf_int(config, auto_select_by_phrase_opts[idx].num);
 }
 
+void save_gtab_conf();
+void destroy_gtab_window();
+
 static gboolean cb_gtab_conf_ok( GtkWidget *widget,
                                    GdkEvent  *event,
                                    gpointer   data )
+{
+  save_gtab_conf();
+  destroy_gtab_window();
+  return TRUE;
+}
+
+void save_gtab_conf()
 {
   save_tsin_eng_pho_key();
   save_hime_conf_int(GTAB_DUP_SELECT_BELL,
@@ -129,17 +139,18 @@ static gboolean cb_gtab_conf_ok( GtkWidget *widget,
   save_menu_val(GTAB_UNIQUE_AUTO_SEND, opt_gtab_unique_auto_send);
 
   send_hime_message(GDK_DISPLAY(), CHANGE_FONT_SIZE);
-  gtk_widget_destroy(hime_gtab_conf_window); hime_gtab_conf_window = NULL;
-
-  return TRUE;
 }
 
+void destroy_gtab_window()
+{
+  gtk_widget_destroy(hime_gtab_conf_window); hime_gtab_conf_window = NULL;
+}
 
 static gboolean close_gtab_conf_window( GtkWidget *widget,
                                    GdkEvent  *event,
                                    gpointer   data )
 {
-  gtk_widget_destroy(hime_gtab_conf_window); hime_gtab_conf_window = NULL;
+  destroy_gtab_window();
   return TRUE;
 }
 

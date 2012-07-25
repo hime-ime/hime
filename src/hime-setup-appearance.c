@@ -95,9 +95,19 @@ static GtkWidget *spinner_hime_font_size_tsin_presel,
 
 static GtkWidget *label_win_color_test, *event_box_win_color_test;
 
+void save_appearance_conf();
+void destroy_appearance_conf_window();
+
 static gboolean cb_appearance_conf_ok( GtkWidget *widget,
                                    GdkEvent  *event,
                                    gpointer   data )
+{
+  save_appearance_conf();
+  destroy_appearance_conf_window();
+  return TRUE;
+}
+
+void save_appearance_conf()
 {
   char fname[128];
   strcpy(fname, gtk_font_button_get_font_name(GTK_FONT_BUTTON(font_sel)));
@@ -178,16 +188,19 @@ static gboolean cb_appearance_conf_ok( GtkWidget *widget,
 #if TRAY_ENABLED
   send_hime_message(GDK_DISPLAY(), UPDATE_TRAY);
 #endif
-  gtk_widget_destroy(hime_appearance_conf_window); hime_appearance_conf_window = NULL;
+  destroy_appearance_conf_window ();
+}
 
-  return TRUE;
+void destroy_appearance_conf_window ()
+{
+  gtk_widget_destroy(hime_appearance_conf_window); hime_appearance_conf_window = NULL;
 }
 
 static gboolean close_appearance_conf_window( GtkWidget *widget,
                                    GdkEvent  *event,
                                    gpointer   data )
 {
-  gtk_widget_destroy(hime_appearance_conf_window); hime_appearance_conf_window = NULL;
+  destroy_appearance_conf_window ();
   return TRUE;
 }
 

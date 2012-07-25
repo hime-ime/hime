@@ -216,10 +216,18 @@ static void save_gtab_list()
   fclose(fp);
 }
 
+void save_gtablist_conf ();
+void destroy_gtablist_window ();
 
 static void cb_ok (GtkWidget *button, gpointer data)
 {
-  GtkTreeModel *model = GTK_TREE_MODEL (data);
+  save_gtablist_conf ();
+  destroy_gtablist_window ();
+}
+
+void save_gtablist_conf ()
+{
+  GtkTreeModel *model = gtk_tree_view_get_model((GtkTreeView *) treeview);
 
   GtkTreeIter iter;
   if (!gtk_tree_model_get_iter_first(model, &iter))
@@ -295,17 +303,20 @@ static void cb_ok (GtkWidget *button, gpointer data)
   save_hime_conf_int(PHONETIC_SPEAK,
      gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_phonetic_speak)));
 
-  gtk_widget_destroy(gtablist_window); gtablist_window = NULL;
-
   /* caleb- did not found where "reload" is used.
    * caleb- think the send_hime_message() here does nothing.
    */
   send_hime_message(GDK_DISPLAY(), "reload");
 }
 
-static void cb_cancel (GtkWidget *widget, gpointer data)
+void destroy_gtablist_window()
 {
   gtk_widget_destroy(gtablist_window); gtablist_window = NULL;
+}
+
+void cb_cancel (GtkWidget *widget, gpointer data)
+{
+  destroy_gtablist_window();
 }
 
 int hime_switch_keys_lookup(int key);

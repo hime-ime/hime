@@ -106,9 +106,19 @@ static GtkWidget *hime_kbm_window = NULL;
 static int new_select_idx_tsin_space_opt;
 //static GdkColor tsin_phrase_line_gcolor;
 
+void save_kbm_conf ();
+void destroy_kbm_window ();
+
 static gboolean cb_ok( GtkWidget *widget,
                                    GdkEvent  *event,
                                    gpointer   data )
+{
+  save_kbm_conf ();
+  destroy_kbm_window ();
+  return TRUE;
+}
+
+void save_kbm_conf()
 {
   int idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_kbm_opts));
 
@@ -184,10 +194,6 @@ static gboolean cb_ok( GtkWidget *widget,
    * caleb- think the send_hime_message() here does nothing.
    */
   send_hime_message(GDK_DISPLAY(), "reload kbm");
-
-  gtk_widget_destroy(hime_kbm_window); hime_kbm_window = NULL;
-
-  return TRUE;
 }
 
 
@@ -240,11 +246,16 @@ static int get_currnet_tsin_space_option_idx()
   return -1;
 }
 
+void destroy_kbm_window ()
+{
+  gtk_widget_destroy(hime_kbm_window); hime_kbm_window = NULL;
+}
+
 static gboolean close_kbm_window( GtkWidget *widget,
                                    GdkEvent  *event,
                                    gpointer   data )
 {
-  gtk_widget_destroy(hime_kbm_window); hime_kbm_window = NULL;
+  destroy_kbm_window ();
   return TRUE;
 }
 
