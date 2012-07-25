@@ -21,7 +21,7 @@
 
 /* "5849302-67" is Dvorak Simplified Keyboard remapped under QWERTY keyboard
  * Please see: http://en.wikipedia.org/wiki/Dvorak_Simplified_Keyboard
- *             https://github.com/caleb-/hime/issues/62
+ *             https://github.com/hime-ime/hime/issues/62
  */
 struct {
   char *kstr;

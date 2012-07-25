@@ -31,7 +31,7 @@ LGPLv2.1 (Qt immodules are GPLv2)
 
 {最新開發版}
 
-    git clone https://github.com/caleb-/hime.git
+    git clone https://github.com/hime-ime/hime.git
     cd hime
 
 {deb系}
@@ -154,4 +154,4 @@ Hime 問題回報
 ====
 
  [取得/安裝]
-{https://github.com/caleb-/hime/wiki/%E5%90%84%E5%80%8BLinux%E7%99%BC%E8%A1%8C%E7%89%88%E6%9C%AC%E9%A0%90%E5%85%88build%E5%A5%BD%E7%9A%84%E5%A5%97%E4%BB%B6%E4%BB%A5%E5%8F%8Aauto-build-scripts-|-Prebuild-packages-and-auto-build-scripts-for-each-of-linux-distributions}
+{https://github.com/hime-ime/hime/wiki/%E5%90%84%E5%80%8BLinux%E7%99%BC%E8%A1%8C%E7%89%88%E6%9C%AC%E9%A0%90%E5%85%88build%E5%A5%BD%E7%9A%84%E5%A5%97%E4%BB%B6%E4%BB%A5%E5%8F%8Aauto-build-scripts-|-Prebuild-packages-and-auto-build-scripts-for-each-of-linux-distributions}

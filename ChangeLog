@@ -132,7 +132,7 @@
  * Fix build warnings (letoh, Tetralet, caleb-, taylorchu)
 
  [ Additional Information ]
- * Detailed changlog: https://github.com/caleb-/hime/commits/master/
+ * Detailed changlog: https://github.com/hime-ime/hime/commits/master/
    You may also git clone our repository and type "git log".
 
 
@@ -175,7 +175,7 @@
  * Initial commit, co-installable with gcin
    Forked from gcin 2.5.1 and synced with 2.5.2, thanks to Edward Der-Hua Liu
  * No centralized version control, feel free to fork your own! :-)
-   Current release is based on caleb-'s branch, https://github.com/caleb-/hime
+   Current release is based on hime-ime's branch, https://github.com/hime-ime/hime
  * Apply some patches from http://debian.luna.com.tw/wheezy/
    Thanks to Tetralet <tetralet AT gmail DOT com>
 

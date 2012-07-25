@@ -11,7 +11,7 @@ optdepends=('gtk3: enable gtk3 im module' 'qt: enable qt4 im module' 'anthy: ena
 options=(!strip)
 source=(install)
 sha512sums=('ef30f014f3d35d1e8136e6f867bc943c13ebfe3844e7be2756105bb41e7563a309cba0986be2ad046aa36d5a1ae76f548f5f3f2f82645d6aa69b683e4836bee2')
-_gitroot="git://github.com/caleb-/hime.git"
+_gitroot="git://github.com/hime-ime/hime.git"
 _gitname="hime"
 
 install=install
