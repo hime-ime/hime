@@ -274,7 +274,7 @@ static void create_main_win()
   gtk_container_add (GTK_CONTAINER (main_window), box);
   gtk_box_pack_start (GTK_BOX (box), vbox, TRUE, TRUE, 0);
 
-  GtkWidget *button_default_input_method1 = gtk_button_new_with_label(_("開啟/關閉/預設\n輸入法"));
+  GtkWidget *button_default_input_method1 = gtk_button_new_with_label(_("開啟/關閉/預設輸入法"));
   gtk_box_pack_start (GTK_BOX (vbox), button_default_input_method1, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (button_default_input_method1), "clicked",
                     G_CALLBACK (create_gtablist_window), GINT_TO_POINTER(1));
