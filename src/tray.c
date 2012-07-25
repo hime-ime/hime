@@ -151,7 +151,7 @@ void load_tray_icon()
   }
   char *iconame = HIME_TRAY_PNG;
 //  if (current_CS && current_CS->in_method && inmd)
-// Workaround due to issue #161 (caleb-/hime) :
+// Workaround due to issue #161
   if (current_CS && current_CS->im_state != HIME_STATE_DISABLED && current_CS->im_state != HIME_STATE_ENG_FULL)
     iconame = inmd[current_CS->in_method].icon;
   char fname[512];
