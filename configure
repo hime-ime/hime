@@ -66,6 +66,7 @@ use_tray='Y'
 use_unity='Y'
 use_i18n='Y'
 use_wide='N'
+use_tabs='N'
 use_tsin='Y'
 use_anthy='Y'
 use_chewing='Y'
@@ -133,6 +134,8 @@ for opt do
   --disable-nls) use_i18n=N
   ;;
   --use-wide-setup-window) use_wide=Y
+  ;;
+  --use-tabbed-setup-window) use_tabs=Y
   ;;
   --use_tsin=*) use_tsin=`echo $opt | cut -d '=' -f 2`
   ;;
@@ -541,6 +544,7 @@ echo "USE_TRAY=$use_tray" >> config.mak
 echo "USE_I18N=$use_i18n" >> config.mak
 echo "USE_TSIN=$use_tsin" >> config.mak
 echo "USE_WIDE=$use_wide" >> config.mak
+echo "USE_TABS=$use_tabs" >> config.mak
 echo "USE_ANTHY=$USE_ANTHY" >> config.mak
 echo "ANTHY_INC=$ANTHY_INC" >> config.mak
 echo "USE_CHEWING=$USE_CHEWING" >> config.mak

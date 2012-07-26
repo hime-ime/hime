@@ -216,14 +216,7 @@ static void save_gtab_list()
   fclose(fp);
 }
 
-void save_gtablist_conf ();
 void destroy_gtablist_window ();
-
-static void cb_ok (GtkWidget *button, gpointer data)
-{
-  save_gtablist_conf ();
-  destroy_gtablist_window ();
-}
 
 void save_gtablist_conf ()
 {
@@ -312,11 +305,6 @@ void save_gtablist_conf ()
 void destroy_gtablist_window()
 {
   gtk_widget_destroy(gtablist_window); gtablist_window = NULL;
-}
-
-void cb_cancel (GtkWidget *widget, gpointer data)
-{
-  destroy_gtablist_window();
 }
 
 int hime_switch_keys_lookup(int key);
@@ -586,14 +574,32 @@ static GtkWidget *create_speaker_opts()
 
 #include <dirent.h>
 
+static GtkWidget *create_gtablist_widget (gsize type);
+
+#ifdef USE_TABS
+GtkWidget *create_gtablist_window ()
+{
+  gtablist_window = create_gtablist_widget(0);
+  return gtablist_window;
+}
+#else
+static void cb_ok (GtkWidget *button, gpointer data)
+{
+  save_gtablist_conf ();
+  destroy_gtablist_window ();
+}
+
+void cb_cancel (GtkWidget *widget, gpointer data)
+{
+  destroy_gtablist_window();
+}
+
 void create_gtablist_window (GtkWidget *widget, gsize type)
 {
   if (gtablist_window) {
     gtk_window_present(GTK_WINDOW(gtablist_window));
     return;
   }
-
-  load_settings();
 
   /* create gtab_list_window, etc */
   gtablist_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -612,9 +618,59 @@ void create_gtablist_window (GtkWidget *widget, gsize type)
   g_signal_connect (G_OBJECT (gtablist_window), "delete_event",
                       G_CALLBACK (callback_win_delete), NULL);
 
+  GtkWidget* top_widget = create_gtablist_widget(type);
+  gtk_container_add (GTK_CONTAINER (gtablist_window), top_widget);
+
+  hbox = gtk_hbox_new (TRUE, 4);
+  gtk_grid_set_column_homogeneous(GTK_GRID(hbox), TRUE);
+  gtk_box_pack_start (GTK_BOX (top_widget), hbox, FALSE, FALSE, 0);
+
+  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+  g_signal_connect (G_OBJECT (button), "clicked",
+                    G_CALLBACK (cb_cancel), NULL);
+  if (button_order)
+    gtk_box_pack_end (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+  else
+    gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+
+  button2 = gtk_button_new_from_stock (GTK_STOCK_OK);
+  g_signal_connect (G_OBJECT (button2), "clicked",
+                    G_CALLBACK (cb_ok), NULL);
+#if !GTK_CHECK_VERSION(2,91,2)
+  if (button_order)
+    gtk_box_pack_end (GTK_BOX (hbox), button2, TRUE, TRUE, 0);
+  else
+    gtk_box_pack_start (GTK_BOX (hbox), button2, TRUE, TRUE, 0);
+#else
+  if (button_order)
+    gtk_grid_attach_next_to (GTK_BOX (hbox), button2, button, GTK_POS_LEFT, 1, 1);
+  else
+    gtk_grid_attach_next_to (GTK_BOX (hbox), button2, button, GTK_POS_RIGHT, 1, 1);
+#endif
+
+  g_signal_connect (G_OBJECT (gtablist_window), "delete_event",
+                    G_CALLBACK (gtk_main_quit), NULL);
+
+  gtk_widget_show_all (gtablist_window);
+
+  set_selection_by_key(default_input_method);
+
+#if 0
+  g_signal_connect (G_OBJECT(tree_selection), "changed",
+                    G_CALLBACK (callback_row_selected), NULL);
+#endif
+}
+#endif
+
+static GtkWidget *create_gtablist_widget (gsize type)
+{
+  GtkWidget* top_widget = NULL;
+
+  load_settings();
+
   GtkWidget *box = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(box), GTK_ORIENTATION_VERTICAL);
-  gtk_container_add (GTK_CONTAINER (gtablist_window), box);
+  top_widget = box;
 
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
@@ -648,13 +704,13 @@ void create_gtablist_window (GtkWidget *widget, gsize type)
 
   if (type ==2)
   {
-    gtk_container_set_border_width (GTK_CONTAINER (gtablist_window), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (top_widget), 10);
     gtk_widget_set_no_show_all (vbox, TRUE);
   }
   else
   {
     // Trying to get correct size of dialog_data->treeview, then put it into a gtk_scrolled_window
-    gtk_widget_show_all (gtablist_window);
+    gtk_widget_show_all (top_widget);
 
     GtkRequisition requisition;
     gtk_widget_get_child_requisition (treeview, &requisition);
@@ -765,42 +821,5 @@ void create_gtablist_window (GtkWidget *widget, gsize type)
 
   if (type ==1) gtk_widget_set_no_show_all (vbox, TRUE);
 
-  hbox = gtk_hbox_new (TRUE, 4);
-  gtk_grid_set_column_homogeneous(GTK_GRID(hbox), TRUE);
-  gtk_box_pack_start (GTK_BOX (box), hbox, FALSE, FALSE, 0);
-
-  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-  g_signal_connect (G_OBJECT (button), "clicked",
-                    G_CALLBACK (cb_cancel), treeview);
-  if (button_order)
-    gtk_box_pack_end (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-  else
-    gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-
-  button2 = gtk_button_new_from_stock (GTK_STOCK_OK);
-  g_signal_connect (G_OBJECT (button2), "clicked",
-                    G_CALLBACK (cb_ok), model);
-#if !GTK_CHECK_VERSION(2,91,2)
-  if (button_order)
-    gtk_box_pack_end (GTK_BOX (hbox), button2, TRUE, TRUE, 0);
-  else
-    gtk_box_pack_start (GTK_BOX (hbox), button2, TRUE, TRUE, 0);
-#else
-  if (button_order)
-    gtk_grid_attach_next_to (GTK_BOX (hbox), button2, button, GTK_POS_LEFT, 1, 1);
-  else
-    gtk_grid_attach_next_to (GTK_BOX (hbox), button2, button, GTK_POS_RIGHT, 1, 1);
-#endif
-
-  g_signal_connect (G_OBJECT (gtablist_window), "delete_event",
-                    G_CALLBACK (gtk_main_quit), NULL);
-
-  gtk_widget_show_all (gtablist_window);
-
-  set_selection_by_key(default_input_method);
-
-#if 0
-  g_signal_connect (G_OBJECT(tree_selection), "changed",
-                    G_CALLBACK (callback_row_selected), NULL);
-#endif
+  return top_widget;
 }

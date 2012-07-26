@@ -71,18 +71,6 @@ void save_menu_val(char *config, GtkWidget *opt)
   save_hime_conf_int(config, auto_select_by_phrase_opts[idx].num);
 }
 
-void save_gtab_conf();
-void destroy_gtab_window();
-
-static gboolean cb_gtab_conf_ok( GtkWidget *widget,
-                                   GdkEvent  *event,
-                                   gpointer   data )
-{
-  save_gtab_conf();
-  destroy_gtab_window();
-  return TRUE;
-}
-
 void save_gtab_conf()
 {
   save_tsin_eng_pho_key();
@@ -144,14 +132,6 @@ void save_gtab_conf()
 void destroy_gtab_window()
 {
   gtk_widget_destroy(hime_gtab_conf_window); hime_gtab_conf_window = NULL;
-}
-
-static gboolean close_gtab_conf_window( GtkWidget *widget,
-                                   GdkEvent  *event,
-                                   gpointer   data )
-{
-  destroy_gtab_window();
-  return TRUE;
 }
 
 extern char utf8_edit[];
@@ -219,14 +199,38 @@ static GtkWidget *create_auto_select_by_phrase_opts(GtkWidget **out, int val)
 
 GtkWidget *create_en_pho_key_sel(char *s);
 
+GtkWidget *create_gtab_widget (gsize type);
+
+#ifdef USE_TABS
+GtkWidget *create_gtab_window ()
+{
+  hime_gtab_conf_window = create_gtab_widget(0);
+  return hime_gtab_conf_window;
+}
+#else
+static gboolean cb_gtab_conf_ok( GtkWidget *widget,
+                                   GdkEvent  *event,
+                                   gpointer   data )
+{
+  save_gtab_conf();
+  destroy_gtab_window();
+  return TRUE;
+}
+
+static gboolean close_gtab_conf_window( GtkWidget *widget,
+                                   GdkEvent  *event,
+                                   gpointer   data )
+{
+  destroy_gtab_window();
+  return TRUE;
+}
+
 void create_gtab_conf_window(GtkWidget *widget, gsize type)
 {
   if (hime_gtab_conf_window) {
     gtk_window_present(GTK_WINDOW(hime_gtab_conf_window));
     return;
   }
-
-  load_settings();
 
   hime_gtab_conf_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   if (hime_setup_window_type_utility)
@@ -241,9 +245,59 @@ void create_gtab_conf_window(GtkWidget *widget, gsize type)
   gtk_window_set_title (GTK_WINDOW (hime_gtab_conf_window), _("倉頡/行列/大易設定"));
   gtk_container_set_border_width (GTK_CONTAINER (hime_gtab_conf_window), 3);
 
+  GtkWidget *top_widget = create_gtab_widget (type);
+  gtk_container_add (GTK_CONTAINER (hime_gtab_conf_window), top_widget);
+
+  GtkWidget *hbox_cancel_ok = gtk_hbox_new (FALSE, 10);
+  gtk_grid_set_column_homogeneous(GTK_GRID(hbox_cancel_ok), TRUE);
+  gtk_box_pack_start (GTK_BOX (top_widget), hbox_cancel_ok, FALSE, FALSE, 0);
+
+  GtkWidget *button_cancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+  if (button_order)
+    gtk_box_pack_end (GTK_BOX (hbox_cancel_ok), button_cancel, TRUE, TRUE, 0);
+  else
+    gtk_box_pack_start (GTK_BOX (hbox_cancel_ok), button_cancel, TRUE, TRUE, 0);
+
+  g_signal_connect (G_OBJECT (button_cancel), "clicked",
+                            G_CALLBACK (close_gtab_conf_window),
+                            G_OBJECT (hime_gtab_conf_window));
+
+  GtkWidget *button_ok = gtk_button_new_from_stock (GTK_STOCK_OK);
+#if !GTK_CHECK_VERSION(2,91,2)
+  if (button_order)
+    gtk_box_pack_end (GTK_BOX (hbox_cancel_ok), button_ok, TRUE, TRUE, 0);
+  else
+    gtk_box_pack_start (GTK_BOX (hbox_cancel_ok), button_ok, TRUE, TRUE, 0);
+#else
+  if (button_order)
+    gtk_grid_attach_next_to (GTK_BOX (hbox_cancel_ok), button_ok, button_cancel, GTK_POS_LEFT, 1, 1);
+  else
+    gtk_grid_attach_next_to (GTK_BOX (hbox_cancel_ok), button_ok, button_cancel, GTK_POS_RIGHT, 1, 1);
+#endif
+
+  g_signal_connect_swapped (G_OBJECT (button_ok), "clicked",
+                            G_CALLBACK (cb_gtab_conf_ok),
+                            G_OBJECT (hime_gtab_conf_window));
+
+  GTK_WIDGET_SET_FLAGS (button_ok, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default (button_ok);
+
+  gtk_widget_show_all (hime_gtab_conf_window);
+
+  return;
+}
+
+#endif
+
+GtkWidget *create_gtab_widget (gsize type)
+{
+  GtkWidget *top_widget = NULL;
+
+  load_settings();
+
   GtkWidget *vbox_top = gtk_vbox_new (FALSE, 10);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_top), GTK_ORIENTATION_VERTICAL);
-  gtk_container_add (GTK_CONTAINER (hime_gtab_conf_window), vbox_top);
+  top_widget = vbox_top;
 
 #ifdef USE_WIDE
   GtkWidget *hbox_lr = gtk_vbox_new (FALSE, 10);
@@ -449,42 +503,5 @@ void create_gtab_conf_window(GtkWidget *widget, gsize type)
   g_signal_connect_swapped (G_OBJECT (button_edit_append), "clicked",
                             G_CALLBACK (cb_gtab_edit_append), NULL);
 
-
-  GtkWidget *hbox_cancel_ok = gtk_hbox_new (FALSE, 10);
-  gtk_grid_set_column_homogeneous(GTK_GRID(hbox_cancel_ok), TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox_top), hbox_cancel_ok, FALSE, FALSE, 0);
-
-  GtkWidget *button_cancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-  if (button_order)
-    gtk_box_pack_end (GTK_BOX (hbox_cancel_ok), button_cancel, TRUE, TRUE, 0);
-  else
-    gtk_box_pack_start (GTK_BOX (hbox_cancel_ok), button_cancel, TRUE, TRUE, 0);
-
-  g_signal_connect (G_OBJECT (button_cancel), "clicked",
-                            G_CALLBACK (close_gtab_conf_window),
-                            G_OBJECT (hime_gtab_conf_window));
-
-  GtkWidget *button_ok = gtk_button_new_from_stock (GTK_STOCK_OK);
-#if !GTK_CHECK_VERSION(2,91,2)
-  if (button_order)
-    gtk_box_pack_end (GTK_BOX (hbox_cancel_ok), button_ok, TRUE, TRUE, 0);
-  else
-    gtk_box_pack_start (GTK_BOX (hbox_cancel_ok), button_ok, TRUE, TRUE, 0);
-#else
-  if (button_order)
-    gtk_grid_attach_next_to (GTK_BOX (hbox_cancel_ok), button_ok, button_cancel, GTK_POS_LEFT, 1, 1);
-  else
-    gtk_grid_attach_next_to (GTK_BOX (hbox_cancel_ok), button_ok, button_cancel, GTK_POS_RIGHT, 1, 1);
-#endif
-
-  g_signal_connect_swapped (G_OBJECT (button_ok), "clicked",
-                            G_CALLBACK (cb_gtab_conf_ok),
-                            G_OBJECT (hime_gtab_conf_window));
-
-  GTK_WIDGET_SET_FLAGS (button_ok, GTK_CAN_DEFAULT);
-  gtk_widget_grab_default (button_ok);
-
-  gtk_widget_show_all (hime_gtab_conf_window);
-
-  return;
+  return top_widget;
 }

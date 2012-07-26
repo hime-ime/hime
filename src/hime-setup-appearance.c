@@ -39,7 +39,6 @@ static GtkWidget *check_button_hime_setup_window_type_utility,
 
 
 static GtkWidget *hime_appearance_conf_window;
-static GtkWidget *hime_kbm_window = NULL, *hime_appearance_conf_window;
 static GtkWidget *opt_hime_edit_display;
 static GdkColor hime_win_gcolor_fg, hime_win_gcolor_bg, hime_sel_key_gcolor, tsin_cursor_gcolor;
 gboolean button_order;
@@ -94,18 +93,6 @@ static GtkWidget *spinner_hime_font_size_tsin_presel,
                  *spinner_root_style_y, *font_sel;
 
 static GtkWidget *label_win_color_test, *event_box_win_color_test;
-
-void save_appearance_conf();
-void destroy_appearance_conf_window();
-
-static gboolean cb_appearance_conf_ok( GtkWidget *widget,
-                                   GdkEvent  *event,
-                                   gpointer   data )
-{
-  save_appearance_conf();
-  destroy_appearance_conf_window();
-  return TRUE;
-}
 
 void save_appearance_conf()
 {
@@ -188,20 +175,11 @@ void save_appearance_conf()
 #if TRAY_ENABLED
   send_hime_message(GDK_DISPLAY(), UPDATE_TRAY);
 #endif
-  destroy_appearance_conf_window ();
 }
 
-void destroy_appearance_conf_window ()
+void destroy_appearance_window ()
 {
   gtk_widget_destroy(hime_appearance_conf_window); hime_appearance_conf_window = NULL;
-}
-
-static gboolean close_appearance_conf_window( GtkWidget *widget,
-                                   GdkEvent  *event,
-                                   gpointer   data )
-{
-  destroy_appearance_conf_window ();
-  return TRUE;
 }
 
 void disp_win_sample();
@@ -377,14 +355,38 @@ static gboolean cb_hime_win_color_use(GtkToggleButton *togglebutton, gpointer us
   return TRUE;
 }
 
+static GtkWidget *create_appearance_widget();
+
+#ifdef USE_TABS
+GtkWidget *create_appearance_window()
+{
+  hime_appearance_conf_window = create_appearance_widget();
+  return hime_appearance_conf_window;
+}
+#else
+static gboolean cb_appearance_conf_ok( GtkWidget *widget,
+                                   GdkEvent  *event,
+                                   gpointer   data )
+{
+  save_appearance_conf();
+  destroy_appearance_window();
+  return TRUE;
+}
+
+static gboolean close_appearance_conf_window( GtkWidget *widget,
+                                   GdkEvent  *event,
+                                   gpointer   data )
+{
+  destroy_appearance_window ();
+  return TRUE;
+}
+
 void create_appearance_conf_window()
 {
   if (hime_appearance_conf_window) {
     gtk_window_present(GTK_WINDOW(hime_appearance_conf_window));
     return;
   }
-
-  load_settings();
 
   hime_appearance_conf_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   if (hime_setup_window_type_utility)
@@ -400,20 +402,66 @@ void create_appearance_conf_window()
   gtk_window_set_title (GTK_WINDOW (hime_appearance_conf_window), _("外觀設定"));
   gtk_container_set_border_width (GTK_CONTAINER (hime_appearance_conf_window), 3);
 
+  GtkWidget* top_widget = create_appearance_widget();
+  gtk_container_add (GTK_CONTAINER (hime_appearance_conf_window), top_widget);
+
+  GtkWidget *hbox_cancel_ok = gtk_hbox_new (FALSE, 10);
+  gtk_grid_set_column_homogeneous(GTK_GRID(hbox_cancel_ok), TRUE);
+  gtk_box_pack_start (GTK_BOX (top_widget), hbox_cancel_ok, TRUE, TRUE, 0);
+
+  GtkWidget *button_cancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+  if (button_order)
+    gtk_box_pack_end (GTK_BOX (hbox_cancel_ok), button_cancel, TRUE, TRUE, 0);
+  else
+    gtk_box_pack_start (GTK_BOX (hbox_cancel_ok), button_cancel, TRUE, TRUE, 0);
+
+  g_signal_connect (G_OBJECT (button_cancel), "clicked",
+                            G_CALLBACK (close_appearance_conf_window),
+                            G_OBJECT (hime_appearance_conf_window));
+
+  GtkWidget *button_close = gtk_button_new_from_stock (GTK_STOCK_OK);
+#if !GTK_CHECK_VERSION(2,91,2)
+  if (button_order)
+    gtk_box_pack_end (GTK_BOX (hbox_cancel_ok), button_close, TRUE, TRUE, 0);
+  else
+    gtk_box_pack_start (GTK_BOX (hbox_cancel_ok), button_close, TRUE, TRUE, 0);
+#else
+  if (button_order)
+    gtk_grid_attach_next_to (GTK_BOX (hbox_cancel_ok), button_close, button_cancel, GTK_POS_LEFT, 1, 1);
+  else
+    gtk_grid_attach_next_to (GTK_BOX (hbox_cancel_ok), button_close, button_cancel, GTK_POS_RIGHT, 1, 1);
+#endif
+
+  g_signal_connect_swapped (G_OBJECT (button_close), "clicked",
+                            G_CALLBACK (cb_appearance_conf_ok), NULL);
+
+  GTK_WIDGET_SET_FLAGS (button_close, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default (button_close);
+
+  gtk_widget_show_all (hime_appearance_conf_window);
+}
+#endif
+
+static GtkWidget *create_appearance_widget()
+{
+  GtkWidget* top_widget = NULL;
+
+  load_settings();
+
   GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_top), GTK_ORIENTATION_VERTICAL);
   gtk_container_set_border_width (GTK_CONTAINER (vbox_top), 10);
 #ifdef USE_WIDE
   GtkWidget *box = gtk_vbox_new (FALSE, 10);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(box), GTK_ORIENTATION_VERTICAL);
-  gtk_container_add (GTK_CONTAINER (hime_appearance_conf_window), box);
+  top_widget = box;
 
   GtkWidget *hbox = gtk_hbox_new (FALSE, 10);
   gtk_container_add (GTK_CONTAINER (box), hbox);
 
   gtk_box_pack_start (GTK_BOX (hbox), vbox_top, FALSE, FALSE, 0);
 #else
-  gtk_container_add (GTK_CONTAINER (hime_appearance_conf_window), vbox_top);
+  top_widget = vbox_top;
 #endif
 
   GtkWidget *hbox_hime_font_size = gtk_hbox_new (FALSE, 10);
@@ -640,42 +688,6 @@ void create_appearance_conf_window()
   vbox_top = box;
 #endif
 
-  GtkWidget *hbox_cancel_ok = gtk_hbox_new (FALSE, 10);
-  gtk_grid_set_column_homogeneous(GTK_GRID(hbox_cancel_ok), TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox_top), hbox_cancel_ok, TRUE, TRUE, 0);
-
-  GtkWidget *button_cancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-  if (button_order)
-    gtk_box_pack_end (GTK_BOX (hbox_cancel_ok), button_cancel, TRUE, TRUE, 0);
-  else
-    gtk_box_pack_start (GTK_BOX (hbox_cancel_ok), button_cancel, TRUE, TRUE, 0);
-
-  g_signal_connect (G_OBJECT (button_cancel), "clicked",
-                            G_CALLBACK (close_appearance_conf_window),
-                            G_OBJECT (hime_appearance_conf_window));
-
-  GtkWidget *button_close = gtk_button_new_from_stock (GTK_STOCK_OK);
-#if !GTK_CHECK_VERSION(2,91,2)
-  if (button_order)
-    gtk_box_pack_end (GTK_BOX (hbox_cancel_ok), button_close, TRUE, TRUE, 0);
-  else
-    gtk_box_pack_start (GTK_BOX (hbox_cancel_ok), button_close, TRUE, TRUE, 0);
-#else
-  if (button_order)
-    gtk_grid_attach_next_to (GTK_BOX (hbox_cancel_ok), button_close, button_cancel, GTK_POS_LEFT, 1, 1);
-  else
-    gtk_grid_attach_next_to (GTK_BOX (hbox_cancel_ok), button_close, button_cancel, GTK_POS_RIGHT, 1, 1);
-#endif
-
-  g_signal_connect_swapped (G_OBJECT (button_close), "clicked",
-                            G_CALLBACK (cb_appearance_conf_ok),
-                            G_OBJECT (hime_kbm_window));
-
-  GTK_WIDGET_SET_FLAGS (button_close, GTK_CAN_DEFAULT);
-  gtk_widget_grab_default (button_close);
-
-  gtk_widget_show_all (hime_appearance_conf_window);
-
-  return;
+  return top_widget;
 }
 

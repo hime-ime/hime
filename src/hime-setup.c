@@ -27,6 +27,138 @@
 GtkWidget *main_window;
 gboolean button_order;
 char utf8_edit[]=HIME_SCRIPT_DIR"/utf8-edit";
+
+#if USE_TABS && USE_WIDE
+#error "not supported"
+#endif
+
+#ifdef USE_TABS
+typedef struct {
+  const char *name;
+  GtkWidget *(*create)();
+  void (*save)();
+  void (*destroy)();
+} TAB_ENTRY;
+
+/* hime-setup-gtab.c */
+GtkWidget *create_gtab_window();
+void save_gtab_conf();
+void destroy_gtab_window();
+
+/* hime-setup-appearance.c */
+GtkWidget *create_appearance_window();
+void save_appearance_conf();
+void destroy_appearance_window();
+
+/* hime-setup-pho.c */
+GtkWidget *create_kbm_window();
+void save_kbm_conf();
+void destroy_kbm_window();
+
+/* hime-setup-list.c */
+GtkWidget *create_gtablist_window();
+void save_gtablist_conf();
+void destroy_gtablist_window();
+
+#define TAB_TABLE_SIZE 4
+TAB_ENTRY tab_table[TAB_TABLE_SIZE] =
+  { {N_("開啟/關閉/預設輸入法"), create_gtablist_window, save_gtablist_conf, destroy_gtablist_window}
+  , {N_("外觀設定"), create_appearance_window, save_appearance_conf, destroy_appearance_window}
+  , {N_("注音/詞音/拼音設定"), create_kbm_window, save_kbm_conf, destroy_kbm_window}
+  , {N_("倉頡/行列/大易設定"), create_gtab_window, save_gtab_conf, destroy_gtab_window}
+  };
+
+static void save_all_tabs(void)
+{
+  int i = 0; /* non-C99 */
+  for (i = 0; i < TAB_TABLE_SIZE; i++)
+    tab_table[i].save();
+}
+
+static void destroy_all_tabs(void)
+{
+  int i = 0; /* non-C99 */
+  for (i = 0; i < TAB_TABLE_SIZE; i++)
+    tab_table[i].destroy();
+}
+
+static void run_dialog(void)
+{
+  /* 建立 notebook 並加進 vbox */
+  GtkWidget *notebook = gtk_notebook_new();
+  if (notebook == NULL)
+  {
+    fprintf(stderr, "notebook == NULL?!\n");
+    exit(-1);
+  }
+
+  /* 塞 tabs */
+  int i = 0; /* non-C99 */
+  for (i = 0; i < TAB_TABLE_SIZE; i++)
+  {
+    GtkWidget *child = tab_table[i].create();
+    if (child == NULL)
+    {
+      fprintf(stderr, "[%d] child == NULL?!\n", i);
+      exit(-1);
+    }
+
+    GtkWidget *label = gtk_label_new(_(tab_table[i].name));
+    if (label == NULL)
+    {
+      fprintf(stderr, "[%d] label == NULL?! (%s translated to %s)\n", i, tab_table[i].name, _(tab_table[i].name));
+      exit(-1);
+    }
+
+    if (gtk_notebook_append_page(GTK_NOTEBOOK (notebook), child, label) == -1)
+    {
+      fprintf(stderr, "[%d] append_page\n", i);
+      exit(-1);
+    }
+  }
+
+  /* 召喚 dialog */
+  GtkWidget *dialog = gtk_dialog_new_with_buttons (
+      _("hime 設定/工具"),
+      NULL,
+      GTK_DIALOG_MODAL,
+      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+      GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
+      NULL);
+  if (dialog == NULL)
+  {
+    fprintf(stderr, "dialog == NULL?!\n");
+    exit(-1);
+  }
+
+  gtk_dialog_set_alternative_button_order (
+      GTK_DIALOG(dialog),
+      GTK_RESPONSE_APPLY,
+      GTK_RESPONSE_CANCEL,
+      -1);
+
+  /* 塞 tabs */
+  GtkWidget *content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  gtk_container_add(GTK_CONTAINER (content_area), notebook);
+
+  /* run!!! */
+  gtk_widget_show_all(dialog);
+  gint response = gtk_dialog_run(GTK_DIALOG(dialog));
+  switch (response)
+  {
+    case GTK_RESPONSE_APPLY:
+      save_all_tabs();
+      break;
+    default:
+      break;
+  }
+
+  /* clean up */
+  destroy_all_tabs();
+  gtk_widget_destroy(GTK_WIDGET(dialog));
+}
+
+#else
 static gboolean close_application( GtkWidget *widget,
                                    GdkEvent  *event,
                                    gpointer   data )
@@ -56,8 +188,6 @@ static void cb_ret(GtkWidget *widget, gpointer user_data)
 {
   gtk_widget_destroy((GtkWidget*)user_data);
 }
-
-#include <string.h>
 
 static void create_result_win(int res, char *cmd)
 {
@@ -453,7 +583,7 @@ static void create_main_win()
 
   gtk_widget_show_all(main_window);
 }
-
+#endif /* USE_TABS */
 
 void init_TableDir(), exec_setup_scripts();
 
@@ -478,6 +608,9 @@ int main(int argc, char **argv)
 
   g_object_get(gtk_settings_get_default(), "gtk-alternative-button-order", &button_order, NULL);
 
+#ifdef USE_TABS
+  run_dialog();
+#else
   create_main_win();
 
 #if 0
@@ -486,6 +619,7 @@ int main(int argc, char **argv)
 #endif
 
   gtk_main();
+#endif
 
   return 0;
 }
