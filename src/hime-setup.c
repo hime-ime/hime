@@ -123,7 +123,7 @@ static void run_dialog(void)
       NULL,
       GTK_DIALOG_MODAL,
       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-      GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
+      GTK_STOCK_OK, GTK_RESPONSE_OK,
       NULL);
   if (dialog == NULL)
   {
@@ -133,7 +133,7 @@ static void run_dialog(void)
 
   gtk_dialog_set_alternative_button_order (
       GTK_DIALOG(dialog),
-      GTK_RESPONSE_APPLY,
+      GTK_RESPONSE_OK,
       GTK_RESPONSE_CANCEL,
       -1);
 
@@ -146,7 +146,7 @@ static void run_dialog(void)
   gint response = gtk_dialog_run(GTK_DIALOG(dialog));
   switch (response)
   {
-    case GTK_RESPONSE_APPLY:
+    case GTK_RESPONSE_OK:
       save_all_tabs();
       break;
     default:
