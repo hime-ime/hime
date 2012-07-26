@@ -32,205 +32,79 @@ char utf8_edit[]=HIME_SCRIPT_DIR"/utf8-edit";
 #error "not supported"
 #endif
 
-#ifdef USE_TABS
-typedef struct {
-  const char *name;
-  GtkWidget *(*create)();
-  void (*save)();
-  void (*destroy)();
-} TAB_ENTRY;
-
-/* hime-setup-gtab.c */
-GtkWidget *create_gtab_window();
-void save_gtab_conf();
-void destroy_gtab_window();
-
-/* hime-setup-appearance.c */
-GtkWidget *create_appearance_window();
-void save_appearance_conf();
-void destroy_appearance_window();
-
-/* hime-setup-pho.c */
-GtkWidget *create_kbm_window();
-void save_kbm_conf();
-void destroy_kbm_window();
-
-/* hime-setup-list.c */
-GtkWidget *create_gtablist_window();
-void save_gtablist_conf();
-void destroy_gtablist_window();
-
-#define TAB_TABLE_SIZE 4
-TAB_ENTRY tab_table[TAB_TABLE_SIZE] =
-  { {N_("開啟/關閉/預設輸入法"), create_gtablist_window, save_gtablist_conf, destroy_gtablist_window}
-  , {N_("外觀設定"), create_appearance_window, save_appearance_conf, destroy_appearance_window}
-  , {N_("注音/詞音/拼音設定"), create_kbm_window, save_kbm_conf, destroy_kbm_window}
-  , {N_("倉頡/行列/大易設定"), create_gtab_window, save_gtab_conf, destroy_gtab_window}
-  };
-
-static void save_all_tabs(void)
-{
-  int i = 0; /* non-C99 */
-  for (i = 0; i < TAB_TABLE_SIZE; i++)
-    tab_table[i].save();
-}
-
-static void destroy_all_tabs(void)
-{
-  int i = 0; /* non-C99 */
-  for (i = 0; i < TAB_TABLE_SIZE; i++)
-    tab_table[i].destroy();
-}
-
-static void run_dialog(void)
-{
-  /* 建立 notebook 並加進 vbox */
-  GtkWidget *notebook = gtk_notebook_new();
-  if (notebook == NULL)
-  {
-    fprintf(stderr, "notebook == NULL?!\n");
-    exit(-1);
-  }
-
-  /* 塞 tabs */
-  int i = 0; /* non-C99 */
-  for (i = 0; i < TAB_TABLE_SIZE; i++)
-  {
-    GtkWidget *child = tab_table[i].create();
-    if (child == NULL)
-    {
-      fprintf(stderr, "[%d] child == NULL?!\n", i);
-      exit(-1);
-    }
-
-    GtkWidget *label = gtk_label_new(_(tab_table[i].name));
-    if (label == NULL)
-    {
-      fprintf(stderr, "[%d] label == NULL?! (%s translated to %s)\n", i, tab_table[i].name, _(tab_table[i].name));
-      exit(-1);
-    }
-
-    if (gtk_notebook_append_page(GTK_NOTEBOOK (notebook), child, label) == -1)
-    {
-      fprintf(stderr, "[%d] append_page\n", i);
-      exit(-1);
-    }
-  }
-
-  /* 召喚 dialog */
-  GtkWidget *dialog = gtk_dialog_new_with_buttons (
-      _("hime 設定/工具"),
-      NULL,
-      GTK_DIALOG_MODAL,
-      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-      GTK_STOCK_OK, GTK_RESPONSE_OK,
-      NULL);
-  if (dialog == NULL)
-  {
-    fprintf(stderr, "dialog == NULL?!\n");
-    exit(-1);
-  }
-
-  gtk_dialog_set_alternative_button_order (
-      GTK_DIALOG(dialog),
-      GTK_RESPONSE_OK,
-      GTK_RESPONSE_CANCEL,
-      -1);
-
-  /* 塞 tabs */
-  GtkWidget *content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  gtk_container_add(GTK_CONTAINER (content_area), notebook);
-
-  /* run!!! */
-  gtk_widget_show_all(dialog);
-  gint response = gtk_dialog_run(GTK_DIALOG(dialog));
-  switch (response)
-  {
-    case GTK_RESPONSE_OK:
-      save_all_tabs();
-      break;
-    default:
-      break;
-  }
-
-  /* clean up */
-  destroy_all_tabs();
-  gtk_widget_destroy(GTK_WIDGET(dialog));
-}
-
-#else
-static gboolean close_application( GtkWidget *widget,
-                                   GdkEvent  *event,
-                                   gpointer   data )
-{
-  exit(0);
-}
-void create_appearance_conf_window();
-static void cb_appearance_conf()
-{
-  create_appearance_conf_window();
-}
-void create_kbm_window();
-
-static void cb_kbm()
-{
-  create_kbm_window();
-}
-
-static void cb_tslearn()
-{
-  system("hime-tslearn &");
-  exit(0);
-}
-
-
-static void cb_ret(GtkWidget *widget, gpointer user_data)
-{
-  gtk_widget_destroy((GtkWidget*)user_data);
-}
-
-static void create_result_win(int res, char *cmd)
+static void cb_alt_shift()
 {
   char tt[512];
-
-  if (res) {
-    sprintf(tt, "%s code:%d '%s'\n%s", _("結果失敗"), res, strerror(res), cmd);
-  }
-  else
-    strcpy(tt, _("結果成功"));
-
-  main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  if (hime_setup_window_type_utility)
-    gtk_window_set_type_hint(GTK_WINDOW(main_window), GDK_WINDOW_TYPE_HINT_UTILITY);
-  gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_MOUSE);
-  gtk_window_set_has_resize_grip(GTK_WINDOW(main_window), FALSE);
-
-  GtkWidget *button = gtk_button_new_with_label(tt);
-  gtk_container_add (GTK_CONTAINER (main_window), button);
-  g_signal_connect (G_OBJECT (button), "clicked",
-                    G_CALLBACK (cb_ret), main_window);
-
-  gtk_widget_show_all(main_window);
+  sprintf(tt, "( cd ~/.config/hime && %s phrase.table ) &", utf8_edit);
+  system(tt);
 }
 
+static void cb_symbol_table()
+{
+  char tt[512];
+  sprintf(tt, "( cd ~/.config/hime && %s symbol-table ) &", utf8_edit);
+  system(tt);
+}
+
+static void cb_gb_output_toggle()
+{
+  send_hime_message(GDK_DISPLAY(), GB_OUTPUT_TOGGLE);
+  exit(0);
+}
+
+static void cb_win_kbm_toggle()
+{
+  send_hime_message(GDK_DISPLAY(), KBM_TOGGLE);
+  exit(0);
+}
+
+static void cb_gb_translate_toggle()
+{
+  system(HIME_BIN_DIR"/hime-sim2trad &");
+  exit(0);
+}
+
+static void cb_juying_learn()
+{
+  system(HIME_BIN_DIR"/hime-juyin-learn &");
+  exit(0);
+}
+
+static void create_result_win(const int res, const char *cmd)
+{
+  GtkWidget *dialog = NULL;
+  if (res) {
+    dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
+      "%s code:%d '%s'\n%s", _("結果失敗"), res, strerror(res), cmd);
+  }
+  else
+  {
+    dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+      _("結果成功"));
+  }
+  if (dialog == NULL) exit(-1);
+
+  gtk_dialog_run(GTK_DIALOG(dialog));
+  gtk_widget_destroy (dialog);
+}
 
 static void cb_ts_export()
 {
-   GtkWidget *file_selector;
-   if (button_order)
-       file_selector = gtk_file_chooser_dialog_new(_("請輸入要匯出的檔案名稱"),
-                              GTK_WINDOW(main_window),
-                              GTK_FILE_CHOOSER_ACTION_SAVE,
-                              GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-                              GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                              NULL);
-   else
-       file_selector = gtk_file_chooser_dialog_new(_("請輸入要匯出的檔案名稱"),
-                              GTK_WINDOW(main_window),
-                              GTK_FILE_CHOOSER_ACTION_SAVE,
-                              GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                              GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-                              NULL);
+   GtkWidget *file_selector =
+      gtk_file_chooser_dialog_new(
+         _("請輸入要匯出的檔案名稱"),
+         GTK_WINDOW(main_window),
+         GTK_FILE_CHOOSER_ACTION_SAVE,
+         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+         GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+         NULL);
+
+   gtk_dialog_set_alternative_button_order(
+      GTK_DIALOG(file_selector),
+      GTK_RESPONSE_ACCEPT,
+      GTK_RESPONSE_CANCEL,
+      -1);
+
    char hime_dir[512];
    get_hime_dir(hime_dir);
    char cmd[512];
@@ -249,7 +123,7 @@ static void cb_ts_export()
       }
       gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER (file_selector), tt);
    }
-   
+
    gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER (file_selector), TRUE);
    if (gtk_dialog_run (GTK_DIALOG (file_selector)) == GTK_RESPONSE_ACCEPT) {
        gchar *selected_filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (file_selector));
@@ -284,21 +158,21 @@ static void cb_ts_import()
 {
    /* Create the selector */
 
-   GtkWidget *file_selector;
-   if (button_order)
-       file_selector = gtk_file_chooser_dialog_new(_("請輸入要匯入的檔案名稱"),
-                              GTK_WINDOW(main_window),
-                              GTK_FILE_CHOOSER_ACTION_OPEN,
-                              GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-                              GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                              NULL);
-   else
-       file_selector = gtk_file_chooser_dialog_new(_("請輸入要匯入的檔案名稱"),
-                              GTK_WINDOW(main_window),
-                              GTK_FILE_CHOOSER_ACTION_OPEN,
-                              GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                              GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-                              NULL);
+   GtkWidget *file_selector =
+      gtk_file_chooser_dialog_new(
+         _("請輸入要匯入的檔案名稱"),
+         GTK_WINDOW(main_window),
+         GTK_FILE_CHOOSER_ACTION_OPEN,
+         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+         GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+         NULL);
+
+   gtk_dialog_set_alternative_button_order(
+      GTK_DIALOG(file_selector),
+      GTK_RESPONSE_ACCEPT,
+      GTK_RESPONSE_CANCEL,
+      -1);
+
    if (gtk_dialog_run (GTK_DIALOG (file_selector)) == GTK_RESPONSE_ACCEPT) {
        gchar *selected_filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (file_selector));
 
@@ -312,6 +186,11 @@ static void cb_ts_edit()
   system(HIME_BIN_DIR"/hime-ts-edit");
 }
 
+static void cb_tslearn()
+{
+  system("hime-tslearn &");
+  exit(0);
+}
 
 static void cb_ts_import_sys()
 {
@@ -322,53 +201,10 @@ static void cb_ts_import_sys()
   system(tt);
 }
 
-
-static void cb_alt_shift()
-{
-  char tt[512];
-  sprintf(tt, "( cd ~/.config/hime && %s phrase.table ) &", utf8_edit);
-  system(tt);
-}
-
-
-static void cb_symbol_table()
-{
-  char tt[512];
-  sprintf(tt, "( cd ~/.config/hime && %s symbol-table ) &", utf8_edit);
-  system(tt);
-}
-
-void create_gtab_conf_window(gsize type);
-
-static void cb_gb_output_toggle()
-{
-  send_hime_message(GDK_DISPLAY(), GB_OUTPUT_TOGGLE);
-  exit(0);
-}
-
-static void cb_win_kbm_toggle()
-{
-  send_hime_message(GDK_DISPLAY(), KBM_TOGGLE);
-  exit(0);
-}
-
-static void cb_gb_translate_toggle()
-{
-  system(HIME_BIN_DIR"/hime-sim2trad &");
-  exit(0);
-}
-
-
-static void cb_juying_learn()
-{
-  system(HIME_BIN_DIR"/hime-juyin-learn &");
-  exit(0);
-}
-
-void create_gtablist_window(gsize type);
+/* XXX */
 void create_about_window();
-void set_window_hime_icon(GtkWidget *window);
 
+/* XXX */
 #include "pho.h"
 #include "tsin.h"
 #include "gst.h"
@@ -376,6 +212,261 @@ void set_window_hime_icon(GtkWidget *window);
 #include "hime-module.h"
 #include "hime-module-cb.h"
 HIME_module_callback_functions *init_HIME_module_callback_functions(char *sofile);
+
+#ifdef USE_TABS
+/* The type of the entries in the table.
+ * XXX XXX XXX XXX XXX XXX XXX XXX XXX */
+typedef struct {
+  const char *name;
+  GtkWidget *(*create)();
+  void (*save)();
+  void (*destroy)();
+} TAB_ENTRY;
+
+/* XXX hime-setup-gtab.c */
+GtkWidget *create_gtab_window();
+void save_gtab_conf();
+void destroy_gtab_window();
+
+/* XXX hime-setup-appearance.c */
+GtkWidget *create_appearance_window();
+void save_appearance_conf();
+void destroy_appearance_window();
+
+/* XXX hime-setup-pho.c */
+GtkWidget *create_kbm_window();
+void save_kbm_conf();
+void destroy_kbm_window();
+
+/* XXX hime-setup-list.c */
+GtkWidget *create_gtablist_window();
+void save_gtablist_conf();
+void destroy_gtablist_window();
+
+GtkWidget *misc_window = NULL;
+
+static void pack_start_new_button_with_callback(
+    GtkBox *box,
+    const gchar *label,
+    GCallback cb,
+    gpointer* user_data)
+{
+  GtkWidget *button = gtk_button_new_with_label(label);
+  if (button == NULL) exit(-1);
+  gtk_box_pack_start (GTK_BOX (box), button, TRUE, TRUE, 5);
+  g_signal_connect (G_OBJECT (button), "clicked", cb, user_data);
+}
+
+static GtkWidget *create_misc_window(void)
+{
+  GtkWidget *top_widget = gtk_vbox_new (FALSE, 5);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(top_widget), GTK_ORIENTATION_VERTICAL);
+
+  pack_start_new_button_with_callback(GTK_BOX(top_widget),
+      _("alt-shift 片語編輯"), G_CALLBACK(cb_alt_shift), NULL);
+
+  pack_start_new_button_with_callback(GTK_BOX(top_widget),
+      _("符號表編輯"), G_CALLBACK(cb_symbol_table), NULL);
+
+  if (!hime_status_tray)
+  {
+    pack_start_new_button_with_callback(GTK_BOX(top_widget),
+      _("啟用/關閉簡體字輸出"), G_CALLBACK(cb_gb_output_toggle), NULL);
+
+    pack_start_new_button_with_callback(GTK_BOX(top_widget),
+      _("顯示/隱藏輸入法鍵盤"), G_CALLBACK (cb_win_kbm_toggle), NULL);
+  }
+
+  pack_start_new_button_with_callback(GTK_BOX(top_widget),
+    _("剪貼區 簡體字->正體字"), G_CALLBACK (cb_gb_translate_toggle), NULL);
+
+  pack_start_new_button_with_callback(GTK_BOX(top_widget),
+    _("剪貼區 注音查詢"), G_CALLBACK (cb_juying_learn), NULL);
+
+  GtkWidget *frame_ts = gtk_frame_new (_("詞庫選項"));
+  gtk_box_pack_start (GTK_BOX (top_widget), frame_ts, FALSE, FALSE, 5);
+  GtkWidget *vbox_ts = gtk_vbox_new (FALSE, 5);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_ts), GTK_ORIENTATION_VERTICAL);
+  gtk_container_add (GTK_CONTAINER (frame_ts), vbox_ts);
+
+  pack_start_new_button_with_callback(GTK_BOX(vbox_ts),
+    _("詞庫匯出"), G_CALLBACK (cb_ts_export), NULL);
+
+  pack_start_new_button_with_callback(GTK_BOX(vbox_ts),
+    _("詞庫匯入"), G_CALLBACK (cb_ts_import), NULL);
+
+  pack_start_new_button_with_callback(GTK_BOX(vbox_ts),
+    _("詞庫編輯"), G_CALLBACK (cb_ts_edit), NULL);
+
+  pack_start_new_button_with_callback(GTK_BOX(vbox_ts),
+    _("從文章學習詞"), G_CALLBACK (cb_tslearn), NULL);
+
+  pack_start_new_button_with_callback(GTK_BOX(vbox_ts),
+    _("匯入系統的詞庫"), G_CALLBACK (cb_ts_import_sys), NULL);
+
+  int i;
+  for (i=0; i < inmdN; i++) {
+    INMD *pinmd = &inmd[i];
+    if (pinmd->method_type != method_type_MODULE || pinmd->disabled)
+      continue;
+
+    HIME_module_callback_functions *f = init_HIME_module_callback_functions(pinmd->filename);
+    if (!f)
+      continue;
+
+    if (!f->module_setup_window_create) {
+      free(f);
+      continue;
+    }
+
+    char tt[128];
+    strcpy(tt, pinmd->cname);
+    strcat(tt, _("設定"));
+    pack_start_new_button_with_callback(GTK_BOX(top_widget),
+        tt, G_CALLBACK (f->module_setup_window_create), GINT_TO_POINTER(hime_setup_window_type_utility));
+  }
+
+#if 0
+  GtkWidget *button_about = gtk_button_new_from_stock (GTK_STOCK_ABOUT);
+  gtk_box_pack_start (GTK_BOX (top_widget), button_about, TRUE, TRUE, 5);
+  g_signal_connect (G_OBJECT (button_about), "clicked",
+                    G_CALLBACK (create_about_window),  NULL);
+#endif
+
+  return top_widget;
+}
+
+static void dummy () { }
+
+/* The table defining all tabs */
+#define TAB_TABLE_SIZE 5
+TAB_ENTRY tab_table[TAB_TABLE_SIZE] =
+  { {N_("開啟/關閉/預設輸入法"), create_gtablist_window, save_gtablist_conf, destroy_gtablist_window}
+  , {N_("外觀設定"), create_appearance_window, save_appearance_conf, destroy_appearance_window}
+  , {N_("注音/詞音/拼音設定"), create_kbm_window, save_kbm_conf, destroy_kbm_window}
+  , {N_("倉頡/行列/大易設定"), create_gtab_window, save_gtab_conf, destroy_gtab_window}
+  , {N_("雜項"), create_misc_window, dummy, dummy}
+  };
+
+static void save_all_tabs(void)
+{
+  int i = 0; /* non-C99 */
+  for (i = 0; i < TAB_TABLE_SIZE; i++)
+    tab_table[i].save();
+}
+
+static void destroy_all_tabs(void)
+{
+  int i = 0; /* non-C99 */
+  for (i = 0; i < TAB_TABLE_SIZE; i++)
+    tab_table[i].destroy();
+}
+
+static void run_dialog(void)
+{
+  /* Create the notebook. */
+  GtkWidget *notebook = gtk_notebook_new();
+  if (notebook == NULL)
+  {
+    fprintf(stderr, "notebook == NULL?!\n");
+    exit(-1);
+  }
+
+  /* Put tabs into the notebook. */
+  int i = 0; /* non-C99 */
+  for (i = 0; i < TAB_TABLE_SIZE; i++)
+  {
+    GtkWidget *child = tab_table[i].create();
+    if (child == NULL)
+    {
+      fprintf(stderr, "[%d] child == NULL?!\n", i);
+      exit(-1);
+    }
+
+    GtkWidget *label = gtk_label_new(_(tab_table[i].name));
+    if (label == NULL)
+    {
+      fprintf(stderr, "[%d] label == NULL?! (%s translated to %s)\n", i, tab_table[i].name, _(tab_table[i].name));
+      exit(-1);
+    }
+
+    if (gtk_notebook_append_page(GTK_NOTEBOOK (notebook), child, label) == -1)
+    {
+      fprintf(stderr, "[%d] append_page\n", i);
+      exit(-1);
+    }
+  }
+
+  /* Create the dialog */
+  GtkWidget *dialog = gtk_dialog_new_with_buttons (
+      _("hime 設定/工具"),
+      NULL,
+      GTK_DIALOG_MODAL,
+      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+      GTK_STOCK_OK, GTK_RESPONSE_OK,
+      NULL);
+  if (dialog == NULL)
+  {
+    fprintf(stderr, "dialog == NULL?!\n");
+    exit(-1);
+  }
+
+  /* Alternative button order when button-orde = 1 */
+  gtk_dialog_set_alternative_button_order (
+      GTK_DIALOG(dialog),
+      GTK_RESPONSE_OK,
+      GTK_RESPONSE_CANCEL,
+      -1);
+
+  /* Put the notebook into the dialog. */
+  GtkWidget *content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  gtk_container_add(GTK_CONTAINER (content_area), notebook);
+
+  /* Run the dialog and save the setting when 'OK' is clicked. */
+  gtk_widget_show_all(dialog);
+  gint response = gtk_dialog_run(GTK_DIALOG(dialog));
+  switch (response)
+  {
+    case GTK_RESPONSE_OK:
+      save_all_tabs();
+      break;
+    default:
+      break;
+  }
+
+  /* Clean things up. */
+  destroy_all_tabs();
+  gtk_widget_destroy(GTK_WIDGET(dialog));
+}
+
+#else
+static gboolean close_application( GtkWidget *widget,
+                                   GdkEvent  *event,
+                                   gpointer   data )
+{
+  exit(0);
+}
+void create_appearance_conf_window();
+static void cb_appearance_conf()
+{
+  create_appearance_conf_window();
+}
+void create_kbm_window();
+
+static void cb_kbm()
+{
+  create_kbm_window();
+}
+
+static void cb_ret(GtkWidget *widget, gpointer user_data)
+{
+  gtk_widget_destroy((GtkWidget*)user_data);
+}
+
+void create_gtab_conf_window(gsize type);
+void create_gtablist_window(gsize type);
+void create_about_window();
+void set_window_hime_icon(GtkWidget *window);
 
 static void create_main_win()
 {
