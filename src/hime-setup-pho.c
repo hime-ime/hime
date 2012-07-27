@@ -1,4 +1,5 @@
 /* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+ * Copyright (C) 2012 Favonia <favonia@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,6 +34,8 @@ struct {
 {NULL}
 };
 
+/* XXX UI states hold uncommited preference.
+ * That's why we need these global variables. */
 static GtkWidget *check_button_tsin_phrase_pre_select,
                  *check_button_phonetic_char_dynamic_sequence,
                  *check_button_pho_hide_row2,
@@ -101,13 +104,19 @@ void save_tsin_eng_pho_key()
 }
 
 
-static GtkWidget *hime_kbm_window = NULL;
+static GtkWidget *kbm_widget = NULL;
 
 static int new_select_idx_tsin_space_opt;
 //static GdkColor tsin_phrase_line_gcolor;
 
 void save_kbm_conf()
 {
+  if (kbm_widget == NULL)
+  {
+    fprintf(stderr, "save_kbm_conf: kbm_widget is NULL!\n");
+    return;
+  }
+
   int idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_kbm_opts));
 
   int idx_selkeys = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_selkeys));
@@ -184,9 +193,9 @@ void save_kbm_conf()
   send_hime_message(GDK_DISPLAY(), "reload kbm");
 }
 
-void destroy_kbm_window ()
+void destroy_kbm_widget ()
 {
-  gtk_widget_destroy(hime_kbm_window); hime_kbm_window = NULL;
+  gtk_widget_destroy(kbm_widget); kbm_widget = NULL;
 }
 
 #if 0
@@ -337,101 +346,16 @@ GtkWidget *create_en_pho_key_sel(char *s)
 
 void load_settings();
 
-static GtkWidget *create_kbm_widget();
-
-#ifdef USE_TABS
-GtkWidget *create_kbm_window()
+GtkWidget *create_kbm_widget()
 {
-  hime_kbm_window = create_kbm_widget();
-  return hime_kbm_window;
-}
-#else
-static gboolean cb_ok( GtkWidget *widget,
-                                   GdkEvent  *event,
-                                   gpointer   data )
-{
-  save_kbm_conf ();
-  destroy_kbm_window ();
-  return TRUE;
-}
-
-static gboolean close_kbm_window( GtkWidget *widget,
-                                   GdkEvent  *event,
-                                   gpointer   data )
-{
-  destroy_kbm_window ();
-  return TRUE;
-}
-
-void create_kbm_window()
-{
-  if (hime_kbm_window) {
-    gtk_window_present(GTK_WINDOW(hime_kbm_window));
-    return;
-  }
-
-  hime_kbm_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  if (hime_setup_window_type_utility)
-    gtk_window_set_type_hint(GTK_WINDOW(hime_kbm_window), GDK_WINDOW_TYPE_HINT_UTILITY);
-  gtk_window_set_position(GTK_WINDOW(hime_kbm_window), GTK_WIN_POS_MOUSE);
-  gtk_window_set_has_resize_grip(GTK_WINDOW(hime_kbm_window), FALSE);
-
-  g_signal_connect (G_OBJECT (hime_kbm_window), "delete_event",
-                    G_CALLBACK (close_kbm_window),
-                    NULL);
-
-  gtk_window_set_title (GTK_WINDOW (hime_kbm_window), _("注音/詞音/拼音設定"));
-  gtk_container_set_border_width (GTK_CONTAINER (hime_kbm_window), 1);
-
-  GtkWidget* top_widget = create_kbm_widget();
-  gtk_container_add (GTK_CONTAINER (hime_kbm_window), top_widget);
-
-  GtkWidget *hbox_cancel_ok = gtk_hbox_new (FALSE, 10);
-  gtk_grid_set_column_homogeneous(GTK_GRID(hbox_cancel_ok), TRUE);
-  gtk_box_pack_start (GTK_BOX (top_widget), hbox_cancel_ok , FALSE, FALSE, 5);
-  GtkWidget *button_cancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-  if (button_order)
-    gtk_box_pack_end (GTK_BOX (hbox_cancel_ok), button_cancel, TRUE, TRUE, 0);
-  else
-    gtk_box_pack_start (GTK_BOX (hbox_cancel_ok), button_cancel, TRUE, TRUE, 0);
-  GtkWidget *button_ok = gtk_button_new_from_stock (GTK_STOCK_OK);
-#if !GTK_CHECK_VERSION(2,91,2)
-  if (button_order)
-    gtk_box_pack_end (GTK_BOX (hbox_cancel_ok), button_ok, TRUE, TRUE, 5);
-  else
-    gtk_box_pack_start (GTK_BOX (hbox_cancel_ok), button_ok, TRUE, TRUE, 5);
-#else
-  if (button_order)
-    gtk_grid_attach_next_to (GTK_BOX (hbox_cancel_ok), button_ok, button_cancel, GTK_POS_LEFT, 1, 1);
-  else
-    gtk_grid_attach_next_to (GTK_BOX (hbox_cancel_ok), button_ok, button_cancel, GTK_POS_RIGHT, 1, 1);
-#endif
-
-  g_signal_connect (G_OBJECT (button_cancel), "clicked",
-                            G_CALLBACK (close_kbm_window),
-                            G_OBJECT (hime_kbm_window));
-
-  g_signal_connect_swapped (G_OBJECT (button_ok), "clicked",
-                            G_CALLBACK (cb_ok),
-                            G_OBJECT (hime_kbm_window));
-
-  GTK_WIDGET_SET_FLAGS (button_cancel, GTK_CAN_DEFAULT);
-  gtk_widget_grab_default (button_cancel);
-
-  gtk_widget_show_all (hime_kbm_window);
-}
-#endif
-
-static GtkWidget *create_kbm_widget()
-{
-  GtkWidget* top_widget = NULL;
+  if (kbm_widget != NULL)
+    fprintf(stderr, "create_kbm_widget: kbm_widget was not NULL!\n");
 
   load_settings();
 
   GtkWidget *vbox_top = gtk_vbox_new (FALSE, 3);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_top), GTK_ORIENTATION_VERTICAL);
-  // gtk_container_add (GTK_CONTAINER (hime_kbm_window), vbox_top);
-  top_widget = vbox_top;
+  kbm_widget = vbox_top;
 
   GtkWidget *hbox_lr = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox_top), hbox_lr, FALSE, FALSE, 0);
@@ -565,5 +489,5 @@ static GtkWidget *create_kbm_widget()
   spinner_tsin_buffer_size = gtk_spin_button_new (adj_gtab_in, 0, 0);
   gtk_container_add (GTK_CONTAINER (frame_tsin_buffer_size), spinner_tsin_buffer_size);
 
-  return top_widget;
+  return kbm_widget;
 }

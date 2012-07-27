@@ -1,4 +1,5 @@
 /* Copyright (C) 2005-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+ * Copyright (C) 2012 Favonia <favonia@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,12 +33,13 @@ struct {
 
 extern char *default_input_method_str;
 
-static GtkWidget *gtablist_window = NULL;
+/* XXX UI states hold uncommited preference.
+ * That's why we need these global variables. */
+static GtkWidget *gtablist_widget = NULL;
 static GtkWidget *vbox;
-static GtkWidget *hbox;
 static GtkWidget *sw;
 static GtkWidget *treeview;
-static GtkWidget *button, *button2, *check_button_phonetic_speak, *opt_speaker_opts, *check_button_hime_bell_off;
+static GtkWidget *check_button_phonetic_speak, *opt_speaker_opts, *check_button_hime_bell_off;
 static GtkWidget *opt_im_toggle_keys, *check_button_hime_remote_client,
        *check_button_hime_shift_space_eng_full,
        *check_button_hime_init_im_enabled,
@@ -216,10 +218,14 @@ static void save_gtab_list()
   fclose(fp);
 }
 
-void destroy_gtablist_window ();
-
 void save_gtablist_conf ()
 {
+  if (gtablist_widget == NULL)
+  {
+    fprintf(stderr, "save_gtablist_conf: gtablist_widget is NULL!\n");
+    return;
+  }
+
   GtkTreeModel *model = gtk_tree_view_get_model((GtkTreeView *) treeview);
 
   GtkTreeIter iter;
@@ -302,9 +308,9 @@ void save_gtablist_conf ()
   send_hime_message(GDK_DISPLAY(), "reload");
 }
 
-void destroy_gtablist_window()
+void destroy_gtablist_widget()
 {
-  gtk_widget_destroy(gtablist_window); gtablist_window = NULL;
+  gtk_widget_destroy(gtablist_widget); gtablist_widget = NULL;
 }
 
 int hime_switch_keys_lookup(int key);
@@ -492,12 +498,6 @@ add_columns (GtkTreeView *treeview)
                                                NULL);
 }
 
-
-static void callback_win_delete()
-{
-  gtk_widget_destroy(gtablist_window); gtablist_window = NULL;
-}
-
 void set_selection_by_key(int key)
 {
   if (!treeview)
@@ -574,103 +574,16 @@ static GtkWidget *create_speaker_opts()
 
 #include <dirent.h>
 
-static GtkWidget *create_gtablist_widget (gsize type);
-
-#ifdef USE_TABS
-GtkWidget *create_gtablist_window ()
+GtkWidget *create_gtablist_widget ()
 {
-  gtablist_window = create_gtablist_widget(0);
-  return gtablist_window;
-}
-#else
-static void cb_ok (GtkWidget *button, gpointer data)
-{
-  save_gtablist_conf ();
-  destroy_gtablist_window ();
-}
-
-void cb_cancel (GtkWidget *widget, gpointer data)
-{
-  destroy_gtablist_window();
-}
-
-void create_gtablist_window (GtkWidget *widget, gsize type)
-{
-  if (gtablist_window) {
-    gtk_window_present(GTK_WINDOW(gtablist_window));
-    return;
-  }
-
-  /* create gtab_list_window, etc */
-  gtablist_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  if (hime_setup_window_type_utility)
-    gtk_window_set_type_hint(GTK_WINDOW(gtablist_window), GDK_WINDOW_TYPE_HINT_UTILITY);
-  gtk_window_set_position(GTK_WINDOW(gtablist_window), GTK_WIN_POS_MOUSE);
-  if (type==2) gtk_window_set_resizable(GTK_WINDOW(gtablist_window), FALSE);
-
-  gtk_window_set_has_resize_grip(GTK_WINDOW(gtablist_window), FALSE);
-  gtk_window_set_title (GTK_WINDOW (gtablist_window), _("開啟/關閉/預設輸入法"));
-  gtk_container_set_border_width (GTK_CONTAINER (gtablist_window), 1);
-
-  g_signal_connect (G_OBJECT (gtablist_window), "destroy",
-                    G_CALLBACK (gtk_widget_destroyed), &gtablist_window);
-
-  g_signal_connect (G_OBJECT (gtablist_window), "delete_event",
-                      G_CALLBACK (callback_win_delete), NULL);
-
-  GtkWidget* top_widget = create_gtablist_widget(type);
-  gtk_container_add (GTK_CONTAINER (gtablist_window), top_widget);
-
-  hbox = gtk_hbox_new (TRUE, 4);
-  gtk_grid_set_column_homogeneous(GTK_GRID(hbox), TRUE);
-  gtk_box_pack_start (GTK_BOX (top_widget), hbox, FALSE, FALSE, 0);
-
-  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-  g_signal_connect (G_OBJECT (button), "clicked",
-                    G_CALLBACK (cb_cancel), NULL);
-  if (button_order)
-    gtk_box_pack_end (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-  else
-    gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-
-  button2 = gtk_button_new_from_stock (GTK_STOCK_OK);
-  g_signal_connect (G_OBJECT (button2), "clicked",
-                    G_CALLBACK (cb_ok), NULL);
-#if !GTK_CHECK_VERSION(2,91,2)
-  if (button_order)
-    gtk_box_pack_end (GTK_BOX (hbox), button2, TRUE, TRUE, 0);
-  else
-    gtk_box_pack_start (GTK_BOX (hbox), button2, TRUE, TRUE, 0);
-#else
-  if (button_order)
-    gtk_grid_attach_next_to (GTK_BOX (hbox), button2, button, GTK_POS_LEFT, 1, 1);
-  else
-    gtk_grid_attach_next_to (GTK_BOX (hbox), button2, button, GTK_POS_RIGHT, 1, 1);
-#endif
-
-  g_signal_connect (G_OBJECT (gtablist_window), "delete_event",
-                    G_CALLBACK (gtk_main_quit), NULL);
-
-  gtk_widget_show_all (gtablist_window);
-
-  set_selection_by_key(default_input_method);
-
-#if 0
-  g_signal_connect (G_OBJECT(tree_selection), "changed",
-                    G_CALLBACK (callback_row_selected), NULL);
-#endif
-}
-#endif
-
-static GtkWidget *create_gtablist_widget (gsize type)
-{
-  GtkWidget* top_widget = NULL;
+  if (gtablist_widget != NULL)
+    fprintf(stderr, "create_gtablist_widget: gtablist_widget was not NULL!\n");
 
   load_settings();
 
   GtkWidget *box = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(box), GTK_ORIENTATION_VERTICAL);
-  top_widget = box;
+  gtablist_widget = box;
 
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
@@ -702,15 +615,10 @@ static GtkWidget *create_gtablist_widget (gsize type)
 
   gtk_container_add (GTK_CONTAINER (sw), treeview);
 
-  if (type ==2)
-  {
-    gtk_container_set_border_width (GTK_CONTAINER (top_widget), 10);
-    gtk_widget_set_no_show_all (vbox, TRUE);
-  }
-  else
   {
     // Trying to get correct size of dialog_data->treeview, then put it into a gtk_scrolled_window
-    gtk_widget_show_all (top_widget);
+    /* XXX Favonia: is this necessary? */
+    gtk_widget_show_all (gtablist_widget);
 
     GtkRequisition requisition;
     gtk_widget_get_child_requisition (treeview, &requisition);
@@ -819,7 +727,5 @@ static GtkWidget *create_gtablist_widget (gsize type)
     gtk_container_add (GTK_CONTAINER (hbox_phonetic_speak), create_speaker_opts());
   }
 
-  if (type ==1) gtk_widget_set_no_show_all (vbox, TRUE);
-
-  return top_widget;
+  return gtablist_widget;
 }

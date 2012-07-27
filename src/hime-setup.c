@@ -1,5 +1,6 @@
 /* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  * Copyright (C) 2012 tytsim <https://github.com/tytsim>
+ * Copyright (C) 2012 Favonia <favonia@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,10 +28,6 @@
 GtkWidget *main_window;
 gboolean button_order;
 char utf8_edit[]=HIME_SCRIPT_DIR"/utf8-edit";
-
-#if USE_TABS && USE_WIDE
-#error "not supported"
-#endif
 
 static void cb_alt_shift()
 {
@@ -213,7 +210,6 @@ void create_about_window();
 #include "hime-module-cb.h"
 HIME_module_callback_functions *init_HIME_module_callback_functions(char *sofile);
 
-#ifdef USE_TABS
 /* The type of the entries in the table.
  * XXX XXX XXX XXX XXX XXX XXX XXX XXX */
 typedef struct {
@@ -224,26 +220,26 @@ typedef struct {
 } TAB_ENTRY;
 
 /* XXX hime-setup-gtab.c */
-GtkWidget *create_gtab_window();
+GtkWidget *create_gtab_widget();
 void save_gtab_conf();
-void destroy_gtab_window();
+void destroy_gtab_widget();
 
 /* XXX hime-setup-appearance.c */
-GtkWidget *create_appearance_window();
+GtkWidget *create_appearance_widget();
 void save_appearance_conf();
-void destroy_appearance_window();
+void destroy_appearance_widget();
 
 /* XXX hime-setup-pho.c */
-GtkWidget *create_kbm_window();
+GtkWidget *create_kbm_widget();
 void save_kbm_conf();
-void destroy_kbm_window();
+void destroy_kbm_widget();
 
 /* XXX hime-setup-list.c */
-GtkWidget *create_gtablist_window();
+GtkWidget *create_gtablist_widget();
 void save_gtablist_conf();
-void destroy_gtablist_window();
+void destroy_gtablist_widget();
 
-GtkWidget *misc_window = NULL;
+GtkWidget *misc_widget = NULL;
 
 static void pack_start_new_button_with_callback(
     GtkBox *box,
@@ -257,7 +253,7 @@ static void pack_start_new_button_with_callback(
   g_signal_connect (G_OBJECT (button), "clicked", cb, user_data);
 }
 
-static GtkWidget *create_misc_window(void)
+static GtkWidget *create_misc_widget(void)
 {
   GtkWidget *top_widget = gtk_vbox_new (FALSE, 5);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(top_widget), GTK_ORIENTATION_VERTICAL);
@@ -340,12 +336,12 @@ static void dummy () { }
 
 /* The table defining all tabs */
 #define TAB_TABLE_SIZE 5
-TAB_ENTRY tab_table[TAB_TABLE_SIZE] =
-  { {N_("開啟/關閉/預設輸入法"), create_gtablist_window, save_gtablist_conf, destroy_gtablist_window}
-  , {N_("外觀設定"), create_appearance_window, save_appearance_conf, destroy_appearance_window}
-  , {N_("注音/詞音/拼音設定"), create_kbm_window, save_kbm_conf, destroy_kbm_window}
-  , {N_("倉頡/行列/大易設定"), create_gtab_window, save_gtab_conf, destroy_gtab_window}
-  , {N_("雜項"), create_misc_window, dummy, dummy}
+static TAB_ENTRY tab_table[TAB_TABLE_SIZE] =
+  { {N_("開啟/關閉/預設輸入法"), create_gtablist_widget, save_gtablist_conf, destroy_gtablist_widget}
+  , {N_("外觀設定"), create_appearance_widget, save_appearance_conf, destroy_appearance_widget}
+  , {N_("注音/詞音/拼音設定"), create_kbm_widget, save_kbm_conf, destroy_kbm_widget}
+  , {N_("倉頡/行列/大易設定"), create_gtab_widget, save_gtab_conf, destroy_gtab_widget}
+  , {N_("雜項"), create_misc_widget, dummy, dummy}
   };
 
 static void save_all_tabs(void)
@@ -439,243 +435,6 @@ static void run_dialog(void)
   gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
-#else
-static gboolean close_application( GtkWidget *widget,
-                                   GdkEvent  *event,
-                                   gpointer   data )
-{
-  exit(0);
-}
-void create_appearance_conf_window();
-static void cb_appearance_conf()
-{
-  create_appearance_conf_window();
-}
-void create_kbm_window();
-
-static void cb_kbm()
-{
-  create_kbm_window();
-}
-
-static void cb_ret(GtkWidget *widget, gpointer user_data)
-{
-  gtk_widget_destroy((GtkWidget*)user_data);
-}
-
-void create_gtab_conf_window(gsize type);
-void create_gtablist_window(gsize type);
-void create_about_window();
-void set_window_hime_icon(GtkWidget *window);
-
-static void create_main_win()
-{
-  main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  if (hime_setup_window_type_utility)
-    gtk_window_set_type_hint(GTK_WINDOW(main_window), GDK_WINDOW_TYPE_HINT_UTILITY);
-  gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_CENTER);
-
-  g_signal_connect (G_OBJECT (main_window), "delete_event",
-                     G_CALLBACK (close_application),
-                     NULL);
-
-  gtk_window_set_title (GTK_WINDOW (main_window), _("hime 設定/工具"));
-  set_window_hime_icon(main_window);
-  gtk_window_set_resizable (GTK_WINDOW (main_window), FALSE);
-
-#ifdef USE_WIDE
-  GtkWidget *vbox = gtk_vbox_new (TRUE, 0);
-#else
-  GtkWidget *vbox = gtk_vbox_new (FALSE, 0);
-#endif
-  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
-
-#ifdef USE_WIDE
-  GtkWidget *box = gtk_hbox_new (TRUE, 0);
-  gtk_container_add (GTK_CONTAINER (main_window), box);
-  gtk_box_pack_start (GTK_BOX (box), vbox, TRUE, TRUE, 0);
-
-  GtkWidget *button_default_input_method1 = gtk_button_new_with_label(_("開啟/關閉/預設輸入法"));
-  gtk_box_pack_start (GTK_BOX (vbox), button_default_input_method1, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_default_input_method1), "clicked",
-                    G_CALLBACK (create_gtablist_window), GINT_TO_POINTER(1));
-
-  GtkWidget *button_default_input_method2 = gtk_button_new_with_label(_("輸入法伺服器"));
-  gtk_box_pack_start (GTK_BOX (vbox), button_default_input_method2, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_default_input_method2), "clicked",
-                    G_CALLBACK (create_gtablist_window), GINT_TO_POINTER(2));
-#else
-  gtk_container_add (GTK_CONTAINER (main_window), vbox);
-
-  GtkWidget *button_default_input_method = gtk_button_new_with_label(_("開啟/關閉/預設輸入法"));
-  gtk_box_pack_start (GTK_BOX (vbox), button_default_input_method, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_default_input_method), "clicked",
-                    G_CALLBACK (create_gtablist_window), GINT_TO_POINTER(0));
-#endif
-
-  GtkWidget *button_appearance_conf = gtk_button_new_with_label(_("外觀設定"));
-  gtk_box_pack_start (GTK_BOX (vbox), button_appearance_conf, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_appearance_conf), "clicked",
-                    G_CALLBACK (cb_appearance_conf), NULL);
-
-  GtkWidget *button_kbm = gtk_button_new_with_label(_("注音/詞音/拼音設定"));
-  gtk_box_pack_start (GTK_BOX (vbox), button_kbm, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_kbm), "clicked",
-                    G_CALLBACK (cb_kbm), NULL);
-
-#ifdef USE_WIDE
-  GtkWidget *button_gtab_conf = gtk_button_new_with_label(_("倉頡/行列/大易 外觀設定"));
-  gtk_box_pack_start (GTK_BOX (vbox), button_gtab_conf, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_gtab_conf), "clicked",
-                    G_CALLBACK (create_gtab_conf_window), GINT_TO_POINTER(1));
-  button_gtab_conf = gtk_button_new_with_label(_("倉頡/行列/大易 行為設定"));
-  gtk_box_pack_start (GTK_BOX (vbox), button_gtab_conf, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_gtab_conf), "clicked",
-                    G_CALLBACK (create_gtab_conf_window), GINT_TO_POINTER(2));
-#else
-  GtkWidget *button_gtab_conf = gtk_button_new_with_label(_("倉頡/行列/大易設定"));
-  gtk_box_pack_start (GTK_BOX (vbox), button_gtab_conf, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_gtab_conf), "clicked",
-                    G_CALLBACK (create_gtab_conf_window), GINT_TO_POINTER(0));
-#endif
-
-#ifdef USE_WIDE
-  vbox = gtk_vbox_new (TRUE, 0);
-  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
-  gtk_box_pack_start (GTK_BOX (box), vbox, TRUE, TRUE, 0);
-#endif
-
-  GtkWidget *button_alt_shift = gtk_button_new_with_label(_("alt-shift 片語編輯"));
-  gtk_box_pack_start (GTK_BOX (vbox), button_alt_shift, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_alt_shift), "clicked",
-                    G_CALLBACK (cb_alt_shift), NULL);
-
-  GtkWidget *button_symbol_table = gtk_button_new_with_label(_("符號表編輯"));
-  gtk_box_pack_start (GTK_BOX (vbox), button_symbol_table, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_symbol_table), "clicked",
-                    G_CALLBACK (cb_symbol_table), NULL);
-
-#if !USE_WIDE
-  if (!hime_status_tray)
-  {
-#endif
-    GtkWidget *button_gb_output_toggle = gtk_button_new_with_label(_("啟用/關閉簡體字輸出"));
-    gtk_box_pack_start (GTK_BOX (vbox), button_gb_output_toggle, TRUE, TRUE, 0);
-    g_signal_connect (G_OBJECT (button_gb_output_toggle), "clicked",
-                      G_CALLBACK (cb_gb_output_toggle), NULL);
-
-    void kbm_open_close(GtkButton *checkmenuitem, gboolean b_show);
-    GtkWidget *button_win_kbm_toggle = gtk_button_new_with_label(_("顯示/隱藏輸入法鍵盤"));
-    gtk_box_pack_start (GTK_BOX (vbox), button_win_kbm_toggle, TRUE, TRUE, 0);
-    g_signal_connect (G_OBJECT (button_win_kbm_toggle), "clicked",
-                      G_CALLBACK (cb_win_kbm_toggle), NULL);
-#if !USE_WIDE
-  }
-#endif
-
-  GtkWidget *button_gb_translate_toggle = gtk_button_new_with_label(_("剪貼區 簡體字->正體字"));
-  gtk_box_pack_start (GTK_BOX (vbox), button_gb_translate_toggle, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_gb_translate_toggle), "clicked",
-                    G_CALLBACK (cb_gb_translate_toggle), NULL);
-
-  GtkWidget *button_juying_learn_toggle = gtk_button_new_with_label(_("剪貼區 注音查詢"));
-  gtk_box_pack_start (GTK_BOX (vbox), button_juying_learn_toggle, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_juying_learn_toggle), "clicked",
-                    G_CALLBACK (cb_juying_learn), NULL);
-
-#ifdef USE_WIDE
-  vbox = gtk_vbox_new (TRUE, 0);
-  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
-  gtk_box_pack_start (GTK_BOX (box), vbox, TRUE, TRUE, 0);
-#endif
-
-  GtkWidget *expander_ts;
-  GtkWidget *vbox_ts;
-#ifdef USE_WIDE
-  vbox_ts = vbox;
-#else
-  expander_ts = gtk_expander_new (_("詞庫選項"));
-  gtk_box_pack_start (GTK_BOX (vbox), expander_ts, TRUE, TRUE, 0);
-  vbox_ts = gtk_vbox_new (FALSE, 0);
-  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_ts), GTK_ORIENTATION_VERTICAL);
-  gtk_container_add (GTK_CONTAINER (expander_ts), vbox_ts);
-#endif
-
-  GtkWidget *button_ts_export = gtk_button_new_with_label(_("詞庫匯出"));
-  gtk_widget_set_hexpand (button_ts_export, TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox_ts), button_ts_export, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_ts_export), "clicked",
-                    G_CALLBACK (cb_ts_export), NULL);
-
-  GtkWidget *button_ts_import = gtk_button_new_with_label(_("詞庫匯入"));
-  gtk_widget_set_hexpand (button_ts_import, TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox_ts), button_ts_import, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_ts_import), "clicked",
-                    G_CALLBACK (cb_ts_import), NULL);
-
-  GtkWidget *button_ts_edit = gtk_button_new_with_label(_("詞庫編輯"));
-  gtk_widget_set_hexpand (button_ts_edit, TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox_ts), button_ts_edit, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_ts_edit), "clicked",
-                    G_CALLBACK (cb_ts_edit), NULL);
-
-  GtkWidget *button_hime_tslearn = gtk_button_new_with_label(_("從文章學習詞"));
-  gtk_box_pack_start (GTK_BOX (vbox_ts), button_hime_tslearn, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_hime_tslearn), "clicked",
-                    G_CALLBACK (cb_tslearn), NULL);
-
-  GtkWidget *button_ts_import_sys = gtk_button_new_with_label(_("匯入系統的詞庫"));
-  gtk_box_pack_start (GTK_BOX (vbox_ts), button_ts_import_sys, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_ts_import_sys), "clicked",
-                    G_CALLBACK (cb_ts_import_sys), NULL);
-
-  gboolean show_about=TRUE;
-  int i;
-  for (i=0; i < inmdN; i++) {
-    INMD *pinmd = &inmd[i];
-    if (pinmd->method_type != method_type_MODULE || pinmd->disabled)
-      continue;
-
-    HIME_module_callback_functions *f = init_HIME_module_callback_functions(pinmd->filename);
-    if (!f)
-      continue;
-
-    if (!f->module_setup_window_create) {
-      free(f);
-      continue;
-    }
-
-    char tt[128];
-    strcpy(tt, pinmd->cname);
-    strcat(tt, _("設定"));
-    GtkWidget *button_module_input_method = gtk_button_new_with_label(tt);
-    gtk_box_pack_start (GTK_BOX (vbox), button_module_input_method, TRUE, TRUE, 0);
-    g_signal_connect (G_OBJECT (button_module_input_method), "clicked",
-                    G_CALLBACK (f->module_setup_window_create), GINT_TO_POINTER(hime_setup_window_type_utility));
-#ifdef USE_WIDE
-    show_about=FALSE;
-#endif
-  }
-
-  if (show_about)
-  {
-    GtkWidget *button_about = gtk_button_new_from_stock (GTK_STOCK_ABOUT);
-    gtk_box_pack_start (GTK_BOX (vbox), button_about, TRUE, TRUE, 0);
-    g_signal_connect (G_OBJECT (button_about), "clicked",
-                      G_CALLBACK (create_about_window),  NULL);
-  }
-
-#if !USE_WIDE
-  GtkWidget *button_quit = gtk_button_new_from_stock (GTK_STOCK_QUIT);
-  gtk_box_pack_start (GTK_BOX (vbox), button_quit, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_quit), "clicked",
-                    G_CALLBACK (close_application), NULL);
-#endif
-
-  gtk_widget_show_all(main_window);
-}
-#endif /* USE_TABS */
-
 void init_TableDir(), exec_setup_scripts();
 
 int main(int argc, char **argv)
@@ -699,18 +458,12 @@ int main(int argc, char **argv)
 
   g_object_get(gtk_settings_get_default(), "gtk-alternative-button-order", &button_order, NULL);
 
-#ifdef USE_TABS
-  run_dialog();
-#else
-  create_main_win();
-
 #if 0
   // once you invoke hime-setup, the left-right buton tips is disabled
   save_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 0);
 #endif
 
-  gtk_main();
-#endif
+  run_dialog();
 
   return 0;
 }
