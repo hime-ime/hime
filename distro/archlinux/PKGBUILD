@@ -23,7 +23,7 @@ build() {
 
         if [[ -d "${srcdir}/${_gitname}/" ]]; then
                 cd "${srcdir}/${_gitname}/"
-                git pull origin
+                git pull --depth=1 origin
                 msg "The local GIT repo has been updated."
         else
                 git clone --depth=1 "${_gitroot}" "${_gitname}"
