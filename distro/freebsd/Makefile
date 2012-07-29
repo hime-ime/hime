@@ -39,7 +39,7 @@ do-extract:
 	@${RM} -rf ${WRKDIR}
 	@${MKDIR} ${WRKDIR}
 	(cd ${WRKDIR} && \
-	 git clone git://github.com/hime-ime/hime.git && \
+	 git clone --depth=1 git://github.com/hime-ime/hime.git && \
 	 ${LN} -s ${PORTNAME} ${PORTNAME}-${PORTVERSION})
 
 pre-patch:
