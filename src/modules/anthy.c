@@ -614,13 +614,6 @@ static void cursor_markup(int idx, char *s)
   gtk_label_set_markup(GTK_LABEL(lab), cur);
 }
 
-static void minimize_win_anthy()
-{
-  if (!win_anthy)
-    return;
-  gtk_window_resize(GTK_WINDOW(win_anthy), 32, 12);
-}
-
 static void disp_keys(int idx)
 {
   int i;
@@ -658,8 +651,6 @@ static void disp_input()
     idx+=keysN;
     cursor_markup(idx, " ");
   }
-
-  minimize_win_anthy();
 }
 
 static void disp_convert()
@@ -1190,7 +1181,6 @@ int module_init_win(HIME_module_main_functions *funcs)
   win_anthy = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_has_resize_grip(GTK_WINDOW(win_anthy), FALSE);
   gtk_window_set_default_size(GTK_WINDOW (win_anthy), 40, 50);
-
 
   gtk_widget_realize (win_anthy);
   gmf.mf_set_no_focus(win_anthy);

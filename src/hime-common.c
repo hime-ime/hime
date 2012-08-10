@@ -98,7 +98,7 @@ void exec_hime_setup()
 
 void set_label_font_size(GtkWidget *label, int size)
 {
-  if (!label)
+  if (! GTK_IS_WIDGET(label))
     return;
 
   PangoContext *pango_context = gtk_widget_get_pango_context (label);
@@ -128,6 +128,7 @@ void set_no_focus(GtkWidget *win)
   gdk_window_set_override_redirect(gtk_widget_get_window(win), TRUE);
   gtk_window_set_accept_focus(GTK_WINDOW(win), FALSE);
   gtk_window_set_focus_on_map (GTK_WINDOW(win), FALSE);
+  gtk_window_set_resizable (GTK_WINDOW (win), FALSE);
 }
 
 #if !USE_TSIN

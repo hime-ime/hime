@@ -358,7 +358,6 @@ void compact_win0()
     return;
 
 //  max_yl = 0;
-  gtk_window_resize(GTK_WINDOW(gwin0), 1, 1);
   raw_move(best_win_x, best_win_y);
 }
 

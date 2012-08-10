@@ -41,7 +41,6 @@ static GdkColor better_color;
 gboolean last_cursor_off;
 
 void set_label_space(GtkWidget *label);
-void minimize_win_gtab();
 gboolean win_size_exceed(GtkWidget *win), gtab_phrase_on();
 void move_win_gtab(int x, int y);
 int win_gtab_max_key_press;
@@ -167,14 +166,14 @@ void change_win_fg_bg(GtkWidget *win, GtkWidget *label)
       gtk_widget_modify_fg(label, GTK_STATE_NORMAL, NULL);
     if (label_edit)
       gtk_widget_modify_fg(label_edit, GTK_STATE_NORMAL, NULL);
-    if (label_gtab_pre_sel)
+    if (GTK_IS_WIDGET(label_gtab_pre_sel))
       gtk_widget_modify_fg(label_gtab_pre_sel, GTK_STATE_NORMAL, NULL);
 #else
     if (label)
       gtk_widget_override_color(label, GTK_STATE_FLAG_NORMAL, NULL);
     if (label_edit)
       gtk_widget_override_color(label_edit, GTK_STATE_FLAG_NORMAL, NULL);
-    if (label_gtab_pre_sel)
+    if (GTK_IS_WIDGET(label_gtab_pre_sel))
       gtk_widget_override_color(label_gtab_pre_sel, GTK_STATE_FLAG_NORMAL, NULL);
 #endif
     return;
@@ -233,7 +232,7 @@ void disp_gtab_sel(char *s)
       return;
   }
 
-  if ( (!s[0]) && (hime_edit_display == HIME_EDIT_DISPLAY_ON_THE_SPOT) && gtab_hide_row2 && (! gtab_in_row1))
+  if ((!s[0]) && (hime_edit_display == HIME_EDIT_DISPLAY_ON_THE_SPOT) && gtab_hide_row2 && (hime_on_the_spot_key || (! gtab_in_row1)))
     gtk_widget_hide(gwin_gtab);
   else {
     if (gwin_gtab && !GTK_WIDGET_VISIBLE(gwin_gtab))
@@ -493,11 +492,11 @@ void create_win_gtab_gui_simple()
 
   if (b_need_label_edit) {
     hbox_edit = gtk_hbox_new (FALSE, 0);
-    gtk_container_add (GTK_CONTAINER (vbox_top), hbox_edit);
+    gtk_box_pack_start (GTK_BOX (vbox_top), hbox_edit, FALSE, FALSE, 0);
     GtkWidget *align_edit = gtk_alignment_new (0, 0.0, 0, 0);
     gtk_box_pack_start (GTK_BOX (hbox_edit), align_edit, FALSE, FALSE, 0);
     label_edit = gtk_label_new(NULL);
-    gtk_container_add (GTK_CONTAINER (align_edit), label_edit);
+    gtk_box_pack_start (GTK_BOX (align_edit), label_edit, FALSE, FALSE, 0);
   }
 
   GtkWidget *align = gtk_alignment_new (0, 0.0, 0, 0);
@@ -531,7 +530,7 @@ void create_win_gtab_gui_simple()
   }
 
   hbox_row2 = gtk_hbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (vbox_top), hbox_row2);
+  gtk_box_pack_start (GTK_BOX (vbox_top), hbox_row2, FALSE, FALSE, 0);
 
   label_full = gtk_label_new(NULL);
   gtk_label_set_markup(GTK_LABEL(label_full), _(cht_full_str));
@@ -620,12 +619,13 @@ void create_win_gtab_gui_simple()
 
   change_gtab_font_size();
 
-  gtk_widget_show_all (gwin_gtab);
+  if ((current_method_type() != method_type_PHO) && (current_method_type()!=method_type_PHO))
+    gtk_widget_show_all (gwin_gtab);
   gtk_widget_hide (gwin_gtab);
   gtk_widget_hide(label_gtab_sele);
   gtk_widget_hide(label_key_codes);
   gtk_widget_hide(label_page);
-  if (label_gtab_pre_sel)
+  if (GTK_IS_WIDGET(label_gtab_pre_sel))
     gtk_widget_hide(label_gtab_pre_sel);
 
   show_hide_label_edit();
@@ -635,8 +635,6 @@ void create_win_gtab_gui_simple()
 
   if (gtab_hide_row2)
     gtk_widget_hide(hbox_row2);
-
-  minimize_win_gtab();
 }
 
 void show_input_method_name_on_gtab()
@@ -720,7 +718,8 @@ void show_win_gtab()
 
   move_win_gtab(current_in_win_x, current_in_win_y);
 
-  gtk_widget_show(gwin_gtab);
+  if ((current_method_type() != method_type_PHO) && (current_method_type()!=method_type_PHO))
+    gtk_widget_show(gwin_gtab);
 
   if (current_CS)
   {
@@ -791,15 +790,6 @@ void hide_win_gtab()
   hide_win_sym();
   hide_win_kbm();
 }
-
-void minimize_win_gtab()
-{
-  if (!gwin_gtab)
-    return;
-
-  gtk_window_resize(GTK_WINDOW(gwin_gtab), 1, 1);
-}
-
 
 void get_win_gtab_geom()
 {
@@ -895,8 +885,6 @@ void win_gtab_disp_half_full()
         disp_gtab_sel(inmd[current_CS->in_method].cname);
     }
   }
-
-  minimize_win_gtab();
 }
 
 
@@ -909,7 +897,6 @@ void disp_gtab_pre_sel(char *s)
 //  dbg("label_gtab_pre_sel %x %d\n", label_gtab_pre_sel, use_tsin_sel_win());
   gtk_widget_show(label_gtab_pre_sel);
   gtk_label_set_markup(GTK_LABEL(label_gtab_pre_sel), s);
-  minimize_win_gtab();
   show_win_gtab();
   adj_gtab_win_pos();
 }
@@ -926,8 +913,6 @@ void hide_gtab_pre_sel()
   tss.ctrl_pre_sel = FALSE;
   if (label_gtab_pre_sel)
     gtk_widget_hide(label_gtab_pre_sel);
-
-  minimize_win_gtab();
 
   move_win_gtab(current_in_win_x, current_in_win_y);
   adj_gtab_win_pos();

@@ -279,13 +279,11 @@ char *bch_cat(char *s, char *ch)
 }
 
 
-void minimize_win_gtab();
 void disp_gtab_sel(char *s);
 
 void ClrSelArea()
 {
   disp_gtab_sel("");
-  minimize_win_gtab();
 //  hide_gtab_pre_sel();
 }
 
@@ -379,7 +377,6 @@ static void DispInArea()
   gtab_disp_empty(tt, win_gtab_max_key_press - i);
 
   disp_gtab(tt);
-  minimize_win_gtab();
 }
 
 int get_DispInArea_str(char *out)

@@ -334,7 +334,6 @@ static void cb_button_close(GtkButton *button, gpointer user_data)
   if (last_row)
     gtk_widget_destroy(last_row);
   last_row = NULL;
-  gtk_window_resize(GTK_WINDOW(mainwin), 1, 1);
 }
 
 static void cb_button_find(GtkButton *button, gpointer user_data)
@@ -627,6 +626,7 @@ int main(int argc, char **argv)
                    G_CALLBACK (key_press_event), NULL);
 
   gtk_window_set_has_resize_grip(GTK_WINDOW(mainwin), FALSE);
+  gtk_window_set_resizable (GTK_WINDOW (mainwin), FALSE);
 //  gtk_window_set_default_size(GTK_WINDOW (mainwin), 640, 520);
   set_window_hime_icon(mainwin);
 

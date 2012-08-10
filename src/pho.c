@@ -307,12 +307,10 @@ static int qcmp_count(const void *aa, const void *bb)
 }
 
 void disp_pho_sel(char *s);
-void minimize_win_pho();
 
 static void ClrPhoSelArea()
 {
   disp_pho_sel("");
-  minimize_win_pho();
 }
 
 

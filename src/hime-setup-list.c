@@ -622,7 +622,7 @@ GtkWidget *create_gtablist_widget ()
 
     GtkRequisition requisition;
     gtk_widget_get_child_requisition (treeview, &requisition);
-    gtk_widget_set_size_request(vbox, requisition.width, 360);
+    gtk_widget_set_size_request(vbox, requisition.width, 240);
   }
 
   vbox = gtk_vbox_new (FALSE, 0);

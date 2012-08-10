@@ -250,7 +250,6 @@ static void clear_gtab_buf_all()
 }
 
 
-void minimize_win_gtab();
 void disp_gbuf()
 {
   char *bf=gen_buf_str_disp();
@@ -260,8 +259,6 @@ void disp_gbuf()
     lookup_gtabn(gbuf[ggg.gbufN-1].ch, NULL);
 
   free(bf);
-
-  minimize_win_gtab();
 }
 
 void clear_gbuf_sel()
