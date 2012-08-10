@@ -1180,7 +1180,6 @@ int module_init_win(HIME_module_main_functions *funcs)
 
   win_anthy = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_has_resize_grip(GTK_WINDOW(win_anthy), FALSE);
-  gtk_window_set_default_size(GTK_WINDOW (win_anthy), 40, 50);
 
   gtk_widget_realize (win_anthy);
   gmf.mf_set_no_focus(win_anthy);

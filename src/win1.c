@@ -233,7 +233,6 @@ void clear_sele()
 
   gtk_widget_hide(arrow_up);
   gtk_widget_hide(arrow_down);
-  gtk_window_resize(GTK_WINDOW(gwin1), 1, 1);
   hide_selections_win();
 }
 

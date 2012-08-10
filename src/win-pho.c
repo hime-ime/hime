@@ -115,7 +115,6 @@ void create_win_pho()
     return;
 
   gwin_pho = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_default_size(GTK_WINDOW(gwin_pho), 1 ,1);
   gtk_window_set_has_resize_grip(GTK_WINDOW(gwin_pho), FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (gwin_pho), 0);
   gtk_widget_realize (gwin_pho);
@@ -248,7 +247,6 @@ void create_win_pho_gui()
 
   if (pho_hide_row2) {
     gtk_widget_hide(hbox_row2);
-    gtk_window_resize(GTK_WINDOW(gwin_pho), 1, 1);
   }
 
   current_hime_inner_frame = hime_inner_frame;
