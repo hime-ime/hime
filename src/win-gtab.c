@@ -232,7 +232,7 @@ void disp_gtab_sel(char *s)
       return;
   }
 
-  if ((!s[0]) && (hime_edit_display == HIME_EDIT_DISPLAY_ON_THE_SPOT) && gtab_hide_row2 && (hime_on_the_spot_key || (! gtab_in_row1)))
+  if (s && (!s[0]) && (hime_edit_display == HIME_EDIT_DISPLAY_ON_THE_SPOT) && gtab_hide_row2 && (hime_on_the_spot_key || (! gtab_in_row1)))
     gtk_widget_hide(gwin_gtab);
   else {
     if (gwin_gtab && !GTK_WIDGET_VISIBLE(gwin_gtab))
@@ -637,35 +637,60 @@ void create_win_gtab_gui_simple()
     gtk_widget_hide(hbox_row2);
 }
 
+void disp_gtab_pre_sel(char *s)
+{
+//  dbg("disp_gtab_pre_sel %s\n", s);
+  if (!label_gtab_pre_sel)
+    show_win_gtab();
+
+//  dbg("label_gtab_pre_sel %x %d\n", label_gtab_pre_sel, use_tsin_sel_win());
+  gtk_widget_show(label_gtab_pre_sel);
+  if (s) gtk_label_set_markup(GTK_LABEL(label_gtab_pre_sel), s);
+  show_win_gtab();
+  adj_gtab_win_pos();
+}
+
+void show_input_method_name(GtkWidget *label, gchar *cname)
+{
+  if (hime_win_color_use)
+  {
+    gchar *color_cname = g_strdup_printf("<span foreground=\"%s\">[%s]</span>",
+				         hime_sel_key_color, cname);
+    gtk_label_set_markup(GTK_LABEL(label), color_cname);
+    g_free(color_cname);
+  }
+  else
+    gtk_label_set_text(GTK_LABEL(label), cname);
+}
+
+GtkWidget *get_cname_label();
+
 void show_input_method_name_on_gtab()
 {
-  // label_gtab = NULL under onthespot mode.
-
-  if ((hime_edit_display == HIME_EDIT_DISPLAY_ON_THE_SPOT) &&
-      current_CS && (! hime_status_tray) && gtab_disp_im_name &&
-      (current_CS->im_state == HIME_STATE_CHINESE) && (current_CS->b_half_full_char == 0) &&
-      (current_CS->tsin_pho_mode) && gtab_hide_row2)
-  {
-    if (label_gtab == NULL) create_win_gtab_gui_simple();
-      disp_gtab_sel(inmd[current_CS->in_method].cname);
-    return;
-  }
-
-  if (label_gtab==NULL) return;
-
-  if (current_CS && (! hime_status_tray) && gtab_hide_row2 && gtab_disp_im_name &&
+  if (current_CS && (! hime_status_tray) && gtab_disp_im_name &&
       (current_CS->im_state == HIME_STATE_CHINESE) && (current_CS->b_half_full_char == 0) &&
       (current_CS->tsin_pho_mode))
   {
-    if (hime_win_color_use)
+    if ((current_method_type() == method_type_MODULE) ||
+        (gtab_hide_row2 && (hime_edit_display == HIME_EDIT_DISPLAY_ON_THE_SPOT)))
+    // label_gtab = NULL under onthespot mode.
     {
-      gchar *color_cname = g_strdup_printf("<span foreground=\"%s\">[%s]</span>",
-					   hime_sel_key_color, inmd[current_CS->in_method].cname);
-      gtk_label_set_markup(GTK_LABEL(label_gtab), color_cname);
-      g_free(color_cname);
+      if (current_method_type() == method_type_MODULE)
+      {
+        show_win_gtab();
+	adj_gtab_win_pos();
+        if (hbox_row2) gtk_widget_hide(hbox_row2);
+      }
+
+      if (label_gtab == NULL) create_win_gtab_gui_simple();
+      disp_gtab_sel(NULL);
+      show_input_method_name(label_gtab_sele, inmd[current_CS->in_method].cname);
+      return;
     }
-    else
-      gtk_label_set_text(GTK_LABEL(label_gtab), inmd[current_CS->in_method].cname);
+
+    if ((label_gtab==NULL) || (! gtab_hide_row2)) return;
+
+    show_input_method_name(label_gtab, inmd[current_CS->in_method].cname);
   }
 }
 
@@ -885,20 +910,6 @@ void win_gtab_disp_half_full()
         disp_gtab_sel(inmd[current_CS->in_method].cname);
     }
   }
-}
-
-
-void disp_gtab_pre_sel(char *s)
-{
-//  dbg("disp_gtab_pre_sel %s\n", s);
-  if (!label_gtab_pre_sel)
-    show_win_gtab();
-
-//  dbg("label_gtab_pre_sel %x %d\n", label_gtab_pre_sel, use_tsin_sel_win());
-  gtk_widget_show(label_gtab_pre_sel);
-  gtk_label_set_markup(GTK_LABEL(label_gtab_pre_sel), s);
-  show_win_gtab();
-  adj_gtab_win_pos();
 }
 
 void hide_selections_win();

@@ -388,6 +388,7 @@ void hide_in_win(ClientState *cs)
     case method_type_MODULE:
       if (inmd[cs->in_method].mod_cb_funcs)
         module_cb1(cs)->module_hide_win();
+      hide_win_gtab();
       break;
     default:
       hide_win_gtab();
@@ -449,6 +450,7 @@ void show_in_win(ClientState *cs)
       if (!module_cb1(cs))
         return;
       module_cb1(cs)->module_show_win();
+      show_input_method_name_on_gtab();
       break;
     default:
       show_win_gtab();
@@ -509,6 +511,7 @@ void move_in_win(ClientState *cs, int x, int y)
     case method_type_MODULE:
       if (inmd[cs->in_method].mod_cb_funcs)
         module_cb1(cs)->module_move_win(x, y);
+        move_win_gtab(x, y);
       break;
     default:
       if (!cs->in_method)
@@ -978,7 +981,7 @@ gboolean init_in_method(int in_no)
       } else {
         return FALSE;
       }
-
+      show_input_method_name_on_gtab();
       break;
     }
     case method_type_EN:
@@ -1339,9 +1342,13 @@ gboolean ProcessKeyPress(KeySym keysym, u_int kev_state)
       return feedkey_pp(keysym, kev_state);
 #endif
     case method_type_MODULE:
+    {
       if (!module_cb())
         return FALSE;
-      return module_cb()->module_feedkey(keysym, kev_state);
+      gboolean response = module_cb()->module_feedkey(keysym, kev_state);
+      if (response) hide_win_gtab();
+      return response;
+    }
     default:
       return feedkey_gtab(keysym, kev_state);
   }
