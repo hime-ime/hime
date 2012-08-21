@@ -63,8 +63,6 @@ void init_HIME_module_main_functions(HIME_module_main_functions *func)
   func->mf_set_label_font_size = set_label_font_size;
   func->mf_set_no_focus = set_no_focus;
 
-
-  func->mf_current_time = current_time;
   func->mf_current_shape_mode = current_shape_mode;
 
   func->mf_exec_hime_setup = exec_hime_setup;

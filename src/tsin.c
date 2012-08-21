@@ -29,7 +29,7 @@
 
 extern int ph_key_sz;
 extern GtkWidget *gwin1;
-gint64 key_press_time, key_press_time_ctrl;
+gboolean key_press_alt, key_press_ctrl;
 extern gboolean b_hsu_kbm;
 extern gboolean test_mode;
 
@@ -961,7 +961,7 @@ void tsin_toggle_eng_ch()
 void tsin_toggle_half_full()
 {
     tss.tsin_half_full^=1;
-    key_press_time = 0;
+    key_press_alt = FALSE;
     drawcursor();
 #if TRAY_ENABLED
     disp_tray_icon();
@@ -1277,8 +1277,6 @@ gboolean pre_punctuation_hsu(KeySym xkey)
 
 
 int inph_typ_pho(KeySym newkey);
-gint64 current_time();
-
 
 KeySym keypad_proc(KeySym xkey)
 {
@@ -1544,28 +1542,25 @@ int feedkey_pp(KeySym xkey, int kbstate)
     }
   }
 
-//  key_press_time = 0;
-
    if (kbstate & (Mod1Mask|Mod4Mask|Mod5Mask)) {
 //     dbg("ret\n");
      return 0;
    }
 
    // Shift has autorepeat on win32
-   if ((xkey==XK_Shift_L||xkey==XK_Shift_R) && !key_press_time) {
+   if ((xkey==XK_Shift_L||xkey==XK_Shift_R) && !key_press_alt) {
 //	  dbg("feedkey_pp\n");
-     key_press_time = current_time();
-     key_press_time_ctrl = 0;
+     key_press_alt = TRUE;
+     key_press_ctrl = FALSE;
    } else
-   if ((xkey==XK_Control_L||xkey==XK_Control_R)
-	   && !key_press_time_ctrl && tss.pre_selN) {
+   if ((xkey==XK_Control_L||xkey==XK_Control_R) && !key_press_ctrl && tss.pre_selN) {
 //	  dbg("feedkey_pp\n");
-     key_press_time_ctrl = current_time();
-     key_press_time = 0;
+     key_press_ctrl = TRUE;
+     key_press_alt = FALSE;
      return TRUE;
    } else {
-     key_press_time = 0;
-     key_press_time_ctrl = 0;
+     key_press_alt = FALSE;
+     key_press_ctrl = FALSE;
    }
 
    if (!tsin_pho_mode() && !tss.c_len && hime_pop_up_win && xkey!=XK_Caps_Lock) {
@@ -2104,39 +2099,30 @@ scan_it:
 
 int feedkey_pp_release(KeySym xkey, int kbstate)
 {
-  gint64 kpt;
-
   switch (xkey) {
      case XK_Shift_L:
      case XK_Shift_R:
-		kpt = key_press_time;
-		key_press_time = 0;
-
 // dbg("release xkey %x\n", xkey);
-        if (
-(  (tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Shift) ||
-   (tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftL
-     && xkey == XK_Shift_L) ||
-   (tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR
-     && xkey == XK_Shift_R))
-          &&  current_time() - kpt < 300000) {
+        if (((tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Shift) ||
+             (tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftL && xkey == XK_Shift_L) ||
+             (tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR && xkey == XK_Shift_R)) &&
+	    key_press_alt) {
           if (!test_mode) {
             close_selection_win();
             tsin_toggle_eng_ch();
           }
+	  key_press_alt = FALSE;
           return 1;
-		} else
+	} else
           return 0;
      case XK_Control_L:
      case XK_Control_R:
-		kpt = key_press_time_ctrl;
-		key_press_time_ctrl = 0;
-        if (current_time() - kpt < 300000 && tss.pre_selN) {
-          if (!test_mode) {
-			tss.ctrl_pre_sel = TRUE;
-          }
+        if (key_press_ctrl && tss.pre_selN) {
+          if (!test_mode)
+	    tss.ctrl_pre_sel = TRUE;
+	  key_press_ctrl = FALSE;
           return 1;
-		} else
+	} else
           return 0;
      default:
         return 0;

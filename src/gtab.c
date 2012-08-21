@@ -31,7 +31,7 @@ gboolean gtab_phrase_on();
 gboolean gtab_disp_partial_match_on(), gtab_vertical_select_on(), gtab_pre_select_on(), gtab_unique_auto_send_on(), gtab_press_full_auto_send_on();
 void init_seltab(char ***p);
 
-extern gint64 key_press_time, key_press_time_ctrl;
+extern gboolean key_press_alt, key_press_ctrl;
 
 extern GtkWidget *gwin_gtab;
 void hide_gtab_pre_sel();
@@ -999,16 +999,16 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
   if (ggg.gbufN && key==XK_Tab)
     return 1;
 
-   if ((key==XK_Shift_L||key==XK_Shift_R) && !key_press_time) {
-     key_press_time = current_time();
-     key_press_time_ctrl = 0;
-   } else
-  if ((key==XK_Control_L||key==XK_Control_R) && !key_press_time_ctrl && tss.pre_selN) {
-    key_press_time_ctrl = current_time();
+  if ((key==XK_Shift_L||key==XK_Shift_R) && !key_press_alt) {
+    key_press_alt = TRUE;
+    key_press_ctrl = FALSE;
+  } else if ((key==XK_Control_L||key==XK_Control_R) && !key_press_ctrl && tss.pre_selN) {
+    key_press_alt = FALSE;
+    key_press_ctrl = TRUE;
     return TRUE;
   } else {
-    key_press_time_ctrl = 0;
-    key_press_time = 0;
+    key_press_alt = FALSE;
+    key_press_ctrl = FALSE;
   }
 
   if (kbstate & (Mod1Mask|Mod4Mask|Mod5Mask|ControlMask)) {
