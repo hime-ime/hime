@@ -153,4 +153,6 @@ void get_hime_conf_fstr(char *name, char rstr[], char *default_str);
 void save_hime_conf_str(char *name, char *str);
 void save_hime_conf_int(char *name, int val);
 void load_settings();
+void save_omni_config(void);
+void free_omni_config(void);
 

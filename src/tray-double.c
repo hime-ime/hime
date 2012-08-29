@@ -127,6 +127,7 @@ static void cb_fast_phonetic_kbd_switch(GtkCheckMenuItem *checkmenuitem, gpointe
 
   save_hime_conf_str(PHONETIC_KEYBOARD, bak);
   save_hime_conf_str(PHONETIC_KEYBOARD_BAK, cur);
+  save_omni_config();
   load_settings();
   load_tab_pho_file();
   update_win_kbm_inited();
