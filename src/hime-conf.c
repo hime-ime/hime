@@ -52,7 +52,7 @@ void init_omni_config(void)
   memset(omni_config_fname, 0, 256);
   get_hime_dir(omni_config_fname);
   len = strlen(omni_config_fname);
-  snprintf(omni_config_fname + len, 256 - len, "/config/hime.ini");
+  snprintf(omni_config_fname + len, 256 - len, "/config/hime.conf");
 
   hime_omni_config = g_key_file_new();
   /* Ignore error */
