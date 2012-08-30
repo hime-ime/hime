@@ -23,6 +23,7 @@
 #if !CLIENT_LIB
 char *TableDir=HIME_TABLE_DIR;
 GKeyFile *hime_omni_config = NULL;
+#define HIME_CONF "/config/hime.conf"
 
 void init_TableDir()
 {
@@ -52,7 +53,7 @@ void init_omni_config(void)
   memset(omni_config_fname, 0, 256);
   get_hime_dir(omni_config_fname);
   len = strlen(omni_config_fname);
-  snprintf(omni_config_fname + len, 256 - len, "/config/hime.conf");
+  snprintf(omni_config_fname + len, 256 - len, HIME_CONF);
 
   hime_omni_config = g_key_file_new();
   /* Ignore error */
@@ -82,7 +83,7 @@ void save_omni_config(void)
   memset(omni_config_fname, 0, 256);
   get_hime_dir(omni_config_fname);
   len = strlen(omni_config_fname);
-  snprintf(omni_config_fname + len, 256 - len, "/config/hime.ini");
+  snprintf(omni_config_fname + len, 256 - len, HIME_CONF);
   f = fopen(omni_config_fname, "w");
   if (f) {
     buff = g_key_file_to_data(hime_omni_config, &bufflen, &error);
