@@ -101,7 +101,6 @@ void save_tsin_eng_pho_key()
 
   save_hime_conf_int(HIME_CAPSLOCK_LOWER,
        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_capslock_lower)));
-  save_omni_config();
 }
 
 
