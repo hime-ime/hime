@@ -23,7 +23,7 @@
 #if !CLIENT_LIB
 char *TableDir=HIME_TABLE_DIR;
 GKeyFile *hime_omni_config = NULL;
-#define HIME_CONF "/config/hime.conf"
+#define HIME_CONF "/hime.conf"
 
 void init_TableDir()
 {
