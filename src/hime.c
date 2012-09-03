@@ -539,6 +539,7 @@ void do_exit()
   destroy_tray();
 #endif
 
+  free_omni_config();
   gtk_main_quit();
 }
 

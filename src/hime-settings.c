@@ -85,12 +85,15 @@ int pho_candicate_col_N, pho_candicate_R2L;
 
 
 int get_hime_conf_int(char *name, int default_value);
+void init_omni_config(void);
 
 void load_settings()
 {
 #if TRAY_UNITY
   const char* desktop = getenv("XDG_CURRENT_DESKTOP");
 #endif
+
+  init_omni_config();
 
   hime_setup_window_type_utility = get_hime_conf_int(HIME_SETUP_WINDOW_TYPE_UTILITY, 0);
 
