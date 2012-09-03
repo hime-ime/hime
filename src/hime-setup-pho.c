@@ -51,7 +51,7 @@ static GtkWidget *check_button_tsin_phrase_pre_select,
 
 GtkWidget *check_button_hime_capslock_lower;
 
-static GtkWidget *opt_kbm_opts, *opt_selkeys, *opt_eng_ch_opts;
+static GtkWidget *opt_kbm_opts, *opt_selkeys, *opt_eng_ch_opts[2];
 extern gboolean button_order;
 
 
@@ -95,7 +95,7 @@ int get_current_speaker_idx()
 void save_tsin_eng_pho_key()
 {
   int idx;
-  idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_eng_ch_opts));
+  idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_eng_ch_opts[0]));
   save_hime_conf_int(TSIN_CHINESE_ENGLISH_TOGGLE_KEY,
                      tsin_eng_ch_sw[idx].key);
 
@@ -302,38 +302,49 @@ static GtkWidget *create_kbm_opts()
   return hbox;
 }
 
+static update_eng_ch_opts (GtkComboBox *widget, gpointer user_data)
+{
+  gint i;
+  gint idx = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
+  for (i=0; i<2; i++)
+  {
+    if ((opt_eng_ch_opts[i]) && (opt_eng_ch_opts[i] != widget))
+      gtk_combo_box_set_active (GTK_COMBO_BOX (opt_eng_ch_opts[i]), idx);
+  }
+  
+}
 
-
-static GtkWidget *create_eng_ch_opts()
+static GtkWidget *create_eng_ch_opts(gint index)
 {
 
   GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
 
-  opt_eng_ch_opts = gtk_combo_box_new_text ();
-  gtk_box_pack_start (GTK_BOX (hbox), opt_eng_ch_opts, FALSE, FALSE, 0);
+  opt_eng_ch_opts[index] = gtk_combo_box_new_text ();
+  g_signal_connect (G_OBJECT (opt_eng_ch_opts[index]), "changed", G_CALLBACK (update_eng_ch_opts), NULL);
+  gtk_box_pack_start (GTK_BOX (hbox), opt_eng_ch_opts[index], FALSE, FALSE, 0);
 
   int i;
   int current_idx = get_currnet_eng_ch_sw_idx();
 
   for(i=0; i < tsin_eng_ch_swN; i++) {
-    gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_eng_ch_opts), _(tsin_eng_ch_sw[i].name));
+    gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_eng_ch_opts[index]), _(tsin_eng_ch_sw[i].name));
   }
 
   dbg("current_idx:%d\n", current_idx);
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (opt_eng_ch_opts), current_idx);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (opt_eng_ch_opts[index]), current_idx);
 
   return hbox;
 }
 
-GtkWidget *create_en_pho_key_sel(char *s)
+GtkWidget *create_en_pho_key_sel(char *s, gint index)
 {
   GtkWidget *frame_tsin_sw = gtk_frame_new(s);
   GtkWidget *vbox_tsin_sw = gtk_vbox_new(FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_tsin_sw), GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (frame_tsin_sw), vbox_tsin_sw);
   gtk_container_set_border_width (GTK_CONTAINER (frame_tsin_sw), 1);
-  gtk_container_add (GTK_CONTAINER (vbox_tsin_sw), create_eng_ch_opts());
+  gtk_container_add (GTK_CONTAINER (vbox_tsin_sw), create_eng_ch_opts(index));
   GtkWidget *hbox_hime_capslock_lower = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox_tsin_sw), hbox_hime_capslock_lower, FALSE, FALSE, 0);
   check_button_hime_capslock_lower = gtk_check_button_new_with_label(_("按下 Capslock 時輸出小寫英數字"));
@@ -376,7 +387,7 @@ GtkWidget *create_kbm_widget()
   gtk_container_set_border_width (GTK_CONTAINER (frame_kbm), 1);
   gtk_container_add (GTK_CONTAINER (frame_kbm), create_kbm_opts());
 
-  gtk_box_pack_start (GTK_BOX (vbox_l), create_en_pho_key_sel(_("(詞音) 切換[中/英]輸入")), FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox_l), create_en_pho_key_sel(_("(詞音) 切換[中/英]輸入"), 0), FALSE, FALSE, 0);
 
   GtkWidget *frame_tsin_space_opt = gtk_frame_new(_("(詞音) 鍵入空白鍵"));
   gtk_box_pack_start (GTK_BOX (vbox_l), frame_tsin_space_opt, FALSE, FALSE, 0);

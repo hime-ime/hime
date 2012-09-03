@@ -205,7 +205,7 @@ static GtkWidget *create_auto_select_by_phrase_opts(GtkWidget **out, int val)
 }
 
 
-GtkWidget *create_en_pho_key_sel(char *s);
+GtkWidget *create_en_pho_key_sel(char *s, gint index);
 
 GtkWidget *create_gtab_widget ()
 {
@@ -329,7 +329,7 @@ GtkWidget *create_gtab_widget ()
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_shift_phrase_key),
      gtab_shift_phrase_key);
 
-  gtk_box_pack_start (GTK_BOX (vbox_gtab_r), create_en_pho_key_sel(_("切換[中/英]輸入")), FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox_gtab_r), create_en_pho_key_sel(_("切換[中/英]輸入"), 1), FALSE, FALSE, 0);
 
 #if 0
   GtkWidget *hbox_hime_capslock_lower = gtk_hbox_new (FALSE, SPC);
