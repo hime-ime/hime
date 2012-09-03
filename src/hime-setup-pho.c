@@ -187,6 +187,7 @@ void save_kbm_conf()
 #endif
 
 
+  save_omni_config();
   /* caleb- does found where "reload kbm" is used.
    * caleb- think the send_hime_message() here does nothing.
    */

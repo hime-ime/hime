@@ -134,6 +134,7 @@ void save_gtab_conf()
 
   save_menu_val(GTAB_UNIQUE_AUTO_SEND, opt_gtab_unique_auto_send);
 
+  save_omni_config();
   send_hime_message(GDK_DISPLAY(), CHANGE_FONT_SIZE);
 }
 

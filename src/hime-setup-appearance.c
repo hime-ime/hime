@@ -180,6 +180,7 @@ void save_appearance_conf()
   save_hime_conf_int(HIME_SETUP_WINDOW_TYPE_UTILITY, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_setup_window_type_utility)));
 #endif
 
+  save_omni_config();
   send_hime_message(GDK_DISPLAY(), CHANGE_FONT_SIZE);
 #if TRAY_ENABLED
   send_hime_message(GDK_DISPLAY(), UPDATE_TRAY);
