@@ -322,7 +322,7 @@ static void reload_data()
     temp_CS_im_states[c] = cs->im_state;
     strcpy(temp_inmd_filenames[c], inmd[cs->in_method].filename);
   }
-
+  free_omni_config();
   load_settings();
   if (current_method_type()==method_type_TSIN)
     set_wselkey(pho_selkey);
