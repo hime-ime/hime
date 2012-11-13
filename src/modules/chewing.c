@@ -208,7 +208,11 @@ is_empty (void)
 {
     if (!g_pChewingCtx)
         return FALSE;
-    return !chewing_buffer_Len (g_pChewingCtx) && chewing_zuin_Check (g_pChewingCtx);
+//  query string instead of chewing_zuin_Check
+    int  nZuinLen = 0;
+    char *pszTmp  = NULL;
+    pszTmp  = chewing_zuin_String (g_pChewingCtx, &nZuinLen);
+    return !chewing_buffer_Len (g_pChewingCtx) && !nZuinLen;
 }
 
 static gboolean 
@@ -369,7 +373,11 @@ static int
 hime_chewing_wrapper_bs (ChewingContext *pCtx)
 {
 //  If zuin is present, let libchewing handles Backspace for removing last zuin
-    if (!chewing_zuin_Check (g_pChewingCtx))
+//  query string instead of chewing_zuin_Check
+    int  nZuinLen = 0;
+    char *pszTmp  = NULL;
+    pszTmp  = chewing_zuin_String (g_pChewingCtx, &nZuinLen);
+    if (nZuinLen)
         return chewing_handle_Backspace (g_pChewingCtx);
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Backspace);
 }
