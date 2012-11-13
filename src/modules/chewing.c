@@ -208,10 +208,8 @@ is_empty (void)
 {
     if (!g_pChewingCtx)
         return FALSE;
-//  query string instead of chewing_zuin_Check
     int  nZuinLen = 0;
-    char *pszTmp  = NULL;
-    pszTmp  = chewing_zuin_String (g_pChewingCtx, &nZuinLen);
+    free(chewing_zuin_String (g_pChewingCtx, &nZuinLen));
     return !chewing_buffer_Len (g_pChewingCtx) && !nZuinLen;
 }
 
@@ -372,11 +370,9 @@ hime_chewing_handler_default (ChewingContext *pCtx)
 static int 
 hime_chewing_wrapper_bs (ChewingContext *pCtx)
 {
-//  If zuin is present, let libchewing handles Backspace for removing last zuin
-//  query string instead of chewing_zuin_Check
+//  If zuin is present, force libchewing handles Backspace for removing last zuin
     int  nZuinLen = 0;
-    char *pszTmp  = NULL;
-    pszTmp  = chewing_zuin_String (g_pChewingCtx, &nZuinLen);
+    free(chewing_zuin_String (g_pChewingCtx, &nZuinLen));
     if (nZuinLen)
         return chewing_handle_Backspace (g_pChewingCtx);
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Backspace);
