@@ -1305,15 +1305,15 @@ direct_select:
         } else {
           if (current_CS->b_half_full_char)
             return full_char_proc(key);
-		  else
+	  else
             return 0;
-		}
+	}
       }
       if (tss.pre_selN && shift_char_proc(key, kbstate))
         return TRUE;
 
-      if (current_CS->b_half_full_char)
-        return full_char_proc(key);
+      // if (current_CS->b_half_full_char)
+      //  return full_char_proc(key);
 
       inkey=cur_inmd->keymap[key];
       if ((inkey && (inkey!=cur_inmd->WILD_STAR && inkey!=cur_inmd->WILD_QUES)) || ptr_selkey(key)) {
