@@ -1363,7 +1363,11 @@ gboolean ProcessKeyPress(KeySym keysym, u_int kev_state)
       if (!module_cb())
         return check_key_press(keysym, kev_state, FALSE);
       gboolean response = module_cb()->module_feedkey(keysym, kev_state);
-      if (response) hide_win_gtab();
+      if (response)
+	hide_win_gtab();
+      else
+	if (current_CS->b_half_full_char)
+	  return check_key_press(keysym, kev_state, full_char_proc(keysym));
       return check_key_press(keysym, kev_state, response);
     }
     default:
