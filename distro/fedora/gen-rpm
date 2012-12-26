@@ -30,7 +30,7 @@ rm -fr ${DISTROROOT}
 cp -r ${DISTRODIR} ${DISTROROOT}
 echo "building ${SPEC_FILE} ..."
 if [ -d '.git' ] ; then
-    VERSION=`head -n 1 ${VERSION_FILE}`+`date +git%y%m%d`
+    VERSION=`head -n 1 ${VERSION_FILE}`+`date +git%Y%m%d`
     TAR_NAME=hime-${VERSION}
     git archive --format=tar --prefix=${TAR_NAME}/ HEAD | xz > ${SRCDIR}/${TAR_NAME}.tar.xz
 else
