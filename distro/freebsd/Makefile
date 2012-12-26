@@ -8,7 +8,7 @@
 #
 
 PORTNAME=	hime
-DATE!=		/bin/date "+%y%m%d"
+DATE!=		/bin/date "+%Y%m%d"
 PORTVERSION=	0.9.10+git${DATE}
 CATEGORIES=	chinese textproc
 MASTER_SITES=	http://hime.luna.com.tw/
