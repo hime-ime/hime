@@ -3,7 +3,7 @@
 rm -fr debian
 cp -r distro/debian .
 if [ -d .git ]; then
-  sed -i "s#9-9#`head -n 1 ChangeLog | sed -e "s/$/+\`date +git%y%m%d\`-1/" -e 's/UNRELEASED/0UNRELEASED/'`#" debian/changelog
+  sed -i "s#9-9#`head -n 1 ChangeLog | sed -e "s/$/+\`date +git%Y%m%d\`-1/" -e 's/UNRELEASED/0UNRELEASED/'`#" debian/changelog
 else
   sed -i "s#9-9#`head -n 1 ChangeLog | sed -e 's/UNRELEASED/0UNRELEASED/'`#" debian/changelog
 fi

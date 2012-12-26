@@ -43,6 +43,6 @@ package() {
 	install -Dm644 fdl-1.2.txt gpl-2.0.txt lgpl-2.1.txt "$pkgdir/usr/share/licenses/$pkgname/"
 
 	if [ -f "$srcdir/${_gitname}/ChangeLog" ]; then
-		pkgver="`head -n 1 $srcdir/${_gitname}/ChangeLog`+git`date '+%y%m%d'`"
+		pkgver="`head -n 1 $srcdir/${_gitname}/ChangeLog`+git`date '+%Y%m%d'`"
 	fi
 }
