@@ -1,0 +1,48 @@
+pkgname=hime
+pkgver=0.9.9
+pkgrel=1
+pkgdesc="A GTK2+/GTK3+ based universal input method platform"
+arch=('i686' 'x86_64')
+url="http://hime.luna.com.tw/"
+license=('LGPL2' 'FDL' 'GPL2')
+depends=('gtk2' 'libxtst')
+makedepends=('git' 'gettext' 'gtk3' 'qt4' 'anthy' 'libchewing')
+optdepends=('gtk3: enable gtk3 im module' 'qt4: enable qt4 im module' 'anthy: enable Anthy input method' 'libchewing: enable Chewing input method')
+options=(!strip)
+source=(install)
+sha512sums=('ef30f014f3d35d1e8136e6f867bc943c13ebfe3844e7be2756105bb41e7563a309cba0986be2ad046aa36d5a1ae76f548f5f3f2f82645d6aa69b683e4836bee2')
+_gitroot="git://github.com/hime-ime/hime.git"
+_gitname="hime"
+
+install=install
+
+build() {
+        cd "${srcdir}/"
+
+        msg "Connecting to GIT server...."
+
+        if [[ -d "${srcdir}/${_gitname}/" ]]; then
+                cd "${srcdir}/${_gitname}/"
+                git pull --depth=1 origin
+                msg "The local GIT repo has been updated."
+        else
+                git clone --depth=1 "${_gitroot}" "${_gitname}"
+                msg "GIT checkout done or server timeout"
+        fi
+
+        cd "${srcdir}/${_gitname}"
+	./configure --prefix=/usr --disable-lib64
+	make
+}
+
+package() {
+	cd "$srcdir/${_gitname}"
+	make DESTDIR="$pkgdir" install
+
+	mkdir -p "$pkgdir/usr/share/licenses/$pkgname/"
+	install -Dm644 fdl-1.2.txt gpl-2.0.txt lgpl-2.1.txt "$pkgdir/usr/share/licenses/$pkgname/"
+
+	if [ -f "$srcdir/${_gitname}/ChangeLog" ]; then
+		pkgver="`head -n 1 $srcdir/${_gitname}/ChangeLog`+git`date '+%Y%m%d'`"
+	fi
+}

@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -263,7 +263,7 @@ void open_xim()
 #endif // if USE_XIM
 
 void load_tsin_db();
-void load_tsin_conf(), load_setttings(), load_tab_pho_file();
+void load_tsin_conf(), load_settings(), load_tab_pho_file();
 
 void disp_hide_tsin_status_row(), update_win_kbm_inited();
 void change_tsin_line_color(), change_win0_style(), change_tsin_color();
@@ -277,10 +277,53 @@ void change_win1_font();
 void set_wselkey(char *s);
 void create_win_gtab();
 
+#if TRAY_ENABLED
+void disp_tray_icon();
+#endif
+gboolean init_in_method(int in_no);
+#include "hime-protocol.h"
+#include "im-srv.h"
+
+static int get_in_method_by_filename(char filename[])
+{
+    int i, in_method = 0;
+    gboolean found = FALSE;
+    for(i=0; i < inmdN; i++) {
+      if (strcmp(filename, inmd[i].filename))
+        continue;
+      found = TRUE;
+      in_method = i;
+      break;
+    }
+    if (!found)
+      in_method = default_input_method;
+    return in_method;
+}
+
 static void reload_data()
 {
   dbg("reload_data\n");
-  load_setttings();
+//  Save input method state before reload
+  char temp_inmd_filenames[hime_clientsN][128];
+  HIME_STATE_E temp_CS_im_states[hime_clientsN];
+  char temp_current_CS_inmd_filename[128] = "";
+  HIME_STATE_E temp_current_CS_im_state = 0;
+  if (current_CS) {
+    temp_current_CS_im_state = current_CS->im_state;
+    strcpy(temp_current_CS_inmd_filename, inmd[current_CS->in_method].filename);
+  }
+  int c;
+  for(c=0;c<hime_clientsN;c++) {
+    strcpy(temp_inmd_filenames[c], "");
+    temp_CS_im_states[c] = HIME_STATE_DISABLED;
+    if (!hime_clients[c].cs)
+      continue;
+    ClientState *cs = hime_clients[c].cs;
+    temp_CS_im_states[c] = cs->im_state;
+    strcpy(temp_inmd_filenames[c], inmd[cs->in_method].filename);
+  }
+  free_omni_config();
+  load_settings();
   if (current_method_type()==method_type_TSIN)
     set_wselkey(pho_selkey);
 
@@ -300,6 +343,24 @@ static void reload_data()
 #if TRAY_ENABLED
   update_item_active_all();
 #endif
+
+//  Load input method state after reload, which may change inmd
+  // load clientstate properties back
+  for(c=0;c<hime_clientsN;c++) {
+    if (!hime_clients[c].cs)
+      continue;
+    hime_clients[c].cs->im_state = HIME_STATE_CHINESE;
+    hime_clients[c].cs->in_method = get_in_method_by_filename(temp_inmd_filenames[c]);
+    init_in_method(hime_clients[c].cs->in_method);
+    if (temp_CS_im_states[c] == HIME_STATE_DISABLED)
+      toggle_im_enabled();
+    hime_clients[c].cs->im_state = temp_CS_im_states[c];
+  }
+  current_CS->im_state = HIME_STATE_CHINESE;
+  init_in_method(get_in_method_by_filename(temp_current_CS_inmd_filename));
+  if (temp_current_CS_im_state == HIME_STATE_DISABLED)
+    toggle_im_enabled();
+  current_CS->im_state = temp_current_CS_im_state;
 }
 
 void change_tsin_font_size();
@@ -312,7 +373,7 @@ extern void change_module_font_size();
 
 static void change_font_size()
 {
-  load_setttings();
+  load_settings();
   change_tsin_font_size();
   change_gtab_font_size();
   change_pho_font_size();
@@ -331,9 +392,7 @@ static int xerror_handler(Display *d, XErrorEvent *eve)
 }
 
 Atom hime_atom;
-#if TRAY_ENABLED
-void disp_tray_icon();
-#endif
+
 void toggle_gb_output();
 
 void cb_trad_sim_toggle()
@@ -344,13 +403,14 @@ void cb_trad_sim_toggle()
 #endif
 }
 void execute_message(char *message), show_win_kbm(), hide_win_kbm();
-int b_show_win_kbm=0;
 void disp_win_kbm_capslock_init();
 
-void kbm_open_close(gboolean b_show)
+extern int hime_show_win_kbm;
+void kbm_open_close(GtkButton *checkmenuitem, gboolean b_show)
 {
-  b_show_win_kbm=b_show;
-  if (b_show) {
+  hime_show_win_kbm=b_show;
+
+  if (hime_show_win_kbm) {
     show_win_kbm();
     disp_win_kbm_capslock_init();
   } else
@@ -360,7 +420,7 @@ void kbm_open_close(gboolean b_show)
 void kbm_toggle()
 {
   win_kbm_inited = 1;
-  kbm_open_close(!b_show_win_kbm);
+  kbm_open_close(NULL, ! hime_show_win_kbm);
 }
 
 
@@ -479,6 +539,7 @@ void do_exit()
   destroy_tray();
 #endif
 
+  free_omni_config();
   gtk_main_quit();
 }
 
@@ -592,7 +653,7 @@ int main(int argc, char **argv)
   }
 
   init_TableDir();
-  load_setttings();
+  load_settings();
   load_gtab_list(TRUE);
 
 

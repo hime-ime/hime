@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -31,7 +31,7 @@ gboolean gtab_phrase_on();
 gboolean gtab_disp_partial_match_on(), gtab_vertical_select_on(), gtab_pre_select_on(), gtab_unique_auto_send_on(), gtab_press_full_auto_send_on();
 void init_seltab(char ***p);
 
-extern gint64 key_press_time, key_press_time_ctrl;
+extern gboolean key_press_alt, key_press_ctrl;
 
 extern GtkWidget *gwin_gtab;
 void hide_gtab_pre_sel();
@@ -279,13 +279,11 @@ char *bch_cat(char *s, char *ch)
 }
 
 
-void minimize_win_gtab();
 void disp_gtab_sel(char *s);
 
 void ClrSelArea()
 {
   disp_gtab_sel("");
-  minimize_win_gtab();
 //  hide_gtab_pre_sel();
 }
 
@@ -350,7 +348,7 @@ static void DispInArea()
 
 //  dbg("sel1st:%d\n", ggg.sel1st_i);
   if (hime_display_on_the_spot_key()) {
-    if (gwin_gtab && GTK_WIDGET_VISIBLE(gwin_gtab) && poo.same_pho_query_state == SAME_PHO_QUERY_none)
+    if (hime_pop_up_win && gwin_gtab && GTK_WIDGET_VISIBLE(gwin_gtab) && poo.same_pho_query_state == SAME_PHO_QUERY_none)
       hide_win_gtab();
     return;
   }
@@ -379,7 +377,6 @@ static void DispInArea()
   gtab_disp_empty(tt, win_gtab_max_key_press - i);
 
   disp_gtab(tt);
-  minimize_win_gtab();
 }
 
 int get_DispInArea_str(char *out)
@@ -474,9 +471,9 @@ static void putstr_inp(char *p)
   clear_after_put();
 
   if ((cur_inmd->flag & FLAG_GTAB_SYM_KBM)) {
-    extern int win_kbm_inited, b_show_win_kbm;
+    extern int win_kbm_inited, hime_show_win_kbm;
     init_in_method(default_input_method);
-    if (win_kbm_inited && !b_show_win_kbm)
+    if (win_kbm_inited && !hime_show_win_kbm)
       hide_win_kbm();
   }
 }
@@ -1002,16 +999,16 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
   if (ggg.gbufN && key==XK_Tab)
     return 1;
 
-   if ((key==XK_Shift_L||key==XK_Shift_R) && !key_press_time) {
-     key_press_time = current_time();
-     key_press_time_ctrl = 0;
-   } else
-  if ((key==XK_Control_L||key==XK_Control_R) && !key_press_time_ctrl && tss.pre_selN) {
-    key_press_time_ctrl = current_time();
+  if ((key==XK_Shift_L||key==XK_Shift_R) && !key_press_alt) {
+    key_press_alt = TRUE;
+    key_press_ctrl = FALSE;
+  } else if ((key==XK_Control_L||key==XK_Control_R) && !key_press_ctrl && tss.pre_selN) {
+    key_press_alt = FALSE;
+    key_press_ctrl = TRUE;
     return TRUE;
   } else {
-    key_press_time_ctrl = 0;
-    key_press_time = 0;
+    key_press_alt = FALSE;
+    key_press_ctrl = FALSE;
   }
 
   if (kbstate & (Mod1Mask|Mod4Mask|Mod5Mask|ControlMask)) {
@@ -1046,17 +1043,16 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
   int ucase;
   ucase = toupper(key);
   if (key < 127 && cur_inmd->keymap[key]) {
-     if (key < 'A' || key > 'z' || (key > 'Z'  && key < 'a') )
-       goto shift_proc;
-     if (cur_inmd->keymap[lcase] != cur_inmd->keymap[ucase])
-       goto next;
-
+    if (key < 'A' || key > 'z' || (key > 'Z'  && key < 'a') )
+      goto shift_proc;
+    if (cur_inmd->keymap[lcase] != cur_inmd->keymap[ucase])
+      goto next;
   }
 
 
 shift_proc:
   if (shift_m && !strchr(cur_inmd->selkey, key) && !ggg.more_pg && key>=' ' && key < 0x7e &&
-       key!='*' && (key!='?' || (gtab_shift_phrase_key && !ggg.ci))) {
+      key!='*' && (key!='?' || (gtab_shift_phrase_key && !ggg.ci))) {
     if (gtab_shift_phrase_key) {
       if (tss.pre_selN && shift_char_proc(key, kbstate))
         return TRUE;
@@ -1309,15 +1305,15 @@ direct_select:
         } else {
           if (current_CS->b_half_full_char)
             return full_char_proc(key);
-		  else
+	  else
             return 0;
-		}
+	}
       }
       if (tss.pre_selN && shift_char_proc(key, kbstate))
         return TRUE;
 
-      if (current_CS->b_half_full_char)
-        return full_char_proc(key);
+      // if (current_CS->b_half_full_char)
+      //  return full_char_proc(key);
 
       inkey=cur_inmd->keymap[key];
       if ((inkey && (inkey!=cur_inmd->WILD_STAR && inkey!=cur_inmd->WILD_QUES)) || ptr_selkey(key)) {

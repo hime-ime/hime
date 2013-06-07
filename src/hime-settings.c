@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,14 +21,14 @@
 int hime_setup_window_type_utility;
 
 int hime_font_size, hime_font_size_tsin_presel, hime_font_size_symbol;
-int hime_font_size_pho_near, hime_font_size_gtab_in, hime_font_size_win_kbm, hime_font_size_win_kbm_en;
+int hime_font_size_pho_near, hime_font_size_gtab_in, hime_font_size_win_kbm, hime_font_size_win_kbm_en, hime_show_win_kbm;
 int hime_win_color_use, hime_single_state;
 int hime_remote_client;
 char *default_input_method_str;
 int default_input_method;
 // int left_right_button_tips;
 int hime_im_toggle_keys, hime_bell_off;
-int hime_capslock_lower, hime_eng_phrase_enabled, hime_init_im_enabled;
+int hime_capslock_lower, hime_eng_phrase_enabled, hime_init_im_enabled, hime_init_full_mode;
 int hime_win_sym_click_close, hime_edit_display;
 int hime_on_the_spot_key, hime_punc_auto_send;
 #if TRAY_ENABLED
@@ -85,12 +85,15 @@ int pho_candicate_col_N, pho_candicate_R2L;
 
 
 int get_hime_conf_int(char *name, int default_value);
+void init_omni_config(void);
 
-void load_setttings()
+void load_settings()
 {
 #if TRAY_UNITY
   const char* desktop = getenv("XDG_CURRENT_DESKTOP");
 #endif
+
+  init_omni_config();
 
   hime_setup_window_type_utility = get_hime_conf_int(HIME_SETUP_WINDOW_TYPE_UTILITY, 0);
 
@@ -112,7 +115,9 @@ void load_setttings()
 #if TRAY_ENABLED
   hime_tray_hf_win_kbm = get_hime_conf_int(HIME_TRAY_HF_WIN_KBM, 0);
 #endif
+  hime_show_win_kbm = get_hime_conf_int(KBM_TOGGLE, 0);
   hime_init_im_enabled = get_hime_conf_int(HIME_INIT_IM_ENABLED, 0);
+  hime_init_full_mode = get_hime_conf_int(HIME_INIT_FULL_MODE, 0);
 
   hime_single_state = get_hime_conf_int(HIME_SINGLE_STATE, 0);
   hime_punc_auto_send = get_hime_conf_int(HIME_PUNC_AUTO_SEND, 0);

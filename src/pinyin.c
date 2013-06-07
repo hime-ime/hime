@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,7 +21,7 @@
 #include "gst.h"
 #include "pho-status.h"
 
-extern void key_typ_pho(phokey_t phokey, u_char rtyp_pho[]);
+extern void fake_key_typ_pho(phokey_t phokey, u_char rtyp_pho[]);
 
 gboolean pin2juyin(gboolean full_match)
 {
@@ -61,7 +61,7 @@ gboolean pin2juyin(gboolean full_match)
 
   bzero(poo.typ_pho, sizeof(poo.typ_pho));
 //  prph(pin_juyin[i].key); dbg(" %x ph\n", pin_juyin[i].key);
-  key_typ_pho(pin_juyin[i].key, (u_char *)poo.typ_pho);
+  fake_key_typ_pho(pin_juyin[i].key, (u_char *)poo.typ_pho);
 
 //  dbg("pin2juyin found %d\n", poo.typ_pho[0]);
 

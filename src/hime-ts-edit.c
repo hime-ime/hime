@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -334,7 +334,6 @@ static void cb_button_close(GtkButton *button, gpointer user_data)
   if (last_row)
     gtk_widget_destroy(last_row);
   last_row = NULL;
-  gtk_window_resize(GTK_WINDOW(mainwin), 1, 1);
 }
 
 static void cb_button_find(GtkButton *button, gpointer user_data)
@@ -586,7 +585,7 @@ int main(int argc, char **argv)
   b_pinyin = is_pinyin_kbm();
 
   gtk_init (&argc, &argv);
-  load_setttings();
+  load_settings();
   load_gtab_list(TRUE);
 
   char hime_dir[512];
@@ -627,6 +626,7 @@ int main(int argc, char **argv)
                    G_CALLBACK (key_press_event), NULL);
 
   gtk_window_set_has_resize_grip(GTK_WINDOW(mainwin), FALSE);
+  gtk_window_set_resizable (GTK_WINDOW (mainwin), FALSE);
 //  gtk_window_set_default_size(GTK_WINDOW (mainwin), 640, 520);
   set_window_hime_icon(mainwin);
 

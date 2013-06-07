@@ -3,8 +3,8 @@
 
 GTK_2_DEMO_APP=gtk-demo
 GTK_3_DEMO_APP=gtk3-demo
-GTK_QUERY_IMMODULES_2=gtk-query-immodules-2.0
-GTK_QUERY_IMMODULES_3=gtk-query-immodules-3.0
+GTK_QUERY_IMMODULES_2=`whereis gtk-query-immodules-2.0 | cut -d ' ' -f 2`
+GTK_QUERY_IMMODULES_3=`whereis gtk-query-immodules-3.0 | cut -d ' ' -f 2`
 
 export HIME_OUTPUT_FILTER=$PWD/filter/nobopomofo
 UTF8_LOCALE=`locale -a | grep utf8 | tail -n 1`

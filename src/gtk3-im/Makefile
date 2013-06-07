@@ -4,9 +4,13 @@ OBJS = imhime.o gtkimcontexthime.o
 GTK3IM=gtk-3.0/immodules
 GTKINC=`pkg-config --cflags gtk+-3.0`
 LDFLAGS=`pkg-config --libs gtk+-3.0`
+GTK3_LIBDIR=`pkg-config --variable=libdir gtk+-3.0`
+GTK3_BINARY_VERSION=`pkg-config --variable=gtk_binary_version gtk+-3.0`
+MODULEDIR=$(DESTDIR)/$(GTK3_LIBDIR)/gtk-3.0/$(GTK3_BINARY_VERSION)/immodules
 IMMODULES=$(libdir)/$(GTK3IM)
 IMMODULES_LOCAL=/usr/$(LIB)/$(GTK3IM)
-
+IMMODULES_QUERY=$(shell whereis gtk-query-immodules-3.0 | awk -F ' = ' '{print $2}')
+IMMODULES_CACHE=$(DESTDIR)/$(GTK3_LIBDIR)/gtk-3.0/$(GTK3_BINARY_VERSION)/immodules.cache
 
 ifeq ($(MAC_OS),1)
 EXTRA_INC=-I/sw/include
@@ -18,11 +22,11 @@ CFLAGS = $(OPTFLAGS) $(EXTRA_INC) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
 
 .c.o:
 	@echo "  $< -> $@"
-	@$(CC) -c -fPIC $(CFLAGS) -o $@ $<
+	@$(CC) -c -fPIC $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 .c.E:
 	@echo "  $< -> $@"
-	@$(CC) -E $(CFLAGS) -o $@ $<
+	@$(CC) -E $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 all:	im-hime.so
 
@@ -36,10 +40,14 @@ clean:
 	@rm -f *.o *.so *~ core.* .depend *.E
 
 install:
-	if [ $(prefix) = /usr/local ]; then \
-		install -d $(IMMODULES_LOCAL); \
-		install -m 755 im-hime.so $(IMMODULES_LOCAL); \
-		gtk-query-immodules-3.0 --update-cache; \
+	if [ "$(prefix)" = "/usr/local" -o "$(prefix)" = "/usr" ]; then \
+		install -d $(MODULEDIR); \
+		install -m 755 im-hime.so $(MODULEDIR); \
+		if [ "$(prefix)" = "/usr/local" ]; then \
+			if [ -f "$(IMMODULES_QUERY)" -a -x "$(IMMODULES_QUERY)" ]; then \
+				GTK_IM_MODULE_FILE=$(IMMODULES_CACHE) $(IMMODULES_QUERY) --update-cache; \
+			fi \
+		fi \
 	else \
 		install -d $(IMMODULES); \
 		install -m 755 im-hime.so $(IMMODULES); \
@@ -47,6 +55,6 @@ install:
 
 .depend:
 	@echo "building $@ ..."
-	@$(CC) $(CFLAGS) -MM *.c > $@
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -MM *.c > $@
 
 include .depend

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # hime filter zh2tw version 0.0.3
   read -r -t 1 aa
   U2S=`echo -n $aa | iconv -f UTF-8 -t GB2312 -c`

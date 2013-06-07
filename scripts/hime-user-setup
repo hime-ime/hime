@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ -z "$1" -o -z "$2" ]; then
   echo "please specify hime_table_dir hime_bin_dir"
@@ -24,7 +24,7 @@ done
 cd ~/.config/hime
 
 diff1=''
-diff tsin-1.src $1/tsin-1.src >& /dev/null
+diff tsin-1.src $1/tsin-1.src > /dev/null 2>&1
 if [ $? != 0 ]; then
 diff1='Y'
 fi

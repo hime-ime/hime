@@ -1,9 +1,10 @@
 /* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+ * Copyright (C) 2012 Favonia <favonia@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,7 +19,8 @@
 #include "hime.h"
 #include "gtab.h"
 
-
+/* XXX UI states hold uncommited preference.
+ * That's why we need these global variables. */
 static GtkWidget *check_button_gtab_dup_select_bell,
                  *opt_gtab_press_full_auto_send,
                  *opt_gtab_pre_select,
@@ -62,7 +64,7 @@ struct {
 };
 
 void save_tsin_eng_pho_key();
-static GtkWidget *hime_gtab_conf_window;
+static GtkWidget *gtab_widget;
 static GtkWidget *opt_spc_opts, *opt_auto_select_by_phrase;
 
 void save_menu_val(char *config, GtkWidget *opt)
@@ -71,10 +73,14 @@ void save_menu_val(char *config, GtkWidget *opt)
   save_hime_conf_int(config, auto_select_by_phrase_opts[idx].num);
 }
 
-static gboolean cb_gtab_conf_ok( GtkWidget *widget,
-                                   GdkEvent  *event,
-                                   gpointer   data )
+void save_gtab_conf()
 {
+  if (gtab_widget == NULL)
+  {
+    fprintf(stderr, "save_gtab_conf: gtab_widget is NULL!\n");
+    return;
+  }
+
   save_tsin_eng_pho_key();
   save_hime_conf_int(GTAB_DUP_SELECT_BELL,
     gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_gtab_dup_select_bell)));
@@ -128,19 +134,13 @@ static gboolean cb_gtab_conf_ok( GtkWidget *widget,
 
   save_menu_val(GTAB_UNIQUE_AUTO_SEND, opt_gtab_unique_auto_send);
 
+  save_omni_config();
   send_hime_message(GDK_DISPLAY(), CHANGE_FONT_SIZE);
-  gtk_widget_destroy(hime_gtab_conf_window); hime_gtab_conf_window = NULL;
-
-  return TRUE;
 }
 
-
-static gboolean close_gtab_conf_window( GtkWidget *widget,
-                                   GdkEvent  *event,
-                                   gpointer   data )
+void destroy_gtab_widget()
 {
-  gtk_widget_destroy(hime_gtab_conf_window); hime_gtab_conf_window = NULL;
-  return TRUE;
+  gtk_widget_destroy(gtab_widget); gtab_widget = NULL;
 }
 
 extern char utf8_edit[];
@@ -170,12 +170,10 @@ static gboolean cb_gtab_edit_append( GtkWidget *widget,
 
 static GtkWidget *create_spc_opts()
 {
-  GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
-  GtkWidget *label = gtk_label_new(_("空白鍵選項"));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+  GtkWidget *frame = gtk_frame_new(_("空白鍵選項"));
 
   opt_spc_opts = gtk_combo_box_new_text ();
-  gtk_box_pack_start (GTK_BOX (hbox), opt_spc_opts, FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (frame), opt_spc_opts);
 
   int i, current_idx=0;
 
@@ -187,7 +185,7 @@ static GtkWidget *create_spc_opts()
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_spc_opts), current_idx);
 
-  return hbox;
+  return frame;
 }
 
 static GtkWidget *create_auto_select_by_phrase_opts(GtkWidget **out, int val)
@@ -208,56 +206,39 @@ static GtkWidget *create_auto_select_by_phrase_opts(GtkWidget **out, int val)
 }
 
 
-GtkWidget *create_en_pho_key_sel(char *s);
+GtkWidget *create_en_pho_key_sel(char *s, gint index);
 
-void create_gtab_conf_window()
+GtkWidget *create_gtab_widget ()
 {
-  if (hime_gtab_conf_window) {
-    gtk_window_present(GTK_WINDOW(hime_gtab_conf_window));
-    return;
-  }
+  if (gtab_widget != NULL)
+    fprintf(stderr, "create_gtab_widget: gtab_widget was not NULL!\n");
 
-  load_setttings();
-
-  hime_gtab_conf_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  if (hime_setup_window_type_utility)
-    gtk_window_set_type_hint(GTK_WINDOW(hime_gtab_conf_window), GDK_WINDOW_TYPE_HINT_UTILITY);
-  gtk_window_set_position(GTK_WINDOW(hime_gtab_conf_window), GTK_WIN_POS_MOUSE);
-  gtk_window_set_has_resize_grip(GTK_WINDOW(hime_gtab_conf_window), FALSE);
-
-  g_signal_connect (G_OBJECT (hime_gtab_conf_window), "delete_event",
-                    G_CALLBACK (close_gtab_conf_window),
-                    NULL);
-
-  gtk_window_set_title (GTK_WINDOW (hime_gtab_conf_window), _("倉頡/行列/大易設定"));
-  gtk_container_set_border_width (GTK_CONTAINER (hime_gtab_conf_window), 3);
+  load_settings();
 
   GtkWidget *vbox_top = gtk_vbox_new (FALSE, 10);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_top), GTK_ORIENTATION_VERTICAL);
-  gtk_container_add (GTK_CONTAINER (hime_gtab_conf_window), vbox_top);
+  gtab_widget = vbox_top;
 
   GtkWidget *hbox_lr = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox_top), hbox_lr, FALSE, FALSE, 0);
 
-
   GtkWidget *frame_gtab_l = gtk_frame_new(_("外觀"));
-  gtk_container_set_border_width (GTK_CONTAINER (frame_gtab_l), 5);
-  gtk_box_pack_start (GTK_BOX (hbox_lr), frame_gtab_l, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame_gtab_l), 10);
+  gtk_box_pack_start (GTK_BOX (hbox_lr), frame_gtab_l, TRUE, TRUE, 0);
   GtkWidget *vbox_gtab_l = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_gtab_l), GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (frame_gtab_l), vbox_gtab_l);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox_gtab_l), 10);
-
 
   GtkWidget *frame_gtab_r = gtk_frame_new(_("行為"));
-  gtk_container_set_border_width (GTK_CONTAINER (frame_gtab_r), 5);
-  gtk_box_pack_start (GTK_BOX (hbox_lr), frame_gtab_r, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame_gtab_r), 10);
+  gtk_box_pack_start (GTK_BOX (hbox_lr), frame_gtab_r, TRUE, TRUE, 0);
   GtkWidget *vbox_gtab_r = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_gtab_r), GTK_ORIENTATION_VERTICAL);
+
   gtk_container_add (GTK_CONTAINER (frame_gtab_r), vbox_gtab_r);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox_gtab_r), 10);
 
 #define SPC 1
+
 
   GtkWidget *hbox_gtab_pre_select = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_pre_select, FALSE, FALSE, 0);
@@ -271,15 +252,20 @@ void create_gtab_conf_window()
   gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_partial_match), opt_gtab_disp_partial_match,  FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_partial_match), create_auto_select_by_phrase_opts(&opt_gtab_disp_partial_match, gtab_disp_partial_match), FALSE, FALSE, 0);
 
+  GtkWidget *hbox_gtab_vertical_select = gtk_hbox_new (FALSE, SPC);
+  gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_vertical_select, FALSE, FALSE, 0);
+  GtkWidget *label_gtab_vertical_select = gtk_label_new (_("垂直選擇"));
+  gtk_box_pack_start (GTK_BOX (hbox_gtab_vertical_select), label_gtab_vertical_select,  FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox_gtab_vertical_select), create_auto_select_by_phrase_opts(&opt_gtab_vertical_select, gtab_vertical_select),  FALSE, FALSE, 0);
+
+
   GtkWidget *hbox_gtab_disp_key_codes = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_disp_key_codes, FALSE, FALSE, 0);
-  check_button_gtab_disp_key_codes = gtk_check_button_new_with_label (_("顯示字根"));
+  check_button_gtab_disp_key_codes = gtk_check_button_new_with_label (_("顯示拆碼"));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_key_codes), check_button_gtab_disp_key_codes,  FALSE, FALSE, 0);
 
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_disp_key_codes),
      gtab_disp_key_codes);
-
-
   GtkWidget *hbox_gtab_disp_im_name = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_disp_im_name, FALSE, FALSE, 0);
   check_button_gtab_disp_im_name = gtk_check_button_new_with_label (_("顯示輸入法名稱"));
@@ -290,7 +276,7 @@ void create_gtab_conf_window()
 
   GtkWidget *hbox_gtab_hide_row2 = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_hide_row2, FALSE, FALSE, 0);
-  check_button_gtab_hide_row2 = gtk_check_button_new_with_label (_("隱藏第二列 (輸入鍵…)"));
+  check_button_gtab_hide_row2 = gtk_check_button_new_with_label (_("隱藏第二列 (輸入字根…)"));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_hide_row2), check_button_gtab_hide_row2,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_hide_row2),
      gtab_hide_row2);
@@ -298,16 +284,10 @@ void create_gtab_conf_window()
 
   GtkWidget *hbox_gtab_in_row1 = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_in_row1, FALSE, FALSE, 0);
-  check_button_gtab_in_row1 = gtk_check_button_new_with_label (_("將字根移至第一列"));
+  check_button_gtab_in_row1 = gtk_check_button_new_with_label (_("將輸入字根移至第一列"));
   gtk_box_pack_start (GTK_BOX (hbox_gtab_in_row1), check_button_gtab_in_row1,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_in_row1),
      gtab_in_row1);
-
-  GtkWidget *hbox_gtab_vertical_select = gtk_hbox_new (FALSE, SPC);
-  gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_vertical_select, FALSE, FALSE, 0);
-  GtkWidget *label_gtab_vertical_select = gtk_label_new (_("垂直選擇"));
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_vertical_select), label_gtab_vertical_select,  FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (hbox_gtab_vertical_select), create_auto_select_by_phrase_opts(&opt_gtab_vertical_select, gtab_vertical_select),  FALSE, FALSE, 0);
 
   GtkWidget *hbox_gtab_press_full_auto_send = gtk_hbox_new (FALSE, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_press_full_auto_send, FALSE, FALSE, 0);
@@ -350,7 +330,7 @@ void create_gtab_conf_window()
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_gtab_shift_phrase_key),
      gtab_shift_phrase_key);
 
-  gtk_box_pack_start (GTK_BOX (vbox_gtab_r), create_en_pho_key_sel(_("切換[中/英]輸入")), FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox_gtab_r), create_en_pho_key_sel(_("切換[中/英]輸入"), 1), FALSE, FALSE, 0);
 
 #if 0
   GtkWidget *hbox_hime_capslock_lower = gtk_hbox_new (FALSE, SPC);
@@ -394,42 +374,5 @@ void create_gtab_conf_window()
   g_signal_connect_swapped (G_OBJECT (button_edit_append), "clicked",
                             G_CALLBACK (cb_gtab_edit_append), NULL);
 
-
-  GtkWidget *hbox_cancel_ok = gtk_hbox_new (FALSE, 10);
-  gtk_grid_set_column_homogeneous(GTK_GRID(hbox_cancel_ok), TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox_top), hbox_cancel_ok, FALSE, FALSE, 0);
-
-  GtkWidget *button_cancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-  if (button_order)
-    gtk_box_pack_end (GTK_BOX (hbox_cancel_ok), button_cancel, TRUE, TRUE, 0);
-  else
-    gtk_box_pack_start (GTK_BOX (hbox_cancel_ok), button_cancel, TRUE, TRUE, 0);
-
-  g_signal_connect (G_OBJECT (button_cancel), "clicked",
-                            G_CALLBACK (close_gtab_conf_window),
-                            G_OBJECT (hime_gtab_conf_window));
-
-  GtkWidget *button_ok = gtk_button_new_from_stock (GTK_STOCK_OK);
-#if !GTK_CHECK_VERSION(2,91,2)
-  if (button_order)
-    gtk_box_pack_end (GTK_BOX (hbox_cancel_ok), button_ok, TRUE, TRUE, 0);
-  else
-    gtk_box_pack_start (GTK_BOX (hbox_cancel_ok), button_ok, TRUE, TRUE, 0);
-#else
-  if (button_order)
-    gtk_grid_attach_next_to (GTK_BOX (hbox_cancel_ok), button_ok, button_cancel, GTK_POS_LEFT, 1, 1);
-  else
-    gtk_grid_attach_next_to (GTK_BOX (hbox_cancel_ok), button_ok, button_cancel, GTK_POS_RIGHT, 1, 1);
-#endif
-
-  g_signal_connect_swapped (G_OBJECT (button_ok), "clicked",
-                            G_CALLBACK (cb_gtab_conf_ok),
-                            G_OBJECT (hime_gtab_conf_window));
-
-  GTK_WIDGET_SET_FLAGS (button_ok, GTK_CAN_DEFAULT);
-  gtk_widget_grab_default (button_ok);
-
-  gtk_widget_show_all (hime_gtab_conf_window);
-
-  return;
+  return gtab_widget;
 }

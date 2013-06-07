@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -113,6 +113,8 @@ static void shutdown_client(int fd)
 void message_cb(char *message);
 void save_CS_temp_to_current();
 
+static gboolean is_init_im_enabled = FALSE;
+
 void process_client_req(int fd)
 {
   HIME_req req;
@@ -154,13 +156,12 @@ void process_client_req(int fd)
     cs->b_hime_protocol = TRUE;
     cs->input_style = InputStyleOverSpot;
 
-    if (hime_init_im_enabled && new_cli)
-    {
-      current_CS = cs;
+    if (hime_init_im_enabled && ((hime_single_state && !is_init_im_enabled) || (!hime_single_state && new_cli))) {
       dbg("new_cli default_input_method:%d\n", default_input_method);
+      is_init_im_enabled = TRUE;
+      current_CS = cs;
       save_CS_temp_to_current();
       init_state_chinese(cs);
-      cs->in_method = default_input_method;
     }
   }
 

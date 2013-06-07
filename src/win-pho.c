@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -37,12 +37,6 @@ void disp_pho(int index, char *phochar)
   disp_pho_sub(label_pho, index, phochar);
 }
 
-void minimize_win_pho()
-{
-  gtk_window_resize(GTK_WINDOW(gwin_pho), 1, 1);
-}
-
-
 void move_win_pho(int x, int y);
 
 void get_win_size(GtkWidget *win, int *width, int *height)
@@ -68,8 +62,6 @@ void disp_pho_sel(char *s)
 {
   if (! label_pho_sele) return;
   gtk_label_set_markup(GTK_LABEL(label_pho_sele), s);
-
-  minimize_win_pho();
 
   if (win_size_exceed(gwin_pho)) {
     move_win_pho(current_in_win_x, current_in_win_y);
@@ -123,7 +115,6 @@ void create_win_pho()
     return;
 
   gwin_pho = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_default_size(GTK_WINDOW(gwin_pho), 1 ,1);
   gtk_window_set_has_resize_grip(GTK_WINDOW(gwin_pho), FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (gwin_pho), 0);
   gtk_widget_realize (gwin_pho);
@@ -256,7 +247,6 @@ void create_win_pho_gui()
 
   if (pho_hide_row2) {
     gtk_widget_hide(hbox_row2);
-    gtk_window_resize(GTK_WINDOW(gwin_pho), 1, 1);
   }
 
   current_hime_inner_frame = hime_inner_frame;
@@ -332,8 +322,6 @@ void win_pho_disp_half_full()
     gtk_widget_hide(label_full);
   else
     gtk_widget_show(label_full);
-
-  minimize_win_pho();
 }
 
 void get_win_pho_geom()

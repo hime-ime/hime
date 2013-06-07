@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 
 PATH=$PATH:/opt/gnome/bin:/usr/local/bin
 
 for i in madedit gedit leafpad l3afpad kedit kate gvim
 do
-  which $i >& /dev/null
+  which $i > /dev/null 2>&1
   if [ $? = 0 ]; then
     UTF8ED=$i
     break

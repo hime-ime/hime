@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -35,6 +35,7 @@ void load_tab_pho_file();
 void clear_sele();
 void send_utf8_ch(char *s);
 extern gboolean force_show;
+int current_shape_mode();
 
 void init_HIME_module_main_functions(HIME_module_main_functions *func)
 {
@@ -62,11 +63,11 @@ void init_HIME_module_main_functions(HIME_module_main_functions *func)
   func->mf_set_label_font_size = set_label_font_size;
   func->mf_set_no_focus = set_no_focus;
 
-
-  func->mf_current_time = current_time;
+  func->mf_current_shape_mode = current_shape_mode;
 
   func->mf_exec_hime_setup = exec_hime_setup;
   func->mf_hime_edit_display_ap_only = hime_edit_display_ap_only;
+  func->mf_hime_display_on_the_spot_key = hime_display_on_the_spot_key;
   func->mf_inmd_switch_popup_handler = inmd_switch_popup_handler;
   func->mf_load_tab_pho_file = load_tab_pho_file;
   func->mf_send_text = send_text;

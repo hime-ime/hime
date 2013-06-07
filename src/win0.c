@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -165,12 +165,14 @@ extern gboolean b_use_full_space;
 void set_label_space();
 void set_label_space(GtkWidget *label);
 
+void show_win0();
+
 void disp_char(int index, char *ch)
 {
   if (hime_edit_display_ap_only())
     return;
   if (!top_bin)
-    return;
+    show_win0();
 
 //  dbg("disp_char %d %s\n", index, ch);
   create_char(index);
@@ -356,7 +358,6 @@ void compact_win0()
     return;
 
 //  max_yl = 0;
-  gtk_window_resize(GTK_WINDOW(gwin0), 1, 1);
   raw_move(best_win_x, best_win_y);
 }
 
@@ -702,8 +703,11 @@ char *get_full_str();
 
 void win_tsin_disp_half_full()
 {
+  if (label_pho==NULL)
+    show_win0();
+
   if (hime_win_color_use)
-   gtk_label_set_markup(GTK_LABEL(label_pho), get_full_str());
+    gtk_label_set_markup(GTK_LABEL(label_pho), get_full_str());
   else
     gtk_label_set_text(GTK_LABEL(label_pho), get_full_str());
   compact_win0();

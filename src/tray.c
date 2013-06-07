@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -45,7 +45,8 @@ void exec_hime_setup();
 void toggle_gb_output();
 extern gboolean gb_output;
 
-static char efull[] = N_("A全"), full[] = N_("全"), engst[] = N_("ABC"), sim[] = N_("简");
+static char full[] = N_("全"), engst[] = N_("ABC"), sim[] = N_("简");
+extern int current_shape_mode();
 
 void destroy_tray_icon()
 {
@@ -101,11 +102,7 @@ static void draw_icon()
 
   if (current_CS) {
     gdk_cairo_set_source_color (cr, &red_color_fg);
-    if (current_CS->im_state == HIME_STATE_ENG_FULL) {
-      get_text_w_h(efull,  &w, &h);
-      cairo_move_to (cr, 0, 0);
-      pango_cairo_show_layout (cr, pango);
-    } else if ((current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char) || (current_method_type()==method_type_TSIN && tss.tsin_half_full)) {
+    if (current_shape_mode()) {
       get_text_w_h(full,  &w, &h);
       cairo_move_to (cr, iw - w, ih - h);
       pango_cairo_show_layout (cr, pango);
@@ -154,7 +151,7 @@ void load_tray_icon()
   }
   char *iconame = HIME_TRAY_PNG;
 //  if (current_CS && current_CS->in_method && inmd)
-// Workaround due to issue #161 (caleb-/hime) :
+// Workaround due to issue #161
   if (current_CS && current_CS->im_state != HIME_STATE_DISABLED && current_CS->im_state != HIME_STATE_ENG_FULL)
     iconame = inmd[current_CS->in_method].icon;
   char fname[512];
@@ -179,7 +176,7 @@ void cb_trad_sim_toggle_(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 void cb_sim2trad(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 void cb_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
-void restart_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat);
+void quit_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
 void cb_tog_phospeak(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
@@ -192,12 +189,12 @@ void cb_inmd_menu(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
 static MITEM mitems[] = {
   {N_("設定"), GTK_STOCK_PREFERENCES, exec_hime_setup_, NULL},
-  {N_("結束hime"), GTK_STOCK_QUIT, restart_hime, NULL},
+  {N_("結束hime"), GTK_STOCK_QUIT, quit_hime, NULL},
   {N_("念出發音"), NULL, cb_tog_phospeak, &phonetic_speak},
   {N_("繁轉簡工具"), NULL, cb_trad2sim, NULL},
   {N_("簡轉繁工具"), NULL, cb_sim2trad, NULL},
   {N_("選擇輸入法"), NULL, cb_inmd_menu, NULL},
-  {N_("小鍵盤"), NULL, kbm_toggle_, &win_kbm_on},
+  {N_("小鍵盤"), NULL, kbm_toggle_, &hime_show_win_kbm},
   {N_("輸出成簡體"), NULL, cb_trad_sim_toggle_, &gb_output},
   {NULL, NULL, NULL, NULL}
 };

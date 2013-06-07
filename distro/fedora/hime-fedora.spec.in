@@ -82,6 +82,7 @@ desktop-file-install \
   --add-category X-Fedora \
   ${RPM_BUILD_ROOT}/%{_datadir}/applications/hime-setup.desktop
 
+
 %post
 /sbin/ldconfig
 update-desktop-database %{_datadir}/applications >/dev/null 2>&1 || :
@@ -119,8 +120,6 @@ fi
 %config %{_sysconfdir}/X11/xinit/xinput.d/hime.conf
 %{_bindir}/hime
 %{_bindir}/hime-*
-%{_bindir}/cin2gtab
-%{_bindir}/gtab2cin
 %{_datadir}/applications/fedora-hime-setup.desktop
 %{_datadir}/hime/
 %{_datadir}/pixmaps/hime/
@@ -130,10 +129,17 @@ fi
 %{_libdir}/hime/*
 
 %files gtk2
+%if "%(test -e %{_libdir}/gtk-2.0/%(pkg-config --variable=gtk_binary_version gtk+-2.0)/immodules/im-hime.so && echo 1 || echo 0)" == "1"
+%{_libdir}/gtk-2.0/%(pkg-config --variable=gtk_binary_version gtk+-2.0)/immodules/im-hime.so
+%else
 %{_libdir}/gtk-2.0/immodules/im-hime.so
-
+%endif
 %files gtk3
+%if "%(test -e %{_libdir}/gtk-3.0/%(pkg-config --variable=gtk_binary_version gtk+-3.0)/immodules/im-hime.so && echo 1 || echo 0)" == "1"
+%{_libdir}/gtk-3.0/%(pkg-config --variable=gtk_binary_version gtk+-3.0)/immodules/im-hime.so
+%else
 %{_libdir}/gtk-3.0/immodules/im-hime.so
+%endif
 
 %files qt4
 %{_libdir}/qt4/plugins/inputmethods/im-hime.so

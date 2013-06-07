@@ -1,9 +1,10 @@
 /* Copyright (C) 2005-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+ * Copyright (C) 2012 Favonia <favonia@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -32,15 +33,17 @@ struct {
 
 extern char *default_input_method_str;
 
-static GtkWidget *gtablist_window = NULL;
+/* XXX UI states hold uncommited preference.
+ * That's why we need these global variables. */
+static GtkWidget *gtablist_widget = NULL;
 static GtkWidget *vbox;
-static GtkWidget *hbox;
 static GtkWidget *sw;
 static GtkWidget *treeview;
-static GtkWidget *button, *button2, *check_button_phonetic_speak, *opt_speaker_opts, *check_button_hime_bell_off;
+static GtkWidget *check_button_phonetic_speak, *opt_speaker_opts, *check_button_hime_bell_off;
 static GtkWidget *opt_im_toggle_keys, *check_button_hime_remote_client,
        *check_button_hime_shift_space_eng_full,
        *check_button_hime_init_im_enabled,
+       *check_button_hime_init_full_mode,
        *check_button_hime_eng_phrase_enabled,
        *check_button_hime_win_sym_click_close,
        *check_button_hime_punc_auto_send;
@@ -215,10 +218,15 @@ static void save_gtab_list()
   fclose(fp);
 }
 
-
-static void cb_ok (GtkWidget *button, gpointer data)
+void save_gtablist_conf ()
 {
-  GtkTreeModel *model = GTK_TREE_MODEL (data);
+  if (gtablist_widget == NULL)
+  {
+    fprintf(stderr, "save_gtablist_conf: gtablist_widget is NULL!\n");
+    return;
+  }
+
+  GtkTreeModel *model = gtk_tree_view_get_model((GtkTreeView *) treeview);
 
   GtkTreeIter iter;
   if (!gtk_tree_model_get_iter_first(model, &iter))
@@ -268,6 +276,9 @@ static void cb_ok (GtkWidget *button, gpointer data)
   save_hime_conf_int(HIME_INIT_IM_ENABLED,
     gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_init_im_enabled)));
 
+  save_hime_conf_int(HIME_INIT_FULL_MODE,
+    gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_init_full_mode)));
+
   save_hime_conf_int(HIME_ENG_PHRASE_ENABLED,
     gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_eng_phrase_enabled)));
 
@@ -291,17 +302,16 @@ static void cb_ok (GtkWidget *button, gpointer data)
   save_hime_conf_int(PHONETIC_SPEAK,
      gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_phonetic_speak)));
 
-  gtk_widget_destroy(gtablist_window); gtablist_window = NULL;
-
+  save_omni_config();
   /* caleb- did not found where "reload" is used.
    * caleb- think the send_hime_message() here does nothing.
    */
   send_hime_message(GDK_DISPLAY(), "reload");
 }
 
-static void cb_cancel (GtkWidget *widget, gpointer data)
+void destroy_gtablist_widget()
 {
-  gtk_widget_destroy(gtablist_window); gtablist_window = NULL;
+  gtk_widget_destroy(gtablist_widget); gtablist_widget = NULL;
 }
 
 int hime_switch_keys_lookup(int key);
@@ -489,12 +499,6 @@ add_columns (GtkTreeView *treeview)
                                                NULL);
 }
 
-
-static void callback_win_delete()
-{
-  gtk_widget_destroy(gtablist_window); gtablist_window = NULL;
-}
-
 void set_selection_by_key(int key)
 {
   if (!treeview)
@@ -571,38 +575,26 @@ static GtkWidget *create_speaker_opts()
 
 #include <dirent.h>
 
-void create_gtablist_window (void)
+GtkWidget *create_gtablist_widget ()
 {
-  if (gtablist_window) {
-    gtk_window_present(GTK_WINDOW(gtablist_window));
-    return;
-  }
+  if (gtablist_widget != NULL)
+    fprintf(stderr, "create_gtablist_widget: gtablist_widget was not NULL!\n");
 
-  /* create gtab_list_window, etc */
-  gtablist_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  if (hime_setup_window_type_utility)
-    gtk_window_set_type_hint(GTK_WINDOW(gtablist_window), GDK_WINDOW_TYPE_HINT_UTILITY);
-  gtk_window_set_position(GTK_WINDOW(gtablist_window), GTK_WIN_POS_MOUSE);
+  load_settings();
 
-  gtk_window_set_has_resize_grip(GTK_WINDOW(gtablist_window), FALSE);
- gtk_window_set_title (GTK_WINDOW (gtablist_window), _("內定輸入法 & 開啟/關閉"));
-  gtk_container_set_border_width (GTK_CONTAINER (gtablist_window), 1);
-
-  g_signal_connect (G_OBJECT (gtablist_window), "destroy",
-                    G_CALLBACK (gtk_widget_destroyed), &gtablist_window);
-
-  g_signal_connect (G_OBJECT (gtablist_window), "delete_event",
-                      G_CALLBACK (callback_win_delete), NULL);
+  GtkWidget *box = gtk_vbox_new (FALSE, 0);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(box), GTK_ORIENTATION_VERTICAL);
+  gtablist_widget = box;
 
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
-  gtk_container_add (GTK_CONTAINER (gtablist_window), vbox);
+  gtk_box_pack_start (GTK_BOX (box), vbox, TRUE, TRUE, 0);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
                                        GTK_SHADOW_ETCHED_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
   gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE, 0);
 
@@ -624,6 +616,20 @@ void create_gtablist_window (void)
 
   gtk_container_add (GTK_CONTAINER (sw), treeview);
 
+  {
+    // Trying to get correct size of dialog_data->treeview, then put it into a gtk_scrolled_window
+    /* XXX Favonia: is this necessary? */
+    gtk_widget_show_all (gtablist_widget);
+
+    GtkRequisition requisition;
+    gtk_widget_get_child_requisition (treeview, &requisition);
+    gtk_widget_set_size_request(vbox, requisition.width, 240);
+  }
+
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
+  gtk_box_pack_start (GTK_BOX (box), vbox, FALSE, FALSE, 0);
+
   gtk_box_pack_start (GTK_BOX (vbox), create_im_toggle_keys(), FALSE, FALSE, 0);
 
   GtkWidget *hbox_hime_remote_client = gtk_hbox_new (FALSE, 10);
@@ -640,6 +646,13 @@ void create_gtablist_window (void)
   gtk_box_pack_start (GTK_BOX (hbox_hime_init_im_enabled),check_button_hime_init_im_enabled,  FALSE, FALSE, 0);
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_init_im_enabled),
      hime_init_im_enabled);
+
+  GtkWidget *hbox_hime_init_full_mode = gtk_hbox_new (FALSE, 10);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_init_full_mode, FALSE, FALSE, 0);
+  check_button_hime_init_full_mode = gtk_check_button_new_with_label (_("直接進入全型輸入狀態"));
+  gtk_box_pack_start (GTK_BOX (hbox_hime_init_full_mode),check_button_hime_init_full_mode,  FALSE, FALSE, 0);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_init_full_mode),
+     hime_init_full_mode);
 
   GtkWidget *hbox_hime_shift_space_eng_full = gtk_hbox_new (FALSE, 10);
   gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_shift_space_eng_full, FALSE, FALSE, 0);
@@ -715,43 +728,5 @@ void create_gtablist_window (void)
     gtk_container_add (GTK_CONTAINER (hbox_phonetic_speak), create_speaker_opts());
   }
 
-  hbox = gtk_hbox_new (TRUE, 4);
-  gtk_grid_set_column_homogeneous(GTK_GRID(hbox), TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-
-  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-  g_signal_connect (G_OBJECT (button), "clicked",
-                    G_CALLBACK (cb_cancel), treeview);
-  if (button_order)
-    gtk_box_pack_end (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-  else
-    gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-
-  button2 = gtk_button_new_from_stock (GTK_STOCK_OK);
-  g_signal_connect (G_OBJECT (button2), "clicked",
-                    G_CALLBACK (cb_ok), model);
-#if !GTK_CHECK_VERSION(2,91,2)
-  if (button_order)
-    gtk_box_pack_end (GTK_BOX (hbox), button2, TRUE, TRUE, 0);
-  else
-    gtk_box_pack_start (GTK_BOX (hbox), button2, TRUE, TRUE, 0);
-#else
-  if (button_order)
-    gtk_grid_attach_next_to (GTK_BOX (hbox), button2, button, GTK_POS_LEFT, 1, 1);
-  else
-    gtk_grid_attach_next_to (GTK_BOX (hbox), button2, button, GTK_POS_RIGHT, 1, 1);
-#endif
-  gtk_window_set_default_size (GTK_WINDOW (gtablist_window), 620, 450);
-
-  g_signal_connect (G_OBJECT (gtablist_window), "delete_event",
-                    G_CALLBACK (gtk_main_quit), NULL);
-
-  gtk_widget_show_all (gtablist_window);
-
-  set_selection_by_key(default_input_method);
-
-#if 0
-  g_signal_connect (G_OBJECT(tree_selection), "changed",
-                    G_CALLBACK (callback_row_selected), NULL);
-#endif
+  return gtablist_widget;
 }

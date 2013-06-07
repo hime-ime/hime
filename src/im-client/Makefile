@@ -13,20 +13,24 @@ OBJS = hime-im-client.o hime-send.o im-addr.o hime-conf.o util.o hime-crypt-fpic
 
 .cpp.E:
 	@echo "  $< -> $@"
-	@$(CC) $(CFLAGS) -E -o $@ $<
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
 
 .c.o:
 	@echo "  $< -> $@"
-	@$(CC) -c $(CFLAGS) $<
+	@$(CC) -c $(CPPFLAGS) $(CFLAGS) $<
 
 .cpp.o:
 	@echo "  $< -> $@"
-	@$(CC) -x c -c $(CFLAGS) $<
+	@$(CC) -x c -c $(CPPFLAGS) $(CFLAGS) $<
 
 $(SOFILEVER):   $(OBJS)
 	@echo "linking $@ ..."
 # TODO: Drop g_get_tmp_dir() and -lglib-2.0
+ifeq ($(FREEBSD), 0)
 	@$(CC) $(SO_FLAGS) -Wl,-soname,libhime-im-client.so.1 $(OBJS) -lX11 -lglib-2.0 -o $@ -L/usr/X11R6/lib
+else
+	@$(CC) $(SO_FLAGS) -Wl,-soname,libhime-im-client.so.1 $(OBJS) -lX11 -lglib-2.0 -o $@ -L/usr/local/lib
+endif
 	ln -sf $(SOFILEVER) $(SOFILE)
 	ln -sf $(SOFILEVER) $(SOFILE).1
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C ../gtk-im; fi
@@ -41,19 +45,19 @@ install:
 
 hime-conf.o: ../hime-conf.c
 	@echo "  $^ -> $@"
-	@$(CCX) -c $(CFLAGS) -o $@ $<
+	@$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 util.o: ../util.c
 	@echo "  $^ -> $@"
-	@$(CCX) -c $(CFLAGS) -o $@ $<
+	@$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 im-addr.o: ../im-addr.c
 	@echo "  $^ -> $@"
-	@$(CCX) -c $(CFLAGS) -o $@ $<
+	@$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 hime-crypt-fpic.o: ../hime-crypt.c
 	@echo "  $^ -> $@"
-	@$(CCX) -c $(CFLAGS) -o $@ $<
+	@$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 clean:
 	@echo "clean up"
@@ -61,6 +65,6 @@ clean:
 
 .depend:
 	@echo "building $@ ..."
-	@$(CCX) $(CFLAGS) -MM *.c > $@
+	@$(CCX) $(CPPFLAGS) $(CFLAGS) -MM *.c > $@
 
 include .depend

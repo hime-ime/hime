@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,7 +23,7 @@
 #include "hime-module-cb.h"
 #include <anthy/anthy.h>
 static anthy_context_t ac;
-static gint64 key_press_time;
+static gboolean key_press_alt;
 static GtkWidget *event_box_anthy;
 
 static HIME_module_main_functions gmf;
@@ -436,16 +436,16 @@ struct {
 {"?",	"？", "？", "?"},
 {":",	"：", "：", ":"},
 {";",	"；", "；", ";"},
-{"0",	"0", "0", "0"},
-{"1",	"1", "1", "1"},
-{"2",	"2", "2", "2"},
-{"3",	"3", "3", "3"},
-{"4",	"4", "4", "4"},
-{"5",	"5", "5", "5"},
-{"6",	"6", "6", "6"},
-{"7",	"7", "7", "7"},
-{"8",	"8", "8", "8"},
-{"9",	"9", "9", "9"},
+{"0",	"0", "０", "0"},
+{"1",	"1", "１", "1"},
+{"2",	"2", "２", "2"},
+{"3",	"3", "３", "3"},
+{"4",	"4", "４", "4"},
+{"5",	"5", "５", "5"},
+{"6",	"6", "６", "6"},
+{"7",	"7", "７", "7"},
+{"8",	"8", "８", "8"},
+{"9",	"9", "９", "9"},
 };
 
 static char *idx_hira_kata(int idx, gboolean always_hira)
@@ -614,13 +614,6 @@ static void cursor_markup(int idx, char *s)
   gtk_label_set_markup(GTK_LABEL(lab), cur);
 }
 
-static void minimize_win_anthy()
-{
-  if (!win_anthy)
-    return;
-  gtk_window_resize(GTK_WINDOW(win_anthy), 32, 12);
-}
-
 static void disp_keys(int idx)
 {
   int i;
@@ -658,8 +651,6 @@ static void disp_input()
     idx+=keysN;
     cursor_markup(idx, " ");
   }
-
-  minimize_win_anthy();
 }
 
 static void disp_convert()
@@ -867,7 +858,7 @@ gboolean module_feedkey(int kv, int kvstate)
 {
   int lkv = tolower(kv);
   int shift_m=(kvstate&ShiftMask) > 0;
-//  printf("%x %c  %d\n", kv, kv, shift_m);
+  // printf("module_feedkey(): kv=%x(%c), shift_m=%d\n", kv, kv, shift_m);
 
   if (kvstate & ControlMask)
     return FALSE;
@@ -875,7 +866,7 @@ gboolean module_feedkey(int kv, int kvstate)
     return FALSE;
 
   if (kv==XK_Shift_L||kv==XK_Shift_R) {
-    key_press_time = gmf.mf_current_time();
+    key_press_alt = TRUE;
   }
 
   if (!gmf.mf_tsin_pho_mode())
@@ -937,6 +928,7 @@ gboolean module_feedkey(int kv, int kvstate)
       }
       return TRUE;
     case XK_Return:
+    case XK_KP_Enter:
       if (b_is_empty)
         return FALSE;
       if (state==STATE_SELECT) {
@@ -1188,8 +1180,6 @@ int module_init_win(HIME_module_main_functions *funcs)
 
   win_anthy = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_has_resize_grip(GTK_WINDOW(win_anthy), FALSE);
-  gtk_window_set_default_size(GTK_WINDOW (win_anthy), 40, 50);
-
 
   gtk_widget_realize (win_anthy);
   gmf.mf_set_no_focus(win_anthy);
@@ -1320,9 +1310,9 @@ int module_feedkey_release(KeySym xkey, int kbstate)
      && xkey == XK_Shift_L) ||
    (*gmf.mf_tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR
      && xkey == XK_Shift_R))
-          &&  gmf.mf_current_time() - key_press_time < 300000) {
+          && key_press_alt) {
           module_flush_input();
-          key_press_time = 0;
+          key_press_alt = FALSE;
           gmf.mf_hide_selections_win();
           gmf.mf_tsin_set_eng_ch(!gmf.mf_tsin_pho_mode());
           return 1;

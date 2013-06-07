@@ -24,6 +24,7 @@
 #define HIME_POP_UP_WIN "hime-pop-up-win"
 #define HIME_INNER_FRAME "hime-inner-frame"
 #define HIME_INIT_IM_ENABLED "hime-init-im-enabled"
+#define HIME_INIT_FULL_MODE "hime-init-full-mode"
 #define HIME_BELL_VOLUME "hime-bell-volume"
 #define HIME_SOUND_PLAY_OVERLAP "hime-sound-play-overlap"
 #define HIME_ENABLE_CTRL_ALT_SWITCH "hime-enable-ctrl-alt-switch"
@@ -122,7 +123,7 @@ extern int gtab_shift_phrase_key, gtab_in_area_button;
 extern int gtab_vertical_select, gtab_unique_auto_send;
 extern int tsin_buffer_size;
 extern int hime_input_style, hime_root_x, hime_root_y, hime_pop_up_win;
-extern int hime_status_tray, hime_tray_hf_win_kbm;
+extern int hime_status_tray, hime_show_win_kbm, hime_tray_hf_win_kbm;
 extern int hime_punc_auto_send;
 
 extern int tsin_phrase_pre_select;
@@ -141,7 +142,7 @@ extern unich_t eng_full_str[], eng_half_str[], cht_full_str[];
 extern char *eng_color_full_str, *eng_color_half_str, *cht_color_full_str;
 extern char *hime_win_color_fg, *hime_win_color_bg;
 extern int hime_win_color_use, hime_bell_off;
-extern int hime_init_im_enabled;
+extern int hime_init_im_enabled, hime_init_full_mode;
 extern int hime_edit_display, hime_tray_display;
 extern char *pho_kbm_name, *pho_selkey, *hime_str_im_cycle;
 extern int pho_candicate_col_N, pho_candicate_R2L;
@@ -151,5 +152,7 @@ void get_hime_conf_str(char *name, char **rstr, char *default_str);
 void get_hime_conf_fstr(char *name, char rstr[], char *default_str);
 void save_hime_conf_str(char *name, char *str);
 void save_hime_conf_int(char *name, int val);
-void load_setttings();
+void load_settings();
+void save_omni_config(void);
+void free_omni_config(void);
 

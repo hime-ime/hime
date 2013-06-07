@@ -1,11 +1,15 @@
 include ../../config.mak
 
-INCS=-I../im-client -I/usr/include/X11 `pkg-config QtCore QtGui --cflags`
+ifeq ($(FREEBSD), 0)
+  INCS=-I../im-client -I/usr/include/X11 `pkg-config QtCore QtGui --cflags`
+else
+  INCS=-I../im-client -I/usr/local/include `pkg-config QtCore QtGui --cflags`
+endif
 CXXFLAGS=$(OPTFLAGS) $(INCS) -Wall -D_REENTRANT -DUNIX=1 -fPIC  -DQT4 -DQT_SHARED \
 -DQT_IMMODULE -DPIC
 OBJS= moc_hime-qt.o hime-qt.o im-hime-qt.o hime-imcontext-qt.o
 .SUFFIXES:	.c .cpp .a .so .E .h
-LDFLAGS=-L../im-client -lhime-im-client `pkg-config QtCore QtGui --libs`
+LDFLAGS=$(LDFLAGS_ENV) -L../im-client -lhime-im-client `pkg-config QtCore QtGui --libs`
 all:    im-hime.so
 
 .cpp.E:

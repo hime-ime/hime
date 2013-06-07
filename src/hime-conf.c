@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,9 +18,12 @@
 #include "hime.h"
 #include <dirent.h>
 #include <X11/Xatom.h>
+#include <glib.h>
 
 #if !CLIENT_LIB
 char *TableDir=HIME_TABLE_DIR;
+GKeyFile *hime_omni_config = NULL;
+#define HIME_CONF "/hime.conf"
 
 void init_TableDir()
 {
@@ -38,6 +41,59 @@ void get_hime_dir(char *tt)
     strcat(tt,"/.config/hime");
 }
 
+void init_omni_config(void)
+{
+  char omni_config_fname[256];
+  int len;
+  GError *error = NULL;
+
+  if (hime_omni_config)
+    return;
+
+  memset(omni_config_fname, 0, 256);
+  get_hime_dir(omni_config_fname);
+  len = strlen(omni_config_fname);
+  snprintf(omni_config_fname + len, 256 - len, HIME_CONF);
+
+  hime_omni_config = g_key_file_new();
+  /* Ignore error */
+  g_key_file_load_from_file(hime_omni_config, omni_config_fname, 0, &error);
+}
+
+void free_omni_config(void)
+{
+  if (hime_omni_config) {
+    g_key_file_free(hime_omni_config);
+    hime_omni_config = NULL;
+  }
+}
+
+void save_omni_config(void)
+{
+  char omni_config_fname[256];
+  int len;
+  FILE *f;
+  gchar *buff;
+  gsize bufflen;
+  GError *error = NULL;
+
+  if (NULL == hime_omni_config)
+    return;
+
+  memset(omni_config_fname, 0, 256);
+  get_hime_dir(omni_config_fname);
+  len = strlen(omni_config_fname);
+  snprintf(omni_config_fname + len, 256 - len, HIME_CONF);
+  f = fopen(omni_config_fname, "w");
+  if (f) {
+    buff = g_key_file_to_data(hime_omni_config, &bufflen, &error);
+    if (NULL == buff)
+      return;
+    fwrite(buff, 1, bufflen, f);
+    fclose(f);
+    g_free(buff);
+  }
+}
 
 gboolean get_hime_user_fname(char *name, char fname[])
 {
@@ -71,6 +127,12 @@ void get_hime_conf_str(char *name, char **rstr, char *default_str)
   if (*rstr)
     free(*rstr);
 
+  *rstr = g_key_file_get_string(hime_omni_config, "HIME", name, NULL);
+  if (NULL != *rstr) {
+    return;
+  }
+
+  /* Compatible for previous configuration */
   get_hime_conf_fname(name, fname);
 
   FILE *fp;
@@ -115,6 +177,9 @@ void save_hime_conf_str(char *name, char *str)
   FILE *fp;
   char fname[256];
 
+  g_key_file_set_value(hime_omni_config, "HIME", name, str);
+
+  /* Compatible for previous configuration */
   get_hime_conf_fname(name, fname);
 
   if ((fp=fopen(fname,"wb"))==NULL) {

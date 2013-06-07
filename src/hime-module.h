@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -48,9 +48,11 @@ typedef struct {
   void (*mf_set_no_focus)(GtkWidget *win);
 
   gint64 (*mf_current_time)();
+  int (*mf_current_shape_mode)();
 
   void (*mf_exec_hime_setup)();
   gboolean (*mf_hime_edit_display_ap_only)();
+  gboolean (*mf_hime_display_on_the_spot_key)();
   gint (*mf_inmd_switch_popup_handler)(GtkWidget *widget, GdkEvent *event);
   void (*mf_load_tab_pho_file)();
   int (*mf_utf8_str_N)(char *str);

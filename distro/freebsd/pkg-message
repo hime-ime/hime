@@ -1,0 +1,16 @@
+[1;32m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[1;33m
+  To enable HIME when starting X, Please set the following environment
+  variables in the starting X scripts, such as ~/.xinitrc or ~/.xsession:
+
+    # set the LOCALE data if necessary
+    export LC_ALL=zh_TW.UTF-8
+
+    export XMODIFIERS="@im=hime"
+    export GTK_IM_MODULE=hime
+    export QT_IM_MODULE=hime
+ 
+    # launch HIME in advance for the applications which are still using XIM
+    exec hime &
+
+[1;32m=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[0m

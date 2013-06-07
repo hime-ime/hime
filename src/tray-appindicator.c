@@ -39,7 +39,7 @@ void cb_trad_sim_toggle_(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 void cb_sim2trad(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 void cb_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
-void restart_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat);
+void quit_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
 void cb_tog_phospeak(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
@@ -62,12 +62,12 @@ void cb_toggle_im_enabled(GtkCheckMenuItem *checkmenuitem, gpointer dat)
 static MITEM mitems[] = {
   {N_("開關輸入法"), NULL, cb_toggle_im_enabled, NULL},
   {N_("設定"), GTK_STOCK_PREFERENCES, exec_hime_setup_, NULL},
-  {N_("結束hime"), GTK_STOCK_QUIT, restart_hime, NULL},
+  {N_("結束hime"), GTK_STOCK_QUIT, quit_hime, NULL},
   {N_("念出發音"), NULL, cb_tog_phospeak, &phonetic_speak},
   {N_("繁轉簡工具"), NULL, cb_trad2sim, NULL},
   {N_("簡轉繁工具"), NULL, cb_sim2trad, NULL},
   {N_("選擇輸入法"), NULL, cb_inmd_menu, NULL},
-  {N_("小鍵盤"), NULL, kbm_toggle_, &win_kbm_on},
+  {N_("小鍵盤"), NULL, kbm_toggle_, &hime_show_win_kbm},
   {N_("輸出成簡體"), NULL, cb_trad_sim_toggle_, &gb_output},
   {NULL, NULL, NULL, NULL}
 };
@@ -130,10 +130,11 @@ static void tray_appindicator_update_icon()
 }
 
 static char st_gb[]=N_("/簡"), st_half[]=N_("半"), st_full[]=N_("全"), st_str[32];
+extern int current_shape_mode();
 static char * tray_appindicator_label_create()
 {
   strcpy(st_str, "");
-  if (current_CS && (current_CS->im_state == HIME_STATE_ENG_FULL || (current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char) || (current_method_type()==method_type_TSIN && tss.tsin_half_full)))
+  if (current_shape_mode())
     strcat(st_str, st_full);
   else
     strcat(st_str, st_half);

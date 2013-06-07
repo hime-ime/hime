@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -59,12 +59,12 @@ void cb_inmd_menu(GtkCheckMenuItem *checkmenuitem, gpointer dat)
 void close_all_clients();
 void do_exit();
 
-void restart_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat)
+void quit_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat)
 {
   do_exit();
 }
 
-void kbm_toggle(), exec_hime_setup(), restart_hime(), cb_trad2sim(), cb_sim2trad();
+void kbm_toggle(), exec_hime_setup(), quit_hime(), cb_trad2sim(), cb_sim2trad();
 
 void cb_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 
@@ -86,10 +86,10 @@ void exec_hime_setup_(GtkCheckMenuItem *checkmenuitem, gpointer dat)
   exec_hime_setup();
 }
 
-void kbm_open_close(gboolean b_show);
+void kbm_open_close(GtkButton *checkmenuitem, gboolean b_show);
 void kbm_toggle_(GtkCheckMenuItem *checkmenuitem, gpointer dat)
 {
-  kbm_open_close(gtk_check_menu_item_get_active(checkmenuitem));
+  kbm_open_close(NULL, gtk_check_menu_item_get_active(checkmenuitem));
 }
 
 void create_about_window();
@@ -108,14 +108,14 @@ extern gboolean win_kbm_on;
 static MITEM mitems_main[] = {
   {N_("關於hime"), GTK_STOCK_ABOUT, cb_about_window},
   {N_("設定/工具"), GTK_STOCK_PREFERENCES, exec_hime_setup_},
-  {N_("結束hime"), GTK_STOCK_QUIT, restart_hime},
+  {N_("結束hime"), GTK_STOCK_QUIT, quit_hime},
   {N_("念出發音"), NULL, cb_tog_phospeak, &phonetic_speak},
-  {N_("小鍵盤"), NULL, kbm_toggle_, &win_kbm_on},
+  {N_("小鍵盤"), NULL, kbm_toggle_, &hime_show_win_kbm},
   {N_("選擇輸入法"), GTK_STOCK_INDEX, cb_inmd_menu, NULL},
   {NULL}
 };
 
-void load_setttings(), load_tab_pho_file();;
+void load_settings(), load_tab_pho_file();;
 void update_win_kbm();
 void update_win_kbm_inited();
 extern gboolean win_kbm_inited, stat_enabled;
@@ -127,7 +127,8 @@ static void cb_fast_phonetic_kbd_switch(GtkCheckMenuItem *checkmenuitem, gpointe
 
   save_hime_conf_str(PHONETIC_KEYBOARD, bak);
   save_hime_conf_str(PHONETIC_KEYBOARD_BAK, cur);
-  load_setttings();
+  save_omni_config();
+  load_settings();
   load_tab_pho_file();
   update_win_kbm_inited();
 }
@@ -320,7 +321,7 @@ static void cb_popup_state(GtkStatusIcon *status_icon, guint button, guint activ
 
 
 #define HIME_TRAY_PNG "hime-tray.png"
-
+extern int current_shape_mode();
 
 void load_tray_icon_double()
 {
@@ -364,9 +365,7 @@ void load_tray_icon_double()
 
 //  dbg("%d %d\n",current_CS->im_state,current_CS->b_half_full_char);
 
-  if (current_CS && (current_CS->im_state == HIME_STATE_ENG_FULL ||
-      (current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char) ||
-      (current_method_type()==method_type_TSIN && tss.tsin_half_full))) {
+  if (current_shape_mode()) {
       if (gb_output) {
         icon_st="full-simp.png";
         tip = _("全形/簡體輸出");

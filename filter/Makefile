@@ -3,8 +3,8 @@ include ../config.mak
 all:
 
 install:
-	install -d $(DESTDIR)/$(filterdir)
-	install -m 755 [a-z]* $(DESTDIR)/$(filterdir)
+	install -d $(filterdir)
+	install -m 755 [a-z]* $(filterdir)
 
 clean:
 	@echo "clean up"

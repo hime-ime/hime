@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # hime filter sakura version 0.0.3
   read -r -t 1 aa
   echo -n $aa        | \

@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -40,7 +40,7 @@ char *htmlspecialchars(char *s, char out[]);
 void hide_gtab_pre_sel();
 gboolean gtab_vertical_select_on();
 
-extern gint64 key_press_time, key_press_time_ctrl;
+extern gboolean key_press_alt, key_press_ctrl;
 
 extern gboolean test_mode;
 
@@ -250,7 +250,6 @@ static void clear_gtab_buf_all()
 }
 
 
-void minimize_win_gtab();
 void disp_gbuf()
 {
   char *bf=gen_buf_str_disp();
@@ -260,8 +259,6 @@ void disp_gbuf()
     lookup_gtabn(gbuf[ggg.gbufN-1].ch, NULL);
 
   free(bf);
-
-  minimize_win_gtab();
 }
 
 void clear_gbuf_sel()
@@ -1089,7 +1086,7 @@ gboolean gtab_pre_select_idx(int c)
   gbuf[ggg.gbufN-1].flag |= FLAG_CHPHO_PHRASE_TAIL;
 
   hide_gtab_pre_sel();
-  if (hime_edit_display_ap_only())
+  if (hime_pop_up_win)
     hide_win_gtab();
 
   return TRUE;
@@ -1109,37 +1106,29 @@ void tsin_toggle_eng_ch();
 
 int feedkey_gtab_release(KeySym xkey, int kbstate)
 {
-  gint64 kpt;
-
   switch (xkey) {
      case XK_Control_L:
      case XK_Control_R:
-       kpt = key_press_time_ctrl;
-       key_press_time_ctrl = 0;
-        if (current_time() - kpt < 300000 && tss.pre_selN) {
-          if (!test_mode) {
-            tss.ctrl_pre_sel = TRUE;
-          }
-          return 1;
-        } else
-          return 0;
+       if (key_press_ctrl && tss.pre_selN) {
+         if (!test_mode) {
+           tss.ctrl_pre_sel = TRUE;
+         }
+	 key_press_ctrl = FALSE;
+         return 1;
+       } else
+         return 0;
 #if 1
      case XK_Shift_L:
      case XK_Shift_R:
-       kpt = key_press_time;
-       key_press_time = 0;
-
 // dbg("release xkey %x\n", xkey);
-        if (
-(  (tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Shift) ||
-   (tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftL
-     && xkey == XK_Shift_L) ||
-   (tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR
-     && xkey == XK_Shift_R))
-          &&  current_time() - kpt < 300000) {
+        if (((tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Shift) ||
+             (tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftL && xkey == XK_Shift_L) ||
+             (tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR && xkey == XK_Shift_R)) &&
+	     key_press_alt) {
           if (!test_mode) {
             tsin_toggle_eng_ch();
           }
+	  key_press_alt = FALSE;
           return 1;
         } else
           return 0;

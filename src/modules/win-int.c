@@ -2,8 +2,8 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -41,11 +41,6 @@ static int int_selN = sizeof(int_sel)/sizeof(int_sel[0]);
 
 static GtkWidget *opt_int_opts;
 
-static void minimize_win()
-{
-  gtk_window_resize(GTK_WINDOW(gwin_int), 1, 1);
-}
-
 static void adj_intcode_buttons()
 {
   int i;
@@ -57,8 +52,6 @@ static void adj_intcode_buttons()
     for(i=4;i < MAX_INTCODE; i++)
       gtk_widget_hide(labels_int[i]);
   }
-
-  minimize_win();
 }
 
 
@@ -191,10 +184,9 @@ void create_win_intcode()
   gtk_widget_show_all (gwin_int);
 
   gtk_widget_realize (gwin_int);
-  set_no_focus(gwin_int);
+  gmf.mf_set_no_focus(gwin_int);
 
   adj_intcode_buttons();
-  minimize_win();
 
 //  dbg("create %x\n",gwin_int);
 }
