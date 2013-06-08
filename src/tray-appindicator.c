@@ -173,6 +173,9 @@ gboolean tray_appindicator_create(gpointer data)
       return FALSE;
 
     tray_appindicator = app_indicator_new_with_path ("hime", iconame, APP_INDICATOR_CATEGORY_APPLICATION_STATUS, icondir);
+    if(tray_appindicator == NULL)
+      return TRUE;
+
     app_indicator_set_status (tray_appindicator, APP_INDICATOR_STATUS_ACTIVE);
     GtkWidget *menu = NULL;
     menu = create_tray_menu(mitems);
