@@ -348,7 +348,7 @@ if [ $? = 0 ]; then
 fi
 
 if [ ! -x "$QT3_MOC_PATH" ]; then
-	 find_in_path_list_to_variable "$qt3_moc_path_list" "QT3_MOC_PATH"
+  find_in_path_list_to_variable "$qt3_moc_path_list" "QT3_MOC_PATH"
 fi
 
 if [ "$QT_IM" = "Y" ]; then
@@ -379,7 +379,7 @@ if [ $? = 0 ]; then
 fi
 
 if [ ! -x "${QT4_MOC_PATH}" ]; then
-	 find_in_path_list_to_variable "$qt4_moc_path_list" "QT4_MOC_PATH"
+  find_in_path_list_to_variable "`pkg-config --variable=moc_location QtCore` $qt4_moc_path_list" "QT4_MOC_PATH"
 fi
 
 if [ "$QT4_IM" = "Y" ]; then
@@ -519,7 +519,7 @@ echo "QT_IM=$QT_IM" >> config.mak
 echo "QT_IM_DIR=\$(libdir)$QT_IM_DIR" >> config.mak
 echo "QT4_IM=$QT4_IM" >> config.mak
 if [ -z "$QT4_IM_DIR_CUSTOM" ]; then
-	echo "QT4_IM_DIR=\$(libdir)$QT4_IM_DIR" >> config.mak
+	echo "QT4_IM_DIR=`pkg-config --define-variable=prefix=$\(DESTDIR\)/\$\(prefix\) --variable=libdir QtCore`$QT4_IM_DIR" >> config.mak
 else
 	echo "QT4_IM_DIR=\$(DESTDIR)$QT4_IM_DIR_CUSTOM" >> config.mak
 fi

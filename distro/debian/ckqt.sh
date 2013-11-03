@@ -1,5 +1,5 @@
 #!/bin/sh
-[ ! -e debian/hime/usr/lib/qt4/plugins/inputmethods/im-hime.so ] && sed -i 's/, hime-qt4-immodule//' debian/hime/DEBIAN/control
+[ ! -e debian/hime/`pkg-config --variable=libdir QtCore`/qt4/plugins/inputmethods/im-hime.so ] && sed -i 's/, hime-qt4-immodule//' debian/hime/DEBIAN/control
 [ ! -e debian/hime/usr/lib/qt3/plugins/inputmethods/im-hime.so ] && sed -i 's/, hime-qt3-immodule//' debian/hime/DEBIAN/control
 [ ! -e debian/hime/`pkg-config --variable=libdir gtk+-3.0`/gtk-3.0/`pkg-config --variable=gtk_binary_version gtk+-3.0`/immodules/im-hime.so ] && sed -i 's/, hime-gtk3-immodule//' debian/hime/DEBIAN/control
 [ ! -e debian/hime/usr/lib/hime/chewing-module.so ] && sed -i 's/, libchewing3//' debian/hime/DEBIAN/control
