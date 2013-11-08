@@ -291,7 +291,12 @@ if [ "$use_unity" = "Y" ]; then
   echo -n ".... Testing appindicator       :  "
   USE_UNITY=`pkg-config --libs $APPINDICATOR 2> /dev/null`
   if [ $? != 0 ]; then
-    echo "Not found, unity tray is turned off."
+    USE_UNITY=`pkg-config --libs appindicator3-0.1 2> /dev/null`
+    if [ $? == 0 && "$GTK" = "gtk+-2.0" ]; then
+      echo "Disabled. appindicator3-0.1 is found, but is using gtk+2.0. Add option \"--with-gtk=3.0\" to enable it."
+    else
+      echo "Not found, unity tray is turned off."
+    fi
     USE_UNITY=N
   else
     if [ "$use_unity" = "N" ]; then
