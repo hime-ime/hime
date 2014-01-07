@@ -1,6 +1,7 @@
 # Contributor: HIME team
-pkgname=hime
-pkgver=0.9.10
+_pkgname=hime
+pkgname=hime-git
+pkgver=984.d2424fa
 pkgrel=1
 pkgdesc="A GTK2+/GTK3+ based universal input method platform"
 arch=('i686' 'x86_64')
@@ -10,26 +11,29 @@ depends=('gtk2' 'libxtst')
 makedepends=('git' 'gettext' 'gtk3' 'qt4' 'anthy' 'libchewing')
 optdepends=('gtk3: enable gtk3 im module' 'qt4: enable qt4 im module' 'anthy: enable Anthy input method' 'libchewing: enable Chewing input method')
 options=(!strip)
-"${pkgname}::git://github.com/hime-ime/hime.git#tag=v${pkgver}"
+install=hime-git.install
+conflicts=('hime')
+provides=('hime')
+source=("${_pkgname}::git+https://github.com/hime-ime/hime.git")
 sha512sums=('SKIP')
-install=hime.install
+
 
 pkgver() {
-  cd "$srcdir/repo"
-  git describe --long | sed -E 's/([^-]*-g)/r\1/;s/-/./g'
+    cd "${srcdir}/${_pkgname}"
+    echo $(git rev-list --count master).$(git rev-parse --short master)
 }
 
 build() {
-        cd "${srcdir}/${pkgname}"
-	./configure --prefix=/usr --disable-lib64
-	make
+    cd "${srcdir}/${_pkgname}"
+    ./configure --prefix=/usr --disable-lib64
+    make
 }
 
 package() {
-	cd "${srcdir}/${pkgname}"
-	make DESTDIR="${pkgdir}" install
+    cd "${srcdir}/${_pkgname}"
+    make DESTDIR="${pkgdir}" install
 
-	install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
-	# install licence files
-	install -Dm644 fdl-1.2.txt gpl-2.0.txt lgpl-2.1.txt "${pkgdir}/usr/share/licenses/${pkgname}/"
+    install -dm755 "${pkgdir}/usr/share/licenses/${_pkgname}/"
+    # install licence files
+    install -Dm644 fdl-1.2.txt gpl-2.0.txt lgpl-2.1.txt "${pkgdir}/usr/share/licenses/${_pkgname}/"
 }
