@@ -37,7 +37,10 @@ void init_TableDir()
 
 void get_hime_dir(char *tt)
 {
-    strcpy(tt,(char *)getenv("HOME"));
+    char *home = getenv("HOME");
+    if (!home)
+      home = "";
+    strcpy(tt,home);
     strcat(tt,"/.config/hime");
 }
 
