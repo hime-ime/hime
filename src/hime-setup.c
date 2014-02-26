@@ -136,10 +136,13 @@ static void cb_ts_export()
 static void ts_import(const gchar *selected_filename)
 {
    char cmd[256];
+   char *home = getenv("HOME");
+   if (!home)
+      home = "";
    if (inmd[default_input_method].method_type==method_type_TSIN) {
      snprintf(cmd, sizeof(cmd),
         "cd %s/.config/hime && "HIME_BIN_DIR"/hime-tsd2a32 %s > tmpfile && cat %s >> tmpfile && "HIME_BIN_DIR"/hime-tsa2d32 tmpfile %s",
-        getenv("HOME"), tsin32_f, selected_filename, tsin32_f);
+        home, tsin32_f, selected_filename, tsin32_f);
      int res = system(cmd);
      res = 0;
      create_result_win(res, cmd);
