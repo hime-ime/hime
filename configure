@@ -39,7 +39,7 @@ if [ $? = 0 ]; then
 fi
 
 FREEBSD=0
-uname | grep FreeBSD > /dev/null 2> /dev/null
+uname | grep FreeBSD | grep -v GNU/kFreeBSD > /dev/null 2> /dev/null
 if [ $? = 0 ]; then
   FREEBSD=1
 fi
