@@ -5,7 +5,7 @@ SOFILEVER=libhime-im-client.so.1.2.4
 
 .SUFFIXES:      .c .o .E .cpp
 WALL=-Wall
-CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) -I. -I.. -I../IMdkit/include $(GTKINC) \
+CFLAGS+= -DUNIX=1 $(WALL) $(OPTFLAGS) -I. -I.. -I../IMdkit/include $(GTKINC) \
         -DCLIENT_LIB=1 -DHIME_BIN_DIR=\"$(HIME_BIN_DIR)\" -DUNIX=1 \
         -DHIME_TABLE_DIR=\"$(HIME_TABLE_DIR)\" \
         -DFREEBSD=$(FREEBSD) -fPIC
