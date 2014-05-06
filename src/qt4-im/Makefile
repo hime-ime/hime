@@ -14,15 +14,15 @@ all:    im-hime.so
 
 .cpp.E:
 	@echo "  $< -> $@"
-	@$(CXX) -E $(CFLAGS) $(INCS) $< > $@
+	$(CXX) -E $(CFLAGS) $(INCS) $< > $@
 
 .cpp.o:
 	@echo "  $< -> $@"
-	@$(CXX) -c -o $@ $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CXXFLAGS) $<
 
 moc_hime-qt.cpp:	hime-qt.h
 	@echo "  $< -> $@"
-	@$(QT4_MOC_PATH) $< -o moc_hime-qt.cpp
+	$(QT4_MOC_PATH) $< -o moc_hime-qt.cpp
 
 im-hime.so: $(OBJS)
 	@echo "linking $@ ..."
@@ -40,6 +40,6 @@ clean:
 
 .depend:
 	@echo "building $@ ..."
-	@$(CXX) $(CXXFLAGS) -MM *.cpp > $@
+	$(CXX) $(CXXFLAGS) -MM *.cpp > $@
 
 include .depend

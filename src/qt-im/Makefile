@@ -11,20 +11,20 @@ all:	im-hime.so
 
 .cpp.E:
 	@echo "  $< -> $@"
-	@$(CXX) -E $(CFLAGS) $(INCS) $< > $@
+	$(CXX) -E $(CFLAGS) $(INCS) $< > $@
 
 .cpp.o:
 	@echo "  $< -> $@"
-	@$(CXX) -c -o $@ $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CXXFLAGS) $<
 
 .h.o:
 	@echo "  $< -> $@"
 	@$(QT3_MOC_PATH) $< -o $<_moc.cpp
-	@$(CXX) -c -pipe $(CXXFLAGS) $<_moc.cpp -o $@
+	$(CXX) -c -pipe $(CXXFLAGS) $<_moc.cpp -o $@
 
 im-hime.so: $(OBJS)
 	@echo "linking $@ ..."
-	@$(CXX) $(gcc_ld_run_path) -fno-exceptions -shared -o $@ $(OBJS) $(LDFLAGS)
+	$(CXX) $(gcc_ld_run_path) -fno-exceptions -shared -o $@ $(OBJS) $(LDFLAGS)
 	@rm -f core.*
 
 install:

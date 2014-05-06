@@ -83,11 +83,11 @@ pin-juyin.xlt: $(PIN_JUYIN) pin-juyin.src
 
 extr1:	extr1.c
 	@echo "building $@ ..."
-	@$(CC) $(CFLAGS) $< $(SRC_DIR)/util.o $(SRC_DIR)/locale.o -o $@ $(LDFLAGS)
+	$(CC) $(CFLAGS) $< $(SRC_DIR)/util.o $(SRC_DIR)/locale.o -o $@ $(LDFLAGS)
 
 t2s-file:	t2s-file.c
 	@echo "building $@ ..."
-	@$(CC) $(CFLAGS) $< $(SRC_DIR)/util.o $(SRC_DIR)/locale.o -o $@ $(LDFLAGS)
+	$(CC) $(CFLAGS) $< $(SRC_DIR)/util.o $(SRC_DIR)/locale.o -o $@ $(LDFLAGS)
 
 tsin-1.src:	extr1
 	./extr1 > $@

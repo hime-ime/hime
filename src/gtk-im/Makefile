@@ -22,17 +22,17 @@ CFLAGS = $(OPTFLAGS) $(EXTRA_INC) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
 
 .c.o:
 	@echo "  $< -> $@"
-	@$(CC) -c -fPIC $(CPPFLAGS) $(CFLAGS) -o $@ $<
+	$(CC) -c -fPIC $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 .c.E:
 	@echo "  $< -> $@"
-	@$(CC) -E $(CPPFLAGS) $(CFLAGS) -o $@ $<
+	$(CC) -E $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 all:	im-hime.so
 
 im-hime.so:     $(OBJS) ../im-client/libhime-im-client.so
 	@echo "linking $@ ..."
-	@$(CC) $(gcc_ld_run_path) $(SO_FLAGS) $(OBJS) -L../im-client -lhime-im-client -o $@ $(LDFLAGS)
+	$(CC) $(gcc_ld_run_path) $(SO_FLAGS) $(OBJS) -L../im-client -lhime-im-client -o $@ $(LDFLAGS)
 	@rm -f core.*
 
 clean:
@@ -55,6 +55,6 @@ install:
 
 .depend:
 	@echo "building $@ ..."
-	@$(CC) $(CPPFLAGS) $(CFLAGS) -MM *.c > $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) -MM *.c > $@
 
 include .depend
