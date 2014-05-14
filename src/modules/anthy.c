@@ -22,6 +22,15 @@
 #include "hime-module.h"
 #include "hime-module-cb.h"
 #include <anthy/anthy.h>
+
+#if 0
+#if DEBUG
+#define dbg(...) gmf.mf___gcin_dbg_(__VA_ARGS__)
+#else
+#define dbg(...) do {} while (0)
+#endif
+#endif
+
 static anthy_context_t ac;
 static gboolean key_press_alt;
 static GtkWidget *event_box_anthy;
@@ -493,11 +502,20 @@ static short pageidx;
 
 typedef struct {
   GtkWidget *label;
-  unsigned char selidx, selN;
+  u_char selidx, selN;
+  u_char ofs, len;
 } SEG;
 static SEG *seg;
 static short segN;
 #define MAX_SEG_N 100
+
+typedef struct {
+  u_char ofs, len;
+  char *sel_str;
+} SEL_SEG;
+static SEL_SEG *sel_seg;
+static int sel_segN;
+
 static short cursor;
 enum {
   STATE_ROMANJI=1,
@@ -593,6 +611,16 @@ static void parse_key()
   }
 }
 
+static int get_sel_seg_with_ofs(int ofs)
+{
+    int idx;
+    for(idx=0;idx<sel_segN;idx++)
+      if (sel_seg[idx].ofs == ofs)
+         break;
+    return idx;
+}
+
+
 static void clear_seg_label()
 {
 //  dbg("clear_seg_label\n");
@@ -657,7 +685,7 @@ static void disp_convert()
 {
   int i;
 
-//  printf("cursor %d\n", cursor);
+  dbg("disp_convert cursor %d\n", cursor);
   for(i=0; i < segN; i++) {
     char tt[256];
     strcpy(tt, gtk_label_get_text(GTK_LABEL(seg[i].label)));
@@ -688,6 +716,7 @@ static void clear_all()
   gmf.mf_tss->sel_pho = FALSE;
   state_hira_kata = STATE_hira;
   auto_hide();
+  sel_segN = 0;
 }
 
 
@@ -734,7 +763,7 @@ static gboolean send_jp()
 
 static void disp_select()
 {
-//  puts("disp_select");
+  dbg("disp_select\n");
   gmf.mf_clear_sele();
   int endn = pageidx + gmf.mf_phkbm->selkeyN;
   if (endn >  seg[cursor].selN)
@@ -754,7 +783,7 @@ static void disp_select()
 
   int x,y;
   gmf.mf_get_widget_xy(win_anthy, seg[cursor].label, &x, &y);
-//  printf("%x cusor %d %d\n", win_anthy, cursor, x);
+  dbg("%x cusor %d %d\n", win_anthy, cursor, x);
   y = gmf.mf_hime_edit_display_ap_only()?
     *gmf.mf_win_y:*gmf.mf_win_y+*gmf.mf_win_yl;
   gmf.mf_disp_selections(x, y);
@@ -762,25 +791,46 @@ static void disp_select()
 
 static void load_seg()
 {
-      clear_seg_label();
-      struct anthy_conv_stat acs;
-      anthy_get_stat(ac, &acs);
-      segN = 0;
-      if (acs.nr_segment > 0) {
+    dbg("load_seg sel_segN:%d\n", sel_segN);
+    clear_seg_label();
+    struct anthy_conv_stat acs;
+    anthy_get_stat(ac, &acs);
+    segN = 0;
+    if (acs.nr_segment > 0) {
         char buf[256];
         int i;
 
+        int ofs = 0;
         for(i=0; i < acs.nr_segment; i++) {
-          anthy_get_segment(ac, i, 0, buf, sizeof(buf));
-
-          seg[i].selidx = 0;
-          gtk_label_set_text(GTK_LABEL(seg[i].label), buf);
-
           struct anthy_segment_stat ss;
           anthy_get_segment_stat(ac, i, &ss);
+          int len = ss.seg_len;
+          int idx = get_sel_seg_with_ofs(ofs);
+          dbg("%d] sel idx:%d ofs:%d\n",i, idx, ofs);
+          int selN = seg[i].selN = ss.nr_candidate;
 
-          seg[i].selN = ss.nr_candidate;
+          char *old_str = NULL;
+          seg[i].selidx = 0;
+          if (idx < sel_segN && sel_seg[idx].len==len) {
+            int j;
+            for(j=0;j<selN;j++) {
+                anthy_get_segment(ac, i, j, buf, sizeof(buf));
+                if (!strcmp(buf, sel_seg[idx].sel_str) ) {
+                  dbg("old found %s", buf);
+                  seg[i].selidx = j;
+                  break;
+              }
+            }
+          }
+
+          anthy_get_segment(ac, i, seg[i].selidx, buf, sizeof(buf));
+          gtk_label_set_text(GTK_LABEL(seg[i].label), buf);
+
+          dbg("seg len:%d\n", len);
+          seg[i].ofs = ofs;
+          seg[i].len = len;
           segN++;
+          ofs += len;
         }
 
         state=STATE_CONVERT;
@@ -842,8 +892,26 @@ static gboolean select_idx(int c)
   if (idx < seg[cursor].selN) {
     char buf[256];
     anthy_get_segment(ac, cursor, idx, buf, sizeof(buf));
+    struct anthy_segment_stat ss;
+    anthy_get_segment_stat(ac, cursor, &ss);
+    int len = ss.seg_len;
+
     gtk_label_set_text(GTK_LABEL(seg[cursor].label), buf);
     seg[cursor].selidx = idx;
+
+    int sidx = get_sel_seg_with_ofs(seg[cursor].ofs);
+    if (sidx==sel_segN) {
+       sel_segN++;
+    }
+
+    if (sel_seg[sidx].sel_str)
+        free(sel_seg[sidx].sel_str);
+
+    dbg("select_idx idx:%d sidx:%d %s\n", idx, sidx, buf);
+
+    sel_seg[sidx].sel_str = strdup(buf);
+    sel_seg[sidx].ofs = seg[cursor].ofs;
+    sel_seg[sidx].len = len;
 
     state = STATE_CONVERT;
     gmf.mf_hide_selections_win();
@@ -1008,8 +1076,10 @@ rom:
           anthy_resize_segment(ac, cursor, -1);
           load_seg();
         } else {
-          if (cursor)
+          if (cursor) {
             cursor--;
+            pageidx = 0;
+          }
         }
         disp_convert();
       }
@@ -1018,8 +1088,10 @@ rom:
       if (b_is_empty)
         return FALSE;
       if (state&STATE_ROMANJI) {
-        if (cursor < jpN)
+        if (cursor < jpN) {
           cursor++;
+          pageidx = 0;
+        }
         disp_input();
       } else
       if (state&STATE_CONVERT) {
@@ -1199,6 +1271,10 @@ int module_init_win(HIME_module_main_functions *funcs)
     int n=sizeof(SEG)*MAX_SEG_N;
     seg=malloc(n);
     bzero(seg, n);
+
+    n=sizeof(SEL_SEG)*MAX_SEG_N;
+    sel_seg = malloc(n);
+    bzero(sel_seg, n);
   }
 
   int i;
@@ -1328,7 +1404,7 @@ int module_get_preedit(char *str, HIME_PREEDIT_ATTR attr[], int *pcursor, int *c
 {
   int i;
 
-//  dbg("anthy_get_preedit %d\n", cursor);
+  dbg("anthy_get_preedit %d  state:%d\n", cursor, state);
   str[0]=0;
   *pcursor=0;
 
@@ -1337,7 +1413,9 @@ int module_get_preedit(char *str, HIME_PREEDIT_ATTR attr[], int *pcursor, int *c
   int attrN=0;
   int ch_N=0;
 
-  if (state==STATE_CONVERT) {
+  if (state&(STATE_CONVERT|STATE_SELECT)) {
+    dbg("state==STATE_CONVERT\n");
+
     if (segN)
       attrN=1;
 
