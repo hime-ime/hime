@@ -25,9 +25,6 @@
 #include <unistd.h>
 #include <signal.h>
 #include <errno.h>
-#ifndef _XSERVER64
-#define _XSERVER64
-#endif
 #include "hime.h"
 #include "hime-protocol.h"
 #include "hime-im-client.h"

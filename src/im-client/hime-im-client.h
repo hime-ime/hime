@@ -17,6 +17,11 @@
 
 #ifndef HIME_IM_CLIENT_H
 #define HIME_IM_CLIENT_H
+
+#ifndef _XSERVER64
+#define _XSERVER64
+#endif
+
 struct HIME_PASSWD;
 
 typedef struct HIME_client_handle_S {
