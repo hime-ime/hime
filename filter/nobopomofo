@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # hime filter nobopomofo version 0.0.4
   read -r -t 1 aa
   echo -n $aa
