@@ -1,12 +1,21 @@
-#!/bin/sh
+#!/bin/bash
 # Copyright and license see bottom of this file
 
-GTK_2_DEMO_APP=gtk-demo
-GTK_3_DEMO_APP=gtk3-demo
-GTK_QUERY_IMMODULES_2=`whereis gtk-query-immodules-2.0 | cut -d ' ' -f 2`
-GTK_QUERY_IMMODULES_3=`whereis gtk-query-immodules-3.0 | cut -d ' ' -f 2`
+GTK_QUERY_IMMODULES_2==`whereis gtk-query-immodules-2.0 | cut -d ' ' -f 2`
+if [ ! -x "$GTK_QUERY_IMMODULES_2" ]; then
+  GTK_QUERY_IMMODULES_2=/usr/lib/`ls /usr/lib | grep linux | grep $(uname -m)`/libgtk2.0-0/gtk-query-immodules-2.0
+fi
 
+
+GTK_QUERY_IMMODULES_3=/usr/lib/x86_64-linux-gnu/libgtk-3-0/gtk-query-immodules-3.0
+
+if [ ! -x "$GTK_QUERY_IMMODULES_3" ]; then
+  GTK_QUERY_IMMODULES_3=/usr/lib/`ls /usr/lib | grep linux | grep $(uname -m)`/libgtk-2-0/gtk-query-immodules-3.0
+fi
+
+echo \#!/bin/sh > hime-test-shell-env
 export HIME_OUTPUT_FILTER=$PWD/filter/nobopomofo
+echo "export HIME_OUTPUT_FILTER=$PWD/filter/nobopomofo" >> hime-test-shell-env
 UTF8_LOCALE=`locale -a | grep utf8 | tail -n 1`
 
 XIM_NAME=`date +%N | tr -d 0`
@@ -15,12 +24,24 @@ GTK_3_TEMP_FILE=$PWD/gtk3
 
 [ ! -e distro/debian ] && exec echo Please execute '"distro/dev-tools/scripts/test-hime"' under hime directory, thanks.
 
+
 export PATH=$PWD/src:$PATH
+echo "export PATH=$PWD/src:$PATH" >> hime-test-shell-env
+
 export HIME_TABLE_DIR=$PWD/data
+echo "export HIME_TABLE_DIR=$PWD/data" >> hime-test-shell-env
+
 export HIME_MODULE_DIR=$PWD/src/modules
+echo "export HIME_MODULE_DIR=$PWD/src/modules" >> hime-test-shell-env
+
 export XMODIFIERS=@im=$XIM_NAME
+echo "export XMODIFIERS=@im=$XIM_NAME" >> hime-test-shell-env
+
 unset LC_ALL
+echo "unset LC_ALL" >> hime-test-shell-env
+
 export LC_CTYPE=$UTF8_LOCALE
+echo "export LC_CTYPE=$UTF8_LOCALE" >> hime-test-shell-env
 
 $GTK_QUERY_IMMODULES_2 | grep -v hime > $GTK_2_TEMP_FILE
 $GTK_QUERY_IMMODULES_3 | grep -v hime > $GTK_3_TEMP_FILE
@@ -28,24 +49,39 @@ LD_LIBRARY_PATH=$PWD/src/im-client/ $GTK_QUERY_IMMODULES_2 $PWD/src/gtk-im/im-hi
 LD_LIBRARY_PATH=$PWD/src/im-client/ $GTK_QUERY_IMMODULES_3 $PWD/src/gtk3-im/im-hime.so >> $GTK_3_TEMP_FILE
 
 export LD_PRELOAD=$PWD/src/im-client/libhime-im-client.so
+echo "export LD_PRELOAD=$PWD/src/im-client/libhime-im-client.so" >> hime-test-shell-env
+
 export GTK_IM_MODULE=hime
+echo "export GTK_IM_MODULE=hime" >> hime-test-shell-env
+
+echo "PS1=\"\[\e]0;\u@\h: \w\a\]\u@\h:\w (hime-test-env)$ \"" >> hime-test-shell-env
 
 if [ ! -x "$HIME_OUTPUT_FILTER" ]; then
   echo [1m[31mWarning![0m Your filter is not executable. Filter has been turned off automatically.
   unset HIME_OUTPUT_FILTER
 fi
+echo [1m[31mTo activate the testing envronment, execute \". hime-test-shell-env\" under this directory[0m
 
-sh scripts/hime-user-setup $PWD/data $PWD/src
-HIME_TABLE_DIR=data LD_LIBRARY_PATH=$PWD/src/im-client/:$PWD/src XMODIFIERS=@im=$XIM_NAME src/hime &
-HIME_PID=$!
+sh $PWD/scripts/hime-user-setup $PWD/data $PWD/src
 
-[ "$GTK_2_DEMO_APP" != "" ] && GTK_IM_MODULE_FILE=$GTK_2_TEMP_FILE $GTK_2_DEMO_APP
-[ "$GTK_3_DEMO_APP" != "" ] && GTK_IM_MODULE_FILE=$GTK_3_TEMP_FILE $GTK_3_DEMO_APP
+echo
+echo ">>>"
+echo
+echo "Depending on whether the application is using gtk2 or gtk3, set up the corresponding environmental variable before running target application in the testing environment"
+echo
+echo "gtk2: export GTK_IM_MODULE_FILE=$GTK_2_TEMP_FILE"
+echo "gtk3: export GTK_IM_MODULE_FILE=$GTK_3_TEMP_FILE"
+echo
+echo ">>>"
+echo
 
-[ $(id -u $USER) != "0" ] && kill -HUP $HIME_PID
+##start hime
+HIME_TABLE_DIR=data LD_LIBRARY_PATH=$PWD/src/im-client/:$PWD/src XMODIFIERS=@im=$XIM_NAME gdb src/hime
+
 
 # TODO: get tempdir from TMPDIR, TMP, and TEMP
 rm $GTK_2_TEMP_FILE $GTK_3_TEMP_FILE /tmp/.hime-$USER/socket-*-$XIM_NAME
+rm hime-test-shell-env
 
 # Copyright (C) 2007-2012 Wen-Yen Chuang <caleb AT calno DOT com>
 #
