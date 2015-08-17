@@ -77,8 +77,8 @@ if [ -x "$GTK_QUERY_2" ]; then
 fi
   echo
   echo "==>gtk-2.0 immodule cache"
-  echo `ls -d /etc/gtk-2.0/gtk.immodules* /usr/local/etc/gtk-2.0/gtk.immodules* 2> /dev/null` | sed 's/$/:/'
-  ls -d `grep hime /etc/gtk-2.0/gtk.immodules* /usr/local/etc/gtk-2.0/gtk.immodules* 2> /dev/null | cut -d '"' -f 2 | grep '/'`
+  echo `ls -d /etc/gtk-2.0/gtk.immodules* /usr/lib/$(ls /usr/lib |grep linux | grep $(uname -m))/gtk-2.0/*/immodules.cache* /usr/local/etc/gtk-2.0/gtk.immodules* 2> /dev/null` | sed 's/$/:/'
+  ls -d `grep hime /etc/gtk-2.0/gtk.immodules* /usr/lib/$(ls /usr/lib |grep linux | grep $(uname -m))/gtk-2.0/*/immodules.cache* /usr/local/etc/gtk-2.0/gtk.immodules* 2> /dev/null | cut -d '"' -f 2 | grep '/'`
 
 # TODO: detect more binary name of gtk-query-immodules-3.0
 GTK_QUERY_3=`whereis gtk-query-immodules-3.0 | cut -d ' ' -f 2`
@@ -95,8 +95,8 @@ if [ -x "$GTK_QUERY_3" ]; then
 fi
   echo
   echo "==>gtk-3.0 immodule cache"
-  echo `ls -d /usr/lib*/gtk-3.0/*/immodules.cache* /usr/local/lib*/gtk-3.0/*/immodules.cache* 2> /dev/null` | sed 's/$/:/'
-  ls -d `grep hime /usr/lib*/gtk-3.0/*/immodules.cache* /usr/local/lib*/gtk-3.0/*/immodules.cache* 2> /dev/null | cut -d '"' -f 2 | grep '/'`
+  echo `ls -d /usr/lib*/gtk-3.0/*/immodules.cache* /usr/lib/$(ls /usr/lib |grep linux | grep $(uname -m))/gtk-3.0/*/immodules.cache* /usr/local/lib*/gtk-3.0/*/immodules.cache* 2> /dev/null` | sed 's/$/:/'
+  ls -d `grep hime /usr/lib*/gtk-3.0/*/immodules.cache* /usr/lib/$(ls /usr/lib |grep linux | grep $(uname -m))/gtk-3.0/*/immodules.cache* /usr/local/lib*/gtk-3.0/*/immodules.cache* 2> /dev/null | cut -d '"' -f 2 | grep '/'`
 
 # Copyright (C) 2012 Wen-Yen Chuang <caleb AT calno DOT com>
 #
