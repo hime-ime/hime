@@ -65,6 +65,11 @@ ls -d /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64 2> /dev/null
 echo "====Immodule status===="
 # TODO: detect more binary name of gtk-query-immodules-2.0
 GTK_QUERY_2=`whereis gtk-query-immodules-2.0 | cut -d ' ' -f 2`
+
+if [ ! -x "$GTK_QUERY_IMMODULES_2" ]; then
+  GTK_QUERY_IMMODULES_2=/usr/lib/`ls /usr/lib | grep linux | grep $(uname -m)`/libgtk2.0-0/gtk-query-immodules-2.0
+fi
+
 if [ -x "$GTK_QUERY_2" ]; then
   echo
   echo "==>gtk-query-immodules-2.0:"
@@ -77,6 +82,12 @@ fi
 
 # TODO: detect more binary name of gtk-query-immodules-3.0
 GTK_QUERY_3=`whereis gtk-query-immodules-3.0 | cut -d ' ' -f 2`
+
+if [ ! -x "$GTK_QUERY_IMMODULES_3" ]; then
+  GTK_QUERY_IMMODULES_3=/usr/lib/`ls /usr/lib | grep linux | grep $(uname -m)`/libgtk-3.0/gtk-query-immodules-3.0
+fi
+
+
 if [ -x "$GTK_QUERY_3" ]; then
   echo
   echo "==>gtk-query-immodules-3.0:"
