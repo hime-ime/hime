@@ -37,18 +37,18 @@ extern char *default_input_method_str;
 
 void load_gtab_list(gboolean skip_disabled)
 {
-  char ttt[128];
+  char filename[128];
   FILE *fp;
 
-  get_hime_user_fname(gtab_list, ttt);
+  get_hime_user_fname(gtab_list, filename);
 
-  if ((fp=fopen(ttt, "rb"))==NULL) {
-    get_sys_table_file_name(gtab_list, ttt);
-    if ((fp=fopen(ttt, "rb"))==NULL)
-      p_err("cannot open %s", ttt);
+  if ((fp=fopen(filename, "rb"))==NULL) {
+    get_sys_table_file_name(gtab_list, filename);
+    if ((fp=fopen(filename, "rb"))==NULL)
+      p_err("cannot open %s", filename);
   }
 
-  dbg("load_gtab_list %s\n", ttt);
+  dbg("load_gtab_list %s\n", filename);
 
   skip_utf8_sigature(fp);
 
