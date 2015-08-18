@@ -419,7 +419,7 @@ static void run_dialog(void)
   GtkWidget *dialog = gtk_dialog_new_with_buttons (
       _("hime 設定/工具"),
       NULL,
-      GTK_DIALOG_MODAL,
+      GTK_DIALOG_DESTROY_WITH_PARENT,
       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
       GTK_STOCK_OK, GTK_RESPONSE_OK,
       NULL);
