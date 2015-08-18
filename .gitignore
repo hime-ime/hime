@@ -54,3 +54,5 @@ hime
 kbmcv
 pin-juyin
 tmp/
+.idea/
+.gitignore

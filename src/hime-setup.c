@@ -252,7 +252,7 @@ static void pack_start_new_button_with_callback(
 {
   GtkWidget *button = gtk_button_new_with_label(label);
   if (button == NULL) exit(-1);
-  gtk_box_pack_start (GTK_BOX (box), button, TRUE, TRUE, 5);
+  gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 5);
   g_signal_connect (G_OBJECT (button), "clicked", cb, user_data);
 }
 
