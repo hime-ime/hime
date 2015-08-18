@@ -76,7 +76,7 @@ echo ">>>"
 echo
 
 ##start hime
-HIME_TABLE_DIR=data LD_LIBRARY_PATH=$PWD/src/im-client/:$PWD/src XMODIFIERS=@im=$XIM_NAME gdb src/hime
+HIME_MODULE_DIR=$PWD/src/modules HIME_TABLE_DIR=data LD_LIBRARY_PATH=$PWD/src/im-client/:$PWD/src XMODIFIERS=@im=$XIM_NAME gdb src/hime
 
 
 # TODO: get tempdir from TMPDIR, TMP, and TEMP
