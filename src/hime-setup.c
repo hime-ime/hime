@@ -361,6 +361,25 @@ static void destroy_all_tabs(void)
     tab_table[i].destroy();
 }
 
+static void dialog_response_handler(GtkDialog *dialog,
+                                    gint response,
+                                    gpointer user_data)
+{
+  switch (response)
+  {
+    case GTK_RESPONSE_OK:
+      save_all_tabs();
+      break;
+    default:
+      break;
+  }
+
+  /* Clean up */
+  destroy_all_tabs();
+  gtk_main_quit();
+}
+
+
 static void run_dialog(void)
 {
   /* Create the notebook. */
@@ -422,20 +441,15 @@ static void run_dialog(void)
   gtk_container_add(GTK_CONTAINER (content_area), notebook);
 
   /* Run the dialog and save the setting when 'OK' is clicked. */
-  gtk_widget_show_all(dialog);
-  gint response = gtk_dialog_run(GTK_DIALOG(dialog));
-  switch (response)
-  {
-    case GTK_RESPONSE_OK:
-      save_all_tabs();
-      break;
-    default:
-      break;
-  }
+  g_signal_connect_swapped (
+      dialog,
+      "response",
+      G_CALLBACK (dialog_response_handler),
+      NULL);
 
-  /* Clean things up. */
-  destroy_all_tabs();
-  gtk_widget_destroy(GTK_WIDGET(dialog));
+
+  gtk_widget_show_all(dialog);
+
 }
 
 void init_TableDir(), exec_setup_scripts();
@@ -454,6 +468,8 @@ int main(int argc, char **argv)
 
   gtk_init(&argc, &argv);
 
+
+
 #if HIME_i18n_message
   bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
   textdomain(GETTEXT_PACKAGE);
@@ -467,6 +483,6 @@ int main(int argc, char **argv)
 #endif
 
   run_dialog();
-
+  gtk_main();
   return 0;
 }
