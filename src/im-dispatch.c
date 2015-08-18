@@ -115,6 +115,16 @@ void save_CS_temp_to_current();
 
 static gboolean is_init_im_enabled = FALSE;
 
+
+inline void parse_client_req(HIME_req* req)
+{
+  to_hime_endian_4(&req.req_no);
+  to_hime_endian_4(&req.client_win);
+  to_hime_endian_4(&req.flag);
+  to_hime_endian_2(&req.spot_location.x);
+  to_hime_endian_2(&req.spot_location.y);
+}
+
 void process_client_req(int fd)
 {
   HIME_req req;
@@ -130,12 +140,8 @@ void process_client_req(int fd)
   if (hime_clients[fd].type == Connection_type_tcp) {
     __hime_enc_mem((u_char *)&req, sizeof(req), &srv_ip_port.passwd, &hime_clients[fd].seed);
   }
-  to_hime_endian_4(&req.req_no);
-  to_hime_endian_4(&req.client_win);
-  to_hime_endian_4(&req.flag);
-  to_hime_endian_2(&req.spot_location.x);
-  to_hime_endian_2(&req.spot_location.y);
 
+  parse_client_req(&req);
 //  dbg("spot %d %d\n", req.spot_location.x, req.spot_location.y);
 
   ClientState *cs = NULL;
@@ -205,7 +211,7 @@ void process_client_req(int fd)
 	  char *typ;
       typ="press";
 #endif
-      
+
       if (req.req_no==HIME_req_key_press)
         status = ProcessKeyPress(req.keyeve.key, req.keyeve.state);
       else {
