@@ -205,17 +205,12 @@ void process_client_req(int fd)
 	  char *typ;
       typ="press";
 #endif
-#if 0
-      if (req.req_no==HIME_req_key_press)
-        status = Process2KeyPress(req.keyeve.key, req.keyeve.state);
-      else {
-        status = Process2KeyRelease(req.keyeve.key, req.keyeve.state);
-#else
+      
       if (req.req_no==HIME_req_key_press)
         status = ProcessKeyPress(req.keyeve.key, req.keyeve.state);
       else {
         status = ProcessKeyRelease(req.keyeve.key, req.keyeve.state);
-#endif
+
 
 #if DBG
         typ="rele";
