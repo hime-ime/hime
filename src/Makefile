@@ -161,6 +161,7 @@ all: $(PROGS) $(PROGS_SYM) $(DATA) $(PROGS_CV)
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im; fi
 	if [ $(QT_IM) = 'Y' ]; then $(MAKE) -C qt-im; fi
 	if [ $(QT4_IM) = 'Y' ]; then $(MAKE) -C qt4-im; fi
+	if [ $(QT5_IM) = 'Y' ]; then $(MAKE) -C qt5-im; fi
 
 $(IMdkitLIB):
 	@echo "building $@ ..."
@@ -287,6 +288,7 @@ install:
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im install; fi
 	if [ $(QT_IM) = 'Y' ]; then $(MAKE) -C qt-im install; fi
 	if [ $(QT4_IM) = 'Y' ]; then $(MAKE) -C qt4-im install; fi
+	if [ $(QT5_IM) = 'Y' ]; then $(MAKE) -C qt5-im install; fi
 
 clean:
 	@echo "clean up"
@@ -297,6 +299,7 @@ clean:
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im clean; fi
 	$(MAKE) -C qt-im clean
 	$(MAKE) -C qt4-im clean
+	$(MAKE) -C qt5-im clean
 	@rm -f *.o *.E *.db *.pico *.so tags $(PROGS) $(PROGS_CV) \
 		$(DATA) .depend $(PROGS_SYM) hime.log hime-fedora.spec
 	@find . '(' -name '.ted*' -o -name '*~' -o -name 'core.*' -o -name 'vgcore.*' ')' -exec rm {} \;
