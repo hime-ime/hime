@@ -114,15 +114,15 @@ void message_cb(char *message);
 void save_CS_temp_to_current();
 
 static gboolean is_init_im_enabled = FALSE;
-
+inline void parse_client_req(HIME_req* req);
 
 inline void parse_client_req(HIME_req* req)
 {
-  to_hime_endian_4(&req.req_no);
-  to_hime_endian_4(&req.client_win);
-  to_hime_endian_4(&req.flag);
-  to_hime_endian_2(&req.spot_location.x);
-  to_hime_endian_2(&req.spot_location.y);
+  to_hime_endian_4(&req->req_no);
+  to_hime_endian_4(&req->client_win);
+  to_hime_endian_4(&req->flag);
+  to_hime_endian_2(&req->spot_location.x);
+  to_hime_endian_2(&req->spot_location.y);
 }
 
 void process_client_req(int fd)
