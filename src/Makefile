@@ -5,7 +5,7 @@ CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I./IMdkit/include -I./im-client 
         -DHIME_TABLE_DIR=\"$(HIME_TABLE_DIR)\" \
         -DHIME_OGG_DIR=\"$(HIME_OGG_DIR)\" \
         -DDOC_DIR=\"$(DOC_DIR)\" \
-        -DHIME_ICON_DIR=\"$(HIME_ICON_DIR)\" \
+        -DHIME_DEFAULT_ICON_DIR=\"$(HIME_DEFAULT_ICON_DIR)\" \
         -DHIME_SCRIPT_DIR=\"$(HIME_SCRIPT_DIR)\" -DHIME_BIN_DIR=\"$(HIME_BIN_DIR)\" \
         -DSYS_ICON_DIR=\"$(SYS_ICON_DIR)\" -DFREEBSD=$(FREEBSD) -DMAC_OS=$(MAC_OS) \
         -DHIME_VERSION=\"$(shell head -n 1 ../ChangeLog)\" \
@@ -47,7 +47,7 @@ OBJS_JUYIN_LEARN = hime-juyin-learn.o locale.o util.o pho-util.o pho-sym.o \
 	pho2pinyin.o hime-settings.o hime-conf.o table-update.o pinyin.o \
 	hime-icon.o pho-dbg.o
 
-OBJS_hime-sim2trad = hime-sim2trad.o util.o locale.o hime-conf.o hime-icon.o t2s-lookup.o
+OBJS_hime-sim2trad = hime-sim2trad.o util.o locale.o hime-conf.o hime-icon.o t2s-lookup.o hime-settings.o
 
 OBJS_hime-phod2a = hime-phod2a.o pho-util.o hime-conf.o pho-sym.o table-update.o \
 	pho-dbg.o locale.o hime-settings.o util.o

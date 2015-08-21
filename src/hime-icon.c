@@ -16,10 +16,15 @@
  */
 
 #include "hime.h"
-
+#include "hime-conf.h"
 void sys_icon_fname(char *iconame, char fname[])
 {
-  sprintf(fname, HIME_ICON_DIR"/%s", iconame);
+  if(!strcmp(hime_icon_dir, "DEFAULT")) {
+    sprintf(fname, HIME_DEFAULT_ICON_DIR"/%s", iconame);
+  }
+  else {
+    sprintf(fname, HIME_DEFAULT_ICON_DIR"/%s/%s", hime_icon_dir, iconame);
+  }
 }
 
 void get_icon_path(char *iconame, char fname[])

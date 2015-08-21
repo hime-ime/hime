@@ -73,7 +73,7 @@ char *eng_color_full_str, *eng_color_half_str, *cht_color_full_str;
 int tsin_tab_phrase_end;
 int hime_input_style, hime_root_x, hime_root_y, hime_pop_up_win;
 int hime_inner_frame;
-char *hime_font_name, *hime_win_color_fg, *hime_win_color_bg;
+char *hime_font_name, *hime_icon_dir, *hime_win_color_fg, *hime_win_color_bg;
 // TODO: move it into if TRAY_ENABLED block
 int hime_status_tray;
 
@@ -106,6 +106,7 @@ void load_settings()
   hime_font_size_pho_near = get_hime_conf_int(HIME_FONT_SIZE_PHO_NEAR, 14);
   hime_font_size_win_kbm = get_hime_conf_int(HIME_FONT_SIZE_WIN_KBM, 10);
   hime_font_size_win_kbm_en = get_hime_conf_int(HIME_FONT_SIZE_WIN_KBM_EN, 8);
+  get_hime_conf_str(HIME_ICON_DIR, &hime_icon_dir, "DEFAULT");
   hime_input_style = get_hime_conf_int(HIME_INPUT_STYLE, InputStyleOverSpot);
   hime_root_x = get_hime_conf_int(HIME_ROOT_X, 1600);
   hime_root_y = get_hime_conf_int(HIME_ROOT_Y, 1200);

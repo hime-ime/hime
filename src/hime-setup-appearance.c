@@ -40,6 +40,7 @@ static GtkWidget *check_button_root_style_use,
 
 
 static GtkWidget *appearance_widget;
+static GtkWidget *opt_hime_icon_dir_display;
 static GtkWidget *opt_hime_edit_display;
 static GdkColor hime_win_gcolor_fg, hime_win_gcolor_bg, hime_sel_key_gcolor, tsin_cursor_gcolor;
 gboolean button_order;
@@ -53,6 +54,19 @@ typedef struct {
   GtkWidget *color_selector;
   unich_t *title;
 } COLORSEL;
+
+typedef struct {
+  unich_t *name;
+  char *path;
+} ICON_DIR_SEL;
+
+ICON_DIR_SEL icon_dir_sel[] =
+  { {N_("預設"), "DEFAULT"},
+    {N_("粉紅"), "pink"},
+    {N_("灰"), "gray"},
+    {N_("暗"), "dark"},
+    {N_("黑"), "black"}
+  };
 
 COLORSEL colorsel[4] =
   { {&hime_win_gcolor_fg, &hime_win_color_fg, NULL, N_("前景顏色")},
@@ -160,6 +174,8 @@ void save_appearance_conf()
   save_hime_conf_str(HIME_WIN_COLOR_FG, hime_win_color_fg);
   save_hime_conf_str(HIME_WIN_COLOR_BG, hime_win_color_bg);
   save_hime_conf_str(HIME_SEL_KEY_COLOR, hime_sel_key_color);
+  int idx = gtk_combo_box_get_active(GTK_COMBO_BOX(opt_hime_icon_dir_display));
+  save_hime_conf_str(HIME_ICON_DIR, icon_dir_sel[idx].path);
   save_hime_conf_str(TSIN_CURSOR_COLOR, tsin_cursor_color);
 
   save_hime_conf_int(HIME_ON_THE_SPOT_KEY, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_on_the_spot_key)));
@@ -168,7 +184,7 @@ void save_appearance_conf()
   save_hime_conf_int(HIME_TRAY_HF_WIN_KBM, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_tray_hf_win_kbm)));
 #endif
 
-  int idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_edit_display));
+  idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_edit_display));
   save_hime_conf_int(HIME_EDIT_DISPLAY, edit_disp[idx].keynum);
 
 #if TRAY_ENABLED
@@ -284,6 +300,28 @@ void combo_selected(GtkWidget *widget, gpointer window)
   if (edit_disp[idx].keynum !=  HIME_EDIT_DISPLAY_ON_THE_SPOT) {
 	  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(check_button_hime_on_the_spot_key), FALSE);
   }
+}
+
+static GtkWidget *create_hime_icon_dir_display()
+{
+  GtkWidget *hbox_hime_icon_dir = gtk_hbox_new(FALSE, 10);
+
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(hbox_hime_icon_dir), GTK_ORIENTATION_HORIZONTAL);
+
+
+  GtkWidget *label = gtk_label_new(_("圖示主題"));
+  gtk_box_pack_start(GTK_BOX(hbox_hime_icon_dir), label, FALSE, FALSE, 0);
+  opt_hime_icon_dir_display = gtk_combo_box_new_text();
+  gtk_box_pack_start(GTK_BOX(hbox_hime_icon_dir), opt_hime_icon_dir_display, FALSE, FALSE, 0);
+  int i, current_idx=0;
+  for(i = 0; i < sizeof(icon_dir_sel)/sizeof(icon_dir_sel[0]); i++) {
+    gtk_combo_box_append_text(GTK_COMBO_BOX_TEXT(opt_hime_icon_dir_display), icon_dir_sel[i].name);
+    if(!strcmp(hime_icon_dir, icon_dir_sel[i].path)){
+      current_idx = i;
+    }
+  }
+  gtk_combo_box_set_active(GTK_COMBO_BOX(opt_hime_icon_dir_display), current_idx);
+  return hbox_hime_icon_dir;
 }
 
 static GtkWidget *create_hime_edit_display()
@@ -513,6 +551,11 @@ GtkWidget *create_appearance_widget()
        hime_setup_window_type_utility);
   gtk_box_pack_start (GTK_BOX(vbox_top), check_button_hime_setup_window_type_utility, FALSE, FALSE, 0);
 #endif
+
+
+  gtk_box_pack_start (GTK_BOX(vbox_top), create_hime_icon_dir_display(), FALSE, FALSE, 0);
+
+
 
   GtkWidget *frame_win_color = gtk_frame_new(_("顏色選擇"));
   gtk_box_pack_start (GTK_BOX (vbox_top), frame_win_color, FALSE, FALSE, 0);
