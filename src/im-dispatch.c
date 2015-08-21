@@ -114,9 +114,9 @@ void message_cb(char *message);
 void save_CS_temp_to_current();
 
 static gboolean is_init_im_enabled = FALSE;
-inline void parse_client_req(HIME_req* req);
 
-inline void parse_client_req(HIME_req* req)
+
+void parse_client_req(HIME_req* req)
 {
   to_hime_endian_4(&req->req_no);
   to_hime_endian_4(&req->client_win);
