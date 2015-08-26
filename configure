@@ -302,6 +302,10 @@ fi
 
 if [ "$GTK" = "gtk+-3.0" ]; then
   APPINDICATOR=appindicator3-0.1
+  SUPPORT_SYSTEM_TRAY=`pkg-config --exists 'gtk+-3.0 >= 3.9.8' && echo 'Y' || echo 'N'`
+  if [ "$SUPPORT_SYSTEM_TRAY" = "Y" ]; then
+    use_tray='N'
+  fi
 else
   APPINDICATOR=appindicator-0.1
 fi

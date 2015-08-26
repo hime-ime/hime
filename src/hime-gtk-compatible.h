@@ -109,6 +109,31 @@
 #define     gtk_table_new(x,y,z) gtk_grid_new()
 #endif
 
+#if GTK_CHECK_VERSION(3,3,18)
+#define GTK_COLOR_SELECTION_DIALOG GTK_COLOR_CHOOSER_DIALOG
+#define GTK_COLOR_SELECTION GTK_COLOR_CHOOSER
+#endif
+
+#if GTK_CHECK_VERSION(3,9,8)
+#define gtk_image_menu_item_set_image(a,b) NULL
+#endif
+
+#if GTK_CHECK_VERSION(3,9,10)
+#define gtk_button_new_from_stock(x) gtk_button_new_from_icon_name(x,GTK_ICON_SIZE_BUTTON)
+#define GTK_STOCK_CANCEL "gtk-cancel"
+#define GTK_STOCK_OK "gtk-ok"
+#define GTK_STOCK_QUIT "gtk-quit"
+#define GTK_STOCK_SAVE "gtk-save"
+#define GTK_STOCK_OPEN "gtk-open"
+#define GTK_STOCK_CLOSE "gtk-close"
+#define GTK_STOCK_DELETE "gtk-delete"
+#define GTK_STOCK_FIND "gtk-find"
+#endif
+
+#if GTK_CHECK_VERSION(3,13,4)
+#define gtk_window_set_has_resize_grip(x,y);
+#endif
+
 #ifndef PANGO_VERSION_CHECK
 #define PANGO_VERSION_CHECK(x,y,z) FALSE
 #endif
