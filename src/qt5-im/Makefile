@@ -40,8 +40,8 @@ im-hime.so: $(OBJS)
 	@rm -f core.*
 
 install:
-	install -d $(QT5_IM_DIR); \
-	install -m 755 im-hime.so $(QT5_IM_DIR)
+	install -d "$(QT5_IM_DIR)"; \
+	install -m 755 im-hime.so "$(QT5_IM_DIR)"
 
 clean:
 	@echo "clean up"

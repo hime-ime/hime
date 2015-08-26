@@ -34,7 +34,7 @@ chewing-module.so: $(chewing_module_obj) $(chewing_module_so)
 	@$(CCLD) $(SO_FLAGS) -o $@ $(chewing_module_obj) $(chewing_module_so) $(LDFLAGS) $(shell pkg-config --cflags --libs chewing)
 
 install:
-	install $(HIME_MODULE) $(himelibdir)
+	install $(HIME_MODULE) "$(himelibdir)"
 
 clean:
 	@echo "clean up"

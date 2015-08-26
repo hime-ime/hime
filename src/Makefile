@@ -272,16 +272,16 @@ hime-tsin2gtab-phrase: $(OBJS_tsin2gtab_phrase)
 	@$(CCLD) -o $@ $^ $(LDFLAGS)
 
 install:
-	install -d $(bindir)
-	install $(PROGS) $(bindir)
-	rm -f $(bindir)/hime-trad2sim; ln -sf hime-sim2trad $(bindir)/hime-trad2sim
-	rm -f $(bindir)/hime-exit; ln -sf hime-gb-toggle $(bindir)/hime-exit
-	rm -f $(bindir)/hime-trad; ln -sf hime-gb-toggle $(bindir)/hime-trad
-	rm -f $(bindir)/hime-sim; ln -sf hime-gb-toggle $(bindir)/hime-sim
-	rm -f $(bindir)/hime-kbm-toggle; ln -sf hime-gb-toggle $(bindir)/hime-kbm-toggle
-	install -d $(himelibdir)
-	install -d $(includedir)
-	install -m 644 im-client/hime-im-client.h im-client/hime-im-client-attr.h $(includedir)
+	install -d "$(bindir)"
+	install $(PROGS) "$(bindir)"
+	rm -f "$(bindir)/hime-trad2sim"; ln -sf hime-sim2trad "$(bindir)/hime-trad2sim"
+	rm -f "$(bindir)/hime-exit"; ln -sf hime-gb-toggle "$(bindir)/hime-exit"
+	rm -f "$(bindir)/hime-trad"; ln -sf hime-gb-toggle "$(bindir)/hime-trad"
+	rm -f "$(bindir)/hime-sim"; ln -sf hime-gb-toggle "$(bindir)/hime-sim"
+	rm -f "$(bindir)/hime-kbm-toggle"; ln -sf hime-gb-toggle "$(bindir)/hime-kbm-toggle"
+	install -d "$(himelibdir)"
+	install -d "$(includedir)"
+	install -m 644 im-client/hime-im-client.h im-client/hime-im-client-attr.h "$(includedir)"
 	$(MAKE) -C im-client install
 	$(MAKE) -C modules install
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im install; fi

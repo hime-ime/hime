@@ -31,8 +31,8 @@ update-po: hime.pot
 install:
 	@set -x ; for d in $(LANG_FILE); do \
 	   $(ECHO) -e "\x1b[1;32m** installing $$d.mo\x1b[0m"; \
-	   install -d $(datadir)/locale/$$d/LC_MESSAGES ; \
-	   install -m 644 $$d.gmo $(datadir)/locale/$$d/LC_MESSAGES/hime.mo ; \
+	   install -d "$(datadir)/locale/$$d/LC_MESSAGES" ; \
+	   install -m 644 $$d.gmo "$(datadir)/locale/$$d/LC_MESSAGES/hime.mo"; \
 	done
 
 clean:
