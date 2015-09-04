@@ -108,9 +108,9 @@ gtab.list: $(REMOVE_TSIN)
 	touch gtab.list
 
 install:
-	install -d $(HIME_TABLE_DIR_i)
-	install -m 644 $(DATA) $(DATAKEEP) $(HIME_TABLE_DIR_i)
-#	cd $(HIME_TABLE_DIR_i); bzip2 -f *.gtab
+	install -d "$(HIME_TABLE_DIR_i)"
+	install -m 644 $(DATA) $(DATAKEEP) "$(HIME_TABLE_DIR_i)"
+#	cd "$(HIME_TABLE_DIR_i)"; bzip2 -f *.gtab
 
 clean:
 	@echo "clean up"

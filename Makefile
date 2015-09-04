@@ -26,11 +26,11 @@ install:
 	   $(MAKE) -C $$d install || exit 1; \
 	done
 	@if [ "$(prefix)" = /usr/local ]; then \
-	   install -d $(DOC_DIR); \
-	   install -m 644 ChangeLog $(DOC_DIR); \
+	   install -d "$(DOC_DIR)"; \
+	   install -m 644 ChangeLog "$(DOC_DIR)"; \
 	else \
-	   install -d $(DOC_DIR_i); \
-	   install -m 644 ChangeLog $(DOC_DIR_i); \
+	   install -d "$(DOC_DIR_i)"; \
+	   install -m 644 ChangeLog "$(DOC_DIR_i)"; \
 	fi
 
 clean:

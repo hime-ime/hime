@@ -38,9 +38,9 @@ endif
 LOCALLIB=/usr/local/$(LIB)
 
 install:
-	install -d $(himelibdir)
-	install -m 755 $(SOFILEVER) $(himelibdir)
-	cd $(himelibdir); rm -f $(SOFILE); ln -s $(SOFILEVER) $(SOFILE); \
+	install -d "$(himelibdir)"
+	install -m 755 $(SOFILEVER) "$(himelibdir)"
+	cd "$(himelibdir)"; rm -f $(SOFILE); ln -s $(SOFILEVER) $(SOFILE); \
 	ln -sf $(SOFILEVER) $(SOFILE).1
 
 hime-conf.o: ../hime-conf.c
