@@ -53,7 +53,6 @@ QHimePlatformInputContext::QHimePlatformInputContext()
     if(!native)
         return;
     Display *display = static_cast<Display *>(native->nativeResourceForWindow("display", NULL));	
-    printf("display %p\n", display);
 
     if (!(hime_ch = hime_im_client_open(display))) {
         perror("cannot open hime_ch");
