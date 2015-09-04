@@ -1,7 +1,7 @@
 include ../../../config.mak
 
 #CFLAGS =  -c -O2 -fno-strength-reduce -Dlinux -D__i386__ -D_POSIX_C_SOURCE=199309L -D_POSIX_SOURCE -D_XOPEN_SOURCE=500L -D_BSD_SOURCE -D_SVID_SOURCE   -DFUNCPROTO=15 -DNARROWPROTO   -DUNIXCONN -DTCPCONN -DXIM_t -DTRANS_SERVER
-CFLAGS =  -c $(OPTFLAGS) -fno-strength-reduce -DXIM_t -DTRANS_SERVER
+CFLAGS +=  -c $(OPTFLAGS) -fno-strength-reduce -DXIM_t -DTRANS_SERVER
 ifeq ($(FREEBSD), 0)
   INC = -I../include -I/usr/X11R6/include
 else
@@ -21,7 +21,7 @@ libXimd.a: $(OBJ)
 
 .c.o:
 	@echo "  $< -> $@"
-	@$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -c $<
 
 clean:
 	@echo "clean up"

@@ -556,6 +556,8 @@ echo "himelibdir=\$(libdir)/hime" >> config.mak
 echo "includedir=\$(DESTDIR)$includedir" >> config.mak
 echo "LDFLAGS_ENV=$LDFLAGS" >> config.mak
 echo "LDFLAGS=$LDFLAGS -Wl,--as-needed -lX11 -lm" >> config.mak
+echo "CFLAGS=$CFLAGS $CPPFLAGS" >> config.mak
+echo "CXXFLAGS=$CXXFLAGS $CPPFLAGS" >> config.mak
 if [ $FREEBSD -eq 0 ]; then
 	echo "LDFLAGS+=$GTKLDFLAGS -lX11 -ldl" >> config.mak
 else

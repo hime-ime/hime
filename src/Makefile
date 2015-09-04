@@ -137,22 +137,22 @@ PROGS_CV  = kbmcv pin-juyin
 
 .cpp.o:
 	@echo "  $< -> $@"
-	@$(CCX) $(CPPFLAGS) $(CFLAGS) -c $<
+	$(CCX) $(CPPFLAGS) $(CFLAGS) -c $<
 .c.o:
 	@echo "  $< -> $@"
-	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
 .c.pico:
 	@echo "  $< -> $@"
-	@$(CC) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
 .cpp.pico:
 	@echo "  $< -> $@"
-	@$(CCX) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
+	$(CCX) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
 .c.E:
 	@echo "  $< -> $@"
-	@$(CC) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
 .cpp.E:
 	@echo "  $< -> $@"
-	@$(CCX) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
+	$(CCX) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
 
 
 all: $(PROGS) $(PROGS_SYM) $(DATA) $(PROGS_CV)
@@ -174,28 +174,28 @@ im-client/libhime-im-client.so:
 hime: $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
 	@echo "linking $@ ..."
 ifeq ($(FREEBSD), 0)
-	@$(CCLD) $(EXTRA_LDFLAGS) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
+	$(CCLD) $(EXTRA_LDFLAGS) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
 else
-	@$(CCLD) $(EXTRA_LDFLAGS) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) -lXtst $(LDFLAGS) -L/usr/local/$(LIB)
+	$(CCLD) $(EXTRA_LDFLAGS) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) -lXtst $(LDFLAGS) -L/usr/local/$(LIB)
 endif
 	@rm -f core.* vgcore.*
 
 hime-tslearn: $(OBJS_TSLEARN) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
-	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 hime-ts-edit: $(OBJS_TS_EDIT) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
-	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 hime-juyin-learn: $(OBJS_JUYIN_LEARN)
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ $(LDFLAGS)
+	$(CCLD) -o $@ $^ $(LDFLAGS)
 	@rm -f core.*
 
 hime-sim2trad: $(OBJS_hime-sim2trad)
 	@echo "linking $@ ..."
-	@$(CC) $(gcc_ld_run_path) -o $@ $^ $(LDFLAGS)
+	$(CC) $(gcc_ld_run_path) -o $@ $^ $(LDFLAGS)
 	@rm -f core.*
 
 hime-trad2sim:  hime-sim2trad
@@ -204,48 +204,48 @@ hime-trad2sim:  hime-sim2trad
 hime-setup: $(OBJS_hime_setup) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
 	@rm -f core.*
-	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 hime-phoa2d: $(OBJS_hime-phoa2d) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
-	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 hime-phod2a: $(OBJS_hime-phod2a)
 	@echo "linking $@ ..."
-	@$(CCLD) -lX11 -o $@ $^ $(LDFLAGS)
+	$(CCLD) -lX11 -o $@ $^ $(LDFLAGS)
 
 hime-tsa2d32:  $(OBJS_hime-tsa2d32) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
-	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 #hime-tsd2a:
 #	$(CCLD) -o $@ $(LDFLAGS)
 
 hime-tsd2a32: $(OBJS_hime-tsd2a32)
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ $(LDFLAGS)
+	$(CCLD) -o $@ $^ $(LDFLAGS)
 
 
 hime-cin2gtab: $(OBJS_cin2gtab)
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ $(LDFLAGS)
+	$(CCLD) -o $@ $^ $(LDFLAGS)
 	@rm -f data/*.gtab
 
 hime-gtab2cin: $(OBJS_gtab2cin)
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ $(LDFLAGS)
+	$(CCLD) -o $@ $^ $(LDFLAGS)
 
 hime-gtab-merge: $(OBJS_gtab_merge)
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ $(LDFLAGS)
+	$(CCLD) -o $@ $^ $(LDFLAGS)
 
 kbmcv: $(OBJS_kbmcv)
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ $(LDFLAGS)
+	$(CCLD) -o $@ $^ $(LDFLAGS)
 
 hime-gb-toggle: $(OBJS_hime_gb_toggle) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
-	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 hime-kbm-toggle: hime-gb-toggle
 	ln -sf hime-gb-toggle $@
@@ -261,15 +261,15 @@ hime-sim: hime-gb-toggle
 
 hime-message: $(OBJS_hime_message) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
-	@$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
+	$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client $(LDFLAGS)
 
 pin-juyin: $(OBJS_pin_juyin)
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ $(LDFLAGS)
+	$(CCLD) -o $@ $^ $(LDFLAGS)
 
 hime-tsin2gtab-phrase: $(OBJS_tsin2gtab_phrase)
 	@echo "linking $@ ..."
-	@$(CCLD) -o $@ $^ $(LDFLAGS)
+	$(CCLD) -o $@ $^ $(LDFLAGS)
 
 install:
 	install -d "$(bindir)"
@@ -306,7 +306,7 @@ clean:
 
 .depend:
 	@echo "building $@ ..."
-	@$(CCX) $(CPPFLAGS) $(CFLAGS) -MM *.c > $@
+	$(CCX) $(CPPFLAGS) $(CFLAGS) -MM *.c > $@
 
 
 

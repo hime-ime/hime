@@ -3,7 +3,7 @@ include ../../config.mak
 OBJS = imhime.o gtkimcontexthime.o
 GTK3IM=gtk-3.0/immodules
 GTKINC=`pkg-config --cflags gtk+-3.0`
-LDFLAGS=`pkg-config --libs gtk+-3.0`
+LDFLAGS+=`pkg-config --libs gtk+-3.0`
 GTK3_LIBDIR=`pkg-config --variable=libdir gtk+-3.0`
 GTK3_BINARY_VERSION=`pkg-config --variable=gtk_binary_version gtk+-3.0`
 MODULEDIR=$(DESTDIR)/$(GTK3_LIBDIR)/gtk-3.0/$(GTK3_BINARY_VERSION)/immodules
@@ -17,22 +17,22 @@ EXTRA_INC=-I/sw/include
 endif
 
 .SUFFIXES:	.c .o .E
-CFLAGS = $(OPTFLAGS) $(EXTRA_INC) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
+CFLAGS += $(OPTFLAGS) $(EXTRA_INC) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
 -I../IMdkit/include -DCLIENT_LIB=1 -DMAC_OS=$(MAC_OS) -DFREEBSD=$(FREEBSD)
 
 .c.o:
 	@echo "  $< -> $@"
-	@$(CC) -c -fPIC $(CPPFLAGS) $(CFLAGS) -o $@ $<
+	$(CC) -c -fPIC $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 .c.E:
 	@echo "  $< -> $@"
-	@$(CC) -E $(CPPFLAGS) $(CFLAGS) -o $@ $<
+	$(CC) -E $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
 all:	im-hime.so
 
 im-hime.so:     $(OBJS) ../im-client/libhime-im-client.so
 	@echo "linking $@ ..."
-	@$(CC) $(gcc_ld_run_path) $(SO_FLAGS) $(OBJS) -L../im-client -lhime-im-client -o $@ $(LDFLAGS)
+	$(CC) $(gcc_ld_run_path) $(SO_FLAGS) $(OBJS) -L../im-client -lhime-im-client -o $@ $(LDFLAGS)
 	@rm -f core.*
 
 clean:
@@ -55,6 +55,6 @@ install:
 
 .depend:
 	@echo "building $@ ..."
-	@$(CC) $(CPPFLAGS) $(CFLAGS) -MM *.c > $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) -MM *.c > $@
 
 include .depend

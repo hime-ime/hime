@@ -2,25 +2,25 @@
 
 .cpp.o:
 	@echo "  $< -> $@"
-	@$(CCX) $(CPPFLAGS) $(CFLAGS) -c $<
+	$(CCX) $(CPPFLAGS) $(CFLAGS) -c $<
 .c.o:
 	@echo "  $< -> $@"
-	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
 .c.pico:
 	@echo "  $< -> $@"
-	@$(CC) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
 .cpp.pico:
 	@echo "  $< -> $@"
-	@$(CCX) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
+	$(CCX) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
 .c.E:
 	@echo "  $< -> $@"
-	@$(CC) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
 .cpp.E:
 	@echo "  $< -> $@"
-	@$(CCX) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
+	$(CCX) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
 
 
-CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I./IMdkit/include -I./im-client \
+CFLAGS+= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I./IMdkit/include -I./im-client \
         -DHIME_TABLE_DIR=\"$(HIME_TABLE_DIR)\" \
         -DHIME_OGG_DIR=\"$(HIME_OGG_DIR)\" \
         -DDOC_DIR=\"$(DOC_DIR)\" \

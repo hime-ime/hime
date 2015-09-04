@@ -5,24 +5,24 @@ ifeq ($(FREEBSD), 0)
 else
   INCS=-I../im-client -I/usr/local/include `pkg-config QtCore QtGui --cflags`
 endif
-CXXFLAGS=$(OPTFLAGS) $(INCS) -Wall -D_REENTRANT -DUNIX=1 -fPIC  -DQT4 -DQT_SHARED \
+CXXFLAGS+=$(OPTFLAGS) $(INCS) -Wall -D_REENTRANT -DUNIX=1 -fPIC  -DQT4 -DQT_SHARED \
 -DQT_IMMODULE -DPIC
 OBJS= moc_hime-qt.o hime-qt.o im-hime-qt.o hime-imcontext-qt.o
 .SUFFIXES:	.c .cpp .a .so .E .h
-LDFLAGS=$(LDFLAGS_ENV) -L../im-client -lhime-im-client `pkg-config QtCore QtGui --libs`
+LDFLAGS+=$(LDFLAGS_ENV) -L../im-client -lhime-im-client `pkg-config QtCore QtGui --libs`
 all:    im-hime.so
 
 .cpp.E:
 	@echo "  $< -> $@"
-	@$(CXX) -E $(CFLAGS) $(INCS) $< > $@
+	$(CXX) -E $(CFLAGS) $(INCS) $< > $@
 
 .cpp.o:
 	@echo "  $< -> $@"
-	@$(CXX) -c -o $@ $(CXXFLAGS) $<
+	$(CXX) -c -o $@ $(CXXFLAGS) $<
 
 moc_hime-qt.cpp:	hime-qt.h
 	@echo "  $< -> $@"
-	@$(QT4_MOC_PATH) $< -o moc_hime-qt.cpp
+	$(QT4_MOC_PATH) $< -o moc_hime-qt.cpp
 
 im-hime.so: $(OBJS)
 	@echo "linking $@ ..."
@@ -40,6 +40,6 @@ clean:
 
 .depend:
 	@echo "building $@ ..."
-	@$(CXX) $(CXXFLAGS) -MM *.cpp > $@
+	$(CXX) $(CXXFLAGS) -MM *.cpp > $@
 
 include .depend
