@@ -11,7 +11,7 @@ class QHimePlatformInputContextPlugin : public QPlatformInputContextPlugin
 {
     Q_OBJECT
 public:
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QPlatformInputContextFactoryInterface" FILE "hime.json")
+    Q_PLUGIN_METADATA(IID QPlatformInputContextFactoryInterface_iid FILE "hime.json")
     QStringList keys() const;
     QHimePlatformInputContext *create(const QString& system, const QStringList& paramList);
 };
