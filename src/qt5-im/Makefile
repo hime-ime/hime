@@ -27,11 +27,11 @@ all:    im-hime.so
 
 moc_hime-qt.cpp:	hime-qt.h
 	@echo "  $< -> $@"
-	@$(QT5_MOC_PATH) $< -o moc_hime-qt.cpp
+	@$(QT5_MOC_PATH) $(INCS) $< -o moc_hime-qt.cpp
 
 moc_hime-imcontext-qt.cpp:	hime-imcontext-qt.h
 	@echo "  $< -> $@"
-	@$(QT5_MOC_PATH) $< -o moc_hime-imcontext-qt.cpp
+	@$(QT5_MOC_PATH) $(INCS) $< -o moc_hime-imcontext-qt.cpp
 
 im-hime.so: $(OBJS)
 	@echo "linking $@ ..."
