@@ -86,6 +86,7 @@ int pho_candicate_col_N, pho_candicate_R2L;
 
 int get_hime_conf_int(char *name, int default_value);
 void init_omni_config(void);
+int is_plasma5(void);
 
 void load_settings()
 {
@@ -141,7 +142,7 @@ void load_settings()
 #if TRAY_ENABLED
   hime_status_tray = get_hime_conf_int(HIME_STATUS_TRAY, 1);
 #if TRAY_UNITY
-  if (desktop != NULL && strcmp("Unity", desktop) == 0) {
+  if ((desktop != NULL && strcmp("Unity", desktop) == 0) || is_plasma5()) {
     hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, HIME_TRAY_DISPLAY_APPINDICATOR);
   }
   else {
@@ -262,4 +263,22 @@ void load_settings()
   if (pho_kbm_name)
     free(pho_kbm_name);
   pho_kbm_name = strdup(phokbm_name);
+}
+
+int is_plasma5(void)
+{
+  char buffer[256];
+  FILE * pin = popen("plasmashell --version", "r");
+
+  if (!pin)
+    return 0;
+
+  fscanf(pin, " plasmashell %s ", buffer);
+  pclose(pin);
+  pin = NULL;
+
+  if (buffer[0] == '5')
+    return 1;
+
+  return 0;
 }
