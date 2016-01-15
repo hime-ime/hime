@@ -41,16 +41,16 @@ clean:
 
 install:
 	if [ "$(prefix)" = "/usr/local" -o "$(prefix)" = "/usr" ]; then \
-		install -d $(MODULEDIR); \
-		install -m 755 im-hime.so $(MODULEDIR); \
+		install -d "$(MODULEDIR)"; \
+		install -m 755 im-hime.so "$(MODULEDIR)"; \
 		if [ "$(prefix)" = "/usr/local" ]; then \
 			if [ -f "$(IMMODULES_QUERY)" -a -x "$(IMMODULES_QUERY)" ]; then \
 				GTK_IM_MODULE_FILE=$(IMMODULES_CACHE) $(IMMODULES_QUERY) --update-cache; \
 			fi \
 		fi \
 	else \
-		install -d $(IMMODULES); \
-		install -m 755 im-hime.so $(IMMODULES); \
+		install -d "$(IMMODULES)"; \
+		install -m 755 im-hime.so "$(IMMODULES)"; \
 	fi
 
 .depend:
