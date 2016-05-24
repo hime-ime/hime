@@ -473,7 +473,9 @@ gboolean tsin_seek(void *pho, int plen, int *r_sti, int *r_edi, char *tone_mask)
 
 //  dbg("<--\n");
   // seek to the first match because binary search is used
+#if 0
   gboolean found=FALSE;
+#endif
 
   int sti;
   for(sti = mid; sti>=0; sti--) {
@@ -490,10 +492,10 @@ gboolean tsin_seek(void *pho, int plen, int *r_sti, int *r_edi, char *tone_mask)
     mask_tone((phokey_t *)stk, mlen, tone_mask);
 
     int v = phokey_t_seq(stk, pho, plen);
+#if 0
     if (!v)
       found = TRUE;
 
-#if 0
     int j;
     dbg("%d] %d*> ", sti, mlen);
     prphs(stk, len);
@@ -573,9 +575,9 @@ gboolean tsin_seek(void *pho, int plen, int *r_sti, int *r_edi, char *tone_mask)
     mask_tone((phokey_t *)stk, mlen, tone_mask);
 
     int v = phokey_t_seq(stk, pho, plen);
+#if 0
     if (!v)
       found = TRUE;
-#if 0
     dbg("edi%d -> ", edi);
     prphs(stk, len);
     dbg(" v:%d\n", v);

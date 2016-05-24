@@ -18,7 +18,7 @@
 #include "hime.h"
 #include <errno.h>
 
-#if !CLIENT_LIB || DEBUG
+#if !CLIENT_LIB && DEBUG
 static FILE *out_fp;
 #endif
 
@@ -42,7 +42,7 @@ void p_err(char *fmt,...)
 #endif
 }
 
-#if !CLIENT_LIB || DEBUG
+#if !CLIENT_LIB && DEBUG
 static void init_out_fp()
 {
   if (!out_fp) {
@@ -61,6 +61,7 @@ static void init_out_fp()
 #if !CLIENT_LIB
 void dbg_time(char *fmt,...)
 {
+#if DEBUG
   va_list args;
   time_t t;
 
@@ -74,6 +75,7 @@ void dbg_time(char *fmt,...)
   vfprintf(out_fp, fmt, args);
   fflush(out_fp);
   va_end(args);
+#endif
 }
 #endif
 

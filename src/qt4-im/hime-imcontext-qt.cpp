@@ -106,13 +106,10 @@ void HIMEIMContext::update_preedit()
 
   const QWidget *focused_widget = qApp->focusWidget ();
   if (!focused_widget || !str) {
-free_mem:
     free(str);
     return;
   }
   const QPalette &palette = focused_widget->palette ();
-  if (&palette==NULL)
-    goto free_mem;
   const QBrush &reversed_foreground = palette.base ();
   const QBrush &reversed_background = palette.text ();
 

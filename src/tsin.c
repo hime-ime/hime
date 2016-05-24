@@ -2011,7 +2011,7 @@ llll2:
 
      pho_play(key);
 
-     int vv=hash_pho[poo.typ_pho[0]];
+     int vv=hash_pho[(int)poo.typ_pho[0]];
 
      phokey_t ttt=0xffff;
      while (vv<idxnum_pho) {

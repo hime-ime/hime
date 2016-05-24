@@ -303,13 +303,13 @@ static GtkWidget *create_kbm_opts()
   return hbox;
 }
 
-static update_eng_ch_opts (GtkComboBox *widget, gpointer user_data)
+static void update_eng_ch_opts (GtkComboBox *widget, gpointer user_data)
 {
   gint i;
   gint idx = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
   for (i=0; i<2; i++)
   {
-    if ((opt_eng_ch_opts[i]) && (opt_eng_ch_opts[i] != widget))
+    if ((opt_eng_ch_opts[i]) && (opt_eng_ch_opts[i] != (GtkWidget*)widget))
       gtk_combo_box_set_active (GTK_COMBO_BOX (opt_eng_ch_opts[i]), idx);
   }
   
