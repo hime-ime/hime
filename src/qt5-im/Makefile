@@ -12,7 +12,7 @@ CXXFLAGS=$(OPTFLAGS) $(INCS) -Wall -D_REENTRANT -DUNIX=1 -fPIC  -DQT5 -DQT_SHARE
 -DQT_IMMODULE -DPIC
 OBJS= moc_hime-qt.o hime-qt.o hime-imcontext-qt.o moc_hime-imcontext-qt.o
 .SUFFIXES:	.c .cpp .a .so .E .h
-LDFLAGS=$(LDFLAGS_ENV) -L../im-client -lhime-im-client `pkg-config Qt5Core Qt5Gui Qt5PlatformSupport Qt5DBus --libs`
+LDFLAGS=$(LDFLAGS_ENV) -L../im-client -lhime-im-client `pkg-config Qt5Core Qt5Gui Qt5DBus --libs`
 
 
 all:    im-hime.so
