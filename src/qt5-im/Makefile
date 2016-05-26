@@ -5,14 +5,14 @@ ifeq ($(FREEBSD), 0)
 else
   INCS=-I../im-client -I/usr/local/include
 endif
-INCS+=`pkg-config Qt5Core Qt5Gui Qt5PlatformSupport Qt5DBus --cflags`
+INCS+=`pkg-config Qt5Core Qt5Gui Qt5DBus --cflags`
 INCS+=-I `pkg-config --variable=includedir Qt5Gui`/QtGui/`pkg-config --modversion Qt5Gui`/QtGui
 
 CXXFLAGS=$(OPTFLAGS) $(INCS) -Wall -D_REENTRANT -DUNIX=1 -fPIC  -DQT5 -DQT_SHARED \
 -DQT_IMMODULE -DPIC
 OBJS= moc_hime-qt.o hime-qt.o hime-imcontext-qt.o moc_hime-imcontext-qt.o
 .SUFFIXES:	.c .cpp .a .so .E .h
-LDFLAGS=$(LDFLAGS_ENV) -L../im-client -lhime-im-client `pkg-config Qt5Core Qt5Gui Qt5PlatformSupport Qt5DBus --libs`
+LDFLAGS=$(LDFLAGS_ENV) -L../im-client -lhime-im-client `pkg-config Qt5Core Qt5Gui Qt5DBus --libs`
 
 
 all:    im-hime.so
