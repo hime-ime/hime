@@ -130,9 +130,10 @@ int main(int argc, char **argv)
   }
   fclose(fp);
 
-  if (strstr(fnamesrc, "pinyin"))
+  if (strstr(fnamesrc, "pinyin")) {
     phkb.phokbm[' '][0].num=0;
     phkb.phokbm[' '][0].typ=3;
+  }
 
   if ((fp=fopen(fnameout,"w"))==NULL) {
     printf("Cannot create %s\n", fnameout);
