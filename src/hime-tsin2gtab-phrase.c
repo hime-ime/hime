@@ -309,10 +309,10 @@ int main(int argc, char **argv)
          u_int64_t k=0;
 
          if (key64) {
-           memcpy(&k, kk64[i].arr[vz[i]].key, 8);
+           memcpy(&k, kk64[i].arr[(int)vz[i]].key, 8);
          } else {
            u_int t;
-           memcpy(&t, kk[i].arr[vz[i]].key, 4);
+           memcpy(&t, kk[i].arr[(int)vz[i]].key, 4);
            k = t;
          }
 

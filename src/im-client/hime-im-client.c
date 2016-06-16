@@ -67,7 +67,9 @@ static HIME_client_handle *hime_im_client_reopen(HIME_client_handle *hime_ch, Di
   int servlen;
 //  char *addr;
   Server_IP_port srv_ip_port;
+#if DEBUG
   u_char *pp;
+#endif
 
   int uid = getuid();
   if (uid > 0 && uid < 500) {
@@ -227,10 +229,12 @@ tcp:
     goto next;
   }
 
+#if DEBUG
   pp = (u_char *)&srv_ip_port.ip;
   if (dbg_msg)
     dbg("hime client connected to server %d.%d.%d.%d:%d\n",
         pp[0], pp[1], pp[2], pp[3], ntohs(srv_ip_port.port));
+#endif
 
   tcp = TRUE;
 

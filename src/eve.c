@@ -514,7 +514,7 @@ void move_in_win(ClientState *cs, int x, int y)
     case method_type_MODULE:
       if (inmd[cs->in_method].mod_cb_funcs)
         module_cb1(cs)->module_move_win(x, y);
-        move_win_gtab(x, y);
+      move_win_gtab(x, y);
       break;
     default:
       if (!cs->in_method)

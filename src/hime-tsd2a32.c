@@ -56,8 +56,8 @@ int main(int argc, char **argv)
     if (!strcmp(argv[i], "-o")) {
       if (i==argc-1)
         p_err("-o need out file name");
-        fname_out = argv[i+1];
-        i+=2;
+      fname_out = argv[i+1];
+      i+=2;
     } else
       fname = argv[i++];
   }

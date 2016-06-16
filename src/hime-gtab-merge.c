@@ -231,7 +231,7 @@ int main(int argc, char **argv)
   fread(idx1, sizeof(gtab_idx1_t), KeyNum+1, fr);
 
   for(i=0; i < th.KeyS; i++) {
-    kno[keymap[i]] = i;
+    kno[(int)keymap[i]] = i;
   }
 
   for(i=0; i < th.DefC; i++) {

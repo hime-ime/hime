@@ -105,7 +105,7 @@ static void find_match_phos(u_char mtyp_pho[4], int *mcount, int newkey)
       prph(key);
       dbg("\n");
 #endif
-      for (vv = hash_pho[poo.typ_pho[0]]; vv < hash_pho[poo.typ_pho[0]+1]; vv++) {
+      for (vv = hash_pho[(int)poo.typ_pho[0]]; vv < hash_pho[(int)poo.typ_pho[0]+1]; vv++) {
         phokey_t ttt=idx_pho[vv].key;
 
         if (newkey!=' ' && !poo.typ_pho[3])
@@ -673,7 +673,7 @@ llll3:
 
   pho_play(key);
 
-  vv=hash_pho[poo.typ_pho[0]];
+  vv=hash_pho[(int)poo.typ_pho[0]];
   phokey_t ttt;
   ttt=0xffff;
 
