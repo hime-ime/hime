@@ -23,7 +23,7 @@ int main()
 {
   FILE *fp;
   char fnamein[]="pin-juyin.src";
-  PIN_JUYIN pinju[1024];
+  PIN_JUYIN pinju[1024] = { 0 };
   short pinjuN=0;
 
   if ((fp=fopen(fnamein, "r"))==NULL)
