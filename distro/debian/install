@@ -1,2 +1,4 @@
 debian/im-switch/hime etc/X11/xinit/xinput.d
 debian/hime.immodules usr/lib/gtk-2.0/2.10.0/immodule-files.d
+debian/im-config/25_hime_upstream.conf usr/share/im-config/data
+debian/im-config/25_hime_upstream.rc usr/share/im-config/data
