@@ -1,0 +1,22 @@
+diff -aur hime-orig/configure hime-new/configure
+--- hime-orig/configure	2011-12-20 18:05:24.000000000 -0800
++++ hime-new/configure	2011-12-21 02:51:54.634572998 -0800
+@@ -253,7 +253,7 @@
+ 
+ # --- QT4 START ---
+ QT4_IM='N'
+-QT4_IM_DIR=/usr/$LIB/qt4/plugins/inputmethods
++QT4_IM_DIR=/usr/$LIB/qt/plugins/inputmethods
+ echo "testing if you have qt4 support"
+ pkg-config --libs QtCore QtGui > /dev/null 2> /dev/null
+ if [ $? = 0 ]; then
+diff -aur hime-orig/src/qt4-im/Makefile hime-new/src/qt4-im/Makefile
+--- hime-orig/src/qt4-im/Makefile	2011-12-20 18:05:24.000000000 -0800
++++ hime-new/src/qt4-im/Makefile	2011-12-21 02:51:31.467906222 -0800
+@@ -1,5 +1,5 @@
+ include ../../config.mak
+-QT=qt4
++QT=qt
+ QTIM=$(QT)/plugins/inputmethods
+ IMMODULES=$(libdir)/$(QTIM)
+ 
