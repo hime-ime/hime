@@ -49,7 +49,7 @@ void get_hime_im_srv_sock_path(char *outstr, int outstrN)
     mkdir(my_dir, 0700);
   else {
     if (st.st_uid != my_uid) {
-      fprintf(stderr, "please check the permision of dir %s\n", my_dir);
+      fprintf(stderr, "please check the permission of dir %s\n", my_dir);
       return;
     }
   }
