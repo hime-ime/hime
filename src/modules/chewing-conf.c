@@ -20,8 +20,8 @@
 static ChewingConfigData g_chewingConfig;
 static gboolean g_bUseDefault = FALSE;
 static int g_nFd = -1;
-static kbmapping_t g_kbMappingTable[] = 
-{ 
+static kbmapping_t g_kbMappingTable[] =
+{
     {"zo",        "KB_DEFAULT"},
     {"et",        "KB_ET"},
     {"et26",      "KB_ET26"},
@@ -82,7 +82,6 @@ chewing_config_load (ChewingConfigData *pChewingConfig)
         g_chewingConfig.bAutoShiftCur         = 1;
         g_chewingConfig.bEasySymbolInput      = 0;
         g_chewingConfig.bPhraseChoiceRearward = 1;
-        g_chewingConfig.hsuSelKeyType         = 0;
         memcpy (&g_chewingConfig.selKey,
                 &nDefaultSelKey,
                 sizeof (g_chewingConfig.selKey));
@@ -100,8 +99,8 @@ chewing_config_set (ChewingContext *pChewingCtx)
         memcpy (&g_chewingConfig.selKey,
                 &nDefaultSelKey,
                 sizeof (g_chewingConfig.selKey));
-        chewing_set_selKey (pChewingCtx, 
-                            g_chewingConfig.selKey, 
+        chewing_set_selKey (pChewingCtx,
+                            g_chewingConfig.selKey,
                             MAX_SELKEY);
         chewing_set_candPerPage (pChewingCtx, g_chewingConfig.candPerPage > HIME_CHEWING_DEFAULT_NUMBER_OF_SELECT_KEYS ? HIME_CHEWING_DEFAULT_NUMBER_OF_SELECT_KEYS : g_chewingConfig.candPerPage);
     }
@@ -113,7 +112,6 @@ chewing_config_set (ChewingContext *pChewingCtx)
     chewing_set_autoShiftCur (pChewingCtx, g_chewingConfig.bAutoShiftCur);
     chewing_set_easySymbolInput (pChewingCtx, g_chewingConfig.bEasySymbolInput);
     chewing_set_phraseChoiceRearward (pChewingCtx, g_chewingConfig.bPhraseChoiceRearward);
-    chewing_set_hsuSelKeyType (pChewingCtx, g_chewingConfig.hsuSelKeyType);
 }
 
 void
@@ -129,7 +127,6 @@ chewing_config_dump (void)
     printf ("\tbAutoShiftCur: %d\n", g_chewingConfig.bAutoShiftCur);
     printf ("\tbEasySymbolInput: %d\n", g_chewingConfig.bEasySymbolInput);
     printf ("\tbPhraseChoiceRearward: %d\n", g_chewingConfig.bPhraseChoiceRearward);
-    printf ("\thsuSelKeyType: %d\n", g_chewingConfig.hsuSelKeyType);
     printf ("\tselKey: ");
     for (nIdx = 0; nIdx < MAX_SELKEY; nIdx++)
         printf ("%c ", g_chewingConfig.selKey[nIdx]);
@@ -171,8 +168,8 @@ hime_kb_config_set (ChewingContext *pChewingCtx)
     memset (pszHimeKBConfig, 0x00, strlen (pszHome) + strlen (HIME_KB_CONFIG) + 1);
     sprintf (pszHimeKBConfig, "%s%s", pszHome, HIME_KB_CONFIG);
 
-    nFd = open (pszHimeKBConfig, 
-          O_RDONLY, 
+    nFd = open (pszHimeKBConfig,
+          O_RDONLY,
           S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 
     free (pszHimeKBConfig);
@@ -183,7 +180,7 @@ hime_kb_config_set (ChewingContext *pChewingCtx)
     nRead = read (nFd, szBuf, 32);
     if (nRead == -1)
         return FALSE;
-    
+
     sscanf (szBuf, "%s %s ", szKbType, szKbSelKey);
 
     if (!strlen (szKbType) || !strlen (szKbSelKey))
@@ -201,7 +198,7 @@ hime_kb_config_set (ChewingContext *pChewingCtx)
 	              szKbType,
 		      strlen (szKbType)))
         {
-            chewing_set_KBType (pChewingCtx, 
+            chewing_set_KBType (pChewingCtx,
 	                        chewing_KBStr2Num (g_kbMappingTable[nIdx].pszChewingKbName));
 	    break;
 	}
@@ -216,7 +213,7 @@ chewing_config_save (int nVal[])
 {
     int nWriteSize;
 
-    g_chewingConfig.candPerPage       = 
+    g_chewingConfig.candPerPage       =
         nVal[0] > MAX_SELKEY ? MAX_SELKEY : nVal[0];
     g_chewingConfig.bSpaceAsSelection = nVal[1];
     g_chewingConfig.bEscCleanAllBuf   = nVal[2];

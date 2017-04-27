@@ -176,11 +176,6 @@ chewing_initialize (void)
     memset (pszChewingHashDir, 0x00, strlen (pszHome) + strlen ("/.chewing/") + 1);
     sprintf (pszChewingHashDir, "%s/.chewing", pszHome);
 
-    if (chewing_Init (CHEWING_DATADIR, pszChewingHashDir) != 0)
-    {
-        free (pszChewingHashDir);
-        return FALSE;
-    }
     free (pszChewingHashDir);
     pszHome = NULL;
 
@@ -213,15 +208,15 @@ is_empty (void)
     return !chewing_buffer_Len (g_pChewingCtx) && !nZuinLen;
 }
 
-static gboolean 
+static gboolean
 hime_key_filter (int *pnKeyVal)
 {
-    if ((*pnKeyVal) > HIME_CHEWING_DEFAULT_KEY_MIN && 
+    if ((*pnKeyVal) > HIME_CHEWING_DEFAULT_KEY_MIN &&
         (*pnKeyVal) < HIME_CHEWING_DEFAULT_KEY_MAX)
         chewing_handle_Default (g_pChewingCtx, (*pnKeyVal));
     else if ((*pnKeyVal) >= XK_KP_0 && (*pnKeyVal) <= XK_KP_9)
         chewing_handle_Numlock (g_pChewingCtx, (*pnKeyVal) - XK_KP_0 + '0');
-    else if ((*pnKeyVal) < HIME_CHEWING_KEY_MAX && 
+    else if ((*pnKeyVal) < HIME_CHEWING_KEY_MAX &&
              (*pnKeyVal) >= HIME_CHEWING_KEY_MIN)
         if ((int)(g_pKeyHandler[(*pnKeyVal)] (g_pChewingCtx)) == -1)
             return FALSE;
@@ -267,7 +262,7 @@ hime_zuin_label_show (void)
     return TRUE;
 }
 
-static gboolean 
+static gboolean
 hime_buffer_label_show (void)
 {
     char *pszTmp         = NULL;
@@ -276,7 +271,7 @@ hime_buffer_label_show (void)
     char *pHead          = NULL;
     int  nIdx            = 0;
     int  nPos            = 0;
-    int  nWordSize       = 0; 
+    int  nWordSize       = 0;
 
     pszWord = (char *) realloc (pszWord, 8);
 
@@ -325,8 +320,8 @@ hime_buffer_label_show (void)
             hime_label_show (pszWord, nIdx++);
         }
 
-        // if chewing_buffer_Check is not zero, 
-        // it means that the chewing_buffer_String must have val, 
+        // if chewing_buffer_Check is not zero,
+        // it means that the chewing_buffer_String must have val,
         // so we could free the ptr here
         free (pszTmp);
     }
@@ -336,8 +331,8 @@ hime_buffer_label_show (void)
     return TRUE;
 }
 
-static gboolean 
-hime_buffer_commit (void) 
+static gboolean
+hime_buffer_commit (void)
 {
     char *pszTmp = NULL;
 
@@ -349,8 +344,8 @@ hime_buffer_commit (void)
         // FIXME: workaround for repeated commit
         chewing_handle_Esc (g_pChewingCtx);
 
-        // if chewing_commit_Check is not zero, 
-        // it means that the chewing_commit_String must have val, 
+        // if chewing_commit_Check is not zero,
+        // it means that the chewing_commit_String must have val,
         // so we could free the ptr here
         free (pszTmp);
     }
@@ -367,7 +362,7 @@ hime_chewing_handler_default (ChewingContext *pCtx)
     return ((void)NULL);
 }
 
-static int 
+static int
 hime_chewing_wrapper_bs (ChewingContext *pCtx)
 {
 //  If zuin is present, force libchewing handles Backspace for removing last zuin
@@ -378,43 +373,43 @@ hime_chewing_wrapper_bs (ChewingContext *pCtx)
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Backspace);
 }
 
-static int 
+static int
 hime_chewing_wrapper_enter (ChewingContext *pCtx)
 {
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Enter);
 }
 
-static int 
+static int
 hime_chewing_wrapper_home (ChewingContext *pCtx)
 {
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Home);
 }
 
-static int 
+static int
 hime_chewing_wrapper_left (ChewingContext *pCtx)
 {
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Left);
 }
 
-static int 
+static int
 hime_chewing_wrapper_up (ChewingContext *pCtx)
 {
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Up);
 }
 
-static int 
+static int
 hime_chewing_wrapper_right (ChewingContext *pCtx)
 {
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Right);
 }
 
-static int 
+static int
 hime_chewing_wrapper_down (ChewingContext *pCtx)
 {
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Down);
 }
 
-static int 
+static int
 hime_chewing_wrapper_pageup (ChewingContext *pCtx)
 {
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_PageUp);
@@ -425,19 +420,19 @@ static int hime_chewing_wrapper_pagedown (ChewingContext *pCtx)
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_PageDown);
 }
 
-static int 
+static int
 hime_chewing_wrapper_end (ChewingContext *pCtx)
 {
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_End);
 }
 
-static int 
+static int
 hime_chewing_wrapper_del (ChewingContext *pCtx)
 {
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Del);
 }
 
-static void 
+static void
 hime_chewing_cb_register (void)
 {
     int nIdx = HIME_CHEWING_KEY_MIN;
