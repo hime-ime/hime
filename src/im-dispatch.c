@@ -330,8 +330,8 @@ void process_client_req(int fd)
       write_enc(fd, &attrN, sizeof(attrN));
       if (attrN > 0)
         write_enc(fd, attr, sizeof(HIME_PREEDIT_ATTR)*attrN);
-        write_enc(fd, &cursor, sizeof(cursor));
-        write_enc(fd, &sub_comp_len, sizeof(sub_comp_len));
+      write_enc(fd, &cursor, sizeof(cursor));
+      write_enc(fd, &sub_comp_len, sizeof(sub_comp_len));
 //      dbg("uuuuuuuuuuuuuuuuu len:%d %d cursor:%d\n", len, attrN, cursor);
       }
       break;

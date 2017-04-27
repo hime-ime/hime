@@ -809,7 +809,6 @@ static void load_seg()
           dbg("%d] sel idx:%d ofs:%d\n",i, idx, ofs);
           int selN = seg[i].selN = ss.nr_candidate;
 
-          char *old_str = NULL;
           seg[i].selidx = 0;
           if (idx < sel_segN && sel_seg[idx].len==len) {
             int j;
