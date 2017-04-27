@@ -5,6 +5,7 @@
 *.pot
 *.so
 *.so.*
+*.swp
 *~
 .depend
 hime-cin2gtab
