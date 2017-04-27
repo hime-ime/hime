@@ -5,8 +5,13 @@ ifeq ($(FREEBSD), 0)
 else
   INCS=-I../im-client -I/usr/local/include
 endif
+
+QTINC=`pkg-config --variable=includedir Qt5Core`
+QTVER=`pkg-config --modversion Qt5Core`
+
 INCS+=`pkg-config Qt5Core Qt5Gui Qt5DBus --cflags`
-INCS+=-I `pkg-config --variable=includedir Qt5Gui`/QtGui/`pkg-config --modversion Qt5Gui`/QtGui
+INCS+=-I$(QTINC)/QtGui/$(QTVER)
+INCS+=-I$(QTINC)/QtCore/$(QTVER)
 
 CXXFLAGS=$(OPTFLAGS) $(INCS) -Wall -D_REENTRANT -DUNIX=1 -fPIC  -DQT5 -DQT_SHARED \
 -DQT_IMMODULE -DPIC

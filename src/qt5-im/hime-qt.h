@@ -2,7 +2,7 @@
 #define HIME_QT5_PLUGIN_H
 
 #include <QtCore/QStringList>
-#include <qpa/qplatforminputcontextplugin_p.h>
+#include <QtGui/qpa/qplatforminputcontextplugin_p.h>
 
 #include "hime-imcontext-qt.h"
 

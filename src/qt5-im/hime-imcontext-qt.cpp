@@ -23,7 +23,7 @@ typedef struct {
 
 static WId focused_win;
 
-#include <qpa/qplatformnativeinterface.h>
+#include <QtGui/qpa/qplatformnativeinterface.h>
 
 #if DEBUG
 FILE *out_fp;
@@ -52,7 +52,7 @@ QHimePlatformInputContext::QHimePlatformInputContext()
     QPlatformNativeInterface *native = QGuiApplication::platformNativeInterface();
     if(!native)
         return;
-    Display *display = static_cast<Display *>(native->nativeResourceForWindow("display", NULL));	
+    Display *display = static_cast<Display *>(native->nativeResourceForWindow("display", NULL));
 
     if (!(hime_ch = hime_im_client_open(display))) {
         perror("cannot open hime_ch");

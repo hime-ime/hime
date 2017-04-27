@@ -1,7 +1,7 @@
 #ifndef HIME_QT5_IM_H
 #define HIME_QT5_IM_H
 
-#include <qpa/qplatforminputcontext.h>
+#include <QtGui/qpa/qplatforminputcontext.h>
 
 class QInputMethodEvent;
 struct HIME_client_handle_S;
