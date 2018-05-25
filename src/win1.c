@@ -167,7 +167,7 @@ void create_win1_gui()
       x*=2;
 
     GtkWidget *align = gtk_alignment_new(0,0,0,0);
-    gtk_table_attach_defaults(GTK_TABLE(table),align, x,x+1,y,y+1);
+    gtk_table_attach(GTK_TABLE(table), align, x, x+1, y, y+1, GTK_SHRINK|GTK_FILL, GTK_SHRINK|GTK_FILL, 0, 0);
     GtkWidget *event_box_pho = gtk_event_box_new();
     gtk_event_box_set_visible_window (GTK_EVENT_BOX(event_box_pho), FALSE);
     GtkWidget *label = gtk_label_new(NULL);
@@ -182,7 +182,7 @@ void create_win1_gui()
 
     if (!tsin_tail_select_key) {
       GtkWidget *alignR = gtk_alignment_new(0,0,0,0);
-      gtk_table_attach_defaults(GTK_TABLE(table), alignR, x+1,x+2,y,y+1);
+      gtk_table_attach(GTK_TABLE(table), alignR, x+1, x+2, y, y+1, GTK_SHRINK|GTK_FILL, GTK_SHRINK|GTK_FILL, 0, 0);
       GtkWidget *event_box_phoR = gtk_event_box_new();
       gtk_event_box_set_visible_window (GTK_EVENT_BOX(event_box_phoR), FALSE);
       GtkWidget *labelR = gtk_label_new(NULL);
