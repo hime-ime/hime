@@ -260,21 +260,21 @@ void set_sele_text(int tN, int i, char *text, int len)
   if (tss.sel_pho && i==tss.pho_menu_idx)
     strcpy(ul, " foreground=\"yellow\" background=\"black\"");
   else
-    sprintf(ul, "foreground=\"%s\"", hime_sel_key_color);
+    snprintf(ul, sizeof(ul), "foreground=\"%s\"", hime_sel_key_color);
 #endif
   if (tss.sel_pho && i==tss.pho_menu_idx) {
     if (hime_win_color_use)
-      sprintf(ul, "foreground=\"white\" background=\"%s\"", tsin_cursor_color);
+      snprintf(ul, sizeof(ul), "foreground=\"white\" background=\"%s\"", tsin_cursor_color);
     else
       strcpy(ul, "foreground=\"white\" background=\""TSIN_CURSOR_COLOR_DEFAULT"\"");
   } else {
     if (hime_win_color_use)
-      sprintf(ul, "foreground=\"%s\"", hime_sel_key_color);
+      snprintf(ul, sizeof(ul), "foreground=\"%s\"", hime_sel_key_color);
     else
       strcpy(ul, "foreground=\""HIME_SEL_KEY_COLOR_DEFAULT"\"");
   }
 
-  sprintf(selma, "<span %s>%s</span>", ul, htmlspecialchars(cc, uu));
+  snprintf(selma, sizeof(selma), "<span %s>%s</span>", ul, htmlspecialchars(cc, uu));
 
   int x = idx_to_x(tN, i);
   char *sep= x?" ":"";

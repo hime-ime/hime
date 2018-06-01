@@ -746,7 +746,7 @@ disp:
 
     while(i< phkbm.selkeyN  && ii < poo.stop_idx) {
       char tt[512];
-      sprintf(tt, "<span foreground=\"%s\">%c</span>",
+      snprintf(tt, sizeof(tt), "<span foreground=\"%s\">%c</span>",
          hime_sel_key_color, pho_selkey[i]);
       int ttlen = strlen(tt);
       memcpy(out_buffer+out_bufferN, tt, ttlen);

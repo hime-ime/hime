@@ -154,15 +154,15 @@ static gboolean cb_gtab_edit_append( GtkWidget *widget,
     return TRUE;
 
   char append_fname[128];
-  sprintf(append_fname, "~/.config/hime/%s.append", fname);
+  snprintf(append_fname, sizeof(append_fname), "~/.config/hime/%s.append", fname);
 
   char prepare[128];
-  sprintf(prepare, HIME_SCRIPT_DIR"/gtab.append_prepare %s", append_fname);
+  snprintf(prepare, sizeof(prepare), HIME_SCRIPT_DIR"/gtab.append_prepare %s", append_fname);
   system(prepare);
 
   char exec[128];
 
-  sprintf(exec, "%s %s", utf8_edit, append_fname);
+  snprintf(exec, sizeof(exec), "%s %s", utf8_edit, append_fname);
   dbg("exec %s\n", exec);
   system(exec);
   return TRUE;

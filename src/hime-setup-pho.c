@@ -129,7 +129,7 @@ void save_kbm_conf()
   dbg("pho_candicate_col_N %d\n", pho_candicate_col_N);
 
   char tt[128];
-  sprintf(tt, "%s %s %d %d", kbm_sel[idx].kbm, selkeys[idx_selkeys].kstr, pho_candicate_col_N, selkeys[idx_selkeys].RL);
+  snprintf(tt, sizeof(tt), "%s %s %d %d", kbm_sel[idx].kbm, selkeys[idx_selkeys].kstr, pho_candicate_col_N, selkeys[idx_selkeys].RL);
 
   char phokbm_name[128];
   get_hime_conf_fstr(PHONETIC_KEYBOARD, phokbm_name, "");

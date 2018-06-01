@@ -50,7 +50,7 @@ void pho_load()
     if (access(phofname, W_OK) < 0){
       char sys_file[256], vv[256];
       get_sys_table_file_name(sys_file, pho_tab);
-      sprintf(vv,"cp %s %s\n", sys_file, phofname);
+      snprintf(vv, sizeof(vv), "cp %s %s\n", sys_file, phofname);
       system(vv);
     }
   } else {

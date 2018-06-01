@@ -48,7 +48,7 @@ static void init_out_fp()
   if (!out_fp) {
     if (getenv("HIME_DBG_TMP") || 0) {
       char fname[64];
-      sprintf(fname, "%s/himedbg-%d-%d", g_get_tmp_dir(), getuid(), getpid());
+      snprintf(fname, sizeof(fname), "%s/himedbg-%d-%d", g_get_tmp_dir(), getuid(), getpid());
       out_fp = fopen(fname, "w");
     }
 

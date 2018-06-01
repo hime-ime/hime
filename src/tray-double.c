@@ -292,7 +292,7 @@ static void cb_popup_state(GtkStatusIcon *status_icon, guint button, guint activ
             unich_t tt[128];
             if (mitems_state[0].name)
               free(mitems_state[0].name);
-            sprintf(tt, "注音換 %s %s", kbm_sel[i].name, p);
+            snprintf(tt, sizeof(tt), "注音換 %s %s", kbm_sel[i].name, p);
             mitems_state[0].name = strdup(tt);
           }
         }

@@ -168,7 +168,7 @@ int get_hime_conf_int(char *name, int default_value)
   char tt[32];
   char default_value_str[MAX_HIME_STR];
 
-  sprintf(default_value_str, "%d", default_value);
+  snprintf(default_value_str, sizeof(default_value_str), "%d", default_value);
   get_hime_conf_fstr(name, tt, default_value_str);
 
   return atoi(tt);
@@ -198,7 +198,7 @@ void save_hime_conf_int(char *name, int val)
 {
   char tt[16];
 
-  sprintf(tt, "%d", val);
+  snprintf(tt, sizeof(tt), "%d", val);
   save_hime_conf_str(name, tt);
 }
 

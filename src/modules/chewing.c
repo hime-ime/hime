@@ -88,11 +88,11 @@ hime_label_show (char *pszPho, int nPos)
     memset (szTmp, 0x00, 128);
 
     if (*g_himeModMainFuncs.mf_hime_win_color_use)
-      sprintf (szTmp, "<span background=\"%s\" foreground=\"white\">%s</span>",
+      snprintf (szTmp, sizeof(szTmp), "<span background=\"%s\" foreground=\"white\">%s</span>",
              *g_himeModMainFuncs.mf_tsin_cursor_color,
              pszPho);
     else
-      sprintf (szTmp, "<span background=\""TSIN_CURSOR_COLOR_DEFAULT"\">%s</span>",
+      snprintf (szTmp, sizeof(szTmp), "<span background=\""TSIN_CURSOR_COLOR_DEFAULT"\">%s</span>",
              pszPho);
 
     gtk_label_set_markup (GTK_LABEL (g_pSeg[nPos].label),

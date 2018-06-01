@@ -194,7 +194,7 @@ void process_client_req(int fd)
         char tt[128];
 
         if (req.keyeve.key < 127) {
-          sprintf(tt,"'%c'", req.keyeve.key);
+          snprintf(tt, sizeof(tt), "'%c'", req.keyeve.key);
         } else {
           strcpy(tt, XKeysymToString(req.keyeve.key));
         }

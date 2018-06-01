@@ -611,14 +611,14 @@ static void page_no_str(char tstr[])
       return;
 
     int pg = ggg.gtab_buf_select ? ggg.pg_idx : ggg.wild_page;
-    sprintf(tstr, "%d/%d", pg /cur_inmd->M_DUP_SEL + 1, pgN);
+    snprintf(tstr, sizeof(tstr), "%d/%d", pg /cur_inmd->M_DUP_SEL + 1, pgN);
   } else {
     int pgN = (ggg.E1 - ggg.S1 + page_len() - 1) /page_len();
 
     if (pgN < 2)
       return;
 
-    sprintf(tstr, "%d/%d", (ggg.pg_idx - ggg.S1)/page_len()+1, pgN);
+    snprintf(tstr, sizeof(tstr), "%d/%d", (ggg.pg_idx - ggg.S1)/page_len()+1, pgN);
   }
 }
 
@@ -705,9 +705,9 @@ void disp_selection0(gboolean phrase_selected, gboolean force_disp)
       char vvv[16];
       char www[1024];
       if (hime_win_color_use)
-        sprintf(www, "<span foreground=\"%s\">%s</span>", hime_sel_key_color, htmlspecialchars(uu, vvv));
+        snprintf(www, sizeof(www), "<span foreground=\"%s\">%s</span>", hime_sel_key_color, htmlspecialchars(uu, vvv));
       else
-        sprintf(www, "<span foreground=\""HIME_SEL_KEY_COLOR_DEFAULT"\">%s</span>", htmlspecialchars(uu, vvv));
+        snprintf(www, sizeof(www), "<span foreground=\""HIME_SEL_KEY_COLOR_DEFAULT"\">%s</span>", htmlspecialchars(uu, vvv));
       strcat(tt, www);
 
       if (gtab_vertical_select_on())
@@ -757,7 +757,7 @@ void disp_selection0(gboolean phrase_selected, gboolean force_disp)
 
   if (gtab_vertical_select_on() && pgstr[0]) {
     char tstr2[16];
-    sprintf(tstr2, "(%s)", pgstr);
+    snprintf(tstr2, sizeof(tstr2), "(%s)", pgstr);
     strcat(tt, tstr2);
   }
 

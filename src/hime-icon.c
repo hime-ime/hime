@@ -20,17 +20,17 @@
 void sys_icon_fname(char *iconame, char fname[])
 {
   if(!strcmp(hime_icon_dir, "DEFAULT")) {
-    sprintf(fname, HIME_DEFAULT_ICON_DIR"/%s", iconame);
+    snprintf(fname, sizeof(fname), HIME_DEFAULT_ICON_DIR"/%s", iconame);
   }
   else {
-    sprintf(fname, HIME_DEFAULT_ICON_DIR"/%s/%s", hime_icon_dir, iconame);
+    snprintf(fname, sizeof(fname), HIME_DEFAULT_ICON_DIR"/%s/%s", hime_icon_dir, iconame);
   }
 }
 
 void get_icon_path(char *iconame, char fname[])
 {
   char uu[128];
-  sprintf(uu, "icons/%s", iconame);
+  snprintf(uu, sizeof(uu), "icons/%s", iconame);
 
   if (!get_hime_user_fname(uu, fname)) {
     sys_icon_fname(iconame, fname);
