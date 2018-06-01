@@ -185,7 +185,7 @@ void load_settings()
   tsin_buffer_size = get_hime_conf_int(TSIN_BUFFER_SIZE, 40);
   tsin_tab_phrase_end = get_hime_conf_int(TSIN_TAB_PHRASE_END, 1);
   tsin_tail_select_key = get_hime_conf_int(TSIN_TAIL_SELECT_KEY, 0);
-  tsin_buffer_editing_mode = get_hime_conf_int(TSIN_BUFFER_EDITING_MODE, 1);
+  tsin_buffer_editing_mode = get_hime_conf_int(TSIN_BUFFER_EDITING_MODE, 0);
   tsin_use_pho_near = get_hime_conf_int(TSIN_USE_PHO_NEAR, 1);
 
   phonetic_char_dynamic_sequence = get_hime_conf_int(PHONETIC_CHAR_DYNAMIC_SEQUENCE, 1);
