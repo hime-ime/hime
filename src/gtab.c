@@ -611,14 +611,14 @@ static void page_no_str(char tstr[])
       return;
 
     int pg = ggg.gtab_buf_select ? ggg.pg_idx : ggg.wild_page;
-    snprintf(tstr, sizeof(tstr), "%d/%d", pg /cur_inmd->M_DUP_SEL + 1, pgN);
+    sprintf(tstr, "%d/%d", pg /cur_inmd->M_DUP_SEL + 1, pgN);
   } else {
     int pgN = (ggg.E1 - ggg.S1 + page_len() - 1) /page_len();
 
     if (pgN < 2)
       return;
 
-    snprintf(tstr, sizeof(tstr), "%d/%d", (ggg.pg_idx - ggg.S1)/page_len()+1, pgN);
+    sprintf(tstr, "%d/%d", (ggg.pg_idx - ggg.S1)/page_len()+1, pgN);
   }
 }
 

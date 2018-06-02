@@ -20,10 +20,10 @@
 void sys_icon_fname(char *iconame, char fname[])
 {
   if(!strcmp(hime_icon_dir, "DEFAULT")) {
-    snprintf(fname, sizeof(fname), HIME_DEFAULT_ICON_DIR"/%s", iconame);
+    sprintf(fname, HIME_DEFAULT_ICON_DIR"/%s", iconame);
   }
   else {
-    snprintf(fname, sizeof(fname), HIME_DEFAULT_ICON_DIR"/%s/%s", hime_icon_dir, iconame);
+    sprintf(fname, HIME_DEFAULT_ICON_DIR"/%s/%s", hime_icon_dir, iconame);
   }
 }
 
