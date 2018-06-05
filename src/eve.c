@@ -861,7 +861,7 @@ void toggle_half_full_char()
   check_CS();
 
   if (!hime_shift_space_eng_full) {
-    current_CS->b_half_full_char = 0;
+    current_CS->b_half_full_char = FALSE;
     tss.tsin_half_full=0;
     disp_im_half_full();
     return;
@@ -1040,7 +1040,7 @@ gboolean init_in_method(int in_no)
       case method_type_EN:
         break;
       default:
-        if (current_CS->b_half_full_char==0) toggle_half_full_char();
+        if (!current_CS->b_half_full_char) toggle_half_full_char();
         break;
     }
   }

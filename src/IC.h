@@ -54,7 +54,7 @@ typedef struct {
     Window	client_win;	/* client window */
     INT32	input_style;	/* input style */
     HIME_STATE_E im_state;
-    gboolean    b_half_full_char;
+    gboolean    b_half_full_char; ///< TRUE: full    FALSE: half
     gboolean    fixed_pos;
     gboolean    b_hime_protocol; // TRUE : hime    FALSE: XIM
     gboolean    b_raise_window;

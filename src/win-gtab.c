@@ -668,7 +668,7 @@ GtkWidget *get_cname_label();
 void show_input_method_name_on_gtab()
 {
   if (current_CS && (! hime_status_tray) && gtab_disp_im_name &&
-      (current_CS->im_state == HIME_STATE_CHINESE) && (current_CS->b_half_full_char == 0) &&
+      (current_CS->im_state == HIME_STATE_CHINESE) && (!current_CS->b_half_full_char) &&
       (current_CS->tsin_pho_mode))
   {
     if ((current_method_type() == method_type_MODULE) ||
