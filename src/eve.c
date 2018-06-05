@@ -736,6 +736,7 @@ void toggle_im_enabled()
     if (current_CS->im_state != HIME_STATE_DISABLED) {
       if (current_CS->im_state == HIME_STATE_ENG_FULL) {
         current_CS->im_state = HIME_STATE_CHINESE;
+        current_CS->b_half_full_char = TRUE;
         disp_im_half_full();
         save_CS_current_to_temp();
         return;
@@ -760,16 +761,20 @@ void toggle_im_enabled()
 #if 0
       hide_win_status();
 #endif
-      current_CS->im_state = HIME_STATE_DISABLED;
+      if (current_CS->b_half_full_char)
+        current_CS->im_state = HIME_STATE_ENG_FULL;
+      else
+        current_CS->im_state = HIME_STATE_DISABLED;
 
 #if TRAY_ENABLED
       disp_tray_icon();
 #endif
-    } else {
+    } else { // current_CS->im_state = HIME_STATE_DISABLED
       if (!current_method_type())
         init_gtab(current_CS->in_method);
 
       init_state_chinese(current_CS);
+      current_CS->b_half_full_char = FALSE;
       reset_current_in_win_xy();
 #if 1
       if ((inmd[current_CS->in_method].flag & FLAG_GTAB_SYM_KBM))
