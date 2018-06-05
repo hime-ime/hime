@@ -131,7 +131,7 @@ void drawcursor()
 
   if (tss.c_idx == tss.c_len) {
     if (!tsin_pho_mode()) {
-      if (tss.tsin_half_full) {
+      if (current_CS->b_half_full_char) {
         disp_char(tss.c_idx,"  ");
         set_cursor_tsin(tss.c_idx);
       } else {
@@ -960,7 +960,7 @@ void tsin_toggle_eng_ch()
 #if USE_TSIN
 void tsin_toggle_half_full()
 {
-    tss.tsin_half_full^=1;
+    current_CS->b_half_full_char ^= TRUE;
     key_press_alt = FALSE;
     drawcursor();
 #if TRAY_ENABLED
@@ -1575,7 +1575,7 @@ int feedkey_pp(KeySym xkey, int kbstate)
        return 1;
      }
      else {
-       if (tss.tsin_half_full && is_ascii) {
+       if (current_CS->b_half_full_char && is_ascii) {
          send_text(half_char_to_full_char(xkey));
          return 1;
        }
@@ -1730,7 +1730,7 @@ tab_phrase_end:
        }
      case XK_space:
        if (!tss.c_len && !poo.ityp3_pho && !poo.typ_pho[0] && !poo.typ_pho[1] && !poo.typ_pho[2]
-           && tss.tsin_half_full) {
+           && current_CS->b_half_full_char) {
          send_text("　");	 /* Full width space */
          return 1;
        }
@@ -1899,7 +1899,7 @@ other_keys:
    if (!xkey || (xkey > 0x7e && !key_pad))
      return 0;
 
-   if (key_pad && !tss.c_len && !tss.tsin_half_full)
+   if (key_pad && !tss.c_len && !current_CS->b_half_full_char)
      return 0;
 
    if (!tsin_pho_mode() || (poo.typ_pho[0]!=BACK_QUOTE_NO && (shift_m || key_pad ||
@@ -1941,7 +1941,7 @@ asc_char:
 
         u_char tt=xkey;
 
-        if (tss.tsin_half_full) {
+        if (current_CS->b_half_full_char) {
           strcpy(tstr, half_char_to_full_char(xkey));
         } else {
           tstr[0] = tt;

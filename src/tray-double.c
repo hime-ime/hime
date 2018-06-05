@@ -26,7 +26,6 @@
 extern void destroy_other_tray();
 
 gboolean tsin_pho_mode();
-extern int tsin_half_full;
 extern gboolean gb_output;
 GtkStatusIcon *icon_main=NULL, *icon_state=NULL;
 

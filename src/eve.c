@@ -149,8 +149,7 @@ int current_shape_mode()
   return current_CS &&
     (
       current_CS->im_state == HIME_STATE_ENG_FULL ||
-      (current_CS->im_state != HIME_STATE_DISABLED && current_method_type()!=method_type_TSIN && current_CS->b_half_full_char) ||
-      (current_CS->im_state == HIME_STATE_CHINESE && current_method_type()==method_type_TSIN && tss.tsin_half_full)
+      (current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char)
     );
 }
 
@@ -862,7 +861,6 @@ void toggle_half_full_char()
 
   if (!hime_shift_space_eng_full) {
     current_CS->b_half_full_char = FALSE;
-    tss.tsin_half_full=0;
     disp_im_half_full();
     return;
   }
@@ -1033,7 +1031,7 @@ gboolean init_in_method(int in_no)
     switch (current_method_type())
     {
       case method_type_TSIN:
-        if (tss.tsin_half_full==0) toggle_half_full_char();
+        if (!current_CS->b_half_full_char) toggle_half_full_char();
         break;
       case method_type_MODULE:
       case method_type_SYMBOL_TABLE:

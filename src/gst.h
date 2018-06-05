@@ -24,7 +24,6 @@ typedef struct {
   int current_page;
   int startf;
   gboolean full_match;
-  gboolean tsin_half_full;
   gboolean tsin_buffer_editing;
   gboolean ctrl_pre_sel;
   struct PRE_SEL *pre_sel;
