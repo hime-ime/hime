@@ -9,7 +9,7 @@ GTK_BINARY_VERSION=`pkg-config --variable=gtk_binary_version gtk+-2.0`
 MODULEDIR=$(DESTDIR)/$(GTK_LIBDIR)/gtk-2.0/$(GTK_BINARY_VERSION)/immodules
 IMMODULES=$(libdir)/$(GTK2IM)
 IMMODULES_LOCAL=/usr/$(LIB)/$(GTK2IM)
-IMMODULES_QUERY=`whereis gtk-query-immodules-2.0 | cut -d ' ' -f 2`
+IMMODULES_QUERY=$(GTK_LIBDIR)/libgtk2.0-0/gtk-query-immodules-2.0
 
 
 ifeq ($(MAC_OS),1)
