@@ -713,10 +713,13 @@ void set_tsin_pho_mode0(ClientState *cs);
 
 void init_state_chinese(ClientState *cs)
 {
+  static gboolean first_act = TRUE; // A boolean value for storing whether it is the first activation of 'init_state_chinese()'
   cs->im_state = HIME_STATE_CHINESE;
   set_tsin_pho_mode0(cs);
-  if (!cs->in_method)
+  if (first_act) {
     init_in_method(default_input_method);
+    first_act = FALSE;
+  }
 
   save_CS_current_to_temp();
 }
