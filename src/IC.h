@@ -58,6 +58,7 @@ typedef struct {
     gboolean    fixed_pos;
     gboolean    b_hime_protocol; // TRUE : hime    FALSE: XIM
     gboolean    b_raise_window;
+    gboolean    in_method_switched; ///< TRUE: switch input method at least once    FALSE: never switch input method
     gboolean    use_preedit;
     gboolean    tsin_pho_mode;
     short       fixed_x, fixed_y;

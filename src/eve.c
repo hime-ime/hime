@@ -125,6 +125,7 @@ void save_CS_current_to_temp()
 
 //  dbg("save_CS_current_to_temp\n");
   temp_CS.b_half_full_char = current_CS->b_half_full_char;
+  temp_CS.in_method_switched = current_CS->in_method_switched;
   temp_CS.im_state = current_CS->im_state;
   temp_CS.in_method = current_CS->in_method;
   temp_CS.tsin_pho_mode = current_CS->tsin_pho_mode;
@@ -138,6 +139,7 @@ void save_CS_temp_to_current()
 
 //  dbg("save_CS_temp_to_current\n");
   current_CS->b_half_full_char = temp_CS.b_half_full_char;
+  current_CS->in_method_switched = temp_CS.in_method_switched;
   current_CS->im_state = temp_CS.im_state;
   current_CS->in_method = temp_CS.in_method;
   current_CS->tsin_pho_mode = temp_CS.tsin_pho_mode;
@@ -713,12 +715,11 @@ void set_tsin_pho_mode0(ClientState *cs);
 
 void init_state_chinese(ClientState *cs)
 {
-  static gboolean first_act = TRUE; // A boolean value for storing whether it is the first activation of 'init_state_chinese()'
   cs->im_state = HIME_STATE_CHINESE;
   set_tsin_pho_mode0(cs);
-  if (first_act) {
+  if (!cs->in_method_switched) {
     init_in_method(default_input_method);
-    first_act = FALSE;
+    cs->in_method_switched = TRUE;
   }
 
   save_CS_current_to_temp();
