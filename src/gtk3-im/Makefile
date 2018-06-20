@@ -28,6 +28,7 @@ CFLAGS += $(OPTFLAGS) $(EXTRA_INC) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
 	@echo "  $< -> $@"
 	$(CC) -E $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
+.PHONY: all
 all:	im-hime.so
 
 im-hime.so:     $(OBJS) ../im-client/libhime-im-client.so
@@ -35,10 +36,12 @@ im-hime.so:     $(OBJS) ../im-client/libhime-im-client.so
 	$(CC) $(gcc_ld_run_path) $(SO_FLAGS) $(OBJS) -L../im-client -lhime-im-client -o $@ $(LDFLAGS)
 	@rm -f core.*
 
+.PHONY: clean
 clean:
 	@echo "clean up"
 	@rm -f *.o *.so *~ core.* .depend *.E
 
+.PHONY: install
 install:
 	if [ "$(prefix)" = "/usr/local" -o "$(prefix)" = "/usr" ]; then \
 		install -d "$(MODULEDIR)"; \
@@ -51,6 +54,16 @@ install:
 	else \
 		install -d "$(IMMODULES)"; \
 		install -m 755 im-hime.so "$(IMMODULES)"; \
+	fi
+
+.PHONY: uninstall
+uninstall:
+	if [ "$(prefix)" = "/usr/local" -o "$(prefix)" = "/usr" ]; then \
+		rm -f $(MODULEDIR)/im-hime.so; \
+		rmdir --ignore-fail-on-non-empty $(MODULEDIR); \
+	else \
+		rm -f $(IMMODULES)/im-hime.so; \
+		rmdir --ignore-fail-on-non-empty $(IMMODULES); \
 	fi
 
 .depend:

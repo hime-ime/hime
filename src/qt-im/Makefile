@@ -7,6 +7,8 @@ CXXFLAGS+=$(OPTFLAGS) $(INCS) -Wall -D_REENTRANT -DUNIX=1 -fPIC  -DQT_THREAD_SUP
 OBJS=qhimeinputcontextplugin.o qhimeinputcontextplugin_my.o qhimeinputcontext.o qhimeinputcontext_x11.o
 .SUFFIXES:	.c .cpp .a .so .E .h
 LDFLAGS+=$(LDFLAGS_ENV) -L../im-client -lhime-im-client -Wl,-rpath,$(himelibdir) `pkg-config qt-mt --libs`
+
+.PHONY: all
 all:	im-hime.so
 
 .cpp.E:
@@ -27,6 +29,7 @@ im-hime.so: $(OBJS)
 	$(CXX) $(gcc_ld_run_path) -fno-exceptions -shared -o $@ $(OBJS) $(LDFLAGS)
 	@rm -f core.*
 
+.PHONY: install
 install:
 	if [ $(prefix) = /usr/local ]; then \
 		install -d $(QT_IM_DIR); \
@@ -36,6 +39,17 @@ install:
                 install -m 755 im-hime.so $(IMMODULES); \
 	fi
 
+.PHONY: uninstall
+uninstall:
+	if [ $(prefix) = /usr/local ]; then \
+		rm -f $(QT_IM_DIR)/im-hime.so; \
+		rmdir --ignore-fail-on-non-empty $(QT_IM_DIR); \
+	else \
+		rm -f $(IMMODULES)/im-hime.so; \
+		rmdir --ignore-fail-on-non-empty $(IMMODULES); \
+	fi
+
+.PHONY: clean
 clean:
 	@echo "clean up"
 	@rm -f $(OBJS) im-hime.so *~ core.* *moc*.cpp *.E

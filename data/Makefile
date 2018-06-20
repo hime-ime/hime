@@ -35,6 +35,7 @@ ifeq ($(INSTALL_DFSG_INCOMPATIBLE),Y)
 DATA += dayi3.gtab
 endif
 
+.PHONY: all
 all:	$(DATA)
 
 $(PHO_A2D):
@@ -107,11 +108,18 @@ remove_tsin: gtab.list.in
 gtab.list: $(REMOVE_TSIN)
 	touch gtab.list
 
+.PHONY: install
 install:
 	install -d "$(HIME_TABLE_DIR_i)"
 	install -m 644 $(DATA) $(DATAKEEP) "$(HIME_TABLE_DIR_i)"
 #	cd "$(HIME_TABLE_DIR_i)"; bzip2 -f *.gtab
 
+.PHONY: uninstall
+uninstall:
+	cd $(HIME_TABLE_DIR_i) && rm -f $(DATA) $(DATAKEEP)
+	rmdir --ignore-fail-on-non-empty $(HIME_TABLE_DIR_i)
+
+.PHONY: clean
 clean:
 	@echo "clean up"
 	@rm -f *~ tags core.* $(DATA) *.gtab extr1 t2s-file tsin-1.src tsin-gtabidx* tsin-ch-idx gtab.list

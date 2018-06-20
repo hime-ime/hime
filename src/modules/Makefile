@@ -15,6 +15,7 @@ CHEWING_DATADIR=$(shell pkg-config --variable=datadir chewing)
 CFLAGS += -DCHEWING_DATADIR=\"$(CHEWING_DATADIR)\" $(shell pkg-config --cflags chewing)
 endif
 
+.PHONY: all
 all:	$(HIME_MODULE)
 
 anthy_module_so = anthy.pico
@@ -33,9 +34,15 @@ chewing-module.so: $(chewing_module_obj) $(chewing_module_so)
 	@echo "linking $@ ..."
 	$(CCLD) $(SO_FLAGS) -o $@ $(chewing_module_obj) $(chewing_module_so) $(LDFLAGS) $(shell pkg-config --cflags --libs chewing)
 
+.PHONY: install
 install:
 	install $(HIME_MODULE) "$(himelibdir)"
 
+.PHONY: unintall
+uninstall:
+	cd $(himelibdir) && rm -f $(HIME_MODULE)
+
+.PHONY: clean
 clean:
 	@echo "clean up"
 	@rm -f *.pico *.so *.o

@@ -9,8 +9,10 @@ ECHO   = echo
 endif
 endif
 
+.PHONY: all
 all:
 
+.PHONY: install
 install:
 	install -d "$(datadir)/pixmaps"
 	install -m 644 hime.png "$(datadir)/pixmaps"
@@ -22,5 +24,18 @@ install:
 	   install -m 644 $$d/*.png "$(HIME_DEFAULT_ICON_DIR_i)/$$d" ; \
 	done
 
+.PHONY: uninstall
+uninstall:
+	cd $(datadir)/pixmaps && rm -f hime.png
+	cd $(HIME_DEFAULT_ICON_DIR_i) && rm -f *.png
+	@set -x ; for d in $(DIR); do \
+	   $(ECHO) -e "\x1b[1;32m** uninstalling icons/$$d\x1b[0m"; \
+	   cd $(HIME_DEFAULT_ICON_DIR_i)/$$d && rm -f *.png && cd -; \
+	   rmdir --ignore-fail-on-non-empty $(HIME_DEFAULT_ICON_DIR_i)/$$d; \
+	done
+	rmdir --ignore-fail-on-non-empty $(HIME_DEFAULT_ICON_DIR_i)
+	rmdir --ignore-fail-on-non-empty $(datadir)/pixmaps
+
+.PHONY: clean
 clean:
 

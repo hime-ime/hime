@@ -37,11 +37,17 @@ endif
 
 LOCALLIB=/usr/local/$(LIB)
 
+.PHONY: install
 install:
 	install -d "$(himelibdir)"
 	install -m 755 $(SOFILEVER) "$(himelibdir)"
 	cd "$(himelibdir)"; rm -f $(SOFILE); ln -s $(SOFILEVER) $(SOFILE); \
 	ln -sf $(SOFILEVER) $(SOFILE).1
+
+.PHONY: uninstall
+uninstall:
+	cd $(himelibdir) && rm -f $(SOFILEVER) $(SOFILE) $(SOFILE).1
+	rmdir --ignore-fail-on-non-empty $(himelibdir)
 
 hime-conf.o: ../hime-conf.c
 	@echo "  $^ -> $@"
@@ -59,6 +65,7 @@ hime-crypt-fpic.o: ../hime-crypt.c
 	@echo "  $^ -> $@"
 	$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
+.PHONY: clean
 clean:
 	@echo "clean up"
 	rm -f *.o *.so *.so.* *~ *.E *.db tags core.* .depend

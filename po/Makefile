@@ -9,6 +9,7 @@ ECHO   = echo
 endif
 endif
 
+.PHONY: all
 all: gmo
 
 gmo:
@@ -28,6 +29,7 @@ update-po: hime.pot
 	   mv $$d.new.po $$d.po ; \
 	done
 
+.PHONY: install
 install:
 	@set -x ; for d in $(LANG_FILE); do \
 	   $(ECHO) -e "\x1b[1;32m** installing $$d.mo\x1b[0m"; \
@@ -35,5 +37,14 @@ install:
 	   install -m 644 $$d.gmo "$(datadir)/locale/$$d/LC_MESSAGES/hime.mo"; \
 	done
 
+.PHONY: uninstall
+uninstall:
+	@set -x ; for d in $(LANG_FILE); do \
+	   $(ECHO) -e "\x1b[1;32m** uninstalling $$d.mo\x1b[0m"; \
+	   rm -f "$(datadir)/locale/$$d/LC_MESSAGES/hime.mo"; \
+	   rmdir --ignore-fail-on-non-empty "$(datadir)/locale/$$d/LC_MESSAGES" ; \
+	done
+
+.PHONY: clean
 clean:
 	rm -f ./hime.pot *.gmo *.new.po

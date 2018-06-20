@@ -1,4 +1,3 @@
-
 include ../config.mak
 
 CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I./IMdkit/include -I./im-client \
@@ -154,7 +153,7 @@ PROGS_CV  = kbmcv pin-juyin
 	@echo "  $< -> $@"
 	$(CCX) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
 
-
+.PHONY: all
 all: $(PROGS) $(PROGS_SYM) $(DATA) $(PROGS_CV)
 	$(MAKE) -C modules
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im; fi
@@ -271,6 +270,7 @@ hime-tsin2gtab-phrase: $(OBJS_tsin2gtab_phrase)
 	@echo "linking $@ ..."
 	$(CCLD) -o $@ $^ $(LDFLAGS)
 
+.PHONY: install
 install:
 	install -d "$(bindir)"
 	install $(PROGS) "$(bindir)"
@@ -290,6 +290,22 @@ install:
 	if [ $(QT4_IM) = 'Y' ]; then $(MAKE) -C qt4-im install; fi
 	if [ $(QT5_IM) = 'Y' ]; then $(MAKE) -C qt5-im install; fi
 
+.PHONY: uninstall
+uninstall:
+	cd $(bindir) && rm -f $(PROGS) $(PROGS_SYM)
+	cd $(includedir) && rm -f hime-im-client.h hime-im-client-attr.h
+	$(MAKE) -C im-client uninstall
+	$(MAKE) -C modules uninstall
+	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im uninstall; fi
+	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im uninstall; fi
+	if [ $(QT_IM) = 'Y' ]; then $(MAKE) -C qt-im uninstall; fi
+	if [ $(QT4_IM) = 'Y' ]; then $(MAKE) -C qt4-im uninstall; fi
+	if [ $(QT5_IM) = 'Y' ]; then $(MAKE) -C qt5-im uninstall; fi
+	rmdir --ignore-fail-on-non-empty $(bindir)
+	rmdir --ignore-fail-on-non-empty $(himelibdir)
+	rmdir --ignore-fail-on-non-empty $(includedir)
+
+.PHONY: clean
 clean:
 	@echo "clean up"
 	$(MAKE) -C IMdkit clean

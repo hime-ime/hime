@@ -19,7 +19,7 @@ OBJS= moc_hime-qt.o hime-qt.o hime-imcontext-qt.o moc_hime-imcontext-qt.o
 .SUFFIXES:	.c .cpp .a .so .E .h
 LDFLAGS=$(LDFLAGS_ENV) -L../im-client -lhime-im-client `pkg-config Qt5Core Qt5Gui Qt5DBus --libs`
 
-
+.PHONY: all
 all:    im-hime.so
 
 .cpp.E:
@@ -44,10 +44,17 @@ im-hime.so: $(OBJS)
 		$(CXX) $(gcc_ld_run_path) -fno-exceptions -shared -o $@ $(OBJS) $(LDFLAGS)
 	@rm -f core.*
 
+.PHONY: install
 install:
 	install -d "$(QT5_IM_DIR)"; \
 	install -m 755 im-hime.so "$(QT5_IM_DIR)"
 
+.PHONY: uninstall
+uninstall:
+	rm -f $(QT5_IM_DIR)/im-hime.so
+	rmdir --ignore-fail-on-non-empty $(QT5_IM_DIR)
+
+.PHONY: clean
 clean:
 	@echo "clean up"
 	@rm -f $(OBJS) im-hime.so *~ core.* *moc*.cpp *.E .depend
