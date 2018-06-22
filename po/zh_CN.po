@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-30 12:14+0800\n"
+"POT-Creation-Date: 2018-06-22 09:29+0800\n"
 "PO-Revision-Date: 2012-04-30 12:42+0800\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,17 +21,15 @@ msgstr ""
 msgid "關於 hime"
 msgstr "关于 hime"
 
-#: ../src/about.c:85
-#: ../src/phrase-save-menu.c:78
+#: ../src/about.c:85 ../src/phrase-save-menu.c:78
 msgid "關閉"
 msgstr "关闭"
 
-#: ../src/gtab.c:1367
+#: ../src/gtab.c:1364
 msgid "輸入要查的同音字，接著在注音視窗選字"
 msgstr "输入要查的同音字，接着在注音视窗选字"
 
-#: ../src/hime-juyin-learn.c:163
-#: ../src/hime-sim2trad.c:135
+#: ../src/hime-juyin-learn.c:163 ../src/hime-sim2trad.c:135
 msgid "自剪貼區更新"
 msgstr "自剪贴区更新"
 
@@ -47,390 +45,312 @@ msgstr "[英]"
 msgid "[全]"
 msgstr "[全]"
 
-#: ../src/hime-setup-appearance.c:58
-#: ../src/hime-setup-appearance.c:560
+#: ../src/hime-setup-appearance.c:64 ../src/hime-setup-list.c:473
+msgid "預設"
+msgstr "默认"
+
+#: ../src/hime-setup-appearance.c:65
+msgid "粉紅"
+msgstr ""
+
+#: ../src/hime-setup-appearance.c:66
+msgid "灰"
+msgstr ""
+
+#: ../src/hime-setup-appearance.c:67
+msgid "暗"
+msgstr ""
+
+#: ../src/hime-setup-appearance.c:68
+msgid "黑"
+msgstr ""
+
+#: ../src/hime-setup-appearance.c:72 ../src/hime-setup-appearance.c:585
 msgid "前景顏色"
 msgstr "前景颜色"
 
-#: ../src/hime-setup-appearance.c:59
-#: ../src/hime-setup-appearance.c:571
+#: ../src/hime-setup-appearance.c:73 ../src/hime-setup-appearance.c:596
 msgid "背景顏色"
 msgstr "背景颜色"
 
-#: ../src/hime-setup-appearance.c:60
-#: ../src/hime-setup-appearance.c:578
+#: ../src/hime-setup-appearance.c:74 ../src/hime-setup-appearance.c:603
 msgid "選擇鍵顏色"
 msgstr "选择键颜色"
 
-#: ../src/hime-setup-appearance.c:61
-#: ../src/hime-setup-appearance.c:586
+#: ../src/hime-setup-appearance.c:75 ../src/hime-setup-appearance.c:611
 msgid "游標顏色"
 msgstr "游標顏色"
 
-#: ../src/hime-setup-appearance.c:68
+#: ../src/hime-setup-appearance.c:82
 msgid "輸入視窗"
 msgstr "输入视窗"
 
-#: ../src/hime-setup-appearance.c:69
+#: ../src/hime-setup-appearance.c:83
 msgid "應用程式編輯區"
 msgstr "应用程序编辑区"
 
-#: ../src/hime-setup-appearance.c:70
+#: ../src/hime-setup-appearance.c:84
 msgid "同時顯示"
 msgstr "同时显示"
 
-#: ../src/hime-setup-appearance.c:79
+#: ../src/hime-setup-appearance.c:93
 msgid "單圖示"
 msgstr "单图标"
 
-#: ../src/hime-setup-appearance.c:80
+#: ../src/hime-setup-appearance.c:94
 msgid "雙圖示"
 msgstr "双图标"
 
-#: ../src/hime-setup-appearance.c:82
+#: ../src/hime-setup-appearance.c:96
 msgid "AppIndicator"
 msgstr "AppIndicator"
 
-#: ../src/hime-setup-appearance.c:245
+#: ../src/hime-setup-appearance.c:260
 #, c-format
 msgid "<span foreground=\"%s\" font=\"%d\">7</span><span foreground=\"%s\" font=\"%d\">測</span><span font=\"%d\" foreground=\"white\" background=\"%s\">試</span>"
 msgstr "<span foreground=\"%s\" font=\"%d\">7</span><span foreground=\"%s\" font=\"%d\">测</span><span font=\"%d\" foreground=\"white\" background=\"%s\">试</span>"
 
-#: ../src/hime-setup-appearance.c:249
+#: ../src/hime-setup-appearance.c:264
 #, c-format
 msgid "<span foreground=\"%s\" font_desc=\"%d\">7</span><span foreground=\"%s\" font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"white\" background=\"%s\">試</span>"
 msgstr "<span foreground=\"%s\" font_desc=\"%d\">7</span><span foreground=\"%s\" font_desc=\"%d\">测</span><span font_desc=\"%d\" foreground=\"white\" background=\"%s\">试</span>"
 
-#: ../src/hime-setup-appearance.c:261
+#: ../src/hime-setup-appearance.c:276
 #, c-format
 msgid "<span foreground=\"blue\" font=\"%d\">7</span><span font=\"%d\">測</span><span font=\"%d\" foreground=\"white\" background=\"blue\">試</span>"
 msgstr "<span foreground=\"blue\" font=\"%d\">7</span><span font=\"%d\">测</span><span font=\"%d\" foreground=\"white\" background=\"blue\">试</span>"
 
-#: ../src/hime-setup-appearance.c:264
+#: ../src/hime-setup-appearance.c:279
 #, c-format
 msgid "<span foreground=\"blue\" font_desc=\"%d\">7</span><span font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"white\" background=\"blue\">試</span>"
 msgstr "<span foreground=\"blue\" font_desc=\"%d\">7</span><span font_desc=\"%d\">测</span><span font_desc=\"%d\" foreground=\"white\" background=\"blue\">试</span>"
 
-#: ../src/hime-setup-appearance.c:294
+#: ../src/hime-setup-appearance.c:312
+msgid "圖示主題"
+msgstr ""
+
+#: ../src/hime-setup-appearance.c:335
 msgid "編輯區顯示"
 msgstr "编辑区显示"
 
-#: ../src/hime-setup-appearance.c:310
-msgid ""
-"顯示字根於應用程式中\n"
-"(OnTheSpot)"
+#: ../src/hime-setup-appearance.c:351
+#, fuzzy
+msgid "顯示字根於應用程式中 (OnTheSpot)"
 msgstr ""
 "显示字根于应用程序中\n"
 "(OnTheSpot)"
 
-#: ../src/hime-setup-appearance.c:329
+#: ../src/hime-setup-appearance.c:370
 msgid "啟用 System Tray Icon"
 msgstr "启用 System Tray Icon"
 
-#: ../src/hime-setup-appearance.c:385
-#: ../src/hime-setup.c:284
-msgid "輸入視窗外觀設定"
-msgstr "输入视窗外观设置"
+#: ../src/hime-setup-appearance.c:421
+msgid "主要字型"
+msgstr ""
 
-#: ../src/hime-setup-appearance.c:394
-msgid "字型大小"
-msgstr "字体大小"
-
-#: ../src/hime-setup-appearance.c:404
+#: ../src/hime-setup-appearance.c:430
 msgid "符號選擇視窗字型大小"
 msgstr "符号选择视窗字体大小"
 
-#: ../src/hime-setup-appearance.c:414
+#: ../src/hime-setup-appearance.c:440
 msgid "詞音&gtab預選詞視窗字型大小"
 msgstr "词音&gtab预选词视窗字体大小"
 
-#: ../src/hime-setup-appearance.c:424
+#: ../src/hime-setup-appearance.c:450
 msgid "詞音注音輸入區字型大小"
 msgstr "词音注音输入区字体大小"
 
-#: ../src/hime-setup-appearance.c:434
+#: ../src/hime-setup-appearance.c:460
 msgid "詞音近似音顯示字型大小"
 msgstr "词音近似音显示字体大小"
 
-#: ../src/hime-setup-appearance.c:444
+#: ../src/hime-setup-appearance.c:470
 msgid "gtab(倉頡…)輸入區字型大小"
 msgstr "gtab(仓颉…)输入区字体大小"
 
-#: ../src/hime-setup-appearance.c:453
+#: ../src/hime-setup-appearance.c:479
 msgid "小鍵盤字型大小"
 msgstr "小键盘字体大小"
 
-#: ../src/hime-setup-appearance.c:459
+#: ../src/hime-setup-appearance.c:485
 msgid "英數"
 msgstr "英数"
 
-#: ../src/hime-setup-appearance.c:473
+#: ../src/hime-setup-appearance.c:494
 msgid "在有輸入字根時才會彈出輸入視窗"
 msgstr "在有输入字根时才会弹出输入视窗"
 
-#: ../src/hime-setup-appearance.c:478
-msgid "固定輸入視窗位置"
-msgstr "固定输入视窗位置"
-
-#: ../src/hime-setup-appearance.c:487
-#: ../src/hime-setup-list.c:481
-msgid "啟用"
-msgstr "启用"
-
-#: ../src/hime-setup-appearance.c:513
-msgid "輸入視窗顯示內框"
-msgstr "输入视窗显示内框"
-
-#: ../src/hime-setup-appearance.c:520
+#: ../src/hime-setup-appearance.c:501
 msgid "在全/半形圖示上按左鍵可顯示/關閉螢幕小鍵盤"
 msgstr "在全/半形图示上按左键可显示/关闭萤幕小键盘"
 
-#: ../src/hime-setup-appearance.c:525
+#: ../src/hime-setup-appearance.c:506
 msgid "啟動時顯示螢幕小鍵盤"
 msgstr "启动时显示萤幕小键盘"
 
-#: ../src/hime-setup-appearance.c:529
+#: ../src/hime-setup-appearance.c:510
+msgid "固定輸入視窗位置"
+msgstr "固定输入视窗位置"
+
+#: ../src/hime-setup-appearance.c:519 ../src/hime-setup-list.c:487
+msgid "啟用"
+msgstr "启用"
+
+#: ../src/hime-setup-appearance.c:524
+msgid "固定位置："
+msgstr ""
+
+#: ../src/hime-setup-appearance.c:543
+msgid "輸入視窗顯示內框"
+msgstr "输入视窗显示内框"
+
+#: ../src/hime-setup-appearance.c:549
 msgid "把設定視窗設為 UTILITY"
 msgstr "把设定视窗设为 UTILITY"
 
-#: ../src/hime-setup-appearance.c:535
+#: ../src/hime-setup-appearance.c:560
 msgid "顏色選擇"
 msgstr "颜色选择"
 
-#: ../src/hime-setup-appearance.c:544
+#: ../src/hime-setup-appearance.c:569
 msgid "自訂顏色主題"
 msgstr "自订颜色主题"
 
-#: ../src/hime-setup.c:67
-msgid "結果失敗"
-msgstr "结果失败"
-
-#: ../src/hime-setup.c:70
-msgid "結果成功"
-msgstr "结果成功"
-
-#: ../src/hime-setup.c:91
-#: ../src/hime-setup.c:98
-msgid "請輸入要匯出的檔案名稱"
-msgstr "请输入要汇出的文件名称"
-
-#: ../src/hime-setup.c:159
-#: ../src/hime-setup.c:166
-msgid "請輸入要匯入的檔案名稱"
-msgstr "请输入要汇入的文件名称"
-
-#: ../src/hime-setup.c:271
-msgid "hime 設定/工具"
-msgstr "hime 设置/工具"
-
-#: ../src/hime-setup.c:279
-#: ../src/hime-setup-list.c:594
-msgid "內定輸入法 & 開啟/關閉"
-msgstr "默认输入法 & 开启/关闭"
-
-#: ../src/hime-setup.c:289
-#: ../src/hime-setup-pho.c:369
-msgid "注音/詞音/拼音設定"
-msgstr "注音/词音/拼音设置"
-
-#: ../src/hime-setup.c:294
-#: ../src/hime-setup-gtab.c:232
-msgid "倉頡/行列/大易設定"
-msgstr "仓颉/行列/大易设置"
-
-#: ../src/hime-setup.c:316
-#: ../src/tray-appindicator.c:64
-#: ../src/tray.c:191
-msgid "設定"
-msgstr "设置"
-
-#: ../src/hime-setup.c:324
-msgid "alt-shift 片語編輯"
-msgstr "alt-shift 片语编辑"
-
-#: ../src/hime-setup.c:329
-msgid "符號表編輯"
-msgstr "符号表编辑"
-
-#: ../src/hime-setup.c:338
-#, fuzzy
-msgid "啟用/關閉簡體字輸出"
-msgstr "简体字输出切换"
-
-#: ../src/hime-setup.c:344
-msgid "顯示/隱藏輸入法鍵盤"
-msgstr "显示/隐藏输入法键盘"
-
-#: ../src/hime-setup.c:351
-msgid "剪貼區 簡體字->正體字"
-msgstr "剪贴区 简体字->正体字"
-
-#: ../src/hime-setup.c:356
-msgid "剪貼區 注音查詢"
-msgstr "剪贴区 注音查询"
-
-#: ../src/hime-setup.c:361
-msgid "詞庫選項"
-msgstr "词库选项"
-
-#: ../src/hime-setup.c:369
-msgid "詞庫匯出"
-msgstr "词库汇出"
-
-#: ../src/hime-setup.c:375
-msgid "詞庫匯入"
-msgstr "词库汇入"
-
-#: ../src/hime-setup.c:381
-msgid "詞庫編輯"
-msgstr "词库编辑"
-
-#: ../src/hime-setup.c:387
-#, fuzzy
-msgid "從文章學習詞"
-msgstr "让词音从文章学习词"
-
-#: ../src/hime-setup.c:392
-msgid "匯入系統的詞庫"
-msgstr "汇入系统的词库"
-
-#: ../src/hime-setup-gtab.c:46
+#: ../src/hime-setup-gtab.c:48
 msgid "由 .gtab 指定"
 msgstr "由 .gtab 指定"
 
-#: ../src/hime-setup-gtab.c:47
+#: ../src/hime-setup-gtab.c:49
 msgid "按空白立即送出第一字(嘸蝦米、大易)"
 msgstr "按空格立即送出第一字(呒虾米、大易)"
 
-#: ../src/hime-setup-gtab.c:48
+#: ../src/hime-setup-gtab.c:50
 msgid "按滿按空白送出第一字"
 msgstr "按满按空格送出第一字"
 
-#: ../src/hime-setup-gtab.c:49
+#: ../src/hime-setup-gtab.c:51
 msgid "按滿按空白不送出第一字(倉頡, 行列)"
 msgstr "按满按空格不送出第一字(仓颉, 行列)"
 
-#: ../src/hime-setup-gtab.c:58
+#: ../src/hime-setup-gtab.c:60
 msgid "由.gtab指定"
 msgstr "由.gtab指定"
 
-#: ../src/hime-setup-gtab.c:59
+#: ../src/hime-setup-gtab.c:61
 msgid "全部開啟"
 msgstr "全部开启"
 
-#: ../src/hime-setup-gtab.c:60
+#: ../src/hime-setup-gtab.c:62
 msgid "全部關閉"
 msgstr "全部关闭"
 
-#: ../src/hime-setup-gtab.c:174
+#: ../src/hime-setup-gtab.c:173
 msgid "空白鍵選項"
 msgstr "空格键选项"
 
-#: ../src/hime-setup-gtab.c:243
+#: ../src/hime-setup-gtab.c:225
 msgid "外觀"
 msgstr "外观"
 
-#: ../src/hime-setup-gtab.c:252
+#: ../src/hime-setup-gtab.c:232
 msgid "行為"
 msgstr "行为"
 
-#: ../src/hime-setup-gtab.c:264
+#: ../src/hime-setup-gtab.c:245
 msgid "預覽/預選 字"
 msgstr "预览/预选 字"
 
-#: ../src/hime-setup-gtab.c:270
+#: ../src/hime-setup-gtab.c:251
 msgid "預選列中顯示部份符合的字"
 msgstr "预选列中显示部份符合的字"
 
-#: ../src/hime-setup-gtab.c:276
-msgid "顯示字根"
-msgstr "显示字根"
-
-#: ../src/hime-setup-gtab.c:285
-msgid "顯示輸入法名稱"
-msgstr "显示输入法名称"
-
-#: ../src/hime-setup-gtab.c:293
-msgid "隱藏第二列 (輸入鍵…)"
-msgstr "隐藏第二列 (输入键…)"
-
-#: ../src/hime-setup-gtab.c:301
-msgid "將字根移至第一列"
-msgstr "将字根移至第一列"
-
-#: ../src/hime-setup-gtab.c:308
+#: ../src/hime-setup-gtab.c:257
 msgid "垂直選擇"
 msgstr "垂直选择"
 
-#: ../src/hime-setup-gtab.c:314
+#: ../src/hime-setup-gtab.c:264
+msgid "顯示拆碼"
+msgstr ""
+
+#: ../src/hime-setup-gtab.c:271
+msgid "顯示輸入法名稱"
+msgstr "显示输入法名称"
+
+#: ../src/hime-setup-gtab.c:279
+#, fuzzy
+msgid "隱藏第二列 (輸入字根…)"
+msgstr "隐藏第二列 (输入键…)"
+
+#: ../src/hime-setup-gtab.c:287
+#, fuzzy
+msgid "將輸入字根移至第一列"
+msgstr "将字根移至第一列"
+
+#: ../src/hime-setup-gtab.c:294
 msgid "按滿字根自動送字"
 msgstr "按满字根自动送字"
 
-#: ../src/hime-setup-gtab.c:320
+#: ../src/hime-setup-gtab.c:300
 msgid "由詞庫自動選字"
 msgstr "由词库自动选字"
 
-#: ../src/hime-setup-gtab.c:323
+#: ../src/hime-setup-gtab.c:303
 msgid "使用預選詞"
 msgstr "使用预选词"
 
-#: ../src/hime-setup-gtab.c:330
+#: ../src/hime-setup-gtab.c:310
 msgid "有重複字時，發出嗶聲"
 msgstr "有重复字时，发出哔声"
 
-#: ../src/hime-setup-gtab.c:339
+#: ../src/hime-setup-gtab.c:319
 msgid "可鍵入錯誤字根 (傳統)"
 msgstr "可键入错误字根 (传统)"
 
-#: ../src/hime-setup-gtab.c:348
+#: ../src/hime-setup-gtab.c:328
 msgid "可用 Shift 輸入片語 (預設為 Alt-Shift)"
 msgstr "可用 Shift 输入片语 (默认为 Alt-Shift)"
 
-#: ../src/hime-setup-gtab.c:353
+#: ../src/hime-setup-gtab.c:333
 msgid "切換[中/英]輸入"
 msgstr "切换[中/英]输入"
 
-#: ../src/hime-setup-gtab.c:358
+#: ../src/hime-setup-gtab.c:338
 msgid "\t用小寫字母"
 msgstr "\t用小写字母"
 
-#: ../src/hime-setup-gtab.c:366
+#: ../src/hime-setup-gtab.c:346
 msgid "唯一選擇時自動送出"
 msgstr "唯一选择时自动送出"
 
-#: ../src/hime-setup-gtab.c:372
+#: ../src/hime-setup-gtab.c:352
 msgid "使用？萬用字元"
 msgstr "使用？万用字符"
 
-#: ../src/hime-setup-gtab.c:379
+#: ../src/hime-setup-gtab.c:359
 msgid "使用＊萬用字元"
 msgstr "使用？万用字符"
 
-#: ../src/hime-setup-gtab.c:386
+#: ../src/hime-setup-gtab.c:366
 msgid "使用` 查詢同音字"
 msgstr "使用` 查詢同音字"
 
-#: ../src/hime-setup-gtab.c:391
+#: ../src/hime-setup-gtab.c:371
 msgid "編輯預設輸入法的使用者外加字詞"
 msgstr "编辑默认输入法的用户外加字词"
 
-#: ../src/hime-setup-list.c:424
+#: ../src/hime-setup-list.c:430
 msgid "名稱"
 msgstr "名称"
 
-#: ../src/hime-setup-list.c:441
+#: ../src/hime-setup-list.c:447
 msgid "Ctrl-Alt-鍵"
 msgstr "Ctrl-Alt-键"
 
-#: ../src/hime-setup-list.c:454
+#: ../src/hime-setup-list.c:460
 msgid "在 Ctrl-Shift 中循環"
 msgstr "在 Ctrl-Shift 中循环"
 
-#: ../src/hime-setup-list.c:467
-msgid "預設"
-msgstr "默认"
-
-#: ../src/hime-setup-list.c:490
+#: ../src/hime-setup-list.c:496
 msgid "檔案名稱"
 msgstr "文件名称"
 
@@ -482,93 +402,187 @@ msgstr "结尾标点符号自动送出编辑区内容"
 msgid "發音選擇"
 msgstr "发音选择"
 
-#: ../src/hime-setup-pho.c:59
+#: ../src/hime-setup-pho.c:62
 msgid "(關閉)"
 msgstr "(禁用)"
 
-#: ../src/hime-setup-pho.c:60
+#: ../src/hime-setup-pho.c:63
 msgid "CapsLock"
 msgstr "CapsLock"
 
-#: ../src/hime-setup-pho.c:62
+#: ../src/hime-setup-pho.c:65
 msgid "Shift"
 msgstr "Shift"
 
-#: ../src/hime-setup-pho.c:63
+#: ../src/hime-setup-pho.c:66
 msgid "左 Shift"
 msgstr "左 Shift"
 
-#: ../src/hime-setup-pho.c:64
+#: ../src/hime-setup-pho.c:67
 msgid "右 Shift"
 msgstr "右 Shift"
 
-#: ../src/hime-setup-pho.c:73
+#: ../src/hime-setup-pho.c:76
 msgid "選擇同音字"
 msgstr "选择同音字"
 
-#: ../src/hime-setup-pho.c:74
+#: ../src/hime-setup-pho.c:77
 msgid "輸入空白"
 msgstr "输入空格"
 
-#: ../src/hime-setup-pho.c:340
+#: ../src/hime-setup-pho.c:351
 msgid "按下 Capslock 時輸出小寫英數字"
 msgstr "按下 Capslock 时输出小写英数字"
 
-#: ../src/hime-setup-pho.c:390
+#: ../src/hime-setup-pho.c:386
 msgid "鍵盤排列方式/選擇鍵/選單每列字數"
 msgstr "键盘排列方式/选择键/菜单每列字数"
 
-#: ../src/hime-setup-pho.c:395
+#: ../src/hime-setup-pho.c:391
 msgid "(詞音) 切換[中/英]輸入"
 msgstr "(词音) 切换[中/英]输入"
 
-#: ../src/hime-setup-pho.c:397
+#: ../src/hime-setup-pho.c:393
 msgid "(詞音) 鍵入空白鍵"
 msgstr "(词音) 键入空格键"
 
-#: ../src/hime-setup-pho.c:426
+#: ../src/hime-setup-pho.c:422
 msgid "詞音輸入預選詞視窗"
 msgstr "词音输入预选词视窗"
 
-#: ../src/hime-setup-pho.c:434
+#: ../src/hime-setup-pho.c:430
 msgid "依使用頻率調整字的順序"
 msgstr "依使用频率调整字的顺序"
 
-#: ../src/hime-setup-pho.c:442
+#: ../src/hime-setup-pho.c:438
 msgid "注音隱藏第二列 (注音符號)"
 msgstr "注音隐藏第二列 (注音符号)"
 
-#: ../src/hime-setup-pho.c:450
+#: ../src/hime-setup-pho.c:446
 msgid "注音符號移至第一列"
 msgstr "注音符号移至第一列"
 
-#: ../src/hime-setup-pho.c:458
+#: ../src/hime-setup-pho.c:454
 msgid "使用巨大 UTF-8 字集"
 msgstr "使用巨大 UTF-8 字集"
 
-#: ../src/hime-setup-pho.c:466
+#: ../src/hime-setup-pho.c:462
 msgid "(詞音) 輸入注音聲調符號"
 msgstr "(词音) 输入注音声调符号"
 
-#: ../src/hime-setup-pho.c:474
+#: ../src/hime-setup-pho.c:470
 msgid "(詞音) 使用 Escape/Tab 斷詞"
 msgstr "(词音) 使用 Escape/Tab 断词"
 
-#: ../src/hime-setup-pho.c:481
+#: ../src/hime-setup-pho.c:477
 msgid "選擇鍵顯示於候選字(詞)後方"
 msgstr "选择键显示于候选字(词)后方"
 
-#: ../src/hime-setup-pho.c:488
+#: ../src/hime-setup-pho.c:484
 msgid "\\ 鍵可切換 jkx 鍵編輯模式"
 msgstr "\\ 键可切换 jkx 键编辑模态"
 
-#: ../src/hime-setup-pho.c:495
+#: ../src/hime-setup-pho.c:491
 msgid "按下 ↑ 鍵查詢近似音"
 msgstr "按下 ↑ 键查询近似音"
 
-#: ../src/hime-setup-pho.c:500
+#: ../src/hime-setup-pho.c:496
 msgid "(詞音) 的編輯緩衝區大小"
 msgstr "(词音) 的编辑缓冲区大小"
+
+#: ../src/hime-setup.c:75
+msgid "結果失敗"
+msgstr "结果失败"
+
+#: ../src/hime-setup.c:80
+msgid "結果成功"
+msgstr "结果成功"
+
+#: ../src/hime-setup.c:92
+msgid "請輸入要匯出的檔案名稱"
+msgstr "请输入要汇出的文件名称"
+
+#: ../src/hime-setup.c:163
+msgid "請輸入要匯入的檔案名稱"
+msgstr "请输入要汇入的文件名称"
+
+#: ../src/hime-setup.c:265
+msgid "alt-shift 片語編輯"
+msgstr "alt-shift 片语编辑"
+
+#: ../src/hime-setup.c:268
+msgid "符號表編輯"
+msgstr "符号表编辑"
+
+#: ../src/hime-setup.c:273
+#, fuzzy
+msgid "啟用/關閉簡體字輸出"
+msgstr "简体字输出切换"
+
+#: ../src/hime-setup.c:276
+msgid "顯示/隱藏輸入法鍵盤"
+msgstr "显示/隐藏输入法键盘"
+
+#: ../src/hime-setup.c:280
+msgid "剪貼區 簡體字->正體字"
+msgstr "剪贴区 简体字->正体字"
+
+#: ../src/hime-setup.c:283
+msgid "剪貼區 注音查詢"
+msgstr "剪贴区 注音查询"
+
+#: ../src/hime-setup.c:285
+msgid "詞庫選項"
+msgstr "词库选项"
+
+#: ../src/hime-setup.c:292
+msgid "詞庫匯出"
+msgstr "词库汇出"
+
+#: ../src/hime-setup.c:295
+msgid "詞庫匯入"
+msgstr "词库汇入"
+
+#: ../src/hime-setup.c:298
+msgid "詞庫編輯"
+msgstr "词库编辑"
+
+#: ../src/hime-setup.c:301
+#, fuzzy
+msgid "從文章學習詞"
+msgstr "让词音从文章学习词"
+
+#: ../src/hime-setup.c:304
+msgid "匯入系統的詞庫"
+msgstr "汇入系统的词库"
+
+#: ../src/hime-setup.c:323 ../src/tray-appindicator.c:64 ../src/tray.c:191
+msgid "設定"
+msgstr "设置"
+
+#: ../src/hime-setup.c:343
+msgid "開啟/關閉/預設輸入法"
+msgstr ""
+
+#: ../src/hime-setup.c:344
+msgid "外觀設定"
+msgstr "外观设置"
+
+#: ../src/hime-setup.c:345
+msgid "注音/詞音/拼音設定"
+msgstr "注音/词音/拼音设置"
+
+#: ../src/hime-setup.c:346
+msgid "倉頡/行列/大易設定"
+msgstr "仓颉/行列/大易设置"
+
+#: ../src/hime-setup.c:347
+msgid "雜項"
+msgstr ""
+
+#: ../src/hime-setup.c:420
+msgid "hime 設定/工具"
+msgstr "hime 设置/工具"
 
 #: ../src/hime-sim2trad.c:140
 msgid "離開"
@@ -653,45 +667,31 @@ msgstr ""
 msgid "開關輸入法"
 msgstr "开关输入法"
 
-#: ../src/tray-appindicator.c:65
-#: ../src/tray.c:192
-#: ../src/tray-double.c:111
+#: ../src/tray-appindicator.c:65 ../src/tray-double.c:110 ../src/tray.c:192
 msgid "結束hime"
 msgstr "结束 hime"
 
-#: ../src/tray-appindicator.c:66
-#: ../src/tray.c:193
-#: ../src/tray-double.c:112
+#: ../src/tray-appindicator.c:66 ../src/tray-double.c:111 ../src/tray.c:193
 msgid "念出發音"
 msgstr "念出发音"
 
-#: ../src/tray-appindicator.c:67
-#: ../src/tray.c:194
-#: ../src/tray-double.c:137
+#: ../src/tray-appindicator.c:67 ../src/tray-double.c:137 ../src/tray.c:194
 msgid "繁轉簡工具"
 msgstr "繁转简工具"
 
-#: ../src/tray-appindicator.c:68
-#: ../src/tray.c:195
-#: ../src/tray-double.c:138
+#: ../src/tray-appindicator.c:68 ../src/tray-double.c:138 ../src/tray.c:195
 msgid "簡轉繁工具"
 msgstr "简转繁工具"
 
-#: ../src/tray-appindicator.c:69
-#: ../src/tray.c:196
-#: ../src/tray-double.c:114
+#: ../src/tray-appindicator.c:69 ../src/tray-double.c:113 ../src/tray.c:196
 msgid "選擇輸入法"
 msgstr "选择输入法"
 
-#: ../src/tray-appindicator.c:70
-#: ../src/tray.c:197
-#: ../src/tray-double.c:113
+#: ../src/tray-appindicator.c:70 ../src/tray-double.c:112 ../src/tray.c:197
 msgid "小鍵盤"
 msgstr "小键盘"
 
-#: ../src/tray-appindicator.c:71
-#: ../src/tray.c:198
-#: ../src/tray-double.c:139
+#: ../src/tray-appindicator.c:71 ../src/tray-double.c:139 ../src/tray.c:198
 msgid "輸出成簡體"
 msgstr "输出成简体"
 
@@ -703,30 +703,15 @@ msgstr "/简"
 msgid "半"
 msgstr "半"
 
-#: ../src/tray-appindicator.c:132
-#: ../src/tray.c:48
-#: ../src/win-pho.c:204
+#: ../src/tray-appindicator.c:132 ../src/tray.c:48 ../src/win-pho.c:195
 msgid "全"
 msgstr "全"
 
-#: ../src/tray.c:48
-msgid "ABC"
-msgstr "ABC"
-
-#: ../src/tray.c:48
-msgid "简"
-msgstr "简"
-
-#: ../src/tray.c:288
-#: ../src/tray.c:291
-msgid "左:中英切換 中:小鍵盤 右:選項"
-msgstr "左:中英切换 中:小键盘 右:选项"
-
-#: ../src/tray-double.c:109
+#: ../src/tray-double.c:108
 msgid "關於hime"
 msgstr "关于 hime"
 
-#: ../src/tray-double.c:110
+#: ../src/tray-double.c:109
 msgid "設定/工具"
 msgstr "设置/工具"
 
@@ -750,20 +735,20 @@ msgstr "半角/简体输出"
 msgid "半形/正體輸出"
 msgstr "半角/正体输出"
 
-#: ../src/win0.c:402
-msgid "英"
-msgstr "英"
+#: ../src/tray.c:48
+msgid "ABC"
+msgstr "ABC"
 
-#: ../src/win0.c:402
-msgid "注"
-msgstr "注"
+#: ../src/tray.c:48
+msgid "简"
+msgstr "简"
 
-#: ../src/win0.c:538
-#: ../src/win0.c:541
-#: ../src/win-gtab.c:591
-#: ../src/win-gtab.c:594
-#: ../src/win-pho.c:232
-#: ../src/win-pho.c:235
+#: ../src/tray.c:288 ../src/tray.c:291
+msgid "左:中英切換 中:小鍵盤 右:選項"
+msgstr "左:中英切换 中:小键盘 右:选项"
+
+#: ../src/win-gtab.c:589 ../src/win-gtab.c:592 ../src/win-pho.c:223
+#: ../src/win-pho.c:226 ../src/win0.c:537 ../src/win0.c:540
 msgid "左鍵符號，右鍵設定"
 msgstr "左键符号，右键设置"
 
@@ -776,39 +761,58 @@ msgstr "%d 秒后自动加入"
 msgid "加片語到詞庫"
 msgstr "加片语到词库"
 
-#: ../src/gtk3-im/imhime.c:26
-#: ../src/gtk-im/imhime.c:26
+#: ../src/win0.c:401
+msgid "英"
+msgstr "英"
+
+#: ../src/win0.c:401
+msgid "注"
+msgstr "注"
+
+#: ../src/gtk-im/imhime.c:26 ../src/gtk3-im/imhime.c:26
 msgid "hime Input Method"
 msgstr "hime Input Method"
 
-#: ../src/modules/hime-setup-chewing.c:111
+#: ../src/modules/hime-setup-chewing.c:113
 #, fuzzy
 msgid "新酷音設定"
 msgstr "hime 新酷音设置"
 
-#: ../src/modules/hime-setup-chewing.c:121
+#: ../src/modules/hime-setup-chewing.c:123
 msgid "每頁候選字數"
 msgstr "每页候选字数"
 
-#: ../src/modules/hime-setup-chewing.c:130
+#: ../src/modules/hime-setup-chewing.c:132
 msgid "空白鍵選字"
 msgstr "空格键选字"
 
-#: ../src/modules/hime-setup-chewing.c:137
+#: ../src/modules/hime-setup-chewing.c:139
 msgid "ESC 鍵清空緩衝區"
 msgstr "ESC 键清空缓冲区"
 
-#: ../src/modules/hime-setup-chewing.c:144
+#: ../src/modules/hime-setup-chewing.c:146
 msgid "選字完畢自動跳字"
 msgstr "选字完毕自动跳字"
 
-#: ../src/modules/hime-setup-chewing.c:151
+#: ../src/modules/hime-setup-chewing.c:153
 msgid "向後加詞"
 msgstr "向后加词"
 
-#: ../src/modules/win-int.c:169
+#: ../src/modules/win-int.c:162
 msgid "內碼"
 msgstr "内码"
+
+#~ msgid "輸入視窗外觀設定"
+#~ msgstr "输入视窗外观设置"
+
+#~ msgid "字型大小"
+#~ msgstr "字体大小"
+
+#~ msgid "內定輸入法 & 開啟/關閉"
+#~ msgstr "默认输入法 & 开启/关闭"
+
+#~ msgid "顯示字根"
+#~ msgstr "显示字根"
 
 #~ msgid "Orientation"
 #~ msgstr "Orientation"
@@ -827,9 +831,6 @@ msgstr "内码"
 
 #~ msgid "選擇鍵的顏色"
 #~ msgstr "选择键的颜色"
-
-#~ msgid "外觀設定"
-#~ msgstr "外观设置"
 
 #~ msgid "重新執行hime"
 #~ msgstr "重新运行hime"
