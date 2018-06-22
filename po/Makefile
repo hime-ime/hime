@@ -20,12 +20,12 @@ gmo:
 	done
 
 hime.pot:
-	xgettext --from-code=UTF-8 --keyword=_ --keyword=N_ -o $@ ../*/*.c ../src/*/*.c*
+	xgettext --from-code=UTF-8 --keyword=_ --keyword=N_ --no-wrap -o $@ ../*/*.c ../src/*/*.c*
 
 update-po: hime.pot
 	@set -x ; for d in $(LANG_FILE); do \
 	   $(ECHO) -e "\x1b[1;32m** updating $$d.po\x1b[0m"; \
-	   msgmerge -v $$d.po hime.pot > $$d.new.po ; \
+	   msgmerge --no-wrap -v $$d.po hime.pot > $$d.new.po; \
 	   mv $$d.new.po $$d.po ; \
 	done
 
