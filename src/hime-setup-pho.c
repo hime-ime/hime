@@ -390,7 +390,7 @@ GtkWidget *create_kbm_widget()
 
   gtk_box_pack_start (GTK_BOX (vbox_l), create_en_pho_key_sel(_("(Tsin) Toggle [中/英] input"), 0), FALSE, FALSE, 0);
 
-  GtkWidget *frame_tsin_space_opt = gtk_frame_new(_("(Tsin) When pressing spacebar...");
+  GtkWidget *frame_tsin_space_opt = gtk_frame_new(_("(Tsin) When pressing spacebar..."));
   gtk_box_pack_start (GTK_BOX (vbox_l), frame_tsin_space_opt, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (frame_tsin_space_opt), 1);
 
