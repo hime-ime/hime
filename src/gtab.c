@@ -1361,7 +1361,7 @@ direct_select:
       if (gtab_pho_query && !cur_inmd->keymap[key]) {
         poo.same_pho_query_state = SAME_PHO_QUERY_gtab_input;
         reset_gtab_all();
-        disp_gtab_sel(_("輸入要查的同音字，接著在注音視窗選字"));
+        disp_gtab_sel(_("Look up same phonetic characters"));
         if (hime_pop_up_win)
           show_win_gtab();
         disp_pho_sel("");

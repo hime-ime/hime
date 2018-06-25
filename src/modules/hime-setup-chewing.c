@@ -110,7 +110,7 @@ void module_setup_window_create (GtkButton *button, gpointer data_hime_setup_win
                       NULL);
 
     gtk_window_set_title (GTK_WINDOW (hime_chewing_window),
-                          _("新酷音設定"));
+                          _("Settings for Chewing"));
     gtk_container_set_border_width (GTK_CONTAINER (hime_chewing_window), 1);
 
     vbox_top = gtk_vbox_new (FALSE, 3);
@@ -120,7 +120,7 @@ void module_setup_window_create (GtkButton *button, gpointer data_hime_setup_win
     // cand per page
     g_pHBoxCandPerPage = gtk_hbox_new (FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), g_pHBoxCandPerPage, TRUE, TRUE, 1);
-    g_pLabelCandPerPage = gtk_label_new (_("每頁候選字數"));
+    g_pLabelCandPerPage = gtk_label_new (_("Candidates per page"));
     gtk_box_pack_start (GTK_BOX (g_pHBoxCandPerPage), g_pLabelCandPerPage, TRUE, TRUE, 0);
     g_pGtkAdj = (GtkAdjustment *)gtk_adjustment_new (g_chewingConfig.candPerPage, 1, 10, 1.0, 1.0, 0.0);
     g_pSpinButtonCandPerPage = gtk_spin_button_new (g_pGtkAdj, 0, 0);
@@ -129,28 +129,28 @@ void module_setup_window_create (GtkButton *button, gpointer data_hime_setup_win
     // space as selection
     g_pHBoxSpaceAsSelection = gtk_hbox_new (FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), g_pHBoxSpaceAsSelection, TRUE, TRUE, 1);
-    g_pCheckButtonSpaceAsSelection = gtk_check_button_new_with_label(_("空白鍵選字"));
+    g_pCheckButtonSpaceAsSelection = gtk_check_button_new_with_label(_("Space key to select candidates"));
     gtk_box_pack_start (GTK_BOX (g_pHBoxSpaceAsSelection), g_pCheckButtonSpaceAsSelection, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (g_pCheckButtonSpaceAsSelection), g_chewingConfig.bSpaceAsSelection);
 
     // esc clean buf
     g_pHBoxEscCleanAllBuf = gtk_hbox_new (FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), g_pHBoxEscCleanAllBuf, TRUE, TRUE, 1);
-    g_pCheckButtonEscCleanAllBuf = gtk_check_button_new_with_label (_("ESC 鍵清空緩衝區"));
+    g_pCheckButtonEscCleanAllBuf = gtk_check_button_new_with_label (_("Esc key to clear buffer"));
     gtk_box_pack_start (GTK_BOX (g_pHBoxEscCleanAllBuf), g_pCheckButtonEscCleanAllBuf, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (g_pCheckButtonEscCleanAllBuf), g_chewingConfig.bEscCleanAllBuf);
 
     // auto shift cursor
     g_pHBoxAutoShiftCur = gtk_hbox_new (FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), g_pHBoxAutoShiftCur, TRUE, TRUE, 1);
-    g_pCheckButtonAutoShiftCur = gtk_check_button_new_with_label (_("選字完畢自動跳字"));
+    g_pCheckButtonAutoShiftCur = gtk_check_button_new_with_label (_("Move cursor automatically after selections"));
     gtk_box_pack_start (GTK_BOX (g_pHBoxAutoShiftCur), g_pCheckButtonAutoShiftCur, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (g_pCheckButtonAutoShiftCur), g_chewingConfig.bAutoShiftCur);
 
     // add phrase forward
     g_pHBoxAddPhraseForward = gtk_hbox_new (FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), g_pHBoxAddPhraseForward, TRUE, TRUE, 1);
-    g_pCheckButtonAddPhraseForward = gtk_check_button_new_with_label (_("向後加詞"));
+    g_pCheckButtonAddPhraseForward = gtk_check_button_new_with_label (_("Add phrase backwards"));
     gtk_box_pack_start (GTK_BOX (g_pHBoxAddPhraseForward), g_pCheckButtonAddPhraseForward, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (g_pCheckButtonAddPhraseForward), g_chewingConfig.bAddPhraseForward);
 

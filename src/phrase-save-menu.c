@@ -75,9 +75,9 @@ void create_phrase_save_menu(GdkEventButton * event)
   gtk_container_add(GTK_CONTAINER(phrase_save_win), vbox);
   char tt[512];
 
-  add_button(vbox, _("關閉"), 0, 0);
+  add_button(vbox, _("Close"), 0, 0);
 
-  GtkWidget *label = gtk_label_new(_("--- 加到詞庫 ---"));
+  GtkWidget *label = gtk_label_new(_("--- Add phrase to Tsin's database ---"));
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
 

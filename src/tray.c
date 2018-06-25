@@ -188,14 +188,14 @@ void cb_inmd_menu(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 #include "mitem.h"
 
 static MITEM mitems[] = {
-  {N_("設定"), GTK_STOCK_PREFERENCES, exec_hime_setup_, NULL},
-  {N_("結束hime"), GTK_STOCK_QUIT, quit_hime, NULL},
-  {N_("念出發音"), NULL, cb_tog_phospeak, &phonetic_speak},
-  {N_("繁轉簡工具"), NULL, cb_trad2sim, NULL},
-  {N_("簡轉繁工具"), NULL, cb_sim2trad, NULL},
-  {N_("選擇輸入法"), NULL, cb_inmd_menu, NULL},
-  {N_("小鍵盤"), NULL, kbm_toggle_, &hime_show_win_kbm},
-  {N_("輸出成簡體"), NULL, cb_trad_sim_toggle_, &gb_output},
+  {N_("Configuration"), GTK_STOCK_PREFERENCES, exec_hime_setup_, NULL},
+  {N_("Exit"), GTK_STOCK_QUIT, quit_hime, NULL},
+  {N_("Text-to-speech"), NULL, cb_tog_phospeak, &phonetic_speak},
+  {N_("Trad. to Simp. conversion tool"), NULL, cb_trad2sim, NULL},
+  {N_("Simp. to Trad. conversion tool"), NULL, cb_sim2trad, NULL},
+  {N_("Select input methods"), NULL, cb_inmd_menu, NULL},
+  {N_("Virtual keyboard"), NULL, kbm_toggle_, &hime_show_win_kbm},
+  {N_("Simplified Chinese output"), NULL, cb_trad_sim_toggle_, &gb_output},
   {NULL, NULL, NULL, NULL}
 };
 
@@ -285,10 +285,10 @@ gboolean create_tray(gpointer data)
                   G_CALLBACK (tray_embedded_cb), NULL);
 
 #if GTK_CHECK_VERSION(2,12,0)
-  gtk_status_icon_set_tooltip_text (tray_icon, _("左:中英切換 中:小鍵盤 右:選項"));
+  gtk_status_icon_set_tooltip_text (tray_icon, _("Left:Toggle alphabet-numeric mode  Middle:Virtual Keyboard  Right:Preferences"));
 #else
   GtkTooltips *tips = gtk_tooltips_new ();
-  gtk_status_icon_set_tooltip (GTK_TOOLTIPS (tips), tray_icon, _("左:中英切換 中:小鍵盤 右:選項"), NULL);
+  gtk_status_icon_set_tooltip (GTK_TOOLTIPS (tips), tray_icon, _("Left:Toggle alphabet-numeric mode  Middle:Virtual Keyboard  Right:Preferences"), NULL);
 #endif
 
 // Initiate Pango for drawing texts from default setting

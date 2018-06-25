@@ -41,7 +41,7 @@ void disp_stat()
 {
   char tt[512];
 
-  snprintf(tt, sizeof(tt), _("1,3,5分鐘\n%d,%d,%d/分"), get_ch_count(1), get_ch_count(3), get_ch_count(5));
+  snprintf(tt, sizeof(tt), _("1,3,5 min\n%d,%d,%d/min"), get_ch_count(1), get_ch_count(3), get_ch_count(5));
   gtk_label_set_text(GTK_LABEL(label_disp), tt);
 }
 

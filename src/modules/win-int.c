@@ -159,7 +159,7 @@ void create_win_intcode()
   GtkWidget *hbox_top = gtk_hbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (frame), hbox_top);
 
-  GtkWidget *button_intcode = gtk_button_new_with_label(_("內碼"));
+  GtkWidget *button_intcode = gtk_button_new_with_label(_("Encoding"));
   g_signal_connect_swapped (GTK_OBJECT (button_intcode), "button_press_event",
         G_CALLBACK (gmf.mf_inmd_switch_popup_handler), NULL);
   gtk_box_pack_start (GTK_BOX (hbox_top), button_intcode, FALSE, FALSE, 0);

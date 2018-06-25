@@ -72,12 +72,12 @@ static void create_result_win(const int res, const char *cmd)
   GtkWidget *dialog = NULL;
   if (res) {
     dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
-      "%s code:%d '%s'\n%s", _("結果失敗"), res, strerror(res), cmd);
+      "%s code:%d '%s'\n%s", _("Failed"), res, strerror(res), cmd);
   }
   else
   {
     dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-      _("結果成功"));
+      _("Success"));
   }
   if (dialog == NULL) exit(-1);
 
@@ -89,7 +89,7 @@ static void cb_ts_export()
 {
    GtkWidget *file_selector =
       gtk_file_chooser_dialog_new(
-         _("請輸入要匯出的檔案名稱"),
+         _("Please input filename for exporting data"),
          GTK_WINDOW(main_window),
          GTK_FILE_CHOOSER_ACTION_SAVE,
          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -160,7 +160,7 @@ static void cb_ts_import()
 
    GtkWidget *file_selector =
       gtk_file_chooser_dialog_new(
-         _("請輸入要匯入的檔案名稱"),
+         _("Please input filename for importing data"),
          GTK_WINDOW(main_window),
          GTK_FILE_CHOOSER_ACTION_OPEN,
          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -262,46 +262,46 @@ static GtkWidget *create_misc_widget(void)
   gtk_orientable_set_orientation(GTK_ORIENTABLE(top_widget), GTK_ORIENTATION_VERTICAL);
 
   pack_start_new_button_with_callback(GTK_BOX(top_widget),
-      _("alt-shift 片語編輯"), G_CALLBACK(cb_alt_shift), NULL);
+      _("Edit Alt-Shift phrases"), G_CALLBACK(cb_alt_shift), NULL);
 
   pack_start_new_button_with_callback(GTK_BOX(top_widget),
-      _("符號表編輯"), G_CALLBACK(cb_symbol_table), NULL);
+      _("Edit symbols"), G_CALLBACK(cb_symbol_table), NULL);
 
   if (!hime_status_tray)
   {
     pack_start_new_button_with_callback(GTK_BOX(top_widget),
-      _("啟用/關閉簡體字輸出"), G_CALLBACK(cb_gb_output_toggle), NULL);
+      _("Toggle Simplified Chinese output"), G_CALLBACK(cb_gb_output_toggle), NULL);
 
     pack_start_new_button_with_callback(GTK_BOX(top_widget),
-      _("顯示/隱藏輸入法鍵盤"), G_CALLBACK (cb_win_kbm_toggle), NULL);
+      _("Toggle virtual keyboard"), G_CALLBACK (cb_win_kbm_toggle), NULL);
   }
 
   pack_start_new_button_with_callback(GTK_BOX(top_widget),
-    _("剪貼區 簡體字->正體字"), G_CALLBACK (cb_gb_translate_toggle), NULL);
+    _("Convert clipboard's Simplified Chinese to Traditional Chinese"), G_CALLBACK (cb_gb_translate_toggle), NULL);
 
   pack_start_new_button_with_callback(GTK_BOX(top_widget),
-    _("剪貼區 注音查詢"), G_CALLBACK (cb_juying_learn), NULL);
+    _("Lookup phonations of words in clipboard"), G_CALLBACK (cb_juying_learn), NULL);
 
-  GtkWidget *frame_ts = gtk_frame_new (_("詞庫選項"));
+  GtkWidget *frame_ts = gtk_frame_new (_("Options for Tsin's database"));
   gtk_box_pack_start (GTK_BOX (top_widget), frame_ts, FALSE, FALSE, 5);
   GtkWidget *vbox_ts = gtk_vbox_new (FALSE, 5);
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_ts), GTK_ORIENTATION_VERTICAL);
   gtk_container_add (GTK_CONTAINER (frame_ts), vbox_ts);
 
   pack_start_new_button_with_callback(GTK_BOX(vbox_ts),
-    _("詞庫匯出"), G_CALLBACK (cb_ts_export), NULL);
+    _("Export phrase database"), G_CALLBACK (cb_ts_export), NULL);
 
   pack_start_new_button_with_callback(GTK_BOX(vbox_ts),
-    _("詞庫匯入"), G_CALLBACK (cb_ts_import), NULL);
+    _("Import phrase database"), G_CALLBACK (cb_ts_import), NULL);
 
   pack_start_new_button_with_callback(GTK_BOX(vbox_ts),
-    _("詞庫編輯"), G_CALLBACK (cb_ts_edit), NULL);
+    _("Edit phrase database"), G_CALLBACK (cb_ts_edit), NULL);
 
   pack_start_new_button_with_callback(GTK_BOX(vbox_ts),
-    _("從文章學習詞"), G_CALLBACK (cb_tslearn), NULL);
+    _("Learn phrases in articles"), G_CALLBACK (cb_tslearn), NULL);
 
   pack_start_new_button_with_callback(GTK_BOX(vbox_ts),
-    _("匯入系統的詞庫"), G_CALLBACK (cb_ts_import_sys), NULL);
+    _("Import global database"), G_CALLBACK (cb_ts_import_sys), NULL);
 
   int i;
   for (i=0; i < inmdN; i++) {
@@ -320,7 +320,7 @@ static GtkWidget *create_misc_widget(void)
 
     char tt[128];
     strcpy(tt, pinmd->cname);
-    strcat(tt, _("設定"));
+    strcat(tt, _("Configuration"));
     pack_start_new_button_with_callback(GTK_BOX(top_widget),
         tt, G_CALLBACK (f->module_setup_window_create), GINT_TO_POINTER(hime_setup_window_type_utility));
   }
@@ -341,9 +341,9 @@ static void dummy () { }
 #define TAB_TABLE_SIZE 5
 static TAB_ENTRY tab_table[TAB_TABLE_SIZE] =
   { {N_("開啟/關閉/預設輸入法"), create_gtablist_widget, save_gtablist_conf, destroy_gtablist_widget}
-  , {N_("外觀設定"), create_appearance_widget, save_appearance_conf, destroy_appearance_widget}
-  , {N_("注音/詞音/拼音設定"), create_kbm_widget, save_kbm_conf, destroy_kbm_widget}
-  , {N_("倉頡/行列/大易設定"), create_gtab_widget, save_gtab_conf, destroy_gtab_widget}
+  , {N_("Appearance Settings"), create_appearance_widget, save_appearance_conf, destroy_appearance_widget}
+  , {N_("Settings for Bopomofo, Tsin, and Pinyin"), create_kbm_widget, save_kbm_conf, destroy_kbm_widget}
+  , {N_("Settings for gtab input methods"), create_gtab_widget, save_gtab_conf, destroy_gtab_widget}
   , {N_("雜項"), create_misc_widget, dummy, dummy}
   };
 
@@ -417,7 +417,7 @@ static void run_dialog(void)
 
   /* Create the dialog */
   GtkWidget *dialog = gtk_dialog_new_with_buttons (
-      _("hime 設定/工具"),
+      _("hime setup"),
       NULL,
       GTK_DIALOG_DESTROY_WITH_PARENT,
       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,

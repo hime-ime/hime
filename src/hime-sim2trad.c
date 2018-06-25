@@ -132,12 +132,12 @@ int main(int argc, char **argv)
   hbox_buttons = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox_top), hbox_buttons, FALSE, FALSE, 0);
 
-  GtkWidget *button_fetch = gtk_button_new_with_label(_("自剪貼區更新"));
+  GtkWidget *button_fetch = gtk_button_new_with_label(_("Update data from clipboard"));
   gtk_box_pack_start (GTK_BOX (hbox_buttons), button_fetch, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_fetch), "clicked",
      G_CALLBACK (cb_button_fetch), NULL);
 
-  GtkWidget *button_exit = gtk_button_new_with_label(_("離開"));
+  GtkWidget *button_exit = gtk_button_new_with_label(_("Exit"));
   gtk_box_pack_start (GTK_BOX (hbox_buttons), button_exit, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_exit), "clicked",
      G_CALLBACK (do_exit), NULL);

@@ -105,12 +105,12 @@ extern gboolean win_kbm_inited;
 extern gboolean win_kbm_on;
 
 static MITEM mitems_main[] = {
-  {N_("關於hime"), GTK_STOCK_ABOUT, cb_about_window},
-  {N_("設定/工具"), GTK_STOCK_PREFERENCES, exec_hime_setup_},
-  {N_("結束hime"), GTK_STOCK_QUIT, quit_hime},
-  {N_("念出發音"), NULL, cb_tog_phospeak, &phonetic_speak},
-  {N_("小鍵盤"), NULL, kbm_toggle_, &hime_show_win_kbm},
-  {N_("選擇輸入法"), GTK_STOCK_INDEX, cb_inmd_menu, NULL},
+  {N_("About hime"), GTK_STOCK_ABOUT, cb_about_window},
+  {N_("Setup / Tools"), GTK_STOCK_PREFERENCES, exec_hime_setup_},
+  {N_("Exit"), GTK_STOCK_QUIT, quit_hime},
+  {N_("Text-to-speech"), NULL, cb_tog_phospeak, &phonetic_speak},
+  {N_("Virtual keyboard"), NULL, kbm_toggle_, &hime_show_win_kbm},
+  {N_("Select input methods"), GTK_STOCK_INDEX, cb_inmd_menu, NULL},
   {NULL}
 };
 
@@ -134,10 +134,10 @@ static void cb_fast_phonetic_kbd_switch(GtkCheckMenuItem *checkmenuitem, gpointe
 
 static MITEM mitems_state[] = {
   {NULL, NULL, cb_fast_phonetic_kbd_switch},
-  {N_("繁轉簡工具"), NULL, cb_trad2sim},
-  {N_("簡轉繁工具"), NULL, cb_sim2trad},
-  {N_("輸出成簡體"), NULL, cb_trad_sim_toggle_, &gb_output},
-  {N_("打字速度統計"), NULL, cb_stat_toggle_, &stat_enabled},
+  {N_("Trad. to Simp. conversion tool"), NULL, cb_trad2sim},
+  {N_("Simp. to Trad. conversion tool"), NULL, cb_sim2trad},
+  {N_("Simplified Chinese output"), NULL, cb_trad_sim_toggle_, &gb_output},
+  {N_("Typing Speed"), NULL, cb_stat_toggle_, &stat_enabled},
   {NULL}
 };
 
@@ -367,19 +367,19 @@ void load_tray_icon_double()
   if (current_shape_mode()) {
       if (gb_output) {
         icon_st="full-simp.png";
-        tip = _("全形/簡體輸出");
+        tip = _("Double-width / Simplified Chinese output");
       }
       else {
         icon_st="full-trad.png";
-        tip = _("全形/正體輸出");
+        tip = _("Double-width / Traditional Chinese output");
       }
   } else {
     if (gb_output) {
       icon_st="half-simp.png";
-      tip= _("半形/簡體輸出");
+      tip= _("Half-width / Simplified Chinese output");
     } else {
       icon_st="half-trad.png";
-      tip = _("半形/正體輸出");
+      tip = _("Half-width / Traditional Chinese output");
     }
   }
 
