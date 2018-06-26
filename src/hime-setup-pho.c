@@ -47,7 +47,7 @@ static GtkWidget *check_button_tsin_phrase_pre_select,
                  *check_button_tsin_buffer_editing_mode,
                  *check_button_tsin_use_pho_near,
                  *spinner_tsin_buffer_size,
-                 *spinner_pho_candicate_col_N;
+                 *spinner_pho_candidate_col_N;
 
 GtkWidget *check_button_hime_capslock_lower;
 
@@ -121,15 +121,15 @@ void save_kbm_conf()
 
   int idx_selkeys = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_selkeys));
 
-  pho_candicate_col_N = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_pho_candicate_col_N));
+  pho_candidate_col_N = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_pho_candidate_col_N));
 
-  if (pho_candicate_col_N > strlen(selkeys[idx_selkeys].kstr))
-    pho_candicate_col_N = strlen(selkeys[idx_selkeys].kstr);
+  if (pho_candidate_col_N > strlen(selkeys[idx_selkeys].kstr))
+    pho_candidate_col_N = strlen(selkeys[idx_selkeys].kstr);
 
-  dbg("pho_candicate_col_N %d\n", pho_candicate_col_N);
+  dbg("pho_candidate_col_N %d\n", pho_candidate_col_N);
 
   char tt[128];
-  snprintf(tt, sizeof(tt), "%s %s %d %d", kbm_sel[idx].kbm, selkeys[idx_selkeys].kstr, pho_candicate_col_N, selkeys[idx_selkeys].RL);
+  snprintf(tt, sizeof(tt), "%s %s %d %d", kbm_sel[idx].kbm, selkeys[idx_selkeys].kstr, pho_candidate_col_N, selkeys[idx_selkeys].RL);
 
   char phokbm_name[128];
   get_hime_conf_fstr(PHONETIC_KEYBOARD, phokbm_name, "");
@@ -296,9 +296,9 @@ static GtkWidget *create_kbm_opts()
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_selkeys), current_idx);
 
   GtkAdjustment *adj =
-   (GtkAdjustment *) gtk_adjustment_new (pho_candicate_col_N, 1, 10, 1.0, 1.0, 0.0);
-  spinner_pho_candicate_col_N = gtk_spin_button_new (adj, 0, 0);
-  gtk_box_pack_start (GTK_BOX (hbox), spinner_pho_candicate_col_N, FALSE, FALSE, 0);
+   (GtkAdjustment *) gtk_adjustment_new (pho_candidate_col_N, 1, 10, 1.0, 1.0, 0.0);
+  spinner_pho_candidate_col_N = gtk_spin_button_new (adj, 0, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), spinner_pho_candidate_col_N, FALSE, FALSE, 0);
 
   return hbox;
 }

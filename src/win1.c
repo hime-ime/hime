@@ -38,17 +38,17 @@ static int c_config;
 
 static int current_config()
 {
-  return (tsin_tail_select_key<<9) | (pho_candicate_col_N<<5) | wselkeyN << 1|
-    pho_candicate_R2L;
+  return (tsin_tail_select_key<<9) | (pho_candidate_col_N<<5) | wselkeyN << 1|
+    pho_candidate_R2L;
 }
 
 static int idx_to_x(int tN, int i)
 {
-    if (tN > pho_candicate_col_N)
-      tN = pho_candicate_col_N;
+    if (tN > pho_candidate_col_N)
+      tN = pho_candidate_col_N;
 
     int x = i % tN;
-    if (pho_candicate_R2L)
+    if (pho_candidate_R2L)
       x = tN - 1 - x;
     return x;
 }
@@ -146,8 +146,8 @@ void create_win1_gui()
   g_signal_connect (G_OBJECT (eve_box_up), "button-press-event",
                       G_CALLBACK (cb_arrow_up), NULL);
 
-  int c_rowN = (wselkeyN + pho_candicate_col_N - 1) / pho_candicate_col_N * pho_candicate_col_N;
-  int tablecolN = pho_candicate_col_N;
+  int c_rowN = (wselkeyN + pho_candidate_col_N - 1) / pho_candidate_col_N * pho_candidate_col_N;
+  int tablecolN = pho_candidate_col_N;
 
   if (!tsin_tail_select_key)
     tablecolN *= 2;
@@ -160,7 +160,7 @@ void create_win1_gui()
   int i;
   for(i=0; i < wselkeyN; i++)
   {
-    int y = i/pho_candicate_col_N;
+    int y = i/pho_candidate_col_N;
     int x = idx_to_x(SELEN+1, i);
 
     if (!tsin_tail_select_key)

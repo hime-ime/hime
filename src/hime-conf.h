@@ -146,7 +146,7 @@ extern int hime_win_color_use, hime_bell_off;
 extern int hime_init_im_enabled, hime_init_full_mode;
 extern int hime_edit_display, hime_tray_display;
 extern char *pho_kbm_name, *pho_selkey, *hime_str_im_cycle;
-extern int pho_candicate_col_N, pho_candicate_R2L;
+extern int pho_candidate_col_N, pho_candidate_R2L;
 
 gboolean get_hime_user_fname(char *name, char fname[]);
 void get_hime_conf_str(char *name, char **rstr, char *default_str);

@@ -81,7 +81,7 @@ int pho_hide_row2, pho_in_row1;
 int hime_bell_volume;
 int hime_sound_play_overlap, hime_enable_ctrl_alt_switch;
 char *pho_kbm_name, *pho_selkey;
-int pho_candicate_col_N, pho_candicate_R2L;
+int pho_candidate_col_N, pho_candidate_R2L;
 
 
 int get_hime_conf_int(char *name, int default_value);
@@ -245,16 +245,16 @@ void load_settings()
   }
 
   char phokbm_name[32], selkey[32];
-  pho_candicate_col_N=0; pho_candicate_R2L=0;
-  sscanf(phokbm, "%s %s %d %d",phokbm_name, selkey, &pho_candicate_col_N, &pho_candicate_R2L);
+  pho_candidate_col_N=0; pho_candidate_R2L=0;
+  sscanf(phokbm, "%s %s %d %d",phokbm_name, selkey, &pho_candidate_col_N, &pho_candidate_R2L);
 
-  if (pho_candicate_col_N <= 0)
-    pho_candicate_col_N = 1;
-  if (pho_candicate_col_N > strlen(selkey))
-    pho_candicate_col_N =strlen(selkey);
+  if (pho_candidate_col_N <= 0)
+    pho_candidate_col_N = 1;
+  if (pho_candidate_col_N > strlen(selkey))
+    pho_candidate_col_N =strlen(selkey);
 
-  if (pho_candicate_R2L<0 || pho_candicate_R2L>1)
-    pho_candicate_R2L = 0;
+  if (pho_candidate_R2L<0 || pho_candidate_R2L>1)
+    pho_candidate_R2L = 0;
 
   if (pho_selkey)
     free(pho_selkey);
