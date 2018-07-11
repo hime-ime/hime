@@ -1444,6 +1444,7 @@ int tsin_pho_sel(int c)
   }
 
   if (len) {
+    tss.c_idx += len;
     prbuf();
     tss.current_page=tss.sel_pho=poo.ityp3_pho=0;
     if (len == 1) {
