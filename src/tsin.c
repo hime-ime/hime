@@ -1737,9 +1737,6 @@ tab_phrase_end:
        }
 
        if (tsin_space_opt == TSIN_SPACE_OPT_INPUT && !poo.typ_pho[0] && !poo.typ_pho[1] && !poo.typ_pho[2] && !poo.ityp3_pho && !tss.sel_pho) {
-         if (tss.c_len)
-           flush_tsin_buffer();
-
          close_selection_win();
          goto asc_char;
        }
