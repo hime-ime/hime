@@ -203,6 +203,15 @@ done
 
 echo "prefix: $prefix"
 
+echo -n ".... Testing pkg-config         :  "
+which pkg-config > /dev/null 2>&1
+if [ $? != 0 ]; then
+  echo "please install pkg-config. abort!"
+  exit 1
+else
+  echo "Found."
+fi
+
 echo -n ".... Testing Xtst               :  "
 XTST=`pkg-config --exists xtst 2> /dev/null`
 if [ $? != 0 ]; then
