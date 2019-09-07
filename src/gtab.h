@@ -122,6 +122,7 @@ typedef struct {
   time_t file_modify_time;
   gboolean key64; // db is 64 bit-long key
   gboolean disabled; // will not be display in the selection menu
+  gboolean in_cycle;  ///< whether the input method can be switched with Ctrl-Shift
   int max_keyN;
   char *endkey;       // only pinin/ar30 use it
   GTAB_space_pressed_E space_style;
@@ -129,7 +130,7 @@ typedef struct {
   u_char kmask, keybits, last_k_bitn, method_type;
   char WILD_QUES, WILD_STAR;
   struct _HIME_module_callback_functions *mod_cb_funcs;
-  char key_ch, in_cycle;
+  char key_ch;
 } INMD;
 
 enum {
