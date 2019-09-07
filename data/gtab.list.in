@@ -1,3 +1,4 @@
+# Do not use the escape character '\' as the key of the input method
 #英數 e !EN hime-tray.png
 內碼 0  intcode-module.so intcode.png
 倉頡 1 cj.gtab cj.png
@@ -21,7 +22,7 @@
 速成(簡易) - simplex.gtab simplex.png
 日文 = anthy-module.so kana-nippon.png
 希臘文 ` greek.gtab greek.png
-拉丁字母 \ latin-letters.gtab latin-letters.png
+拉丁字母 a latin-letters.gtab latin-letters.png
 俄文 ? russian.gtab russian.png
 新酷音 [ chewing-module.so chewing.png
 韓羅 / hangul-roman.gtab hangul.png
