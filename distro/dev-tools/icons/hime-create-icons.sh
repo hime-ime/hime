@@ -176,6 +176,7 @@ convert_word 'hime-tray' 'En' \
  	     'fcitx-qxm' '冰' \
 	     'fcitx-wanfeng' '晚' \
 	     'greek' 'αβ' \
+	     'esperanto' '★' \
 	     'hakka' '客' \
 	     'halfwidth-kana' 'ア' \
 	     'intcode' '內' \
