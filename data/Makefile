@@ -13,7 +13,8 @@ DATA=pho.tab2 tsin32.idx gtab.list \
      ibm.kbm tsin32 hsu.kbm pho-huge.tab2 simplex.gtab symbols.gtab russian.gtab \
      greek.gtab cj-punc.gtab latin-letters.gtab tsin-1.src pin-juyin.xlt \
      t2s.dat s2t.dat cj543.gtab s-tsin32 s-tsin32.idx s-pho.tab2 s-pho-huge.tab2 \
-     pinyin-no-tone.kbm simplex-punc.gtab hangul-roman.gtab vims.gtab hangul.gtab
+     pinyin-no-tone.kbm simplex-punc.gtab hangul-roman.gtab vims.gtab hangul.gtab \
+     esperanto.gtab
 
 DATAKEEP = symbol-table phrase.table phrase-ctrl.table
 
