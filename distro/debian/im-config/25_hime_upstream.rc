@@ -1,0 +1,58 @@
+# start hime (upstream version)
+# vim: set sts=4 expandtab:
+
+if [ "$IM_CONFIG_PHASE" = 2 ]; then
+# start hime daemon
+/usr/bin/hime &
+fi
+
+if [ "$IM_CONFIG_PHASE" = 1 ]; then
+# set variables for the plain XIM
+XMODIFIERS=@im=hime
+
+GTK_IM_MODULE=xim
+# use hime immodule only when available for both GTK 2.0 and 3.0
+
+IM_CONFIG_MARKER2=0
+for IM_CONFIG_MARKER in /usr/lib/*/gtk-2.0/*/immodules/im-hime.so \
+                        /usr/lib/gtk-2.0/*/immodules/im-hime.so ; do
+    if [ -e $IM_CONFIG_MARKER ]; then
+        IM_CONFIG_MARKER2=1
+        break
+    fi
+done
+
+IM_CONFIG_MARKER3=0
+for IM_CONFIG_MARKER in /usr/lib/*/gtk-3.0/*/immodules/im-hime.so \
+                        /usr/lib/gtk-3.0/*/immodules/im-hime.so ; do
+    if [ -e $IM_CONFIG_MARKER ]; then
+        IM_CONFIG_MARKER3=1
+        break
+    fi
+done
+if [ $IM_CONFIG_MARKER2 = 1 ] && [ $IM_CONFIG_MARKER3 = 1 ] ; then
+    GTK_IM_MODULE=hime
+fi
+
+QT4_IM_MODULE=xim
+# use immodule when available for Qt4
+for IM_CONFIG_MARKER in /usr/lib/*/qt4/plugins/inputmethods/im-hime.so \
+                        /usr/lib/qt4/plugins/inputmethods/im-hime.so ; do
+    if [ -e $IM_CONFIG_MARKER ]; then
+        QT4_IM_MODULE=hime
+        break
+    fi
+done
+
+# use immodule when available for Qt5
+for IM_CONFIG_MARKER in /usr/lib/*/qt5/plugins/platforminputcontexts/im-hime.so \
+                        /usr/lib/qt5/plugins/platforminputcontexts/im-hime.so ; do
+    if [ -e $IM_CONFIG_MARKER ]; then
+        QT_IM_MODULE=hime
+        break
+    fi
+done
+
+# hime has no clutter support, and qt3 immodule is not compiled.
+CLUTTER_IM_MODULE=xim
+fi
