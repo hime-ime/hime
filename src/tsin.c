@@ -1553,7 +1553,6 @@ int feedkey_pp(KeySym xkey, int kbstate)
 //	  dbg("feedkey_pp\n");
      key_press_alt = TRUE;
      key_press_ctrl = FALSE;
-     flush_tsin_buffer();
    } else
    if ((xkey==XK_Control_L||xkey==XK_Control_R) && !key_press_ctrl && tss.pre_selN) {
 //	  dbg("feedkey_pp\n");
