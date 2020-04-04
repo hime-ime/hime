@@ -8,6 +8,8 @@
 *.swp
 *~
 .depend
+.gitignore
+.idea/
 config.mak
 data/*.gtab
 data/*.kbm
@@ -26,12 +28,13 @@ data/t2s.dat
 data/tsin-1.src
 data/tsin32
 data/tsin32.idx
+distro/archlinux/pkg/hime-git/
 hime
 hime-cin2gtab
 hime-exit
 hime-gb-toggle
-hime-gtab2cin
 hime-gtab-merge
+hime-gtab2cin
 hime-juyin-learn
 hime-kbm-toggle
 hime-message
@@ -50,5 +53,3 @@ hime-tslearn
 kbmcv
 pin-juyin
 tmp/
-.idea/
-.gitignore
