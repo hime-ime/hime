@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  * Copyright (C) 2012 tytsim <https://github.com/tytsim>
  * Copyright (C) 2012 Favonia <favonia@gmail.com>
  *
@@ -202,9 +204,6 @@ static void cb_ts_import_sys()
 }
 
 /* XXX */
-void create_about_window();
-
-/* XXX */
 #include "pho.h"
 #include "tsin.h"
 #include "gst.h"
@@ -324,13 +323,6 @@ static GtkWidget *create_misc_widget(void)
     pack_start_new_button_with_callback(GTK_BOX(top_widget),
         tt, G_CALLBACK (f->module_setup_window_create), GINT_TO_POINTER(hime_setup_window_type_utility));
   }
-
-#if 0
-  GtkWidget *button_about = gtk_button_new_from_stock (GTK_STOCK_ABOUT);
-  gtk_box_pack_start (GTK_BOX (top_widget), button_about, TRUE, TRUE, 5);
-  g_signal_connect (G_OBJECT (button_about), "clicked",
-                    G_CALLBACK (create_about_window),  NULL);
-#endif
 
   return top_widget;
 }

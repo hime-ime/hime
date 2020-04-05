@@ -531,11 +531,15 @@ includedir=$prefix/include
 optdir=/opt
 
 if [ -z "$CFLAGS" ]; then
-  OPTFLAGS="-Wall"
+    OPTFLAGS="-Wall"
+    CFLAGS="-std=gnu17"
+    CXXFLAGS="-std=gnu++17"
 else
   OPTFLAGS="$CFLAGS"
 fi
-echo "-> CFLAGS = $CFLAGS."
+echo "-> CFLAGS = $CFLAGS"
+echo "-> CXXFLAGS = $CXXFLAGS"
+echo "-> OPTFLAGS = $OPTFLAGS"
 
 if [ -z "$CC" ]; then
   CC=gcc
