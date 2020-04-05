@@ -28,70 +28,117 @@ static void callback_close(GtkWidget *widget, gpointer dummy)
     about_window = NULL;
 }
 
+/* Create a new about_window */
+static GtkWidget *get_new_about_window(void)
+{
+    GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+    /* Sets attributes of the about_window. */
+    gtk_window_set_title(GTK_WINDOW (window), _("About hime"));
+    gtk_container_set_border_width(GTK_CONTAINER (window), 10);
+    gtk_window_set_position(GTK_WINDOW (window), GTK_WIN_POS_CENTER);
+
+    /* kill signals */
+    g_signal_connect(G_OBJECT (window), "destroy",
+                     G_CALLBACK (callback_close), NULL);
+
+    g_signal_connect(G_OBJECT (window), "delete_event",
+                     G_CALLBACK (callback_close), NULL);
+
+    return window;
+}
+
+/*
+ * Create a new hbox
+ *
+ * This is the container for the HIME icon image and the version label.
+ */
+static GtkWidget *get_new_hbox(void)
+{
+    GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
+    gtk_container_set_border_width(GTK_CONTAINER (hbox), 2);
+
+    return hbox;
+}
+
+/*
+ * Create a new vbox
+ *
+ * This is the container for everthing under the about window.
+ */
+static GtkWidget *get_new_vbox(void)
+{
+    GtkWidget *vbox = gtk_vbox_new(FALSE, 3);
+    gtk_orientable_set_orientation(
+        GTK_ORIENTABLE (vbox), GTK_ORIENTATION_VERTICAL);
+
+    return vbox;
+}
+
+/*
+ * Create a new label for HIME_VERSION (with GIT_HASH)
+ */
+static GtkWidget *get_version_label(void)
+{
+    GtkWidget *label;
+
+#if GIT_HAVE
+    label = gtk_label_new("version " HIME_VERSION "\n(git " GIT_HASH ")");
+#else
+    label = gtk_label_new("version " HIME_VERSION);
+#endif
+
+    return label;
+}
+
+/*
+ * Create a new gtk button for close button
+ */
+static GtkWidget *get_close_button(void)
+{
+    GtkWidget *button = gtk_button_new_with_label(_("Close"));
+    g_signal_connect(G_OBJECT (button), "clicked",
+                     G_CALLBACK(callback_close), NULL);
+
+    return button;
+}
+
+/* Put a child Widget inside the parent box */
+static void box_add(GtkBox *parent, GtkWidget *child) {
+    /* no expand, no filling, padding = 3 */
+    gtk_box_pack_start(parent, child, FALSE, FALSE, 3);
+}
+
 void create_about_window()
 {
-    const gboolean no_expand = FALSE;
-    const gboolean no_fill = FALSE;
-    const guint padding = 3;
 
     if (about_window) {
         gtk_window_present(GTK_WINDOW (about_window));
         return;
     }
 
-    /* Create a new about_window */
-    about_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    about_window = get_new_about_window();
 
-    /* Sets attributes of the about_window. */
-    gtk_window_set_title(GTK_WINDOW (about_window), _("About hime"));
-    gtk_container_set_border_width(GTK_CONTAINER (about_window), 10);
-    gtk_window_set_position(GTK_WINDOW (about_window), GTK_WIN_POS_CENTER);
-
-    /* It's a good idea to do this for all windows. */
-    g_signal_connect(G_OBJECT (about_window), "destroy",
-                     G_CALLBACK (callback_close), NULL);
-
-    g_signal_connect(G_OBJECT (about_window), "delete_event",
-                     G_CALLBACK (callback_close), NULL);
-
-
-    /* Create box for icon image and label */
-    GtkWidget *hbox = gtk_hbox_new(FALSE, 0);
-    gtk_container_set_border_width(GTK_CONTAINER (hbox), 2);
-
-    GtkWidget *vbox = gtk_vbox_new(FALSE, 3);
-    gtk_orientable_set_orientation(
-        GTK_ORIENTABLE (vbox), GTK_ORIENTATION_VERTICAL);
-    gtk_box_pack_start(GTK_BOX (vbox), hbox, no_expand, no_fill, padding);
-
+    GtkWidget *hbox = get_new_hbox();
+    GtkWidget *vbox = get_new_vbox();
     GtkWidget *separator = gtk_hseparator_new();
-    gtk_box_pack_start(GTK_BOX (vbox), separator, no_expand, no_fill, padding);
-
-
-    /* hime icon image and label */
     GtkWidget *image = gtk_image_new_from_file(SYS_ICON_DIR "/hime.png");
-    GtkWidget *label_version;
-#if GIT_HAVE
-    label_version = gtk_label_new("version " HIME_VERSION "\n(git " GIT_HASH ")");
-#else
-    label_version = gtk_label_new("version " HIME_VERSION);
-#endif
+    GtkWidget *version_label = get_version_label();
+    GtkWidget *close_button = get_close_button();
 
-    gtk_box_pack_start(GTK_BOX (hbox), image, no_expand, no_fill, padding);
-    gtk_box_pack_start(GTK_BOX (hbox), label_version, no_expand, no_fill, padding);
+    box_add(GTK_BOX (vbox), hbox);
+    box_add(GTK_BOX (vbox), separator);
+    box_add(GTK_BOX (hbox), image);
+    box_add(GTK_BOX (hbox), version_label);
     gtk_container_add(GTK_CONTAINER (about_window), vbox);
-
-    /* close button */
-    GtkWidget *button = gtk_button_new_with_label(_("Close"));
-    gtk_box_pack_start(GTK_BOX (vbox), button, no_expand, no_fill, padding);
-    g_signal_connect(G_OBJECT (button), "clicked",
-                     G_CALLBACK (callback_close), NULL);
+    box_add(GTK_BOX (vbox), close_button);
 
     gtk_widget_show_all(about_window);
+
     /* Put gtk_label_set_selectable() here so it will not be selected
      * by default. It is still selectable and can be copied.
      */
-    gtk_label_set_selectable(GTK_LABEL (label_version), TRUE);
+    gtk_label_set_selectable(GTK_LABEL (version_label), TRUE);
 
     return;
 }
