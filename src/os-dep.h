@@ -9,9 +9,6 @@ void unix_exec(char *fmt,...);
 #include <X11/keysym.h>
 
 #include <glib.h>
-#if GLIB_CHECK_VERSION(2,29,8)
-#define G_CONST_RETURN const
-#endif
 
 #include <gdk/gdkx.h>
 
