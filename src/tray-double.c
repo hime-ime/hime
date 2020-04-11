@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -91,6 +93,7 @@ void kbm_toggle_(GtkCheckMenuItem *checkmenuitem, gpointer dat)
   kbm_open_close(NULL, gtk_check_menu_item_get_active(checkmenuitem));
 }
 
+/* src/about.c */
 void create_about_window();
 
 static void cb_about_window(GtkCheckMenuItem *checkmenuitem, gpointer dat)
