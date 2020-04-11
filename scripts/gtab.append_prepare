@@ -1,6 +1,6 @@
 #!/bin/sh
 
-[ -f $1 ] && exit 0;
+[ -f "$1" ] && exit 0
 
-echo 'aaaa 輸入要定義的詞' > $1
-echo 'bbbb 或是字' >> $1
+echo 'aaaa 輸入要定義的詞' >"$1"
+echo 'bbbb 或是字' >>"$1"

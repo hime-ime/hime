@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]; then
+if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ "$1" = "-help" ]; then
     echo "Usage: $0 [OPTION]... [VAR=VALUE]..."
     echo ""
     echo "Installation directories:"
@@ -34,31 +34,26 @@ if [ "$1" = "-h" -o "$1" = "--help" -o "$1" = "-help" ]; then
     exit
 fi
 
-
-MAKE=make
-which gmake > /dev/null 2> /dev/null
-if [ $? = 0 ]; then
-  MAKE=gmake
+MAKE="make"
+if command -v gmake >/dev/null 2>/dev/null; then
+    MAKE="gmake"
 fi
 
 FREEBSD=0
-uname | grep FreeBSD | grep -v GNU/kFreeBSD > /dev/null 2> /dev/null
-if [ $? = 0 ]; then
-  FREEBSD=1
+if uname | grep FreeBSD | grep -v GNU/kFreeBSD >/dev/null 2>/dev/null; then
+    FREEBSD=1
 fi
 
-uname | grep OpenBSD > /dev/null 2> /dev/null
-if [ $? = 0 ]; then
-  FREEBSD=1
+if uname | grep OpenBSD >/dev/null 2>/dev/null; then
+    FREEBSD=1
 fi
 
 SO_FLAGS="$LDFLAGS -shared -Wl,--as-needed"
 MAC_OS=0
-uname | grep Darwin > /dev/null 2> /dev/null
-if [ $? = 0 ]; then
-  FREEBSD=1
-  MAC_OS=1
-  SO_FLAGS="-dynamic -bundle -undefined suppress -flat_namespace"
+if uname | grep Darwin >/dev/null 2>/dev/null; then
+    FREEBSD=1
+    MAC_OS=1
+    SO_FLAGS="-dynamic -bundle -undefined suppress -flat_namespace"
 fi
 
 prefix="/usr/local"
@@ -83,14 +78,14 @@ find_in_path_list_to_variable() {
     # find_in_path_list_to_variable() will find all elements in the array name stored in $1
     # if found, set the found path to variable name in $2 and return 0
     # otherwise return 1.
-	 
-	 for path in $1; do
-		  if [ -x "$path" ]; then
-				eval $2=\"$path\"
-				return 0
-		  fi
-	 done
-	 return 1
+
+    for path in $1; do
+        if [ -x "$path" ]; then
+            eval "$2"=\""$path"\"
+            return 0
+        fi
+    done
+    return 1
 }
 
 #                  debian                 fedora               fedora           freebsd                slackware          arch
@@ -103,288 +98,326 @@ qt4_moc_path_list="/usr/share/qt4/bin/moc /usr/lib/qt4/bin/moc /usr/bin/moc-qt4 
 qt3_moc_path_list="/usr/share/qt3/bin/moc /opt/qt/bin/moc"
 
 if [ "$HIME_USE_XIM" ]; then
-  use_xim=$HIME_USE_XIM
+    use_xim=$HIME_USE_XIM
 fi
 
 QT5_IM_DIR_CUSTOM=
 QT4_IM_DIR_CUSTOM=
-for opt do
-  case "$opt" in
-  --with_gtk3|--with-gtk=3.0) GTK=gtk+-3.0
-  ;;
-  --prefix=*) prefix=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --use_xim=*) use_xim=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --enable-xim) use_xim=Y
-  ;;
-  --disable-xim) use_xim=N
-  ;;
-  --use_tray=*) use_tray=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --enable-system-tray) use_tray=Y
-  ;;
-  --disable-system-tray) use_tray=N
-  ;;
-  --use_unity=*) use_unity=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --enable-appindicator) use_unity=Y
-  ;;
-  --disable-appindicator) use_unity=N
-  ;;
-  --use_i18n=*) use_i18n=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --enable-nls) use_i18n=Y
-  ;;
-  --disable-nls) use_i18n=N
-  ;;
-  --use_tsin=*) use_tsin=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --enable-tsin) use_tsin=Y
-  ;;
-  --disable-tsin) use_tsin=N
-  ;;
-  --use_anthy=*) use_anthy=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --enable-anthy) use_anthy=Y
-  ;;
-  --disable-anthy) use_anthy=N
-  ;;
-  --use_chewing=*) use_chewing=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --enable-chewing) use_chewing=Y
-  ;;
-  --disable-chewing) use_chewing=N
-  ;;
-  --use_qt3=*) use_qt3=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --enable-qt3-immodule) use_qt3=Y
-  ;;
-  --disable-qt3-immodule) use_qt3=N
-  ;;
-  --use_qt4=*) use_qt4=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --enable-qt4-immodule) use_qt4=Y
-  ;;
-  --disable-qt4-immodule) use_qt4=N
-  ;;
-  --use_qt5=*) use_qt5=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --enable-qt5-immodule) use_qt5=Y
-  ;;
-  --disable-qt5-immodule) use_qt5=N
-  ;;
-  --use_gtk=*) use_gtk=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --enable-gtk2-im-module) use_gtk=Y
-  ;;
-  --disable-gtk2-im-module) use_gtk=N
-  ;;
-  --use_gtk3=*) use_gtk3=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --enable-gtk3-im-module) use_gtk3=Y
-  ;;
-  --disable-gtk3-im-module) use_gtk3=N
-  ;;
-  --qt3-moc-path=*) QT3_MOC_PATH=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --qt4-moc-path=*) QT4_MOC_PATH=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --qt4-install-to=*|--qt4-im-module-path=*) QT4_IM_DIR_CUSTOM=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --qt5-moc-path=*) QT5_MOC_PATH=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --qt5-install-to=*|--qt5-im-module-path=*) QT5_IM_DIR_CUSTOM=`echo $opt | cut -d '=' -f 2`
-  ;;
-  --disable-lib64) LIB='lib'
-  ;;
-  esac
+for opt; do
+    case "$opt" in
+        --with_gtk3 | --with-gtk=3.0)
+            GTK=gtk+-3.0
+            ;;
+        --prefix=*)
+            prefix=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --use_xim=*)
+            use_xim=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-xim)
+            use_xim=Y
+            ;;
+        --disable-xim)
+            use_xim=N
+            ;;
+        --use_tray=*)
+            use_tray=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-system-tray)
+            use_tray=Y
+            ;;
+        --disable-system-tray)
+            use_tray=N
+            ;;
+        --use_unity=*)
+            use_unity=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-appindicator)
+            use_unity=Y
+            ;;
+        --disable-appindicator)
+            use_unity=N
+            ;;
+        --use_i18n=*)
+            use_i18n=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-nls)
+            use_i18n=Y
+            ;;
+        --disable-nls)
+            use_i18n=N
+            ;;
+        --use_tsin=*)
+            use_tsin=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-tsin)
+            use_tsin=Y
+            ;;
+        --disable-tsin)
+            use_tsin=N
+            ;;
+        --use_anthy=*)
+            use_anthy=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-anthy)
+            use_anthy=Y
+            ;;
+        --disable-anthy)
+            use_anthy=N
+            ;;
+        --use_chewing=*)
+            use_chewing=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-chewing)
+            use_chewing=Y
+            ;;
+        --disable-chewing)
+            use_chewing=N
+            ;;
+        --use_qt3=*)
+            use_qt3=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-qt3-immodule)
+            use_qt3=Y
+            ;;
+        --disable-qt3-immodule)
+            use_qt3=N
+            ;;
+        --use_qt4=*)
+            use_qt4=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-qt4-immodule)
+            use_qt4=Y
+            ;;
+        --disable-qt4-immodule)
+            use_qt4=N
+            ;;
+        --use_qt5=*)
+            use_qt5=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-qt5-immodule)
+            use_qt5=Y
+            ;;
+        --disable-qt5-immodule)
+            use_qt5=N
+            ;;
+        --use_gtk=*)
+            use_gtk=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-gtk2-im-module)
+            use_gtk=Y
+            ;;
+        --disable-gtk2-im-module)
+            use_gtk=N
+            ;;
+        --use_gtk3=*)
+            use_gtk3=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-gtk3-im-module)
+            use_gtk3=Y
+            ;;
+        --disable-gtk3-im-module)
+            use_gtk3=N
+            ;;
+        --qt3-moc-path=*)
+            QT3_MOC_PATH=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --qt4-moc-path=*)
+            QT4_MOC_PATH=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --qt4-install-to=* | --qt4-im-module-path=*)
+            QT4_IM_DIR_CUSTOM=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --qt5-moc-path=*)
+            QT5_MOC_PATH=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --qt5-install-to=* | --qt5-im-module-path=*)
+            QT5_IM_DIR_CUSTOM=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --disable-lib64)
+            LIB='lib'
+            ;;
+    esac
 done
 
 echo "prefix: $prefix"
 
 echo -n ".... Testing pkg-config         :  "
-which pkg-config > /dev/null 2>&1
-if [ $? != 0 ]; then
-  echo "please install pkg-config. abort!"
-  exit 1
+if ! command -v pkg-config >/dev/null 2>&1; then
+    echo "please install pkg-config. abort!"
+    exit 1
 else
-  echo "Found."
+    echo "Found."
 fi
 
 echo -n ".... Testing Xtst               :  "
-XTST=`pkg-config --exists xtst 2> /dev/null`
-if [ $? != 0 ]; then
-  echo "please install rpm/package xtest-devel. abort!"
-  exit 1
+if ! pkg-config --exists xtst 2>/dev/null; then
+    echo "please install rpm/package xtest-devel. abort!"
+    exit 1
 else
-  echo "Found."
+    echo "Found."
 fi
 
 if [ -z "$GTK" ]; then
-  GTK=gtk+-2.0
+    GTK=gtk+-2.0
 fi
 
 echo -n ".... Testing $GTK           :  "
 
-GTKINC=`pkg-config --cflags $GTK 2> /dev/null`
+GTKINC=$(pkg-config --cflags "$GTK" 2>/dev/null)
 
 if [ $? != 0 ]; then
-  if [ "$GTK" = gtk+-2.0 ]; then
-    echo "Not found, trying gtk+-3.0..."
-    GTK=gtk+-3.0
-    echo -n ".... Testing $GTK           :  "
-  
-    GTKINC=`pkg-config --cflags $GTK 2> /dev/null`
-    if [ $? != 0 ]; then
-      echo "$GTK or above required --cflags. abort!"
-      rm -f config.mak
-      exit 1
+    if [ "$GTK" = gtk+-2.0 ]; then
+        echo "Not found, trying gtk+-3.0..."
+        GTK=gtk+-3.0
+        echo -n ".... Testing $GTK           :  "
+
+        GTKINC=$(pkg-config --cflags "$GTK" 2>/dev/null)
+        if [ $? != 0 ]; then
+            echo "$GTK or above required --cflags. abort!"
+            rm -f config.mak
+            exit 1
+        fi
+    else
+        echo "$GTK or above required --cflags. abort!"
+        rm -f config.mak
+        exit 1
     fi
-  else
-    echo "$GTK or above required --cflags. abort!"
-    rm -f config.mak
-    exit 1
-  fi
 fi
 
 ## problem in MacOS, by candyz
-if [ $MAC_OS = 1 ]; then
-  GTKINC="-I/sw/include `pkg-config --cflags $GTK` 2> /dev/null"
+if [ "$MAC_OS" = 1 ]; then
+    GTKINC="-I/sw/include $(pkg-config --cflags "$GTK") 2> /dev/null"
 fi
 
-GTKLDFLAGS=`pkg-config --libs $GTK 2> /dev/null`
+GTKLDFLAGS=$(pkg-config --libs "$GTK" 2>/dev/null)
 
 if [ $? != 0 ]; then
-  echo "$GTK or above required --libs"
-  echo "please install rpm/package libgtk+2.0_0-devel/libgtk+3.0_0-devel. abort!"
-  rm -f config.mak
-  exit 1
+    echo "$GTK or above required --libs"
+    echo "please install rpm/package libgtk+2.0_0-devel/libgtk+3.0_0-devel. abort!"
+    rm -f config.mak
+    exit 1
 else
-  echo "Found."
+    echo "Found."
 fi
 
 if [ "$GTK" = gtk+-2.0 ]; then
-  pkg-config --exists 'gtk+-2.0 >= 2.10' 2> /dev/null
-  if [ $? != 0 ]; then
-    echo ".... Testing system-tray     :  Disabled. gtk > 2.10 is needed to enable system-tray."
-    use_tray=N
-  fi
+    if ! pkg-config --exists 'gtk+-2.0 >= 2.10' 2>/dev/null; then
+        echo ".... Testing system-tray     :  Disabled. gtk > 2.10 is needed to enable system-tray."
+        use_tray=N
+    fi
 fi
 
 echo -n ".... Testing anthy              :  "
-USE_ANTHY=`pkg-config --libs anthy 2> /dev/null`
+USE_ANTHY=$(pkg-config --libs anthy 2>/dev/null)
 if [ $? != 0 ]; then
-  echo "Not found, anthy module is turned off."
-  USE_ANTHY=N
+    echo "Not found, anthy module is turned off."
+    USE_ANTHY=N
 else
-  if [ "$use_anthy" = "N" ]; then
-    USE_ANTHY='N'
-    echo "Found, but disabled."
-  else
-    USE_ANTHY='Y'
-    ANTHY_INC="-I`pkg-config --variable=includedir anthy` `pkg-config --libs anthy`"
-    echo "Found."
-  fi
+    if [ "$use_anthy" = "N" ]; then
+        USE_ANTHY='N'
+        echo "Found, but disabled."
+    else
+        USE_ANTHY='Y'
+        ANTHY_INC="-I$(pkg-config --variable=includedir anthy) $(pkg-config --libs anthy)"
+        echo "Found."
+    fi
 fi
 
 echo -n ".... Testing chewing            :  "
-USE_CHEWING=`pkg-config --libs chewing 2> /dev/null`
+USE_CHEWING=$(pkg-config --libs chewing 2>/dev/null)
 if [ $? != 0 ]; then
-  echo Not found, chewing module is turned off.
-  USE_CHEWING=N
+    echo Not found, chewing module is turned off.
+    USE_CHEWING=N
 else
-  if [ $use_chewing = "N" ]; then
-    USE_CHEWING='N'
-    echo "Found, but disabled."
-  else
-    pkg-config --exists 'chewing >= 0.3.2' 2> /dev/null
-    if [ $? != 0 ]; then
-      USE_CHEWING='N'
-      echo "Disabled. chewing > 0.3.2 is needed to enable chewing."
+    if [ "$use_chewing" = "N" ]; then
+        USE_CHEWING='N'
+        echo "Found, but disabled."
     else
-      USE_CHEWING='Y'
-      echo "Found."
+        if pkg-config --exists 'chewing >= 0.3.2' 2>/dev/null; then
+            USE_CHEWING='N'
+            echo "Disabled. chewing > 0.3.2 is needed to enable chewing."
+        else
+            USE_CHEWING='Y'
+            echo "Found."
+        fi
     fi
-  fi
 fi
 
 if [ "$GTK" = "gtk+-3.0" ]; then
-  APPINDICATOR=appindicator3-0.1
-  SUPPORT_SYSTEM_TRAY=`pkg-config --exists 'gtk+-3.0 > 3.9.8' && echo 'N' || echo 'Y'`
-  if [ "$SUPPORT_SYSTEM_TRAY" = "N" ]; then
-    use_tray='N'
-  fi
+    APPINDICATOR=appindicator3-0.1
+    SUPPORT_SYSTEM_TRAY=$(pkg-config --exists 'gtk+-3.0 > 3.9.8' && echo 'N' || echo 'Y')
+    if [ "$SUPPORT_SYSTEM_TRAY" = "N" ]; then
+        use_tray='N'
+    fi
 else
-  APPINDICATOR=appindicator-0.1
+    APPINDICATOR=appindicator-0.1
 fi
 if [ "$use_unity" = "Y" ]; then
-  echo -n ".... Testing appindicator       :  "
-  USE_UNITY=`pkg-config --libs $APPINDICATOR 2> /dev/null`
-  if [ $? != 0 ]; then
-    USE_UNITY=`pkg-config --libs appindicator3-0.1 2> /dev/null`
-    if [ $? = 0 ] && [ "$GTK" = "gtk+-2.0" ]; then
-      echo "Disabled. appindicator3-0.1 is found, but is using gtk+2.0. Add option \"--with-gtk=3.0\" to enable it."
+    echo -n ".... Testing appindicator       :  "
+    USE_UNITY=$(pkg-config --libs "$APPINDICATOR" 2>/dev/null)
+    if [ $? != 0 ]; then
+        USE_UNITY=$(pkg-config --libs appindicator3-0.1 2>/dev/null)
+        if [ $? = 0 ] && [ "$GTK" = "gtk+-2.0" ]; then
+            echo "Disabled. appindicator3-0.1 is found, but is using gtk+2.0. Add option \"--with-gtk=3.0\" to enable it."
+        else
+            echo "Not found, unity tray is turned off."
+        fi
+        USE_UNITY=N
     else
-      echo "Not found, unity tray is turned off."
+        if [ "$use_unity" = "N" ]; then
+            USE_UNITY='N'
+            echo "Found, but disabled."
+        else
+            if pkg-config --exists "$APPINDICATOR >= 0.4.0" 2>/dev/null; then
+                echo "Disabled. appindicator > 0.4.0 is needed to enable appindicator."
+                USE_UNITY='N'
+            else
+                USE_UNITY='Y'
+                echo "Found."
+                UNITY_INC="-I/usr/include/libappindicator-0.1"
+                GTKINC=$(pkg-config --cflags "$GTK" "$APPINDICATOR" 2>/dev/null)
+                GTKLDFLAGS=$(pkg-config --libs "$GTK" "$APPINDICATOR" 2>/dev/null)
+            fi
+        fi
     fi
-    USE_UNITY=N
-  else
-    if [ "$use_unity" = "N" ]; then
-      USE_UNITY='N'
-      echo "Found, but disabled."
-    else
-      pkg-config --exists "$APPINDICATOR >= 0.4.0" 2> /dev/null
-      if [ $? != 0 ]; then
-        echo "Disabled. appindicator > 0.4.0 is needed to enable appindicator."
-        USE_UNITY='N'
-      else
-        USE_UNITY='Y'
-        echo "Found."
-        UNITY_INC="-I/usr/include/libappindicator-0.1"
-        GTKINC=`pkg-config --cflags $GTK $APPINDICATOR 2> /dev/null`
-        GTKLDFLAGS=`pkg-config --libs $GTK $APPINDICATOR 2> /dev/null`
-      fi
-    fi
-  fi
 fi
-if [ -z "$LIB" ];then
-  LIB='lib'
-  if [ -d /usr/lib64 -a -d /lib64 ]; then
-    LIB='lib64'
-  fi
+if [ -z "$LIB" ]; then
+    LIB='lib'
+    if [ -d /usr/lib64 ] && [ -d /lib64 ]; then
+        LIB='lib64'
+    fi
 
-  if [ `uname -s` = Linux ]; then
-     distid=`lsb_release -is 2> /dev/null`
-     if [ $? = 0 ]; then
-       case $distid in
-           Ubuntu | Debian | Arch | archlinux)
-             LIB='lib'
-             ;;
-       esac
-     else
-       DEBIAN_LD=`ld -v 2>&1 | grep -i debian`
-       UBUNTU_LD=`ld -v 2>&1 | grep -i ubuntu`
-       if [ "$DEBIAN_LD" != "" -o "$UBUNTU_LD" != "" ]; then
-         LIB='lib'
-           elif [ -e /etc/arch-release ]; then
-             LIB='lib'
-       fi
-     fi
-  fi
+    if [ "$(uname -s)" = Linux ]; then
+        distid=$(lsb_release -is 2>/dev/null)
+        if [ $? = 0 ]; then
+            case $distid in
+                Ubuntu | Debian | Arch | archlinux)
+                    LIB='lib'
+                    ;;
+            esac
+        else
+            DEBIAN_LD=$(ld -v 2>&1 | grep -i debian)
+            UBUNTU_LD=$(ld -v 2>&1 | grep -i ubuntu)
+            if [ "$DEBIAN_LD" != "" ] || [ "$UBUNTU_LD" != "" ]; then
+                LIB='lib'
+            elif [ -e /etc/arch-release ]; then
+                LIB='lib'
+            fi
+        fi
+    fi
 fi
 
 # --- QT3 START ---
 QT_IM='N'
 QT_IM_DIR=/qt3/plugins/inputmethods
 echo -n ".... Testing Qt 3.x             :  "
-pkg-config --libs qt-mt > /dev/null 2> /dev/null
-if [ $? = 0 ]; then
-  QT_IM='Y'
+if pkg-config --libs qt-mt >/dev/null 2>/dev/null; then
+    QT_IM='Y'
 fi
 
 if [ ! -x "$QT3_MOC_PATH" ]; then
-  find_in_path_list_to_variable "$qt3_moc_path_list" "QT3_MOC_PATH"
+    find_in_path_list_to_variable "$qt3_moc_path_list" "QT3_MOC_PATH"
 fi
 
 if [ "$QT_IM" = "Y" ]; then
@@ -392,11 +425,11 @@ if [ "$QT_IM" = "Y" ]; then
         QT_IM='N'
         echo "Found, but disabled."
     else
-		  if [ ! -x "$QT3_MOC_PATH" ]; then
-				echo "Not found, cannot find \"moc\" tool for Qt 3.x."
-				echo "Hint: use the --qt3-moc-path option. abort!"
-				exit 1
-		  fi
+        if [ ! -x "$QT3_MOC_PATH" ]; then
+            echo "Not found, cannot find \"moc\" tool for Qt 3.x."
+            echo "Hint: use the --qt3-moc-path option. abort!"
+            exit 1
+        fi
         echo "Found."
     fi
 else
@@ -409,13 +442,12 @@ QT4_IM='N'
 if [ -z "$QT4_IM_DIR" ]; then QT4_IM_DIR=/qt4/plugins/inputmethods; fi
 
 echo -n ".... Testing Qt 4.x             :  "
-pkg-config --libs QtCore QtGui > /dev/null 2> /dev/null
-if [ $? = 0 ]; then
-  QT4_IM='Y'
+if pkg-config --libs QtCore QtGui >/dev/null 2>/dev/null; then
+    QT4_IM='Y'
 fi
 
-if [ ! -x "${QT4_MOC_PATH}" ]; then
-  find_in_path_list_to_variable "`pkg-config --variable=moc_location QtCore` $qt4_moc_path_list" "QT4_MOC_PATH"
+if [ ! -x "$QT4_MOC_PATH" ]; then
+    find_in_path_list_to_variable "$(pkg-config --variable=moc_location QtCore) $qt4_moc_path_list" "QT4_MOC_PATH"
 fi
 
 if [ "$QT4_IM" = "Y" ]; then
@@ -423,11 +455,11 @@ if [ "$QT4_IM" = "Y" ]; then
         QT4_IM='N'
         echo "Found, but disabled."
     else
-		  if [ ! -x "$QT4_MOC_PATH" ]; then
-				echo "Not found, cannot find \"moc\" tool for Qt 4.x."
-				echo "Hint: use the --qt4-moc-path option. abort!"
-				exit 1
-		  fi		  
+        if [ ! -x "$QT4_MOC_PATH" ]; then
+            echo "Not found, cannot find \"moc\" tool for Qt 4.x."
+            echo "Hint: use the --qt4-moc-path option. abort!"
+            exit 1
+        fi
         echo "Found."
     fi
 else
@@ -440,13 +472,12 @@ QT5_IM='N'
 if [ -z "$QT5_IM_DIR" ]; then QT5_IM_DIR=/qt5/plugins/platforminputcontexts; fi
 
 echo -n ".... Testing Qt 5.x             :  "
-pkg-config --libs Qt5Core Qt5Gui > /dev/null 2> /dev/null
-if [ $? = 0 ]; then
-  QT5_IM='Y'
+if pkg-config --libs Qt5Core Qt5Gui >/dev/null 2>/dev/null; then
+    QT5_IM='Y'
 fi
 
-if [ ! -x "${QT5_MOC_PATH}" ]; then
-  find_in_path_list_to_variable "`pkg-config --variable=host_bins Qt5Core`/moc $qt5_moc_path_list" "QT5_MOC_PATH"
+if [ ! -x "$QT5_MOC_PATH" ]; then
+    find_in_path_list_to_variable "$(pkg-config --variable=host_bins Qt5Core)/moc $qt5_moc_path_list" "QT5_MOC_PATH"
 fi
 
 if [ "$QT5_IM" = "Y" ]; then
@@ -458,7 +489,7 @@ if [ "$QT5_IM" = "Y" ]; then
             echo "Not found, cannot find \"moc\" tool for Qt 5.x."
             echo "Hint: use the --qt5-moc-path option. abort!"
             exit 1
-        fi		  
+        fi
         echo "Found."
     fi
 else
@@ -468,37 +499,35 @@ fi
 
 # --- MOC INFO START ---
 
-if [ "$QT_IM" = "Y" ]; then echo ".... Path of Qt3 moc            :  ${QT3_MOC_PATH}"; fi
-if [ "$QT4_IM" = "Y" ]; then echo ".... Path of Qt4 moc            :  ${QT4_MOC_PATH}"; fi
-if [ "$QT5_IM" = "Y" ]; then echo ".... Path of Qt5 moc            :  ${QT5_MOC_PATH}"; fi
+if [ "$QT_IM" = "Y" ]; then echo ".... Path of Qt3 moc            :  $QT3_MOC_PATH"; fi
+if [ "$QT4_IM" = "Y" ]; then echo ".... Path of Qt4 moc            :  $QT4_MOC_PATH"; fi
+if [ "$QT5_IM" = "Y" ]; then echo ".... Path of Qt5 moc            :  $QT5_MOC_PATH"; fi
 
 # --- MOC INFO END ---
 
-if [ "$GTK"=gtk+-3.0 ]; then
-  GTK_IM='N'
-  echo -n ".... Testing GTK+ 2.x immodule  :  "
-  pkg-config --libs gtk+-2.0 > /dev/null 2> /dev/null
-  if [ $? = 0 ]; then
-    GTK_IM='Y'
-  fi
-  
-  if [ "$GTK_IM" = "Y" ]; then
-      if [ "$use_gtk" = "N" ]; then
-          GTK_IM='N'
-          echo "Found, but disabled."
-      else
-          echo "Found."
-      fi
-  else
-      echo "Not found. It's ok if you don't want GTK+ 2.x immodule."
-  fi
+if [ "$GTK" = "gtk+-3.0" ]; then
+    GTK_IM='N'
+    echo -n ".... Testing GTK+ 2.x immodule  :  "
+    if pkg-config --libs gtk+-2.0 >/dev/null 2>/dev/null; then
+        GTK_IM='Y'
+    fi
+
+    if [ "$GTK_IM" = "Y" ]; then
+        if [ "$use_gtk" = "N" ]; then
+            GTK_IM='N'
+            echo "Found, but disabled."
+        else
+            echo "Found."
+        fi
+    else
+        echo "Not found. It's ok if you don't want GTK+ 2.x immodule."
+    fi
 fi
 
 GTK3_IM='N'
 echo -n ".... Testing GTK+ 3.x immodule  :  "
-pkg-config --libs gtk+-3.0 > /dev/null 2> /dev/null
-if [ $? = 0 ]; then
-  GTK3_IM='Y'
+if pkg-config --libs gtk+-3.0 >/dev/null 2>/dev/null; then
+    GTK3_IM='Y'
 fi
 
 if [ "$GTK3_IM" = "Y" ]; then
@@ -515,16 +544,16 @@ fi
 [ -f "data/dayi3.cin" ] && INSTALL_DFSG_INCOMPATIBLE=Y
 
 if [ -d .git ]; then
-  GIT_HAVE='Y'
-  GIT_HASH=`git log 2> /dev/null | head -n 1 | cut -d ' ' -f 2 | head -c 7`
+    GIT_HAVE='Y'
+    GIT_HASH=$(git log 2>/dev/null | head -n 1 | cut -d ' ' -f 2 | head -c 7)
 fi
 
 bindir=$prefix/bin
 datadir=$prefix/share
-if [ $FREEBSD -eq 0 ]; then
-  mandir=$datadir/man
+if [ "$FREEBSD" -eq 0 ]; then
+    mandir=$datadir/man
 else
-  mandir=$prefix/man
+    mandir=$prefix/man
 fi
 libdir=$prefix/$LIB
 includedir=$prefix/include
@@ -534,96 +563,97 @@ if [ -z "$CFLAGS" ]; then
     OPTFLAGS="-Wall"
     CFLAGS="-std=gnu17"
     CXXFLAGS="-std=gnu++17"
+
 else
-  OPTFLAGS="$CFLAGS"
+    OPTFLAGS="$CFLAGS"
 fi
 echo "-> CFLAGS = $CFLAGS"
 echo "-> CXXFLAGS = $CXXFLAGS"
 echo "-> OPTFLAGS = $OPTFLAGS"
 
 if [ -z "$CC" ]; then
-  CC=gcc
+    CC=gcc
 fi
 
 if [ -z "$CXX" ]; then
-  CXX=g++
+    CXX=g++
 fi
 
-echo "CC=$CC" > config.mak
-echo "CCX=$CC" >> config.mak
-echo "CXX=$CXX" >> config.mak
-echo "CCLD=$CC" >> config.mak
-echo "MAKE=$MAKE" >> config.mak
-echo "GTK=$GTK" >> config.mak
-echo "GTKINC=$GTKINC" >> config.mak
-echo "prefix=$prefix" >> config.mak
-echo "bindir=\$(DESTDIR)$bindir" >> config.mak
-echo "mandir=\$(DESTDIR)$mandir" >> config.mak
-echo "man1dir=\$(mandir)/man1" >> config.mak
-echo "bindir_r=\$(DESTDIR)$bindir" >> config.mak
-echo "datadir=\$(DESTDIR)$datadir" >> config.mak
-echo "datadir_r=\$(DESTDIR)$datadir" >> config.mak
-echo "filterdir=\$(datadir_r)/hime/filter" >> config.mak
-echo "libdir=\$(DESTDIR)$libdir" >> config.mak
-echo "himelibdir=\$(libdir)/hime" >> config.mak
-echo "includedir=\$(DESTDIR)$includedir" >> config.mak
-echo "LDFLAGS_ENV=$LDFLAGS" >> config.mak
-echo "LDFLAGS=$LDFLAGS -Wl,--as-needed -lX11 -lm" >> config.mak
-echo "CFLAGS=$CFLAGS $CPPFLAGS" >> config.mak
-echo "CXXFLAGS=$CXXFLAGS $CPPFLAGS" >> config.mak
-if [ $FREEBSD -eq 0 ]; then
-	echo "LDFLAGS+=$GTKLDFLAGS -lX11 -ldl" >> config.mak
+echo "CC=$CC" >config.mak
+echo "CCX=$CC" >>config.mak
+echo "CXX=$CXX" >>config.mak
+echo "CCLD=$CC" >>config.mak
+echo "MAKE=$MAKE" >>config.mak
+echo "GTK=$GTK" >>config.mak
+echo "GTKINC=$GTKINC" >>config.mak
+echo "prefix=$prefix" >>config.mak
+echo "bindir=\$(DESTDIR)$bindir" >>config.mak
+echo "mandir=\$(DESTDIR)$mandir" >>config.mak
+echo "man1dir=\$(mandir)/man1" >>config.mak
+echo "bindir_r=\$(DESTDIR)$bindir" >>config.mak
+echo "datadir=\$(DESTDIR)$datadir" >>config.mak
+echo "datadir_r=\$(DESTDIR)$datadir" >>config.mak
+echo "filterdir=\$(datadir_r)/hime/filter" >>config.mak
+echo "libdir=\$(DESTDIR)$libdir" >>config.mak
+echo "himelibdir=\$(libdir)/hime" >>config.mak
+echo "includedir=\$(DESTDIR)$includedir" >>config.mak
+echo "LDFLAGS_ENV=$LDFLAGS" >>config.mak
+echo "LDFLAGS=$LDFLAGS -Wl,--as-needed -lX11 -lm" >>config.mak
+echo "CFLAGS=$CFLAGS $CPPFLAGS" >>config.mak
+echo "CXXFLAGS=$CXXFLAGS $CPPFLAGS" >>config.mak
+if [ "$FREEBSD" -eq 0 ]; then
+    echo "LDFLAGS+=$GTKLDFLAGS -lX11 -ldl" >>config.mak
 else
-	echo "LDFLAGS+=$GTKLDFLAGS -lX11" >> config.mak
+    echo "LDFLAGS+=$GTKLDFLAGS -lX11" >>config.mak
 fi
-echo "HIME_TABLE_DIR=\$(datadir_r)/hime/table" >> config.mak
-echo "HIME_OGG_DIR=\$(datadir_r)/hime/ogg" >> config.mak
-echo "HIME_TABLE_DIR_i=\$(datadir)/hime/table" >> config.mak
-echo "HIME_SCRIPT_DIR=\$(datadir_r)/hime/script" >> config.mak
-echo "HIME_SCRIPT_DIR_i=\$(datadir)/hime/script" >> config.mak
-echo "OPTFLAGS=$OPTFLAGS" >> config.mak
-echo "DOC_DIR=\$(datadir_r)/doc/hime" >> config.mak
-echo "DOC_DIR_i=\$(datadir)/doc/hime" >> config.mak
-echo "HIME_DEFAULT_ICON_DIR=\$(datadir_r)/pixmaps/hime" >> config.mak
-echo "SYS_ICON_DIR=\$(datadir_r)/pixmaps" >> config.mak
-echo "HIME_DEFAULT_ICON_DIR_i=\$(datadir)/pixmaps/hime" >> config.mak
-echo "HIME_BIN_DIR=\$(bindir_r)" >> config.mak
-echo "FREEBSD=$FREEBSD" >> config.mak
-echo "QT_IM=$QT_IM" >> config.mak
-echo "QT_IM_DIR=\$(libdir)$QT_IM_DIR" >> config.mak
-echo "QT4_IM=$QT4_IM" >> config.mak
+echo "HIME_TABLE_DIR=\$(datadir_r)/hime/table" >>config.mak
+echo "HIME_OGG_DIR=\$(datadir_r)/hime/ogg" >>config.mak
+echo "HIME_TABLE_DIR_i=\$(datadir)/hime/table" >>config.mak
+echo "HIME_SCRIPT_DIR=\$(datadir_r)/hime/script" >>config.mak
+echo "HIME_SCRIPT_DIR_i=\$(datadir)/hime/script" >>config.mak
+echo "OPTFLAGS=$OPTFLAGS" >>config.mak
+echo "DOC_DIR=\$(datadir_r)/doc/hime" >>config.mak
+echo "DOC_DIR_i=\$(datadir)/doc/hime" >>config.mak
+echo "HIME_DEFAULT_ICON_DIR=\$(datadir_r)/pixmaps/hime" >>config.mak
+echo "SYS_ICON_DIR=\$(datadir_r)/pixmaps" >>config.mak
+echo "HIME_DEFAULT_ICON_DIR_i=\$(datadir)/pixmaps/hime" >>config.mak
+echo "HIME_BIN_DIR=\$(bindir_r)" >>config.mak
+echo "FREEBSD=$FREEBSD" >>config.mak
+echo "QT_IM=$QT_IM" >>config.mak
+echo "QT_IM_DIR=\$(libdir)$QT_IM_DIR" >>config.mak
+echo "QT4_IM=$QT4_IM" >>config.mak
 if [ -z "$QT4_IM_DIR_CUSTOM" ]; then
-	echo "QT4_IM_DIR=`pkg-config --define-variable=prefix=$\(DESTDIR\)/\$\(prefix\) --variable=libdir QtCore`$QT4_IM_DIR" >> config.mak
+    echo "QT4_IM_DIR=$(pkg-config --define-variable=prefix=$\(DESTDIR\)/\$\(prefix\) --variable=libdir QtCore)$QT4_IM_DIR" >>config.mak
 else
-	echo "QT4_IM_DIR=\$(DESTDIR)$QT4_IM_DIR_CUSTOM" >> config.mak
+    echo "QT4_IM_DIR=\$(DESTDIR)$QT4_IM_DIR_CUSTOM" >>config.mak
 fi
-echo "QT5_IM=$QT5_IM" >> config.mak
+echo "QT5_IM=$QT5_IM" >>config.mak
 if [ -z "$QT5_IM_DIR_CUSTOM" ]; then
-	echo "QT5_IM_DIR=`pkg-config --define-variable=prefix=$\(DESTDIR\)/\$\(prefix\) --variable=libdir Qt5Core`$QT5_IM_DIR" >> config.mak
+    echo "QT5_IM_DIR=$(pkg-config --define-variable=prefix=$\(DESTDIR\)/\$\(prefix\) --variable=libdir Qt5Core)$QT5_IM_DIR" >>config.mak
 else
-	echo "QT5_IM_DIR=\$(DESTDIR)$QT5_IM_DIR_CUSTOM" >> config.mak
+    echo "QT5_IM_DIR=\$(DESTDIR)$QT5_IM_DIR_CUSTOM" >>config.mak
 fi
-echo "QT3_MOC_PATH=$QT3_MOC_PATH" >> config.mak
-echo "QT4_MOC_PATH=$QT4_MOC_PATH" >> config.mak
-echo "QT5_MOC_PATH=$QT5_MOC_PATH" >> config.mak
-echo "QT3_QMAKE_PATH=$QT3_MOC_PATH" | sed 's/moc/qmake/' >> config.mak
-echo "QT4_QMAKE_PATH=$QT4_MOC_PATH" | sed 's/moc/qmake/' >> config.mak
-echo "QT5_QMAKE_PATH=$QT5_MOC_PATH" | sed 's/moc/qmake/' >> config.mak
-echo "GTK_IM=$GTK_IM" >> config.mak
-echo "GTK3_IM=$GTK3_IM" >> config.mak
-echo "USE_XIM=$use_xim" >> config.mak
-echo "LIB=$LIB" >> config.mak
-echo "MAC_OS=$MAC_OS" >> config.mak
-echo "SO_FLAGS=$SO_FLAGS" >> config.mak
-echo "USE_TRAY=$use_tray" >> config.mak
-echo "USE_I18N=$use_i18n" >> config.mak
-echo "USE_TSIN=$use_tsin" >> config.mak
-echo "USE_ANTHY=$USE_ANTHY" >> config.mak
-echo "ANTHY_INC=$ANTHY_INC" >> config.mak
-echo "USE_CHEWING=$USE_CHEWING" >> config.mak
-echo "USE_UNITY=$USE_UNITY" >> config.mak
-echo "INSTALL_DFSG_INCOMPATIBLE=$INSTALL_DFSG_INCOMPATIBLE" >> config.mak
-echo "GIT_HAVE=$GIT_HAVE" >> config.mak
-echo "GIT_HASH=$GIT_HASH" >> config.mak
-echo "hime_ld_run_path=\$(himelibdir)" >> config.mak
-echo "gcc_ld_run_path=-Wl,-rpath,\$(hime_ld_run_path)" >> config.mak
+echo "QT3_MOC_PATH=$QT3_MOC_PATH" >>config.mak
+echo "QT4_MOC_PATH=$QT4_MOC_PATH" >>config.mak
+echo "QT5_MOC_PATH=$QT5_MOC_PATH" >>config.mak
+echo "QT3_QMAKE_PATH=$QT3_MOC_PATH" | sed 's/moc/qmake/' >>config.mak
+echo "QT4_QMAKE_PATH=$QT4_MOC_PATH" | sed 's/moc/qmake/' >>config.mak
+echo "QT5_QMAKE_PATH=$QT5_MOC_PATH" | sed 's/moc/qmake/' >>config.mak
+echo "GTK_IM=$GTK_IM" >>config.mak
+echo "GTK3_IM=$GTK3_IM" >>config.mak
+echo "USE_XIM=$use_xim" >>config.mak
+echo "LIB=$LIB" >>config.mak
+echo "MAC_OS=$MAC_OS" >>config.mak
+echo "SO_FLAGS=$SO_FLAGS" >>config.mak
+echo "USE_TRAY=$use_tray" >>config.mak
+echo "USE_I18N=$use_i18n" >>config.mak
+echo "USE_TSIN=$use_tsin" >>config.mak
+echo "USE_ANTHY=$USE_ANTHY" >>config.mak
+echo "ANTHY_INC=$ANTHY_INC" >>config.mak
+echo "USE_CHEWING=$USE_CHEWING" >>config.mak
+echo "USE_UNITY=$USE_UNITY" >>config.mak
+echo "INSTALL_DFSG_INCOMPATIBLE=$INSTALL_DFSG_INCOMPATIBLE" >>config.mak
+echo "GIT_HAVE=$GIT_HAVE" >>config.mak
+echo "GIT_HASH=$GIT_HASH" >>config.mak
+echo "hime_ld_run_path=\$(himelibdir)" >>config.mak
+echo "gcc_ld_run_path=-Wl,-rpath,\$(hime_ld_run_path)" >>config.mak

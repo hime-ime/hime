@@ -1,21 +1,23 @@
 #!/bin/sh
 # Copyright and license see bottom of this file
 echo "====Detecting hime install===="
-HIME_BINARY=`whereis hime | cut -d ' ' -f 2`
+HIME_BINARY=$(whereis hime | cut -d ' ' -f 2)
 if [ -x "$HIME_BINARY" ]; then
-  echo "==>Hime binary found."
+    echo "==>Hime binary found."
 else
-  echo
-  echo "==>Your hime is not installed properly. Bye."
-  echo
-  exit
+    echo
+    echo "==>Your hime is not installed properly. Bye."
+    echo
+    exit
 fi
 if [ -x "$HIME_BINARY" ]; then
-  echo
-  echo -n "==>$HIME_BINARY:"`$HIME_BINARY -v 2>&1 | grep version | sed -e 's/$/, linked to /'`
-  ldd "$HIME_BINARY" | grep -i gtk | cut -d '>' -f 2 | cut -d '(' -f 1 | tr -s '\t' ' '
-  ls /usr/share/doc/hime*/changelog.Debian.gz 2> /dev/null | while read ver; do echo "==>$ver: `zcat $ver | head -n 1`"; done
-  ls /usr/share/doc/hime*/ChangeLog 2> /dev/null | while read ver; do echo "==>$ver: `cat $ver | head -n 1`"; done
+    echo
+    echo "==>$HIME_BINARY:$("$HIME_BINARY" -v 2>&1 | grep version | sed -e 's/$/, linked to/') $(ldd "$HIME_BINARY" | awk '/gtk/{print $3}')"
+
+    find /usr/share/doc/ -path "*hime*" -name ChangeLog.Debian.gz \
+        -exec echo -n "==>{}: " \; -exec zcat {} \; -exec head -n 1 \;
+    find /usr/share/doc/ -path "*hime*" -name ChangeLog \
+        -exec echo -n "==>{}: " \; -exec head -n 1 {} \;
 fi
 echo
 echo
@@ -24,79 +26,85 @@ echo "====Detecting OS/Distribution===="
 uname -a | sed -e "s/$(hostname)//" -e "s/$USER//" | tr -s ' ' ' '
 
 echo
-lsb_release -a 2> /dev/null|grep -v "LSB Version"
-ls /etc/*[-_]version 2> /dev/null | while read ver; do echo $ver: `cat $ver`; done
-ls /etc/*[-_]release 2> /dev/null | while read ver; do echo $ver: `cat $ver`; done
+lsb_release -a 2>/dev/null | grep -v "LSB Version"
+find /etc -name "*version" \
+    -exec echo "{}:" \; -exec cat {} \; 2>/dev/null
 
+find /etc -name "*release" \
+    -exec echo "{}:" \; -exec cat {} \; 2>/dev/null
 
 echo
-echo -n "/etc/issue: "
-grep -v '^$' /etc/issue | head -n 1 | sed 's/$/\\/' | cut -d '\' -f 1
-
+echo "/etc/issue: $(head -n 1 /etc/issue | sed 's/$/\\/' | cut -d "\\" -f 1)"
 
 echo
 echo
 echo "====Detecting Environment Variables===="
-if [ -n "$XMODIFIERS" -o -n "$LC_ALL" -o -n "$LC_CTYPE" -o -n "$LANG" -o -n "$LANGUAGE" -o -n "$GTK_IM_MODULE" -o -n "$QT_IM_MODULE" -o -n "$QT4_IM_MODULE" ]; then
-echo
-  [ -n "$XMODIFIERS" ] && echo "XMODIFIERS   : XMODIFIERS=$XMODIFIERS"
-  [ -n "$LANG" ] && echo "LANG               : LANG=$LANG"
-  [ -n "$LANGUAGE" ] && echo "LANGUAGE       : LANGUAGE=$LANGUAGE"
-  [ -n "$LC_CTYPE" ] && echo "LC_CTYPE       : LC_CTYPE=$LC_CTYPE"
-  [ -n "$LC_ALL" ] && echo "LC_ALL           : LC_ALL=$LC_ALL"
-  locale 2> /dev/null | grep -v '"' | sed 's/=/\t      : /' | grep -v ': $'
-  [ -n "$GTK_IM_MODULE" ] && echo "GTK_IM_MODULE: GTK_IM_MODULE=$GTK_IM_MODULE"
-  [ -n "$QT_IM_MODULE" ] && echo "QT_IM_MODULE : QT_IM_MODULE=$QT_IM_MODULE"
-  [ -n "$QT4_IM_MODULE" ] && echo "QT4_IM_MODULE: QT4_IM_MODULE=$QT4_IM_MODULE"
+if [ -n "$XMODIFIERS" ] || [ -n "$LC_ALL" ] || [ -n "$LC_CTYPE" ] ||
+    [ -n "$LANG" ] || [ -n "$LANGUAGE" ] || [ -n "$GTK_IM_MODULE" ] ||
+    [ -n "$QT_IM_MODULE" ] || [ -n "$QT4_IM_MODULE" ]; then
+    echo
+    [ -n "$XMODIFIERS" ] && echo "XMODIFIERS   : XMODIFIERS=$XMODIFIERS"
+    [ -n "$LANG" ] && echo "LANG               : LANG=$LANG"
+    [ -n "$LANGUAGE" ] && echo "LANGUAGE       : LANGUAGE=$LANGUAGE"
+    [ -n "$LC_CTYPE" ] && echo "LC_CTYPE       : LC_CTYPE=$LC_CTYPE"
+    [ -n "$LC_ALL" ] && echo "LC_ALL           : LC_ALL=$LC_ALL"
+    locale 2>/dev/null | grep -v '"' | sed 's/=/\t      : /' | grep -v ': $'
+    [ -n "$GTK_IM_MODULE" ] && echo "GTK_IM_MODULE: GTK_IM_MODULE=$GTK_IM_MODULE"
+    [ -n "$QT_IM_MODULE" ] && echo "QT_IM_MODULE : QT_IM_MODULE=$QT_IM_MODULE"
+    [ -n "$QT4_IM_MODULE" ] && echo "QT4_IM_MODULE: QT4_IM_MODULE=$QT4_IM_MODULE"
 fi
 
 echo
 echo
 echo "====Detecting hime status===="
-echo "==>Running hime number: "`pgrep ^hime$ | wc -l`
+echo "==>Running hime number: ""$(pgrep ^hime$ | wc -l)"
 
 echo
 # TODO: get tempdir from TMPDIR, TMP, and TEMP
-echo "==>hime socket number: "`ls /tmp/.hime-$USER/socket-:* | wc -l`
+echo "==>hime socket number: $(find "/tmp/.hime-$USER" -name "socket*" | wc -l)"
 
 echo
-echo -n "==>System library path: "
-ls -d /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64 2> /dev/null
+echo "==>System library path: "
+ls -d /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64 2>/dev/null
+
 echo "====Immodule status===="
 # TODO: detect more binary name of gtk-query-immodules-2.0
-GTK_QUERY_2=`whereis gtk-query-immodules-2.0 | cut -d ' ' -f 2`
+GTK_QUERY_2=$(whereis gtk-query-immodules-2.0 | cut -d ' ' -f 2)
 
 if [ ! -x "$GTK_QUERY_IMMODULES_2" ]; then
-  GTK_QUERY_IMMODULES_2=/usr/lib/`ls /usr/lib | grep linux | grep $(uname -m)`/libgtk2.0-0/gtk-query-immodules-2.0
+    GTK_QUERY_IMMODULES_2="$(find /usr/lib -path "*libgtk2.0-0*" -name gtk-query-immodules-2.0)"
 fi
 
 if [ -x "$GTK_QUERY_2" ]; then
-  echo
-  echo "==>gtk-query-immodules-2.0:"
-  ls -d `$GTK_QUERY_2 | grep hime | cut -d '"' -f 2 | grep '/'`
+    echo
+    echo "==>gtk-query-immodules-2.0:"
+    ls -d "$("$GTK_QUERY_2" | grep hime | cut -d '"' -f 2 | grep '/')"
 fi
-  echo
-  echo "==>gtk-2.0 immodule cache"
-  echo `ls -d /etc/gtk-2.0/gtk.immodules* /usr/lib/$(ls /usr/lib |grep linux | grep $(uname -m))/gtk-2.0/*/immodules.cache* /usr/local/etc/gtk-2.0/gtk.immodules* 2> /dev/null` | sed 's/$/:/'
-  ls -d `grep hime /etc/gtk-2.0/gtk.immodules* /usr/lib/$(ls /usr/lib |grep linux | grep $(uname -m))/gtk-2.0/*/immodules.cache* /usr/local/etc/gtk-2.0/gtk.immodules* 2> /dev/null | cut -d '"' -f 2 | grep '/'`
+echo
+echo "==>gtk-2.0 immodule cache"
+find /etc /usr/lib64 /usr/lib /usr/local/etc \
+    -path "*gtk-2.0*" -name "*immodules*" \
+    -exec grep hime '{}' \; 2>/dev/null |
+    cut -d '"' -f 2 | grep so
 
 # TODO: detect more binary name of gtk-query-immodules-3.0
-GTK_QUERY_3=`whereis gtk-query-immodules-3.0 | cut -d ' ' -f 2`
+GTK_QUERY_3=$(whereis gtk-query-immodules-3.0 | cut -d ' ' -f 2)
 
 if [ ! -x "$GTK_QUERY_IMMODULES_3" ]; then
-  GTK_QUERY_IMMODULES_3=/usr/lib/`ls /usr/lib | grep linux | grep $(uname -m)`/libgtk-3.0/gtk-query-immodules-3.0
+    GTK_QUERY_IMMODULES_3="$(find /usr/lib -path "*libgtk-3.0*" -name gtk-query-immodules-3.0)"
 fi
-
 
 if [ -x "$GTK_QUERY_3" ]; then
-  echo
-  echo "==>gtk-query-immodules-3.0:"
-  ls -d `$GTK_QUERY_3 | grep hime | cut -d '"' -f 2 | grep '/'`
+    echo
+    echo "==>gtk-query-immodules-3.0:"
+    ls -d "$("$GTK_QUERY_3" | grep hime | cut -d '"' -f 2 | grep '/')"
 fi
-  echo
-  echo "==>gtk-3.0 immodule cache"
-  echo `ls -d /usr/lib*/gtk-3.0/*/immodules.cache* /usr/lib/$(ls /usr/lib |grep linux | grep $(uname -m))/gtk-3.0/*/immodules.cache* /usr/local/lib*/gtk-3.0/*/immodules.cache* 2> /dev/null` | sed 's/$/:/'
-  ls -d `grep hime /usr/lib*/gtk-3.0/*/immodules.cache* /usr/lib/$(ls /usr/lib |grep linux | grep $(uname -m))/gtk-3.0/*/immodules.cache* /usr/local/lib*/gtk-3.0/*/immodules.cache* 2> /dev/null | cut -d '"' -f 2 | grep '/'`
+echo
+echo "==>gtk-3.0 immodule cache"
+find /usr/lib64 /usr/lib /usr/local/lib \
+    -path "*gtk-3.0*" -name "immodules.cache*" \
+    -exec grep hime '{}' \; 2>/dev/null |
+    cut -d '"' -f 2 | grep so
 
 # Copyright (C) 2012 Wen-Yen Chuang <caleb AT calno DOT com>
 #
