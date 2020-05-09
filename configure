@@ -334,7 +334,7 @@ else
         USE_CHEWING='N'
         echo "Found, but disabled."
     else
-        if pkg-config --exists 'chewing >= 0.3.2' 2>/dev/null; then
+        if ! pkg-config --exists 'chewing >= 0.3.2' 2>/dev/null; then
             USE_CHEWING='N'
             echo "Disabled. chewing > 0.3.2 is needed to enable chewing."
         else
@@ -369,7 +369,7 @@ if [ "$use_unity" = "Y" ]; then
             USE_UNITY='N'
             echo "Found, but disabled."
         else
-            if pkg-config --exists "$APPINDICATOR >= 0.4.0" 2>/dev/null; then
+            if ! pkg-config --exists "$APPINDICATOR >= 0.4.0" 2>/dev/null; then
                 echo "Disabled. appindicator > 0.4.0 is needed to enable appindicator."
                 USE_UNITY='N'
             else
