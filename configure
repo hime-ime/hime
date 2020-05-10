@@ -49,12 +49,6 @@ if uname | grep OpenBSD >/dev/null 2>/dev/null; then
 fi
 
 SO_FLAGS="$LDFLAGS -shared -Wl,--as-needed"
-MAC_OS=0
-if uname | grep Darwin >/dev/null 2>/dev/null; then
-    FREEBSD=1
-    MAC_OS=1
-    SO_FLAGS="-dynamic -bundle -undefined suppress -flat_namespace"
-fi
 
 prefix="/usr/local"
 LIB=
@@ -283,11 +277,6 @@ if [ $? != 0 ]; then
         rm -f config.mak
         exit 1
     fi
-fi
-
-## problem in MacOS, by candyz
-if [ "$MAC_OS" = 1 ]; then
-    GTKINC="-I/sw/include $(pkg-config --cflags "$GTK") 2> /dev/null"
 fi
 
 GTKLDFLAGS=$(pkg-config --libs "$GTK" 2>/dev/null)
@@ -643,7 +632,6 @@ echo "GTK_IM=$GTK_IM" >>config.mak
 echo "GTK3_IM=$GTK3_IM" >>config.mak
 echo "USE_XIM=$use_xim" >>config.mak
 echo "LIB=$LIB" >>config.mak
-echo "MAC_OS=$MAC_OS" >>config.mak
 echo "SO_FLAGS=$SO_FLAGS" >>config.mak
 echo "USE_TRAY=$use_tray" >>config.mak
 echo "USE_I18N=$use_i18n" >>config.mak

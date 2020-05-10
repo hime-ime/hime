@@ -631,7 +631,7 @@ int main(int argc, char **argv)
   char *t = strchr(lc_ctype, '.');
   if (t) {
     int len = t - lc_ctype;
-#if MAC_OS || FREEBSD
+#if FREEBSD
     lc = strdup(lc_ctype);
     lc[len] = 0;
 #else

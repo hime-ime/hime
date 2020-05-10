@@ -12,13 +12,9 @@ IMMODULES_LOCAL=/usr/$(LIB)/$(GTK2IM)
 IMMODULES_QUERY=$(GTK_LIBDIR)/libgtk2.0-0/gtk-query-immodules-2.0
 
 
-ifeq ($(MAC_OS),1)
-EXTRA_INC=-I/sw/include
-endif
-
 .SUFFIXES:	.c .o .E
-CFLAGS = $(OPTFLAGS) $(EXTRA_INC) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
--I../IMdkit/include -DCLIENT_LIB=1 -DMAC_OS=$(MAC_OS) -DFREEBSD=$(FREEBSD)
+CFLAGS = $(OPTFLAGS) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
+-I../IMdkit/include -DCLIENT_LIB=1 -DFREEBSD=$(FREEBSD)
 
 .c.o:
 	@echo "  $< -> $@"

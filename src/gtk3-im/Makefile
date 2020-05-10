@@ -12,13 +12,10 @@ IMMODULES_LOCAL=/usr/$(LIB)/$(GTK3IM)
 IMMODULES_QUERY=$(GTK3_LIBDIR)/libgtk-3-0/gtk-query-immodules-3.0
 IMMODULES_CACHE=$(DESTDIR)/$(GTK3_LIBDIR)/gtk-3.0/$(GTK3_BINARY_VERSION)/immodules.cache
 
-ifeq ($(MAC_OS),1)
-EXTRA_INC=-I/sw/include
-endif
 
 .SUFFIXES:	.c .o .E
-CFLAGS += $(OPTFLAGS) $(EXTRA_INC) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
--I../IMdkit/include -DCLIENT_LIB=1 -DMAC_OS=$(MAC_OS) -DFREEBSD=$(FREEBSD)
+CFLAGS += $(OPTFLAGS) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
+-I../IMdkit/include -DCLIENT_LIB=1 -DFREEBSD=$(FREEBSD)
 
 .c.o:
 	@echo "  $< -> $@"
