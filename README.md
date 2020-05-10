@@ -1,5 +1,7 @@
 # HIME Input Method Editor
 
+![badge](https://github.com/hime-ime/hime/workflows/Build/badge.svg)
+
 ## Hime 新手上路
 
 ### 簡介
