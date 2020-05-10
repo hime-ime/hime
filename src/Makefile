@@ -87,13 +87,13 @@ CFLAGS     += -DUSE_XIM=1
 OBJS       += IC.o
 endif
 
-ifeq ($(USE_TRAY),Y)
+ifeq ($(USE_SYSTEM_TRAY),Y)
 CFLAGS     += -DTRAY_ENABLED=1
 OBJS       += tray.o tray-double.o
 ifeq ($(GTK),gtk+-2.0)
 OBJS       += gdkpixbuf-drawable.o
 endif
-ifeq ($(USE_UNITY),Y)
+ifeq ($(USE_UNITY_TRAY),Y)
 CFLAGS     += -DTRAY_UNITY=1
 OBJS       += tray-appindicator.o
 endif
