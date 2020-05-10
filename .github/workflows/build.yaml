@@ -13,7 +13,7 @@ jobs:
           fetch-depth: 2
 
       - name: Change diff
-        run: git --no-pager show "$GITHUB_SHA" --color
+        run: git --no-pager show -m "$GITHUB_SHA" --color
 
       - name: Docker Action
         uses: ./.github/actions/archlinux
