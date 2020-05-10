@@ -154,7 +154,6 @@ all: $(PROGS) $(PROGS_SYM) $(DATA) $(PROGS_CV)
 	$(MAKE) -C modules
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im; fi
-	if [ $(QT_IM) = 'Y' ]; then $(MAKE) -C qt-im; fi
 	if [ $(QT4_IM) = 'Y' ]; then $(MAKE) -C qt4-im; fi
 	if [ $(QT5_IM) = 'Y' ]; then $(MAKE) -C qt5-im; fi
 
@@ -282,7 +281,6 @@ install:
 	$(MAKE) -C modules install
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im install; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im install; fi
-	if [ $(QT_IM) = 'Y' ]; then $(MAKE) -C qt-im install; fi
 	if [ $(QT4_IM) = 'Y' ]; then $(MAKE) -C qt4-im install; fi
 	if [ $(QT5_IM) = 'Y' ]; then $(MAKE) -C qt5-im install; fi
 
@@ -294,7 +292,6 @@ uninstall:
 	$(MAKE) -C modules uninstall
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im uninstall; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im uninstall; fi
-	if [ $(QT_IM) = 'Y' ]; then $(MAKE) -C qt-im uninstall; fi
 	if [ $(QT4_IM) = 'Y' ]; then $(MAKE) -C qt4-im uninstall; fi
 	if [ $(QT5_IM) = 'Y' ]; then $(MAKE) -C qt5-im uninstall; fi
 	rmdir --ignore-fail-on-non-empty $(bindir)
