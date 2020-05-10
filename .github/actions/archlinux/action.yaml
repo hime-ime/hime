@@ -1,0 +1,6 @@
+name: 'Build @Archlinux'
+description: 'Build hime with Archlinux container'
+
+runs:
+  using: 'docker'
+  image: '../../../distro/archlinux/ci/Dockerfile'
