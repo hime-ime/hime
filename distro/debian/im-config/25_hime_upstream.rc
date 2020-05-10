@@ -53,6 +53,6 @@ for IM_CONFIG_MARKER in /usr/lib/*/qt5/plugins/platforminputcontexts/im-hime.so 
     fi
 done
 
-# hime has no clutter support, and qt3 immodule is not compiled.
+# hime has no clutter support
 CLUTTER_IM_MODULE=xim
 fi
