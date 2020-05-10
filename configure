@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ "$1" = "-help" ]; then
     echo "Usage: $0 [OPTION]... [VAR=VALUE]..."
@@ -10,19 +10,19 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ "$1" = "-help" ]; then
     echo "  --with-gtk=2.0|3.0    : which gtk+ version to compile against [default: 2.0]"
     echo ""
     echo "Optional Features:"
-    echo "  --disable-nls            : disable Native Language Support [default: enable]"
     echo "  --disable-xim            : disable the support of XIM [default: enable]"
-    echo "  --disable-system-tray    : disable system tray support [default: enable]"
+    echo "  --disable-nls            : disable Native Language Support [default: enable]"
     echo "  --disable-tsin           : disable Tsin input method [default: enable]"
-    echo "  --disable-gtk2-im-module : disable GTK+ 2.x im-module [default: auto-detect]"
-    echo "  --disable-gtk3-im-module : disable GTK+ 3.x im-module [default: auto-detect]"
+    echo "  --disable-anthy          : disable Anthy input method [default: auto-detect]"
+    echo "  --disable-chewing        : disable Chewing input method [default: auto-detect]"
+    echo "  --disable-system-tray    : disable system tray support [default: enable]"
+    echo "  --disable-appindicator   : disable Ubuntu unity tray [default: auto-detect]"
+    echo "  --disable-lib64          : disable the use of lib64 dir [default: auto-detect]"
     echo "  --enable-qt3-immodule    : enable QT3 im-module [default: disable]"
     echo "  --disable-qt4-immodule   : disable QT4 im-module [default: auto-detect]"
     echo "  --disable-qt5-immodule   : disable QT5 im-module [default: auto-detect]"
-    echo "  --disable-anthy          : disable Anthy input method [default: auto-detect]"
-    echo "  --disable-chewing        : disable Chewing input method [default: auto-detect]"
-    echo "  --disable-appindicator   : disable Ubuntu unity tray [default: auto-detect]"
-    echo "  --disable-lib64          : disable the use of lib64 dir [default: auto-detect]"
+    echo "  --disable-gtk2-im-module : disable GTK+ 2.x im-module [default: auto-detect]"
+    echo "  --disable-gtk3-im-module : disable GTK+ 3.x im-module [default: auto-detect]"
     echo ""
     echo "System Specific Pathes:"
     echo "  --qt3-moc-path=PATH       : specify the path of \"moc\" command for Qt 3.x"
@@ -51,20 +51,22 @@ fi
 SO_FLAGS="$LDFLAGS -shared -Wl,--as-needed"
 
 prefix="/usr/local"
-LIB=
 use_xim='Y'
-use_tray='Y'
-use_unity='Y'
 use_i18n='Y'
 use_tsin='Y'
 use_anthy='Y'
 use_chewing='Y'
+use_system_tray='Y'
+use_unity_tray='Y'
+LIB="lib64"
+
 # Qt3 immodule patch is not included in official Qt3 release.
 # Some distros do not apply that patch and will always build failure.
 # We should turn off Qt3 immodule by default.
 use_qt3='N'
 use_qt4='Y'
 use_qt5='Y'
+
 use_gtk='Y'
 use_gtk3='Y'
 
@@ -91,19 +93,15 @@ qt4_moc_path_list="/usr/share/qt4/bin/moc /usr/lib/qt4/bin/moc /usr/bin/moc-qt4 
 #                  debian                 others
 qt3_moc_path_list="/usr/share/qt3/bin/moc /opt/qt/bin/moc"
 
-if [ "$HIME_USE_XIM" ]; then
-    use_xim=$HIME_USE_XIM
-fi
-
 QT5_IM_DIR_CUSTOM=
 QT4_IM_DIR_CUSTOM=
 for opt; do
     case "$opt" in
-        --with_gtk3 | --with-gtk=3.0)
-            GTK=gtk+-3.0
-            ;;
         --prefix=*)
             prefix=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --with_gtk3 | --with-gtk=3.0)
+            GTK=gtk+-3.0
             ;;
         --use_xim=*)
             use_xim=$(echo "$opt" | cut -d '=' -f 2)
@@ -113,24 +111,6 @@ for opt; do
             ;;
         --disable-xim)
             use_xim=N
-            ;;
-        --use_tray=*)
-            use_tray=$(echo "$opt" | cut -d '=' -f 2)
-            ;;
-        --enable-system-tray)
-            use_tray=Y
-            ;;
-        --disable-system-tray)
-            use_tray=N
-            ;;
-        --use_unity=*)
-            use_unity=$(echo "$opt" | cut -d '=' -f 2)
-            ;;
-        --enable-appindicator)
-            use_unity=Y
-            ;;
-        --disable-appindicator)
-            use_unity=N
             ;;
         --use_i18n=*)
             use_i18n=$(echo "$opt" | cut -d '=' -f 2)
@@ -167,6 +147,27 @@ for opt; do
             ;;
         --disable-chewing)
             use_chewing=N
+            ;;
+        --use_system_tray=*)
+            use_system_tray=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-system-tray)
+            use_system_tray=Y
+            ;;
+        --disable-system-tray)
+            use_system_tray=N
+            ;;
+        --use_unity_tray=*)
+            use_unity_tray=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-appindicator)
+            use_unity_tray=Y
+            ;;
+        --disable-appindicator)
+            use_unity_tray=N
+            ;;
+        --disable-lib64)
+            LIB='lib'
             ;;
         --use_qt3=*)
             use_qt3=$(echo "$opt" | cut -d '=' -f 2)
@@ -228,78 +229,33 @@ for opt; do
         --qt5-install-to=* | --qt5-im-module-path=*)
             QT5_IM_DIR_CUSTOM=$(echo "$opt" | cut -d '=' -f 2)
             ;;
-        --disable-lib64)
-            LIB='lib'
-            ;;
     esac
 done
 
+
 echo "prefix: $prefix"
+
 
 echo -n ".... Testing pkg-config         :  "
 if ! command -v pkg-config >/dev/null 2>&1; then
     echo "please install pkg-config. abort!"
     exit 1
 else
-    echo "Found."
+    echo "Found: $(command -v pkg-config)"
 fi
+
 
 echo -n ".... Testing Xtst               :  "
 if ! pkg-config --exists xtst 2>/dev/null; then
     echo "please install rpm/package xtest-devel. abort!"
     exit 1
 else
-    echo "Found."
+    echo "Found: $(pkg-config --print-provides xtst)"
 fi
 
-if [ -z "$GTK" ]; then
-    GTK=gtk+-2.0
-fi
-
-echo -n ".... Testing $GTK           :  "
-
-GTKINC=$(pkg-config --cflags "$GTK" 2>/dev/null)
-
-if [ $? != 0 ]; then
-    if [ "$GTK" = gtk+-2.0 ]; then
-        echo "Not found, trying gtk+-3.0..."
-        GTK=gtk+-3.0
-        echo -n ".... Testing $GTK           :  "
-
-        GTKINC=$(pkg-config --cflags "$GTK" 2>/dev/null)
-        if [ $? != 0 ]; then
-            echo "$GTK or above required --cflags. abort!"
-            rm -f config.mak
-            exit 1
-        fi
-    else
-        echo "$GTK or above required --cflags. abort!"
-        rm -f config.mak
-        exit 1
-    fi
-fi
-
-GTKLDFLAGS=$(pkg-config --libs "$GTK" 2>/dev/null)
-
-if [ $? != 0 ]; then
-    echo "$GTK or above required --libs"
-    echo "please install rpm/package libgtk+2.0_0-devel/libgtk+3.0_0-devel. abort!"
-    rm -f config.mak
-    exit 1
-else
-    echo "Found."
-fi
-
-if [ "$GTK" = gtk+-2.0 ]; then
-    if ! pkg-config --exists 'gtk+-2.0 >= 2.10' 2>/dev/null; then
-        echo ".... Testing system-tray     :  Disabled. gtk > 2.10 is needed to enable system-tray."
-        use_tray=N
-    fi
-fi
 
 echo -n ".... Testing anthy              :  "
-USE_ANTHY=$(pkg-config --libs anthy 2>/dev/null)
-if [ $? != 0 ]; then
+if ! pkg-config --libs anthy >/dev/null 2>/dev/null; then
     echo "Not found, anthy module is turned off."
     USE_ANTHY=N
 else
@@ -309,13 +265,12 @@ else
     else
         USE_ANTHY='Y'
         ANTHY_INC="-I$(pkg-config --variable=includedir anthy) $(pkg-config --libs anthy)"
-        echo "Found."
+        echo "Found: $(pkg-config --print-provides anthy)"
     fi
 fi
 
 echo -n ".... Testing chewing            :  "
-USE_CHEWING=$(pkg-config --libs chewing 2>/dev/null)
-if [ $? != 0 ]; then
+if ! pkg-config --libs chewing >/dev/null 2>/dev/null; then
     echo Not found, chewing module is turned off.
     USE_CHEWING=N
 else
@@ -328,41 +283,70 @@ else
             echo "Disabled. chewing > 0.3.2 is needed to enable chewing."
         else
             USE_CHEWING='Y'
-            echo "Found."
+            echo "Found: $(pkg-config --print-provides chewing)"
         fi
+    fi
+fi
+
+GTK=${GTK:-gtk+-2.0}
+echo -n ".... Testing $GTK           :  "
+if ! pkg-config --exists "$GTK"; then
+    echo "Not found, trying gtk+-3.0..."
+    GTK=gtk+-3.0
+    if ! pkg-config --exists "$GTK"; then
+        echo "$GTK or above required --cflags. abort!"
+        rm -f config.mak
+        exit 1
+    fi
+fi
+echo "Found: $(pkg-config --print-provides $GTK)"
+GTKINC=$(pkg-config --cflags "$GTK" 2>/dev/null)
+
+if pkg-config --libs >/dev/null 2>/dev/null; then
+    echo "$GTK or above required --libs"
+    echo "please install rpm/package libgtk+2.0_0-devel/libgtk+3.0_0-devel. abort!"
+    rm -f config.mak
+    exit 1
+fi
+GTKLDFLAGS=$(pkg-config --libs "$GTK" 2>/dev/null)
+
+if [ "$GTK" = gtk+-2.0 ]; then
+    APPINDICATOR=appindicator-0.1
+    if ! pkg-config --exists 'gtk+-2.0 >= 2.10' 2>/dev/null; then
+        echo ".... Testing system-tray     :  Disabled. $GTK > 2.10 is needed to enable system-tray."
+        use_system_tray=N
     fi
 fi
 
 if [ "$GTK" = "gtk+-3.0" ]; then
     APPINDICATOR=appindicator3-0.1
-    SUPPORT_SYSTEM_TRAY=$(pkg-config --exists 'gtk+-3.0 > 3.9.8' && echo 'N' || echo 'Y')
-    if [ "$SUPPORT_SYSTEM_TRAY" = "N" ]; then
-        use_tray='N'
+    if ! pkg-config --exists 'gtk+-3.0 > 3.9.8'; then
+        echo ".... Testing system-tray     :  Disabled. $GTK > 3.9.8 is needed to enable system-tray."
+        use_system_tray=N
     fi
-else
-    APPINDICATOR=appindicator-0.1
 fi
-if [ "$use_unity" = "Y" ]; then
+
+if [ "$use_unity_tray" = "Y" ]; then
     echo -n ".... Testing appindicator       :  "
-    USE_UNITY=$(pkg-config --libs "$APPINDICATOR" 2>/dev/null)
+    USE_UNITY_TRAY=$(pkg-config --libs "$APPINDICATOR" 2>/dev/null)
     if [ $? != 0 ]; then
-        USE_UNITY=$(pkg-config --libs appindicator3-0.1 2>/dev/null)
+        USE_UNITY_TRAY=$(pkg-config --libs appindicator3-0.1 2>/dev/null)
         if [ $? = 0 ] && [ "$GTK" = "gtk+-2.0" ]; then
             echo "Disabled. appindicator3-0.1 is found, but is using gtk+2.0. Add option \"--with-gtk=3.0\" to enable it."
         else
             echo "Not found, unity tray is turned off."
         fi
-        USE_UNITY=N
+        USE_UNITY_TRAY=N
     else
-        if [ "$use_unity" = "N" ]; then
-            USE_UNITY='N'
+        if [ "$use_unity_tray" = "N" ]; then
+            USE_UNITY_TRAY='N'
             echo "Found, but disabled."
         else
             if ! pkg-config --exists "$APPINDICATOR >= 0.4.0" 2>/dev/null; then
                 echo "Disabled. appindicator > 0.4.0 is needed to enable appindicator."
-                USE_UNITY='N'
+                USE_UNITY_TRAY='N'
             else
-                USE_UNITY='Y'
+                USE_UNITY_TRAY='Y'
                 echo "Found."
                 UNITY_INC="-I/usr/include/libappindicator-0.1"
                 GTKINC=$(pkg-config --cflags "$GTK" "$APPINDICATOR" 2>/dev/null)
@@ -371,6 +355,7 @@ if [ "$use_unity" = "Y" ]; then
         fi
     fi
 fi
+
 if [ -z "$LIB" ]; then
     LIB='lib'
     if [ -d /usr/lib64 ] && [ -d /lib64 ]; then
@@ -378,8 +363,8 @@ if [ -z "$LIB" ]; then
     fi
 
     if [ "$(uname -s)" = Linux ]; then
-        distid=$(lsb_release -is 2>/dev/null)
-        if [ $? = 0 ]; then
+        if command -v lsb_release; then
+            distid=$(lsb_release -is 2>/dev/null)
             case $distid in
                 Ubuntu | Debian | Arch | archlinux)
                     LIB='lib'
@@ -419,7 +404,7 @@ if [ "$QT_IM" = "Y" ]; then
             echo "Hint: use the --qt3-moc-path option. abort!"
             exit 1
         fi
-        echo "Found."
+        echo "Found: $(pkg-config --print-provides qt-mt)"
     fi
 else
     echo "Not found, Qt 3.x immodule is turned off."
@@ -442,14 +427,14 @@ fi
 if [ "$QT4_IM" = "Y" ]; then
     if [ "$use_qt4" = "N" ]; then
         QT4_IM='N'
-        echo "Found, but disabled."
+        echo "Found: $(pkg-config --print-provides QtCore), but disabled."
     else
         if [ ! -x "$QT4_MOC_PATH" ]; then
             echo "Not found, cannot find \"moc\" tool for Qt 4.x."
             echo "Hint: use the --qt4-moc-path option. abort!"
             exit 1
         fi
-        echo "Found."
+        echo "Found: $(pkg-config --print-provides QtCore)"
     fi
 else
     echo "Not found, Qt 4.x immodule is turned off."
@@ -472,14 +457,14 @@ fi
 if [ "$QT5_IM" = "Y" ]; then
     if [ "$use_qt5" = "N" ]; then
         QT5_IM='N'
-        echo "Found, but disabled."
+        echo "Found: $(pkg-config --print-provides Qt5Core), but disabled."
     else
         if [ ! -x "$QT5_MOC_PATH" ]; then
             echo "Not found, cannot find \"moc\" tool for Qt 5.x."
             echo "Hint: use the --qt5-moc-path option. abort!"
             exit 1
         fi
-        echo "Found."
+        echo "Found: $(pkg-config --print-provides Qt5Core)"
     fi
 else
     echo "Not found, Qt 5.x immodule is turned off."
@@ -536,7 +521,47 @@ if [ -d .git ]; then
     GIT_HAVE='Y'
     GIT_HASH=$(git log 2>/dev/null | head -n 1 | cut -d ' ' -f 2 | head -c 7)
 fi
+echo ".... GIT hash: $GIT_HASH"
 
+
+CC="${CC:-gcc}"
+CXX="${CXX:-g++}"
+if [ -z "$CFLAGS" ]; then
+    CFLAGS="-std=gnu17"
+    CXXFLAGS="-std=gnu++17"
+    OPTFLAGS="-Wall"
+else
+    OPTFLAGS="$CFLAGS"
+fi
+
+echo ".... Toolchains flags:"
+echo "         CC/CXX = $CC/$CXX"
+echo "         CFLAGS = $CFLAGS"
+echo "         CXXFLAGS = $CXXFLAGS"
+echo "         OPTFLAGS = $OPTFLAGS"
+
+# build
+echo "MAKE=$MAKE" >config.mak
+echo "CC=$CC" >>config.mak
+echo "CCX=$CC" >>config.mak
+echo "CXX=$CXX" >>config.mak
+echo "CCLD=$CC" >>config.mak
+echo "LDFLAGS_ENV=$LDFLAGS" >>config.mak
+echo "LDFLAGS=$LDFLAGS -Wl,--as-needed -lX11 -lm" >>config.mak
+echo "CFLAGS=$CFLAGS $CPPFLAGS" >>config.mak
+echo "CXXFLAGS=$CXXFLAGS $CPPFLAGS" >>config.mak
+echo "FREEBSD=$FREEBSD" >>config.mak
+if [ "$FREEBSD" -eq 0 ]; then
+    echo "LDFLAGS+=$GTKLDFLAGS -lX11 -ldl" >>config.mak
+else
+    echo "LDFLAGS+=$GTKLDFLAGS -lX11" >>config.mak
+fi
+echo "OPTFLAGS=$OPTFLAGS" >>config.mak
+echo "SO_FLAGS=$SO_FLAGS" >>config.mak
+echo "prefix=$prefix" >>config.mak
+
+
+# installation
 bindir=$prefix/bin
 datadir=$prefix/share
 if [ "$FREEBSD" -eq 0 ]; then
@@ -546,68 +571,47 @@ else
 fi
 libdir=$prefix/$LIB
 includedir=$prefix/include
-optdir=/opt
-
-if [ -z "$CFLAGS" ]; then
-    OPTFLAGS="-Wall"
-    CFLAGS="-std=gnu17"
-    CXXFLAGS="-std=gnu++17"
-
-else
-    OPTFLAGS="$CFLAGS"
-fi
-echo "-> CFLAGS = $CFLAGS"
-echo "-> CXXFLAGS = $CXXFLAGS"
-echo "-> OPTFLAGS = $OPTFLAGS"
-
-if [ -z "$CC" ]; then
-    CC=gcc
-fi
-
-if [ -z "$CXX" ]; then
-    CXX=g++
-fi
-
-echo "CC=$CC" >config.mak
-echo "CCX=$CC" >>config.mak
-echo "CXX=$CXX" >>config.mak
-echo "CCLD=$CC" >>config.mak
-echo "MAKE=$MAKE" >>config.mak
-echo "GTK=$GTK" >>config.mak
-echo "GTKINC=$GTKINC" >>config.mak
-echo "prefix=$prefix" >>config.mak
 echo "bindir=\$(DESTDIR)$bindir" >>config.mak
+echo "bindir_r=\$(DESTDIR)$bindir" >>config.mak
 echo "mandir=\$(DESTDIR)$mandir" >>config.mak
 echo "man1dir=\$(mandir)/man1" >>config.mak
-echo "bindir_r=\$(DESTDIR)$bindir" >>config.mak
 echo "datadir=\$(DESTDIR)$datadir" >>config.mak
 echo "datadir_r=\$(DESTDIR)$datadir" >>config.mak
 echo "filterdir=\$(datadir_r)/hime/filter" >>config.mak
+echo "includedir=\$(DESTDIR)$includedir" >>config.mak
 echo "libdir=\$(DESTDIR)$libdir" >>config.mak
 echo "himelibdir=\$(libdir)/hime" >>config.mak
-echo "includedir=\$(DESTDIR)$includedir" >>config.mak
-echo "LDFLAGS_ENV=$LDFLAGS" >>config.mak
-echo "LDFLAGS=$LDFLAGS -Wl,--as-needed -lX11 -lm" >>config.mak
-echo "CFLAGS=$CFLAGS $CPPFLAGS" >>config.mak
-echo "CXXFLAGS=$CXXFLAGS $CPPFLAGS" >>config.mak
-if [ "$FREEBSD" -eq 0 ]; then
-    echo "LDFLAGS+=$GTKLDFLAGS -lX11 -ldl" >>config.mak
-else
-    echo "LDFLAGS+=$GTKLDFLAGS -lX11" >>config.mak
-fi
-echo "HIME_TABLE_DIR=\$(datadir_r)/hime/table" >>config.mak
+echo "hime_ld_run_path=\$(himelibdir)" >>config.mak
+echo "gcc_ld_run_path=-Wl,-rpath,\$(hime_ld_run_path)" >>config.mak
+
+echo "HIME_BIN_DIR=\$(bindir_r)" >>config.mak
+echo "HIME_DEFAULT_ICON_DIR=\$(datadir_r)/pixmaps/hime" >>config.mak
+echo "HIME_DEFAULT_ICON_DIR_i=\$(datadir)/pixmaps/hime" >>config.mak
 echo "HIME_OGG_DIR=\$(datadir_r)/hime/ogg" >>config.mak
-echo "HIME_TABLE_DIR_i=\$(datadir)/hime/table" >>config.mak
 echo "HIME_SCRIPT_DIR=\$(datadir_r)/hime/script" >>config.mak
 echo "HIME_SCRIPT_DIR_i=\$(datadir)/hime/script" >>config.mak
-echo "OPTFLAGS=$OPTFLAGS" >>config.mak
+echo "HIME_TABLE_DIR=\$(datadir_r)/hime/table" >>config.mak
+echo "HIME_TABLE_DIR_i=\$(datadir)/hime/table" >>config.mak
+
 echo "DOC_DIR=\$(datadir_r)/doc/hime" >>config.mak
 echo "DOC_DIR_i=\$(datadir)/doc/hime" >>config.mak
-echo "HIME_DEFAULT_ICON_DIR=\$(datadir_r)/pixmaps/hime" >>config.mak
+
 echo "SYS_ICON_DIR=\$(datadir_r)/pixmaps" >>config.mak
-echo "HIME_DEFAULT_ICON_DIR_i=\$(datadir)/pixmaps/hime" >>config.mak
-echo "HIME_BIN_DIR=\$(bindir_r)" >>config.mak
-echo "FREEBSD=$FREEBSD" >>config.mak
+
+echo "INSTALL_DFSG_INCOMPATIBLE=$INSTALL_DFSG_INCOMPATIBLE" >>config.mak
+
+# configure script flags
+echo "USE_XIM=$use_xim" >>config.mak
+echo "USE_SYSTEM_TRAY=$use_system_tray" >>config.mak
+echo "USE_UNITY_TRAY=$USE_UNITY_TRAY" >>config.mak
+echo "USE_I18N=$use_i18n" >>config.mak
+echo "USE_TSIN=$use_tsin" >>config.mak
+echo "USE_ANTHY=$USE_ANTHY" >>config.mak
+echo "ANTHY_INC=$ANTHY_INC" >>config.mak
+echo "USE_CHEWING=$USE_CHEWING" >>config.mak
+echo "LIB=$LIB" >>config.mak
+
+# QT
 echo "QT_IM=$QT_IM" >>config.mak
 echo "QT_IM_DIR=\$(libdir)$QT_IM_DIR" >>config.mak
 echo "QT4_IM=$QT4_IM" >>config.mak
@@ -628,20 +632,13 @@ echo "QT5_MOC_PATH=$QT5_MOC_PATH" >>config.mak
 echo "QT3_QMAKE_PATH=$QT3_MOC_PATH" | sed 's/moc/qmake/' >>config.mak
 echo "QT4_QMAKE_PATH=$QT4_MOC_PATH" | sed 's/moc/qmake/' >>config.mak
 echo "QT5_QMAKE_PATH=$QT5_MOC_PATH" | sed 's/moc/qmake/' >>config.mak
+
+# GTK
+echo "GTK=$GTK" >>config.mak
+echo "GTKINC=$GTKINC" >>config.mak
 echo "GTK_IM=$GTK_IM" >>config.mak
 echo "GTK3_IM=$GTK3_IM" >>config.mak
-echo "USE_XIM=$use_xim" >>config.mak
-echo "LIB=$LIB" >>config.mak
-echo "SO_FLAGS=$SO_FLAGS" >>config.mak
-echo "USE_TRAY=$use_tray" >>config.mak
-echo "USE_I18N=$use_i18n" >>config.mak
-echo "USE_TSIN=$use_tsin" >>config.mak
-echo "USE_ANTHY=$USE_ANTHY" >>config.mak
-echo "ANTHY_INC=$ANTHY_INC" >>config.mak
-echo "USE_CHEWING=$USE_CHEWING" >>config.mak
-echo "USE_UNITY=$USE_UNITY" >>config.mak
-echo "INSTALL_DFSG_INCOMPATIBLE=$INSTALL_DFSG_INCOMPATIBLE" >>config.mak
+
+# git
 echo "GIT_HAVE=$GIT_HAVE" >>config.mak
 echo "GIT_HASH=$GIT_HASH" >>config.mak
-echo "hime_ld_run_path=\$(himelibdir)" >>config.mak
-echo "gcc_ld_run_path=-Wl,-rpath,\$(hime_ld_run_path)" >>config.mak
