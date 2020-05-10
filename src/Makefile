@@ -6,7 +6,7 @@ CFLAGS= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I./IMdkit/include -I./im-client 
         -DDOC_DIR=\"$(DOC_DIR)\" \
         -DHIME_DEFAULT_ICON_DIR=\"$(HIME_DEFAULT_ICON_DIR)\" \
         -DHIME_SCRIPT_DIR=\"$(HIME_SCRIPT_DIR)\" -DHIME_BIN_DIR=\"$(HIME_BIN_DIR)\" \
-        -DSYS_ICON_DIR=\"$(SYS_ICON_DIR)\" -DFREEBSD=$(FREEBSD) -DMAC_OS=$(MAC_OS) \
+        -DSYS_ICON_DIR=\"$(SYS_ICON_DIR)\" -DFREEBSD=$(FREEBSD) \
         -DHIME_VERSION=\"$(shell head -n 1 ../ChangeLog)\" \
         -DG_DISABLE_SINGLE_INCLUDES -DG_DISABLE_DEPRECATED \
         -DGDK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED \
@@ -114,10 +114,6 @@ ifeq ($(USE_TSIN),N)
 OBJS       += tsin.o tsin-util.o win0.o win1.o tsin-parse.o
 endif
 
-ifeq ($(MAC_OS),1)
-EXTRA_LDFLAGS=-bind_at_load 
-endif
-
 ifeq ($(GIT_HAVE),Y)
 CFLAGS     += -DGIT_HASH=\"$(GIT_HASH)\" -DGIT_HAVE=1
 endif
@@ -173,9 +169,9 @@ im-client/libhime-im-client.so:
 hime: $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
 	@echo "linking $@ ..."
 ifeq ($(FREEBSD), 0)
-	$(CCLD) $(EXTRA_LDFLAGS) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
+	$(CCLD) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) -lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
 else
-	$(CCLD) $(EXTRA_LDFLAGS) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) -lXtst $(LDFLAGS) -L/usr/local/$(LIB)
+	$(CCLD) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) -lXtst $(LDFLAGS) -L/usr/local/$(LIB)
 endif
 	@rm -f core.* vgcore.*
 

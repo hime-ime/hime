@@ -339,7 +339,7 @@ gtk_im_context_hime_filter_keypress (GtkIMContext *context,
 
   char *rstr = NULL;
 
-#if (!FREEBSD || MAC_OS)
+#if (!FREEBSD)
 //  if (event->type == GDK_KEY_PRESS)
 //    printf("kval %x %x\n",event->keyval, keysym);
 
