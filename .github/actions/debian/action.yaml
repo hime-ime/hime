@@ -1,0 +1,6 @@
+name: 'Build @Debian'
+description: 'Build hime with Debian container'
+
+runs:
+  using: 'docker'
+  image: '../../../distro/debian/ci/Dockerfile'

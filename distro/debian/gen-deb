@@ -1,13 +1,18 @@
 #!/bin/sh
+
 [ ! -e distro/debian ] && exec echo Please execute '"[1m[32mdistro/debian/gen-deb[0m"' under hime directory, thanks.
-rm -fr debian
+
+rm -rf debian
 cp -r distro/debian .
+
 if [ -d .git ]; then
-  sed -i "s#9-9#`head -n 1 ChangeLog | sed -e "s/$/+\`date +git%Y%m%d\`-1/" -e 's/UNRELEASED/0UNRELEASED/'`#" debian/changelog
+    sed -i "s#9-9#$(head -n 1 ChangeLog | sed -e "s/$/+$(date +git%Y%m%d)-1/" -e 's/UNRELEASED/0UNRELEASED/')#" debian/changelog
 else
-  sed -i "s#9-9#`head -n 1 ChangeLog | sed -e 's/UNRELEASED/0UNRELEASED/'`#" debian/changelog
+  sed -i "s#9-9#$(head -n 1 ChangeLog | sed -e 's/UNRELEASED/0UNRELEASED/')#" debian/changelog
 fi
-# Not sure if DEB_CFLAGS_SET do work
+
+# Not sure if DEB_CFLAGS_SET does work
 export DEB_CFLAGS_SET="-Wall -g -O0"
 export CFLAGS="$CFLAGS -Wall -g -O0"
+
 dpkg-buildpackage -b
