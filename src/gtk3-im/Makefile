@@ -2,7 +2,7 @@ include ../../config.mak
 
 OBJS = imhime.o gtkimcontexthime.o
 GTK3IM=gtk-3.0/immodules
-GTKINC=`pkg-config --cflags gtk+-3.0`
+GTKINC+=`pkg-config --cflags gtk+-3.0`
 LDFLAGS+=`pkg-config --libs gtk+-3.0`
 GTK3_LIBDIR=`pkg-config --variable=libdir gtk+-3.0`
 GTK3_BINARY_VERSION=`pkg-config --variable=gtk_binary_version gtk+-3.0`

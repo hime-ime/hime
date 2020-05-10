@@ -1,4 +1,6 @@
-/* Copyright (C) 2009 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2009 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,6 +15,8 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+#ifndef HIME_QT4_IM_H
+#define HIME_QT4_IM_H
 
 #include <QApplication>
 #include <QEvent>
@@ -27,20 +31,22 @@
 struct HIME_client_handle_S;
 
 class HIMEIMContext: public QInputContext {
-    public:
-        HIMEIMContext ();
-        ~HIMEIMContext ();
-        bool x11FilterEvent (QWidget *widget, XEvent *event);
-        bool filterEvent (const QEvent *event);
-        void update();
-        QString identifierName();
-        QString language();
-        void mouseHandler (int offset, QMouseEvent *event);
-        void setFocusWidget (QWidget *widget);
-        void widgetDestroyed (QWidget *widget);
-        void reset ();
-        HIME_client_handle_S *hime_ch;
-        bool isComposing() const;
-        void update_cursor(QWidget *);
-        void update_preedit();
+public:
+    HIMEIMContext ();
+    ~HIMEIMContext ();
+
+    bool x11FilterEvent (QWidget *widget, XEvent *event);
+    bool filterEvent (const QEvent *event);
+    void update();
+    QString identifierName();
+    QString language();
+    void mouseHandler (int offset, QMouseEvent *event);
+    void setFocusWidget (QWidget *widget);
+    void widgetDestroyed (QWidget *widget);
+    void reset ();
+    HIME_client_handle_S *hime_ch;
+    bool isComposing() const;
+    void update_cursor(QWidget *);
+    void update_preedit();
 };
+#endif  /* HIME_QT4_IM_H */

@@ -1,4 +1,6 @@
-/* Copyright (C) 2008 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2008 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,52 +16,49 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifndef HIME_QT4_HIME_QT_H
+#define HIME_QT4_HIME_QT_H
+
 #include <QObject>
 #include <QSocketNotifier>
 
-//#include "hime-imcontext-qt.h"
 #include "hime-common-qt.h"
+
 
 class HIMEQt: public QObject
 {
 
     Q_OBJECT
 
-    public slots:
+public slots:
+    void handle_message ();
 
-        void handle_message ();
+public:
+    /**
+     * Constructor.
+     */
+    HIMEQt ();
 
-    public:
+    /**
+     * Destructor.
+     */
+    ~HIMEQt ();
 
-        /**
-         * Constructor.
-         */
-        HIMEQt ();
+    /**
+     * A messenger is opened.
+     */
+    void messenger_opened ();
 
+    /**
+     * A messenger is closed.
+     */
+    void messenger_closed ();
 
-        /**
-         * Destructor.
-         */
-        ~HIMEQt ();
-
-
-        /**
-         * A messenger is opened.
-         */
-        void messenger_opened ();
-
-        /**
-         * A messenger is closed.
-         */
-        void messenger_closed ();
-
-
-    private:
-
-
-        /**
-         * The notifier for the messenger socket.
-         */
-        QSocketNotifier *socket_notifier;
-
+private:
+    /**
+     * The notifier for the messenger socket.
+     */
+    QSocketNotifier *socket_notifier;
 };
+
+#endif  /* HIME_QT4_HIME_QT_H */

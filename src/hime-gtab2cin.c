@@ -1,4 +1,6 @@
-/* Copyright (C) 2011-2012 Huang, Kai-Chang (Solomon Huang) <kaichanh@gmail.com>
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011-2012 Huang, Kai-Chang (Solomon Huang) <kaichanh@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,18 +17,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <stdio.h>
 #include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
+
 #include <sys/types.h>
 #include <unistd.h>
 #if FREEBSD
 #include <sys/param.h>
 #include <sys/stat.h>
 #endif
-#include <string.h>
-#include "hime.h"
+
 #include "gtab.h"
 #include "hime-endian.h"
+#include "hime.h"
 
 
 int futf8cpy_bytes(FILE *fp, char *s, int n)
