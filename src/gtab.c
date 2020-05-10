@@ -1,4 +1,6 @@
-/* Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,16 +17,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <sys/stat.h>
 #include <regex.h>
-#include "hime.h"
+
+#include <sys/stat.h>
+
+#include "gst.h"
+#include "gtab-buf.h"
 #include "gtab.h"
-#include "pho.h"
 #include "hime-conf.h"
 #include "hime-endian.h"
-#include "gtab-buf.h"
+#include "hime.h"
+#include "pho.h"
 #include "tsin.h"
-#include "gst.h"
 
 extern gboolean test_mode;
 gboolean gtab_phrase_on();
@@ -756,7 +760,7 @@ void disp_selection0(gboolean phrase_selected, gboolean force_disp)
   }
 
   if (gtab_vertical_select_on() && pgstr[0]) {
-    char tstr2[16];
+    char tstr2[64];
     snprintf(tstr2, sizeof(tstr2), "(%s)", pgstr);
     strcat(tt, tstr2);
   }

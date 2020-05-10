@@ -16,8 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef OS_DEP_H
-#define OS_DEP_H
+#ifndef HIME_OS_DEP_H
+#define HIME_OS_DEP_H
 
 typedef char unich_t;
 void unix_exec(char *fmt,...);
@@ -30,4 +30,4 @@ void unix_exec(char *fmt,...);
 
 #include <gdk/gdkx.h>
 
-#endif  /* OS_DEP_H */
+#endif  /* HIME_OS_DEP_H */

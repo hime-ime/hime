@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,11 +17,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hime.h"
-#include "pho.h"
-#include "lang.h"
-#include <sys/stat.h>
 #include <stdlib.h>
+
+#include <sys/stat.h>
+
+#include "hime.h"
+#include "lang.h"
+#include "pho.h"
+
 
 char phofname[128]="";
 extern char *TableDir;
@@ -47,8 +52,8 @@ void pho_load()
 
   if (!getenv("HIME_TABLE_DIR") && phonetic_char_dynamic_sequence) {
     get_hime_user_fname(pho_tab, phofname);
-    if (access(phofname, W_OK) < 0){
-      char sys_file[256], vv[256];
+    if (access(phofname, W_OK) < 0) {
+      char sys_file[256], vv[512];
       get_sys_table_file_name(sys_file, pho_tab);
       snprintf(vv, sizeof(vv), "cp %s %s\n", sys_file, phofname);
       system(vv);

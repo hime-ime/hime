@@ -1,4 +1,6 @@
-/* Copyright (C) 1995-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 1995-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,6 +16,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+#ifndef HIME_PHO_H
+#define HIME_PHO_H
 
 typedef u_short phokey_t;
 
@@ -90,3 +95,5 @@ char *pho_idx_str2(int idx, int *is_phrase);
 
 #define PHO_PHRASE_ESCAPE 0x1b
 #define PHO_PINYIN_TONE1 -1
+
+#endif  /* HIME_PHO_H */

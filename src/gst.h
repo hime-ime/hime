@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,6 +16,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+#ifndef HIME_GST_H
+#define HIME_GST_H
+
+#include <X11/Xlib.h>
+
+#include <gtk/gtk.h>
 
 typedef struct {
   struct CHPHO *chpho;
@@ -61,3 +70,5 @@ typedef struct {
   KeySym inch[MAX_TAB_KEY_NUM64_6];
 } GTAB_ST;
 extern GTAB_ST ggg;
+
+#endif  /* HIME_GST_H */

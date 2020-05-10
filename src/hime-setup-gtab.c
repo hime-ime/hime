@@ -1,5 +1,7 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
  * Copyright (C) 2012 Favonia <favonia@gmail.com>
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hime.h"
 #include "gtab.h"
+#include "hime.h"
 
 /* XXX UI states hold uncommited preference.
  * That's why we need these global variables. */
@@ -156,11 +158,11 @@ static gboolean cb_gtab_edit_append( GtkWidget *widget,
   char append_fname[128];
   snprintf(append_fname, sizeof(append_fname), "~/.config/hime/%s.append", fname);
 
-  char prepare[128];
+  char prepare[256];
   snprintf(prepare, sizeof(prepare), HIME_SCRIPT_DIR"/gtab.append_prepare %s", append_fname);
   system(prepare);
 
-  char exec[128];
+  char exec[256];
 
   snprintf(exec, sizeof(exec), "%s %s", utf8_edit, append_fname);
   dbg("exec %s\n", exec);

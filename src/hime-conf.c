@@ -1,4 +1,6 @@
-/* Copyright (C) 2010 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2010 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,10 +17,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hime.h"
-#include <dirent.h>
 #include <X11/Xatom.h>
+#include <dirent.h>
 #include <glib.h>
+
+#include "hime.h"
 
 #if !CLIENT_LIB
 char *TableDir=HIME_TABLE_DIR;
@@ -103,7 +106,6 @@ gboolean get_hime_user_fname(char *name, char fname[])
   get_hime_dir(fname);
   strcat(strcat(fname,"/"),name);
   return !access(fname, R_OK);
-//  dbg("get_hime_user_fname %s %s\n", name, fname);
 }
 
 void get_hime_conf_fname(char *name, char fname[])
