@@ -430,8 +430,8 @@ if [ "$QT5_IM" = "Y" ]; then echo ".... Path of Qt5 moc            :  $QT5_MOC_P
 
 # --- MOC INFO END ---
 
-if [ "$GTK" = "gtk+-3.0" ]; then
-    GTK_IM='N'
+GTK_IM='N'
+if [ "$GTK" = "gtk+-2.0" ]; then
     echo -n ".... Testing GTK+ 2.x immodule  :  "
     if pkg-config --libs gtk+-2.0 >/dev/null 2>/dev/null; then
         GTK_IM='Y'
@@ -523,31 +523,25 @@ fi
 libdir=$prefix/$LIB
 includedir=$prefix/include
 echo "bindir=\$(DESTDIR)$bindir" >>config.mak
-echo "bindir_r=\$(DESTDIR)$bindir" >>config.mak
 echo "mandir=\$(DESTDIR)$mandir" >>config.mak
 echo "man1dir=\$(mandir)/man1" >>config.mak
 echo "datadir=\$(DESTDIR)$datadir" >>config.mak
-echo "datadir_r=\$(DESTDIR)$datadir" >>config.mak
-echo "filterdir=\$(datadir_r)/hime/filter" >>config.mak
+echo "filterdir=\$(datadir)/hime/filter" >>config.mak
 echo "includedir=\$(DESTDIR)$includedir" >>config.mak
 echo "libdir=\$(DESTDIR)$libdir" >>config.mak
 echo "himelibdir=\$(libdir)/hime" >>config.mak
 echo "hime_ld_run_path=\$(himelibdir)" >>config.mak
 echo "gcc_ld_run_path=-Wl,-rpath,\$(hime_ld_run_path)" >>config.mak
 
-echo "HIME_BIN_DIR=\$(bindir_r)" >>config.mak
-echo "HIME_DEFAULT_ICON_DIR=\$(datadir_r)/pixmaps/hime" >>config.mak
-echo "HIME_DEFAULT_ICON_DIR_i=\$(datadir)/pixmaps/hime" >>config.mak
-echo "HIME_OGG_DIR=\$(datadir_r)/hime/ogg" >>config.mak
-echo "HIME_SCRIPT_DIR=\$(datadir_r)/hime/script" >>config.mak
-echo "HIME_SCRIPT_DIR_i=\$(datadir)/hime/script" >>config.mak
-echo "HIME_TABLE_DIR=\$(datadir_r)/hime/table" >>config.mak
-echo "HIME_TABLE_DIR_i=\$(datadir)/hime/table" >>config.mak
+echo "HIME_BIN_DIR=\$(bindir)" >>config.mak
+echo "HIME_DEFAULT_ICON_DIR=\$(datadir)/pixmaps/hime" >>config.mak
+echo "HIME_OGG_DIR=\$(datadir)/hime/ogg" >>config.mak
+echo "HIME_SCRIPT_DIR=\$(datadir)/hime/script" >>config.mak
+echo "HIME_TABLE_DIR=\$(datadir)/hime/table" >>config.mak
 
-echo "DOC_DIR=\$(datadir_r)/doc/hime" >>config.mak
-echo "DOC_DIR_i=\$(datadir)/doc/hime" >>config.mak
+echo "DOC_DIR=\$(datadir)/doc/hime" >>config.mak
 
-echo "SYS_ICON_DIR=\$(datadir_r)/pixmaps" >>config.mak
+echo "SYS_ICON_DIR=\$(datadir)/pixmaps" >>config.mak
 
 echo "INSTALL_DFSG_INCOMPATIBLE=$INSTALL_DFSG_INCOMPATIBLE" >>config.mak
 

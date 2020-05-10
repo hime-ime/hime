@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,23 +17,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#ifndef HIME_H
+#define HIME_H
+
+#include <ctype.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
-#include "os-dep.h"
-#include <gtk/gtk.h>
 #include <string.h>
-#include "IMdkit.h"
-#include "Xi18n.h"
+
+#include <gtk/gtk.h>
+
 #if HIME_i18n_message
 #include <libintl.h>
 #define _(STRING) gettext(STRING)
 #else
 #define _(STRING) (STRING)
 #endif
-
 #define N_(STRING) (STRING)
+
+#include "os-dep.h"
+
+#include "IMdkit.h"
+#include "Xi18n.h"
 
 #include "hime-gtk-compatible.h"
 
@@ -179,3 +187,5 @@ void skip_utf8_sigature(FILE *fp);
 typedef int usecount_t;
 
 #define MAX_CIN_PHR (100*CH_SZ + 1)
+
+#endif  /* HIME_H */

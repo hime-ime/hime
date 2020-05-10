@@ -17,7 +17,7 @@ CXXFLAGS=$(OPTFLAGS) $(INCS) -Wall -D_REENTRANT -DUNIX=1 -fPIC  -DQT5 -DQT_SHARE
 -DQT_IMMODULE -DPIC
 OBJS= moc_hime-qt.o hime-qt.o hime-imcontext-qt.o moc_hime-imcontext-qt.o
 .SUFFIXES:	.c .cpp .a .so .E .h
-LDFLAGS=$(LDFLAGS_ENV) -L../im-client -lhime-im-client `pkg-config Qt5Core Qt5Gui Qt5DBus --libs`
+LDFLAGS+=$(LDFLAGS_ENV) -L../im-client -lhime-im-client `pkg-config Qt5Core Qt5Gui Qt5DBus --libs`
 
 .PHONY: all
 all:    im-hime.so
@@ -58,6 +58,7 @@ uninstall:
 clean:
 	@echo "clean up"
 	@rm -f $(OBJS) im-hime.so *~ core.* *moc*.cpp *.E .depend
+	@rm -f moc_hime-qt.cpp moc_hime-imcontext-qt.cpp
 
 .depend:
 	@echo "building $@ ..."

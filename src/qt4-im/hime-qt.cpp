@@ -1,4 +1,6 @@
-/* Copyright (C) 2009 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2009 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,9 +18,7 @@
 
 #include "hime-qt.h"
 
-#ifdef QT4
 using namespace Qt;
-#endif
 
 /* Static variables */
 static HIMEQt *client = NULL;

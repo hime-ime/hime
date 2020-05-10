@@ -3,7 +3,7 @@ include ../config.mak
 SRC_DIR       = ../src
 IM_CLIENT_DIR = $(SRC_DIR)/im-client
 
-.SUFFIXES:	.kbmsrc .kbm .cin .gtab
+.SUFFIXES: .kbmsrc .kbm .cin .gtab
 CFLAGS+= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I$(SRC_DIR)
 export HIME_NO_RELOAD=
 
@@ -37,7 +37,7 @@ DATA += dayi3.gtab
 endif
 
 .PHONY: all
-all:	$(DATA)
+all: $(DATA)
 
 $(PHO_A2D):
 	$(MAKE) -C $(SRC_DIR) hime-phoa2d
@@ -54,31 +54,31 @@ $(KBMCV):
 $(PIN_JUYIN):
 	$(MAKE) -C $(SRC_DIR) pin-juyin
 
-tsin32:	tsin.src  $(TS_A2D)
+tsin32: tsin.src  $(TS_A2D)
 	export LD_LIBRARY_PATH=$(IM_CLIENT_DIR); $(TS_A2D) $<
-tsin32.idx:	tsin32
+tsin32.idx: tsin32
 
 
-s-tsin32:	s-tsin.src  $(TS_A2D)
+s-tsin32: s-tsin.src  $(TS_A2D)
 	export LD_LIBRARY_PATH=$(IM_CLIENT_DIR); $(TS_A2D) $< $@
-s-tsin32.idx:	s-tsin32
+s-tsin32.idx: s-tsin32
 
 
-pho.tab2:	 pho.tab2.src $(PHO_A2D)
+pho.tab2: pho.tab2.src $(PHO_A2D)
 	export LD_LIBRARY_PATH=$(IM_CLIENT_DIR); $(PHO_A2D) $<
 
-s-pho.tab2:	 s-pho.tab2.src $(PHO_A2D)
+s-pho.tab2: s-pho.tab2.src $(PHO_A2D)
 	export LD_LIBRARY_PATH=$(IM_CLIENT_DIR); $(PHO_A2D) $<
 
-pho-huge.tab2:	 pho-huge.tab2.src $(PHO_A2D)
+pho-huge.tab2: pho-huge.tab2.src $(PHO_A2D)
 	export LD_LIBRARY_PATH=$(IM_CLIENT_DIR); $(PHO_A2D) $<
 
-s-pho-huge.tab2:	 s-pho-huge.tab2.src $(PHO_A2D)
+s-pho-huge.tab2: s-pho-huge.tab2.src $(PHO_A2D)
 	export LD_LIBRARY_PATH=$(IM_CLIENT_DIR); $(PHO_A2D) $<
 
-t2s.dat:	t2s-file t2s-file.table
+t2s.dat: t2s-file t2s-file.table
 	./t2s-file
-s2t.dat:	t2s-file
+s2t.dat: t2s-file
 
 pin-juyin.xlt: $(PIN_JUYIN) pin-juyin.src
 	$(PIN_JUYIN)
@@ -91,7 +91,7 @@ t2s-file: t2s-file.c $(SRC_DIR)/util.o $(SRC_DIR)/locale.o
 	@echo "building $@ ..."
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
-tsin-1.src:	extr1
+tsin-1.src: extr1
 	./extr1 > $@
 
 .cin.gtab: $(CIN2GTAB)
@@ -111,14 +111,13 @@ gtab.list: $(REMOVE_TSIN)
 
 .PHONY: install
 install:
-	install -d "$(HIME_TABLE_DIR_i)"
-	install -m 644 $(DATA) $(DATAKEEP) "$(HIME_TABLE_DIR_i)"
-#	cd "$(HIME_TABLE_DIR_i)"; bzip2 -f *.gtab
+	install -d "$(HIME_TABLE_DIR)"
+	install -m 644 $(DATA) $(DATAKEEP) "$(HIME_TABLE_DIR)"
 
 .PHONY: uninstall
 uninstall:
-	cd $(HIME_TABLE_DIR_i) && rm -f $(DATA) $(DATAKEEP)
-	rmdir --ignore-fail-on-non-empty $(HIME_TABLE_DIR_i)
+	cd $(HIME_TABLE_DIR) && rm -f $(DATA) $(DATAKEEP)
+	rmdir --ignore-fail-on-non-empty $(HIME_TABLE_DIR)
 
 .PHONY: clean
 clean:

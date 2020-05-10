@@ -2,8 +2,8 @@ include ../../config.mak
 
 OBJS = imhime.o gtkimcontexthime.o
 GTK2IM=gtk-2.0/immodules
-GTKINC=`pkg-config --cflags gtk+-2.0`
-LDFLAGS=`pkg-config --libs gtk+-2.0`
+GTKINC+=`pkg-config --cflags gtk+-2.0`
+LDFLAGS+=`pkg-config --libs gtk+-2.0`
 GTK_LIBDIR=`pkg-config --variable=libdir gtk+-2.0`
 GTK_BINARY_VERSION=`pkg-config --variable=gtk_binary_version gtk+-2.0`
 MODULEDIR=$(DESTDIR)/$(GTK_LIBDIR)/gtk-2.0/$(GTK_BINARY_VERSION)/immodules

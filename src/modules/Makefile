@@ -1,5 +1,5 @@
 include ../../config.mak
-include ../suffixes-rule
+include ../suffixes-rule.mk
 
 CFLAGS+=-I.. -I../IMdkit/include
 HIME_MODULE=intcode-module.so

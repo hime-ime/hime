@@ -1,4 +1,6 @@
-/* GTK - The GIMP Toolkit
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * GTK - The GIMP Toolkit
  * Copyright (C) 2000 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -15,22 +17,23 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#include "locale.h"
-#include <string.h>
+
+#include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-//#include "gtkintl.h"
 #include <gtk/gtk.h>
+#include "gtkimcontexthime.h"
 #if !GTK_CHECK_VERSION(3,0,0) // latest GTK+ 2.x can drop these, keep them for older GTK+ 2.x
 #include "gtk/gtklabel.h"
 #include "gtk/gtksignal.h"
 #include "gtk/gtkwindow.h"
 #endif
-#include "gtkimcontexthime.h"
-// #include "hime.h"  // for debug only
-#include "hime-im-client.h"
+
 #include <X11/keysym.h>
+
+#include "hime-im-client.h"
 
 #define DBG 0
 
@@ -340,9 +343,6 @@ gtk_im_context_hime_filter_keypress (GtkIMContext *context,
   char *rstr = NULL;
 
 #if (!FREEBSD)
-//  if (event->type == GDK_KEY_PRESS)
-//    printf("kval %x %x\n",event->keyval, keysym);
-
   int uni = gdk_keyval_to_unicode(event->keyval);
   if (uni) {
     gsize rn;
@@ -350,7 +350,6 @@ gtk_im_context_hime_filter_keypress (GtkIMContext *context,
     char *utf8 = g_convert((char *)&uni, 4, "UTF-8", "UTF-32", &rn, &num_bytes, &err);
 
     if (utf8) {
-//      printf("conv %s\n", utf8);
       strcpy(buffer, utf8);
       g_free(utf8);
     }

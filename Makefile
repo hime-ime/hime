@@ -2,7 +2,7 @@ include config.mak
 
 VERSION_FILE = ChangeLog
 
-DIRS    = src data filter scripts icons man menu
+DIRS    = src data filter icons man menu scripts
 
 ifeq ($(ECHO),)
 ECHO  := $(shell whereis -b echo | awk '{print $$2}')
@@ -26,13 +26,8 @@ install:
 	@for d in $(DIRS); do $(ECHO) -e "\x1b[1;32m** installing $$d\x1b[0m"; \
 	   $(MAKE) -C $$d install || exit 1; \
 	done
-	@if [ "$(prefix)" = /usr/local ]; then \
-	   install -d "$(DOC_DIR)"; \
-	   install -m 644 ChangeLog "$(DOC_DIR)"; \
-	else \
-	   install -d "$(DOC_DIR_i)"; \
-	   install -m 644 ChangeLog "$(DOC_DIR_i)"; \
-	fi
+	install -d "$(DOC_DIR)"; \
+	install -m 644 $(VERSION_FILE) "$(DOC_DIR)"
 
 .PHONY: uninstall
 uninstall:

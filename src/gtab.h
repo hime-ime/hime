@@ -1,4 +1,6 @@
-/* Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,6 +16,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+#ifndef GTAB_H
+#define GTAB_H
+
+#include "hime.h"
 
 typedef enum {
   GTAB_space_auto_first_none=0,   // use the value set by .cin
@@ -166,3 +173,5 @@ char current_method_type();
 #define tblch2(inm, i) (inm->key64 ? inm->tbl64[i].ch:inm->tbl[i].ch)
 #define Max_tab_key_num1(inm) (inm->key64 ? MAX_TAB_KEY_NUM641(inm) : MAX_TAB_KEY_NUM1(inm))
 #define Max_tab_key_num Max_tab_key_num1(cur_inmd)
+
+#endif  /* GTAB_H */
