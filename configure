@@ -56,7 +56,7 @@ use_anthy='Y'
 use_chewing='Y'
 use_system_tray='Y'
 use_unity_tray='Y'
-LIB="lib64"
+use_lib=''
 
 use_qt4='Y'
 use_qt5='Y'
@@ -158,8 +158,14 @@ for opt; do
         --disable-appindicator)
             use_unity_tray=N
             ;;
+        --use_lib=*)
+            use_lib=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-lib64)
+            use_lib='lib64'
+            ;;
         --disable-lib64)
-            LIB='lib'
+            use_lib='lib'
             ;;
         --use_qt4=*)
             use_qt4=$(echo "$opt" | cut -d '=' -f 2)
@@ -336,30 +342,36 @@ if [ "$use_unity_tray" = "Y" ]; then
     fi
 fi
 
-if [ -z "$LIB" ]; then
-    LIB='lib'
-    if [ -d /usr/lib64 ] && [ -d /lib64 ]; then
-        LIB='lib64'
-    fi
+echo -n ".... Testing lib                :  "
+LIB='lib'
+if [ -d /usr/lib64 ] && [ -d /lib64 ]; then
+    LIB='lib64'
+fi
 
-    if [ "$(uname -s)" = Linux ]; then
-        if command -v lsb_release; then
-            distid=$(lsb_release -is 2>/dev/null)
-            case $distid in
-                Ubuntu | Debian | Arch | archlinux)
-                    LIB='lib'
-                    ;;
-            esac
-        else
-            DEBIAN_LD=$(ld -v 2>&1 | grep -i debian)
-            UBUNTU_LD=$(ld -v 2>&1 | grep -i ubuntu)
-            if [ "$DEBIAN_LD" != "" ] || [ "$UBUNTU_LD" != "" ]; then
+if [ "$(uname -s)" = Linux ]; then
+    if command -v lsb_release >/dev/null; then
+        distid=$(lsb_release -is 2>/dev/null)
+        case $distid in
+            Ubuntu | Debian | Arch | archlinux)
                 LIB='lib'
-            elif [ -e /etc/arch-release ]; then
-                LIB='lib'
-            fi
+                ;;
+        esac
+    else
+        DEBIAN_LD=$(ld -v 2>&1 | grep -i debian)
+        UBUNTU_LD=$(ld -v 2>&1 | grep -i ubuntu)
+        if [ "$DEBIAN_LD" != "" ] || [ "$UBUNTU_LD" != "" ]; then
+            LIB='lib'
+        elif [ -e /etc/arch-release ]; then
+            LIB='lib'
         fi
     fi
+fi
+
+if [ -n "$use_lib" ]; then
+    echo "Decteted $LIB, but set to $prefix/$use_lib"
+    LIB="$use_lib"
+else
+    echo "Using $prefix/$LIB"
 fi
 
 
