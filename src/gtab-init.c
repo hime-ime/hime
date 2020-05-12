@@ -1,4 +1,6 @@
-/* Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,15 +17,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <sys/stat.h>
 #include <regex.h>
-#include "hime.h"
+
+#include <sys/stat.h>
+
+#include "gst.h"
 #include "gtab.h"
-#include "pho.h"
 #include "hime-conf.h"
 #include "hime-endian.h"
+#include "hime.h"
+#include "pho.h"
 #include "tsin.h"
-#include "gst.h"
 
 GTAB_space_pressed_E _gtab_space_auto_first;
 char **seltab;
@@ -176,7 +180,7 @@ void init_gtab(int inmdno)
     time_t mtime_append_gtab = file_mtime(append_user_gtab);
 
     if (mtime_append_gtab < mtime || mtime_append_gtab < mtime_append) {
-      char exe[256];
+      char exe[512];
 
       snprintf(exe, sizeof(exe), HIME_BIN_DIR"/hime-gtab-merge %s %s %s", ttt, append_user, append_user_gtab);
       dbg("exe %s\n", exe);

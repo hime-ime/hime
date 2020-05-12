@@ -28,6 +28,8 @@
 
 #include <gtk/gtk.h>
 
+#include <X11/Xlib.h>
+
 #if HIME_i18n_message
 #include <libintl.h>
 #define _(STRING) gettext(STRING)

@@ -1,4 +1,6 @@
-/* Copyright (C) 1995-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 1995-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,13 +18,15 @@
  */
 
 #include <stdio.h>
-#include <sys/types.h>
 #include <string.h>
+
+#include <sys/types.h>
+
+#include "gst.h"
+#include "gtab.h"
 #include "hime.h"
 #include "pho.h"
 #include "tsin.h"
-#include "gtab.h"
-#include "gst.h"
 
 void load_pin_juyin();
 phokey_t pinyin2phokey(char *s);
@@ -264,7 +268,7 @@ int main(int argc, char **argv)
     keymap[0]=' ';
     sscanf(s, "%s %d %d %s", aa, &keybits, &maxkey, keymap+1);
     for(i=0; keymap[i]; i++)
-      kno[keymap[i]]=i;
+      kno[(unsigned)keymap[i]]=i;
 
     if (maxkey * keybits > 32)
       gtabkey64 = TRUE;
@@ -350,7 +354,7 @@ int main(int argc, char **argv)
         kk64=0;
         int idx=0;
         while (s[i]!=' ' && i<len) {
-          int k = kno[s[i]];
+          int k = kno[(unsigned)s[i]];
           kk64|=(u_int64_t)k << ( LAST_K_bitN - idx*keybits);
           i++;
           idx++;
