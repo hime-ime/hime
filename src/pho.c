@@ -1,4 +1,6 @@
-/* Copyright (C) 1994-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 1994-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,13 +17,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hime.h"
-#include "pho.h"
-#include <sys/stat.h>
 #include <stdlib.h>
-#include "gtab.h"
+
+#include <sys/stat.h>
+
 #include "gst.h"
+#include "gtab.h"
+#include "hime.h"
 #include "pho-status.h"
+#include "pho.h"
 
 PHO_ST poo;
 
@@ -850,7 +854,7 @@ extern GtkWidget *gwin_pho;
 int pho_get_preedit(char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *sub_comp_len)
 {
   *sub_comp_len = !typ_pho_empty();;
-  if (gwin_pho && GTK_WIDGET_VISIBLE(gwin_pho))
+  if (gwin_pho && gtk_widget_get_visible (gwin_pho))
     *sub_comp_len|=2;
   *cursor = 0;
   str[0]=0;

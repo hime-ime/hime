@@ -1,4 +1,6 @@
-/* Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,15 +17,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hime.h"
-#include "gtab.h"
+
 #include <signal.h>
+
 #include <X11/extensions/XTest.h>
+
 #include "gst.h"
+#include "gtab.h"
 #include "pho.h"
-#include "im-client/hime-im-client-attr.h"
-#include "hime-module.h"
 #include "hime-module-cb.h"
+#include "hime.h"
+
 #include "win-sym.h"
 
 #define STRBUFLEN 64
@@ -839,21 +843,21 @@ gboolean win_is_visible()
     return FALSE;
   switch (current_method_type()) {
     case method_type_PHO:
-      return gwin_pho && GTK_WIDGET_VISIBLE(gwin_pho);
+      return gwin_pho && gtk_widget_get_visible (gwin_pho);
 #if USE_TSIN
     case method_type_TSIN:
-      return gwin0 && GTK_WIDGET_VISIBLE(gwin0);
+      return gwin0 && gtk_widget_get_visible (gwin0);
 #endif
     case method_type_MODULE:
       if (!module_cb())
         return FALSE;
       return module_cb()->module_win_visible();
     case method_type_SYMBOL_TABLE:
-      return gwin_sym && GTK_WIDGET_VISIBLE(gwin_sym);
+      return gwin_sym && gtk_widget_get_visible (gwin_sym);
     default:
       if (!gwin_gtab)
         return FALSE;
-      return gwin_gtab && GTK_WIDGET_VISIBLE(gwin_gtab);
+      return gwin_gtab && gtk_widget_get_visible (gwin_gtab);
   }
 
   return FALSE;

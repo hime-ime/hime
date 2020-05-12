@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,6 +16,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+#ifndef HIME_PROTOCOL_H
+#define HIME_PROTOCOL_H
 
 #include <X11/Xlib.h>
 #include "../hime-endian.h"
@@ -93,3 +98,5 @@ typedef struct {
   char sock_path[UNIX_PATH_MAX];
 } Server_sock_path;
 void __hime_enc_mem(u_char *p, int n, HIME_PASSWD *passwd, u_int *seed);
+
+#endif  /* HIME_PROTOCOL_H */

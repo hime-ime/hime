@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,10 +17,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "gtab.h"
 #include "hime.h"
 #include "pho.h"
 #include "win-save-phrase.h"
-#include "gtab.h"
 
 extern int c_len;
 extern gboolean test_mode;
@@ -200,7 +202,7 @@ void create_win_save_phrase(WSP_S *wsp, int wspN)
 
 //  dbg("mmmmmmmmmmmmm\n");
 
-  GTK_WIDGET_SET_FLAGS (button_ok, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (button_ok, 1);
   gtk_widget_grab_default (button_ok);
 
 

@@ -352,7 +352,7 @@ static void DispInArea()
 
 //  dbg("sel1st:%d\n", ggg.sel1st_i);
   if (hime_display_on_the_spot_key()) {
-    if (hime_pop_up_win && gwin_gtab && GTK_WIDGET_VISIBLE(gwin_gtab) && poo.same_pho_query_state == SAME_PHO_QUERY_none)
+    if (hime_pop_up_win && gwin_gtab && gtk_widget_get_visible (gwin_gtab) && poo.same_pho_query_state == SAME_PHO_QUERY_none)
       hide_win_gtab();
     return;
   }
@@ -1023,7 +1023,7 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
     return feedkey_pho(key, 0);
 
   if (poo.same_pho_query_state == SAME_PHO_QUERY_none && gwin_pho &&
-    GTK_WIDGET_VISIBLE(gwin_pho))
+    gtk_widget_get_visible (gwin_pho))
      hide_win_pho();
 
   if (!tsin_pho_mode()) {

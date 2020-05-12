@@ -1,4 +1,6 @@
-/* Copyright (C) 2011-2012 cwlin <https://github.com/cwlin>
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011-2012 cwlin <https://github.com/cwlin>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -750,7 +752,7 @@ module_hide_win (void)
 int
 module_win_visible (void)
 {
-    return GTK_WIDGET_VISIBLE (g_pWinChewing);
+    return gtk_widget_get_visible (g_pWinChewing);
 }
 
 void

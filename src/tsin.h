@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,6 +16,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+#ifndef HIME_TSIN_H
+#define HIME_TSIN_H
 
 extern int phcount;
 extern int hashidx[];
@@ -66,3 +71,5 @@ typedef struct PRE_SEL {
 
 extern gboolean tsin_is_gtab;
 extern int ph_key_sz;
+
+#endif  /* HIME_TSIN_H */

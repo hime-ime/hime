@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -113,7 +115,8 @@ void set_label_font_size(GtkWidget *label, int size)
   pango_font_description_merge(font, nfont, TRUE);
   pango_font_description_free(nfont);
 #endif
-  gtk_widget_override_font(label, font);
+  // XXX(xatier): deprecated function, find alternatives
+  gtk_widget_override_font (label, font);
 }
 
 // the width of ascii space in firefly song

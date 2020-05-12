@@ -14,8 +14,9 @@ IMMODULES_CACHE=$(DESTDIR)/$(GTK3_LIBDIR)/gtk-3.0/$(GTK3_BINARY_VERSION)/immodul
 
 
 .SUFFIXES:	.c .o .E
-CFLAGS += $(OPTFLAGS) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
--I../IMdkit/include -DCLIENT_LIB=1 -DFREEBSD=$(FREEBSD)
+CFLAGS = $(OPTFLAGS) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
+-I../IMdkit/include -DCLIENT_LIB=1 -DFREEBSD=$(FREEBSD) \
+-DGTK_DISABLE_DEPRECATED
 
 .c.o:
 	@echo "  $< -> $@"

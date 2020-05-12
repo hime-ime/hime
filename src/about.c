@@ -104,7 +104,8 @@ static GtkWidget *get_close_button(void)
 }
 
 /* Put a child Widget inside the parent box */
-static void box_add(GtkBox *parent, GtkWidget *child) {
+static void box_add(GtkBox *parent, GtkWidget *child)
+{
     /* no expand, no filling, padding = 3 */
     gtk_box_pack_start(parent, child, FALSE, FALSE, 3);
 }

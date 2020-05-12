@@ -15,6 +15,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#ifndef HIME_MODULE_H
+#define HIME_MODULE_H
+
 #include "win1.h"
 
 // optional functions/data for hime module to use, please refer to anthy.cpp
@@ -77,3 +80,5 @@ typedef struct {
 #endif
 
 void init_HIME_module_main_functions(HIME_module_main_functions *func);
+
+#endif  /* HIME_MODULE_H */

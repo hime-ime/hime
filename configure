@@ -286,6 +286,23 @@ if ! pkg-config --exists "$GTK"; then
     fi
 fi
 echo "Found: $(pkg-config --print-provides $GTK)"
+
+# version guards for GTK+
+if [ "$GTK" = gtk+-2.0 ]; then
+    if ! pkg-config --exists 'gtk+-2.0 >= 2.24.32'; then
+        echo "gtk+-2.0 >= 2.24.32 is required. abort!"
+        rm -f config.mak
+        exit 1
+    fi
+fi
+if [ "$GTK" = gtk+-3.0 ]; then
+    if ! pkg-config --exists 'gtk+-3.0 >= 3.24.20'; then
+        echo "gtk+-3.0 >= 3.24.20 is required. abort!"
+        rm -f config.mak
+        exit 1
+    fi
+fi
+
 GTKINC=$(pkg-config --cflags "$GTK" 2>/dev/null)
 
 if pkg-config --libs >/dev/null 2>/dev/null; then

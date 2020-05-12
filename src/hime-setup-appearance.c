@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  * Copyright (C) 2012 tytsim <https://github.com/tytsim>
  * Copyright (C) 2012 Favonia <favonia@gmail.com>
  *
@@ -17,13 +19,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "gst.h"
+#include "hime-module-cb.h"
+#include "hime-module.h"
 #include "hime.h"
+#include "im-client/hime-im-client-attr.h"
 #include "pho.h"
 #include "tsin.h"
-#include "gst.h"
-#include "im-client/hime-im-client-attr.h"
-#include "hime-module.h"
-#include "hime-module-cb.h"
 
 /* XXX UI states hold uncommited preference.
  * That's why we need these global variables. */
@@ -120,7 +122,7 @@ void save_appearance_conf()
   char fname[128];
   strcpy(fname, gtk_font_button_get_font_name(GTK_FONT_BUTTON(font_sel)));
   int len = strlen(fname)-1;
-  
+
 
   while (len > 0 && isdigit(fname[len])) {
        len--;
@@ -311,11 +313,11 @@ static GtkWidget *create_hime_icon_dir_display()
 
   GtkWidget *label = gtk_label_new(_("Icon style"));
   gtk_box_pack_start(GTK_BOX(hbox_hime_icon_dir), label, FALSE, FALSE, 0);
-  opt_hime_icon_dir_display = gtk_combo_box_new_text();
+  opt_hime_icon_dir_display = gtk_combo_box_text_new ();
   gtk_box_pack_start(GTK_BOX(hbox_hime_icon_dir), opt_hime_icon_dir_display, FALSE, FALSE, 0);
   int i, current_idx=0;
   for(i = 0; i < sizeof(icon_dir_sel)/sizeof(icon_dir_sel[0]); i++) {
-    gtk_combo_box_append_text(GTK_COMBO_BOX_TEXT(opt_hime_icon_dir_display), icon_dir_sel[i].name);
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT (opt_hime_icon_dir_display), icon_dir_sel[i].name);
     if(!strcmp(hime_icon_dir, icon_dir_sel[i].path)){
       current_idx = i;
     }
@@ -335,7 +337,7 @@ static GtkWidget *create_hime_edit_display()
   GtkWidget *label = gtk_label_new(_("Editing area"));
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
-  opt_hime_edit_display = gtk_combo_box_new_text ();
+  opt_hime_edit_display = gtk_combo_box_text_new ();
   gtk_box_pack_start (GTK_BOX (hbox), opt_hime_edit_display, FALSE, FALSE, 0);
 
   int i, current_idx=0;
@@ -343,7 +345,7 @@ static GtkWidget *create_hime_edit_display()
   for(i=0; edit_disp[i].keystr; i++) {
     if (edit_disp[i].keynum == hime_edit_display)
       current_idx = i;
-    gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_hime_edit_display), _(edit_disp[i].keystr));
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_hime_edit_display), _(edit_disp[i].keystr));
   }
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_hime_edit_display), current_idx);
@@ -375,7 +377,7 @@ static GtkWidget *create_hime_tray_display()
 //  GtkWidget *label = gtk_label_new(_("System tray displays as"));
 //  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
-  opt_hime_tray_display = gtk_combo_box_new_text ();
+  opt_hime_tray_display = gtk_combo_box_text_new ();
 
   gtk_box_pack_start (GTK_BOX (hbox), opt_hime_tray_display, FALSE, FALSE, 0);
 
@@ -384,7 +386,7 @@ static GtkWidget *create_hime_tray_display()
   for(i=0; tray_disp[i].keystr; i++) {
     if (tray_disp[i].keynum == hime_tray_display)
       current_idx = i;
-    gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_hime_tray_display), _(tray_disp[i].keystr));
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_hime_tray_display), _(tray_disp[i].keystr));
   }
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_hime_tray_display), current_idx);
@@ -620,4 +622,3 @@ GtkWidget *create_appearance_widget()
 
   return appearance_widget;
 }
-

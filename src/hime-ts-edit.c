@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,19 +17,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hime.h"
-#include "pho.h"
-#include "config.h"
 #if HIME_i18n_message
 #include <libintl.h>
 #endif
-#include "lang.h"
-#include "tsin.h"
-#include "gtab.h"
+
 #include <gdk/gdkkeysyms.h>
-#if GTK_CHECK_VERSION(2,90,7)
 #include <gdk/gdkkeysyms-compat.h>
-#endif
+
+#include "config.h"
+#include "gtab.h"
+#include "hime.h"
+#include "lang.h"
+#include "pho.h"
+#include "tsin.h"
+
 
 char txt[128];
 
@@ -437,7 +440,7 @@ GtkWidget *create_pho_sel_area()
   int i;
 
   for(i=0; i < bigphoN; i++) {
-    bigpho[i].opt_menu = gtk_combo_box_new_text ();
+    bigpho[i].opt_menu = gtk_combo_box_text_new ();
     gtk_box_pack_start (GTK_BOX (hbox_pho_sel), bigpho[i].opt_menu, FALSE, FALSE, 0);
 
     int j;
@@ -465,7 +468,7 @@ GtkWidget *create_pho_sel_area()
         phokey2pinyin(k):phokey_to_str(k);
       }
 
-      gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (bigpho[i].opt_menu), phostr);
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (bigpho[i].opt_menu), phostr);
     }
 
     gtk_combo_box_set_active (GTK_COMBO_BOX(bigpho[i].opt_menu), 0);

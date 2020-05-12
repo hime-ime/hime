@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,6 +16,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+#ifndef HIME_MODULE_CB_H
+#define HIME_MODULE_CB_H
+
+#include "hime.h"
+
+#include "gst.h"
+#include "gtab.h"
+#include "pho.h"
+#include "tsin.h"
+
+#include "hime-module.h"
+#include "im-client/hime-im-client-attr.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,3 +65,5 @@ typedef struct _HIME_module_callback_functions {
   int (*module_flush_input)();
   void (*module_setup_window_create)();
 } HIME_module_callback_functions;
+
+#endif  /* HIME_MODULE_CB_H */

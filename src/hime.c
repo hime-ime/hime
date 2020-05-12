@@ -24,7 +24,6 @@
 #endif
 
 #include "config.h"
-#include "gtab.h"
 #include "hime.h"
 
 Window root;

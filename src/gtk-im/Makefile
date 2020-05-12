@@ -14,7 +14,8 @@ IMMODULES_QUERY=$(GTK_LIBDIR)/libgtk2.0-0/gtk-query-immodules-2.0
 
 .SUFFIXES:	.c .o .E
 CFLAGS = $(OPTFLAGS) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
--I../IMdkit/include -DCLIENT_LIB=1 -DFREEBSD=$(FREEBSD)
+-I../IMdkit/include -DCLIENT_LIB=1 -DFREEBSD=$(FREEBSD) \
+-DGTK_DISABLE_DEPRECATED
 
 .c.o:
 	@echo "  $< -> $@"

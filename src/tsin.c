@@ -1,4 +1,6 @@
-/* Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,15 +19,15 @@
 
 #include <string.h>
 
-#include "hime.h"
-#include "pho.h"
-#include "tsin.h"
-#include "hime-conf.h"
-#include "tsin-parse.h"
-#include "win-save-phrase.h"
 #include "gst.h"
 #include "gtab.h"
+#include "hime-conf.h"
+#include "hime.h"
 #include "pho-status.h"
+#include "pho.h"
+#include "tsin-parse.h"
+#include "tsin.h"
+#include "win-save-phrase.h"
 
 extern int ph_key_sz;
 extern GtkWidget *gwin1;
@@ -2199,7 +2201,7 @@ fin:
 
   *cursor = tss.c_idx;
   *comp_flag = !typ_pho_empty();
-  if (gwin1 && GTK_WIDGET_VISIBLE(gwin1))
+  if (gwin1 && gtk_widget_get_visible (gwin1))
     *comp_flag|=2;
 #if 1
   if (tss.c_len && !ap_only)

@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,10 +17,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "gst.h"
 #include "hime.h"
 #include "pho.h"
 #include "win-sym.h"
-#include "gst.h"
 
 /* "destroy_window = FALSE" should be ok with both GTK+ 2.x and 3.x
  * gcin use TRUE for GTK+ 3.x, but caleb- always patch it to FALSE
@@ -198,7 +200,7 @@ void hide_char(int index)
   if (!chars[index].vbox)
     return;
   gtk_label_set_text(GTK_LABEL(chars[index].label), "");
-  gtk_widget_hide_all(chars[index].vbox);
+  gtk_widget_hide (chars[index].vbox);
 }
 
 
@@ -240,12 +242,12 @@ void hide_win0();
 void disp_tsin_pho(int index, char *pho)
 {
   if (hime_display_on_the_spot_key()) {
-    if (gwin0 && GTK_WIDGET_VISIBLE(gwin0))
+    if (gwin0 && gtk_widget_get_visible (gwin0))
       hide_win0();
     return;
   }
 
-  if (button_pho && !GTK_WIDGET_VISIBLE(button_pho))
+  if (button_pho && !gtk_widget_get_visible (button_pho))
     gtk_widget_show(button_pho);
 
   text_pho_N = pin_juyin?6:3;
@@ -609,7 +611,7 @@ void show_win0()
   }
 
 #if 0
-  if (!GTK_WIDGET_VISIBLE(gwin0))
+  if (!gtk_widget_get_visible(gwin0))
 #endif
   {
 //    dbg("gtk_widget_show %x\n", gwin0);

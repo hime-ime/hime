@@ -19,13 +19,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hime.h"
-#include "gtab.h"
-#include "config.h"
 #include <signal.h>
+
+#include "config.h"
+#include "gtab.h"
+#include "hime.h"
+
 #if HIME_i18n_message
 #include <libintl.h>
 #endif
+
 #include "lang.h"
 GtkWidget *main_window;
 gboolean button_order;

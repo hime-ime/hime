@@ -297,7 +297,7 @@ void set_sele_text(int tN, int i, char *text, int len)
 
 void raise_tsin_selection_win()
 {
-  if (gwin1 && GTK_WIDGET_VISIBLE(gwin1))
+  if (gwin1 && gtk_widget_get_visible (gwin1))
     gtk_window_present(GTK_WINDOW(gwin1));
 }
 
@@ -334,7 +334,7 @@ void disp_selections(int x, int y)
 
   gtk_window_move(GTK_WINDOW(gwin1), x, y);
 
-  if (!GTK_WIDGET_VISIBLE(gwin1)) {
+  if (!gtk_widget_get_visible (gwin1)) {
     gtk_widget_show(gwin1);
   }
 }

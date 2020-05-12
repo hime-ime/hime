@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,13 +17,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hime.h"
-#include "pho.h"
-#include "gst.h"
-#include "im-client/hime-im-client-attr.h"
-#include "hime-module.h"
-#include "hime-module-cb.h"
 #include <anthy/anthy.h>
+
+#include "gst.h"
+#include "hime-module-cb.h"
+#include "hime-module.h"
+#include "hime.h"
+#include "im-client/hime-im-client-attr.h"
+#include "pho.h"
+
 
 #if 0
 #if DEBUG
@@ -1299,7 +1303,7 @@ int module_init_win(HIME_module_main_functions *funcs)
 
 int module_win_visible()
 {
-  return GTK_WIDGET_VISIBLE(win_anthy);
+  return gtk_widget_get_visible (win_anthy);
 }
 
 void module_show_win()
@@ -1469,7 +1473,7 @@ int module_get_preedit(char *str, HIME_PREEDIT_ATTR attr[], int *pcursor, int *c
   }
 
   *comp_flag = keysN>0;
-  if (win_anthy && GTK_WIDGET_VISIBLE(win_anthy))
+  if (win_anthy && gtk_widget_get_visible (win_anthy))
     *comp_flag|=2;
   if (segN || jpN)
     *comp_flag|=4;

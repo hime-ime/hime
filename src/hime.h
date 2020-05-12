@@ -43,7 +43,6 @@
 #include "IMdkit.h"
 #include "Xi18n.h"
 
-#include "hime-gtk-compatible.h"
 
 typedef enum {
   HIME_STATE_DISABLED = 0,
@@ -55,6 +54,9 @@ typedef enum {
    regenerate *.gtab tsin
 */
 #define CH_SZ (4)
+
+#include "gtab.h"
+#include "hime-gtk-compatible.h"
 
 
 #include "IC.h"

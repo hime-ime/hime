@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -265,7 +267,7 @@ void show_win_pho()
   if (hime_pop_up_win && !pho_has_input())
     return;
 
-  if (!GTK_WIDGET_VISIBLE(gwin_pho))
+  if (!gtk_widget_get_visible (gwin_pho))
   {
     gtk_widget_show(gwin_pho);
     move_win_pho(win_x, win_y);
@@ -314,7 +316,7 @@ char *get_full_str();
 void win_pho_disp_half_full()
 {
   if (hime_win_color_use)
-     gtk_label_set_markup(GTK_LABEL(label_pho), get_full_str()); 
+     gtk_label_set_markup(GTK_LABEL(label_pho), get_full_str());
   else
      gtk_label_set_text(GTK_LABEL(label_pho), get_full_str());
 

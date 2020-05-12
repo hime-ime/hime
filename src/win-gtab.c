@@ -77,7 +77,7 @@ void disp_gtab(char *str)
 #if !GTK_CHECK_VERSION(2,91,6)
 void set_gtab_input_color(GdkColor *color)
 {
-  if (label_gtab) 
+  if (label_gtab)
     gtk_widget_modify_fg(label_gtab, GTK_STATE_NORMAL, color);
 }
 #else
@@ -235,7 +235,7 @@ void disp_gtab_sel(char *s)
   if (s && (!s[0]) && (hime_edit_display == HIME_EDIT_DISPLAY_ON_THE_SPOT) && gtab_hide_row2 && (hime_on_the_spot_key || (! gtab_in_row1)))
     gtk_widget_hide(gwin_gtab);
   else {
-    if (gwin_gtab && !GTK_WIDGET_VISIBLE(gwin_gtab))
+    if (gwin_gtab && !gtk_widget_get_visible (gwin_gtab))
       show_win_gtab();
     gtk_widget_show(label_gtab_sele);
   }
@@ -755,7 +755,7 @@ void show_win_gtab()
 
     if ((GTK_IS_WIDGET (label_gtab)) && (hime_status_tray || (! gtab_hide_row2)))
       gtk_widget_hide(label_gtab);
-    
+
     win_gtab_disp_half_full();
   }
 

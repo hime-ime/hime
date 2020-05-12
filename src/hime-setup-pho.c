@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  * Copyright (C) 2012 Favonia <favonia@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -17,8 +19,8 @@
  */
 
 #include "hime.h"
-#include "pho.h"
 #include "pho-kbm-name.h"
+#include "pho.h"
 
 /* "5849302-67" is Dvorak Simplified Keyboard remapped under QWERTY keyboard
  * Please see: http://en.wikipedia.org/wiki/Dvorak_Simplified_Keyboard
@@ -271,24 +273,24 @@ static GtkWidget *create_kbm_opts()
 
   GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
 
-  opt_kbm_opts = gtk_combo_box_new_text ();
+  opt_kbm_opts = gtk_combo_box_text_new ();
   gtk_box_pack_start (GTK_BOX (hbox), opt_kbm_opts, FALSE, FALSE, 0);
 
   int i;
   int current_idx = get_current_kbm_idx();
 
   for(i=0; kbm_sel[i].name; i++) {
-    gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_kbm_opts), _(kbm_sel[i].name));
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_kbm_opts), _(kbm_sel[i].name));
   }
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_kbm_opts), current_idx);
 
-  opt_selkeys = gtk_combo_box_new_text ();
+  opt_selkeys = gtk_combo_box_text_new ();
   gtk_box_pack_start (GTK_BOX (hbox), opt_selkeys, FALSE, FALSE, 0);
 
   current_idx = 0;
   for(i=0; selkeys[i].kstr; i++) {
-    gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_selkeys), selkeys[i].kstr);
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_selkeys), selkeys[i].kstr);
     if (!strcmp(selkeys[i].kstr, pho_selkey))
       current_idx = i;
   }
@@ -312,7 +314,7 @@ static void update_eng_ch_opts (GtkComboBox *widget, gpointer user_data)
     if ((opt_eng_ch_opts[i]) && (opt_eng_ch_opts[i] != (GtkWidget*)widget))
       gtk_combo_box_set_active (GTK_COMBO_BOX (opt_eng_ch_opts[i]), idx);
   }
-  
+
 }
 
 static GtkWidget *create_eng_ch_opts(gint index)
@@ -320,7 +322,7 @@ static GtkWidget *create_eng_ch_opts(gint index)
 
   GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
 
-  opt_eng_ch_opts[index] = gtk_combo_box_new_text ();
+  opt_eng_ch_opts[index] = gtk_combo_box_text_new ();
   g_signal_connect (G_OBJECT (opt_eng_ch_opts[index]), "changed", G_CALLBACK (update_eng_ch_opts), NULL);
   gtk_box_pack_start (GTK_BOX (hbox), opt_eng_ch_opts[index], FALSE, FALSE, 0);
 
@@ -328,7 +330,7 @@ static GtkWidget *create_eng_ch_opts(gint index)
   int current_idx = get_currnet_eng_ch_sw_idx();
 
   for(i=0; i < tsin_eng_ch_swN; i++) {
-    gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_eng_ch_opts[index]), _(tsin_eng_ch_sw[i].name));
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_eng_ch_opts[index]), _(tsin_eng_ch_sw[i].name));
   }
 
   dbg("current_idx:%d\n", current_idx);
