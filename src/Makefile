@@ -103,7 +103,7 @@ endif
 endif
 
 ifeq ($(USE_I18N),Y)
-CFLAGS     += -DHIME_i18n_message=1
+CFLAGS     += -DHIME_I18N_MESSAGE=1
 endif
 
 ifeq ($(USE_TSIN),Y)

@@ -25,7 +25,7 @@
 #include "gtab.h"
 #include "hime.h"
 
-#if HIME_i18n_message
+#if HIME_I18N_MESSAGE
 #include <libintl.h>
 #endif
 
@@ -465,7 +465,7 @@ int main(int argc, char **argv)
 
 
 
-#if HIME_i18n_message
+#if HIME_I18N_MESSAGE
   bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
   textdomain(GETTEXT_PACKAGE);
 #endif

@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,7 +19,7 @@
 
 #include "hime.h"
 #include "pho.h"
-#if HIME_i18n_message
+#if HIME_I18N_MESSAGE
 #include <libintl.h>
 #endif
 #include "gst.h"

@@ -28,7 +28,7 @@
 /* TODO: Should support build-time configuration */
 #define GTK_LOCALEDIR "/usr/share/locale"
 
-/* TODO: Should support #if HIME_i18n_message here */
+/* TODO: Should support #if HIME_I18N_MESSAGE here */
 #define _(String) dgettext(GETTEXT_PACKAGE,String)
 #define N_(String) (String)
 

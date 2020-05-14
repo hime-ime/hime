@@ -30,7 +30,7 @@
 
 #include <X11/Xlib.h>
 
-#if HIME_i18n_message
+#if HIME_I18N_MESSAGE
 #include <libintl.h>
 #define _(STRING) gettext(STRING)
 #else
