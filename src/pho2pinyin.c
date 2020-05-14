@@ -30,8 +30,7 @@ PIN_JUYIN *pin_juyin;
 int pin_juyinN;
 PHOKBM phkbm;
 PHO_ST poo;
-TSIN_ST tss;
-int text_pho_N;
+int text_pho_N = 3;
 
 void fake_key_typ_pho(phokey_t phokey, u_char rtyp_pho[])
 {

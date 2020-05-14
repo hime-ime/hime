@@ -61,7 +61,7 @@ extern gboolean key_press_alt;
 extern gboolean key_press_ctrl;
 
 #if TRAY_ENABLED
-int hime_tray_display;
+extern int hime_tray_display;
 #endif
 void init_gtab(int inmdno);
 

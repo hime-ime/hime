@@ -64,8 +64,10 @@ OBJS_hime-phoa2d = hime-phoa2d.o pho-sym.o hime-conf.o locale.o \
 
 OBJS_kbmcv = kbmcv.o pho-sym.o util.o locale.o
 
-OBJS_hime-tsd2a32 = hime-tsd2a32.o pho-sym.o pho-dbg.o locale.o util.o \
-	gtab-dbg.o pho2pinyin.o hime-conf.o pinyin.o
+OBJS_hime-tsd2a32 = gtab-dbg.o \
+	hime-conf.o hime-tsd2a32.o \
+	locale.o util.o \
+	pho-dbg.o pho-sym.o pho2pinyin.o pinyin.o
 
 OBJS_cin2gtab     = hime-cin2gtab.o gtab-util.o util.o locale.o
 OBJS_gtab2cin     = hime-gtab2cin.o gtab-util.o util.o locale.o

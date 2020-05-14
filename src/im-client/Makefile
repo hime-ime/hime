@@ -8,12 +8,12 @@ CFLAGS+= $(OPTFLAGS) $(GTKINC) \
 		-DGDK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED \
 		-DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED \
 		-DG_DISABLE_SINGLE_INCLUDES \
-        -DCLIENT_LIB=1 \
+		-DCLIENT_LIB=1 \
 		-DHIME_BIN_DIR=\"$(HIME_BIN_DIR)\" \
-        -DHIME_TABLE_DIR=\"$(HIME_TABLE_DIR)\" \
-        -DFREEBSD=$(FREEBSD) \
+		-DHIME_TABLE_DIR=\"$(HIME_TABLE_DIR)\" \
+		-DFREEBSD=$(FREEBSD) \
 		-I. -I.. -I../IMdkit/include \
-        -fPIC
+		-fPIC
 OBJS = hime-im-client.o hime-send.o im-addr.o hime-conf.o util.o hime-crypt-fpic.o
 
 .cpp.E:

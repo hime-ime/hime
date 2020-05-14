@@ -20,9 +20,7 @@
 #include "hime.h"
 #include "pho.h"
 
-PIN_JUYIN *pin_juyin;
-
-int text_pho_N=3;
+extern PIN_JUYIN *pin_juyin;
 
 gboolean b_use_full_space = TRUE;
 

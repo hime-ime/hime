@@ -27,15 +27,13 @@
 #include "pho-status.h"
 #include "pho.h"
 
-PHO_ST poo;
+extern PHO_ST poo;
 
 extern PHO_ITEM *ch_pho;
 
-PHOKBM phkbm;
-extern int text_pho_N;
+extern PHOKBM phkbm;
 gboolean b_hsu_kbm;
 extern PIN_JUYIN *pin_juyin;
-int pin_juyinN;
 
 gboolean full_char_proc(KeySym keysym);
 void hide_win_pho();

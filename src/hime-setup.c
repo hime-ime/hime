@@ -31,7 +31,7 @@
 
 #include "lang.h"
 GtkWidget *main_window;
-gboolean button_order;
+extern gboolean button_order;
 char utf8_edit[]=HIME_SCRIPT_DIR"/utf8-edit";
 
 static void cb_alt_shift()
