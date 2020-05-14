@@ -6,18 +6,26 @@ else
   INCS=-I../im-client -I/usr/local/include
 endif
 
-QTINC=`pkg-config --variable=includedir Qt5Core`
-QTVER=`pkg-config --modversion Qt5Core`
+QTINC=$(shell pkg-config --variable=includedir Qt5Core)
+QTVER=$(shell pkg-config --modversion Qt5Core)
 
-INCS+=`pkg-config Qt5Core Qt5Gui Qt5DBus --cflags`
+INCS+=$(shell pkg-config Qt5Core Qt5Gui Qt5DBus --cflags)
 INCS+=-I$(QTINC)/QtGui/$(QTVER)
 INCS+=-I$(QTINC)/QtCore/$(QTVER)
 
-CXXFLAGS=$(OPTFLAGS) $(INCS) -Wall -D_REENTRANT -DUNIX=1 -fPIC  -DQT5 -DQT_SHARED \
--DQT_IMMODULE -DPIC
+CXXFLAGS+=$(OPTFLAGS) $(INCS) \
+		-D_REENTRANT \
+		-DQT5 \
+		-DQT_SHARED \
+		-DQT_IMMODULE \
+		-DPIC -fPIC
+
 OBJS= moc_hime-qt.o hime-qt.o hime-imcontext-qt.o moc_hime-imcontext-qt.o
+
+QTLIBS=$(shell pkg-config Qt5Core Qt5Gui Qt5DBus --libs)
+LDFLAGS+=$(LDFLAGS_ENV) -L../im-client -lhime-im-client $(QTLIBS)
+
 .SUFFIXES:	.c .cpp .a .so .E .h
-LDFLAGS+=$(LDFLAGS_ENV) -L../im-client -lhime-im-client `pkg-config Qt5Core Qt5Gui Qt5DBus --libs`
 
 .PHONY: all
 all:    im-hime.so

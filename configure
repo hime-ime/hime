@@ -551,6 +551,8 @@ else
 fi
 libdir=$prefix/$LIB
 includedir=$prefix/include
+hime_version="$(head -n 1 ChangeLog)"
+
 echo "bindir=\$(DESTDIR)$bindir" >>config.mak
 echo "mandir=\$(DESTDIR)$mandir" >>config.mak
 echo "man1dir=\$(mandir)/man1" >>config.mak
@@ -567,9 +569,9 @@ echo "HIME_DEFAULT_ICON_DIR=\$(datadir)/pixmaps/hime" >>config.mak
 echo "HIME_OGG_DIR=\$(datadir)/hime/ogg" >>config.mak
 echo "HIME_SCRIPT_DIR=\$(datadir)/hime/script" >>config.mak
 echo "HIME_TABLE_DIR=\$(datadir)/hime/table" >>config.mak
+echo "HIME_VERSION=$hime_version" >>config.mak
 
 echo "DOC_DIR=\$(datadir)/doc/hime" >>config.mak
-
 echo "SYS_ICON_DIR=\$(datadir)/pixmaps" >>config.mak
 
 echo "INSTALL_DFSG_INCOMPATIBLE=$INSTALL_DFSG_INCOMPATIBLE" >>config.mak
