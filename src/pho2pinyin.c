@@ -18,12 +18,11 @@
  */
 
 #include "hime.h"
+
 #include "pho.h"
-#if HIME_I18N_MESSAGE
-#include <libintl.h>
-#endif
 #include "gst.h"
 #include "tsin.h"
+
 
 static gboolean b_pinyin;
 PIN_JUYIN *pin_juyin;

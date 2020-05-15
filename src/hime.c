@@ -19,12 +19,8 @@
 
 #include <signal.h>
 
-#if HIME_I18N_MESSAGE
-#include <libintl.h>
-#endif
-
-#include "config.h"
 #include "hime.h"
+
 
 Window root;
 Display *dpy;

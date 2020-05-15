@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,21 +17,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <netinet/in.h>
 #include <string.h>
-#include <netdb.h>
-#include <X11/Xatom.h>
-#include <sys/stat.h>
+
 #include <arpa/inet.h>
 #include <ifaddrs.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/un.h>
+
+#include <X11/Xatom.h>
+
 
 #include "hime.h"
+
 #include "hime-protocol.h"
 #include "im-srv.h"
-#include <gdk/gdk.h>
+
 
 int im_sockfd, im_tcp_sockfd;
 Atom get_hime_sockpath_atom(Display *dpy);

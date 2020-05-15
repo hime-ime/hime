@@ -23,13 +23,15 @@
 /* To get GETTEXT_PACKAGE */
 #include "../config.h"
 
-#include <libintl.h>
-
 /* TODO: Should support build-time configuration */
 #define GTK_LOCALEDIR "/usr/share/locale"
 
-/* TODO: Should support #if HIME_I18N_MESSAGE here */
+#if HIME_I18N_MESSAGE
+#include <libintl.h>
 #define _(String) dgettext(GETTEXT_PACKAGE,String)
+#else
+#define _(String) (String)
+#endif
 #define N_(String) (String)
 
 #endif  /* HIME_GTKINTL_H */

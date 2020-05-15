@@ -22,7 +22,12 @@
 #define HIME_GTKIMCONTEXTHIME_H
 
 #include <gtk/gtk.h>
+#include <gtk/gtkimmodule.h>
+
 #include <gdk/gdkx.h>
+#if !GTK_CHECK_VERSION(3,0,0)
+#include <gdk/gdkkeysyms.h>
+#endif
 
 #include "../hime-gtk-compatible.h"
 

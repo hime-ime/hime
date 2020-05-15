@@ -23,13 +23,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <gtk/gtk.h>
-
 #include <X11/keysym.h>
 
 #include "gtkimcontexthime.h"
 
 #include "hime-im-client.h"
+
 
 #define DBG 0
 
@@ -216,7 +215,6 @@ GtkIMContext *gtk_im_context_hime_new(void)
     return GTK_IM_CONTEXT (result);
 }
 
-#include <gdk/gdkkeysyms.h>
 
 
 static gboolean gtk_im_context_hime_filter_keypress(GtkIMContext *context, GdkEventKey *event)

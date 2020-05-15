@@ -17,16 +17,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#if HIME_I18N_MESSAGE
-#include <libintl.h>
-#endif
-
-#include <gdk/gdkkeysyms.h>
-#include <gdk/gdkkeysyms-compat.h>
-
-#include "config.h"
-#include "gtab.h"
 #include "hime.h"
+
+#include "gtab.h"
 #include "lang.h"
 #include "pho.h"
 #include "tsin.h"

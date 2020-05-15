@@ -21,15 +21,11 @@
 
 #include <signal.h>
 
-#include "config.h"
 #include "gtab.h"
 #include "hime.h"
-
-#if HIME_I18N_MESSAGE
-#include <libintl.h>
-#endif
-
 #include "lang.h"
+
+
 GtkWidget *main_window;
 extern gboolean button_order;
 char utf8_edit[]=HIME_SCRIPT_DIR"/utf8-edit";

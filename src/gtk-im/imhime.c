@@ -19,9 +19,6 @@
  */
 #include <string.h>
 
-#include <gtk/gtk.h>
-#include <gtk/gtkimmodule.h>
-
 #include "gtkimcontexthime.h"
 #include "gtkintl.h"
 

@@ -28,7 +28,15 @@
 
 #include <gtk/gtk.h>
 
+#include <gdk/gdk.h>
+#if !GTK_CHECK_VERSION(3,0,0)
+#include <gdk/gdkkeysyms.h>
+#endif
+
 #include <X11/Xlib.h>
+
+/* To get GETTEXT_PACKAGE */
+#include "config.h"
 
 #if HIME_I18N_MESSAGE
 #include <libintl.h>

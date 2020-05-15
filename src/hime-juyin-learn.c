@@ -18,12 +18,9 @@
  */
 
 #include "hime.h"
-#include "pho.h"
-#include "config.h"
-#if HIME_I18N_MESSAGE
-#include <libintl.h>
-#endif
+
 #include "gst.h"
+#include "pho.h"
 #include "tsin.h"
 
 
