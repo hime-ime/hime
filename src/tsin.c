@@ -1422,7 +1422,6 @@ static int cursor_delete()
 	return cursor_backspace();
 }
 
-void case_inverse(KeySym *xkey, int shift_m);
 void pho_play(phokey_t key);
 
 int tsin_pho_sel(int c)

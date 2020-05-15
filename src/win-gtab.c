@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,6 +18,7 @@
  */
 
 #include "hime.h"
+
 #include "gtab.h"
 #include "win-sym.h"
 #include "gst.h"
@@ -40,7 +43,6 @@ static GtkWidget *label_edit;
 static GdkColor better_color;
 gboolean last_cursor_off;
 
-void set_label_space(GtkWidget *label);
 gboolean win_size_exceed(GtkWidget *win), gtab_phrase_on();
 void move_win_gtab(int x, int y);
 int win_gtab_max_key_press;
@@ -351,7 +353,6 @@ void create_win_gtab()
     init_tsin_selection_win();
 }
 
-void exec_hime_setup();
 
 static void mouse_button_callback( GtkWidget *widget,GdkEventButton *event, gpointer data)
 {

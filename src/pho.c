@@ -524,7 +524,6 @@ gboolean pre_punctuation(KeySym xkey);
 void pho_play(phokey_t key);
 void close_gtab_pho_win();
 gboolean pre_punctuation_hsu(KeySym xkey);
-void case_inverse(KeySym *xkey, int shift_m);
 
 int feedkey_pho(KeySym xkey, int kbstate)
 {

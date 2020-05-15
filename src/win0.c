@@ -17,8 +17,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "gst.h"
+
 #include "hime.h"
+
+#include "gst.h"
 #include "pho.h"
 #include "win-sym.h"
 
@@ -164,9 +166,6 @@ static void create_char(int index)
 
 extern gboolean b_use_full_space;
 
-void set_label_space();
-void set_label_space(GtkWidget *label);
-
 void show_win0();
 
 void disp_char(int index, char *ch)
@@ -236,7 +235,6 @@ void clr_tsin_cursor(int index)
   gtk_label_set_attributes(GTK_LABEL(label), attr_list_blank);
 }
 
-void disp_pho_sub(GtkWidget *label, int index, char *pho);
 void hide_win0();
 
 void disp_tsin_pho(int index, char *pho)
@@ -408,7 +406,6 @@ void disp_tsin_eng_pho(int eng_pho)
   gtk_button_set_label(GTK_BUTTON(button_eng_ph), _(eng_pho_strs[eng_pho]));
 }
 
-void exec_hime_setup();
 
 static void mouse_button_callback( GtkWidget *widget,GdkEventButton *event, gpointer data)
 {
@@ -428,7 +425,6 @@ static void mouse_button_callback( GtkWidget *widget,GdkEventButton *event, gpoi
 
 
 void tsin_toggle_eng_ch();
-void set_no_focus();
 
 
 void create_win0()

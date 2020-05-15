@@ -17,12 +17,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include <anthy/anthy.h>
+
+#include "hime.h"
 
 #include "gst.h"
 #include "hime-module-cb.h"
 #include "hime-module.h"
-#include "hime.h"
 #include "im-client/hime-im-client-attr.h"
 #include "pho.h"
 

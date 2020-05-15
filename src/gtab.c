@@ -410,7 +410,6 @@ int get_DispInArea_str(char *out)
 
 
 void set_gtab_input_method_name(char *s);
-void case_inverse(KeySym *xkey, int shift_m);
 
 extern unich_t *fullchar[];
 

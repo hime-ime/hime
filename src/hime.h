@@ -180,14 +180,21 @@ char *half_char_to_full_char(KeySym xkey);
 void send_text(char *text);
 void send_utf8_ch(char *bchar);
 void send_ascii(char key);
+
+// hime-common.c
 void bell();
+void case_inverse(KeySym *xkey, int shift_m);
+gint64 current_time();
+void disp_pho_sub(GtkWidget *label, int index, char *pho);
+void exec_hime_setup();
 void set_label_font_size(GtkWidget *label, int size);
+void set_label_space(GtkWidget *label);
+void set_no_focus(GtkWidget *win);
+
 void send_hime_message(Display *dpy, char *s);
 void check_CS();
-gint64 current_time();
 void get_win_size(GtkWidget *win, int *width, int *height);
 void change_win_fg_bg(GtkWidget *win, GtkWidget *label);
-void set_no_focus(GtkWidget *win);
 void change_win_bg(GtkWidget *win);
 gboolean hime_edit_display_ap_only();
 gboolean hime_display_on_the_spot_key();

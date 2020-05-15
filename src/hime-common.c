@@ -31,12 +31,7 @@ void bell()
   if (hime_bell_off)
     return;
 
-#if 1
   XBell(dpy, hime_bell_volume);
-#else
-  gdk_beep();
-#endif
-//  abort();
 }
 
 void case_inverse(KeySym *xkey, int shift_m)

@@ -17,7 +17,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include "hime.h"
+
 #include "win-sym.h"
 
 static int current_hime_inner_frame;
@@ -31,7 +33,6 @@ static GtkWidget *label_full;
 static GtkWidget *label_key_codes;
 
 void change_pho_font_size();
-void disp_pho_sub(GtkWidget *label, int index, char *pho);
 
 void disp_pho(int index, char *phochar)
 {
@@ -124,7 +125,6 @@ void create_win_pho()
   change_win_bg(gwin_pho);
 }
 
-void exec_hime_setup();
 
 static void mouse_button_callback( GtkWidget *widget,GdkEventButton *event, gpointer data)
 {
