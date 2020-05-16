@@ -16,36 +16,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
 #include "hime.h"
-#include "pho.h"
+
 #include "hime-conf.h"
+#include "pho.h"
 
 gboolean is_chs;
 
-int main(int argc, char **argv)
-{
-  int i;
+int main (int argc, char **argv) {
+    int i;
 
-  load_settings();
+    load_settings ();
 
-  if (argc > 1) {
-    p_err("Currently only support ~/.config/hime/pho.tab2");
-  }
-
-  pho_load();
-
-  for(i=0; i < idxnum_pho; i++) {
-    phokey_t key = idx_pho[i].key;
-    int frm = idx_pho[i].start;
-    int to = idx_pho[i+1].start;
-
-    int j;
-    for(j=frm; j < to; j++) {
-      prph(key);
-      dbg(" %s %d\n", pho_idx_str(j), ch_pho[j].count);
+    if (argc > 1) {
+        p_err ("Currently only support ~/.config/hime/pho.tab2");
     }
-  }
 
-  return 0;
+    pho_load ();
+
+    for (i = 0; i < idxnum_pho; i++) {
+        phokey_t key = idx_pho[i].key;
+        int frm = idx_pho[i].start;
+        int to = idx_pho[i + 1].start;
+
+        int j;
+        for (j = frm; j < to; j++) {
+            prph (key);
+            dbg (" %s %d\n", pho_idx_str (j), ch_pho[j].count);
+        }
+    }
+
+    return 0;
 }

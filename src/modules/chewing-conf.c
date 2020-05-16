@@ -21,25 +21,23 @@ static ChewingConfigData g_chewingConfig;
 static gboolean g_bUseDefault = FALSE;
 static int g_nFd = -1;
 static kbmapping_t g_kbMappingTable[] =
-{
-    {"zo",        "KB_DEFAULT"},
-    {"et",        "KB_ET"},
-    {"et26",      "KB_ET26"},
-    {"hsu",       "KB_HSU"},
-    {"pinyin",    "KB_HANYU_PINYIN"},
-    {"pinyin-no-tone", "KB_HANYU_PINYIN"},
-    {"dvorak",    "KB_DVORAK"},
-    {"ibm",       "KB_IBM"},
-    {"mitac",     NULL},
-    {"colemak",   NULL},
-    {NULL,        NULL},
+    {
+        {"zo", "KB_DEFAULT"},
+        {"et", "KB_ET"},
+        {"et26", "KB_ET26"},
+        {"hsu", "KB_HSU"},
+        {"pinyin", "KB_HANYU_PINYIN"},
+        {"pinyin-no-tone", "KB_HANYU_PINYIN"},
+        {"dvorak", "KB_DVORAK"},
+        {"ibm", "KB_IBM"},
+        {"mitac", NULL},
+        {"colemak", NULL},
+        {NULL, NULL},
 };
 
 static gboolean hime_kb_config_set (ChewingContext *pChewingCtx);
 
-void
-chewing_config_open (gboolean bWrite)
-{
+void chewing_config_open (gboolean bWrite) {
     char *pszChewingConfig;
     char *pszHome;
 
@@ -61,26 +59,23 @@ chewing_config_open (gboolean bWrite)
         g_bUseDefault = TRUE;
 }
 
-void
-chewing_config_load (ChewingConfigData *pChewingConfig)
-{
+void chewing_config_load (ChewingConfigData *pChewingConfig) {
     int nReadSize;
 
     nReadSize = read (g_nFd, &g_chewingConfig, sizeof (g_chewingConfig));
     if (nReadSize == 0 || nReadSize != sizeof (g_chewingConfig))
         g_bUseDefault = TRUE;
 
-    if (g_bUseDefault)
-    {
+    if (g_bUseDefault) {
         int nDefaultSelKey[MAX_SELKEY] = HIME_CHEWING_DEFAULT_SELECT_KEYS;
 
-        g_chewingConfig.candPerPage           = 10;
-        g_chewingConfig.maxChiSymbolLen       = 16;
-        g_chewingConfig.bAddPhraseForward     = 1;
-        g_chewingConfig.bSpaceAsSelection     = 1;
-        g_chewingConfig.bEscCleanAllBuf       = 0;
-        g_chewingConfig.bAutoShiftCur         = 1;
-        g_chewingConfig.bEasySymbolInput      = 0;
+        g_chewingConfig.candPerPage = 10;
+        g_chewingConfig.maxChiSymbolLen = 16;
+        g_chewingConfig.bAddPhraseForward = 1;
+        g_chewingConfig.bSpaceAsSelection = 1;
+        g_chewingConfig.bEscCleanAllBuf = 0;
+        g_chewingConfig.bAutoShiftCur = 1;
+        g_chewingConfig.bEasySymbolInput = 0;
         g_chewingConfig.bPhraseChoiceRearward = 1;
         memcpy (&g_chewingConfig.selKey,
                 &nDefaultSelKey,
@@ -90,11 +85,8 @@ chewing_config_load (ChewingConfigData *pChewingConfig)
     memcpy (pChewingConfig, &g_chewingConfig, sizeof (ChewingConfigData));
 }
 
-void
-chewing_config_set (ChewingContext *pChewingCtx)
-{
-    if (!hime_kb_config_set (pChewingCtx))
-    {
+void chewing_config_set (ChewingContext *pChewingCtx) {
+    if (!hime_kb_config_set (pChewingCtx)) {
         int nDefaultSelKey[MAX_SELKEY] = HIME_CHEWING_DEFAULT_SELECT_KEYS;
         memcpy (&g_chewingConfig.selKey,
                 &nDefaultSelKey,
@@ -114,9 +106,7 @@ chewing_config_set (ChewingContext *pChewingCtx)
     chewing_set_phraseChoiceRearward (pChewingCtx, g_chewingConfig.bPhraseChoiceRearward);
 }
 
-void
-chewing_config_dump (void)
-{
+void chewing_config_dump (void) {
     int nIdx = 0;
     printf ("chewing config:\n");
     printf ("\tcandPerPage: %d\n", g_chewingConfig.candPerPage);
@@ -133,9 +123,7 @@ chewing_config_dump (void)
     printf ("\n");
 }
 
-void
-chewing_config_close (void)
-{
+void chewing_config_close (void) {
     if (g_nFd != -1)
         close (g_nFd);
 
@@ -145,16 +133,15 @@ chewing_config_close (void)
 }
 
 static gboolean
-hime_kb_config_set (ChewingContext *pChewingCtx)
-{
+hime_kb_config_set (ChewingContext *pChewingCtx) {
     char *pszHome;
     char *pszHimeKBConfig;
     char szBuf[32];
     char szKbType[16];
     char szKbSelKey[16];
-    int  nFd;
-    int  nRead;
-    int  nIdx = 0;
+    int nFd;
+    int nRead;
+    int nIdx = 0;
 
     memset (szBuf, 0x00, 32);
     memset (szKbType, 0x00, 16);
@@ -169,8 +156,8 @@ hime_kb_config_set (ChewingContext *pChewingCtx)
     sprintf (pszHimeKBConfig, "%s%s", pszHome, HIME_KB_CONFIG);
 
     nFd = open (pszHimeKBConfig,
-          O_RDONLY,
-          S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+                O_RDONLY,
+                S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 
     free (pszHimeKBConfig);
 
@@ -192,16 +179,14 @@ hime_kb_config_set (ChewingContext *pChewingCtx)
     chewing_set_candPerPage (pChewingCtx, g_chewingConfig.candPerPage > strlen (szKbSelKey) ? strlen (szKbSelKey) : g_chewingConfig.candPerPage);
 
     nIdx = 0;
-    while (g_kbMappingTable[nIdx].pszHimeKbName)
-    {
+    while (g_kbMappingTable[nIdx].pszHimeKbName) {
         if (!strncmp (g_kbMappingTable[nIdx].pszHimeKbName,
-	              szKbType,
-		      strlen (szKbType)))
-        {
+                      szKbType,
+                      strlen (szKbType))) {
             chewing_set_KBType (pChewingCtx,
-	                        chewing_KBStr2Num (g_kbMappingTable[nIdx].pszChewingKbName));
-	    break;
-	}
+                                chewing_KBStr2Num (g_kbMappingTable[nIdx].pszChewingKbName));
+            break;
+        }
         nIdx++;
     }
 
@@ -209,15 +194,14 @@ hime_kb_config_set (ChewingContext *pChewingCtx)
 }
 
 gboolean
-chewing_config_save (int nVal[])
-{
+chewing_config_save (int nVal[]) {
     int nWriteSize;
 
-    g_chewingConfig.candPerPage       =
+    g_chewingConfig.candPerPage =
         nVal[0] > MAX_SELKEY ? MAX_SELKEY : nVal[0];
     g_chewingConfig.bSpaceAsSelection = nVal[1];
-    g_chewingConfig.bEscCleanAllBuf   = nVal[2];
-    g_chewingConfig.bAutoShiftCur     = nVal[3];
+    g_chewingConfig.bEscCleanAllBuf = nVal[2];
+    g_chewingConfig.bAutoShiftCur = nVal[3];
     g_chewingConfig.bAddPhraseForward = nVal[4];
 
     lseek (g_nFd, 0, SEEK_SET);
@@ -228,4 +212,3 @@ chewing_config_save (int nVal[])
 
     return TRUE;
 }
-

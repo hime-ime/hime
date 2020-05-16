@@ -50,3 +50,7 @@ distclean:
 config.mak: $(VERSION_FILE) configure
 	@$(ECHO) "regenerate $@ ..."
 	./configure
+
+.PHONY: clang-format
+clang-format:
+	clang-format -i **/*.h **/*.c **/**/*.h **/**/*.c --verbose

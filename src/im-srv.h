@@ -16,16 +16,16 @@
  */
 
 typedef enum {
-  Connection_type_unix = 1,
-  Connection_type_tcp = 2
+    Connection_type_unix = 1,
+    Connection_type_tcp = 2
 } Connection_type;
 
 typedef struct {
-  ClientState *cs;
-  int tag;
-  u_int seed;
-  Connection_type type;
-  int fd;
+    ClientState *cs;
+    int tag;
+    u_int seed;
+    Connection_type type;
+    int fd;
 } HIME_ENT;
 
 extern HIME_ENT *hime_clients;

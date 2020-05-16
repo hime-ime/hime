@@ -7,7 +7,6 @@
 #define RELOAD_TSIN_DB "reload tsin db"
 #define HIME_EXIT_MESSAGE "hime exit"
 
-
 #define HIME_SETUP_WINDOW_TYPE_UTILITY "hime-setup-window-type-utility"
 #define HIME_FONT_SIZE "hime-font-size"
 #define HIME_FONT_NAME "hime-font-name"
@@ -19,8 +18,8 @@
 #define HIME_FONT_SIZE_WIN_KBM "hime-font-size-win-kbm"
 #define HIME_FONT_SIZE_WIN_KBM_EN "hime-font-size-win-kbm-en"
 #define HIME_INPUT_STYLE "hime-input-style"
-#define HIME_ROOT_X      "hime-root-x"
-#define HIME_ROOT_Y      "hime-root-y"
+#define HIME_ROOT_X "hime-root-x"
+#define HIME_ROOT_Y "hime-root-y"
 #define HIME_POP_UP_WIN "hime-pop-up-win"
 #define HIME_ICON_DIR "hime-icon-dir"
 #define HIME_INNER_FRAME "hime-inner-frame"
@@ -73,7 +72,6 @@
 #define GTAB_PHRASE_PRE_SELECT "gtab-phrase-pre-select"
 #define GTAB_IN_AREA_BUTTON "gtab-in-area-button"
 
-
 #define TSIN_PHRASE_PRE_SELECT "tsin-phrase-pre-select"
 #define TSIN_CHINESE_ENGLISH_TOGGLE_KEY "tsin-chinese-english-toggle_key"
 #define TSIN_SPACE_OPT "tsin-space-opt"
@@ -89,7 +87,6 @@
 #define PHO_HIDE_ROW2 "pho-hide-row2"
 #define PHO_IN_ROW1 "pho-in-row1"
 
-
 #define PHONETIC_KEYBOARD "phonetic-keyboard2"
 #define PHONETIC_KEYBOARD_BAK "phonetic-keyboard-bak"
 
@@ -99,17 +96,17 @@
 #define PHONETIC_SPEAK_SEL "phonetic-speak-sel"
 
 extern int hime_setup_window_type_utility,
-           hime_font_size, hime_font_size_tsin_presel, hime_font_size_symbol,
-           hime_font_size_tsin_pho_in, hime_font_size_pho_near,
-           hime_font_size_gtab_in, hime_font_size_win_kbm, hime_font_size_win_kbm_en,
-           hime_inner_frame, hime_single_state,
-           hime_remote_client,
-           gtab_disp_key_codes, gtab_disp_im_name, hime_shift_space_eng_full,
-           gtab_invalid_key_in, gtab_hide_row2, gtab_in_row1,
-           hime_capslock_lower, pho_hide_row2, pho_in_row1,
-           hime_eng_phrase_enabled, hime_win_sym_click_close,
-           gtab_que_wild_card, gtab_que_wild_card_asterisk, gtab_pho_query,
-           hime_bell_volume, hime_sound_play_overlap, hime_enable_ctrl_alt_switch, hime_on_the_spot_key;
+    hime_font_size, hime_font_size_tsin_presel, hime_font_size_symbol,
+    hime_font_size_tsin_pho_in, hime_font_size_pho_near,
+    hime_font_size_gtab_in, hime_font_size_win_kbm, hime_font_size_win_kbm_en,
+    hime_inner_frame, hime_single_state,
+    hime_remote_client,
+    gtab_disp_key_codes, gtab_disp_im_name, hime_shift_space_eng_full,
+    gtab_invalid_key_in, gtab_hide_row2, gtab_in_row1,
+    hime_capslock_lower, pho_hide_row2, pho_in_row1,
+    hime_eng_phrase_enabled, hime_win_sym_click_close,
+    gtab_que_wild_card, gtab_que_wild_card_asterisk, gtab_pho_query,
+    hime_bell_volume, hime_sound_play_overlap, hime_enable_ctrl_alt_switch, hime_on_the_spot_key;
 
 extern int default_input_method;
 // extern int left_right_button_tips;
@@ -148,12 +145,11 @@ extern int hime_edit_display, hime_tray_display;
 extern char *pho_kbm_name, *pho_selkey, *hime_str_im_cycle;
 extern int pho_candidate_col_N, pho_candidate_R2L;
 
-gboolean get_hime_user_fname(char *name, char fname[]);
-void get_hime_conf_str(char *name, char **rstr, char *default_str);
-void get_hime_conf_fstr(char *name, char rstr[], char *default_str);
-void save_hime_conf_str(char *name, char *str);
-void save_hime_conf_int(char *name, int val);
-void load_settings();
-void save_omni_config(void);
-void free_omni_config(void);
-
+gboolean get_hime_user_fname (char *name, char fname[]);
+void get_hime_conf_str (char *name, char **rstr, char *default_str);
+void get_hime_conf_fstr (char *name, char rstr[], char *default_str);
+void save_hime_conf_str (char *name, char *str);
+void save_hime_conf_int (char *name, int val);
+void load_settings ();
+void save_omni_config (void);
+void free_omni_config (void);

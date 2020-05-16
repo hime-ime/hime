@@ -19,7 +19,6 @@
 #ifndef HIME_GTKINTL_H
 #define HIME_GTKINTL_H
 
-
 /* To get GETTEXT_PACKAGE */
 #include "../config.h"
 
@@ -28,10 +27,10 @@
 
 #if HIME_I18N_MESSAGE
 #include <libintl.h>
-#define _(String) dgettext(GETTEXT_PACKAGE,String)
+#define _(String) dgettext (GETTEXT_PACKAGE, String)
 #else
 #define _(String) (String)
 #endif
 #define N_(String) (String)
 
-#endif  /* HIME_GTKINTL_H */
+#endif /* HIME_GTKINTL_H */

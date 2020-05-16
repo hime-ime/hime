@@ -16,6 +16,7 @@
  */
 
 #include "hime.h"
+
 #include "gtab.h"
 
 int hime_setup_window_type_utility;
@@ -66,9 +67,9 @@ int tsin_buffer_editing_mode;
 int hime_shift_space_eng_full;
 char *tsin_phrase_line_color;
 char *tsin_cursor_color, *hime_sel_key_color;
-unich_t eng_full_str[] = N_("[英/全]");
-unich_t eng_half_str[] = N_("[英]");
-unich_t cht_full_str[] = N_("[全]");
+unich_t eng_full_str[] = N_ ("[英/全]");
+unich_t eng_half_str[] = N_ ("[英]");
+unich_t cht_full_str[] = N_ ("[全]");
 char *eng_color_full_str, *eng_color_half_str, *cht_color_full_str;
 int tsin_tab_phrase_end;
 int hime_input_style, hime_root_x, hime_root_y, hime_pop_up_win;
@@ -83,191 +84,186 @@ int hime_sound_play_overlap, hime_enable_ctrl_alt_switch;
 char *pho_kbm_name, *pho_selkey;
 int pho_candidate_col_N, pho_candidate_R2L;
 
+int get_hime_conf_int (char *name, int default_value);
+void init_omni_config (void);
+int is_kde5 (void);
 
-int get_hime_conf_int(char *name, int default_value);
-void init_omni_config(void);
-int is_kde5(void);
-
-void load_settings()
-{
+void load_settings () {
 #if TRAY_UNITY
-  const char* desktop = getenv("XDG_CURRENT_DESKTOP");
+    const char *desktop = getenv ("XDG_CURRENT_DESKTOP");
 #endif
 
-  init_omni_config();
+    init_omni_config ();
 
-  hime_setup_window_type_utility = get_hime_conf_int(HIME_SETUP_WINDOW_TYPE_UTILITY, 0);
+    hime_setup_window_type_utility = get_hime_conf_int (HIME_SETUP_WINDOW_TYPE_UTILITY, 0);
 
-  hime_font_size = get_hime_conf_int(HIME_FONT_SIZE, 16);
-  get_hime_conf_str(HIME_FONT_NAME, &hime_font_name, "Sans");
-  hime_font_size_tsin_presel = get_hime_conf_int(HIME_FONT_SIZE_TSIN_PRESEL, 16);
-  hime_font_size_symbol = get_hime_conf_int(HIME_FONT_SIZE_SYMBOL, 12);
-  hime_font_size_tsin_pho_in = get_hime_conf_int(HIME_FONT_SIZE_TSIN_PHO_IN, 13);
-  hime_font_size_gtab_in = get_hime_conf_int(HIME_FONT_SIZE_GTAB_IN, 10);
-  hime_font_size_pho_near = get_hime_conf_int(HIME_FONT_SIZE_PHO_NEAR, 14);
-  hime_font_size_win_kbm = get_hime_conf_int(HIME_FONT_SIZE_WIN_KBM, 10);
-  hime_font_size_win_kbm_en = get_hime_conf_int(HIME_FONT_SIZE_WIN_KBM_EN, 8);
-  get_hime_conf_str(HIME_ICON_DIR, &hime_icon_dir, "DEFAULT");
-  hime_input_style = get_hime_conf_int(HIME_INPUT_STYLE, InputStyleOverSpot);
-  hime_root_x = get_hime_conf_int(HIME_ROOT_X, 1600);
-  hime_root_y = get_hime_conf_int(HIME_ROOT_Y, 1200);
-  hime_pop_up_win = get_hime_conf_int(HIME_POP_UP_WIN, 0);
-  hime_inner_frame = get_hime_conf_int(HIME_INNER_FRAME, 1);
-  hime_eng_phrase_enabled = get_hime_conf_int(HIME_ENG_PHRASE_ENABLED, 1);
+    hime_font_size = get_hime_conf_int (HIME_FONT_SIZE, 16);
+    get_hime_conf_str (HIME_FONT_NAME, &hime_font_name, "Sans");
+    hime_font_size_tsin_presel = get_hime_conf_int (HIME_FONT_SIZE_TSIN_PRESEL, 16);
+    hime_font_size_symbol = get_hime_conf_int (HIME_FONT_SIZE_SYMBOL, 12);
+    hime_font_size_tsin_pho_in = get_hime_conf_int (HIME_FONT_SIZE_TSIN_PHO_IN, 13);
+    hime_font_size_gtab_in = get_hime_conf_int (HIME_FONT_SIZE_GTAB_IN, 10);
+    hime_font_size_pho_near = get_hime_conf_int (HIME_FONT_SIZE_PHO_NEAR, 14);
+    hime_font_size_win_kbm = get_hime_conf_int (HIME_FONT_SIZE_WIN_KBM, 10);
+    hime_font_size_win_kbm_en = get_hime_conf_int (HIME_FONT_SIZE_WIN_KBM_EN, 8);
+    get_hime_conf_str (HIME_ICON_DIR, &hime_icon_dir, "DEFAULT");
+    hime_input_style = get_hime_conf_int (HIME_INPUT_STYLE, InputStyleOverSpot);
+    hime_root_x = get_hime_conf_int (HIME_ROOT_X, 1600);
+    hime_root_y = get_hime_conf_int (HIME_ROOT_Y, 1200);
+    hime_pop_up_win = get_hime_conf_int (HIME_POP_UP_WIN, 0);
+    hime_inner_frame = get_hime_conf_int (HIME_INNER_FRAME, 1);
+    hime_eng_phrase_enabled = get_hime_conf_int (HIME_ENG_PHRASE_ENABLED, 1);
 #if TRAY_ENABLED
-  hime_tray_hf_win_kbm = get_hime_conf_int(HIME_TRAY_HF_WIN_KBM, 0);
+    hime_tray_hf_win_kbm = get_hime_conf_int (HIME_TRAY_HF_WIN_KBM, 0);
 #endif
-  hime_show_win_kbm = get_hime_conf_int(KBM_TOGGLE, 0);
-  hime_init_im_enabled = get_hime_conf_int(HIME_INIT_IM_ENABLED, 0);
-  hime_init_full_mode = get_hime_conf_int(HIME_INIT_FULL_MODE, 0);
+    hime_show_win_kbm = get_hime_conf_int (KBM_TOGGLE, 0);
+    hime_init_im_enabled = get_hime_conf_int (HIME_INIT_IM_ENABLED, 0);
+    hime_init_full_mode = get_hime_conf_int (HIME_INIT_FULL_MODE, 0);
 
-  hime_single_state = get_hime_conf_int(HIME_SINGLE_STATE, 0);
-  hime_punc_auto_send = get_hime_conf_int(HIME_PUNC_AUTO_SEND, 0);
+    hime_single_state = get_hime_conf_int (HIME_SINGLE_STATE, 0);
+    hime_punc_auto_send = get_hime_conf_int (HIME_PUNC_AUTO_SEND, 0);
 
-
-  get_hime_conf_str(HIME_STR_IM_CYCLE, &hime_str_im_cycle, "1234567890-=[]\\");
-  hime_remote_client = get_hime_conf_int(HIME_REMOTE_CLIENT, 0);
-  hime_shift_space_eng_full = get_hime_conf_int(HIME_SHIFT_SPACE_ENG_FULL, 1);
-  hime_capslock_lower = get_hime_conf_int(HIME_CAPSLOCK_LOWER, 1);
+    get_hime_conf_str (HIME_STR_IM_CYCLE, &hime_str_im_cycle, "1234567890-=[]\\");
+    hime_remote_client = get_hime_conf_int (HIME_REMOTE_CLIENT, 0);
+    hime_shift_space_eng_full = get_hime_conf_int (HIME_SHIFT_SPACE_ENG_FULL, 1);
+    hime_capslock_lower = get_hime_conf_int (HIME_CAPSLOCK_LOWER, 1);
 
 #if USE_TSIN
-  get_hime_conf_str(DEFAULT_INPUT_METHOD, &default_input_method_str, "6"); /* "6" usually is Tsin */
+    get_hime_conf_str (DEFAULT_INPUT_METHOD, &default_input_method_str, "6"); /* "6" usually is Tsin */
 #endif
 #if !USE_TSIN
-  get_hime_conf_str(DEFAULT_INPUT_METHOD, &default_input_method_str, "3"); /* "3" usually is Bopomofo */
+    get_hime_conf_str (DEFAULT_INPUT_METHOD, &default_input_method_str, "3"); /* "3" usually is Bopomofo */
 #endif
-//  left_right_button_tips = get_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 1);
-  hime_im_toggle_keys = get_hime_conf_int(HIME_IM_TOGGLE_KEYS, 0);
-  hime_win_sym_click_close = get_hime_conf_int(HIME_WIN_SYM_CLICK_CLOSE, 1);
+    //  left_right_button_tips = get_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 1);
+    hime_im_toggle_keys = get_hime_conf_int (HIME_IM_TOGGLE_KEYS, 0);
+    hime_win_sym_click_close = get_hime_conf_int (HIME_WIN_SYM_CLICK_CLOSE, 1);
 #if TRAY_ENABLED
-  hime_status_tray = get_hime_conf_int(HIME_STATUS_TRAY, 1);
+    hime_status_tray = get_hime_conf_int (HIME_STATUS_TRAY, 1);
 #if TRAY_UNITY
-  if ((desktop != NULL && strcmp("Unity", desktop) == 0) || is_kde5()) {
-    hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, HIME_TRAY_DISPLAY_APPINDICATOR);
-  }
-  else {
-    hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, HIME_TRAY_DISPLAY_DOUBLE);
-  }
+    if ((desktop != NULL && strcmp ("Unity", desktop) == 0) || is_kde5 ()) {
+        hime_tray_display = get_hime_conf_int (HIME_TRAY_DISPLAY, HIME_TRAY_DISPLAY_APPINDICATOR);
+    } else {
+        hime_tray_display = get_hime_conf_int (HIME_TRAY_DISPLAY, HIME_TRAY_DISPLAY_DOUBLE);
+    }
 #else
-  hime_tray_display = get_hime_conf_int(HIME_TRAY_DISPLAY, HIME_TRAY_DISPLAY_DOUBLE);
+    hime_tray_display = get_hime_conf_int (HIME_TRAY_DISPLAY, HIME_TRAY_DISPLAY_DOUBLE);
 #endif
 #else
-// TODO: remove it
-  hime_status_tray = 0;
+    // TODO: remove it
+    hime_status_tray = 0;
 #endif
 
-  gtab_dup_select_bell = get_hime_conf_int(GTAB_DUP_SELECT_BELL, 0);
-  gtab_space_auto_first = get_hime_conf_int(GTAB_SPACE_AUTO_FIRST, GTAB_space_auto_first_none);
-  gtab_auto_select_by_phrase = get_hime_conf_int(GTAB_AUTO_SELECT_BY_PHRASE, GTAB_OPTION_AUTO);
-  gtab_pre_select = get_hime_conf_int(GTAB_PRE_SELECT, GTAB_OPTION_YES);
-  gtab_press_full_auto_send = get_hime_conf_int(GTAB_PRESS_FULL_AUTO_SEND, GTAB_OPTION_NO);
-  gtab_disp_partial_match = get_hime_conf_int(GTAB_DISP_PARTIAL_MATCH, GTAB_OPTION_NO);
-  gtab_disp_key_codes = get_hime_conf_int(GTAB_DISP_KEY_CODES, 0);
-  gtab_disp_im_name = get_hime_conf_int(GTAB_DISP_IM_NAME, 1);
-  gtab_invalid_key_in = get_hime_conf_int(GTAB_INVALID_KEY_IN, 0);
-  gtab_shift_phrase_key = get_hime_conf_int(GTAB_SHIFT_PHRASE_KEY, 0);
-  gtab_hide_row2 = get_hime_conf_int(GTAB_HIDE_ROW2, 0);
-  gtab_in_row1 = get_hime_conf_int(GTAB_IN_ROW1, 0);
-  gtab_vertical_select = get_hime_conf_int(GTAB_VERTICAL_SELECT, GTAB_OPTION_NO);
-  gtab_unique_auto_send = get_hime_conf_int(GTAB_UNIQUE_AUTO_SEND, GTAB_OPTION_NO);
-  gtab_que_wild_card = get_hime_conf_int(GTAB_QUE_WILD_CARD, 0);
-  gtab_que_wild_card_asterisk = get_hime_conf_int(GTAB_QUE_WILD_CARD_ASTERISK, 1);
-  gtab_pho_query = get_hime_conf_int(GTAB_PHO_QUERY, 1);
-  gtab_phrase_pre_select = get_hime_conf_int(GTAB_PHRASE_PRE_SELECT, 1);
-  gtab_in_area_button = get_hime_conf_int(GTAB_IN_AREA_BUTTON, 0);
+    gtab_dup_select_bell = get_hime_conf_int (GTAB_DUP_SELECT_BELL, 0);
+    gtab_space_auto_first = get_hime_conf_int (GTAB_SPACE_AUTO_FIRST, GTAB_space_auto_first_none);
+    gtab_auto_select_by_phrase = get_hime_conf_int (GTAB_AUTO_SELECT_BY_PHRASE, GTAB_OPTION_AUTO);
+    gtab_pre_select = get_hime_conf_int (GTAB_PRE_SELECT, GTAB_OPTION_YES);
+    gtab_press_full_auto_send = get_hime_conf_int (GTAB_PRESS_FULL_AUTO_SEND, GTAB_OPTION_NO);
+    gtab_disp_partial_match = get_hime_conf_int (GTAB_DISP_PARTIAL_MATCH, GTAB_OPTION_NO);
+    gtab_disp_key_codes = get_hime_conf_int (GTAB_DISP_KEY_CODES, 0);
+    gtab_disp_im_name = get_hime_conf_int (GTAB_DISP_IM_NAME, 1);
+    gtab_invalid_key_in = get_hime_conf_int (GTAB_INVALID_KEY_IN, 0);
+    gtab_shift_phrase_key = get_hime_conf_int (GTAB_SHIFT_PHRASE_KEY, 0);
+    gtab_hide_row2 = get_hime_conf_int (GTAB_HIDE_ROW2, 0);
+    gtab_in_row1 = get_hime_conf_int (GTAB_IN_ROW1, 0);
+    gtab_vertical_select = get_hime_conf_int (GTAB_VERTICAL_SELECT, GTAB_OPTION_NO);
+    gtab_unique_auto_send = get_hime_conf_int (GTAB_UNIQUE_AUTO_SEND, GTAB_OPTION_NO);
+    gtab_que_wild_card = get_hime_conf_int (GTAB_QUE_WILD_CARD, 0);
+    gtab_que_wild_card_asterisk = get_hime_conf_int (GTAB_QUE_WILD_CARD_ASTERISK, 1);
+    gtab_pho_query = get_hime_conf_int (GTAB_PHO_QUERY, 1);
+    gtab_phrase_pre_select = get_hime_conf_int (GTAB_PHRASE_PRE_SELECT, 1);
+    gtab_in_area_button = get_hime_conf_int (GTAB_IN_AREA_BUTTON, 0);
 
-  tsin_phrase_pre_select = get_hime_conf_int(TSIN_PHRASE_PRE_SELECT, 1);
-  tsin_chinese_english_toggle_key = get_hime_conf_int(TSIN_CHINESE_ENGLISH_TOGGLE_KEY,
-                                    TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Shift);
-  tsin_tone_char_input = get_hime_conf_int(TSIN_TONE_CHAR_INPUT, 0);
+    tsin_phrase_pre_select = get_hime_conf_int (TSIN_PHRASE_PRE_SELECT, 1);
+    tsin_chinese_english_toggle_key = get_hime_conf_int (TSIN_CHINESE_ENGLISH_TOGGLE_KEY,
+                                                         TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Shift);
+    tsin_tone_char_input = get_hime_conf_int (TSIN_TONE_CHAR_INPUT, 0);
 
-  tsin_space_opt = get_hime_conf_int(TSIN_SPACE_OPT, TSIN_SPACE_OPT_SELECT_CHAR);
-  tsin_buffer_size = get_hime_conf_int(TSIN_BUFFER_SIZE, 40);
-  tsin_tab_phrase_end = get_hime_conf_int(TSIN_TAB_PHRASE_END, 1);
-  tsin_tail_select_key = get_hime_conf_int(TSIN_TAIL_SELECT_KEY, 0);
-  tsin_buffer_editing_mode = get_hime_conf_int(TSIN_BUFFER_EDITING_MODE, 0);
-  tsin_use_pho_near = get_hime_conf_int(TSIN_USE_PHO_NEAR, 1);
+    tsin_space_opt = get_hime_conf_int (TSIN_SPACE_OPT, TSIN_SPACE_OPT_SELECT_CHAR);
+    tsin_buffer_size = get_hime_conf_int (TSIN_BUFFER_SIZE, 40);
+    tsin_tab_phrase_end = get_hime_conf_int (TSIN_TAB_PHRASE_END, 1);
+    tsin_tail_select_key = get_hime_conf_int (TSIN_TAIL_SELECT_KEY, 0);
+    tsin_buffer_editing_mode = get_hime_conf_int (TSIN_BUFFER_EDITING_MODE, 0);
+    tsin_use_pho_near = get_hime_conf_int (TSIN_USE_PHO_NEAR, 1);
 
-  phonetic_char_dynamic_sequence = get_hime_conf_int(PHONETIC_CHAR_DYNAMIC_SEQUENCE, 1);
-  phonetic_huge_tab = get_hime_conf_int(PHONETIC_HUGE_TAB, 0);
-  phonetic_speak = get_hime_conf_int(PHONETIC_SPEAK, 0);
-  get_hime_conf_str(PHONETIC_SPEAK_SEL, &phonetic_speak_sel, "3.ogg");
+    phonetic_char_dynamic_sequence = get_hime_conf_int (PHONETIC_CHAR_DYNAMIC_SEQUENCE, 1);
+    phonetic_huge_tab = get_hime_conf_int (PHONETIC_HUGE_TAB, 0);
+    phonetic_speak = get_hime_conf_int (PHONETIC_SPEAK, 0);
+    get_hime_conf_str (PHONETIC_SPEAK_SEL, &phonetic_speak_sel, "3.ogg");
 
-  pho_hide_row2 = get_hime_conf_int(PHO_HIDE_ROW2, 0);
-  pho_in_row1 = get_hime_conf_int(PHO_IN_ROW1, 1);
+    pho_hide_row2 = get_hime_conf_int (PHO_HIDE_ROW2, 0);
+    pho_in_row1 = get_hime_conf_int (PHO_IN_ROW1, 1);
 
-  get_hime_conf_str(TSIN_PHRASE_LINE_COLOR, &tsin_phrase_line_color, "blue");
-  get_hime_conf_str(TSIN_CURSOR_COLOR, &tsin_cursor_color, TSIN_CURSOR_COLOR_DEFAULT);
-  get_hime_conf_str(HIME_SEL_KEY_COLOR, &hime_sel_key_color, HIME_SEL_KEY_COLOR_DEFAULT);
+    get_hime_conf_str (TSIN_PHRASE_LINE_COLOR, &tsin_phrase_line_color, "blue");
+    get_hime_conf_str (TSIN_CURSOR_COLOR, &tsin_cursor_color, TSIN_CURSOR_COLOR_DEFAULT);
+    get_hime_conf_str (HIME_SEL_KEY_COLOR, &hime_sel_key_color, HIME_SEL_KEY_COLOR_DEFAULT);
 
-  if (eng_color_full_str) {
-    g_free(eng_color_full_str);
-    g_free(eng_color_half_str);
-    g_free(cht_color_full_str);
-  }
+    if (eng_color_full_str) {
+        g_free (eng_color_full_str);
+        g_free (eng_color_half_str);
+        g_free (cht_color_full_str);
+    }
 
-  eng_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_full_str));
-  eng_color_half_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(eng_half_str));
-  cht_color_full_str = g_strdup_printf("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _(cht_full_str));
+    eng_color_full_str = g_strdup_printf ("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _ (eng_full_str));
+    eng_color_half_str = g_strdup_printf ("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _ (eng_half_str));
+    cht_color_full_str = g_strdup_printf ("<span foreground=\"%s\">%s</span>", hime_sel_key_color, _ (cht_full_str));
 
-  get_hime_conf_str(HIME_WIN_COLOR_FG, &hime_win_color_fg, "black");
-  get_hime_conf_str(HIME_WIN_COLOR_BG, &hime_win_color_bg, "#DADCD5");
-  hime_win_color_use = get_hime_conf_int(HIME_WIN_COLOR_USE, 0);
-  hime_bell_off = get_hime_conf_int(HIME_BELL_OFF, 0);
+    get_hime_conf_str (HIME_WIN_COLOR_FG, &hime_win_color_fg, "black");
+    get_hime_conf_str (HIME_WIN_COLOR_BG, &hime_win_color_bg, "#DADCD5");
+    hime_win_color_use = get_hime_conf_int (HIME_WIN_COLOR_USE, 0);
+    hime_bell_off = get_hime_conf_int (HIME_BELL_OFF, 0);
 
-  hime_bell_volume = get_hime_conf_int(HIME_BELL_VOLUME, -97);
-  hime_sound_play_overlap = get_hime_conf_int(HIME_SOUND_PLAY_OVERLAP, 0);
-  hime_enable_ctrl_alt_switch = get_hime_conf_int(HIME_ENABLE_CTRL_ALT_SWITCH, 1);
+    hime_bell_volume = get_hime_conf_int (HIME_BELL_VOLUME, -97);
+    hime_sound_play_overlap = get_hime_conf_int (HIME_SOUND_PLAY_OVERLAP, 0);
+    hime_enable_ctrl_alt_switch = get_hime_conf_int (HIME_ENABLE_CTRL_ALT_SWITCH, 1);
 #if 0
   hime_edit_display = get_hime_conf_int(HIME_EDIT_DISPLAY, HIME_EDIT_DISPLAY_BOTH);
 #elif 0
-  hime_edit_display = get_hime_conf_int(HIME_EDIT_DISPLAY, HIME_EDIT_DISPLAY_ON_THE_SPOT);
+    hime_edit_display = get_hime_conf_int (HIME_EDIT_DISPLAY, HIME_EDIT_DISPLAY_ON_THE_SPOT);
 #else
-  hime_edit_display = get_hime_conf_int(HIME_EDIT_DISPLAY, HIME_EDIT_DISPLAY_OVER_THE_SPOT);
+    hime_edit_display = get_hime_conf_int (HIME_EDIT_DISPLAY, HIME_EDIT_DISPLAY_OVER_THE_SPOT);
 #endif
 
-  hime_on_the_spot_key = get_hime_conf_int(HIME_ON_THE_SPOT_KEY, 0);
-  if (hime_on_the_spot_key)
-    hime_edit_display = HIME_EDIT_DISPLAY_ON_THE_SPOT;
+    hime_on_the_spot_key = get_hime_conf_int (HIME_ON_THE_SPOT_KEY, 0);
+    if (hime_on_the_spot_key)
+        hime_edit_display = HIME_EDIT_DISPLAY_ON_THE_SPOT;
 
-
-  char phokbm[MAX_HIME_STR];
+    char phokbm[MAX_HIME_STR];
 
 #if DEBUG
-  char *hime_pho_kbm = getenv("HIME_PHO_KBM");
-  if (hime_pho_kbm)
-    strcpy(phokbm, hime_pho_kbm);
-  else
+    char *hime_pho_kbm = getenv ("HIME_PHO_KBM");
+    if (hime_pho_kbm)
+        strcpy (phokbm, hime_pho_kbm);
+    else
 #endif
-  {
-    char *kbm_str = "zo 123456789 1 0";
-    get_hime_conf_fstr(PHONETIC_KEYBOARD, phokbm, kbm_str);
-  }
+    {
+        char *kbm_str = "zo 123456789 1 0";
+        get_hime_conf_fstr (PHONETIC_KEYBOARD, phokbm, kbm_str);
+    }
 
-  char phokbm_name[32], selkey[32];
-  pho_candidate_col_N=0; pho_candidate_R2L=0;
-  sscanf(phokbm, "%s %s %d %d",phokbm_name, selkey, &pho_candidate_col_N, &pho_candidate_R2L);
-
-  if (pho_candidate_col_N <= 0)
-    pho_candidate_col_N = 1;
-  if (pho_candidate_col_N > strlen(selkey))
-    pho_candidate_col_N =strlen(selkey);
-
-  if (pho_candidate_R2L<0 || pho_candidate_R2L>1)
+    char phokbm_name[32], selkey[32];
+    pho_candidate_col_N = 0;
     pho_candidate_R2L = 0;
+    sscanf (phokbm, "%s %s %d %d", phokbm_name, selkey, &pho_candidate_col_N, &pho_candidate_R2L);
 
-  if (pho_selkey)
-    free(pho_selkey);
-  pho_selkey = strdup(selkey);
+    if (pho_candidate_col_N <= 0)
+        pho_candidate_col_N = 1;
+    if (pho_candidate_col_N > strlen (selkey))
+        pho_candidate_col_N = strlen (selkey);
 
-  if (pho_kbm_name)
-    free(pho_kbm_name);
-  pho_kbm_name = strdup(phokbm_name);
+    if (pho_candidate_R2L < 0 || pho_candidate_R2L > 1)
+        pho_candidate_R2L = 0;
+
+    if (pho_selkey)
+        free (pho_selkey);
+    pho_selkey = strdup (selkey);
+
+    if (pho_kbm_name)
+        free (pho_kbm_name);
+    pho_kbm_name = strdup (phokbm_name);
 }
 
 /* FIXME only KDE5 needs to use libappindicator, but this also includes KDE4 */
-int is_kde5(void)
-{
-  const char* desktop = getenv("XDG_CURRENT_DESKTOP");
-  return desktop && strcmp(desktop, "KDE") == 0;
+int is_kde5 (void) {
+    const char *desktop = getenv ("XDG_CURRENT_DESKTOP");
+    return desktop && strcmp (desktop, "KDE") == 0;
 }

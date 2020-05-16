@@ -17,40 +17,37 @@
 
 #include "hime.h"
 
-int main(int argc, char **argv)
-{
-  int i;
-  char text[128];
-  char icon[128];
-  int duration = 3000;
+int main (int argc, char **argv) {
+    int i;
+    char text[128];
+    char icon[128];
+    int duration = 3000;
 
-  gdk_init(&argc, &argv);
+    gdk_init (&argc, &argv);
 
-  if (argc < 3)
-    p_err("usage: hime-message -icon file_name -text string -duration milli_seconds\n");
+    if (argc < 3)
+        p_err ("usage: hime-message -icon file_name -text string -duration milli_seconds\n");
 
-  strcpy(text, "-");
-  strcpy(icon, "-");
+    strcpy (text, "-");
+    strcpy (icon, "-");
 
-  for(i=1; i < argc; i+=2) {
-    if (!strcmp(argv[i], "-icon")) {
-      strcpy(icon, argv[i+1]);
-    } else
-    if (!strcmp(argv[i], "-text")) {
-      strcpy(text, argv[i+1]);
-    } else
-    if (!strcmp(argv[i], "-duration")) {
-      duration = atoi(argv[i+1]);
-    } else {
-      dbg("unknown opt %s", argv[i]);
+    for (i = 1; i < argc; i += 2) {
+        if (!strcmp (argv[i], "-icon")) {
+            strcpy (icon, argv[i + 1]);
+        } else if (!strcmp (argv[i], "-text")) {
+            strcpy (text, argv[i + 1]);
+        } else if (!strcmp (argv[i], "-duration")) {
+            duration = atoi (argv[i + 1]);
+        } else {
+            dbg ("unknown opt %s", argv[i]);
+        }
     }
-  }
 
-  char message[512];
+    char message[512];
 
-  snprintf(message, sizeof(message), "#hime_message %s %s %d", icon, text, duration);
+    snprintf (message, sizeof (message), "#hime_message %s %s %d", icon, text, duration);
 
-  send_hime_message(GDK_DISPLAY(), message);
+    send_hime_message (GDK_DISPLAY (), message);
 
-  return 0;
+    return 0;
 }

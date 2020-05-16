@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
 #ifndef HIME_IM_CLIENT_ATTR_H
 #define HIME_IM_CLIENT_ATTR_H
 
@@ -26,8 +25,8 @@
 #define HIME_PREEDIT_MAX_STR 512
 
 typedef struct {
-  int flag;
-  short ofs0, ofs1;   // ofs : bytes offset
+    int flag;
+    short ofs0, ofs1;  // ofs : bytes offset
 } HIME_PREEDIT_ATTR;
 
-#endif  /* HIME_IM_CLIENT_ATTR_H */
+#endif /* HIME_IM_CLIENT_ATTR_H */

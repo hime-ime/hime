@@ -30,23 +30,23 @@
 
 struct HIME_client_handle_S;
 
-class HIMEIMContext: public QInputContext {
-public:
+class HIMEIMContext : public QInputContext {
+  public:
     HIMEIMContext ();
     ~HIMEIMContext ();
 
     bool x11FilterEvent (QWidget *widget, XEvent *event);
     bool filterEvent (const QEvent *event);
-    void update();
-    QString identifierName();
-    QString language();
+    void update ();
+    QString identifierName ();
+    QString language ();
     void mouseHandler (int offset, QMouseEvent *event);
     void setFocusWidget (QWidget *widget);
     void widgetDestroyed (QWidget *widget);
     void reset ();
     HIME_client_handle_S *hime_ch;
-    bool isComposing() const;
-    void update_cursor(QWidget *);
-    void update_preedit();
+    bool isComposing () const;
+    void update_cursor (QWidget *);
+    void update_preedit ();
 };
-#endif  /* HIME_QT4_IM_H */
+#endif /* HIME_QT4_IM_H */

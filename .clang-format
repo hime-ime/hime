@@ -1,0 +1,72 @@
+---
+#
+# HIME coding style
+#
+# This is based on gtk .clang-format style file with a few overrides.
+# https://raw.githubusercontent.com/GNOME/gtk/mainline/.clang-format
+
+Language: Cpp
+
+# start of the gtk style file ------------------------------------------------
+# See https://wiki.apertis.org/Guidelines/Coding_conventions#Code_formatting
+BasedOnStyle: GNU
+AlwaysBreakAfterDefinitionReturnType: All
+BreakBeforeBinaryOperators: None
+BinPackParameters: false
+SpaceAfterCStyleCast: true
+# Our column limit is actually 80, but setting that results in clang-format
+# making a lot of dubious hanging-indent choices; disable it and assume the
+# developer will line wrap appropriately. clang-format will still check
+# existing hanging indents.
+ColumnLimit: 0
+# end of the gtk style file --------------------------------------------------
+
+# start of HIME overrides ----------------------------------------------------
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: true
+AlwaysBreakTemplateDeclarations: Yes
+BraceWrapping:
+  AfterCaseLabel:  false
+  AfterClass:      false
+  AfterControlStatement: false
+  AfterEnum:       false
+  AfterFunction:   false
+  AfterNamespace:  false
+  AfterObjCDeclaration: false
+  AfterStruct:     false
+  AfterUnion:      false
+  AfterExternBlock: false
+  BeforeCatch:     false
+  BeforeElse:      false
+  IndentBraces:    false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+BreakBeforeBraces: Attach
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+Cpp11BracedListStyle: true
+FixNamespaceComments: true
+IncludeBlocks:   Regroup
+IncludeCategories:
+  # C standard libs
+  - Regex:           '^<(assert|complex|ctype|errno|fenv|float|inttypes|iso646|limits|locale|math|setjmp|signal|stdalign|stdarg|stdatomic|stdbool|stddef|stdint|stdio|stdlib|stdnoreturn|string|tgmath|thread|stime|uchar|wchar|wctype)\.h>'
+    Priority:        -1
+  - Regex:           '^<sys/.*\.h>'
+    Priority:        1
+  - Regex:           '^<(X11|gtk|gdk)/.*\.h>'
+    Priority:        2
+  - Regex:           '^"hime\.h"'
+    Priority:        3
+  - Regex:           '^<.*\.h>'
+    Priority:        0
+  - Regex:           '^"'
+    Priority:        4
+  - Regex:           '.*'
+    Priority:        4
+IncludeIsMainRegex: '^$'
+IndentWidth: 4
+PenaltyReturnTypeOnItsOwnLine: 200
+SpacesBeforeTrailingComments: 2
+Standard:        Auto
+# end of HIME overrides ------------------------------------------------------

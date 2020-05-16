@@ -27,60 +27,59 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ******************************************************************/
 typedef struct {
-    XRectangle	area;		/* area */
-    XRectangle	area_needed;	/* area needed */
-    Colormap	cmap;		/* colormap */
-    CARD32	foreground;	/* foreground */
-    CARD32	background;	/* background */
-    Pixmap	bg_pixmap;	/* background pixmap */
-    char	*base_font;	/* base font of fontset */
-    CARD32	line_space;	/* line spacing */
-    Cursor	cursor;		/* cursor */
+    XRectangle area;        /* area */
+    XRectangle area_needed; /* area needed */
+    Colormap cmap;          /* colormap */
+    CARD32 foreground;      /* foreground */
+    CARD32 background;      /* background */
+    Pixmap bg_pixmap;       /* background pixmap */
+    char *base_font;        /* base font of fontset */
+    CARD32 line_space;      /* line spacing */
+    Cursor cursor;          /* cursor */
 } PreeditAttributes;
 
 typedef struct {
-    XRectangle	area;		/* area */
-    XRectangle	area_needed;	/* area needed */
-    Colormap	cmap;		/* colormap */
-    CARD32	foreground;	/* foreground */
-    CARD32	background;	/* background */
-    Pixmap	bg_pixmap;	/* background pixmap */
-    char	*base_font;	/* base font of fontset */
-    CARD32	line_space;	/* line spacing */
-    Cursor	cursor;		/* cursor */
+    XRectangle area;        /* area */
+    XRectangle area_needed; /* area needed */
+    Colormap cmap;          /* colormap */
+    CARD32 foreground;      /* foreground */
+    CARD32 background;      /* background */
+    Pixmap bg_pixmap;       /* background pixmap */
+    char *base_font;        /* base font of fontset */
+    CARD32 line_space;      /* line spacing */
+    Cursor cursor;          /* cursor */
 } StatusAttributes;
 
 typedef struct {
-    Window	client_win;	/* client window */
-    INT32	input_style;	/* input style */
+    Window client_win; /* client window */
+    INT32 input_style; /* input style */
     HIME_STATE_E im_state;
-    gboolean    b_half_full_char; ///< TRUE: full    FALSE: half
-    gboolean    fixed_pos;
-    gboolean    b_hime_protocol; // TRUE : hime    FALSE: XIM
-    gboolean    b_raise_window;
-    gboolean    in_method_switched; ///< TRUE: switch input method at least once    FALSE: never switch input method
-    gboolean    use_preedit;
-    gboolean    tsin_pho_mode;
-    short       fixed_x, fixed_y;
-    short       in_method;
-    XPoint	spot_location;	/* spot location, relative to client window */
+    gboolean b_half_full_char;  ///< TRUE: full    FALSE: half
+    gboolean fixed_pos;
+    gboolean b_hime_protocol;  // TRUE : hime    FALSE: XIM
+    gboolean b_raise_window;
+    gboolean in_method_switched;  ///< TRUE: switch input method at least once    FALSE: never switch input method
+    gboolean use_preedit;
+    gboolean tsin_pho_mode;
+    short fixed_x, fixed_y;
+    short in_method;
+    XPoint spot_location; /* spot location, relative to client window */
 #if USE_XIM
     gboolean xim_preedit_started;
 #endif
 } ClientState;
 
-
 typedef struct _IC {
 #if USE_XIM
-    CARD16	id;		/* ic id */
+    CARD16 id; /* ic id */
 #endif
-    Window	focus_win;	/* focus window */
+    Window focus_win; /* focus window */
 #if USE_XIM
-    char	*resource_name;	/* resource name */
-    char	*resource_class; /* resource class */
+    char *resource_name;        /* resource name */
+    char *resource_class;       /* resource class */
     PreeditAttributes pre_attr; /* preedit attributes */
-    StatusAttributes sts_attr; /* status attributes */
+    StatusAttributes sts_attr;  /* status attributes */
 #endif
     ClientState cs;
-    struct _IC	*next;
+    struct _IC *next;
 } IC;
