@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 // version check
 // GTK+3
 #if GTK_CHECK_VERSION(3,0,0) && !GTK_CHECK_VERSION(3,24,20)
@@ -40,8 +41,6 @@
 #define gtk_vseparator_new() gtk_separator_new(GTK_ORIENTATION_VERTICAL)
 #define GTK_OBJECT
 
-#undef GTK_BOX
-#define GTK_BOX GTK_GRID
 #define gtk_hbox_new(x,y) gtk_grid_new()
 #define gtk_vbox_new(x,y) gtk_grid_new()
 #define gtk_box_pack_end(v,w,x,y,z) gtk_container_add(GTK_CONTAINER(v),w)

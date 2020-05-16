@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include "hime.h"
 
 #include "gst.h"
@@ -26,6 +27,7 @@
 #include "pho.h"
 #include "tsin.h"
 #include "win-sym.h"
+
 
 void init_tsin_selection_win(),disp_selections(int x, int y),hide_selections_win();
 void disp_arrow_up(),disp_arrow_down(), set_tsin_pho_mode();

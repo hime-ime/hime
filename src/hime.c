@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include <signal.h>
 
 #include "hime.h"
@@ -27,7 +28,11 @@ Display *dpy;
 
 int win_xl, win_yl;
 int win_x, win_y;   // actual win x/y
+
+// display width/height in pixels
+// dpy_xl and dpy_yl are global variable shared across files
 int dpy_xl, dpy_yl;
+
 Window xim_xwin;
 
 extern unich_t *fullchar[];
@@ -576,14 +581,23 @@ gboolean delayed_start_cb(gpointer data)
   return FALSE;
 }
 
-void get_dpy_xyl()
+static void get_dpy_xyl ()
 {
-	dpy_xl = gdk_screen_width(), dpy_yl = gdk_screen_height();
+#if !GTK_CHECK_VERSION(3,0,0)
+    dpy_xl = gdk_screen_width ();
+    dpy_yl = gdk_screen_height ();
+#else
+    GdkRectangle work_area;
+    gdk_monitor_get_workarea (get_primary_monitor(), &work_area);
+
+    dpy_xl = work_area.width;
+    dpy_yl = work_area.height;
+#endif
 }
 
-void screen_size_changed(GdkScreen *screen, gpointer user_data)
+static void screen_size_changed (GdkScreen *screen, gpointer user_data)
 {
-	get_dpy_xyl();
+    get_dpy_xyl();
 }
 
 #include "lang.h"
@@ -665,8 +679,14 @@ int main(int argc, char **argv)
 
   dpy = GDK_DISPLAY();
   root=DefaultRootWindow(dpy);
+
   get_dpy_xyl();
-  g_signal_connect(gdk_screen_get_default(),"size-changed", G_CALLBACK(screen_size_changed), NULL);
+
+  // update dpy_xl/dpy_yl on screen size-changed events
+  g_signal_connect (
+      gdk_screen_get_default (), "size-changed",
+      G_CALLBACK (screen_size_changed), NULL
+  );
 
   dbg("display width:%d height:%d\n", dpy_xl, dpy_yl);
 

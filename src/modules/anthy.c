@@ -1329,30 +1329,31 @@ void module_hide_win()
   gmf.mf_hide_win_sym();
 }
 
-void module_change_font_size()
+void module_change_font_size (void)
 {
-  dbg("change_anthy_font_size\n");
-  GdkColor fg;
-  gdk_color_parse(*gmf.mf_hime_win_color_fg, &fg);
-#if GTK_CHECK_VERSION(2,91,6)
-  GdkRGBA rgbfg;
-  gdk_rgba_parse(&rgbfg, gdk_color_to_string(&fg));
-#endif
-  gmf.mf_change_win_bg(win_anthy);
-  gmf.mf_change_win_bg(event_box_anthy);
+    GdkColor fg;
+    gdk_color_parse (*gmf.mf_hime_win_color_fg, &fg);
 
-  int i;
-  for(i=0; i < MAX_SEG_N; i++) {
-    GtkWidget *label = seg[i].label;
-    gmf.mf_set_label_font_size(label, *gmf.mf_hime_font_size);
-    if (*gmf.mf_hime_win_color_use) {
-#if !GTK_CHECK_VERSION(2,91,6)
-      gtk_widget_modify_fg(label, GTK_STATE_NORMAL, &fg);
-#else
-      gtk_widget_override_color(label, GTK_STATE_FLAG_NORMAL, &rgbfg);
+#if GTK_CHECK_VERSION(3,0,0)
+    GdkRGBA rgbfg;
+    gdk_rgba_parse (&rgbfg, gdk_color_to_string (&fg));
 #endif
+
+    gmf.mf_change_win_bg (win_anthy);
+    gmf.mf_change_win_bg (event_box_anthy);
+
+    for (int i = 0; i < MAX_SEG_N; i++) {
+        GtkWidget *label = seg[i].label;
+        gmf.mf_set_label_font_size(label, *gmf.mf_hime_font_size);
+
+        if (*gmf.mf_hime_win_color_use) {
+#if !GTK_CHECK_VERSION(3,0,0)
+            gtk_widget_modify_fg (label, GTK_STATE_NORMAL, &fg);
+#else
+            gtk_widget_override_color(label, GTK_STATE_FLAG_NORMAL, &rgbfg);
+#endif
+        }
     }
-  }
 }
 
 void module_move_win(int x, int y)

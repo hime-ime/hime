@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #ifndef HIME_MODULE_CB_H
 #define HIME_MODULE_CB_H
 
@@ -29,6 +30,7 @@
 
 #include "hime-module.h"
 #include "im-client/hime-im-client-attr.h"
+
 
 #ifdef __cplusplus
 extern "C" {

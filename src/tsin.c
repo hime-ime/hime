@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include <string.h>
 
 #include "gst.h"
@@ -1537,7 +1538,7 @@ int feedkey_pp(KeySym xkey, int kbstate)
 //    dbg("aaa\n");
 
   if (caps_eng_tog) {
-    gboolean new_tsin_pho_mode = ! gdk_keymap_get_caps_lock_state(gdk_keymap_get_default());
+    gboolean new_tsin_pho_mode = ! get_caps_lock_state();
     if (current_CS->tsin_pho_mode != new_tsin_pho_mode) {
       close_selection_win();
       tsin_set_eng_ch(new_tsin_pho_mode);

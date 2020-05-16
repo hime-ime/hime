@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include "hime.h"
 
 #include "gtab.h"
@@ -639,13 +640,15 @@ int main(int argc, char **argv)
     gtk_box_pack_start (GTK_BOX (hbox), button_check[i], FALSE, FALSE, 0);
 
     labels[i]=gtk_label_new(NULL);
-#if 0
-    g_signal_connect (G_OBJECT (labels[i]), "scroll-event",
-                      G_CALLBACK (scroll_event), NULL);
-#endif
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_halign(hbox, GTK_ALIGN_START);
+    gtk_widget_set_valign(hbox, GTK_ALIGN_START);
+    gtk_container_add (GTK_CONTAINER (hbox), labels[i]);
+#else
     GtkWidget *align = gtk_alignment_new (0, 0, 0, 0);
     gtk_container_add(GTK_CONTAINER(align), labels[i]);
     gtk_box_pack_start (GTK_BOX (hbox), align, FALSE, FALSE, 0);
+#endif
   }
 
   hbox_buttons = gtk_hbox_new (FALSE, 0);
@@ -660,13 +663,6 @@ int main(int argc, char **argv)
   gtk_box_pack_start (GTK_BOX (hbox_buttons), button_find, FALSE, FALSE, 0);
   g_signal_connect (G_OBJECT (button_find), "clicked",
      G_CALLBACK (cb_button_find), NULL);
-
-#if 0
-  GtkWidget *button_edit = gtk_button_new_from_stock (GTK_STOCK_EDIT);
-  gtk_box_pack_start (GTK_BOX (hbox_buttons), button_edit, FALSE, FALSE, 0);
-  g_signal_connect (G_OBJECT (button_edit), "clicked",
-     G_CALLBACK (cb_button_edit), NULL);
-#endif
 
   GtkWidget *button_save = gtk_button_new_from_stock (GTK_STOCK_SAVE);
   gtk_box_pack_start (GTK_BOX (hbox_buttons), button_save, FALSE, FALSE, 0);

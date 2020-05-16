@@ -30,6 +30,7 @@
 
 #include "win-sym.h"
 
+
 #define STRBUFLEN 64
 
 extern Display *dpy;
@@ -1165,42 +1166,26 @@ gboolean timeout_raise_window(gpointer data)
 extern Window xwin_pho, xwin0, xwin_gtab;
 void win_kbm_disp_caplock();
 
-#if !GTK_CHECK_VERSION(2,16,0)
-gboolean get_caps_lock_state()
-{
-	XkbStateRec states;
-
-	if (XkbGetState(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), XkbUseCoreKbd, &states) == Success)
-	{
-		if (states.locked_mods & LockMask) return TRUE;
-	}
-	return FALSE;
-}
-#endif
-
 void disp_win_kbm_capslock()
 {
-  if (!hime_show_win_kbm)
-    return;
+    if (!hime_show_win_kbm)
+        return;
 
-  gboolean o_state = old_capslock_on;
-  old_capslock_on = gdk_keymap_get_caps_lock_state(gdk_keymap_get_default());
+    gboolean o_state = old_capslock_on;
+    old_capslock_on = get_caps_lock_state();
 
-//  dbg("%x %x\n", old_capslock_on, o_state);
-
-  if (o_state != old_capslock_on) {
-    win_kbm_disp_caplock();
-  }
+    if (o_state != old_capslock_on)
+    {
+        win_kbm_disp_caplock();
+    }
 }
-
 
 void disp_win_kbm_capslock_init()
 {
-  old_capslock_on = gdk_keymap_get_caps_lock_state(gdk_keymap_get_default());
-//  dbg("disp_win_kbm_capslock_init %d\n",old_capslock_on);
+    old_capslock_on = get_caps_lock_state();
 
-  if (hime_show_win_kbm)
-    win_kbm_disp_caplock();
+    if (hime_show_win_kbm)
+        win_kbm_disp_caplock();
 }
 
 void toggle_symbol_table()

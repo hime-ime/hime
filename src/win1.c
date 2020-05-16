@@ -17,10 +17,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include "gst.h"
 #include "hime.h"
 #include "pho.h"
 #include "win1.h"
+
 
 GtkWidget *gwin1;
 static GtkWidget *frame;
@@ -127,91 +129,124 @@ void set_win1_cb(cb_selec_by_idx_t sele_by_idx, cb_page_ud_t page_up, cb_page_ud
   cb_page_down = page_down;
 }
 
-void create_win1_gui()
+void create_win1_gui (void)
 {
-  if (frame)
-    return;
-//  dbg("create_win1_gui %s\n", wselkey);
+    if (frame)
+        return;
 
-  frame = gtk_frame_new(NULL);
-  gtk_container_add (GTK_CONTAINER(gwin1), frame);
+    frame = gtk_frame_new (NULL);
+    gtk_container_add (GTK_CONTAINER (gwin1), frame);
 
-  GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
-  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_top), GTK_ORIENTATION_VERTICAL);
-  gtk_container_add (GTK_CONTAINER(frame), vbox_top);
+    GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
+    gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
+    gtk_container_add (GTK_CONTAINER (frame), vbox_top);
 
-  GtkWidget *eve_box_up = gtk_event_box_new();
-  gtk_event_box_set_visible_window (GTK_EVENT_BOX(eve_box_up), FALSE);
-  gtk_box_pack_start (GTK_BOX (vbox_top), eve_box_up, FALSE, FALSE, 0);
-  arrow_up = gtk_arrow_new (GTK_ARROW_UP, GTK_SHADOW_IN);
-  gtk_container_add(GTK_CONTAINER(eve_box_up), arrow_up);
-  g_signal_connect (G_OBJECT (eve_box_up), "button-press-event",
-                      G_CALLBACK (cb_arrow_up), NULL);
+    GtkWidget *eve_box_up = gtk_event_box_new ();
 
-  int c_rowN = (wselkeyN + pho_candidate_col_N - 1) / pho_candidate_col_N * pho_candidate_col_N;
-  int tablecolN = pho_candidate_col_N;
+    gtk_event_box_set_visible_window (GTK_EVENT_BOX (eve_box_up), FALSE);
+    gtk_box_pack_start (GTK_BOX (vbox_top), eve_box_up, FALSE, FALSE, 0);
+    arrow_up = gtk_arrow_new (GTK_ARROW_UP, GTK_SHADOW_IN);
+    gtk_container_add (GTK_CONTAINER (eve_box_up), arrow_up);
+    g_signal_connect (
+        G_OBJECT (eve_box_up), "button-press-event",
+        G_CALLBACK (cb_arrow_up), NULL
+    );
 
-  if (!tsin_tail_select_key)
-    tablecolN *= 2;
-
-  c_config = current_config();
-
-  GtkWidget *table = gtk_table_new(c_rowN, tablecolN, FALSE);
-  gtk_box_pack_start (GTK_BOX (vbox_top), table, FALSE, FALSE, 0);
-
-  int i;
-  for(i=0; i < wselkeyN; i++)
-  {
-    int y = i/pho_candidate_col_N;
-    int x = idx_to_x(SELEN+1, i);
+    int c_rowN = (wselkeyN + pho_candidate_col_N - 1) / pho_candidate_col_N * pho_candidate_col_N;
+    int tablecolN = pho_candidate_col_N;
 
     if (!tsin_tail_select_key)
-      x*=2;
+        tablecolN *= 2;
 
-    GtkWidget *align = gtk_alignment_new(0,0,0,0);
-    gtk_table_attach(GTK_TABLE(table), align, x, x+1, y, y+1, GTK_SHRINK|GTK_FILL, GTK_SHRINK|GTK_FILL, 0, 0);
-    GtkWidget *event_box_pho = gtk_event_box_new();
-    gtk_event_box_set_visible_window (GTK_EVENT_BOX(event_box_pho), FALSE);
-    GtkWidget *label = gtk_label_new(NULL);
-    gtk_container_add (GTK_CONTAINER (event_box_pho), label);
-    labels_sele[i] = label;
-    eve_sele[i] = event_box_pho;
-    gtk_container_add (GTK_CONTAINER (align), event_box_pho);
-    gtk_label_set_justify(GTK_LABEL(labels_sele[i]),GTK_JUSTIFY_LEFT);
-    set_label_font_size(labels_sele[i], hime_font_size_tsin_presel);
-    g_signal_connect(G_OBJECT(event_box_pho),"button-press-event",
-                   G_CALLBACK(mouse_button_callback), GINT_TO_POINTER(i));
+    c_config = current_config();
 
-    if (!tsin_tail_select_key) {
-      GtkWidget *alignR = gtk_alignment_new(0,0,0,0);
-      gtk_table_attach(GTK_TABLE(table), alignR, x+1, x+2, y, y+1, GTK_SHRINK|GTK_FILL, GTK_SHRINK|GTK_FILL, 0, 0);
-      GtkWidget *event_box_phoR = gtk_event_box_new();
-      gtk_event_box_set_visible_window (GTK_EVENT_BOX(event_box_phoR), FALSE);
-      GtkWidget *labelR = gtk_label_new(NULL);
-      gtk_container_add (GTK_CONTAINER (event_box_phoR), labelR);
-      labels_seleR[i] = labelR;
-      eve_seleR[i] = event_box_phoR;
-      gtk_container_add (GTK_CONTAINER (alignR), event_box_phoR);
-      gtk_label_set_justify(GTK_LABEL(labels_sele[i]),GTK_JUSTIFY_LEFT);
-      set_label_font_size(labels_seleR[i], hime_font_size_tsin_presel);
-      g_signal_connect(G_OBJECT(event_box_phoR),"button-press-event",
-                     G_CALLBACK(mouse_button_callback), GINT_TO_POINTER(i));
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget *table = gtk_grid_new ();
+#else
+    GtkWidget *table = gtk_table_new (c_rowN, tablecolN, FALSE);
+#endif
+    gtk_box_pack_start (GTK_BOX (vbox_top), table, FALSE, FALSE, 0);
+
+    int i;
+    for (i = 0; i < wselkeyN; i++) {
+        int y = i / pho_candidate_col_N;
+        int x = idx_to_x(SELEN+1, i);
+
+        if (!tsin_tail_select_key)
+            x *= 2;
+
+        GtkWidget *event_box_pho = gtk_event_box_new ();
+
+#if GTK_CHECK_VERSION(3,0,0)
+        gtk_grid_attach (GTK_GRID (table), event_box_pho, x, y, 1, 1);
+#else
+        GtkWidget *align = gtk_alignment_new (0, 0, 0, 0);
+        gtk_table_attach (
+            GTK_TABLE (table), align, x, x+1, y, y+1,
+            GTK_SHRINK|GTK_FILL, GTK_SHRINK|GTK_FILL, 0, 0
+        );
+        gtk_container_add (GTK_CONTAINER (align), event_box_pho);
+#endif
+
+        gtk_event_box_set_visible_window (GTK_EVENT_BOX (event_box_pho), FALSE);
+
+        GtkWidget *label = gtk_label_new (NULL);
+        gtk_container_add (GTK_CONTAINER (event_box_pho), label);
+        labels_sele[i] = label;
+
+#if GTK_CHECK_VERSION(3,0,0)
+        gtk_widget_set_halign (label, GTK_ALIGN_START);
+#endif
+        eve_sele[i] = event_box_pho;
+
+        gtk_label_set_justify (GTK_LABEL (labels_sele[i]), GTK_JUSTIFY_LEFT);
+        set_label_font_size(labels_sele[i], hime_font_size_tsin_presel);
+        g_signal_connect (
+            G_OBJECT (event_box_pho), "button-press-event",
+            G_CALLBACK(mouse_button_callback), GINT_TO_POINTER(i)
+        );
+
+        if (!tsin_tail_select_key) {
+            GtkWidget *event_box_phoR = gtk_event_box_new ();
+#if GTK_CHECK_VERSION(3,0,0)
+            gtk_grid_attach (GTK_GRID (table), event_box_phoR, x+1,y, 1,1);
+            gtk_widget_set_halign (event_box_phoR, GTK_ALIGN_START);
+#else
+            GtkWidget *alignR = gtk_alignment_new (0, 0, 0, 0);
+            gtk_container_add (GTK_CONTAINER (alignR), event_box_phoR);
+            gtk_table_attach(
+                GTK_TABLE(table), alignR, x+1, x+2, y, y+1,
+                GTK_SHRINK|GTK_FILL, GTK_SHRINK|GTK_FILL, 0, 0
+            );
+#endif
+            gtk_event_box_set_visible_window (GTK_EVENT_BOX(event_box_phoR), FALSE);
+            GtkWidget *labelR = gtk_label_new (NULL);
+            gtk_container_add (GTK_CONTAINER (event_box_phoR), labelR);
+            labels_seleR[i] = labelR;
+            eve_seleR[i] = event_box_phoR;
+            gtk_label_set_justify (GTK_LABEL (labels_sele[i]), GTK_JUSTIFY_LEFT);
+            set_label_font_size(labels_seleR[i], hime_font_size_tsin_presel);
+            g_signal_connect (
+                G_OBJECT(event_box_phoR),"button-press-event",
+                G_CALLBACK(mouse_button_callback), GINT_TO_POINTER(i)
+            );
+        }
     }
-  }
 
-  GtkWidget *eve_box_down = gtk_event_box_new();
-  gtk_event_box_set_visible_window (GTK_EVENT_BOX(eve_box_down), FALSE);
-  gtk_box_pack_start (GTK_BOX (vbox_top), eve_box_down, FALSE, FALSE, 0);
-  arrow_down = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_IN);
-  gtk_container_add(GTK_CONTAINER(eve_box_down), arrow_down);
-  g_signal_connect (G_OBJECT (eve_box_down), "button-press-event",
-                      G_CALLBACK (cb_arrow_down), NULL);
+    GtkWidget *eve_box_down = gtk_event_box_new ();
+    gtk_event_box_set_visible_window (GTK_EVENT_BOX (eve_box_down), FALSE);
+    gtk_box_pack_start (GTK_BOX (vbox_top), eve_box_down, FALSE, FALSE, 0);
+    arrow_down = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_IN);
+    gtk_container_add (GTK_CONTAINER (eve_box_down), arrow_down);
+    g_signal_connect (
+        G_OBJECT (eve_box_down), "button-press-event",
+        G_CALLBACK (cb_arrow_down), NULL
+    );
 
-  gtk_widget_show_all(gwin1);
-//  gdk_flush();
-  gtk_widget_hide(gwin1);
+    gtk_widget_show_all (gwin1);
+    gtk_widget_hide (gwin1);
 
-  change_win1_font();
+    change_win1_font();
 }
 
 void init_tsin_selection_win()
@@ -367,39 +402,40 @@ void destroy_win1()
 }
 #endif
 
-void change_win1_font()
+void change_win1_font (void)
 {
-  int i;
-  if (!frame)
-    return;
+    if (!frame)
+        return;
 
-  GdkColor fg;
-  gdk_color_parse(hime_win_color_fg, &fg);
-#if GTK_CHECK_VERSION(2,91,6)
-  GdkRGBA rgbfg;
-  gdk_rgba_parse(&rgbfg, gdk_color_to_string(&fg));
+    GdkColor fg;
+    gdk_color_parse (hime_win_color_fg, &fg);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    GdkRGBA rgbfg;
+    gdk_rgba_parse (&rgbfg, gdk_color_to_string (&fg));
 #endif
 
-  for(i=0; i < wselkeyN; i++) {
-    set_label_font_size(labels_sele[i], hime_font_size_tsin_presel);
-    set_label_font_size(labels_seleR[i], hime_font_size_tsin_presel);
-#if !GTK_CHECK_VERSION(2,91,6)
-    if (labels_sele[i])
-      gtk_widget_modify_fg(labels_sele[i], GTK_STATE_NORMAL, hime_win_color_use?&fg:NULL);
-    if (labels_seleR[i])
-      gtk_widget_modify_fg(labels_seleR[i], GTK_STATE_NORMAL, hime_win_color_use?&fg:NULL);
+    for (int i = 0; i < wselkeyN; i++) {
+        set_label_font_size(labels_sele[i], hime_font_size_tsin_presel);
+        set_label_font_size(labels_seleR[i], hime_font_size_tsin_presel);
+
+#if !GTK_CHECK_VERSION(3,0,0)
+        if (labels_sele[i])
+            gtk_widget_modify_fg (labels_sele[i], GTK_STATE_NORMAL, hime_win_color_use ? &fg : NULL);
+        if (labels_seleR[i])
+            gtk_widget_modify_fg (labels_seleR[i], GTK_STATE_NORMAL, hime_win_color_use ? &fg : NULL);
 #else
-    if (labels_sele[i])
-      gtk_widget_override_color(labels_sele[i], GTK_STATE_FLAG_NORMAL, hime_win_color_use?&rgbfg:NULL);
-    if (labels_seleR[i])
-      gtk_widget_override_color(labels_seleR[i], GTK_STATE_FLAG_NORMAL, hime_win_color_use?&rgbfg:NULL);
+        if (labels_sele[i])
+            gtk_widget_override_color (labels_sele[i], GTK_STATE_FLAG_NORMAL, hime_win_color_use ? &rgbfg : NULL);
+        if (labels_seleR[i])
+            gtk_widget_override_color (labels_seleR[i], GTK_STATE_FLAG_NORMAL, hime_win_color_use ? &rgbfg : NULL);
 #endif
-    change_win_bg(eve_sele[i]);
-    if (eve_seleR[i])
-      change_win_bg(eve_seleR[i]);
-  }
+        change_win_bg(eve_sele[i]);
+        if (eve_seleR[i])
+            change_win_bg(eve_seleR[i]);
+    }
 
-  change_win_bg(gwin1);
+    change_win_bg(gwin1);
 }
 
 void recreate_win1_if_nessary()

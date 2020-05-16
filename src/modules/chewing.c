@@ -17,7 +17,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include "chewing.h"
+
 
 // hime-chewing funcs
 static gboolean select_idx (int c);
@@ -694,30 +696,32 @@ module_move_win (int nX, int nY)
     g_himeModMainFuncs.mf_move_win_sym ();
 }
 
-void
-module_change_font_size (void)
+void module_change_font_size (void)
 {
     GdkColor colorFG;
-    GtkWidget *pLabel;
-    int n;
 
     gdk_color_parse (*g_himeModMainFuncs.mf_hime_win_color_fg, &colorFG);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    GdkRGBA rgbfg;
+    gdk_rgba_parse (&rgbfg, gdk_color_to_string (&colorFG));
+#endif
+
     g_himeModMainFuncs.mf_change_win_bg (g_pWinChewing);
     g_himeModMainFuncs.mf_change_win_bg (g_pEvBoxChewing);
 
-    for (n = 0; n < MAX_SEG_NUM; n++)
-    {
-        pLabel = g_pSeg[n].label;
-        g_himeModMainFuncs.mf_set_label_font_size (pLabel,
-            *g_himeModMainFuncs.mf_hime_font_size);
+    for (int i = 0; i < MAX_SEG_NUM; i++) {
+        GtkWidget *pLabel = g_pSeg[i].label;
+        g_himeModMainFuncs.mf_set_label_font_size (
+            pLabel,
+            *g_himeModMainFuncs.mf_hime_font_size
+        );
 
         if (*g_himeModMainFuncs.mf_hime_win_color_use) {
-#if !GTK_CHECK_VERSION(2,91,6)
+#if !GTK_CHECK_VERSION(3,0,0)
             gtk_widget_modify_fg (pLabel, GTK_STATE_NORMAL, &colorFG);
 #else
-            GdkRGBA rgbfg;
-            gdk_rgba_parse(&rgbfg, gdk_color_to_string(&colorFG));
-            gtk_widget_override_color(pLabel, GTK_STATE_FLAG_NORMAL, &rgbfg);
+            gtk_widget_override_color (pLabel, GTK_STATE_FLAG_NORMAL, &rgbfg);
 #endif
         }
     }
@@ -795,4 +799,3 @@ module_flush_input (void)
 
     return 0;
 }
-

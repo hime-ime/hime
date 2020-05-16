@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,10 +17,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include <sys/stat.h>
+
 #include <X11/extensions/XTest.h>
+
 #include "hime.h"
+
 #include "gtab.h"
+
+
 extern INMD *cur_inmd;
 
 static GtkWidget *gwin_kbm;
@@ -58,22 +66,29 @@ static int keysN=sizeof(keys)/sizeof(keys[0]);
 
 void update_win_kbm();
 
-#if !GTK_CHECK_VERSION(2,91,6)
-void mod_fg_all(GtkWidget *lab, GdkColor *col)
+#if !GTK_CHECK_VERSION(3,0,0)
+void mod_fg_all (GtkWidget *lab, GdkColor *col)
 {
-  if (lab==NULL) return;
-  gtk_widget_modify_fg(lab, GTK_STATE_NORMAL, col);
-  gtk_widget_modify_fg(lab, GTK_STATE_ACTIVE, col);
-  gtk_widget_modify_fg(lab, GTK_STATE_SELECTED, col);
-  gtk_widget_modify_fg(lab, GTK_STATE_PRELIGHT, col);
+    if (!lab) {
+        return;
+    }
+
+    gtk_widget_modify_fg (lab, GTK_STATE_NORMAL, col);
+    gtk_widget_modify_fg (lab, GTK_STATE_ACTIVE, col);
+    gtk_widget_modify_fg (lab, GTK_STATE_SELECTED, col);
+    gtk_widget_modify_fg (lab, GTK_STATE_PRELIGHT, col);
 }
 #else
-void mod_fg_all(GtkWidget *lab, GdkRGBA *rgbfg)
+void mod_fg_all (GtkWidget *lab, GdkRGBA *rgbfg)
 {
-  gtk_widget_override_color(lab, GTK_STATE_FLAG_NORMAL, rgbfg);
-  gtk_widget_override_color(lab, GTK_STATE_FLAG_ACTIVE, rgbfg);
-  gtk_widget_override_color(lab, GTK_STATE_FLAG_SELECTED, rgbfg);
-  gtk_widget_override_color(lab, GTK_STATE_FLAG_PRELIGHT, rgbfg);
+    if (!lab) {
+        return;
+    }
+
+    gtk_widget_override_color (lab, GTK_STATE_FLAG_NORMAL, rgbfg);
+    gtk_widget_override_color (lab, GTK_STATE_FLAG_ACTIVE, rgbfg);
+    gtk_widget_override_color (lab, GTK_STATE_FLAG_SELECTED, rgbfg);
+    gtk_widget_override_color (lab, GTK_STATE_FLAG_PRELIGHT, rgbfg);
 }
 #endif
 

@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include <regex.h>
 
 #include <sys/stat.h>
@@ -29,6 +30,7 @@
 #include "hime.h"
 #include "pho.h"
 #include "tsin.h"
+
 
 extern gboolean test_mode;
 gboolean gtab_phrase_on();
@@ -985,7 +987,7 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
   if ((tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock) &&
       (key == XK_Caps_Lock)){
     // The CapLock status may be incorrect when XK_Caps_Lock is pressed.
-    gboolean new_tsin_pho_mode = ! gdk_keymap_get_caps_lock_state(gdk_keymap_get_default());
+    gboolean new_tsin_pho_mode = ! get_caps_lock_state();
     if (current_CS->tsin_pho_mode != new_tsin_pho_mode) {
       current_CS->tsin_pho_mode = new_tsin_pho_mode;
       save_CS_current_to_temp();

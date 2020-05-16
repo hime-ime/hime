@@ -17,17 +17,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 /**
  @file hime-module-cb.c
  @brief Handle module callback.
 
  Find hime modules.
-
 */
+
+
 #include <dlfcn.h>
 
 #include "hime.h"
+
 #include "hime-module-cb.h"
+
 
 #define SETUP_CB(fn) do { \
 	*(void **) (&st.fn) = dlsym(handle, # fn); \

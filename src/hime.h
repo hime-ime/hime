@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #ifndef HIME_H
 #define HIME_H
 
@@ -182,14 +183,18 @@ void send_utf8_ch(char *bchar);
 void send_ascii(char key);
 
 // hime-common.c
-void bell();
-void case_inverse(KeySym *xkey, int shift_m);
-gint64 current_time();
-void disp_pho_sub(GtkWidget *label, int index, char *pho);
-void exec_hime_setup();
-void set_label_font_size(GtkWidget *label, int size);
-void set_label_space(GtkWidget *label);
-void set_no_focus(GtkWidget *win);
+void bell (void);
+void case_inverse (KeySym *xkey, int shift_m);
+gint64 current_time (void);
+void disp_pho_sub (GtkWidget *label, int index, char *pho);
+void exec_hime_setup (void);
+void set_label_font_size (GtkWidget *label, int size);
+void set_label_space (GtkWidget *label);
+void set_no_focus (GtkWidget *win);
+#if GTK_CHECK_VERSION(3,0,0)
+GdkMonitor *get_primary_monitor (void);
+#endif
+gboolean get_caps_lock_state (void);
 
 void send_hime_message(Display *dpy, char *s);
 void check_CS();
