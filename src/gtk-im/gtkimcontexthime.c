@@ -26,12 +26,9 @@
 #include <X11/keysym.h>
 
 #include "gtkimcontexthime.h"
-
 #include "hime-im-client.h"
 
-
 #define DBG 0
-
 
 typedef struct _GtkHIMEInfo GtkHIMEInfo;
 
@@ -50,38 +47,35 @@ struct _GtkIMContextHIME {
     int pe_cursor;
 };
 
-
-static void     gtk_im_context_hime_class_init         (GtkIMContextHIMEClass  *class);
-static void     gtk_im_context_hime_init               (GtkIMContextHIME       *im_context_hime);
-static void     gtk_im_context_hime_finalize           (GObject               *obj);
-static void     gtk_im_context_hime_set_client_window  (GtkIMContext          *context,
-        GdkWindow             *client_window);
-static gboolean gtk_im_context_hime_filter_keypress    (GtkIMContext          *context,
-        GdkEventKey           *key);
-static void     gtk_im_context_hime_reset              (GtkIMContext          *context);
-static void     gtk_im_context_hime_focus_in           (GtkIMContext          *context);
-static void     gtk_im_context_hime_focus_out          (GtkIMContext          *context);
-static void     gtk_im_context_hime_set_cursor_location (GtkIMContext          *context,
-        GdkRectangle             *area);
-static void     gtk_im_context_hime_set_use_preedit    (GtkIMContext          *context,
-        gboolean               use_preedit);
-static void     gtk_im_context_hime_get_preedit_string (GtkIMContext          *context,
-        gchar                **str,
-        PangoAttrList        **attrs,
-        gint                  *cursor_pos);
-
+static void gtk_im_context_hime_class_init (GtkIMContextHIMEClass *class);
+static void gtk_im_context_hime_init (GtkIMContextHIME *im_context_hime);
+static void gtk_im_context_hime_finalize (GObject *obj);
+static void gtk_im_context_hime_set_client_window (GtkIMContext *context,
+                                                   GdkWindow *client_window);
+static gboolean gtk_im_context_hime_filter_keypress (GtkIMContext *context,
+                                                     GdkEventKey *key);
+static void gtk_im_context_hime_reset (GtkIMContext *context);
+static void gtk_im_context_hime_focus_in (GtkIMContext *context);
+static void gtk_im_context_hime_focus_out (GtkIMContext *context);
+static void gtk_im_context_hime_set_cursor_location (GtkIMContext *context,
+                                                     GdkRectangle *area);
+static void gtk_im_context_hime_set_use_preedit (GtkIMContext *context,
+                                                 gboolean use_preedit);
+static void gtk_im_context_hime_get_preedit_string (GtkIMContext *context,
+                                                    gchar **str,
+                                                    PangoAttrList **attrs,
+                                                    gint *cursor_pos);
 
 GType gtk_type_im_context_hime = 0;
 
-void gtk_im_context_hime_register_type(GTypeModule *type_module)
-{
+void gtk_im_context_hime_register_type (GTypeModule *type_module) {
     static const GTypeInfo im_context_hime_info = {
         sizeof (GtkIMContextHIMEClass),
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
         (GClassInitFunc) gtk_im_context_hime_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
+        NULL, /* class_finalize */
+        NULL, /* class_data */
         sizeof (GtkIMContextHIME),
         0,
         (GInstanceInitFunc) gtk_im_context_hime_init,
@@ -89,28 +83,26 @@ void gtk_im_context_hime_register_type(GTypeModule *type_module)
 
     gtk_type_im_context_hime =
         g_type_module_register_type (type_module,
-                GTK_TYPE_IM_CONTEXT,
-                "GtkIMContextHIME",
-                &im_context_hime_info, 0);
+                                     GTK_TYPE_IM_CONTEXT,
+                                     "GtkIMContextHIME",
+                                     &im_context_hime_info, 0);
 }
 
-
-static void get_im(GtkIMContextHIME *context_xim)
-{
+static void get_im (GtkIMContextHIME *context_xim) {
     GdkWindow *client_window = context_xim->client_window;
     if (!client_window)
         return;
-    GdkScreen *screen = gdk_window_get_screen(client_window);
+    GdkScreen *screen = gdk_window_get_screen (client_window);
     if (!screen)
         return;
 
-    GdkDisplay *display = gdk_screen_get_display(screen);
+    GdkDisplay *display = gdk_screen_get_display (screen);
     if (!display)
         return;
 
     if (!context_xim->hime_ch) {
-        if (!(context_xim->hime_ch = hime_im_client_open(GDK_DISPLAY())))
-            perror("cannot open hime_ch");
+        if (!(context_xim->hime_ch = hime_im_client_open (GDK_DISPLAY ())))
+            perror ("cannot open hime_ch");
 
         context_xim->timeout_handle = 0;
         context_xim->pe_attN = 0;
@@ -118,12 +110,10 @@ static void get_im(GtkIMContextHIME *context_xim)
         context_xim->pe_str = NULL;
         context_xim->pe_cursor = 0;
         context_xim->pe_started = FALSE;
-
     }
 }
 
-static void gtk_im_context_hime_class_init(GtkIMContextHIMEClass *class)
-{
+static void gtk_im_context_hime_class_init (GtkIMContextHIMEClass *class) {
     GtkIMContextClass *im_context_class = GTK_IM_CONTEXT_CLASS (class);
     GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
@@ -138,10 +128,8 @@ static void gtk_im_context_hime_class_init(GtkIMContextHIMEClass *class)
     gobject_class->finalize = gtk_im_context_hime_finalize;
 }
 
-
 static void
-gtk_im_context_hime_init(GtkIMContextHIME *im_context_hime)
-{
+gtk_im_context_hime_init (GtkIMContextHIME *im_context_hime) {
     im_context_hime->timeout_handle = 0;
     im_context_hime->pe_attN = 0;
     im_context_hime->pe_att = NULL;
@@ -150,19 +138,17 @@ gtk_im_context_hime_init(GtkIMContextHIME *im_context_hime)
     im_context_hime->hime_ch = NULL;
 }
 
-
-void clear_preedit(GtkIMContextHIME *context_hime)
-{
+void clear_preedit (GtkIMContextHIME *context_hime) {
     if (!context_hime)
         return;
 
     if (context_hime->pe_str) {
-        free(context_hime->pe_str);
+        free (context_hime->pe_str);
         context_hime->pe_str = NULL;
     }
 
     if (context_hime->pe_att) {
-        free(context_hime->pe_att);
+        free (context_hime->pe_att);
         context_hime->pe_att = NULL;
         context_hime->pe_attN = 0;
     }
@@ -170,21 +156,17 @@ void clear_preedit(GtkIMContextHIME *context_hime)
     context_hime->pe_cursor = 0;
 }
 
-
-static void gtk_im_context_hime_finalize(GObject *obj)
-{
+static void gtk_im_context_hime_finalize (GObject *obj) {
     GtkIMContextHIME *context_xim = GTK_IM_CONTEXT_HIME (obj);
-    clear_preedit(context_xim);
+    clear_preedit (context_xim);
 
     if (context_xim->hime_ch) {
-        hime_im_client_close(context_xim->hime_ch);
+        hime_im_client_close (context_xim->hime_ch);
         context_xim->hime_ch = NULL;
     }
 }
 
-
-static void set_ic_client_window(GtkIMContextHIME *context_xim, GdkWindow *client_window)
-{
+static void set_ic_client_window (GtkIMContextHIME *context_xim, GdkWindow *client_window) {
     if (!client_window)
         return;
 
@@ -193,21 +175,17 @@ static void set_ic_client_window(GtkIMContextHIME *context_xim, GdkWindow *clien
     if (context_xim->client_window) {
         get_im (context_xim);
         if (context_xim->hime_ch) {
-            hime_im_client_set_window(context_xim->hime_ch, GDK_WINDOW_XID (client_window));
+            hime_im_client_set_window (context_xim->hime_ch, GDK_WINDOW_XID (client_window));
         }
     }
 }
 
-
-static void gtk_im_context_hime_set_client_window(GtkIMContext *context, GdkWindow *client_window)
-{
+static void gtk_im_context_hime_set_client_window (GtkIMContext *context, GdkWindow *client_window) {
     GtkIMContextHIME *context_xim = GTK_IM_CONTEXT_HIME (context);
     set_ic_client_window (context_xim, client_window);
 }
 
-
-GtkIMContext *gtk_im_context_hime_new(void)
-{
+GtkIMContext *gtk_im_context_hime_new (void) {
     GtkIMContextHIME *result;
 
     result = GTK_IM_CONTEXT_HIME (g_object_new (GTK_TYPE_IM_CONTEXT_HIME, NULL));
@@ -215,20 +193,17 @@ GtkIMContext *gtk_im_context_hime_new(void)
     return GTK_IM_CONTEXT (result);
 }
 
-
-
-static gboolean gtk_im_context_hime_filter_keypress(GtkIMContext *context, GdkEventKey *event)
-{
+static gboolean gtk_im_context_hime_filter_keypress (GtkIMContext *context, GdkEventKey *event) {
     GtkIMContextHIME *context_xim = GTK_IM_CONTEXT_HIME (context);
 
     gchar static_buffer[256];
     char *buffer = static_buffer;
-    gint buffer_size = sizeof(static_buffer) - 1;
+    gint buffer_size = sizeof (static_buffer) - 1;
     gsize num_bytes = 0;
     KeySym keysym = 0;
     //  Status status;
     gboolean result = FALSE;
-#if !GTK_CHECK_VERSION(3,0,0)
+#if !GTK_CHECK_VERSION(3, 0, 0)
     GdkWindow *root_window = gdk_screen_get_root_window (gdk_window_get_screen (event->window));
 #else
     GdkWindow *root_window = NULL;
@@ -241,7 +216,7 @@ static gboolean gtk_im_context_hime_filter_keypress(GtkIMContext *context, GdkEv
 
     XKeyPressedEvent xevent;
     xevent.type = (event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
-    xevent.serial = 0;            /* hope it doesn't matter */
+    xevent.serial = 0; /* hope it doesn't matter */
     xevent.send_event = event->send_event;
     xevent.display = GDK_WINDOW_XDISPLAY (event->window);
     xevent.window = GDK_WINDOW_XID (event->window);
@@ -258,15 +233,15 @@ static gboolean gtk_im_context_hime_filter_keypress(GtkIMContext *context, GdkEv
     char *rstr = NULL;
 
 #if (!FREEBSD)
-    int uni = gdk_keyval_to_unicode(event->keyval);
+    int uni = gdk_keyval_to_unicode (event->keyval);
     if (uni) {
         gsize rn;
         GError *err = NULL;
-        char *utf8 = g_convert((char *)&uni, 4, "UTF-8", "UTF-32", &rn, &num_bytes, &err);
+        char *utf8 = g_convert ((char *) &uni, 4, "UTF-8", "UTF-32", &rn, &num_bytes, &err);
 
         if (utf8) {
-            strcpy(buffer, utf8);
-            g_free(utf8);
+            strcpy (buffer, utf8);
+            g_free (utf8);
         }
     }
 #endif
@@ -281,16 +256,16 @@ static gboolean gtk_im_context_hime_filter_keypress(GtkIMContext *context, GdkEv
     gboolean has_str = FALSE;
 
     if (event->type == GDK_KEY_PRESS) {
-        result = hime_im_client_forward_key_press(context_xim->hime_ch,
-                keysym, xevent.state, &rstr);
+        result = hime_im_client_forward_key_press (context_xim->hime_ch,
+                                                   keysym, xevent.state, &rstr);
     } else {
-        result = hime_im_client_forward_key_release(context_xim->hime_ch,
-                keysym, xevent.state, &rstr);
+        result = hime_im_client_forward_key_release (context_xim->hime_ch,
+                                                     keysym, xevent.state, &rstr);
     }
 
     preedit_changed = result;
 
-    int attN = hime_im_client_get_preedit(context_xim->hime_ch, &tstr, att, &cursor_pos, &sub_comp_len);
+    int attN = hime_im_client_get_preedit (context_xim->hime_ch, &tstr, att, &cursor_pos, &sub_comp_len);
     has_str = tstr && tstr[0];
 
     if (sub_comp_len) {
@@ -305,104 +280,95 @@ static gboolean gtk_im_context_hime_filter_keypress(GtkIMContext *context, GdkEv
         context_pe_started = context_xim->pe_started = TRUE;
     }
 
-    if (context_has_str != has_str || (tstr && context_xim->pe_str && strcmp(tstr, context_xim->pe_str))) {
+    if (context_has_str != has_str || (tstr && context_xim->pe_str && strcmp (tstr, context_xim->pe_str))) {
         if (context_xim->pe_str)
-            free(context_xim->pe_str);
+            free (context_xim->pe_str);
         context_xim->pe_str = tstr;
         //      preedit_changed = TRUE;
     }
 
-
-    int attsz = sizeof(HIME_PREEDIT_ATTR)*attN;
+    int attsz = sizeof (HIME_PREEDIT_ATTR) * attN;
     if (context_xim->pe_attN != attN ||
-            (context_xim->pe_att && memcmp(context_xim->pe_att, att, attsz))) {
+        (context_xim->pe_att && memcmp (context_xim->pe_att, att, attsz))) {
         //      printf("att changed pe_att:%x:%d %d\n", context_xim->pe_att, context_xim->pe_attN, attN);
         context_xim->pe_attN = attN;
         if (context_xim->pe_att)
-            free(context_xim->pe_att);
+            free (context_xim->pe_att);
 
         context_xim->pe_att = NULL;
         if (attN)
-            context_xim->pe_att = malloc(attsz);
-        memcpy(context_xim->pe_att, att, attsz);
+            context_xim->pe_att = malloc (attsz);
+        memcpy (context_xim->pe_att, att, attsz);
         //      printf("context_xim->pe_att %x\n", context_xim->pe_att);
         //      preedit_changed = TRUE;
     }
 
     if (context_xim->pe_cursor != cursor_pos) {
 #if DBG
-        printf("cursor changed %d %d\n", context_xim->pe_cursor, cursor_pos);
+        printf ("cursor changed %d %d\n", context_xim->pe_cursor, cursor_pos);
 #endif
         context_xim->pe_cursor = cursor_pos;
         //      preedit_changed = TRUE;
     }
 
 #if DBG
-    printf("seq:%d rstr:%s result:%x num_bytes:%d %x\n", context_xim->hime_ch->seq, rstr, result, num_bytes, (unsigned int)buffer[0]);
+    printf ("seq:%d rstr:%s result:%x num_bytes:%d %x\n", context_xim->hime_ch->seq, rstr, result, num_bytes, (unsigned int) buffer[0]);
 #endif
     if (event->type == GDK_KEY_PRESS && !rstr && !result && num_bytes &&
-            buffer[0]>=0x20 && buffer[0]!=0x7f
-            && !(xevent.state & (Mod1Mask|ControlMask))) {
-        rstr = (char *)malloc(num_bytes + 1);
-        memcpy(rstr, buffer, num_bytes);
+        buffer[0] >= 0x20 && buffer[0] != 0x7f && !(xevent.state & (Mod1Mask | ControlMask))) {
+        rstr = (char *) malloc (num_bytes + 1);
+        memcpy (rstr, buffer, num_bytes);
         rstr[num_bytes] = 0;
         result = TRUE;
     }
 
     if (preedit_changed) {
-        g_signal_emit_by_name(context_xim, "preedit_changed");
+        g_signal_emit_by_name (context_xim, "preedit_changed");
     }
 
     if (rstr) {
         g_signal_emit_by_name (context, "commit", rstr);
-        free(rstr);
+        free (rstr);
     }
 
     if (!has_str && context_pe_started) {
-        clear_preedit(context_xim);
+        clear_preedit (context_xim);
         context_xim->pe_started = FALSE;
         g_signal_emit_by_name (context, "preedit-end");
     }
 
-
     return result;
 }
 
-
-static void gtk_im_context_hime_focus_in(GtkIMContext *context)
-{
+static void gtk_im_context_hime_focus_in (GtkIMContext *context) {
     GtkIMContextHIME *context_xim = GTK_IM_CONTEXT_HIME (context);
     if (context_xim->hime_ch) {
-        hime_im_client_focus_in(context_xim->hime_ch);
+        hime_im_client_focus_in (context_xim->hime_ch);
     }
 
     return;
 }
 
-static void gtk_im_context_hime_focus_out(GtkIMContext *context)
-{
+static void gtk_im_context_hime_focus_out (GtkIMContext *context) {
     GtkIMContextHIME *context_xim = GTK_IM_CONTEXT_HIME (context);
 
     if (context_xim->hime_ch) {
         char *rstr;
-        hime_im_client_focus_out2(context_xim->hime_ch , &rstr);
+        hime_im_client_focus_out2 (context_xim->hime_ch, &rstr);
         context_xim->pe_started = FALSE;
 
         if (rstr) {
             g_signal_emit_by_name (context, "commit", rstr);
-            clear_preedit(context_xim);
-            g_signal_emit_by_name(context, "preedit_changed");
-            free(rstr);
+            clear_preedit (context_xim);
+            g_signal_emit_by_name (context, "preedit_changed");
+            free (rstr);
         }
-
     }
 
     return;
 }
 
-
-static void gtk_im_context_hime_set_cursor_location(GtkIMContext *context, GdkRectangle *area)
-{
+static void gtk_im_context_hime_set_cursor_location (GtkIMContext *context, GdkRectangle *area) {
     if (!area) {
         return;
     }
@@ -410,40 +376,36 @@ static void gtk_im_context_hime_set_cursor_location(GtkIMContext *context, GdkRe
     GtkIMContextHIME *context_xim = GTK_IM_CONTEXT_HIME (context);
 
     if (!context_xim->hime_ch) {
-        get_im(context_xim);
+        get_im (context_xim);
     }
 
     if (context_xim->hime_ch) {
-        hime_im_client_set_cursor_location(context_xim->hime_ch, area->x, area->y + area->height);
+        hime_im_client_set_cursor_location (context_xim->hime_ch, area->x, area->y + area->height);
     }
 
     return;
 }
 
-
-static void gtk_im_context_hime_set_use_preedit(GtkIMContext *context, gboolean use_preedit)
-{
+static void gtk_im_context_hime_set_use_preedit (GtkIMContext *context, gboolean use_preedit) {
     GtkIMContextHIME *context_hime = GTK_IM_CONTEXT_HIME (context);
     if (!context_hime->hime_ch)
         return;
     int ret;
     if (use_preedit)
-        hime_im_client_set_flags(context_hime->hime_ch, FLAG_HIME_client_handle_use_preedit, &ret);
+        hime_im_client_set_flags (context_hime->hime_ch, FLAG_HIME_client_handle_use_preedit, &ret);
     else
-        hime_im_client_clear_flags(context_hime->hime_ch, FLAG_HIME_client_handle_use_preedit, &ret);
+        hime_im_client_clear_flags (context_hime->hime_ch, FLAG_HIME_client_handle_use_preedit, &ret);
 }
 
-
-static void gtk_im_context_hime_reset(GtkIMContext *context)
-{
+static void gtk_im_context_hime_reset (GtkIMContext *context) {
     GtkIMContextHIME *context_hime = GTK_IM_CONTEXT_HIME (context);
 
     context_hime->pe_started = FALSE;
     if (context_hime->hime_ch) {
-        hime_im_client_reset(context_hime->hime_ch);
+        hime_im_client_reset (context_hime->hime_ch);
         if (context_hime->pe_str && context_hime->pe_str[0]) {
-            clear_preedit(context_hime);
-            g_signal_emit_by_name(context, "preedit_changed");
+            clear_preedit (context_hime);
+            g_signal_emit_by_name (context, "preedit_changed");
         }
     }
 }
@@ -452,8 +414,7 @@ static void gtk_im_context_hime_reset(GtkIMContext *context)
  * Mask of feedback bits that we render
  */
 
-static void add_preedit_attr (PangoAttrList *attrs, const gchar *str,  HIME_PREEDIT_ATTR *att)
-{
+static void add_preedit_attr (PangoAttrList *attrs, const gchar *str, HIME_PREEDIT_ATTR *att) {
     PangoAttribute *attr;
     gint start_index = g_utf8_offset_to_pointer (str, att->ofs0) - str;
     gint end_index = g_utf8_offset_to_pointer (str, att->ofs1) - str;
@@ -478,17 +439,16 @@ static void add_preedit_attr (PangoAttrList *attrs, const gchar *str,  HIME_PREE
     }
 }
 
-static void gtk_im_context_hime_get_preedit_string(
+static void gtk_im_context_hime_get_preedit_string (
     GtkIMContext *context,
     gchar **str,
     PangoAttrList **attrs,
-    gint *cursor_pos)
-{
+    gint *cursor_pos) {
     GtkIMContextHIME *context_hime = GTK_IM_CONTEXT_HIME (context);
 
     if (context_hime->hime_ch && cursor_pos) {
         int ret;
-        hime_im_client_set_flags(context_hime->hime_ch, FLAG_HIME_client_handle_use_preedit, &ret);
+        hime_im_client_set_flags (context_hime->hime_ch, FLAG_HIME_client_handle_use_preedit, &ret);
     }
 
     if (cursor_pos)
@@ -501,8 +461,8 @@ static void gtk_im_context_hime_get_preedit_string(
         return;
 
     if (!context_hime->hime_ch) {
-empty:
-        *str=g_strdup("");
+    empty:
+        *str = g_strdup ("");
         return;
     }
 
@@ -511,19 +471,17 @@ empty:
     }
 
     if (context_hime->pe_str) {
-        *str=g_strdup(context_hime->pe_str);
+        *str = g_strdup (context_hime->pe_str);
     } else {
         goto empty;
     }
 
     int i;
     if (attrs)
-        for(i=0; i < context_hime->pe_attN; i++) {
-            add_preedit_attr(*attrs, *str, &(context_hime->pe_att[i]));
+        for (i = 0; i < context_hime->pe_attN; i++) {
+            add_preedit_attr (*attrs, *str, &(context_hime->pe_att[i]));
         }
-
 }
-
 
 /**
  * gtk_im_context_hime_shutdown:
@@ -531,6 +489,5 @@ empty:
  * Destroys all the status windows that are kept by the HIME contexts.  This
  * function should only be called by the HIME module exit routine.
  **/
-void gtk_im_context_hime_shutdown(void)
-{
+void gtk_im_context_hime_shutdown (void) {
 }

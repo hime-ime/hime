@@ -19,21 +19,18 @@
 #ifndef HIME_QT4_HIME_QT_H
 #define HIME_QT4_HIME_QT_H
 
+#include "hime-common-qt.h"
 #include <QObject>
 #include <QSocketNotifier>
 
-#include "hime-common-qt.h"
-
-
-class HIMEQt: public QObject
-{
+class HIMEQt : public QObject {
 
     Q_OBJECT
 
-public slots:
+  public slots:
     void handle_message ();
 
-public:
+  public:
     /**
      * Constructor.
      */
@@ -54,11 +51,11 @@ public:
      */
     void messenger_closed ();
 
-private:
+  private:
     /**
      * The notifier for the messenger socket.
      */
     QSocketNotifier *socket_notifier;
 };
 
-#endif  /* HIME_QT4_HIME_QT_H */
+#endif /* HIME_QT4_HIME_QT_H */

@@ -18,44 +18,45 @@
 #ifndef CHEWING_H
 #define CHEWING_H
 
-#include <chewing.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <stdint.h>
 
-#include "hime.h"
-#include "pho.h"
-#include "gst.h"
-#include "im-client/hime-im-client-attr.h"
-#include "hime-module.h"
-#include "hime-module-cb.h"
-#include "hime-conf.h"
+#include <chewing.h>
+#include <fcntl.h>
 
-#define MAX_SEG_NUM  128
+#include <sys/stat.h>
+
+#include "hime.h"
+
+#include "gst.h"
+#include "hime-conf.h"
+#include "hime-module-cb.h"
+#include "hime-module.h"
+#include "im-client/hime-im-client-attr.h"
+#include "pho.h"
+
+#define MAX_SEG_NUM 128
 #define HIME_CHEWING_CONFIG "/.config/hime/config/chewing_conf.dat"
 #define HIME_KB_CONFIG "/.config/hime/config/phonetic-keyboard2"
 
-#define HIME_CHEWING_DEFAULT_SELECT_KEYS { '1', '2', '3', '4', \
-                                           '5', '6', '7', '8', \
-                                           '9', '0' }
+#define HIME_CHEWING_DEFAULT_SELECT_KEYS \
+    { '1', '2', '3', '4',                \
+      '5', '6', '7', '8',                \
+      '9', '0' }
 #define HIME_CHEWING_DEFAULT_NUMBER_OF_SELECT_KEYS 10
 
 #define HIME_CHEWING_DEFAULT_KEY_MIN (XK_space)
 #define HIME_CHEWING_DEFAULT_KEY_MAX (XK_asciitilde + 1)
-#define HIME_CHEWING_KEY_MIN         (0x00)
-#define HIME_CHEWING_KEY_MAX         (XK_Delete + 1)
+#define HIME_CHEWING_KEY_MIN (0x00)
+#define HIME_CHEWING_KEY_MAX (XK_Delete + 1)
 
-#define HIME_CHEWING_WRAPPER_FUNC(FUNC_NAME) return (chewing_buffer_Len (g_pChewingCtx) \
-                                             == 0 ? (-1) : FUNC_NAME(g_pChewingCtx));
+#define HIME_CHEWING_WRAPPER_FUNC(FUNC_NAME) return (chewing_buffer_Len (g_pChewingCtx) == 0 ? (-1) : FUNC_NAME (g_pChewingCtx));
 
-typedef struct _SEGMENT 
-{
+typedef struct _SEGMENT {
     GtkWidget *label;
     unsigned char selidx, selN;
 } SEG;
 
-typedef struct KB_MAPPING
-{
+typedef struct KB_MAPPING {
     char *pszHimeKbName;
     char *pszChewingKbName;
 } kbmapping_t;
@@ -64,11 +65,10 @@ typedef struct KB_MAPPING
 int module_init_win (HIME_module_main_functions *pFuncs);
 void module_get_win_geom (void);
 int module_reset (void);
-int module_get_preedit (char *pszStr, HIME_PREEDIT_ATTR attr[],
-                        int *pnCursor, int *pCompFlag);
+int module_get_preedit (char *pszStr, HIME_PREEDIT_ATTR attr[], int *pnCursor, int *pCompFlag);
 gboolean module_feedkey (int nKeyVal, int nKeyState);
 int module_feedkey_release (KeySym xkey, int nKbState);
-void module_move_win(int x, int y);
+void module_move_win (int x, int y);
 void module_change_font_size (void);
 void module_show_win (void);
 void module_hide_win (void);

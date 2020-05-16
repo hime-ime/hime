@@ -53,4 +53,4 @@ config.mak: $(VERSION_FILE) configure
 
 .PHONY: clang-format
 clang-format:
-	clang-format -i **/*.h **/*.c --verbose
+	clang-format -i **/*.h **/*.c **/**/*.h **/**/*.c --verbose
