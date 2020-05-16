@@ -13,8 +13,14 @@ IMMODULES_QUERY=$(GTK_LIBDIR)/libgtk2.0-0/gtk-query-immodules-2.0
 
 
 .SUFFIXES:	.c .o .E
-CFLAGS = $(OPTFLAGS) $(GTKINC) -I../im-client -I.. -DUNIX=1 \
--I../IMdkit/include -DCLIENT_LIB=1 -DFREEBSD=$(FREEBSD)
+CFLAGS = $(OPTFLAGS) $(GTKINC) \
+		-DGDK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED \
+		-DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED \
+		-DG_DISABLE_SINGLE_INCLUDES \
+		-DCLIENT_LIB=1 \
+		-DFREEBSD=$(FREEBSD) \
+		-I../im-client -I.. \
+		-I../IMdkit/include
 
 .c.o:
 	@echo "  $< -> $@"

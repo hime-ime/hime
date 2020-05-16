@@ -174,7 +174,7 @@ static GtkWidget *create_spc_opts()
 {
   GtkWidget *frame = gtk_frame_new(_("Behavior of Space key"));
 
-  opt_spc_opts = gtk_combo_box_new_text ();
+  opt_spc_opts = gtk_combo_box_text_new ();
   gtk_container_add (GTK_CONTAINER (frame), opt_spc_opts);
 
   int i, current_idx=0;
@@ -182,7 +182,7 @@ static GtkWidget *create_spc_opts()
   for(i=0; spc_opts[i].str; i++) {
     if (spc_opts[i].num == gtab_space_auto_first)
       current_idx = i;
-    gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_spc_opts), _(spc_opts[i].str));
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_spc_opts), _(spc_opts[i].str));
   }
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_spc_opts), current_idx);
@@ -192,14 +192,14 @@ static GtkWidget *create_spc_opts()
 
 static GtkWidget *create_auto_select_by_phrase_opts(GtkWidget **out, int val)
 {
-  *out = gtk_combo_box_new_text ();
+  *out = gtk_combo_box_text_new ();
 
   int i, current_idx=0;
 
   for(i=0; auto_select_by_phrase_opts[i].str; i++) {
     if (auto_select_by_phrase_opts[i].num == val)
       current_idx = i;
-    gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (*out), _(auto_select_by_phrase_opts[i].str));
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (*out), _(auto_select_by_phrase_opts[i].str));
   }
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (*out), current_idx);

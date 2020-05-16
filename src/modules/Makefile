@@ -2,21 +2,21 @@ include ../../config.mak
 include ../suffixes-rule.mk
 
 CFLAGS+=-I.. -I../IMdkit/include
-HIME_MODULE=intcode-module.so
+HIME_MODULES=intcode-module.so
 
 ifeq ($(USE_ANTHY),Y)
-HIME_MODULE+=anthy-module.so
+HIME_MODULES+=anthy-module.so
 CFLAGS += $(ANTHY_INC)
 endif
 
 ifeq ($(USE_CHEWING),Y)
-HIME_MODULE+=chewing-module.so
+HIME_MODULES+=chewing-module.so
 CHEWING_DATADIR=$(shell pkg-config --variable=datadir chewing)
 CFLAGS += -DCHEWING_DATADIR=\"$(CHEWING_DATADIR)\" $(shell pkg-config --cflags chewing)
 endif
 
 .PHONY: all
-all:	$(HIME_MODULE)
+all:	$(HIME_MODULES)
 
 anthy_module_so = anthy.pico
 anthy-module.so: $(anthy_module_so)
@@ -36,11 +36,11 @@ chewing-module.so: $(chewing_module_obj) $(chewing_module_so)
 
 .PHONY: install
 install:
-	install $(HIME_MODULE) "$(himelibdir)"
+	install $(HIME_MODULES) "$(himelibdir)"
 
 .PHONY: unintall
 uninstall:
-	cd $(himelibdir) && rm -f $(HIME_MODULE)
+	cd $(himelibdir) && rm -f $(HIME_MODULES)
 
 .PHONY: clean
 clean:

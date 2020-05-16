@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,10 +17,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include "hime.h"
+
+#include "gst.h"
 #include "pho.h"
 #include "win-sym.h"
-#include "gst.h"
+
 
 /* "destroy_window = FALSE" should be ok with both GTK+ 2.x and 3.x
  * gcin use TRUE for GTK+ 3.x, but caleb- always patch it to FALSE
@@ -83,8 +88,6 @@ void change_win0_style()
 #endif
 
 
-void set_label_font_size();
-
 /* there is a bug in gtk, if the widget is created and hasn't been processed by
    gtk_main(), the coodinate of the widget is sometimes invalid.
    We use pre-create to overcome this bug.
@@ -112,58 +115,55 @@ static void mouse_char_callback( GtkWidget *widget,GdkEventButton *event, gpoint
   }
 }
 
-static void create_char(int index)
+static void create_char (int index)
 {
-  int i;
 
-  if (!hbox_edit)
-    return;
+    if (!hbox_edit)
+        return;
 
-  GdkColor fg;
-  gdk_color_parse(hime_win_color_fg, &fg);
-  GdkColor color_bg;
-  gdk_color_parse(tsin_phrase_line_color, &color_bg);
+    GdkColor fg;
+    gdk_color_parse (hime_win_color_fg, &fg);
+    GdkColor color_bg;
+    gdk_color_parse (tsin_phrase_line_color, &color_bg);
 
+    int i = index;
+    {
+        if (chars[i].vbox)
+            return;
 
-  i = index;
-  {
-    if (chars[i].vbox)
-      return;
+        GtkWidget *event_box = gtk_event_box_new ();
+        gtk_event_box_set_visible_window (GTK_EVENT_BOX (event_box), FALSE);
+        chars[i].vbox = event_box;
+        g_signal_connect (
+            G_OBJECT (event_box), "button-press-event",
+            G_CALLBACK (mouse_char_callback), GINT_TO_POINTER (index)
+        );
 
-    GtkWidget *event_box = gtk_event_box_new();
-    gtk_event_box_set_visible_window (GTK_EVENT_BOX(event_box), FALSE);
-    chars[i].vbox = event_box;
-    g_signal_connect (G_OBJECT (event_box), "button-press-event",  G_CALLBACK (mouse_char_callback), GINT_TO_POINTER(index));
+        gtk_box_pack_start (GTK_BOX (hbox_edit), event_box, FALSE, FALSE, 0);
+        GtkWidget *vbox = gtk_vbox_new (FALSE, 0);
+        gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox), GTK_ORIENTATION_VERTICAL);
+        gtk_container_add (GTK_CONTAINER (event_box), vbox);
 
-    gtk_box_pack_start (GTK_BOX (hbox_edit), event_box, FALSE, FALSE, 0);
-    GtkWidget *vbox = gtk_vbox_new (FALSE, 0);
-    gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox), GTK_ORIENTATION_VERTICAL);
-    gtk_container_add(GTK_CONTAINER(event_box), vbox);
+        GtkWidget *label = gtk_label_new (NULL);
+        gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
-    GtkWidget *label = gtk_label_new(NULL);
-    gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+        set_label_font_size(label, hime_font_size);
+        chars[i].label = label;
 
-    set_label_font_size(label, hime_font_size);
-    chars[i].label = label;
-
-    if (hime_win_color_use) {
-#if !GTK_CHECK_VERSION(2,91,6)
-      gtk_widget_modify_fg(label, GTK_STATE_NORMAL, &fg);
+        if (hime_win_color_use) {
+#if !GTK_CHECK_VERSION(3,0,0)
+            gtk_widget_modify_fg (label, GTK_STATE_NORMAL, &fg);
 #else
-      GdkRGBA rgbfg;
-      gdk_rgba_parse(&rgbfg, gdk_color_to_string(&fg));
-      gtk_widget_override_color(label, GTK_STATE_FLAG_NORMAL, &rgbfg);
+            GdkRGBA rgbfg;
+            gdk_rgba_parse (&rgbfg, gdk_color_to_string (&fg));
+            gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &rgbfg);
 #endif
+        }
+        gtk_widget_show_all (event_box);
     }
-
-    gtk_widget_show_all(event_box);
-  }
 }
 
 extern gboolean b_use_full_space;
-
-void set_label_space();
-void set_label_space(GtkWidget *label);
 
 void show_win0();
 
@@ -198,7 +198,7 @@ void hide_char(int index)
   if (!chars[index].vbox)
     return;
   gtk_label_set_text(GTK_LABEL(chars[index].label), "");
-  gtk_widget_hide_all(chars[index].vbox);
+  gtk_widget_hide (chars[index].vbox);
 }
 
 
@@ -234,18 +234,17 @@ void clr_tsin_cursor(int index)
   gtk_label_set_attributes(GTK_LABEL(label), attr_list_blank);
 }
 
-void disp_pho_sub(GtkWidget *label, int index, char *pho);
 void hide_win0();
 
 void disp_tsin_pho(int index, char *pho)
 {
   if (hime_display_on_the_spot_key()) {
-    if (gwin0 && GTK_WIDGET_VISIBLE(gwin0))
+    if (gwin0 && gtk_widget_get_visible (gwin0))
       hide_win0();
     return;
   }
 
-  if (button_pho && !GTK_WIDGET_VISIBLE(button_pho))
+  if (button_pho && !gtk_widget_get_visible (button_pho))
     gtk_widget_show(button_pho);
 
   text_pho_N = pin_juyin?6:3;
@@ -406,7 +405,6 @@ void disp_tsin_eng_pho(int eng_pho)
   gtk_button_set_label(GTK_BUTTON(button_eng_ph), _(eng_pho_strs[eng_pho]));
 }
 
-void exec_hime_setup();
 
 static void mouse_button_callback( GtkWidget *widget,GdkEventButton *event, gpointer data)
 {
@@ -426,7 +424,6 @@ static void mouse_button_callback( GtkWidget *widget,GdkEventButton *event, gpoi
 
 
 void tsin_toggle_eng_ch();
-void set_no_focus();
 
 
 void create_win0()
@@ -609,7 +606,7 @@ void show_win0()
   }
 
 #if 0
-  if (!GTK_WIDGET_VISIBLE(gwin0))
+  if (!gtk_widget_get_visible(gwin0))
 #endif
   {
 //    dbg("gtk_widget_show %x\n", gwin0);
@@ -648,41 +645,39 @@ void bell();
 #if USE_TSIN
 void change_tsin_font_size()
 {
-  if (!top_bin)
-    return;
+    if (!top_bin)
+        return;
 
-  GdkColor fg;
-  gdk_color_parse(hime_win_color_fg, &fg);
+    GdkColor fg;
+    gdk_color_parse (hime_win_color_fg, &fg);
 
-  set_label_font_size(label_pho, hime_font_size_tsin_pho_in);
+    set_label_font_size(label_pho, hime_font_size_tsin_pho_in);
 
-  int i;
-  for(i=0; i < MAX_PH_BF_EXT; i++) {
-    GtkWidget *label = chars[i].label;
-    if (!label)
-      continue;
+    int i;
+    for (i=0; i < MAX_PH_BF_EXT; i++) {
+        GtkWidget *label = chars[i].label;
+        if (!label)
+            continue;
 
-    set_label_font_size(label, hime_font_size);
+        set_label_font_size(label, hime_font_size);
 
-    if (hime_win_color_use) {
-#if !GTK_CHECK_VERSION(2,91,6)
-      gtk_widget_modify_fg(label, GTK_STATE_NORMAL, &fg);
+        if (hime_win_color_use) {
+#if !GTK_CHECK_VERSION(3,0,0)
+            gtk_widget_modify_fg(label, GTK_STATE_NORMAL, &fg);
 #else
-      GdkRGBA rgbfg;
-      gdk_rgba_parse(&rgbfg, gdk_color_to_string(&fg));
-      gtk_widget_override_color(label, GTK_STATE_FLAG_NORMAL, &rgbfg);
+            GdkRGBA rgbfg;
+            gdk_rgba_parse (&rgbfg, gdk_color_to_string (&fg));
+            gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &rgbfg);
 #endif
+        }
     }
-  }
 
-  compact_win0();
+    compact_win0();
 
-//  change_win1_font();
 
-  set_win0_bg();
-//  change_tsin_line_color();
+    set_win0_bg();
 }
-#endif
+#endif  // USE_TSIN
 
 
 

@@ -1,19 +1,20 @@
 include ../config.mak
 
-CFLAGS= $(WALL) $(OPTFLAGS) $(GTKINC) \
-		-I./IMdkit/include -I./im-client \
-		-DDOC_DIR=\"$(DOC_DIR)\" \
+CFLAGS= $(OPTFLAGS) $(GTKINC) \
 		-DGDK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED \
-		-DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE \
-		-DG_DISABLE_SINGLE_INCLUDES -DG_DISABLE_DEPRECATED \
+		-DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED \
+		-DG_DISABLE_SINGLE_INCLUDES \
+		-DGSEAL_ENABLE \
 		-DHIME_BIN_DIR=\"$(HIME_BIN_DIR)\" \
 		-DHIME_DEFAULT_ICON_DIR=\"$(HIME_DEFAULT_ICON_DIR)\" \
 		-DHIME_OGG_DIR=\"$(HIME_OGG_DIR)\" \
 		-DHIME_SCRIPT_DIR=\"$(HIME_SCRIPT_DIR)\" \
 		-DHIME_TABLE_DIR=\"$(HIME_TABLE_DIR)\" \
-		-DHIME_VERSION=\"$(shell head -n 1 ../ChangeLog)\" \
-		-DSYS_ICON_DIR=\"$(SYS_ICON_DIR)\" -DFREEBSD=$(FREEBSD) \
-		-DUNIX=1
+		-DHIME_VERSION=\"$(HIME_VERSION)\" \
+		-DDOC_DIR=\"$(DOC_DIR)\" \
+		-DSYS_ICON_DIR=\"$(SYS_ICON_DIR)\" \
+		-DFREEBSD=$(FREEBSD) \
+		-I./IMdkit/include -I./im-client
 
 OBJ_IMSRV = im-addr.o im-dispatch.o im-srv.o hime-crypt.o
 
@@ -63,8 +64,10 @@ OBJS_hime-phoa2d = hime-phoa2d.o pho-sym.o hime-conf.o locale.o \
 
 OBJS_kbmcv = kbmcv.o pho-sym.o util.o locale.o
 
-OBJS_hime-tsd2a32 = hime-tsd2a32.o pho-sym.o pho-dbg.o locale.o util.o \
-	gtab-dbg.o pho2pinyin.o hime-conf.o pinyin.o
+OBJS_hime-tsd2a32 = gtab-dbg.o \
+	hime-conf.o hime-tsd2a32.o \
+	locale.o util.o \
+	pho-dbg.o pho-sym.o pho2pinyin.o pinyin.o
 
 OBJS_cin2gtab     = hime-cin2gtab.o gtab-util.o util.o locale.o
 OBJS_gtab2cin     = hime-gtab2cin.o gtab-util.o util.o locale.o
@@ -102,7 +105,7 @@ endif
 endif
 
 ifeq ($(USE_I18N),Y)
-CFLAGS     += -DHIME_i18n_message=1
+CFLAGS     += -DHIME_I18N_MESSAGE=1
 endif
 
 ifeq ($(USE_TSIN),Y)

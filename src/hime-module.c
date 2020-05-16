@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,14 +17,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include "hime.h"
+
+#include "gst.h"
 #include "gtab.h"
+#include "hime-module.h"
+#include "im-client/hime-im-client-attr.h"
 #include "pho.h"
 #include "tsin.h"
-#include "gst.h"
-#include "im-client/hime-im-client-attr.h"
-#include "hime-module.h"
 #include "win-sym.h"
+
 
 void init_tsin_selection_win(),disp_selections(int x, int y),hide_selections_win();
 void disp_arrow_up(),disp_arrow_down(), set_tsin_pho_mode();
@@ -30,7 +35,6 @@ void set_sele_text(int tN, int i, char *text, int len);
 void tsin_set_eng_ch(int nmod);
 int get_widget_xy(GtkWidget *win, GtkWidget *widget, int *rx, int *ry);
 void get_win_size(GtkWidget *win, int *width, int *height);
-void exec_hime_setup();
 void load_tab_pho_file();
 void clear_sele();
 void send_utf8_ch(char *s);

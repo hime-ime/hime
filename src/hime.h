@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #ifndef HIME_H
 #define HIME_H
 
@@ -28,9 +29,17 @@
 
 #include <gtk/gtk.h>
 
+#include <gdk/gdk.h>
+#if !GTK_CHECK_VERSION(3,0,0)
+#include <gdk/gdkkeysyms.h>
+#endif
+
 #include <X11/Xlib.h>
 
-#if HIME_i18n_message
+/* To get GETTEXT_PACKAGE */
+#include "config.h"
+
+#if HIME_I18N_MESSAGE
 #include <libintl.h>
 #define _(STRING) gettext(STRING)
 #else
@@ -43,7 +52,6 @@
 #include "IMdkit.h"
 #include "Xi18n.h"
 
-#include "hime-gtk-compatible.h"
 
 typedef enum {
   HIME_STATE_DISABLED = 0,
@@ -55,6 +63,9 @@ typedef enum {
    regenerate *.gtab tsin
 */
 #define CH_SZ (4)
+
+#include "gtab.h"
+#include "hime-gtk-compatible.h"
 
 
 #include "IC.h"
@@ -170,14 +181,25 @@ char *half_char_to_full_char(KeySym xkey);
 void send_text(char *text);
 void send_utf8_ch(char *bchar);
 void send_ascii(char key);
-void bell();
-void set_label_font_size(GtkWidget *label, int size);
+
+// hime-common.c
+void bell (void);
+void case_inverse (KeySym *xkey, int shift_m);
+gint64 current_time (void);
+void disp_pho_sub (GtkWidget *label, int index, char *pho);
+void exec_hime_setup (void);
+void set_label_font_size (GtkWidget *label, int size);
+void set_label_space (GtkWidget *label);
+void set_no_focus (GtkWidget *win);
+#if GTK_CHECK_VERSION(3,0,0)
+GdkMonitor *get_primary_monitor (void);
+#endif
+gboolean get_caps_lock_state (void);
+
 void send_hime_message(Display *dpy, char *s);
 void check_CS();
-gint64 current_time();
 void get_win_size(GtkWidget *win, int *width, int *height);
 void change_win_fg_bg(GtkWidget *win, GtkWidget *label);
-void set_no_focus(GtkWidget *win);
 void change_win_bg(GtkWidget *win);
 gboolean hime_edit_display_ap_only();
 gboolean hime_display_on_the_spot_key();

@@ -4,11 +4,16 @@ SOFILE=libhime-im-client.so
 SOFILEVER=libhime-im-client.so.1.2.4
 
 .SUFFIXES:      .c .o .E .cpp
-WALL=-Wall
-CFLAGS+= -DUNIX=1 $(WALL) $(OPTFLAGS) -I. -I.. -I../IMdkit/include $(GTKINC) \
-        -DCLIENT_LIB=1 -DHIME_BIN_DIR=\"$(HIME_BIN_DIR)\" -DUNIX=1 \
-        -DHIME_TABLE_DIR=\"$(HIME_TABLE_DIR)\" \
-        -DFREEBSD=$(FREEBSD) -fPIC
+CFLAGS+= $(OPTFLAGS) $(GTKINC) \
+		-DGDK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED \
+		-DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED \
+		-DG_DISABLE_SINGLE_INCLUDES \
+		-DCLIENT_LIB=1 \
+		-DHIME_BIN_DIR=\"$(HIME_BIN_DIR)\" \
+		-DHIME_TABLE_DIR=\"$(HIME_TABLE_DIR)\" \
+		-DFREEBSD=$(FREEBSD) \
+		-I. -I.. -I../IMdkit/include \
+		-fPIC
 OBJS = hime-im-client.o hime-send.o im-addr.o hime-conf.o util.o hime-crypt-fpic.o
 
 .cpp.E:
@@ -25,6 +30,7 @@ OBJS = hime-im-client.o hime-send.o im-addr.o hime-conf.o util.o hime-crypt-fpic
 
 $(SOFILEVER):   $(OBJS)
 	@echo "linking $@ ..."
+
 # TODO: Drop g_get_tmp_dir() and -lglib-2.0
 ifeq ($(FREEBSD), 0)
 	$(CC) $(SO_FLAGS) -Wl,-soname,libhime-im-client.so.1 $(OBJS) -lX11 -lglib-2.0 -o $@ -L/usr/X11R6/lib
@@ -34,6 +40,9 @@ endif
 	ln -sf $(SOFILEVER) $(SOFILE)
 	ln -sf $(SOFILEVER) $(SOFILE).1
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C ../gtk-im; fi
+	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C ../gtk3-im; fi
+	if [ $(QT4_IM) = 'Y' ]; then $(MAKE) -C ../qt4-im; fi
+	if [ $(QT5_IM) = 'Y' ]; then $(MAKE) -C ../qt5-im; fi
 
 LOCALLIB=/usr/local/$(LIB)
 

@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,23 +17,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 /**
  @file hime-module-cb.c
  @brief Handle module callback.
 
  Find hime modules.
-
 */
 
-#include "hime.h"
-#include "gtab.h"
-#include "pho.h"
-#include "tsin.h"
-#include "gst.h"
-#include "im-client/hime-im-client-attr.h"
-#include "hime-module.h"
-#include "hime-module-cb.h"
+
 #include <dlfcn.h>
+
+#include "hime.h"
+
+#include "hime-module-cb.h"
+
 
 #define SETUP_CB(fn) do { \
 	*(void **) (&st.fn) = dlsym(handle, # fn); \

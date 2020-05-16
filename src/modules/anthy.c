@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,13 +17,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hime.h"
-#include "pho.h"
-#include "gst.h"
-#include "im-client/hime-im-client-attr.h"
-#include "hime-module.h"
-#include "hime-module-cb.h"
+
 #include <anthy/anthy.h>
+
+#include "hime.h"
+
+#include "gst.h"
+#include "hime-module-cb.h"
+#include "hime-module.h"
+#include "im-client/hime-im-client-attr.h"
+#include "pho.h"
+
 
 #if 0
 #if DEBUG
@@ -1299,7 +1305,7 @@ int module_init_win(HIME_module_main_functions *funcs)
 
 int module_win_visible()
 {
-  return GTK_WIDGET_VISIBLE(win_anthy);
+  return gtk_widget_get_visible (win_anthy);
 }
 
 void module_show_win()
@@ -1323,30 +1329,31 @@ void module_hide_win()
   gmf.mf_hide_win_sym();
 }
 
-void module_change_font_size()
+void module_change_font_size (void)
 {
-  dbg("change_anthy_font_size\n");
-  GdkColor fg;
-  gdk_color_parse(*gmf.mf_hime_win_color_fg, &fg);
-#if GTK_CHECK_VERSION(2,91,6)
-  GdkRGBA rgbfg;
-  gdk_rgba_parse(&rgbfg, gdk_color_to_string(&fg));
-#endif
-  gmf.mf_change_win_bg(win_anthy);
-  gmf.mf_change_win_bg(event_box_anthy);
+    GdkColor fg;
+    gdk_color_parse (*gmf.mf_hime_win_color_fg, &fg);
 
-  int i;
-  for(i=0; i < MAX_SEG_N; i++) {
-    GtkWidget *label = seg[i].label;
-    gmf.mf_set_label_font_size(label, *gmf.mf_hime_font_size);
-    if (*gmf.mf_hime_win_color_use) {
-#if !GTK_CHECK_VERSION(2,91,6)
-      gtk_widget_modify_fg(label, GTK_STATE_NORMAL, &fg);
-#else
-      gtk_widget_override_color(label, GTK_STATE_FLAG_NORMAL, &rgbfg);
+#if GTK_CHECK_VERSION(3,0,0)
+    GdkRGBA rgbfg;
+    gdk_rgba_parse (&rgbfg, gdk_color_to_string (&fg));
 #endif
+
+    gmf.mf_change_win_bg (win_anthy);
+    gmf.mf_change_win_bg (event_box_anthy);
+
+    for (int i = 0; i < MAX_SEG_N; i++) {
+        GtkWidget *label = seg[i].label;
+        gmf.mf_set_label_font_size(label, *gmf.mf_hime_font_size);
+
+        if (*gmf.mf_hime_win_color_use) {
+#if !GTK_CHECK_VERSION(3,0,0)
+            gtk_widget_modify_fg (label, GTK_STATE_NORMAL, &fg);
+#else
+            gtk_widget_override_color(label, GTK_STATE_FLAG_NORMAL, &rgbfg);
+#endif
+        }
     }
-  }
 }
 
 void module_move_win(int x, int y)
@@ -1469,7 +1476,7 @@ int module_get_preedit(char *str, HIME_PREEDIT_ATTR attr[], int *pcursor, int *c
   }
 
   *comp_flag = keysN>0;
-  if (win_anthy && GTK_WIDGET_VISIBLE(win_anthy))
+  if (win_anthy && gtk_widget_get_visible (win_anthy))
     *comp_flag|=2;
   if (segN || jpN)
     *comp_flag|=4;

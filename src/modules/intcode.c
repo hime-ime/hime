@@ -1,4 +1,6 @@
-/* Copyright (C) 1994-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 1994-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -180,7 +182,7 @@ int module_get_preedit(char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *co
 {
   *comp_flag = intcode_cin>0;
 #if 1
-  if (gwin_int && GTK_WIDGET_VISIBLE(gwin_int))
+  if (gwin_int && gtk_widget_get_visible (gwin_int))
     *comp_flag|=2;
 #endif
 //  dbg("comp_len %x\n", *sub_comp_len);

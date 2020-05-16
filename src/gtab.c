@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include <regex.h>
 
 #include <sys/stat.h>
@@ -29,6 +30,7 @@
 #include "hime.h"
 #include "pho.h"
 #include "tsin.h"
+
 
 extern gboolean test_mode;
 gboolean gtab_phrase_on();
@@ -352,7 +354,7 @@ static void DispInArea()
 
 //  dbg("sel1st:%d\n", ggg.sel1st_i);
   if (hime_display_on_the_spot_key()) {
-    if (hime_pop_up_win && gwin_gtab && GTK_WIDGET_VISIBLE(gwin_gtab) && poo.same_pho_query_state == SAME_PHO_QUERY_none)
+    if (hime_pop_up_win && gwin_gtab && gtk_widget_get_visible (gwin_gtab) && poo.same_pho_query_state == SAME_PHO_QUERY_none)
       hide_win_gtab();
     return;
   }
@@ -410,7 +412,6 @@ int get_DispInArea_str(char *out)
 
 
 void set_gtab_input_method_name(char *s);
-void case_inverse(KeySym *xkey, int shift_m);
 
 extern unich_t *fullchar[];
 
@@ -986,7 +987,7 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
   if ((tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock) &&
       (key == XK_Caps_Lock)){
     // The CapLock status may be incorrect when XK_Caps_Lock is pressed.
-    gboolean new_tsin_pho_mode = ! gdk_keymap_get_caps_lock_state(gdk_keymap_get_default());
+    gboolean new_tsin_pho_mode = ! get_caps_lock_state();
     if (current_CS->tsin_pho_mode != new_tsin_pho_mode) {
       current_CS->tsin_pho_mode = new_tsin_pho_mode;
       save_CS_current_to_temp();
@@ -1023,7 +1024,7 @@ gboolean feedkey_gtab(KeySym key, int kbstate)
     return feedkey_pho(key, 0);
 
   if (poo.same_pho_query_state == SAME_PHO_QUERY_none && gwin_pho &&
-    GTK_WIDGET_VISIBLE(gwin_pho))
+    gtk_widget_get_visible (gwin_pho))
      hide_win_pho();
 
   if (!tsin_pho_mode()) {

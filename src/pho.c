@@ -1,4 +1,6 @@
-/* Copyright (C) 1994-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 1994-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,23 +17,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hime.h"
-#include "pho.h"
-#include <sys/stat.h>
 #include <stdlib.h>
-#include "gtab.h"
-#include "gst.h"
-#include "pho-status.h"
 
-PHO_ST poo;
+#include <sys/stat.h>
+
+#include "gst.h"
+#include "gtab.h"
+#include "hime.h"
+#include "pho-status.h"
+#include "pho.h"
+
+extern PHO_ST poo;
 
 extern PHO_ITEM *ch_pho;
 
-PHOKBM phkbm;
-extern int text_pho_N;
+extern PHOKBM phkbm;
 gboolean b_hsu_kbm;
 extern PIN_JUYIN *pin_juyin;
-int pin_juyinN;
 
 gboolean full_char_proc(KeySym keysym);
 void hide_win_pho();
@@ -522,7 +524,6 @@ gboolean pre_punctuation(KeySym xkey);
 void pho_play(phokey_t key);
 void close_gtab_pho_win();
 gboolean pre_punctuation_hsu(KeySym xkey);
-void case_inverse(KeySym *xkey, int shift_m);
 
 int feedkey_pho(KeySym xkey, int kbstate)
 {
@@ -850,7 +851,7 @@ extern GtkWidget *gwin_pho;
 int pho_get_preedit(char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *sub_comp_len)
 {
   *sub_comp_len = !typ_pho_empty();;
-  if (gwin_pho && GTK_WIDGET_VISIBLE(gwin_pho))
+  if (gwin_pho && gtk_widget_get_visible (gwin_pho))
     *sub_comp_len|=2;
   *cursor = 0;
   str[0]=0;

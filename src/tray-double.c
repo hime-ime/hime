@@ -17,13 +17,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hime.h"
-#include "pho.h"
-#include "gtab.h"
+
 #include <string.h>
 #include <signal.h>
+
+#include "hime.h"
+
 #include "gst.h"
+#include "gtab.h"
 #include "pho-kbm-name.h"
+#include "pho.h"
 
 extern void destroy_other_tray();
 
@@ -65,7 +68,7 @@ void quit_hime(GtkCheckMenuItem *checkmenuitem, gpointer dat)
   do_exit();
 }
 
-void kbm_toggle(), exec_hime_setup(), quit_hime(), cb_trad2sim(), cb_sim2trad();
+void kbm_toggle(), quit_hime(), cb_trad2sim(), cb_sim2trad();
 
 void cb_trad2sim(GtkCheckMenuItem *checkmenuitem, gpointer dat);
 

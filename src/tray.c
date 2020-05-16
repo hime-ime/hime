@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,11 +17,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hime.h"
-#include "pho.h"
-#include "gtab.h"
+
 #include <signal.h>
+
+#include "hime.h"
+
 #include "gst.h"
+#include "gtab.h"
+#include "pho.h"
 
 #if !GTK_CHECK_VERSION(2,90,6)
 extern GdkPixbuf *gdk_pixbuf_get_from_surface(cairo_surface_t *surface, gint src_x, gint src_y, gint width, gint height);
@@ -40,7 +45,6 @@ static GdkColor blue_color_fg;
 
 #define HIME_TRAY_PNG "hime-tray.png"
 static char pixbuf_ch_fname[512];
-void exec_hime_setup();
 
 void toggle_gb_output();
 extern gboolean gb_output;
@@ -298,7 +302,7 @@ gboolean create_tray(gpointer data)
   pango_font_description_set_size(desc, 9 * PANGO_SCALE);
   pango = gtk_widget_create_pango_layout(wi, NULL);
   pango_layout_set_font_description(pango, desc);
- 
+
   gdk_color_parse("red", &red_color_fg);
   gdk_color_parse("blue", &blue_color_fg);
 

@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,8 +17,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include "hime.h"
+
 #include "win-sym.h"
+
 
 static int current_hime_inner_frame;
 static int current_pho_in_row1;
@@ -29,7 +34,6 @@ static GtkWidget *label_full;
 static GtkWidget *label_key_codes;
 
 void change_pho_font_size();
-void disp_pho_sub(GtkWidget *label, int index, char *pho);
 
 void disp_pho(int index, char *phochar)
 {
@@ -122,7 +126,6 @@ void create_win_pho()
   change_win_bg(gwin_pho);
 }
 
-void exec_hime_setup();
 
 static void mouse_button_callback( GtkWidget *widget,GdkEventButton *event, gpointer data)
 {
@@ -143,114 +146,116 @@ static void mouse_button_callback( GtkWidget *widget,GdkEventButton *event, gpoi
 
 void create_win_pho_gui_simple()
 {
-//  dbg("create_win_pho .....\n");
+    if (top_bin)
+        return;
 
-  if (top_bin)
-    return;
+    GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
+    gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
 
-  GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
-  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_top), GTK_ORIENTATION_VERTICAL);
+    GtkWidget *event_box_pho;
+    if (gtab_in_area_button) {
+        event_box_pho = gtk_button_new ();
+    } else {
+        event_box_pho = gtk_event_box_new ();
+        gtk_event_box_set_visible_window (GTK_EVENT_BOX (event_box_pho), FALSE);
+    }
 
-  GtkWidget *event_box_pho;
-  if (gtab_in_area_button)
-	event_box_pho = gtk_button_new();
-  else {
-	event_box_pho = gtk_event_box_new();
-	gtk_event_box_set_visible_window (GTK_EVENT_BOX(event_box_pho), FALSE);
-  }
+    gtk_container_set_border_width (GTK_CONTAINER (event_box_pho), 0);
 
-  gtk_container_set_border_width (GTK_CONTAINER (event_box_pho), 0);
+    if (hime_inner_frame) {
+        GtkWidget *frame = top_bin = gtk_frame_new (NULL);
+        gtk_container_set_border_width (GTK_CONTAINER (frame), 0);
+        gtk_container_add (GTK_CONTAINER (gwin_pho), frame);
+        gtk_container_add (GTK_CONTAINER (frame), vbox_top);
+        gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_ETCHED_OUT);
+    } else {
+        gtk_container_add (GTK_CONTAINER (gwin_pho), vbox_top);
+        top_bin = vbox_top;
+    }
 
-  if (hime_inner_frame) {
-    GtkWidget *frame = top_bin = gtk_frame_new(NULL);
-    gtk_container_set_border_width (GTK_CONTAINER (frame), 0);
-    gtk_container_add (GTK_CONTAINER(gwin_pho), frame);
-    gtk_container_add (GTK_CONTAINER (frame), vbox_top);
-    gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_ETCHED_OUT);
-  } else {
-    gtk_container_add (GTK_CONTAINER(gwin_pho), vbox_top);
-    top_bin = vbox_top;
-  }
-
-
-  GtkWidget *align = gtk_alignment_new (0, 0, 0, 0);
-  label_pho_sele = gtk_label_new(NULL);
-
-  if (!pho_in_row1) {
-    gtk_box_pack_start (GTK_BOX (vbox_top), align, FALSE, FALSE, 0);
-    gtk_container_add (GTK_CONTAINER (align), label_pho_sele);
-  } else {
-    GtkWidget *hbox_row1 = gtk_hbox_new (FALSE, 0);
-    gtk_box_pack_start (GTK_BOX (vbox_top), hbox_row1, FALSE, FALSE, 0);
-    gtk_box_pack_start (GTK_BOX (hbox_row1), event_box_pho, FALSE, FALSE, 0);
-
-    gtk_box_pack_start (GTK_BOX (hbox_row1), align, FALSE, FALSE, 0);
-    gtk_container_add (GTK_CONTAINER (align), label_pho_sele);
-  }
-
-
-  hbox_row2 = gtk_hbox_new (FALSE, 0);
-  /* This packs the button into the gwin_pho (a gtk container). */
-  gtk_container_add (GTK_CONTAINER (vbox_top), hbox_row2);
-  label_full = gtk_label_new(_("全"));
-  gtk_container_add (GTK_CONTAINER (hbox_row2), label_full);
-
-
-  if (!pho_in_row1)
-    gtk_box_pack_start (GTK_BOX (hbox_row2), event_box_pho, FALSE, FALSE, 0);
-
-  g_signal_connect(G_OBJECT(event_box_pho),"button-press-event",
-                   G_CALLBACK(mouse_button_callback), NULL);
-
-
-  label_pho = gtk_label_new(NULL);
-
-  GtkWidget *frame_pho;
-  if (gtab_in_area_button) {
-	gtk_container_add (GTK_CONTAINER (event_box_pho), label_pho);
-  }
-  else {
-	frame_pho = gtk_frame_new(NULL);
-	gtk_frame_set_shadow_type(GTK_FRAME(frame_pho), GTK_SHADOW_OUT);
-	gtk_container_add (GTK_CONTAINER (event_box_pho), frame_pho);
-	gtk_container_set_border_width (GTK_CONTAINER (frame_pho), 0);
-	gtk_container_add (GTK_CONTAINER (frame_pho), label_pho);
-  }
-
-#if 0
-  if (left_right_button_tips) {
-#if GTK_CHECK_VERSION(2,12,0)
-    gtk_widget_set_tooltip_text (event_box_pho, _("Left:Symbol selection tables  Right:Preferences"));
+#if GTK_CHECK_VERSION(3,0,0)
 #else
-    GtkTooltips *button_gtab_tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (GTK_TOOLTIPS (button_gtab_tips), event_box_pho, _("Left:Symbol selection tables  Right:Preferences"), NULL);
+    GtkWidget *align = gtk_alignment_new (0, 0, 0, 0);
 #endif
-  }
+    label_pho_sele = gtk_label_new(NULL);
+
+    if (!pho_in_row1) {
+#if GTK_CHECK_VERSION(3,0,0)
+        gtk_widget_set_halign(vbox_top, GTK_ALIGN_START);
+        gtk_widget_set_valign(vbox_top, GTK_ALIGN_START);
+        gtk_container_add (GTK_CONTAINER (vbox_top), label_pho_sele);
+#else
+        gtk_box_pack_start (GTK_BOX (vbox_top), align, FALSE, FALSE, 0);
+        gtk_container_add (GTK_CONTAINER (align), label_pho_sele);
 #endif
+    } else {
+        GtkWidget *hbox_row1 = gtk_hbox_new (FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (vbox_top), hbox_row1, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (hbox_row1), event_box_pho, FALSE, FALSE, 0);
 
-  label_key_codes  = gtk_label_new(NULL);
-  gtk_label_set_selectable(GTK_LABEL(label_key_codes), TRUE);
-  gtk_box_pack_start (GTK_BOX (hbox_row2), label_key_codes, FALSE, FALSE, 2);
+#if GTK_CHECK_VERSION(3,0,0)
+        gtk_widget_set_halign(hbox_row1, GTK_ALIGN_START);
+        gtk_widget_set_valign(hbox_row1, GTK_ALIGN_START);
+        gtk_container_add (GTK_CONTAINER (hbox_row1), label_pho_sele);
+#else
+        gtk_box_pack_start (GTK_BOX (hbox_row1), align, FALSE, FALSE, 0);
+        gtk_container_add (GTK_CONTAINER (align), label_pho_sele);
+#endif
+    }
 
-  change_pho_font_size();
 
-  gtk_widget_show_all (gwin_pho);
+    hbox_row2 = gtk_hbox_new (FALSE, 0);
+    /* This packs the button into the gwin_pho (a gtk container). */
+    gtk_container_add (GTK_CONTAINER (vbox_top), hbox_row2);
+    label_full = gtk_label_new (_("全"));
+    gtk_container_add (GTK_CONTAINER (hbox_row2), label_full);
 
-  gtk_widget_hide(label_key_codes);
 
-  gtk_widget_hide(label_full);
+    if (!pho_in_row1)
+        gtk_box_pack_start (GTK_BOX (hbox_row2), event_box_pho, FALSE, FALSE, 0);
+
+    g_signal_connect (
+        G_OBJECT (event_box_pho),"button-press-event",
+        G_CALLBACK (mouse_button_callback), NULL
+    );
+
+    label_pho = gtk_label_new (NULL);
+
+    GtkWidget *frame_pho;
+    if (gtab_in_area_button) {
+        gtk_container_add (GTK_CONTAINER (event_box_pho), label_pho);
+    }
+    else {
+        frame_pho = gtk_frame_new (NULL);
+        gtk_frame_set_shadow_type (GTK_FRAME (frame_pho), GTK_SHADOW_OUT);
+        gtk_container_add (GTK_CONTAINER (event_box_pho), frame_pho);
+        gtk_container_set_border_width (GTK_CONTAINER (frame_pho), 0);
+        gtk_container_add (GTK_CONTAINER (frame_pho), label_pho);
+    }
+
+    label_key_codes  = gtk_label_new (NULL);
+    gtk_label_set_selectable (GTK_LABEL (label_key_codes), TRUE);
+    gtk_box_pack_start (GTK_BOX (hbox_row2), label_key_codes, FALSE, FALSE, 2);
+
+    change_pho_font_size();
+
+    gtk_widget_show_all (gwin_pho);
+
+    gtk_widget_hide(label_key_codes);
+
+    gtk_widget_hide(label_full);
 }
 
 void create_win_pho_gui()
 {
-  create_win_pho_gui_simple();
+    create_win_pho_gui_simple();
 
-  if (pho_hide_row2) {
-    gtk_widget_hide(hbox_row2);
-  }
+    if (pho_hide_row2) {
+        gtk_widget_hide(hbox_row2);
+    }
 
-  current_hime_inner_frame = hime_inner_frame;
-  current_pho_in_row1 = pho_in_row1;
+    current_hime_inner_frame = hime_inner_frame;
+    current_pho_in_row1 = pho_in_row1;
 }
 
 
@@ -265,7 +270,7 @@ void show_win_pho()
   if (hime_pop_up_win && !pho_has_input())
     return;
 
-  if (!GTK_WIDGET_VISIBLE(gwin_pho))
+  if (!gtk_widget_get_visible (gwin_pho))
   {
     gtk_widget_show(gwin_pho);
     move_win_pho(win_x, win_y);
@@ -314,7 +319,7 @@ char *get_full_str();
 void win_pho_disp_half_full()
 {
   if (hime_win_color_use)
-     gtk_label_set_markup(GTK_LABEL(label_pho), get_full_str()); 
+     gtk_label_set_markup(GTK_LABEL(label_pho), get_full_str());
   else
      gtk_label_set_text(GTK_LABEL(label_pho), get_full_str());
 
@@ -346,14 +351,3 @@ void change_pho_font_size()
 
   change_win_fg_bg(gwin_pho, label_pho_sele);
 }
-
-#if 0
-void recreate_win_pho()
-{
-  gtk_widget_destroy(gwin_pho);
-  top_bin = NULL;
-  gwin_pho = NULL;
-  create_win_pho();
-  create_win_pho_gui_simple();
-}
-#endif

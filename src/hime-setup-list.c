@@ -1,4 +1,6 @@
-/* Copyright (C) 2005-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2005-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  * Copyright (C) 2012 Favonia <favonia@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -16,9 +18,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hime.h"
-#include "hime-conf.h"
 #include "gtab.h"
+#include "hime-conf.h"
+#include "hime.h"
 
 struct {
   char *keystr;
@@ -534,7 +536,7 @@ static GtkWidget *create_im_toggle_keys()
   GtkWidget *label = gtk_label_new(_("Toggle input window"));
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
-  opt_im_toggle_keys = gtk_combo_box_new_text ();
+  opt_im_toggle_keys = gtk_combo_box_text_new ();
   gtk_box_pack_start (GTK_BOX (hbox), opt_im_toggle_keys, FALSE, FALSE, 0);
 
   int i, current_idx=0;
@@ -542,7 +544,7 @@ static GtkWidget *create_im_toggle_keys()
   for(i=0; imkeys[i].keystr; i++) {
     if (imkeys[i].keynum == hime_im_toggle_keys)
       current_idx = i;
-    gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_im_toggle_keys), imkeys[i].keystr);
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_im_toggle_keys), imkeys[i].keystr);
   }
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_im_toggle_keys), current_idx);
@@ -556,7 +558,7 @@ static GtkWidget *create_speaker_opts()
 {
   GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
 
-  opt_speaker_opts = gtk_combo_box_new_text ();
+  opt_speaker_opts = gtk_combo_box_text_new ();
   gtk_box_pack_start (GTK_BOX (hbox), opt_speaker_opts, FALSE, FALSE, 0);
 
   int i;
@@ -565,7 +567,7 @@ static GtkWidget *create_speaker_opts()
   for(i=0; i<pho_speakerN; i++) {
     if (imkeys[i].keynum == hime_im_toggle_keys)
       current_idx = i;
-    gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_speaker_opts), pho_speaker[i]);
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_speaker_opts), pho_speaker[i]);
   }
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_speaker_opts), current_idx);

@@ -65,6 +65,8 @@ enum {
 };
 
 
+/* avoid conflict with /usr/include/chewing/global.h */
+#undef MAX_SELKEY
 #define MAX_SELKEY 16
 
 struct TableHead {

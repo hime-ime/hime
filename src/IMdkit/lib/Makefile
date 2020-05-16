@@ -1,6 +1,7 @@
 include ../../../config.mak
 
 CFLAGS +=  -c $(OPTFLAGS) -fno-strength-reduce -DXIM_t -DTRANS_SERVER
+
 ifeq ($(FREEBSD), 0)
   INC = -I../include -I/usr/X11R6/include
 else

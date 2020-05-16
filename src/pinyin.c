@@ -132,8 +132,6 @@ gboolean inph_typ_pho_pinyin(int newkey)
   return PHO_STATUS_OK_NEW|PHO_STATUS_PINYIN_LEFT;
 }
 
-extern int text_pho_N;
-
 void load_pin_juyin()
 {
   text_pho_N = 6;

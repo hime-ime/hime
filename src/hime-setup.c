@@ -19,16 +19,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hime.h"
-#include "gtab.h"
-#include "config.h"
 #include <signal.h>
-#if HIME_i18n_message
-#include <libintl.h>
-#endif
+
+#include "gtab.h"
+#include "hime.h"
 #include "lang.h"
+
+
 GtkWidget *main_window;
-gboolean button_order;
+extern gboolean button_order;
 char utf8_edit[]=HIME_SCRIPT_DIR"/utf8-edit";
 
 static void cb_alt_shift()
@@ -462,7 +461,7 @@ int main(int argc, char **argv)
 
 
 
-#if HIME_i18n_message
+#if HIME_I18N_MESSAGE
   bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
   textdomain(GETTEXT_PACKAGE);
 #endif

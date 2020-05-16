@@ -9,7 +9,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,8 +17,7 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <gtk/gtk.h>
@@ -53,28 +52,29 @@ extern GdkPixbuf *gdk_pixbuf_get_from_surface(cairo_surface_t *surface, gint src
  * This allows you to efficiently read individual pixels on the client side.
  *
  * This function will create an RGB pixbuf with 8 bits per channel with
- * the same size specified by the @width and @height arguments. The pixbuf
- * will contain an alpha channel if the @window contains one.
+ * the size specified by the @width and @height arguments scaled by the
+ * scale factor of @window. The pixbuf will contain an alpha channel if
+ * the @window contains one.
  *
  * If the window is off the screen, then there is no image data in the
  * obscured/offscreen regions to be placed in the pixbuf. The contents of
  * portions of the pixbuf corresponding to the offscreen region are undefined.
  *
- * If the window you're obtaining data from is partially obscured by
+ * If the window you’re obtaining data from is partially obscured by
  * other windows, then the contents of the pixbuf areas corresponding
  * to the obscured regions are undefined.
  *
- * If the window is not mapped (typically because it's iconified/minimized
+ * If the window is not mapped (typically because it’s iconified/minimized
  * or not on the current workspace), then %NULL will be returned.
  *
- * If memory can't be allocated for the return value, %NULL will be returned
+ * If memory can’t be allocated for the return value, %NULL will be returned
  * instead.
  *
  * (In short, there are several ways this function can fail, and if it fails
  *  it returns %NULL; so check the return value.)
  *
- * Return value: (transfer full): A newly-created pixbuf with a reference
- *     count of 1, or %NULL on error
+ * Returns: (nullable) (transfer full): A newly-created pixbuf with a
+ *     reference count of 1, or %NULL on error
  */
 /**
  * gdk_pixbuf_get_from_window is not necessary for hime and
@@ -205,8 +205,8 @@ convert_no_alpha (guchar *dest_data,
  * This function will create an RGB pixbuf with 8 bits per channel.
  * The pixbuf will contain an alpha channel if the @surface contains one.
  *
- * Return value: (transfer full): A newly-created pixbuf with a reference
- *     count of 1, or %NULL on error
+ * Returns: (nullable) (transfer full): A newly-created pixbuf with a
+ *     reference count of 1, or %NULL on error
  */
 GdkPixbuf *
 gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
@@ -228,9 +228,17 @@ gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
                          8,
                          width, height);
 
-  surface = gdk_cairo_surface_coerce_to_image (surface, content,
-                                               src_x, src_y,
-                                               width, height);
+  if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE &&
+      cairo_image_surface_get_format (surface) == gdk_cairo_format_for_content (content))
+    surface = cairo_surface_reference (surface);
+  else
+    {
+      surface = gdk_cairo_surface_coerce_to_image (surface, content,
+						   src_x, src_y,
+						   width, height);
+      src_x = 0;
+      src_y = 0;
+    }
   cairo_surface_flush (surface);
   if (cairo_surface_status (surface) || dest == NULL)
     {
@@ -243,14 +251,14 @@ gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
                    gdk_pixbuf_get_rowstride (dest),
                    cairo_image_surface_get_data (surface),
                    cairo_image_surface_get_stride (surface),
-                   0, 0,
+                   src_x, src_y,
                    width, height);
   else
     convert_no_alpha (gdk_pixbuf_get_pixels (dest),
                       gdk_pixbuf_get_rowstride (dest),
                       cairo_image_surface_get_data (surface),
                       cairo_image_surface_get_stride (surface),
-                      0, 0,
+                      src_x, src_y,
                       width, height);
 
   cairo_surface_destroy (surface);

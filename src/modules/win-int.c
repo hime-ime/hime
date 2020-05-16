@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,13 +17,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "gst.h"
+#include "hime-module-cb.h"
+#include "hime-module.h"
 #include "hime.h"
+#include "im-client/hime-im-client-attr.h"
 #include "intcode.h"
 #include "pho.h"
-#include "gst.h"
-#include "im-client/hime-im-client-attr.h"
-#include "hime-module.h"
-#include "hime-module-cb.h"
 
 GtkWidget *gwin_int;
 extern HIME_module_main_functions gmf;
@@ -66,12 +68,12 @@ static GtkWidget *create_int_opts()
 
   GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
 
-  opt_int_opts = gtk_combo_box_new_text ();
+  opt_int_opts = gtk_combo_box_text_new ();
   gtk_box_pack_start (GTK_BOX (hbox), opt_int_opts, FALSE, FALSE, 0);
 
   int i;
   for(i=0; i < int_selN; i++) {
-    gtk_combo_box_append_text (GTK_COMBO_BOX_TEXT (opt_int_opts), int_sel[i].name);
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_int_opts), int_sel[i].name);
   }
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (opt_int_opts), current_intcode);
@@ -203,7 +205,7 @@ void module_show_win()
     return;
 #endif
 
-  if (!GTK_WIDGET_VISIBLE(gwin_int)) {
+  if (!gtk_widget_get_visible (gwin_int)) {
     gtk_widget_show(gwin_int);
   }
 
@@ -226,7 +228,7 @@ void module_win_geom()
 
 int module_win_visible()
 {
-  return GTK_WIDGET_VISIBLE(gwin_int);
+  return gtk_widget_get_visible (gwin_int);
 }
 
 

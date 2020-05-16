@@ -1,4 +1,6 @@
-/* Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2004-2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,17 +17,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 #include <string.h>
 
-#include "hime.h"
-#include "pho.h"
-#include "tsin.h"
-#include "hime-conf.h"
-#include "tsin-parse.h"
-#include "win-save-phrase.h"
 #include "gst.h"
 #include "gtab.h"
+#include "hime-conf.h"
+#include "hime.h"
 #include "pho-status.h"
+#include "pho.h"
+#include "tsin-parse.h"
+#include "tsin.h"
+#include "win-save-phrase.h"
 
 extern int ph_key_sz;
 extern GtkWidget *gwin1;
@@ -1420,7 +1423,6 @@ static int cursor_delete()
 	return cursor_backspace();
 }
 
-void case_inverse(KeySym *xkey, int shift_m);
 void pho_play(phokey_t key);
 
 int tsin_pho_sel(int c)
@@ -1536,7 +1538,7 @@ int feedkey_pp(KeySym xkey, int kbstate)
 //    dbg("aaa\n");
 
   if (caps_eng_tog) {
-    gboolean new_tsin_pho_mode = ! gdk_keymap_get_caps_lock_state(gdk_keymap_get_default());
+    gboolean new_tsin_pho_mode = ! get_caps_lock_state();
     if (current_CS->tsin_pho_mode != new_tsin_pho_mode) {
       close_selection_win();
       tsin_set_eng_ch(new_tsin_pho_mode);
@@ -2199,7 +2201,7 @@ fin:
 
   *cursor = tss.c_idx;
   *comp_flag = !typ_pho_empty();
-  if (gwin1 && GTK_WIDGET_VISIBLE(gwin1))
+  if (gwin1 && gtk_widget_get_visible (gwin1))
     *comp_flag|=2;
 #if 1
   if (tss.c_len && !ap_only)

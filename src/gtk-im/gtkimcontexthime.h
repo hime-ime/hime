@@ -1,4 +1,6 @@
-/* GTK - The GIMP Toolkit
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * GTK - The GIMP Toolkit
  * Copyright (C) 2000 Red Hat Software
  *
  * This library is free software; you can redistribute it and/or
@@ -16,31 +18,40 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#ifndef HIME_GTKIMCONTEXTHIME_H
+#define HIME_GTKIMCONTEXTHIME_H
+
 #include <gtk/gtk.h>
-#if !GTK_CHECK_VERSION(3,0,0) // latest GTK+ 2.x can drop these, keep them for older GTK+ 2.x
-#include <gtk/gtkimcontext.h>
+#include <gtk/gtkimmodule.h>
+
+#include <gdk/gdkx.h>
+#if !GTK_CHECK_VERSION(3,0,0)
+#include <gdk/gdkkeysyms.h>
 #endif
-#include "gdk/gdkx.h"
+
 #include "../hime-gtk-compatible.h"
+
 
 extern GType gtk_type_im_context_hime;
 
 #define GTK_TYPE_IM_CONTEXT_HIME              gtk_type_im_context_hime
-#define GTK_IM_CONTEXT_HIME(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_IM_CONTEXT_HIME, GtkIMContextHIME))
-#define GTK_IM_CONTEXT_HIME_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_CONTEXT_HIME, GtkIMContextHIMEClass))
-#define GTK_IS_IM_CONTEXT_HIME(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_IM_CONTEXT_HIME))
-#define GTK_IS_IM_CONTEXT_HIME_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IM_CONTEXT_HIME))
-#define GTK_IM_CONTEXT_HIME_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_IM_CONTEXT_HIME, GtkIMContextHIMEClass))
+#define GTK_IM_CONTEXT_HIME(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_HIME, GtkIMContextHIME))
+#define GTK_IM_CONTEXT_HIME_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_CONTEXT_HIME, GtkIMContextHIMEClass))
+#define GTK_IS_IM_CONTEXT_HIME(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_IM_CONTEXT_HIME))
+#define GTK_IS_IM_CONTEXT_HIME_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IM_CONTEXT_HIME))
+#define GTK_IM_CONTEXT_HIME_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IM_CONTEXT_HIME, GtkIMContextHIMEClass))
 
 typedef struct _GtkIMContextHIME       GtkIMContextHIME;
 typedef struct _GtkIMContextHIMEClass  GtkIMContextHIMEClass;
 
 struct _GtkIMContextHIMEClass
 {
-  GtkIMContextClass parent_class;
+    GtkIMContextClass parent_class;
 };
 
 void gtk_im_context_hime_register_type (GTypeModule *type_module);
 GtkIMContext *gtk_im_context_hime_new (void);
 
 void gtk_im_context_hime_shutdown (void);
+
+#endif  /* HIME_GTKIMCONTEXTHIME_H */

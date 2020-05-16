@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,20 +18,18 @@
  */
 
 #include "hime.h"
+
 #include "pho.h"
-#if HIME_i18n_message
-#include <libintl.h>
-#endif
 #include "gst.h"
 #include "tsin.h"
+
 
 static gboolean b_pinyin;
 PIN_JUYIN *pin_juyin;
 int pin_juyinN;
 PHOKBM phkbm;
 PHO_ST poo;
-TSIN_ST tss;
-int text_pho_N;
+int text_pho_N = 3;
 
 void fake_key_typ_pho(phokey_t phokey, u_char rtyp_pho[])
 {

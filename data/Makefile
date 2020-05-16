@@ -4,7 +4,7 @@ SRC_DIR       = ../src
 IM_CLIENT_DIR = $(SRC_DIR)/im-client
 
 .SUFFIXES: .kbmsrc .kbm .cin .gtab
-CFLAGS+= -DUNIX=1 $(WALL) $(OPTFLAGS) $(GTKINC) -I$(SRC_DIR)
+CFLAGS+= $(OPTFLAGS) $(GTKINC) -I$(SRC_DIR)
 export HIME_NO_RELOAD=
 
 DATA=pho.tab2 tsin32.idx gtab.list \

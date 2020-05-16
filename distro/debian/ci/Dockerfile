@@ -1,4 +1,4 @@
-FROM debian:sid
+FROM debian:testing
 
 COPY entrypoint.sh /app/entrypoint.sh
 

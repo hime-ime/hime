@@ -62,6 +62,7 @@ extern PHO_ITEM *ch_pho;
 extern int ch_phoN;
 extern PIN_JUYIN *pin_juyin;
 extern int pin_juyinN;
+extern int text_pho_N;
 
 void pho_load();
 extern char *pho_chars[];
