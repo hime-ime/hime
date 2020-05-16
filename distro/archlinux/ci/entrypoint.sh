@@ -21,7 +21,8 @@ pacman -Syuu --noconfirm --needed \
     anthy \
     libchewing \
     libappindicator-gtk2 \
-    libappindicator-gtk3
+    libappindicator-gtk3 \
+    qt5-base
 
 echo 'en_US.UTF-8 UTF-8' >/etc/locale.gen && locale-gen
 
