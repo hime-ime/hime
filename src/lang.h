@@ -21,6 +21,6 @@
 
 extern gboolean is_chs;
 extern char *tsin32_f;
-void set_is_chs();
+void set_is_chs ();
 
-#endif  /* HIME_LANG_H */
+#endif /* HIME_LANG_H */

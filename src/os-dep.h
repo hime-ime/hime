@@ -20,14 +20,13 @@
 #define HIME_OS_DEP_H
 
 typedef char unich_t;
-void unix_exec(char *fmt,...);
+void unix_exec (char *fmt, ...);
+
+#include <glib.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xlocale.h>
 #include <X11/keysym.h>
-
-#include <glib.h>
-
 #include <gdk/gdkx.h>
 
-#endif  /* HIME_OS_DEP_H */
+#endif /* HIME_OS_DEP_H */

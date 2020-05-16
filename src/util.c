@@ -15,136 +15,128 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "hime.h"
 #include <errno.h>
+
+#include "hime.h"
 
 #if !CLIENT_LIB && DEBUG
 static FILE *out_fp;
 #endif
 
-void p_err(char *fmt,...)
-{
-  va_list args;
-  char out[4096];
+void p_err (char *fmt, ...) {
+    va_list args;
+    char out[4096];
 
-  va_start(args, fmt);
-  vsprintf(out, fmt, args);
-  va_end(args);
+    va_start (args, fmt);
+    vsprintf (out, fmt, args);
+    va_end (args);
 
-  fprintf(stderr, "%s\n", out);
+    fprintf (stderr, "%s\n", out);
 
 #if DEBUG && 1
-  abort();
+    abort ();
 #else
-  if (getenv("HIME_ERR_COREDUMP"))
-    abort();
-  exit(-1);
+    if (getenv ("HIME_ERR_COREDUMP"))
+        abort ();
+    exit (-1);
 #endif
 }
 
 #if !CLIENT_LIB && DEBUG
-static void init_out_fp()
-{
-  if (!out_fp) {
-    if (getenv("HIME_DBG_TMP") || 0) {
-      char fname[64];
-      snprintf(fname, sizeof(fname), "%s/himedbg-%d-%d", g_get_tmp_dir(), getuid(), getpid());
-      out_fp = fopen(fname, "w");
-    }
+static void init_out_fp () {
+    if (!out_fp) {
+        if (getenv ("HIME_DBG_TMP") || 0) {
+            char fname[64];
+            snprintf (fname, sizeof (fname), "%s/himedbg-%d-%d", g_get_tmp_dir (), getuid (), getpid ());
+            out_fp = fopen (fname, "w");
+        }
 
-    if (!out_fp)
-      out_fp = stdout;
-  }
+        if (!out_fp)
+            out_fp = stdout;
+    }
 }
 #endif
 
 #if !CLIENT_LIB
-void dbg_time(char *fmt,...)
-{
+void dbg_time (char *fmt, ...) {
 #if DEBUG
-  va_list args;
-  time_t t;
+    va_list args;
+    time_t t;
 
-  init_out_fp();
+    init_out_fp ();
 
-  time(&t);
-  struct tm *ltime = localtime(&t);
-  dbg("%02d:%02d:%02d ", ltime->tm_hour, ltime->tm_min, ltime->tm_sec);
+    time (&t);
+    struct tm *ltime = localtime (&t);
+    dbg ("%02d:%02d:%02d ", ltime->tm_hour, ltime->tm_min, ltime->tm_sec);
 
-  va_start(args, fmt);
-  vfprintf(out_fp, fmt, args);
-  fflush(out_fp);
-  va_end(args);
+    va_start (args, fmt);
+    vfprintf (out_fp, fmt, args);
+    fflush (out_fp);
+    va_end (args);
 #endif
 }
 #endif
 
 #if DEBUG
-void __hime_dbg_(char *fmt,...)
-{
-  va_list args;
+void __hime_dbg_ (char *fmt, ...) {
+    va_list args;
 
-  init_out_fp();
+    init_out_fp ();
 
-  va_start(args, fmt);
-  vfprintf(out_fp, fmt, args);
-  fflush(out_fp);
-  va_end(args);
+    va_start (args, fmt);
+    vfprintf (out_fp, fmt, args);
+    fflush (out_fp);
+    va_end (args);
 }
 #endif
 
-char *sys_err_strA()
-{
-  return (char *)strerror(errno);
+char *sys_err_strA () {
+    return (char *) strerror (errno);
 }
 
-void *zmalloc(int n)
-{
-  void *p =  malloc(n);
-  bzero(p, n);
-  return p;
+void *zmalloc (int n) {
+    void *p = malloc (n);
+    bzero (p, n);
+    return p;
 }
 #if !HIME_IME
 
-void *memdup(void *p, int n)
-{
-  if (!p || !n)
-    return NULL;
-  void *q;
-  q = malloc(n);
-  memcpy(q, p, n);
-  return q;
+void *memdup (void *p, int n) {
+    if (!p || !n)
+        return NULL;
+    void *q;
+    q = malloc (n);
+    memcpy (q, p, n);
+    return q;
 }
 
 // can handle eol with \n \r \n\r \r\n
-char *myfgets(char *buf, int bufN, FILE *fp)
-{
-	char *out = buf;
-//	int rN = 0;
-	while (!feof(fp) && out - buf < bufN) {
-		char a, b;
-		a = 0;
-		if (fread(&a, 1, 1, fp) != 1)
-			break;
-		if (a =='\n') {
-			b = 0;
-			if (fread(&b, 1, 1, fp)==1)
-				if (b!='\r')
-					fseek(fp, -1, SEEK_CUR);
-			break;
-		} else
-		if (a =='\r') {
-			b = 0;
-			if (fread(&b, 1, 1, fp)==1)
-				if (b!='\n')
-					fseek(fp, -1, SEEK_CUR);
-			break;
-		}
+char *myfgets (char *buf, int bufN, FILE *fp) {
+    char *out = buf;
+    //	int rN = 0;
+    while (!feof (fp) && out - buf < bufN) {
+        char a, b;
+        a = 0;
+        if (fread (&a, 1, 1, fp) != 1)
+            break;
+        if (a == '\n') {
+            b = 0;
+            if (fread (&b, 1, 1, fp) == 1)
+                if (b != '\r')
+                    fseek (fp, -1, SEEK_CUR);
+            break;
+        } else if (a == '\r') {
+            b = 0;
+            if (fread (&b, 1, 1, fp) == 1)
+                if (b != '\n')
+                    fseek (fp, -1, SEEK_CUR);
+            break;
+        }
 
-		*(out++) = a;
-	}
+        *(out++) = a;
+    }
 
-	*out = 0;
-	return buf;
+    *out = 0;
+    return buf;
 }
 #endif

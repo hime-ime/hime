@@ -19,10 +19,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include "hime.h"
+
 #include "gst.h"
 #include "hime-module-cb.h"
 #include "hime-module.h"
-#include "hime.h"
 #include "im-client/hime-im-client-attr.h"
 #include "pho.h"
 #include "tsin.h"
@@ -30,16 +31,15 @@
 /* XXX UI states hold uncommited preference.
  * That's why we need these global variables. */
 static GtkWidget *check_button_root_style_use,
-                 *check_button_hime_pop_up_win,
-                 *check_button_hime_inner_frame,
-		 *check_button_hime_show_win_kbm,
+    *check_button_hime_pop_up_win,
+    *check_button_hime_inner_frame,
+    *check_button_hime_show_win_kbm,
 #if TRAY_ENABLED
-                 *check_button_hime_status_tray,
-                 *check_button_hime_tray_hf_win_kbm,
+    *check_button_hime_status_tray,
+    *check_button_hime_tray_hf_win_kbm,
 #endif
-                 *check_button_hime_win_color_use,
-                 *check_button_hime_on_the_spot_key;
-
+    *check_button_hime_win_color_use,
+    *check_button_hime_on_the_spot_key;
 
 static GtkWidget *appearance_widget;
 static GtkWidget *opt_hime_icon_dir_display;
@@ -51,501 +51,474 @@ static GtkWidget *opt_hime_tray_display;
 #endif
 
 typedef struct {
-  GdkColor *color;
-  char **color_str;
-  GtkWidget *color_selector;
-  unich_t *title;
+    GdkColor *color;
+    char **color_str;
+    GtkWidget *color_selector;
+    unich_t *title;
 } COLORSEL;
 
 typedef struct {
-  unich_t *name;
-  char *path;
+    unich_t *name;
+    char *path;
 } ICON_DIR_SEL;
 
 ICON_DIR_SEL icon_dir_sel[] =
-  { {N_("Default"), "DEFAULT"},
-    {N_("Pink"), "pink"},
-    {N_("Grey"), "gray"},
-    {N_("Dark"), "dark"},
-    {N_("Black"), "black"}
-  };
+    {{N_ ("Default"), "DEFAULT"},
+     {N_ ("Pink"), "pink"},
+     {N_ ("Grey"), "gray"},
+     {N_ ("Dark"), "dark"},
+     {N_ ("Black"), "black"}};
 
 COLORSEL colorsel[4] =
-  { {&hime_win_gcolor_fg, &hime_win_color_fg, NULL, N_("Foreground color")},
-    {&hime_win_gcolor_bg, &hime_win_color_bg, NULL, N_("Background color")},
-    {&hime_sel_key_gcolor, &hime_sel_key_color, NULL, N_("Color of selection key")},
-    {&tsin_cursor_gcolor, &tsin_cursor_color, NULL, N_("Cursor color")}
-  };
+    {{&hime_win_gcolor_fg, &hime_win_color_fg, NULL, N_ ("Foreground color")},
+     {&hime_win_gcolor_bg, &hime_win_color_bg, NULL, N_ ("Background color")},
+     {&hime_sel_key_gcolor, &hime_sel_key_color, NULL, N_ ("Color of selection key")},
+     {&tsin_cursor_gcolor, &tsin_cursor_color, NULL, N_ ("Cursor color")}};
 
 struct {
-  unich_t *keystr;
-  int keynum;
+    unich_t *keystr;
+    int keynum;
 } edit_disp[] = {
-  {N_("Input window"), HIME_EDIT_DISPLAY_OVER_THE_SPOT},
-  {N_("on application window"), HIME_EDIT_DISPLAY_ON_THE_SPOT},
-  {N_("on both windows"),  HIME_EDIT_DISPLAY_BOTH},
-  { NULL, 0},
+    {N_ ("Input window"), HIME_EDIT_DISPLAY_OVER_THE_SPOT},
+    {N_ ("on application window"), HIME_EDIT_DISPLAY_ON_THE_SPOT},
+    {N_ ("on both windows"), HIME_EDIT_DISPLAY_BOTH},
+    {NULL, 0},
 };
 
 #if TRAY_ENABLED
 struct {
-  unich_t *keystr;
-  int keynum;
+    unich_t *keystr;
+    int keynum;
 } tray_disp[] = {
-  {N_("Single icon"), HIME_TRAY_DISPLAY_SINGLE},
-  {N_("Dual icons"), HIME_TRAY_DISPLAY_DOUBLE},
+    {N_ ("Single icon"), HIME_TRAY_DISPLAY_SINGLE},
+    {N_ ("Dual icons"), HIME_TRAY_DISPLAY_DOUBLE},
 #if TRAY_UNITY
-  {N_("AppIndicator"),  HIME_TRAY_DISPLAY_APPINDICATOR},
+    {N_ ("AppIndicator"), HIME_TRAY_DISPLAY_APPINDICATOR},
 #endif
-  { NULL, 0},
+    {NULL, 0},
 };
 #endif
 
-
 static GtkWidget *spinner_hime_font_size_tsin_presel,
-                 *spinner_hime_font_size_symbol,*spinner_hime_font_size_pho_near,
-                 *spinner_hime_font_size_win_kbm,
-                 *spinner_hime_font_size_win_kbm_en,
-                 *spinner_hime_font_size_tsin_pho_in, *spinner_hime_font_size_gtab_in, *spinner_root_style_x,
-                 *spinner_root_style_y, *font_sel;
+    *spinner_hime_font_size_symbol, *spinner_hime_font_size_pho_near,
+    *spinner_hime_font_size_win_kbm,
+    *spinner_hime_font_size_win_kbm_en,
+    *spinner_hime_font_size_tsin_pho_in, *spinner_hime_font_size_gtab_in, *spinner_root_style_x,
+    *spinner_root_style_y, *font_sel;
 
 static GtkWidget *label_win_color_test, *event_box_win_color_test;
 
-void save_appearance_conf()
-{
-  if (appearance_widget == NULL)
-  {
-    fprintf(stderr, "save_appearance_conf: appearance_widget is NULL!\n");
-    return;
-  }
+void save_appearance_conf () {
+    if (appearance_widget == NULL) {
+        fprintf (stderr, "save_appearance_conf: appearance_widget is NULL!\n");
+        return;
+    }
 
-  char fname[128];
-  strcpy(fname, gtk_font_button_get_font_name(GTK_FONT_BUTTON(font_sel)));
-  int len = strlen(fname)-1;
+    char fname[128];
+    strcpy (fname, gtk_font_button_get_font_name (GTK_FONT_BUTTON (font_sel)));
+    int len = strlen (fname) - 1;
 
+    while (len > 0 && isdigit (fname[len])) {
+        len--;
+    }
+    save_hime_conf_int (HIME_FONT_SIZE, atoi (&(fname[len + 1])));
 
-  while (len > 0 && isdigit(fname[len])) {
-       len--;
-  }
-  save_hime_conf_int(HIME_FONT_SIZE, atoi(&(fname[len+1])));
+    while (len > 0 && fname[len] == ' ') {
+        fname[len--] = 0;
+    }
+    save_hime_conf_str (HIME_FONT_NAME, fname);
 
-  while (len > 0 && fname[len]==' ') {
-       fname[len--]=0;
-  }
-  save_hime_conf_str(HIME_FONT_NAME, fname);
+    int font_size_tsin_presel = (int) gtk_spin_button_get_value (GTK_SPIN_BUTTON (spinner_hime_font_size_tsin_presel));
+    save_hime_conf_int (HIME_FONT_SIZE_TSIN_PRESEL, font_size_tsin_presel);
 
-  int font_size_tsin_presel = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_hime_font_size_tsin_presel));
-  save_hime_conf_int(HIME_FONT_SIZE_TSIN_PRESEL, font_size_tsin_presel);
+    int font_size_symbol = (int) gtk_spin_button_get_value (GTK_SPIN_BUTTON (spinner_hime_font_size_symbol));
+    save_hime_conf_int (HIME_FONT_SIZE_SYMBOL, font_size_symbol);
 
-  int font_size_symbol = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_hime_font_size_symbol));
-  save_hime_conf_int(HIME_FONT_SIZE_SYMBOL, font_size_symbol);
+    int font_size_tsin_pho_in = (int) gtk_spin_button_get_value (GTK_SPIN_BUTTON (spinner_hime_font_size_tsin_pho_in));
+    save_hime_conf_int (HIME_FONT_SIZE_TSIN_PHO_IN, font_size_tsin_pho_in);
 
-  int font_size_tsin_pho_in = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_hime_font_size_tsin_pho_in));
-  save_hime_conf_int(HIME_FONT_SIZE_TSIN_PHO_IN, font_size_tsin_pho_in);
+    int font_size_pho_near = (int) gtk_spin_button_get_value (GTK_SPIN_BUTTON (spinner_hime_font_size_pho_near));
+    save_hime_conf_int (HIME_FONT_SIZE_PHO_NEAR, font_size_pho_near);
 
-  int font_size_pho_near = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_hime_font_size_pho_near));
-  save_hime_conf_int(HIME_FONT_SIZE_PHO_NEAR, font_size_pho_near);
+    int font_size_gtab_in = (int) gtk_spin_button_get_value (GTK_SPIN_BUTTON (spinner_hime_font_size_gtab_in));
+    save_hime_conf_int (HIME_FONT_SIZE_GTAB_IN, font_size_gtab_in);
 
-  int font_size_gtab_in = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_hime_font_size_gtab_in));
-  save_hime_conf_int(HIME_FONT_SIZE_GTAB_IN, font_size_gtab_in);
+    int font_size_win_kbm = (int) gtk_spin_button_get_value (GTK_SPIN_BUTTON (spinner_hime_font_size_win_kbm));
+    save_hime_conf_int (HIME_FONT_SIZE_WIN_KBM, font_size_win_kbm);
+    int font_size_win_kbm_en = (int) gtk_spin_button_get_value (GTK_SPIN_BUTTON (spinner_hime_font_size_win_kbm_en));
+    save_hime_conf_int (HIME_FONT_SIZE_WIN_KBM_EN, font_size_win_kbm_en);
 
-  int font_size_win_kbm = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_hime_font_size_win_kbm));
-  save_hime_conf_int(HIME_FONT_SIZE_WIN_KBM, font_size_win_kbm);
-  int font_size_win_kbm_en = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_hime_font_size_win_kbm_en));
-  save_hime_conf_int(HIME_FONT_SIZE_WIN_KBM_EN, font_size_win_kbm_en);
+    int hime_pop_up_win = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_hime_pop_up_win));
+    save_hime_conf_int (HIME_POP_UP_WIN, hime_pop_up_win);
 
-  int hime_pop_up_win = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_pop_up_win));
-  save_hime_conf_int(HIME_POP_UP_WIN, hime_pop_up_win);
+    int hime_root_x = (int) gtk_spin_button_get_value (GTK_SPIN_BUTTON (spinner_root_style_x));
+    save_hime_conf_int (HIME_ROOT_X, hime_root_x);
 
-  int hime_root_x = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_root_style_x));
-  save_hime_conf_int(HIME_ROOT_X, hime_root_x);
+    int hime_root_y = (int) gtk_spin_button_get_value (GTK_SPIN_BUTTON (spinner_root_style_y));
+    save_hime_conf_int (HIME_ROOT_Y, hime_root_y);
 
-  int hime_root_y = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner_root_style_y));
-  save_hime_conf_int(HIME_ROOT_Y, hime_root_y);
+    int style = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_root_style_use)) ? InputStyleRoot : InputStyleOverSpot;
+    save_hime_conf_int (HIME_INPUT_STYLE, style);
 
-  int style = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_root_style_use)) ?
-            InputStyleRoot : InputStyleOverSpot;
-  save_hime_conf_int(HIME_INPUT_STYLE, style);
-
-  save_hime_conf_int(HIME_INNER_FRAME, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_inner_frame)));
+    save_hime_conf_int (HIME_INNER_FRAME, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_hime_inner_frame)));
 #if TRAY_ENABLED
-  save_hime_conf_int(HIME_STATUS_TRAY, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_status_tray)));
+    save_hime_conf_int (HIME_STATUS_TRAY, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_hime_status_tray)));
 #endif
 
-  save_hime_conf_int(HIME_WIN_COLOR_USE, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_win_color_use)));
-  save_hime_conf_str(HIME_WIN_COLOR_FG, hime_win_color_fg);
-  save_hime_conf_str(HIME_WIN_COLOR_BG, hime_win_color_bg);
-  save_hime_conf_str(HIME_SEL_KEY_COLOR, hime_sel_key_color);
-  int idx = gtk_combo_box_get_active(GTK_COMBO_BOX(opt_hime_icon_dir_display));
-  save_hime_conf_str(HIME_ICON_DIR, icon_dir_sel[idx].path);
-  save_hime_conf_str(TSIN_CURSOR_COLOR, tsin_cursor_color);
+    save_hime_conf_int (HIME_WIN_COLOR_USE, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_hime_win_color_use)));
+    save_hime_conf_str (HIME_WIN_COLOR_FG, hime_win_color_fg);
+    save_hime_conf_str (HIME_WIN_COLOR_BG, hime_win_color_bg);
+    save_hime_conf_str (HIME_SEL_KEY_COLOR, hime_sel_key_color);
+    int idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_icon_dir_display));
+    save_hime_conf_str (HIME_ICON_DIR, icon_dir_sel[idx].path);
+    save_hime_conf_str (TSIN_CURSOR_COLOR, tsin_cursor_color);
 
-  save_hime_conf_int(HIME_ON_THE_SPOT_KEY, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_on_the_spot_key)));
-  save_hime_conf_int(KBM_TOGGLE, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_show_win_kbm)));
+    save_hime_conf_int (HIME_ON_THE_SPOT_KEY, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_hime_on_the_spot_key)));
+    save_hime_conf_int (KBM_TOGGLE, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_hime_show_win_kbm)));
 #if TRAY_ENABLED
-  save_hime_conf_int(HIME_TRAY_HF_WIN_KBM, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_tray_hf_win_kbm)));
+    save_hime_conf_int (HIME_TRAY_HF_WIN_KBM, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_hime_tray_hf_win_kbm)));
 #endif
 
-  idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_edit_display));
-  save_hime_conf_int(HIME_EDIT_DISPLAY, edit_disp[idx].keynum);
+    idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_edit_display));
+    save_hime_conf_int (HIME_EDIT_DISPLAY, edit_disp[idx].keynum);
 
 #if TRAY_ENABLED
-  idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_tray_display));
-  save_hime_conf_int(HIME_TRAY_DISPLAY, tray_disp[idx].keynum);
+    idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_tray_display));
+    save_hime_conf_int (HIME_TRAY_DISPLAY, tray_disp[idx].keynum);
 #endif
 
 #if 0
   save_hime_conf_int(HIME_SETUP_WINDOW_TYPE_UTILITY, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_button_hime_setup_window_type_utility)));
 #endif
 
-  save_omni_config();
-  send_hime_message(GDK_DISPLAY(), CHANGE_FONT_SIZE);
+    save_omni_config ();
+    send_hime_message (GDK_DISPLAY (), CHANGE_FONT_SIZE);
 #if TRAY_ENABLED
-  send_hime_message(GDK_DISPLAY(), UPDATE_TRAY);
+    send_hime_message (GDK_DISPLAY (), UPDATE_TRAY);
 #endif
 }
 
-void destroy_appearance_widget ()
-{
-  gtk_widget_destroy(appearance_widget); appearance_widget = NULL;
+void destroy_appearance_widget () {
+    gtk_widget_destroy (appearance_widget);
+    appearance_widget = NULL;
 }
 
-void disp_win_sample();
-static void cb_save_hime_win_color(GtkWidget *widget, gpointer user_data)
-{
-  COLORSEL *sel = (COLORSEL *)user_data;
-  GtkWidget *color_selector = sel->color_selector;
-  gtk_color_selection_get_current_color(GTK_COLOR_SELECTION(gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(color_selector))), sel->color);
-  *sel->color_str = gtk_color_selection_palette_to_string(sel->color, 1);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_win_color_use), TRUE);
-  disp_win_sample();
+void disp_win_sample ();
+static void cb_save_hime_win_color (GtkWidget *widget, gpointer user_data) {
+    COLORSEL *sel = (COLORSEL *) user_data;
+    GtkWidget *color_selector = sel->color_selector;
+    gtk_color_selection_get_current_color (GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (GTK_COLOR_SELECTION_DIALOG (color_selector))), sel->color);
+    *sel->color_str = gtk_color_selection_palette_to_string (sel->color, 1);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_win_color_use), TRUE);
+    disp_win_sample ();
 }
 
-static gboolean cb_hime_win_color( GtkWidget *widget,
-                                   gpointer   data)
-{
-  COLORSEL *sel = (COLORSEL *)data;
-  GtkWidget *color_selector = gtk_color_selection_dialog_new (_(sel->title));
+static gboolean cb_hime_win_color (GtkWidget *widget,
+                                   gpointer data) {
+    COLORSEL *sel = (COLORSEL *) data;
+    GtkWidget *color_selector = gtk_color_selection_dialog_new (_ (sel->title));
 
-  gdk_color_parse(*sel->color_str, sel->color);
+    gdk_color_parse (*sel->color_str, sel->color);
 
-  gtk_color_selection_set_current_color(
-          GTK_COLOR_SELECTION(gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(color_selector))),
-          sel->color);
+    gtk_color_selection_set_current_color (
+        GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (GTK_COLOR_SELECTION_DIALOG (color_selector))),
+        sel->color);
 
-  sel->color_selector = color_selector;
+    sel->color_selector = color_selector;
 
-  gtk_widget_show((GtkWidget*)color_selector);
+    gtk_widget_show ((GtkWidget *) color_selector);
 
-  if (gtk_dialog_run(GTK_DIALOG(color_selector)) == GTK_RESPONSE_OK)
-    cb_save_hime_win_color((GtkWidget *)color_selector, (gpointer) sel);
-  gtk_widget_destroy(color_selector);
+    if (gtk_dialog_run (GTK_DIALOG (color_selector)) == GTK_RESPONSE_OK)
+        cb_save_hime_win_color ((GtkWidget *) color_selector, (gpointer) sel);
+    gtk_widget_destroy (color_selector);
 
-  return TRUE;
+    return TRUE;
 }
 
-void disp_win_sample()
-{
-  dbg("disp_win_sample\n");
-  unich_t tt[512];
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(check_button_hime_win_color_use))) {
-#if !GTK_CHECK_VERSION(2,91,6)
-    gtk_widget_modify_bg(event_box_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_bg);
+void disp_win_sample () {
+    dbg ("disp_win_sample\n");
+    unich_t tt[512];
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_hime_win_color_use))) {
+#if !GTK_CHECK_VERSION(2, 91, 6)
+        gtk_widget_modify_bg (event_box_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_bg);
 #else
-    GdkRGBA rgbbg;
-    gdk_rgba_parse(&rgbbg, gdk_color_to_string(&hime_win_gcolor_bg));
-    gtk_widget_override_background_color(event_box_win_color_test, GTK_STATE_FLAG_NORMAL, &rgbbg);
+        GdkRGBA rgbbg;
+        gdk_rgba_parse (&rgbbg, gdk_color_to_string (&hime_win_gcolor_bg));
+        gtk_widget_override_background_color (event_box_win_color_test, GTK_STATE_FLAG_NORMAL, &rgbbg);
 #endif
 
-#if PANGO_VERSION_CHECK(1,22,0)
-  snprintf
-(tt, sizeof(tt), _("<span foreground=\"%s\" font=\"%d\">7</span><span foreground=\"%s\" font=\"%d\">測</span><span font=\"%d\" foreground=\"white\" background=\"%s\">試</span>"), hime_sel_key_color,
-hime_font_size_tsin_presel, hime_win_color_fg, hime_font_size_tsin_presel, hime_font_size_tsin_presel, tsin_cursor_color);
+#if PANGO_VERSION_CHECK(1, 22, 0)
+        snprintf (tt, sizeof (tt), _ ("<span foreground=\"%s\" font=\"%d\">7</span><span foreground=\"%s\" font=\"%d\">測</span><span font=\"%d\" foreground=\"white\" background=\"%s\">試</span>"), hime_sel_key_color,
+                  hime_font_size_tsin_presel, hime_win_color_fg, hime_font_size_tsin_presel, hime_font_size_tsin_presel, tsin_cursor_color);
 #else
-  snprintf
-(tt, sizeof(tt), _("<span foreground=\"%s\" font_desc=\"%d\">7</span><span foreground=\"%s\" font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"white\" background=\"%s\">試</span>"), hime_sel_key_color,
-hime_font_size_tsin_presel, hime_win_color_fg, hime_font_size_tsin_presel, hime_font_size_tsin_presel, tsin_cursor_color);
+        snprintf (tt, sizeof (tt), _ ("<span foreground=\"%s\" font_desc=\"%d\">7</span><span foreground=\"%s\" font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"white\" background=\"%s\">試</span>"), hime_sel_key_color,
+                  hime_font_size_tsin_presel, hime_win_color_fg, hime_font_size_tsin_presel, hime_font_size_tsin_presel, tsin_cursor_color);
 #endif
-  } else {
-#if !GTK_CHECK_VERSION(2,91,6)
-    gtk_widget_modify_bg(event_box_win_color_test, GTK_STATE_NORMAL, NULL);
+    } else {
+#if !GTK_CHECK_VERSION(2, 91, 6)
+        gtk_widget_modify_bg (event_box_win_color_test, GTK_STATE_NORMAL, NULL);
 #else
-    gtk_widget_override_background_color(event_box_win_color_test, GTK_STATE_FLAG_NORMAL, NULL);
+        gtk_widget_override_background_color (event_box_win_color_test, GTK_STATE_FLAG_NORMAL, NULL);
 #endif
 
-#if PANGO_VERSION_CHECK(1,22,0)
-  snprintf
-(tt, sizeof(tt), _("<span foreground=\"blue\" font=\"%d\">7</span><span font=\"%d\">測</span><span font=\"%d\" foreground=\"white\" background=\"blue\">試</span>"), hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_font_size_tsin_presel);
+#if PANGO_VERSION_CHECK(1, 22, 0)
+        snprintf (tt, sizeof (tt), _ ("<span foreground=\"blue\" font=\"%d\">7</span><span font=\"%d\">測</span><span font=\"%d\" foreground=\"white\" background=\"blue\">試</span>"), hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_font_size_tsin_presel);
 #else
-  snprintf
-(tt, sizeof(tt), _("<span foreground=\"blue\" font_desc=\"%d\">7</span><span font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"white\" background=\"blue\">試</span>"), hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_font_size_tsin_presel);
+        snprintf (tt, sizeof (tt), _ ("<span foreground=\"blue\" font_desc=\"%d\">7</span><span font_desc=\"%d\">測</span><span font_desc=\"%d\" foreground=\"white\" background=\"blue\">試</span>"), hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_font_size_tsin_presel);
 #endif
-
-  }
-
-  gtk_label_set_markup(GTK_LABEL(label_win_color_test), _(tt));
-}
-
-void cb_button_hime_on_the_spot_key(GtkToggleButton *togglebutton, gpointer user_data)
-{
-  if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(togglebutton)))
-    return;
-  int i;
-  for (i=0; edit_disp[i].keystr; i++)
-   if (edit_disp[i].keynum == HIME_EDIT_DISPLAY_ON_THE_SPOT)
-     gtk_combo_box_set_active (GTK_COMBO_BOX (opt_hime_edit_display), i);
-}
-
-void combo_selected(GtkWidget *widget, gpointer window)
-{
-  int idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_edit_display));
-  if (edit_disp[idx].keynum !=  HIME_EDIT_DISPLAY_ON_THE_SPOT) {
-	  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(check_button_hime_on_the_spot_key), FALSE);
-  }
-}
-
-static GtkWidget *create_hime_icon_dir_display()
-{
-  GtkWidget *hbox_hime_icon_dir = gtk_hbox_new(FALSE, 10);
-
-  gtk_orientable_set_orientation(GTK_ORIENTABLE(hbox_hime_icon_dir), GTK_ORIENTATION_HORIZONTAL);
-
-
-  GtkWidget *label = gtk_label_new(_("Icon style"));
-  gtk_box_pack_start(GTK_BOX(hbox_hime_icon_dir), label, FALSE, FALSE, 0);
-  opt_hime_icon_dir_display = gtk_combo_box_text_new ();
-  gtk_box_pack_start(GTK_BOX(hbox_hime_icon_dir), opt_hime_icon_dir_display, FALSE, FALSE, 0);
-  int i, current_idx=0;
-  for(i = 0; i < sizeof(icon_dir_sel)/sizeof(icon_dir_sel[0]); i++) {
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT (opt_hime_icon_dir_display), icon_dir_sel[i].name);
-    if(!strcmp(hime_icon_dir, icon_dir_sel[i].path)){
-      current_idx = i;
     }
-  }
-  gtk_combo_box_set_active(GTK_COMBO_BOX(opt_hime_icon_dir_display), current_idx);
-  return hbox_hime_icon_dir;
+
+    gtk_label_set_markup (GTK_LABEL (label_win_color_test), _ (tt));
 }
 
-static GtkWidget *create_hime_edit_display()
-{
+void cb_button_hime_on_the_spot_key (GtkToggleButton *togglebutton, gpointer user_data) {
+    if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (togglebutton)))
+        return;
+    int i;
+    for (i = 0; edit_disp[i].keystr; i++)
+        if (edit_disp[i].keynum == HIME_EDIT_DISPLAY_ON_THE_SPOT)
+            gtk_combo_box_set_active (GTK_COMBO_BOX (opt_hime_edit_display), i);
+}
 
-  GtkWidget *box = gtk_vbox_new (FALSE, 1);
-  gtk_orientable_set_orientation(GTK_ORIENTABLE(box), GTK_ORIENTATION_VERTICAL);
+void combo_selected (GtkWidget *widget, gpointer window) {
+    int idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_hime_edit_display));
+    if (edit_disp[idx].keynum != HIME_EDIT_DISPLAY_ON_THE_SPOT) {
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_on_the_spot_key), FALSE);
+    }
+}
 
-  GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
-  gtk_box_pack_start (GTK_BOX (box), hbox, FALSE, FALSE, 0);
-  GtkWidget *label = gtk_label_new(_("Editing area"));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+static GtkWidget *create_hime_icon_dir_display () {
+    GtkWidget *hbox_hime_icon_dir = gtk_hbox_new (FALSE, 10);
 
-  opt_hime_edit_display = gtk_combo_box_text_new ();
-  gtk_box_pack_start (GTK_BOX (hbox), opt_hime_edit_display, FALSE, FALSE, 0);
+    gtk_orientable_set_orientation (GTK_ORIENTABLE (hbox_hime_icon_dir), GTK_ORIENTATION_HORIZONTAL);
 
-  int i, current_idx=0;
+    GtkWidget *label = gtk_label_new (_ ("Icon style"));
+    gtk_box_pack_start (GTK_BOX (hbox_hime_icon_dir), label, FALSE, FALSE, 0);
+    opt_hime_icon_dir_display = gtk_combo_box_text_new ();
+    gtk_box_pack_start (GTK_BOX (hbox_hime_icon_dir), opt_hime_icon_dir_display, FALSE, FALSE, 0);
+    int i, current_idx = 0;
+    for (i = 0; i < sizeof (icon_dir_sel) / sizeof (icon_dir_sel[0]); i++) {
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_hime_icon_dir_display), icon_dir_sel[i].name);
+        if (!strcmp (hime_icon_dir, icon_dir_sel[i].path)) {
+            current_idx = i;
+        }
+    }
+    gtk_combo_box_set_active (GTK_COMBO_BOX (opt_hime_icon_dir_display), current_idx);
+    return hbox_hime_icon_dir;
+}
 
-  for(i=0; edit_disp[i].keystr; i++) {
-    if (edit_disp[i].keynum == hime_edit_display)
-      current_idx = i;
-    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_hime_edit_display), _(edit_disp[i].keystr));
-  }
+static GtkWidget *create_hime_edit_display () {
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (opt_hime_edit_display), current_idx);
+    GtkWidget *box = gtk_vbox_new (FALSE, 1);
+    gtk_orientable_set_orientation (GTK_ORIENTABLE (box), GTK_ORIENTATION_VERTICAL);
 
-  check_button_hime_on_the_spot_key = gtk_check_button_new_with_label (_("Show keycodes on application window (OnTheSpot)"));
-  g_signal_connect (G_OBJECT (check_button_hime_on_the_spot_key), "toggled",
-                    G_CALLBACK (cb_button_hime_on_the_spot_key), NULL);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_on_the_spot_key),
-       hime_on_the_spot_key);
-  gtk_box_pack_start (GTK_BOX (box), check_button_hime_on_the_spot_key, FALSE, FALSE, 0);
+    GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
+    gtk_box_pack_start (GTK_BOX (box), hbox, FALSE, FALSE, 0);
+    GtkWidget *label = gtk_label_new (_ ("Editing area"));
+    gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
-  g_signal_connect(G_OBJECT(opt_hime_edit_display), "changed",
-        G_CALLBACK(combo_selected), (gpointer) NULL);
+    opt_hime_edit_display = gtk_combo_box_text_new ();
+    gtk_box_pack_start (GTK_BOX (hbox), opt_hime_edit_display, FALSE, FALSE, 0);
 
-  return box;
+    int i, current_idx = 0;
+
+    for (i = 0; edit_disp[i].keystr; i++) {
+        if (edit_disp[i].keynum == hime_edit_display)
+            current_idx = i;
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_hime_edit_display), _ (edit_disp[i].keystr));
+    }
+
+    gtk_combo_box_set_active (GTK_COMBO_BOX (opt_hime_edit_display), current_idx);
+
+    check_button_hime_on_the_spot_key = gtk_check_button_new_with_label (_ ("Show keycodes on application window (OnTheSpot)"));
+    g_signal_connect (G_OBJECT (check_button_hime_on_the_spot_key), "toggled",
+                      G_CALLBACK (cb_button_hime_on_the_spot_key), NULL);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_on_the_spot_key),
+                                  hime_on_the_spot_key);
+    gtk_box_pack_start (GTK_BOX (box), check_button_hime_on_the_spot_key, FALSE, FALSE, 0);
+
+    g_signal_connect (G_OBJECT (opt_hime_edit_display), "changed",
+                      G_CALLBACK (combo_selected), (gpointer) NULL);
+
+    return box;
 }
 
 #if TRAY_ENABLED
-static GtkWidget *create_hime_tray_display()
-{
+static GtkWidget *create_hime_tray_display () {
 
-  GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
+    GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
 
-  check_button_hime_status_tray = gtk_check_button_new_with_label (_("Enable system tray icon"));
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_status_tray),
-       hime_status_tray);
-  gtk_box_pack_start (GTK_BOX(hbox), check_button_hime_status_tray, FALSE, FALSE, 0);
+    check_button_hime_status_tray = gtk_check_button_new_with_label (_ ("Enable system tray icon"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_status_tray),
+                                  hime_status_tray);
+    gtk_box_pack_start (GTK_BOX (hbox), check_button_hime_status_tray, FALSE, FALSE, 0);
 
-//  GtkWidget *label = gtk_label_new(_("System tray displays as"));
-//  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+    //  GtkWidget *label = gtk_label_new(_("System tray displays as"));
+    //  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
-  opt_hime_tray_display = gtk_combo_box_text_new ();
+    opt_hime_tray_display = gtk_combo_box_text_new ();
 
-  gtk_box_pack_start (GTK_BOX (hbox), opt_hime_tray_display, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox), opt_hime_tray_display, FALSE, FALSE, 0);
 
-  int i, current_idx=0;
+    int i, current_idx = 0;
 
-  for(i=0; tray_disp[i].keystr; i++) {
-    if (tray_disp[i].keynum == hime_tray_display)
-      current_idx = i;
-    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_hime_tray_display), _(tray_disp[i].keystr));
-  }
+    for (i = 0; tray_disp[i].keystr; i++) {
+        if (tray_disp[i].keynum == hime_tray_display)
+            current_idx = i;
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_hime_tray_display), _ (tray_disp[i].keystr));
+    }
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (opt_hime_tray_display), current_idx);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (opt_hime_tray_display), current_idx);
 
-//  g_signal_connect(G_OBJECT(opt_hime_tray_display), "changed",
-//        G_CALLBACK(combo_selected), (gpointer) NULL);
+    //  g_signal_connect(G_OBJECT(opt_hime_tray_display), "changed",
+    //        G_CALLBACK(combo_selected), (gpointer) NULL);
 
-  return hbox;
+    return hbox;
 }
 #endif
 
-static gboolean cb_hime_win_color_use(GtkToggleButton *togglebutton, gpointer user_data)
-{
-  dbg("cb_hime_win_color_use\n");
-  disp_win_sample();
-  return TRUE;
+static gboolean cb_hime_win_color_use (GtkToggleButton *togglebutton, gpointer user_data) {
+    dbg ("cb_hime_win_color_use\n");
+    disp_win_sample ();
+    return TRUE;
 }
 
-GtkWidget *create_appearance_widget()
-{
-  if (appearance_widget != NULL)
-    fprintf(stderr, "create_appearance_widget: appearance_widget was not NULL!\n");
+GtkWidget *create_appearance_widget () {
+    if (appearance_widget != NULL)
+        fprintf (stderr, "create_appearance_widget: appearance_widget was not NULL!\n");
 
-  load_settings();
+    load_settings ();
 
-  GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
-  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_top), GTK_ORIENTATION_VERTICAL);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox_top), 10);
-  appearance_widget = vbox_top;
+    GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
+    gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
+    gtk_container_set_border_width (GTK_CONTAINER (vbox_top), 10);
+    appearance_widget = vbox_top;
 
-  GtkWidget *hbox_hime_font_size = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size, FALSE, FALSE, 0);
+    GtkWidget *hbox_hime_font_size = gtk_hbox_new (FALSE, 10);
+    gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size, FALSE, FALSE, 0);
 
-  GtkWidget *label_hime_font_size = gtk_label_new(_("Main font"));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size), label_hime_font_size, FALSE, FALSE, 0);
-  char tt[128];
-  snprintf(tt, sizeof(tt), "%s %d", hime_font_name, hime_font_size);
-  font_sel = gtk_font_button_new_with_font (tt);
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size), font_sel, FALSE, FALSE, 0);
+    GtkWidget *label_hime_font_size = gtk_label_new (_ ("Main font"));
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size), label_hime_font_size, FALSE, FALSE, 0);
+    char tt[128];
+    snprintf (tt, sizeof (tt), "%s %d", hime_font_name, hime_font_size);
+    font_sel = gtk_font_button_new_with_font (tt);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size), font_sel, FALSE, FALSE, 0);
 
-  GtkWidget *hbox_hime_font_size_symbol = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_symbol, FALSE, FALSE, 0);
-  GtkWidget *label_hime_font_size_symbol = gtk_label_new(_("Font size of symbols window"));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_symbol), label_hime_font_size_symbol, FALSE, FALSE, 0);
-  GtkAdjustment *adj_hime_font_size_symbol =
-   (GtkAdjustment *) gtk_adjustment_new (hime_font_size_symbol, 8.0, 32.0, 1.0, 1.0, 0.0);
-  spinner_hime_font_size_symbol = gtk_spin_button_new (adj_hime_font_size_symbol, 0, 0);
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_symbol), spinner_hime_font_size_symbol, FALSE, FALSE, 0);
+    GtkWidget *hbox_hime_font_size_symbol = gtk_hbox_new (FALSE, 10);
+    gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_symbol, FALSE, FALSE, 0);
+    GtkWidget *label_hime_font_size_symbol = gtk_label_new (_ ("Font size of symbols window"));
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_symbol), label_hime_font_size_symbol, FALSE, FALSE, 0);
+    GtkAdjustment *adj_hime_font_size_symbol =
+        (GtkAdjustment *) gtk_adjustment_new (hime_font_size_symbol, 8.0, 32.0, 1.0, 1.0, 0.0);
+    spinner_hime_font_size_symbol = gtk_spin_button_new (adj_hime_font_size_symbol, 0, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_symbol), spinner_hime_font_size_symbol, FALSE, FALSE, 0);
 
+    GtkWidget *hbox_hime_font_size_tsin_presel = gtk_hbox_new (FALSE, 10);
+    gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_tsin_presel, FALSE, FALSE, 0);
+    GtkWidget *label_hime_font_size_tsin_presel = gtk_label_new (_ ("Font size of Tsin's and gtab's preselection window"));
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_presel), label_hime_font_size_tsin_presel, FALSE, FALSE, 0);
+    GtkAdjustment *adj_hime_font_size_tsin_presel =
+        (GtkAdjustment *) gtk_adjustment_new (hime_font_size_tsin_presel, 8.0, 32.0, 1.0, 1.0, 0.0);
+    spinner_hime_font_size_tsin_presel = gtk_spin_button_new (adj_hime_font_size_tsin_presel, 0, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_presel), spinner_hime_font_size_tsin_presel, FALSE, FALSE, 0);
 
-  GtkWidget *hbox_hime_font_size_tsin_presel = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_tsin_presel, FALSE, FALSE, 0);
-  GtkWidget *label_hime_font_size_tsin_presel = gtk_label_new(_("Font size of Tsin's and gtab's preselection window"));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_presel), label_hime_font_size_tsin_presel, FALSE, FALSE, 0);
-  GtkAdjustment *adj_hime_font_size_tsin_presel =
-   (GtkAdjustment *) gtk_adjustment_new (hime_font_size_tsin_presel, 8.0, 32.0, 1.0, 1.0, 0.0);
-  spinner_hime_font_size_tsin_presel = gtk_spin_button_new (adj_hime_font_size_tsin_presel, 0, 0);
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_presel), spinner_hime_font_size_tsin_presel, FALSE, FALSE, 0);
+    GtkWidget *hbox_hime_font_size_tsin_pho_in = gtk_hbox_new (FALSE, 10);
+    gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
+    GtkWidget *label_hime_font_size_tsin_pho_in = gtk_label_new (_ ("Font size of keycodes for Bopomofo and Tsin"));
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_pho_in), label_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
+    GtkAdjustment *adj_hime_font_size_tsin_pho_in =
+        (GtkAdjustment *) gtk_adjustment_new (hime_font_size_tsin_pho_in, 8.0, 32.0, 1.0, 1.0, 0.0);
+    spinner_hime_font_size_tsin_pho_in = gtk_spin_button_new (adj_hime_font_size_tsin_pho_in, 0, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_pho_in), spinner_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
 
+    GtkWidget *hbox_hime_font_size_pho_near = gtk_hbox_new (FALSE, 10);
+    gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_pho_near, FALSE, FALSE, 0);
+    GtkWidget *label_hime_font_size_pho_near = gtk_label_new (_ ("Font size of similar phonetic choices"));
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_pho_near), label_hime_font_size_pho_near, FALSE, FALSE, 0);
+    GtkAdjustment *adj_hime_font_size_pho_near =
+        (GtkAdjustment *) gtk_adjustment_new (hime_font_size_pho_near, 8.0, 32.0, 1.0, 1.0, 0.0);
+    spinner_hime_font_size_pho_near = gtk_spin_button_new (adj_hime_font_size_pho_near, 0, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_pho_near), spinner_hime_font_size_pho_near, FALSE, FALSE, 0);
 
-  GtkWidget *hbox_hime_font_size_tsin_pho_in = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
-  GtkWidget *label_hime_font_size_tsin_pho_in = gtk_label_new(_("Font size of keycodes for Bopomofo and Tsin"));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_pho_in), label_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
-  GtkAdjustment *adj_hime_font_size_tsin_pho_in =
-   (GtkAdjustment *) gtk_adjustment_new (hime_font_size_tsin_pho_in, 8.0, 32.0, 1.0, 1.0, 0.0);
-  spinner_hime_font_size_tsin_pho_in = gtk_spin_button_new (adj_hime_font_size_tsin_pho_in, 0, 0);
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_pho_in), spinner_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
+    GtkWidget *hbox_hime_font_size_gtab_in = gtk_hbox_new (FALSE, 10);
+    gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_gtab_in, FALSE, FALSE, 0);
+    GtkWidget *label_hime_font_size_gtab_in = gtk_label_new (_ ("Font size of keycodes for gtab"));
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_gtab_in), label_hime_font_size_gtab_in, FALSE, FALSE, 0);
+    GtkAdjustment *adj_hime_font_size_gtab_in =
+        (GtkAdjustment *) gtk_adjustment_new (hime_font_size_gtab_in, 8.0, 32.0, 1.0, 1.0, 0.0);
+    spinner_hime_font_size_gtab_in = gtk_spin_button_new (adj_hime_font_size_gtab_in, 0, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_gtab_in), spinner_hime_font_size_gtab_in, FALSE, FALSE, 0);
 
+    GtkWidget *hbox_hime_font_size_win_kbm = gtk_hbox_new (FALSE, 10);
+    gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_win_kbm, FALSE, FALSE, 0);
+    GtkWidget *label_hime_font_size_win_kbm = gtk_label_new (_ ("Font size of virtual keyboard"));
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), label_hime_font_size_win_kbm, FALSE, FALSE, 0);
+    GtkAdjustment *adj_hime_font_size_win_kbm =
+        (GtkAdjustment *) gtk_adjustment_new (hime_font_size_win_kbm, 8.0, 32.0, 1.0, 1.0, 0.0);
+    spinner_hime_font_size_win_kbm = gtk_spin_button_new (adj_hime_font_size_win_kbm, 0, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), spinner_hime_font_size_win_kbm, FALSE, FALSE, 0);
+    GtkWidget *label_hime_font_size_win_kbm_en = gtk_label_new (_ ("Alphabet-numeric"));
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), label_hime_font_size_win_kbm_en, FALSE, FALSE, 0);
+    GtkAdjustment *adj_hime_font_size_win_kbm_en =
+        (GtkAdjustment *) gtk_adjustment_new (hime_font_size_win_kbm_en, 8.0, 32.0, 1.0, 1.0, 0.0);
+    spinner_hime_font_size_win_kbm_en = gtk_spin_button_new (adj_hime_font_size_win_kbm_en, 0, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), spinner_hime_font_size_win_kbm_en, FALSE, FALSE, 0);
 
-  GtkWidget *hbox_hime_font_size_pho_near = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_pho_near, FALSE, FALSE, 0);
-  GtkWidget *label_hime_font_size_pho_near = gtk_label_new(_("Font size of similar phonetic choices"));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_pho_near), label_hime_font_size_pho_near, FALSE, FALSE, 0);
-  GtkAdjustment *adj_hime_font_size_pho_near =
-   (GtkAdjustment *) gtk_adjustment_new (hime_font_size_pho_near, 8.0, 32.0, 1.0, 1.0, 0.0);
-  spinner_hime_font_size_pho_near = gtk_spin_button_new (adj_hime_font_size_pho_near, 0, 0);
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_pho_near), spinner_hime_font_size_pho_near, FALSE, FALSE, 0);
-
-
-  GtkWidget *hbox_hime_font_size_gtab_in = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_gtab_in, FALSE, FALSE, 0);
-  GtkWidget *label_hime_font_size_gtab_in = gtk_label_new(_("Font size of keycodes for gtab"));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_gtab_in), label_hime_font_size_gtab_in, FALSE, FALSE, 0);
-  GtkAdjustment *adj_hime_font_size_gtab_in =
-   (GtkAdjustment *) gtk_adjustment_new (hime_font_size_gtab_in, 8.0, 32.0, 1.0, 1.0, 0.0);
-  spinner_hime_font_size_gtab_in = gtk_spin_button_new (adj_hime_font_size_gtab_in, 0, 0);
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_gtab_in), spinner_hime_font_size_gtab_in, FALSE, FALSE, 0);
-
-  GtkWidget *hbox_hime_font_size_win_kbm = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_win_kbm, FALSE, FALSE, 0);
-  GtkWidget *label_hime_font_size_win_kbm = gtk_label_new(_("Font size of virtual keyboard"));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), label_hime_font_size_win_kbm, FALSE, FALSE, 0);
-  GtkAdjustment *adj_hime_font_size_win_kbm =
-   (GtkAdjustment *) gtk_adjustment_new (hime_font_size_win_kbm, 8.0, 32.0, 1.0, 1.0, 0.0);
-  spinner_hime_font_size_win_kbm = gtk_spin_button_new (adj_hime_font_size_win_kbm, 0, 0);
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), spinner_hime_font_size_win_kbm, FALSE, FALSE, 0);
-  GtkWidget *label_hime_font_size_win_kbm_en = gtk_label_new(_("Alphabet-numeric"));
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), label_hime_font_size_win_kbm_en, FALSE, FALSE, 0);
-  GtkAdjustment *adj_hime_font_size_win_kbm_en =
-   (GtkAdjustment *) gtk_adjustment_new (hime_font_size_win_kbm_en, 8.0, 32.0, 1.0, 1.0, 0.0);
-  spinner_hime_font_size_win_kbm_en = gtk_spin_button_new (adj_hime_font_size_win_kbm_en, 0, 0);
-  gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), spinner_hime_font_size_win_kbm_en, FALSE, FALSE, 0);
-
-  GtkWidget *hbox_hime_pop_up_win = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX(vbox_top), hbox_hime_pop_up_win, FALSE, FALSE, 0);
-  check_button_hime_pop_up_win = gtk_check_button_new_with_label (_("Popup input window when typing"));
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_pop_up_win),
-       hime_pop_up_win);
-  gtk_box_pack_start (GTK_BOX(hbox_hime_pop_up_win), check_button_hime_pop_up_win, FALSE, FALSE, 0);
+    GtkWidget *hbox_hime_pop_up_win = gtk_hbox_new (FALSE, 10);
+    gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_pop_up_win, FALSE, FALSE, 0);
+    check_button_hime_pop_up_win = gtk_check_button_new_with_label (_ ("Popup input window when typing"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_pop_up_win),
+                                  hime_pop_up_win);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_pop_up_win), check_button_hime_pop_up_win, FALSE, FALSE, 0);
 
 #if TRAY_ENABLED
-  gtk_box_pack_start (GTK_BOX(vbox_top), create_hime_tray_display(), FALSE, FALSE, 0);
-  check_button_hime_tray_hf_win_kbm = gtk_check_button_new_with_label (_("Toggle virtual keyboard by clicking shape tray"));
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_tray_hf_win_kbm),
-       hime_tray_hf_win_kbm);
-  gtk_box_pack_start (GTK_BOX(vbox_top), check_button_hime_tray_hf_win_kbm, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox_top), create_hime_tray_display (), FALSE, FALSE, 0);
+    check_button_hime_tray_hf_win_kbm = gtk_check_button_new_with_label (_ ("Toggle virtual keyboard by clicking shape tray"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_tray_hf_win_kbm),
+                                  hime_tray_hf_win_kbm);
+    gtk_box_pack_start (GTK_BOX (vbox_top), check_button_hime_tray_hf_win_kbm, FALSE, FALSE, 0);
 #endif
-  check_button_hime_show_win_kbm = gtk_check_button_new_with_label (_("Show virtual keyboard on initial"));
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_show_win_kbm), hime_show_win_kbm);
-  gtk_box_pack_start (GTK_BOX(vbox_top), check_button_hime_show_win_kbm, FALSE, FALSE, 0);
+    check_button_hime_show_win_kbm = gtk_check_button_new_with_label (_ ("Show virtual keyboard on initial"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_show_win_kbm), hime_show_win_kbm);
+    gtk_box_pack_start (GTK_BOX (vbox_top), check_button_hime_show_win_kbm, FALSE, FALSE, 0);
 
-  GtkWidget *frame_root_style = gtk_frame_new(_("Fixed input window"));
-  gtk_box_pack_start (GTK_BOX (vbox_top), frame_root_style, FALSE, FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (frame_root_style), 3);
-  GtkWidget *vbox_root_style = gtk_vbox_new (FALSE, 10);
-  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_root_style), GTK_ORIENTATION_VERTICAL);
-  gtk_container_add (GTK_CONTAINER (frame_root_style), vbox_root_style);
+    GtkWidget *frame_root_style = gtk_frame_new (_ ("Fixed input window"));
+    gtk_box_pack_start (GTK_BOX (vbox_top), frame_root_style, FALSE, FALSE, 0);
+    gtk_container_set_border_width (GTK_CONTAINER (frame_root_style), 3);
+    GtkWidget *vbox_root_style = gtk_vbox_new (FALSE, 10);
+    gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_root_style), GTK_ORIENTATION_VERTICAL);
+    gtk_container_add (GTK_CONTAINER (frame_root_style), vbox_root_style);
 
-  GtkWidget *hbox_root_style_use = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX(vbox_root_style), hbox_root_style_use, FALSE, FALSE, 0);
-  check_button_root_style_use = gtk_check_button_new_with_label (_("Enable"));
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_root_style_use),
-       hime_input_style == InputStyleRoot);
-  gtk_box_pack_start (GTK_BOX(hbox_root_style_use), check_button_root_style_use, FALSE, FALSE, 0);
+    GtkWidget *hbox_root_style_use = gtk_hbox_new (FALSE, 10);
+    gtk_box_pack_start (GTK_BOX (vbox_root_style), hbox_root_style_use, FALSE, FALSE, 0);
+    check_button_root_style_use = gtk_check_button_new_with_label (_ ("Enable"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_root_style_use),
+                                  hime_input_style == InputStyleRoot);
+    gtk_box_pack_start (GTK_BOX (hbox_root_style_use), check_button_root_style_use, FALSE, FALSE, 0);
 
-  GtkWidget *label_fix_location = gtk_label_new(_("Fixed position:"));
-  gtk_box_pack_start (GTK_BOX (hbox_root_style_use), label_fix_location, FALSE, FALSE, 0);
+    GtkWidget *label_fix_location = gtk_label_new (_ ("Fixed position:"));
+    gtk_box_pack_start (GTK_BOX (hbox_root_style_use), label_fix_location, FALSE, FALSE, 0);
 
-  GtkAdjustment *adj_root_style_x =
-   (GtkAdjustment *) gtk_adjustment_new (hime_root_x, 0.0, 5120.0, 1.0, 1.0, 0.0);
-  spinner_root_style_x = gtk_spin_button_new (adj_root_style_x, 0, 0);
-  gtk_widget_set_hexpand (spinner_root_style_x, TRUE);
-  gtk_box_pack_start (GTK_BOX(hbox_root_style_use), spinner_root_style_x, FALSE, FALSE, 0);
+    GtkAdjustment *adj_root_style_x =
+        (GtkAdjustment *) gtk_adjustment_new (hime_root_x, 0.0, 5120.0, 1.0, 1.0, 0.0);
+    spinner_root_style_x = gtk_spin_button_new (adj_root_style_x, 0, 0);
+    gtk_widget_set_hexpand (spinner_root_style_x, TRUE);
+    gtk_box_pack_start (GTK_BOX (hbox_root_style_use), spinner_root_style_x, FALSE, FALSE, 0);
 
-  GtkAdjustment *adj_root_style_y =
-   (GtkAdjustment *) gtk_adjustment_new (hime_root_y, 0.0, 2880.0, 1.0, 1.0, 0.0);
-  spinner_root_style_y = gtk_spin_button_new (adj_root_style_y, 0, 0);
-  gtk_widget_set_hexpand (spinner_root_style_y, TRUE);
-  gtk_box_pack_start (GTK_BOX(hbox_root_style_use), spinner_root_style_y, FALSE, FALSE, 0);
+    GtkAdjustment *adj_root_style_y =
+        (GtkAdjustment *) gtk_adjustment_new (hime_root_y, 0.0, 2880.0, 1.0, 1.0, 0.0);
+    spinner_root_style_y = gtk_spin_button_new (adj_root_style_y, 0, 0);
+    gtk_widget_set_hexpand (spinner_root_style_y, TRUE);
+    gtk_box_pack_start (GTK_BOX (hbox_root_style_use), spinner_root_style_y, FALSE, FALSE, 0);
 
-  gtk_box_pack_start (GTK_BOX(vbox_top), create_hime_edit_display(), FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox_top), create_hime_edit_display (), FALSE, FALSE, 0);
 
-  GtkWidget *hbox_hime_inner_frame = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX(vbox_top), hbox_hime_inner_frame, FALSE, FALSE, 0);
-  check_button_hime_inner_frame = gtk_check_button_new_with_label (_("Show frame of input window"));
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_inner_frame),
-       hime_inner_frame);
-  gtk_box_pack_start (GTK_BOX(hbox_hime_inner_frame), check_button_hime_inner_frame, FALSE, FALSE, 0);
+    GtkWidget *hbox_hime_inner_frame = gtk_hbox_new (FALSE, 10);
+    gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_inner_frame, FALSE, FALSE, 0);
+    check_button_hime_inner_frame = gtk_check_button_new_with_label (_ ("Show frame of input window"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_inner_frame),
+                                  hime_inner_frame);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_inner_frame), check_button_hime_inner_frame, FALSE, FALSE, 0);
 
 #if 0
   check_button_hime_setup_window_type_utility = gtk_check_button_new_with_label (_("Set setup windows as UTILITY"));
@@ -554,71 +527,68 @@ GtkWidget *create_appearance_widget()
   gtk_box_pack_start (GTK_BOX(vbox_top), check_button_hime_setup_window_type_utility, FALSE, FALSE, 0);
 #endif
 
+    gtk_box_pack_start (GTK_BOX (vbox_top), create_hime_icon_dir_display (), FALSE, FALSE, 0);
 
-  gtk_box_pack_start (GTK_BOX(vbox_top), create_hime_icon_dir_display(), FALSE, FALSE, 0);
+    GtkWidget *frame_win_color = gtk_frame_new (_ ("Color selection"));
+    gtk_box_pack_start (GTK_BOX (vbox_top), frame_win_color, FALSE, FALSE, 0);
+    gtk_container_set_border_width (GTK_CONTAINER (frame_win_color), 1);
+    GtkWidget *vbox_win_color = gtk_vbox_new (FALSE, 0);
+    gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_win_color), GTK_ORIENTATION_VERTICAL);
+    gtk_container_add (GTK_CONTAINER (frame_win_color), vbox_win_color);
 
+    GtkWidget *hbox_win_color_use = gtk_hbox_new (FALSE, 10);
+    gtk_box_pack_start (GTK_BOX (vbox_win_color), hbox_win_color_use, FALSE, FALSE, 0);
+    check_button_hime_win_color_use = gtk_check_button_new_with_label (_ ("Custom theme color"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_win_color_use),
+                                  hime_win_color_use);
 
+    g_signal_connect (G_OBJECT (check_button_hime_win_color_use), "clicked",
+                      G_CALLBACK (cb_hime_win_color_use), NULL);
 
-  GtkWidget *frame_win_color = gtk_frame_new(_("Color selection"));
-  gtk_box_pack_start (GTK_BOX (vbox_top), frame_win_color, FALSE, FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (frame_win_color), 1);
-  GtkWidget *vbox_win_color = gtk_vbox_new (FALSE, 0);
-  gtk_orientable_set_orientation(GTK_ORIENTABLE(vbox_win_color), GTK_ORIENTATION_VERTICAL);
-  gtk_container_add (GTK_CONTAINER (frame_win_color), vbox_win_color);
+    gtk_box_pack_start (GTK_BOX (hbox_win_color_use), check_button_hime_win_color_use, FALSE, FALSE, 0);
+    event_box_win_color_test = gtk_event_box_new ();
+    // this will make the color test failed
+    //  gtk_event_box_set_visible_window (GTK_EVENT_BOX(event_box_win_color_test), FALSE);
+    gtk_box_pack_start (GTK_BOX (vbox_win_color), event_box_win_color_test, FALSE, FALSE, 0);
+    label_win_color_test = gtk_label_new (NULL);
+    gtk_container_add (GTK_CONTAINER (event_box_win_color_test), label_win_color_test);
+    GtkWidget *hbox_win_color_fbg = gtk_hbox_new (FALSE, 10);
+    gtk_box_pack_start (GTK_BOX (vbox_win_color), hbox_win_color_fbg, FALSE, FALSE, 0);
+    GtkWidget *button_fg = gtk_button_new_with_label (_ ("Foreground color"));
+    gtk_widget_set_hexpand (button_fg, TRUE);
+    gtk_widget_set_halign (button_fg, GTK_ALIGN_FILL);
+    gtk_box_pack_start (GTK_BOX (hbox_win_color_fbg), button_fg, TRUE, TRUE, 0);
+    g_signal_connect (G_OBJECT (button_fg), "clicked",
+                      G_CALLBACK (cb_hime_win_color), &colorsel[0]);
+    gdk_color_parse (hime_win_color_fg, &hime_win_gcolor_fg);
+    //  gtk_widget_modify_fg(label_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_fg);
+    gdk_color_parse (hime_win_color_bg, &hime_win_gcolor_bg);
+    //  gtk_widget_modify_bg(event_box_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_bg);
 
-  GtkWidget *hbox_win_color_use = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX(vbox_win_color), hbox_win_color_use, FALSE, FALSE, 0);
-  check_button_hime_win_color_use = gtk_check_button_new_with_label (_("Custom theme color"));
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_button_hime_win_color_use),
-       hime_win_color_use);
+    GtkWidget *button_bg = gtk_button_new_with_label (_ ("Background color"));
+    gtk_widget_set_hexpand (button_bg, TRUE);
+    gtk_widget_set_halign (button_bg, GTK_ALIGN_FILL);
+    gtk_box_pack_start (GTK_BOX (hbox_win_color_fbg), button_bg, TRUE, TRUE, 0);
+    g_signal_connect (G_OBJECT (button_bg), "clicked",
+                      G_CALLBACK (cb_hime_win_color), &colorsel[1]);
 
-  g_signal_connect (G_OBJECT (check_button_hime_win_color_use), "clicked",
-                    G_CALLBACK (cb_hime_win_color_use), NULL);
+    GtkWidget *button_hime_sel_key_color = gtk_button_new_with_label (_ ("Color of selection key"));
+    gtk_widget_set_hexpand (button_hime_sel_key_color, TRUE);
+    gtk_widget_set_halign (button_hime_sel_key_color, GTK_ALIGN_FILL);
+    g_signal_connect (G_OBJECT (button_hime_sel_key_color), "clicked",
+                      G_CALLBACK (cb_hime_win_color), &colorsel[2]);
+    gdk_color_parse (hime_sel_key_color, &hime_sel_key_gcolor);
+    gtk_box_pack_start (GTK_BOX (hbox_win_color_fbg), button_hime_sel_key_color, TRUE, TRUE, 0);
 
-  gtk_box_pack_start (GTK_BOX(hbox_win_color_use), check_button_hime_win_color_use, FALSE, FALSE, 0);
-  event_box_win_color_test = gtk_event_box_new();
-// this will make the color test failed
-//  gtk_event_box_set_visible_window (GTK_EVENT_BOX(event_box_win_color_test), FALSE);
-  gtk_box_pack_start (GTK_BOX(vbox_win_color), event_box_win_color_test, FALSE, FALSE, 0);
-  label_win_color_test = gtk_label_new(NULL);
-  gtk_container_add (GTK_CONTAINER(event_box_win_color_test), label_win_color_test);
-  GtkWidget *hbox_win_color_fbg = gtk_hbox_new (FALSE, 10);
-  gtk_box_pack_start (GTK_BOX(vbox_win_color), hbox_win_color_fbg, FALSE, FALSE, 0);
-  GtkWidget *button_fg = gtk_button_new_with_label(_("Foreground color"));
-  gtk_widget_set_hexpand (button_fg, TRUE);
-  gtk_widget_set_halign (button_fg, GTK_ALIGN_FILL);
-  gtk_box_pack_start (GTK_BOX(hbox_win_color_fbg), button_fg, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_fg), "clicked",
-                    G_CALLBACK (cb_hime_win_color), &colorsel[0]);
-  gdk_color_parse(hime_win_color_fg, &hime_win_gcolor_fg);
-//  gtk_widget_modify_fg(label_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_fg);
-  gdk_color_parse(hime_win_color_bg, &hime_win_gcolor_bg);
-//  gtk_widget_modify_bg(event_box_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_bg);
+    GtkWidget *button_tsin_cursor_color = gtk_button_new_with_label (_ ("Cursor color"));
+    gtk_widget_set_hexpand (button_tsin_cursor_color, TRUE);
+    gtk_widget_set_halign (button_tsin_cursor_color, GTK_ALIGN_FILL);
+    g_signal_connect (G_OBJECT (button_tsin_cursor_color), "clicked",
+                      G_CALLBACK (cb_hime_win_color), &colorsel[3]);
+    gdk_color_parse (tsin_cursor_color, &tsin_cursor_gcolor);
+    gtk_box_pack_start (GTK_BOX (hbox_win_color_fbg), button_tsin_cursor_color, TRUE, TRUE, 0);
 
-  GtkWidget *button_bg = gtk_button_new_with_label(_("Background color"));
-  gtk_widget_set_hexpand (button_bg, TRUE);
-  gtk_widget_set_halign (button_bg, GTK_ALIGN_FILL);
-  gtk_box_pack_start (GTK_BOX(hbox_win_color_fbg), button_bg, TRUE, TRUE, 0);
-  g_signal_connect (G_OBJECT (button_bg), "clicked",
-                    G_CALLBACK (cb_hime_win_color), &colorsel[1]);
+    disp_win_sample ();
 
-  GtkWidget *button_hime_sel_key_color = gtk_button_new_with_label(_("Color of selection key"));
-  gtk_widget_set_hexpand (button_hime_sel_key_color, TRUE);
-  gtk_widget_set_halign (button_hime_sel_key_color, GTK_ALIGN_FILL);
-  g_signal_connect (G_OBJECT (button_hime_sel_key_color), "clicked",
-                    G_CALLBACK (cb_hime_win_color), &colorsel[2]);
-  gdk_color_parse(hime_sel_key_color, &hime_sel_key_gcolor);
-  gtk_box_pack_start (GTK_BOX(hbox_win_color_fbg), button_hime_sel_key_color, TRUE, TRUE, 0);
-
-  GtkWidget *button_tsin_cursor_color = gtk_button_new_with_label(_("Cursor color"));
-  gtk_widget_set_hexpand (button_tsin_cursor_color, TRUE);
-  gtk_widget_set_halign (button_tsin_cursor_color, GTK_ALIGN_FILL);
-  g_signal_connect (G_OBJECT (button_tsin_cursor_color), "clicked",
-                    G_CALLBACK (cb_hime_win_color), &colorsel[3]);
-  gdk_color_parse(tsin_cursor_color, &tsin_cursor_gcolor);
-  gtk_box_pack_start (GTK_BOX(hbox_win_color_fbg), button_tsin_cursor_color, TRUE, TRUE, 0);
-
-  disp_win_sample();
-
-  return appearance_widget;
+    return appearance_widget;
 }

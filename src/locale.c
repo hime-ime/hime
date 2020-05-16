@@ -18,197 +18,174 @@
 #include "hime.h"
 
 #if !HIME_IME
-void utf8_big5_n(char *s, int len, char out[])
-{
-  out[0]=0;
+void utf8_big5_n (char *s, int len, char out[]) {
+    out[0] = 0;
 
-  GError *err = NULL;
-  gsize rn, wn;
-  char *big5 = g_locale_from_utf8 (s, len, &rn, &wn, &err);
+    GError *err = NULL;
+    gsize rn, wn;
+    char *big5 = g_locale_from_utf8 (s, len, &rn, &wn, &err);
 
-  if (err || !big5) {
-    dbg("utf8_big5 convert error\n");
-//    abort();
-    return;
-  }
+    if (err || !big5) {
+        dbg ("utf8_big5 convert error\n");
+        //    abort();
+        return;
+    }
 
-  strcpy(out, big5);
-  g_free(big5);
+    strcpy (out, big5);
+    g_free (big5);
 }
 
-
-void utf8_big5(char *s, char out[])
-{
-  utf8_big5_n(s, strlen(s), out);
+void utf8_big5 (char *s, char out[]) {
+    utf8_big5_n (s, strlen (s), out);
 }
 #endif
 
+int utf8_sz (char *s) {
+    if (!(*s & 0x80))
+        return 1;
 
-int utf8_sz(char *s)
-{
-  if (!(*s & 0x80))
-    return 1;
+    if ((*s & 0xe0) == 0xc0)
+        return 2;
 
-  if ((*s & 0xe0) == 0xc0)
-    return 2;
+    if ((*s & 0xf0) == 0xe0)
+        return 3;
 
-  if ((*s & 0xf0) == 0xe0)
-    return 3;
+    if ((*s & 0xf8) == 0xf0)
+        return 4;
 
-  if ((*s & 0xf8) == 0xf0)
-    return 4;
-
-  p_err("bad utf8 char %x %c%c%c", *s, *s, *(s+1), *(s+2));
-  return -1;
+    p_err ("bad utf8 char %x %c%c%c", *s, *s, *(s + 1), *(s + 2));
+    return -1;
 }
 
+int utf8cpy (char *t, char *s) {
+    int utf8sz = utf8_sz (s);
 
-int utf8cpy(char *t, char *s)
-{
-  int utf8sz = utf8_sz(s);
-
-  memcpy(t, s, utf8sz);
-  t[utf8sz] = 0;
-  return utf8sz;
+    memcpy (t, s, utf8sz);
+    t[utf8sz] = 0;
+    return utf8sz;
 }
 
 // copy N utf-8 chars
-void utf8cpyN(char *t, char *s, int N)
-{
-  int len = utf8_tlen(s, N);
+void utf8cpyN (char *t, char *s, int N) {
+    int len = utf8_tlen (s, N);
 
-  memcpy(t, s, len);
+    memcpy (t, s, len);
 
-  t[len] = 0;
+    t[len] = 0;
 }
 
+int u8cpy (char *t, char *s) {
+    int utf8sz = utf8_sz (s);
 
-int u8cpy(char *t, char *s)
-{
-  int utf8sz = utf8_sz(s);
-
-  memcpy(t, s, utf8sz);
-  return utf8sz;
+    memcpy (t, s, utf8sz);
+    return utf8sz;
 }
 
+int utf8_tlen (char *s, int N) {
+    int i;
+    char *p = s;
 
-int utf8_tlen(char *s, int N)
-{
-  int i;
-  char *p = s;
+    for (i = 0; i < N; i++) {
+        int len = utf8_sz (p);
+        p += len;
+    }
 
-  for(i=0; i < N; i++) {
-    int len = utf8_sz(p);
-    p+=len;
-  }
-
-  return p - s;
+    return p - s;
 }
 
-int utf8_to_big5(char *in, char *out, int outN);
-void utf8_putchar_fp(FILE *fp, char *s)
-{
-  int i;
-  int len = utf8_sz(s);
-  for(i=0;i<len;i++)
-    fputc(s[i], fp);
+int utf8_to_big5 (char *in, char *out, int outN);
+void utf8_putchar_fp (FILE *fp, char *s) {
+    int i;
+    int len = utf8_sz (s);
+    for (i = 0; i < len; i++)
+        fputc (s[i], fp);
 }
 
-
-void utf8_putchar(char *s)
-{
-	utf8_putchar_fp(stdout, s);
+void utf8_putchar (char *s) {
+    utf8_putchar_fp (stdout, s);
 }
 
-void utf8_putcharn(char *s, int n)
-{
-  int i, ofs;
+void utf8_putcharn (char *s, int n) {
+    int i, ofs;
 
-  for(ofs=i=0; i < n; i++) {
-    utf8_putchar(&s[ofs]);
-    ofs+= utf8_sz(&s[ofs]);
-  }
+    for (ofs = i = 0; i < n; i++) {
+        utf8_putchar (&s[ofs]);
+        ofs += utf8_sz (&s[ofs]);
+    }
 }
 
-gboolean utf8_eq(char *a, char *b)
-{
-  int ta = utf8_sz(a);
-  int tb = utf8_sz(b);
+gboolean utf8_eq (char *a, char *b) {
+    int ta = utf8_sz (a);
+    int tb = utf8_sz (b);
 
-  if (ta != tb)
-    return FALSE;
+    if (ta != tb)
+        return FALSE;
 
-  return !memcmp(a,b, ta);
+    return !memcmp (a, b, ta);
 }
 
-gboolean utf8_str_eq(char *a, char *b, int len)
-{
-  int ta = utf8_tlen(a, len);
-  int tb = utf8_tlen(b, len);
+gboolean utf8_str_eq (char *a, char *b, int len) {
+    int ta = utf8_tlen (a, len);
+    int tb = utf8_tlen (b, len);
 
-  if (ta != tb)
-    return FALSE;
+    if (ta != tb)
+        return FALSE;
 
-  return !memcmp(a, b, ta);
+    return !memcmp (a, b, ta);
 }
 
-int utf8_str_N(char *str)
-{
-  int N=0;
+int utf8_str_N (char *str) {
+    int N = 0;
 
-  while (*str) {
-    str+= utf8_sz(str);
-    N++;
-  }
+    while (*str) {
+        str += utf8_sz (str);
+        N++;
+    }
 
-  return N;
+    return N;
 }
 
 // copy at most n utf-8 chars
-void utf8cpyn(char *t, char *s, int n)
-{
-  int tn=0;
-  int i;
+void utf8cpyn (char *t, char *s, int n) {
+    int tn = 0;
+    int i;
 
-  for (i=0; i < n && *s; i++) {
-    int sz = utf8_sz(s);
+    for (i = 0; i < n && *s; i++) {
+        int sz = utf8_sz (s);
 
-    memcpy(t+tn, s, sz);
-    tn+=sz;
-    s+=sz;
-  }
+        memcpy (t + tn, s, sz);
+        tn += sz;
+        s += sz;
+    }
 
-  t[tn]=0;
+    t[tn] = 0;
 }
-
 
 // copy at most utf-8 bytes
-void utf8cpy_bytes(char *t, char *s, int n)
-{
-  int tn=0;
-  int i;
+void utf8cpy_bytes (char *t, char *s, int n) {
+    int tn = 0;
+    int i;
 
-  for (i=0; tn < n && *s; i++) {
-    int sz = utf8_sz(s);
+    for (i = 0; tn < n && *s; i++) {
+        int sz = utf8_sz (s);
 
-    memcpy(t+tn, s, sz);
-    tn+=sz;
-    s+=sz;
-  }
+        memcpy (t + tn, s, sz);
+        tn += sz;
+        s += sz;
+    }
 
-  t[tn]=0;
+    t[tn] = 0;
 }
 
-char utf8_sigature[]="\xef\xbb\xbf";
+char utf8_sigature[] = "\xef\xbb\xbf";
 
-void skip_utf8_sigature(FILE *fp)
-{
-	char tt[3];
+void skip_utf8_sigature (FILE *fp) {
+    char tt[3];
 
-	tt[0]=0;
-	fread(tt, 1, 3, fp);
-	if (memcmp(tt, utf8_sigature, 3)) {
-//		fseek(fp, 0, SEEK_SET);
-		rewind(fp);
-	}
+    tt[0] = 0;
+    fread (tt, 1, 3, fp);
+    if (memcmp (tt, utf8_sigature, 3)) {
+        //		fseek(fp, 0, SEEK_SET);
+        rewind (fp);
+    }
 }

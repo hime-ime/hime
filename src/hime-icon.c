@@ -16,29 +16,25 @@
  */
 
 #include "hime.h"
+
 #include "hime-conf.h"
-void sys_icon_fname(char *iconame, char fname[])
-{
-  if(!strcmp(hime_icon_dir, "DEFAULT")) {
-    sprintf(fname, HIME_DEFAULT_ICON_DIR"/%s", iconame);
-  }
-  else {
-    sprintf(fname, HIME_DEFAULT_ICON_DIR"/%s/%s", hime_icon_dir, iconame);
-  }
+void sys_icon_fname (char *iconame, char fname[]) {
+    if (!strcmp (hime_icon_dir, "DEFAULT")) {
+        sprintf (fname, HIME_DEFAULT_ICON_DIR "/%s", iconame);
+    } else {
+        sprintf (fname, HIME_DEFAULT_ICON_DIR "/%s/%s", hime_icon_dir, iconame);
+    }
 }
 
-void get_icon_path(char *iconame, char fname[])
-{
-  char uu[128];
-  snprintf(uu, sizeof(uu), "icons/%s", iconame);
+void get_icon_path (char *iconame, char fname[]) {
+    char uu[128];
+    snprintf (uu, sizeof (uu), "icons/%s", iconame);
 
-  if (!get_hime_user_fname(uu, fname)) {
-    sys_icon_fname(iconame, fname);
-  }
+    if (!get_hime_user_fname (uu, fname)) {
+        sys_icon_fname (iconame, fname);
+    }
 }
 
-
-void set_window_hime_icon(GtkWidget *window)
-{
-  gtk_window_set_icon_from_file(GTK_WINDOW(window), SYS_ICON_DIR"/hime.png", NULL);
+void set_window_hime_icon (GtkWidget *window) {
+    gtk_window_set_icon_from_file (GTK_WINDOW (window), SYS_ICON_DIR "/hime.png", NULL);
 }
