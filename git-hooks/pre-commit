@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Usage: put this under ${repo_dir}/.git/hooks/
+
+set -euo pipefail
+
+topleveldir="$(git rev-parse --show-toplevel)"
+
+pushd "$topleveldir" || exit 1
+
+echo "Applying clang-format..."
+make clang-format
+
+popd || exit 1
