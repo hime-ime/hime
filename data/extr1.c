@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,14 +20,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "util.h"
+#include "hime.h"
 
-int utf8_str_N (char *str);
+int main (void) {
+    FILE *fp = fopen ("tsin.src", "r");
 
-int main () {
-    FILE *fp;
-
-    if ((fp = fopen ("tsin.src", "r")) == NULL)
+    if (!fp)
         p_err ("cannot open");
 
     while (!feof (fp)) {

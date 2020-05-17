@@ -4,17 +4,65 @@ SRC_DIR       = ../src
 IM_CLIENT_DIR = $(SRC_DIR)/im-client
 
 .SUFFIXES: .kbmsrc .kbm .cin .gtab
-CFLAGS+= $(OPTFLAGS) $(GTKINC) -I$(SRC_DIR)
+CFLAGS+= $(OPTFLAGS) $(GTKINC) \
+		-DGDK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED \
+		-DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED \
+		-DG_DISABLE_SINGLE_INCLUDES \
+		-DGSEAL_ENABLE \
+		-I$(SRC_DIR) \
+		-I../src/IMdkit/include -I../src/im-client
+
 export HIME_NO_RELOAD=
 
-DATA=pho.tab2 tsin32.idx gtab.list \
-     cj.gtab ar30.gtab ar30-big.gtab array40.gtab pinyin.gtab jyutping.gtab cj5.gtab \
-     et.kbm et26.kbm zo.kbm pinyin.kbm dvorak.kbm mitac.kbm colemak.kbm \
-     ibm.kbm tsin32 hsu.kbm pho-huge.tab2 simplex.gtab symbols.gtab russian.gtab \
-     greek.gtab cj-punc.gtab latin-letters.gtab tsin-1.src pin-juyin.xlt \
-     t2s.dat s2t.dat cj543.gtab s-tsin32 s-tsin32.idx s-pho.tab2 s-pho-huge.tab2 \
-     pinyin-no-tone.kbm simplex-punc.gtab hangul-roman.gtab vims.gtab hangul.gtab \
-     esperanto.gtab
+GTAB_DATA = ar30-big.gtab \
+	ar30.gtab \
+	array40.gtab \
+	cj-punc.gtab \
+	cj.gtab \
+	cj5.gtab \
+	cj543.gtab \
+	esperanto.gtab \
+	greek.gtab \
+	hangul-roman.gtab \
+	hangul.gtab \
+	jyutping.gtab \
+	latin-letters.gtab \
+	pinyin.gtab \
+	russian.gtab \
+	simplex-punc.gtab \
+	simplex.gtab \
+	symbols.gtab \
+	vims.gtab
+
+KBM_DATA = colemak.kbm \
+	dvorak.kbm \
+	et.kbm \
+	et26.kbm \
+	hsu.kbm \
+	ibm.kbm \
+	mitac.kbm \
+	pinyin-no-tone.kbm \
+	pinyin.kbm \
+	zo.kbm
+
+ifeq ($(INSTALL_DFSG_INCOMPATIBLE),Y)
+GTAB_DATA += dayi3.gtab
+endif
+
+DATA = $(GTAB_DATA) $(KBM_DATA) \
+	tsin32 \
+	tsin32.idx \
+	s-tsin32 \
+	s-tsin32.idx \
+	pho.tab2 \
+	s-pho.tab2 \
+	pho-huge.tab2 \
+	s-pho-huge.tab2 \
+	s2t.dat \
+	t2s.dat \
+	pin-juyin.xlt \
+	tsin-1.src \
+	gtab.list
 
 DATAKEEP = symbol-table phrase.table phrase-ctrl.table
 
@@ -32,9 +80,6 @@ ifeq ($(USE_TSIN),N)
 REMOVE_TSIN = remove_tsin
 endif
 
-ifeq ($(INSTALL_DFSG_INCOMPATIBLE),Y)
-DATA += dayi3.gtab
-endif
 
 .PHONY: all
 all: $(DATA)

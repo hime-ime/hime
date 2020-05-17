@@ -1,4 +1,6 @@
-/* Copyright (C) 2010 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2010 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,75 +21,72 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <sys/types.h>
-
-#include <gtk/gtk.h>
-
 #include "t2s-file.h"
 #include "util.h"
 
-T2S t2s[3000], s2t[3000];
-int t2sn;
+#define SIZE 3000
 
-int qcmp (const void *aa0, const void *bb0) {
-    T2S *aa = (T2S *) aa0;
-    T2S *bb = (T2S *) bb0;
-#if 0
-  int64_t a = aa->a;
-  int64_t b = bb->a;
-#else
-    u_int a = aa->a;
-    u_int b = bb->a;
-#endif
+static T2S t2s[SIZE], s2t[SIZE];
+static int t2sn;
 
-    if (a > b)
+static int qcmp (const void *aa0, const void *bb0) {
+    const T2S *aa = (const T2S *) aa0;
+    const T2S *bb = (const T2S *) bb0;
+
+    if (aa->a > bb->a)
         return 1;
-    if (a < b)
+    if (aa->a < bb->a)
         return -1;
     return 0;
 }
 
-void gen (T2S *t, char *name) {
+static void gen (T2S *t, const char *name) {
     qsort (t, t2sn, sizeof (T2S), qcmp);
-    FILE *fw;
+    FILE *fw = fopen (name, "w");
 
-    if ((fw = fopen (name, "w")) == NULL)
+    if (!fw)
         p_err ("cannot write %s", name);
+
     fwrite (t, sizeof (T2S), t2sn, fw);
     fclose (fw);
 }
 
-int main () {
-    /* This data file is maintained by caleb-, ONLY for conversion
-   * from Traditional Chinese to Simplified Chinese.
-   * (Single Chinese glyph, one to one conversion.)
-   *
-   * However, "hime-sim2trad" also use this file to do "S to T"
-   * conversion, so the conversion result is not very ideal.
-   */
-    char *fname = "t2s-file.table";
+int main (void) {
+    /*
+     * This data file is maintained by caleb-, ONLY for conversion
+     * from Traditional Chinese to Simplified Chinese.
+     * (Single Chinese glyph, one to one conversion.)
+     *
+     * However, "hime-sim2trad" also use this file to do "S to T"
+     * conversion, so the conversion result is not very ideal.
+     */
+    t2sn = 0;
+    const char *fname = "t2s-file.table";
     FILE *fp = fopen (fname, "r");
 
     if (!fp)
         dbg ("cannot open %s", fname);
 
-    while (!feof (fp)) {
+    while (!feof (fp) && t2sn < SIZE) {
         char tt[128];
-        tt[0] = 0;
+        tt[0] = '\0';
+
         fgets (tt, sizeof (tt), fp);
         if (!tt[0])
             break;
-        char a[9], b[9];
 
-        bzero (a, sizeof (a));
-        bzero (b, sizeof (b));
+        char a[9], b[9];
+        memset (a, 0, sizeof (a));
+        memset (b, 0, sizeof (b));
+
         sscanf (tt, "%s %s", a, b);
+
         memcpy (&t2s[t2sn].a, a, sizeof (t2s[0].a));
         memcpy (&t2s[t2sn].b, b, sizeof (t2s[0].b));
         memcpy (&s2t[t2sn].b, a, sizeof (s2t[0].a));
         memcpy (&s2t[t2sn].a, b, sizeof (s2t[0].b));
+
         t2sn++;
-        //    dbg("%s %s\n", a,b);
     }
 
     gen (t2s, "t2s.dat");
