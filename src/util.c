@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,7 +35,7 @@ void p_err (char *fmt, ...) {
 
     fprintf (stderr, "%s\n", out);
 
-#if DEBUG && 1
+#if DEBUG
     abort ();
 #else
     if (getenv ("HIME_ERR_COREDUMP"))
@@ -43,7 +45,7 @@ void p_err (char *fmt, ...) {
 }
 
 #if !CLIENT_LIB && DEBUG
-static void init_out_fp () {
+static void init_out_fp (void) {
     if (!out_fp) {
         if (getenv ("HIME_DBG_TMP") || 0) {
             char fname[64];
@@ -90,7 +92,7 @@ void __hime_dbg_ (char *fmt, ...) {
 }
 #endif
 
-char *sys_err_strA () {
+char *sys_err_strA (void) {
     return (char *) strerror (errno);
 }
 
