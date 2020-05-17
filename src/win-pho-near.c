@@ -149,7 +149,7 @@ void create_win_pho_near (phokey_t pho) {
                 int i;
                 for (i = start_i; i < stop_i; i++) {
                     char tt[CH_SZ + 1];
-                    bzero (tt, sizeof (tt));
+                    memset (tt, 0, sizeof (tt));
                     utf8cpy (tt, pho_idx_str (i));
 
                     GtkWidget *button = gtk_button_new ();

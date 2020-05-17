@@ -63,7 +63,7 @@ static GtkWidget *button_eng_ph;
 static void create_win0_gui ();
 
 static void recreate_win0 () {
-    bzero (chars, sizeof (chars));
+    memset (chars, 0, sizeof (chars));
     label_pho = NULL;
 
     create_win0_gui ();
@@ -468,7 +468,7 @@ static void create_win0_gui () {
         gtk_container_add (GTK_CONTAINER (gwin0), vbox_top);
     }
 
-    bzero (chars, sizeof (chars));
+    memset (chars, 0, sizeof (chars));
 
     GtkWidget *hbox_row1 = gtk_hbox_new (FALSE, 0);
     /* This packs the button into the gwin0 (a gtk container). */
@@ -531,7 +531,7 @@ static void destroy_top_bin () {
     button_pho = NULL;
     button_eng_ph = NULL;
     hbox_edit = NULL;
-    bzero (chars, sizeof (chars));
+    memset (chars, 0, sizeof (chars));
 }
 
 #if USE_TSIN

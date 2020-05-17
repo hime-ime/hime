@@ -254,8 +254,8 @@ int inph_typ_pho (KeySym newkey) {
 }
 
 void clrin_pho () {
-    bzero (poo.typ_pho, sizeof (poo.typ_pho));
-    bzero (poo.inph, sizeof (poo.inph));
+    memset (poo.typ_pho, 0, sizeof (poo.typ_pho));
+    memset (poo.inph, 0, sizeof (poo.inph));
     poo.maxi = poo.ityp3_pho = 0;
     poo.cpg = 0;
 
@@ -415,7 +415,7 @@ void recreate_win1_if_nessary ();
 void load_tab_pho_file () {
     pho_load ();
 
-    bzero (poo.typ_pho, sizeof (poo.typ_pho));
+    memset (poo.typ_pho, 0, sizeof (poo.typ_pho));
 
     u_int ttt = 0;
     int i;
@@ -790,11 +790,11 @@ void start_gtab_pho_query (char *utf8) {
         return;
 
     u_char rtyp_pho[4];
-    bzero (rtyp_pho, sizeof (rtyp_pho));
+    memset (rtyp_pho, 0, sizeof (rtyp_pho));
     key_typ_pho (phokeys[0], rtyp_pho);
 
     char xkeys[4];
-    bzero (xkeys, sizeof (xkeys));
+    memset (xkeys, 0, sizeof (xkeys));
 
     for (i = 0; i < 4; i++) {
         if (!rtyp_pho[i])

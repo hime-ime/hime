@@ -102,7 +102,7 @@ void load_gtab_list (gboolean skip_disabled) {
 
         int inmd_idx;
         INMD *pinmd = &inmd[inmd_idx = inmdN++];
-        bzero (pinmd, sizeof (INMD));
+        memset (pinmd, 0, sizeof (INMD));
         pinmd->key_ch = key[0];
 
         pinmd->in_cycle = strchr (hime_str_im_cycle, key[0]) != NULL;

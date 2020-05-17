@@ -26,7 +26,7 @@ static FILE *fp;
 
 static int k_lookup (char *s, char out[]) {
     unsigned int key;
-    bzero (&key, sizeof (key));
+    memset (&key, 0, sizeof (key));
 
     u8cpy ((char *) &key, s);
 

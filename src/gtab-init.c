@@ -258,7 +258,7 @@ void init_gtab (int inmdno) {
     gboolean all_full_ascii = TRUE;
     char keyname_lookup[256];
 
-    bzero (keyname_lookup, sizeof (keyname_lookup));
+    memset (keyname_lookup, 0, sizeof (keyname_lookup));
     for (i = 1; i < th.KeyS; i++) {
         char *keyname = &inp->keyname[i * CH_SZ];
         int len = utf8_sz (keyname);
@@ -300,7 +300,7 @@ void init_gtab (int inmdno) {
 
     if (th.selkey[sizeof (th.selkey) - 1]) {
         char tt[32];
-        bzero (tt, sizeof (tt));
+        memset (tt, 0, sizeof (tt));
         memcpy (tt, th.selkey, sizeof (th.selkey));
         strcat (tt, th.selkey2);
         inp->selkey = strdup (tt);

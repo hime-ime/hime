@@ -1333,7 +1333,7 @@ int xim_ForwardEventHandler (IMForwardEventStruct *call_data) {
     char strbuf[STRBUFLEN];
     KeySym keysym;
 
-    bzero (strbuf, STRBUFLEN);
+    memset (strbuf, 0, STRBUFLEN);
     XKeyEvent *kev = (XKeyEvent *) &current_forward_eve->event;
     XLookupString (kev, strbuf, STRBUFLEN, &keysym, NULL);
 

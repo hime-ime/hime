@@ -98,7 +98,7 @@ char *sys_err_strA (void) {
 
 void *zmalloc (int n) {
     void *p = malloc (n);
-    bzero (p, n);
+    memset (p, 0, n);
     return p;
 }
 #if !HIME_IME

@@ -205,7 +205,7 @@ static void cb_activate (GtkStatusIcon *status_icon, gpointer user_data) {
     toggle_im_enabled ();
 
     GdkRectangle rect;
-    bzero (&rect, sizeof (rect));
+    memset (&rect, 0, sizeof (rect));
     GtkOrientation ori;
     gtk_status_icon_get_geometry (status_icon, NULL, &rect, &ori);
 }

@@ -576,7 +576,7 @@ static void put_u8_char (int pho_idx, phokey_t key, gboolean b_tone) {
         tss.chpho[tss.c_idx].ch = str;
         tss.chpho[tss.c_idx].flag |= FLAG_CHPHO_PHO_PHRASE;
     } else {
-        bzero (tss.chpho[tss.c_idx].cha, sizeof (tss.chpho[0].cha));
+        memset (tss.chpho[tss.c_idx].cha, 0, sizeof (tss.chpho[0].cha));
         bchcpy (tss.chpho[tss.c_idx].cha, str);
         tss.chpho[tss.c_idx].ch = tss.chpho[tss.c_idx].cha;
         //     dbg("wwww %s\n",tss.chpho[tss.c_idx].ch);
@@ -1078,7 +1078,7 @@ void add_to_tsin_buf_str (char *str) {
     dbg ("add_to_tsin_buf_str %s %d\n", str, N);
 
     phokey_t pho[MAX_PHRASE_LEN];
-    bzero (pho, sizeof (pho));
+    memset (pho, 0, sizeof (pho));
     add_to_tsin_buf (str, pho, N);
 }
 
@@ -1269,7 +1269,7 @@ static int cursor_backspace () {
     if (pho_cleared) {
         //          dbg("pho cleared %d %d %d\n",tss.c_len, hime_pop_up_win, typ_pho_empty());
         if (typ_pho_empty ())
-            bzero (poo.inph, sizeof (poo.inph));
+            memset (poo.inph, 0, sizeof (poo.inph));
 
         disp_in_area_pho_tsin ();
         tsin_scan_pre_select (TRUE);
@@ -1813,7 +1813,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
         if (xkey > 127)
             return 0;
         char tstr[CH_SZ + 1];
-        bzero (tstr, sizeof (tstr));
+        memset (tstr, 0, sizeof (tstr));
 
         u_char tt = xkey;
 

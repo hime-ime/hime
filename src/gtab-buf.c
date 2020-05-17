@@ -379,7 +379,7 @@ void set_tsin_parse_len (int);
 void gtab_parse () {
     int i;
     TSIN_PARSE out[MAX_PH_BF_EXT + 1];
-    bzero (out, sizeof (out));
+    memset (out, 0, sizeof (out));
 
     if (test_mode)
         return;
@@ -494,8 +494,8 @@ GEDIT *insert_gbuf_cursor (char **sel, int selN, u_int64_t key, gboolean b_gtab_
     ggg.gbuf_cursor++;
     ggg.gbufN++;
 
-    bzero (pbuf, sizeof (GEDIT));
-    bzero (gbuf + ggg.gbufN, sizeof (GEDIT));
+    memset (pbuf, 0, sizeof (GEDIT));
+    memset (gbuf + ggg.gbufN, 0, sizeof (GEDIT));
 
     GITEM *items = tmalloc (GITEM, selN);
 
@@ -841,7 +841,7 @@ int ch_to_gtab_keys (INMD *tinmd, char *ch, u_int64_t keys[]);
 void save_gtab_buf_phrase_idx (int idx0, int len) {
     WSP_S wsp[MAX_PHRASE_LEN];
 
-    bzero (wsp, sizeof (wsp));
+    memset (wsp, 0, sizeof (wsp));
     int i;
     for (i = 0; i < len; i++) {
         u8cpy (wsp[i].ch, gbuf[idx0 + i].ch);

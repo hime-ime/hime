@@ -1227,11 +1227,11 @@ int module_init_win (HIME_module_main_functions *funcs) {
     if (!seg) {
         int n = sizeof (SEG) * MAX_SEG_N;
         seg = malloc (n);
-        bzero (seg, n);
+        memset (seg, 0, n);
 
         n = sizeof (SEL_SEG) * MAX_SEG_N;
         sel_seg = malloc (n);
-        bzero (sel_seg, n);
+        memset (sel_seg, 0, n);
     }
 
     int i;

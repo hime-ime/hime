@@ -72,7 +72,7 @@ int main (int argc, char **argv) {
         exit (1);
     }
 
-    bzero (&phkb, sizeof (phkb));
+    memset (&phkb, 0, sizeof (phkb));
     strcpy (fnameout, argv[1]);
 
     char *p;

@@ -41,7 +41,7 @@ int qcmp_ch64 (const void *aa, const void *bb) {
 ITEM *find_ch (char *s, int *N) {
     ITEM t;
 
-    bzero (t.ch, CH_SZ);
+    memset (t.ch, 0, CH_SZ);
     u8cpy ((char *) t.ch, s);
 
     ITEM *p = (ITEM *) bsearch (&t, it, itN, sizeof (ITEM), qcmp_ch);
@@ -67,7 +67,7 @@ ITEM *find_ch (char *s, int *N) {
 ITEM64 *find_ch64 (char *s, int *N) {
     ITEM64 t;
 
-    bzero (t.ch, CH_SZ);
+    memset (t.ch, 0, CH_SZ);
     u8cpy ((char *) t.ch, s);
 
     ITEM64 *p = (ITEM64 *) bsearch (&t, it64, itN, sizeof (ITEM64), qcmp_ch64);
@@ -164,7 +164,7 @@ int main (int argc, char **argv) {
 
     itN = th.DefC;
 
-    bzero (keymap, sizeof (keymap));
+    memset (keymap, 0, sizeof (keymap));
     fread (keymap, 1, th.KeyS, fr);
     fread (kname, CH_SZ, th.KeyS, fr);
     fread (idx1, sizeof (gtab_idx1_t), KeyNum + 1, fr);
@@ -224,9 +224,9 @@ int main (int argc, char **argv) {
         gboolean has_err = FALSE;
 
         if (key64)
-            bzero (kk64, sizeof (kk64));
+            memset (kk64, 0, sizeof (kk64));
         else
-            bzero (kk, sizeof (kk));
+            memset (kk, 0, sizeof (kk));
 
         //    dbg("clen %d\n", clen);
         for (i = 0; i < clen; i++) {

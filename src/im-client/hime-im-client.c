@@ -152,7 +152,7 @@ static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch, D
         goto next;
 
     struct sockaddr_un serv_addr;
-    bzero ((char *) &serv_addr, sizeof (serv_addr));
+    memset ((char *) &serv_addr, 0, sizeof (serv_addr));
     serv_addr.sun_family = AF_UNIX;
     char sock_path[UNIX_PATH_MAX];
 
@@ -208,7 +208,7 @@ tcp:
     //  dbg("im server tcp port %d\n", ntohs(srv_ip_port.port));
 
     struct sockaddr_in in_serv_addr;
-    bzero ((char *) &in_serv_addr, sizeof (in_serv_addr));
+    memset ((char *) &in_serv_addr, 0, sizeof (in_serv_addr));
 
     in_serv_addr.sin_family = AF_INET;
     in_serv_addr.sin_addr.s_addr = srv_ip_port.ip;
@@ -306,7 +306,7 @@ static int gen_req (HIME_client_handle *handle, u_int req_no, HIME_req *req) {
 
     handle->seq++;
 
-    bzero (req, sizeof (HIME_req));
+    memset (req, 0, sizeof (HIME_req));
 
     req->req_no = req_no;
     to_hime_endian_4 (&req->req_no);
@@ -457,7 +457,7 @@ void hime_im_client_focus_out2 (HIME_client_handle *handle, char **rstr) {
         error_proc (handle, "hime_im_client_focus_out error");
     }
 
-    bzero (&reply, sizeof (reply));
+    memset (&reply, 0, sizeof (reply));
     if (handle_read (handle, &reply, sizeof (reply)) <= 0) {
         error_proc (handle, "cannot read reply from hime server");
         return;
@@ -508,7 +508,7 @@ static int hime_im_client_forward_key_event (HIME_client_handle *handle,
         return FALSE;
     }
 
-    bzero (&reply, sizeof (reply));
+    memset (&reply, 0, sizeof (reply));
     if (handle_read (handle, &reply, sizeof (reply)) <= 0) {
         error_proc (handle, "cannot read reply from hime server");
         return FALSE;

@@ -28,7 +28,7 @@ gboolean pin2juyin (gboolean full_match) {
     int i;
 
     char pin[8];
-    bzero (poo.typ_pho, sizeof (poo.typ_pho));
+    memset (poo.typ_pho, 0, sizeof (poo.typ_pho));
     if (poo.inph[0] == '`') {
         poo.typ_pho[0] = BACK_QUOTE_NO;
         poo.typ_pho[1] = poo.inph[1];
@@ -37,7 +37,7 @@ gboolean pin2juyin (gboolean full_match) {
 
     int inphN = strlen (poo.inph);
     for (i = 0; i < pin_juyinN; i++) {
-        bzero (pin, sizeof (pin));
+        memset (pin, 0, sizeof (pin));
         memcpy (pin, pin_juyin[i].pinyin, sizeof (pin_juyin[0].pinyin));
 
         int pinN = strlen (pin);
@@ -59,7 +59,7 @@ gboolean pin2juyin (gboolean full_match) {
         return FALSE;
     }
 
-    bzero (poo.typ_pho, sizeof (poo.typ_pho));
+    memset (poo.typ_pho, 0, sizeof (poo.typ_pho));
     //  prph(pin_juyin[i].key); dbg(" %x ph\n", pin_juyin[i].key);
     fake_key_typ_pho (pin_juyin[i].key, (u_char *) poo.typ_pho);
 
@@ -125,7 +125,7 @@ gboolean inph_typ_pho_pinyin (int newkey) {
     if (j == pin_juyinN)
         return PHO_STATUS_REJECT;
 
-    bzero (poo.inph, sizeof (poo.inph));
+    memset (poo.inph, 0, sizeof (poo.inph));
     poo.inph[0] = newkey;
     return PHO_STATUS_OK_NEW | PHO_STATUS_PINYIN_LEFT;
 }
