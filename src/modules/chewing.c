@@ -527,7 +527,7 @@ int module_reset (void) {
 // FIXME: refine and chk
 int module_get_preedit (char *pszStr, HIME_PREEDIT_ATTR himePreeditAttr[], int *pnCursor, int *pCompFlag) {
     char *pszTmpStr = NULL;
-    char *pszZuinStr = NULL;
+    const char *pszZuinStr = NULL;
     int nIdx;
     int nLength;
     int nTotalLen = 0;
