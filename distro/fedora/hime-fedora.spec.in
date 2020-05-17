@@ -40,15 +40,6 @@ Requires: %{name} = %{version}-%{release}
 %description gtk3
 gtk3 support for hime.
 
-%package qt4
-Summary: Qt support for hime
-Group:   Applications/System
-Requires: qt4
-Requires: %{name} = %{version}-%{release}
-
-%description qt4
-qt4 support for hime.
-
 %package devel
 Summary: Development files for HIME
 Group:   Development/Libraries
@@ -140,9 +131,6 @@ fi
 %else
 %{_libdir}/gtk-3.0/immodules/im-hime.so
 %endif
-
-%files qt4
-%{_libdir}/qt4/plugins/inputmethods/im-hime.so
 
 %files devel
 %{_includedir}/hime-im-client-attr.h

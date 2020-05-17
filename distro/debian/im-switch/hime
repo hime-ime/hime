@@ -12,11 +12,6 @@ if [ ! -e /usr/lib/${MULTIARCH_PATH_DIFFERENCE}qt3/plugins/inputmethods/im-hime.
 else
   QT_IM_MODULE=hime
 fi
-if [ ! -e /usr/lib/${MULTIARCH_PATH_DIFFERENCE}qt4/plugins/inputmethods/im-hime.so ]; then
-  QT4_IM_MODULE=xim
-else
-  QT4_IM_MODULE=hime
-fi
 if [ -e /usr/lib/${MULTIARCH_PATH_DIFFERENCE}qt5/plugins/platforminputcontexts/im-hime.so ]; then
   QT_IM_MODULE=hime
 fi

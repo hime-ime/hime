@@ -18,14 +18,11 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ "$1" = "-help" ]; then
     echo "  --disable-system-tray    : disable system tray support [default: enable]"
     echo "  --disable-appindicator   : disable Ubuntu unity tray [default: auto-detect]"
     echo "  --disable-lib64          : disable the use of lib64 dir [default: auto-detect]"
-    echo "  --disable-qt4-immodule   : disable QT4 im-module [default: auto-detect]"
     echo "  --disable-qt5-immodule   : disable QT5 im-module [default: auto-detect]"
     echo "  --disable-gtk2-im-module : disable GTK+ 2.x im-module [default: auto-detect]"
     echo "  --disable-gtk3-im-module : disable GTK+ 3.x im-module [default: auto-detect]"
     echo ""
     echo "System Specific Pathes:"
-    echo "  --qt4-moc-path=PATH       : specify the path of \"moc\" command for Qt 4.x"
-    echo "  --qt4-im-module-path=PATH : specify the install path for Qt 4.x im-module."
     echo "  --qt5-moc-path=PATH       : specify the path of \"moc\" command for Qt 5.x"
     echo "  --qt5-im-module-path=PATH : specify the install path for Qt 5.x im-module."
     echo ""
@@ -58,7 +55,6 @@ use_system_tray='Y'
 use_unity_tray='Y'
 use_lib=''
 
-use_qt4='Y'
 use_qt5='Y'
 
 use_gtk='Y'
@@ -81,12 +77,7 @@ find_in_path_list_to_variable() {
 #                  debian                 fedora               fedora           freebsd                slackware          arch
 qt5_moc_path_list="/usr/share/qt5/bin/moc /usr/lib/qt5/bin/moc /usr/bin/moc-qt5 /usr/local/bin/moc-qt5 /usr/local/bin/moc /usr/bin/moc"
 
-#                  debian                 fedora               fedora           freebsd                slackware          arch
-qt4_moc_path_list="/usr/share/qt4/bin/moc /usr/lib/qt4/bin/moc /usr/bin/moc-qt4 /usr/local/bin/moc-qt4 /usr/local/bin/moc /usr/bin/moc"
-
-
 QT5_IM_DIR_CUSTOM=
-QT4_IM_DIR_CUSTOM=
 for opt; do
     case "$opt" in
         --prefix=*)
@@ -167,15 +158,6 @@ for opt; do
         --disable-lib64)
             use_lib='lib'
             ;;
-        --use_qt4=*)
-            use_qt4=$(echo "$opt" | cut -d '=' -f 2)
-            ;;
-        --enable-qt4-immodule)
-            use_qt4=Y
-            ;;
-        --disable-qt4-immodule)
-            use_qt4=N
-            ;;
         --use_qt5=*)
             use_qt5=$(echo "$opt" | cut -d '=' -f 2)
             ;;
@@ -202,12 +184,6 @@ for opt; do
             ;;
         --disable-gtk3-im-module)
             use_gtk3=N
-            ;;
-        --qt4-moc-path=*)
-            QT4_MOC_PATH=$(echo "$opt" | cut -d '=' -f 2)
-            ;;
-        --qt4-install-to=* | --qt4-im-module-path=*)
-            QT4_IM_DIR_CUSTOM=$(echo "$opt" | cut -d '=' -f 2)
             ;;
         --qt5-moc-path=*)
             QT5_MOC_PATH=$(echo "$opt" | cut -d '=' -f 2)
@@ -392,36 +368,6 @@ else
 fi
 
 
-# --- QT4 START ---
-QT4_IM='N'
-if [ -z "$QT4_IM_DIR" ]; then QT4_IM_DIR=/qt4/plugins/inputmethods; fi
-
-echo -n ".... Testing Qt 4.x             :  "
-if pkg-config --libs QtCore QtGui >/dev/null 2>/dev/null; then
-    QT4_IM='Y'
-fi
-
-if [ ! -x "$QT4_MOC_PATH" ]; then
-    find_in_path_list_to_variable "$(pkg-config --variable=moc_location QtCore) $qt4_moc_path_list" "QT4_MOC_PATH"
-fi
-
-if [ "$QT4_IM" = "Y" ]; then
-    if [ "$use_qt4" = "N" ]; then
-        QT4_IM='N'
-        echo "Found: $(pkg-config --print-provides QtCore), but disabled."
-    else
-        if [ ! -x "$QT4_MOC_PATH" ]; then
-            echo "Not found, cannot find \"moc\" tool for Qt 4.x."
-            echo "Hint: use the --qt4-moc-path option. abort!"
-            exit 1
-        fi
-        echo "Found: $(pkg-config --print-provides QtCore)"
-    fi
-else
-    echo "Not found, Qt 4.x immodule is turned off."
-fi
-# --- QT4 END ---
-
 # --- QT5 START ---
 QT5_IM='N'
 if [ -z "$QT5_IM_DIR" ]; then QT5_IM_DIR=/qt5/plugins/platforminputcontexts; fi
@@ -454,7 +400,6 @@ fi
 
 # --- MOC INFO START ---
 
-if [ "$QT4_IM" = "Y" ]; then echo ".... Path of Qt4 moc            :  $QT4_MOC_PATH"; fi
 if [ "$QT5_IM" = "Y" ]; then echo ".... Path of Qt5 moc            :  $QT5_MOC_PATH"; fi
 
 # --- MOC INFO END ---
@@ -588,21 +533,13 @@ echo "USE_CHEWING=$USE_CHEWING" >>config.mak
 echo "LIB=$LIB" >>config.mak
 
 # QT
-echo "QT4_IM=$QT4_IM" >>config.mak
-if [ -z "$QT4_IM_DIR_CUSTOM" ]; then
-    echo "QT4_IM_DIR=$(pkg-config --define-variable=prefix=$\(DESTDIR\)/\$\(prefix\) --variable=libdir QtCore)$QT4_IM_DIR" >>config.mak
-else
-    echo "QT4_IM_DIR=\$(DESTDIR)$QT4_IM_DIR_CUSTOM" >>config.mak
-fi
 echo "QT5_IM=$QT5_IM" >>config.mak
 if [ -z "$QT5_IM_DIR_CUSTOM" ]; then
     echo "QT5_IM_DIR=$(pkg-config --define-variable=prefix=$\(DESTDIR\)/\$\(prefix\) --variable=libdir Qt5Core)$QT5_IM_DIR" >>config.mak
 else
     echo "QT5_IM_DIR=\$(DESTDIR)$QT5_IM_DIR_CUSTOM" >>config.mak
 fi
-echo "QT4_MOC_PATH=$QT4_MOC_PATH" >>config.mak
 echo "QT5_MOC_PATH=$QT5_MOC_PATH" >>config.mak
-echo "QT4_QMAKE_PATH=$QT4_MOC_PATH" | sed 's/moc/qmake/' >>config.mak
 echo "QT5_QMAKE_PATH=$QT5_MOC_PATH" | sed 's/moc/qmake/' >>config.mak
 
 # GTK

@@ -34,16 +34,6 @@ if [ $IM_CONFIG_MARKER2 = 1 ] && [ $IM_CONFIG_MARKER3 = 1 ] ; then
     GTK_IM_MODULE=hime
 fi
 
-QT4_IM_MODULE=xim
-# use immodule when available for Qt4
-for IM_CONFIG_MARKER in /usr/lib/*/qt4/plugins/inputmethods/im-hime.so \
-                        /usr/lib/qt4/plugins/inputmethods/im-hime.so ; do
-    if [ -e $IM_CONFIG_MARKER ]; then
-        QT4_IM_MODULE=hime
-        break
-    fi
-done
-
 # use immodule when available for Qt5
 for IM_CONFIG_MARKER in /usr/lib/*/qt5/plugins/platforminputcontexts/im-hime.so \
                         /usr/lib/qt5/plugins/platforminputcontexts/im-hime.so ; do
