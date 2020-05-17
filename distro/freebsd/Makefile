@@ -2,7 +2,7 @@
 # Date created:				2012/06/20
 # Whom:					The HIME project
 # Depends:				git gtk20 intltool libXtst gtk30 gmake ja-anthy
-#					zh-libchewing qt4-moc qt4-corelib qt4-gui
+#					zh-libchewing
 #
 # $FreeBSD$
 #
@@ -27,7 +27,6 @@ USE_LDCONFIG=	yes
 WITH_DEBUG=	yes
 OPTIONS=	NLS		"Enable Native Language Support"	on \
 		GTK3_IM_MODULE	"Build the GTK+3 im-module"		on \
-		QT4_IM_MODULE	"Build the QT4 im-module"		on \
 		ANTHY		"Support Anthy input method"		on \
 		CHEWING		"Support Chewing input method"		on
 
@@ -52,15 +51,6 @@ BUILD_DEPENDS+=	${LOCALBASE}/libdata/pkgconfig/gtk+-3.0.pc:${PORTSDIR}/x11-toolk
 GTK3_BINARY_VERSION!=	/usr/local/bin/pkg-config --variable=gtk_binary_version gtk+-3.0
 .else
 CONFIGURE_ARGS+=--disable-gtk3-im-module
-.endif
-
-.if defined(WITH_QT4_IM_MODULE)
-BUILD_DEPENDS+=	/usr/local/libdata/pkgconfig/QtGui.pc:${PORTSDIR}/x11-toolkits/qt4-gui \
-		/usr/local/libdata/pkgconfig/QtCore.pc:${PORTSDIR}/devel/qt4-corelib \
-		/usr/local/bin/moc-qt4:${PORTSDIR}/devel/qt4-moc
-QT_NONSTANDARD=	yes
-.else
-CONFIGURE_ARGS+=--disable-qt4-immodule
 .endif
 
 .if defined(WITH_ANTHY)
@@ -93,7 +83,7 @@ post-install:
 	  DIRLIST=`mtree -L -d -f ${MTREE_FILE} | ${SED} -e 's/ extra$$//g'` && \
 	  for DIR in $$DIRLIST; do \
 	  	case "$$DIR" in \
-			lib/gtk-2.0|lib/gtk-3.0|share/locale/en_US|lib/qt4) ;; \
+			lib/gtk-2.0|lib/gtk-3.0|share/locale/en_US) ;; \
 			*) ${FIND} $$DIR -type d | ${SORT} -r | ${SED} -e 's/^/@dirrm /g' >> ${TMPPLIST};; \
 		esac ; \
 	  done; \

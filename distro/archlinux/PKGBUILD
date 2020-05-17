@@ -10,10 +10,9 @@ license=('LGPL2' 'FDL' 'GPL2')
 depends=('gtk2' 'libxtst')
 makedepends=('git' 'gettext')
 # uncomment and edit next line to enable those plugins
-# makedepends+=('libchewing' 'anthy' 'gtk3' 'qt4')
+# makedepends+=('gtk3' 'qt5-base' 'anthy' 'libchewing')
 optdepends=('gtk3: enable gtk3 im module'
             'qt5-base: enable qt5 im module'
-            'qt4: enable qt4 im module'
             'anthy: enable Anthy input method'
             'libchewing: enable Chewing input method')
 conflicts=('hime')

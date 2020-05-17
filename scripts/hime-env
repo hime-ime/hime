@@ -41,7 +41,7 @@ echo
 echo "====Detecting Environment Variables===="
 if [ -n "$XMODIFIERS" ] || [ -n "$LC_ALL" ] || [ -n "$LC_CTYPE" ] ||
     [ -n "$LANG" ] || [ -n "$LANGUAGE" ] || [ -n "$GTK_IM_MODULE" ] ||
-    [ -n "$QT_IM_MODULE" ] || [ -n "$QT4_IM_MODULE" ]; then
+    [ -n "$QT_IM_MODULE" ] ; then
     echo
     [ -n "$XMODIFIERS" ] && echo "XMODIFIERS   : XMODIFIERS=$XMODIFIERS"
     [ -n "$LANG" ] && echo "LANG               : LANG=$LANG"
@@ -51,7 +51,6 @@ if [ -n "$XMODIFIERS" ] || [ -n "$LC_ALL" ] || [ -n "$LC_CTYPE" ] ||
     locale 2>/dev/null | grep -v '"' | sed 's/=/\t      : /' | grep -v ': $'
     [ -n "$GTK_IM_MODULE" ] && echo "GTK_IM_MODULE: GTK_IM_MODULE=$GTK_IM_MODULE"
     [ -n "$QT_IM_MODULE" ] && echo "QT_IM_MODULE : QT_IM_MODULE=$QT_IM_MODULE"
-    [ -n "$QT4_IM_MODULE" ] && echo "QT4_IM_MODULE: QT4_IM_MODULE=$QT4_IM_MODULE"
 fi
 
 echo
