@@ -82,7 +82,7 @@ int tsin_parse_recur (int start, TSIN_PARSE *out, short *r_match_phr_N, short *r
         else
             ppp = pp64;
 
-        bzero (pbest, sizeof (TSIN_PARSE) * tsin_parse_len);
+        memset (pbest, 0, sizeof (TSIN_PARSE) * tsin_parse_len);
 
         pbest[0].len = plen;
         pbest[0].start = start;
@@ -280,7 +280,7 @@ void disp_ph_sta_idx (int idx);
 void free_cache (), load_tsin_db ();
 void tsin_parse () {
     TSIN_PARSE out[MAX_PH_BF_EXT + 1];
-    bzero (out, sizeof (out));
+    memset (out, 0, sizeof (out));
 
     int i, ofsi;
 

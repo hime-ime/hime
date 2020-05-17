@@ -306,7 +306,7 @@ int main (int argc, char **argv) {
         if ((len = strlen (arg)) <= CH_SZ && (arg[0] & 0x80)) {
             char out[CH_SZ + 1];
 
-            bzero (out, sizeof (out));
+            memset (out, 0, sizeof (out));
             memcpy (out, arg, len);
 
             if (key64)
@@ -358,8 +358,8 @@ int main (int argc, char **argv) {
             memcpy (&itout[i], &itar[i], sizeof (ITEM));
     }
 
-    bzero (def1, sizeof (def1));
-    bzero (idx1, sizeof (idx1));
+    memset (def1, 0, sizeof (def1));
+    memset (idx1, 0, sizeof (idx1));
 
     for (i = 0; i < chno; i++) {
         u_int64_t key = CONVT2 (cur_inmd, i);

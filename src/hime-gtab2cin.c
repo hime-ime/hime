@@ -222,7 +222,7 @@ int main (int argc, char **argv) {
     fprintf (fw, "%%keyname end\n");
 
     /* check quick def */
-    bzero (&qkeys, sizeof (qkeys));
+    memset (&qkeys, 0, sizeof (qkeys));
     if (0 != memcmp (&qkeys, &th->qkeys, sizeof (qkeys)))
         quick_def = 1;
     if (quick_def) {

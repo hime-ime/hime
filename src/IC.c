@@ -61,7 +61,7 @@ static IC
         rec = (IC *) malloc (sizeof (IC));
     }
 
-    bzero (rec, sizeof (IC));
+    memset (rec, 0, sizeof (IC));
     rec->cs.input_style = InputStyleOverSpot;
     rec->id = ++icid;
 

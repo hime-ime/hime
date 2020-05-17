@@ -178,7 +178,7 @@ void process_client_req (int fd) {
 
     gboolean status;
     HIME_reply reply;
-    bzero (&reply, sizeof (reply));
+    memset (&reply, 0, sizeof (reply));
 
     switch (req.req_no) {
     case HIME_req_key_press:
@@ -260,7 +260,7 @@ void process_client_req (int fd) {
             flush_edit_buffer ();
 
         HIME_reply reply;
-        bzero (&reply, sizeof (reply));
+        memset (&reply, 0, sizeof (reply));
 
         int datalen = reply.datalen =
             output_bufferN ? output_bufferN + 1 : 0;  // include '\0'
@@ -353,7 +353,7 @@ void process_client_req (int fd) {
         dbg_time ("Invalid request %x from:", req.req_no);
         struct sockaddr_in addr;
         socklen_t len = sizeof (addr);
-        bzero (&addr, sizeof (addr));
+        memset (&addr, 0, sizeof (addr));
 
         if (!getpeername (fd, (struct sockaddr *) &addr, &len)) {
             dbg ("%s\n", inet_ntoa (addr.sin_addr));

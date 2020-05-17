@@ -414,10 +414,10 @@ void recreate_win1_if_nessary () {
     if (current_config () != c_config) {
         c_config = current_config ();
         //    dbg("destroy frame\n");
-        bzero (labels_sele, sizeof (labels_sele));
-        bzero (labels_seleR, sizeof (labels_seleR));
-        bzero (eve_sele, sizeof (eve_sele));
-        bzero (eve_seleR, sizeof (eve_seleR));
+        memset (labels_sele, 0, sizeof (labels_sele));
+        memset (labels_seleR, 0, sizeof (labels_seleR));
+        memset (eve_sele, 0, sizeof (eve_sele));
+        memset (eve_seleR, 0, sizeof (eve_seleR));
         gtk_widget_destroy (frame);
         frame = NULL;
         create_win1_gui ();

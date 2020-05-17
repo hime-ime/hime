@@ -264,7 +264,7 @@ int main (int argc, char **argv) {
     int keybits = 0, maxkey = 0;
     char keymap[128];
     char kno[128];
-    bzero (kno, sizeof (kno));
+    memset (kno, 0, sizeof (kno));
     myfgets (s, sizeof (s), fp);
     puts (s);
     if (strstr (s, TSIN_GTAB_KEY)) {
@@ -536,7 +536,7 @@ int main (int argc, char **argv) {
 
     if (is_gtab) {
         TSIN_GTAB_HEAD head;
-        bzero (&head, sizeof (head));
+        memset (&head, 0, sizeof (head));
         strcpy (head.signature, TSIN_GTAB_KEY);
         head.keybits = keybits;
         head.maxkey = maxkey;

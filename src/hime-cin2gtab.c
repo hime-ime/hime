@@ -65,7 +65,7 @@ void del_nl_spc (char *s) {
 
 void get_line () {
     while (!feof (fr)) {
-        bzero (tt, sizeof (tt));
+        memset (tt, 0, sizeof (tt));
         myfgets (tt, sizeof (tt), fr);
         lineno++;
 
@@ -208,14 +208,14 @@ int main (int argc, char **argv) {
 
     skip_utf8_sigature (fr);
 
-    bzero (&th, sizeof (th));
-    bzero (kno, sizeof (kno));
-    bzero (keymap, sizeof (keymap));
+    memset (&th, 0, sizeof (th));
+    memset (kno, 0, sizeof (kno));
+    memset (keymap, 0, sizeof (keymap));
 
-    bzero (itar, sizeof (itar));
-    bzero (itout, sizeof (itout));
-    bzero (itar64, sizeof (itar64));
-    bzero (itout64, sizeof (itout64));
+    memset (itar, 0, sizeof (itar));
+    memset (itout, 0, sizeof (itout));
+    memset (itar64, 0, sizeof (itar64));
+    memset (itout64, 0, sizeof (itout64));
 
     cmd_arg (&cmd, &arg);
     if (sequ (cmd, "%gen_inp")) {
@@ -471,7 +471,7 @@ int main (int argc, char **argv) {
         if ((len = strlen (arg)) <= CH_SZ && (arg[0] & 0x80)) {
             char out[CH_SZ + 1];
 
-            bzero (out, sizeof (out));
+            memset (out, 0, sizeof (out));
             memcpy (out, arg, len);
 
             if (key64)
@@ -525,8 +525,8 @@ int main (int argc, char **argv) {
             memcpy (&itout[i], &itar[i], sizeof (ITEM));
     }
 
-    bzero (def1, sizeof (def1));
-    bzero (idx1, sizeof (idx1));
+    memset (def1, 0, sizeof (def1));
+    memset (idx1, 0, sizeof (idx1));
 
     u_int64_t keymask = KEY_MASK;
     for (i = 0; i < chno; i++) {

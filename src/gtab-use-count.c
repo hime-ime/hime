@@ -53,7 +53,7 @@ void inc_gtab_use_count (char *s) {
     //  dbg("inc %d\n", ftell(fp_gtab_use_count));
     while (!feof (fp_gtab_use_count)) {
         char tt[512];
-        bzero (&c, sizeof (c));
+        memset (&c, 0, sizeof (c));
         fread (&c, sizeof (c), 1, fp_gtab_use_count);
         if (c.bytes != bytes)
             continue;
@@ -82,7 +82,7 @@ void inc_gtab_use_count (char *s) {
     fseek(fp_gtab_use_count, - delta, SEEK_CUR);
 #endif
 
-    bzero (&c, sizeof (c));
+    memset (&c, 0, sizeof (c));
     c.use_count = 1;
     c.bytes = bytes;
     fwrite (&c, sizeof (c), 1, fp_gtab_use_count);

@@ -286,7 +286,7 @@ static void clr_seltab () {
 
 void clear_gtab_in_area (), hide_win_gtab ();
 void ClrIn () {
-    bzero (ggg.inch, sizeof (ggg.inch));
+    memset (ggg.inch, 0, sizeof (ggg.inch));
     clr_seltab ();
     ggg.total_matchN = ggg.pg_idx = ggg.more_pg = ggg.wild_mode = ggg.wild_page = ggg.last_idx = ggg.defselN = ggg.exa_match =
         ggg.spc_pressed = ggg.ci = ggg.invalid_spc = 0;
@@ -912,7 +912,7 @@ gboolean feedkey_gtab (KeySym key, int kbstate) {
     //  gboolean ctrl_m = (kbstate & ControlMask) > 0;
     gboolean capslock_on = (kbstate & LockMask);
 
-    bzero (seltab_phrase, sizeof (seltab_phrase));
+    memset (seltab_phrase, 0, sizeof (seltab_phrase));
 
     //  dbg("uuuuu %x %x   shift,ctrl:%d,%d\n", key, kbstate, shift_m, ctrl_m);
 

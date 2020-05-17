@@ -79,13 +79,13 @@ static gboolean cb_new_hime_client (GIOChannel *source, GIOCondition condition, 
     if (type == Connection_type_unix) {
         struct sockaddr_un cli_addr;
 
-        bzero (&cli_addr, sizeof (cli_addr));
+        memset (&cli_addr, 0, sizeof (cli_addr));
         clilen = 0;
         newsockfd = accept (im_sockfd, (struct sockaddr *) &cli_addr, &clilen);
     } else {
         struct sockaddr_in cli_addr;
 
-        bzero (&cli_addr, sizeof (cli_addr));
+        memset (&cli_addr, 0, sizeof (cli_addr));
         clilen = sizeof (cli_addr);
         newsockfd = accept (im_tcp_sockfd, (struct sockaddr *) &cli_addr, &clilen);
     }
@@ -106,7 +106,7 @@ static gboolean cb_new_hime_client (GIOChannel *source, GIOCondition condition, 
             hime_clients[c].cs = NULL;
     }
 
-    bzero (&hime_clients[newsockfd], sizeof (hime_clients[0]));
+    memset (&hime_clients[newsockfd], 0, sizeof (hime_clients[0]));
 
     hime_clients[newsockfd].tag = g_io_add_watch (g_io_channel_unix_new (newsockfd), G_IO_IN, cb_read_hime_client_data,
                                                   GINT_TO_POINTER (newsockfd));
@@ -178,7 +178,7 @@ void init_hime_im_serv (Window win) {
     struct sockaddr_un serv_addr;
 
     // unix socket
-    bzero (&serv_addr, sizeof (serv_addr));
+    memset (&serv_addr, 0, sizeof (serv_addr));
     serv_addr.sun_family = AF_UNIX;
     char sock_path[UNIX_PATH_MAX];
     get_hime_im_srv_sock_path (sock_path, sizeof (sock_path));
@@ -250,7 +250,7 @@ void init_hime_im_serv (Window win) {
 
     for (port = 9999; port < 20000; port++) {
         // tcp socket
-        bzero (&serv_addr_tcp, sizeof (serv_addr_tcp));
+        memset (&serv_addr_tcp, 0, sizeof (serv_addr_tcp));
         serv_addr_tcp.sin_family = AF_INET;
 
         serv_addr_tcp.sin_addr.s_addr = htonl (INADDR_ANY);

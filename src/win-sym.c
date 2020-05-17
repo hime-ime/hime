@@ -118,7 +118,7 @@ static gboolean read_syms () {
     while (!feof (fp)) {
         char tt[1024];
 
-        bzero (tt, sizeof (tt));
+        memset (tt, 0, sizeof (tt));
         myfgets (tt, sizeof (tt), fp);
         //    dbg("%d] %s\n",strlen(tt), tt);
 
@@ -142,7 +142,7 @@ static gboolean read_syms () {
 
         syms = trealloc (syms, SYM_ROW, symsN + 1);
         SYM_ROW *psym = &syms[symsN++];
-        bzero (psym, sizeof (SYM_ROW));
+        memset (psym, 0, sizeof (SYM_ROW));
 
         while (*p) {
             char *n = p;

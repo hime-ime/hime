@@ -39,7 +39,7 @@ int main () {
             break;
 
         char pin[16], ju[64];
-        bzero (pin, sizeof (pin));
+        memset (pin, 0, sizeof (pin));
         sscanf (tt, "%s %s", pin, ju);
 
         phokey_t kk = 0;
