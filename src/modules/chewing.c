@@ -194,9 +194,7 @@ static gboolean
 is_empty (void) {
     if (!g_pChewingCtx)
         return FALSE;
-    int nZuinLen = 0;
-    free (chewing_zuin_String (g_pChewingCtx, &nZuinLen));
-    return !chewing_buffer_Len (g_pChewingCtx) && !nZuinLen;
+    return !chewing_buffer_Check(g_pChewingCtx);
 }
 
 static gboolean
@@ -221,11 +219,12 @@ hime_key_filter (int *pnKeyVal) {
 
 static gboolean
 hime_zuin_label_show (void) {
-    char *pszTmp = NULL;
+    const char *pszTmp = NULL;
     char *pszWord = NULL;
     int nZuinLen = 0, nIdx = 0, nPhoIdx = 0;
 
-    pszTmp = chewing_zuin_String (g_pChewingCtx, &nZuinLen);
+    pszTmp = chewing_bopomofo_String_static (g_pChewingCtx);
+    nZuinLen = strlen (pszTmp) / 3;
     pszWord = (char *) realloc (pszWord, 4);
 
     if (!pszWord)
@@ -240,8 +239,6 @@ hime_zuin_label_show (void) {
                 if (strstr (g_himeModMainFuncs.mf_pho_chars[nPhoIdx], pszWord) != NULL)
                     hime_label_show (pszWord, nPhoIdx + chewing_buffer_Len (g_pChewingCtx) + 1);
         }
-
-        free (pszTmp);
     }
 
     free (pszWord);
@@ -344,9 +341,8 @@ hime_chewing_handler_default (ChewingContext *pCtx) {
 static int
 hime_chewing_wrapper_bs (ChewingContext *pCtx) {
     //  If zuin is present, force libchewing handles Backspace for removing last zuin
-    int nZuinLen = 0;
-    free (chewing_zuin_String (g_pChewingCtx, &nZuinLen));
-    if (nZuinLen)
+    const char *pszWord = chewing_bopomofo_String_static (pCtx);
+    if (pszWord[0] != '\0')
         return chewing_handle_Backspace (g_pChewingCtx);
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Backspace);
 }
@@ -568,9 +564,8 @@ int module_get_preedit (char *pszStr, HIME_PREEDIT_ATTR himePreeditAttr[], int *
     }
 
     if (g_himeModMainFuncs.mf_hime_display_on_the_spot_key ()) {
-        pszZuinStr = chewing_zuin_String (g_pChewingCtx, &nZuinLen);
+        pszZuinStr = chewing_bopomofo_String_static (g_pChewingCtx);
         strcat (pszStr, pszZuinStr);
-        free (pszZuinStr);
         nTotalLen += nZuinLen;
     }
 
