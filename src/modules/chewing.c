@@ -194,8 +194,9 @@ static gboolean
 is_empty (void) {
     if (!g_pChewingCtx)
         return FALSE;
-
-    return chewing_buffer_Check (g_pChewingCtx);
+    int nZuinLen = 0;
+    free (chewing_zuin_String (g_pChewingCtx, &nZuinLen));
+    return !chewing_buffer_Len (g_pChewingCtx) && !nZuinLen;
 }
 
 static gboolean
@@ -220,12 +221,11 @@ hime_key_filter (int *pnKeyVal) {
 
 static gboolean
 hime_zuin_label_show (void) {
-    const char *pszTmp = NULL;
+    char *pszTmp = NULL;
     char *pszWord = NULL;
     int nZuinLen = 0, nIdx = 0, nPhoIdx = 0;
 
-    pszTmp = chewing_buffer_String_static (g_pChewingCtx);
-    nZuinLen = chewing_buffer_Len (g_pChewingCtx);
+    pszTmp = chewing_zuin_String (g_pChewingCtx, &nZuinLen);
     pszWord = (char *) realloc (pszWord, 4);
 
     if (!pszWord)
@@ -240,6 +240,8 @@ hime_zuin_label_show (void) {
                 if (strstr (g_himeModMainFuncs.mf_pho_chars[nPhoIdx], pszWord) != NULL)
                     hime_label_show (pszWord, nPhoIdx + chewing_buffer_Len (g_pChewingCtx) + 1);
         }
+
+        free (pszTmp);
     }
 
     free (pszWord);
@@ -342,7 +344,9 @@ hime_chewing_handler_default (ChewingContext *pCtx) {
 static int
 hime_chewing_wrapper_bs (ChewingContext *pCtx) {
     //  If zuin is present, force libchewing handles Backspace for removing last zuin
-    if (!is_empty ())
+    int nZuinLen = 0;
+    free (chewing_zuin_String (g_pChewingCtx, &nZuinLen));
+    if (nZuinLen)
         return chewing_handle_Backspace (g_pChewingCtx);
     HIME_CHEWING_WRAPPER_FUNC (chewing_handle_Backspace);
 }
@@ -527,7 +531,7 @@ int module_reset (void) {
 // FIXME: refine and chk
 int module_get_preedit (char *pszStr, HIME_PREEDIT_ATTR himePreeditAttr[], int *pnCursor, int *pCompFlag) {
     char *pszTmpStr = NULL;
-    const char *pszZuinStr = NULL;
+    char *pszZuinStr = NULL;
     int nIdx;
     int nLength;
     int nTotalLen = 0;
@@ -564,9 +568,9 @@ int module_get_preedit (char *pszStr, HIME_PREEDIT_ATTR himePreeditAttr[], int *
     }
 
     if (g_himeModMainFuncs.mf_hime_display_on_the_spot_key ()) {
-        pszZuinStr = chewing_buffer_String_static (g_pChewingCtx);
-        nZuinLen = chewing_buffer_Len (g_pChewingCtx);
+        pszZuinStr = chewing_zuin_String (g_pChewingCtx, &nZuinLen);
         strcat (pszStr, pszZuinStr);
+        free (pszZuinStr);
         nTotalLen += nZuinLen;
     }
 
