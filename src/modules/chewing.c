@@ -194,7 +194,7 @@ static gboolean
 is_empty (void) {
     if (!g_pChewingCtx)
         return FALSE;
-    return !chewing_buffer_Check (g_pChewingCtx);
+    return !chewing_buffer_Check (g_pChewingCtx) && !chewing_bopomofo_Check (g_pChewingCtx);
 }
 
 static gboolean
