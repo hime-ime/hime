@@ -116,7 +116,7 @@ void set_no_focus (GtkWidget *win) {
     gtk_window_set_resizable (GTK_WINDOW (win), FALSE);
 }
 
-static GdkDisplay *get_default_display (void) {
+GdkDisplay *get_default_display (void) {
     GdkDisplay *display = gdk_display_get_default ();
     if (!display) {
         dbg ("gdk_display_get_default returned NULL\n");

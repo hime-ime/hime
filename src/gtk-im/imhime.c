@@ -24,13 +24,12 @@
 #include "gtkintl.h"
 
 static const GtkIMContextInfo hime_info = {
-    "hime",                   /* ID */
-    N_ ("hime Input Method"), /* Human readable name */
-    GETTEXT_PACKAGE,          /* Translation domain */
-    GTK_LOCALEDIR,            /* Dir for bindtextdomain (not strictly needed for "gtk+") */
-    //  "*"                         /* Languages for which this module is the default */
-    "zh:ja" /* Languages for which this module is the default */
-    //  "zh_TW"                     /* Languages for which this module is the default */
+    "hime",                   /* unique identification string */
+    N_ ("hime Input Method"), /* human-readable name */
+    GETTEXT_PACKAGE,          /* Translation domain to be used with dgettext() */
+    GTK_LOCALEDIR,            /* Name of locale directory for use with bindtextdomain() */
+    "zh:ja"                   /* A colon-separated list of locales where this input method should
+                                 be the default. */
 };
 
 static const GtkIMContextInfo *info_list[] = {
@@ -51,8 +50,9 @@ void im_module_list (const GtkIMContextInfo ***contexts,
 }
 
 GtkIMContext *im_module_create (const gchar *context_id) {
-    if (strcmp (context_id, "hime") == 0)
+    if (strcmp (context_id, "hime") == 0) {
         return gtk_im_context_hime_new ();
-    else
-        return NULL;
+    }
+
+    return NULL;
 }

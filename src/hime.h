@@ -184,9 +184,11 @@ void exec_hime_setup (void);
 void set_label_font_size (GtkWidget *label, int size);
 void set_label_space (GtkWidget *label);
 void set_no_focus (GtkWidget *win);
+GdkDisplay *get_default_display (void);
 #if GTK_CHECK_VERSION(3, 0, 0)
 GdkMonitor *get_primary_monitor (void);
 #endif
+GdkKeymap *get_keymap (void);
 gboolean get_caps_lock_state (void);
 
 void send_hime_message (Display *dpy, char *s);

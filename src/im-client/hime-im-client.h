@@ -33,7 +33,7 @@ typedef struct HIME_client_handle_S {
     XPoint spot_location; /* spot location */
                           // below is private data, don't modify them.
     u_int flag;
-    Display *disp;
+    Display *disp; /* X Display, not a GdkDisplay */
     struct HIME_PASSWD *passwd;
     u_int seq;
 } HIME_client_handle;
