@@ -34,6 +34,7 @@ extern GType gtk_type_im_context_hime;
 
 #define GTK_TYPE_IM_CONTEXT_HIME gtk_type_im_context_hime
 #define GTK_IM_CONTEXT_HIME(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_HIME, GtkIMContextHIME))
+#define GTK_IM_CONTEXT_HIME_CONST(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_HIME, GtkIMContextHIME const))
 #define GTK_IM_CONTEXT_HIME_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_CONTEXT_HIME, GtkIMContextHIMEClass))
 #define GTK_IS_IM_CONTEXT_HIME(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_IM_CONTEXT_HIME))
 #define GTK_IS_IM_CONTEXT_HIME_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IM_CONTEXT_HIME))
@@ -47,6 +48,7 @@ struct _GtkIMContextHIMEClass {
 };
 
 void gtk_im_context_hime_register_type (GTypeModule *type_module);
+
 GtkIMContext *gtk_im_context_hime_new (void);
 
 void gtk_im_context_hime_shutdown (void);

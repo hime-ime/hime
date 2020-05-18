@@ -593,20 +593,20 @@ void hime_im_client_set_cursor_location (HIME_client_handle *handle, int x, int 
     }
 }
 
-// in win32, if win is NULL, this means hime_im_client_set_cursor_location(x,y) is screen position
 void hime_im_client_set_window (HIME_client_handle *handle, Window win) {
-    if (!handle)
+    if (!handle) {
         return;
-    //  dbg("hime_im_client_set_window %x\n", win);
+    }
 
-    if (is_special_user)
+    if (is_special_user) {
         return;
-    if (!win)
+    }
+
+    if (!win) {
         return;
+    }
+
     handle->client_win = win;
-
-    // For chrome
-    //  hime_im_client_set_cursor_location(handle, handle->spot_location.x, handle->spot_location.y);
 }
 
 void hime_im_client_set_flags (HIME_client_handle *handle, int flags, int *ret_flag) {
