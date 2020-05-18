@@ -18,13 +18,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <X11/keysym.h>
-
-#include "hime.h"
 
 #include "gtkimcontexthime.h"
 #include "hime-im-client.h"
@@ -40,11 +39,13 @@ struct _GtkIMContextHIME {
 
     // preedit
     char *pe_str;
-    HIME_PREEDIT_ATTR *pe_att;
-    int pe_attN;
+    HIME_PREEDIT_ATTR *pe_attr;
+    int pe_attrN;
     int pe_cursor;
     gboolean pe_started;
 };
+
+static const int BUFFER_SIZE = 256;
 
 // GObject functions
 static void gtk_im_context_hime_class_init (GtkIMContextHIMEClass *class);
@@ -70,7 +71,7 @@ static void gtk_im_context_hime_set_use_preedit (GtkIMContext *context,
 
 static void add_preedit_attr (PangoAttrList *attrs,
                               const gchar *str,
-                              HIME_PREEDIT_ATTR *att);
+                              HIME_PREEDIT_ATTR *hime_attr);
 
 GType gtk_type_im_context_hime = 0;
 
@@ -133,8 +134,8 @@ init_preedit (GtkIMContextHIME *im_context_hime) {
     }
 
     im_context_hime->pe_str = NULL;
-    im_context_hime->pe_att = NULL;
-    im_context_hime->pe_attN = 0;
+    im_context_hime->pe_attr = NULL;
+    im_context_hime->pe_attrN = 0;
     im_context_hime->pe_cursor = 0;
     im_context_hime->pe_started = FALSE;
 }
@@ -156,10 +157,10 @@ void clear_preedit (GtkIMContextHIME *context_hime) {
         context_hime->pe_str = NULL;
     }
 
-    if (context_hime->pe_att) {
-        free (context_hime->pe_att);
-        context_hime->pe_att = NULL;
-        context_hime->pe_attN = 0;
+    if (context_hime->pe_attr) {
+        free (context_hime->pe_attr);
+        context_hime->pe_attr = NULL;
+        context_hime->pe_attrN = 0;
     }
 
     context_hime->pe_cursor = 0;
@@ -185,7 +186,7 @@ static void get_hime_im_client (GtkIMContextHIME *context_xim) {
         return;
     }
 
-    GdkDisplay *display = get_default_display ();
+    GdkDisplay *display = gdk_display_get_default ();
     if (!display) {
         return;
     }
@@ -254,161 +255,181 @@ static void gtk_im_context_hime_get_preedit_string (
 
     if (attrs) {
         *attrs = pango_attr_list_new ();
-        for (int i = 0; i < context_hime->pe_attN; i++) {
-            add_preedit_attr (*attrs, *str, &(context_hime->pe_att[i]));
+        for (int i = 0; i < context_hime->pe_attrN; i++) {
+            add_preedit_attr (*attrs, *str, &(context_hime->pe_attr[i]));
         }
     }
+}
+
+// returns 0 if failed
+static int construct_xevent (const GdkEventKey *event,
+                             XKeyPressedEvent *xevent) {
+
+    GdkScreen *screen = gdk_window_get_screen (event->window);
+    if (!screen) {
+        return 0;
+    }
+
+    GdkWindow *root_window = gdk_screen_get_root_window (screen);
+
+    xevent->type = (event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
+    xevent->serial = 0;
+    xevent->send_event = (unsigned char) event->send_event;
+    xevent->display = GDK_WINDOW_XDISPLAY (event->window);
+    xevent->window = GDK_WINDOW_XID (event->window);
+    xevent->root = GDK_WINDOW_XID (root_window);
+    xevent->subwindow = xevent->window;
+    xevent->time = event->time;
+    xevent->x = 0;
+    xevent->y = 0;
+    xevent->x_root = 0;
+    xevent->y_root = 0;
+    xevent->state = event->state;
+    xevent->keycode = event->hardware_keycode;
+    xevent->same_screen = True;
+
+    return 1;
 }
 
 static gboolean gtk_im_context_hime_filter_keypress (GtkIMContext *context,
                                                      GdkEventKey *event) {
     GtkIMContextHIME *context_xim = GTK_IM_CONTEXT_HIME (context);
 
-    const int BUFFER_SIZE = 256;
+    // buffer between X and hime
     gchar static_buffer[BUFFER_SIZE];
     char *buffer = static_buffer;
     gint buffer_size = sizeof (static_buffer) - 1;
-    gsize num_bytes = 0;
-    KeySym keysym = 0;
-    //  Status status;
+
+    // TRUE if the input method handled the key event.
+    // No further processing should be done for this key event for Gtk.
     gboolean result = FALSE;
-#if !GTK_CHECK_VERSION(3, 0, 0)
-    GdkWindow *root_window = gdk_screen_get_root_window (
-        gdk_window_get_screen (event->window));
-#else
-    GdkWindow *root_window = NULL;
-    GdkScreen *screen = gdk_window_get_screen (event->window);
-    if (screen)
-        root_window = gdk_screen_get_root_window (screen);
-    else
-        return result;
-#endif
 
+    // the final result of preediting to be commited
+    char *result_str = NULL;
+
+    // construct key event
     XKeyPressedEvent xevent;
-    xevent.type = (event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
-    xevent.serial = 0; /* hope it doesn't matter */
-    xevent.send_event = (unsigned char) event->send_event;
-    xevent.display = GDK_WINDOW_XDISPLAY (event->window);
-    xevent.window = GDK_WINDOW_XID (event->window);
-    xevent.root = GDK_WINDOW_XID (root_window);
-    xevent.subwindow = xevent.window;
-    xevent.time = event->time;
-    xevent.x = xevent.x_root = 0;
-    xevent.y = xevent.y_root = 0;
-    xevent.state = event->state;
-    xevent.keycode = event->hardware_keycode;
-    xevent.same_screen = True;
-    num_bytes = XLookupString (&xevent, buffer, buffer_size, &keysym, NULL);
+    int ok = construct_xevent (event, &xevent);
+    if (!ok) {
+        // can't get root window, skip processing
+        return result;
+    }
 
-    char *rstr = NULL;
+    // XLookupString translates a key event to a KeySym and a string,
+    // returns the number of characters that are stored in the buffer.
+    KeySym keysym = 0;
+    gsize num_bytes = XLookupString (&xevent, buffer, buffer_size, &keysym, NULL);
 
 #if (!FREEBSD)
-    int uni = gdk_keyval_to_unicode (event->keyval);
-    if (uni) {
-        gsize rn = 0;
-        GError *err = NULL;
-        char *utf8 = g_convert ((char *) &uni,
-                                4, "UTF-8", "UTF-32", &rn, &num_bytes, &err);
-
-        if (utf8) {
-            strncpy (buffer, utf8, BUFFER_SIZE);
-            g_free (utf8);
-        }
+    // Convert from a GDK key symbol to the corresponding ISO10646 (Unicode) character.
+    // returns 0 if there is no corresponding character.
+    const guint32 unicode = gdk_keyval_to_unicode (event->keyval);
+    if (unicode) {
+        num_bytes = g_unichar_to_utf8 (unicode, buffer);
+        buffer[num_bytes] = '\0';
     }
 #endif
 
-    gboolean preedit_changed = FALSE;
-    gboolean context_pe_started = context_xim->pe_started;
+    // tell hime-im-client to process key event
+    // result_str would hold the result
     gboolean context_has_str = context_xim->pe_str && context_xim->pe_str[0];
-    char *tstr = NULL;
-    int sub_comp_len = 0;
-    HIME_PREEDIT_ATTR att[HIME_PREEDIT_ATTR_MAX_N];
-    int cursor_pos = 0;
-    gboolean has_str = FALSE;
-
     if (event->type == GDK_KEY_PRESS) {
         result = hime_im_client_forward_key_press (context_xim->hime_ch,
-                                                   keysym, xevent.state, &rstr);
+                                                   keysym, event->state, &result_str);
     } else {
         result = hime_im_client_forward_key_release (context_xim->hime_ch,
-                                                     keysym, xevent.state, &rstr);
+                                                     keysym, event->state, &result_str);
     }
+    gboolean preedit_changed = result;
 
-    preedit_changed = result;
-
-    int attN = hime_im_client_get_preedit (context_xim->hime_ch,
-                                           &tstr, att, &cursor_pos, &sub_comp_len);
-    has_str = tstr && tstr[0];
-
+    char *preedit_str = NULL;
+    HIME_PREEDIT_ATTR attr[HIME_PREEDIT_ATTR_MAX_N];
+    int cursor_pos = 0;
+    int sub_comp_len = 0;
+    int attrN = hime_im_client_get_preedit (context_xim->hime_ch,
+                                            &preedit_str, attr, &cursor_pos, &sub_comp_len);
+    gboolean has_preedit_str = preedit_str && preedit_str[0];
     if (sub_comp_len) {
-        has_str = TRUE;
-        //      preedit_changed = TRUE;
+        has_preedit_str = TRUE;
     }
 
-    if (!context_pe_started && has_str) {
+    if (!context_xim->pe_started && has_preedit_str) {
         g_signal_emit_by_name (context, "preedit-start");
-        context_pe_started = context_xim->pe_started = TRUE;
+        context_xim->pe_started = TRUE;
     }
 
-    if (context_has_str != has_str ||
-        (tstr && context_xim->pe_str && (strcmp (tstr, context_xim->pe_str) != 0))) {
+    // preedit_str and pe_str hold different strings
+    const gboolean different_str = preedit_str &&
+                                   context_xim->pe_str &&
+                                   (strcmp (preedit_str, context_xim->pe_str) != 0);
+
+    // update preedit string
+    if (context_has_str != has_preedit_str || different_str) {
         if (context_xim->pe_str) {
             free (context_xim->pe_str);
         }
-        context_xim->pe_str = tstr;
-        //      preedit_changed = TRUE;
+        context_xim->pe_str = preedit_str;
     }
 
-    size_t attsz = sizeof (HIME_PREEDIT_ATTR) * attN;
-    if (context_xim->pe_attN != attN ||
-        (context_xim->pe_att && (memcmp (context_xim->pe_att, att, attsz) != 0))) {
-        //      printf("att changed pe_att:%x:%d %d\n", context_xim->pe_att, context_xim->pe_attN, attN);
-        context_xim->pe_attN = attN;
-        if (context_xim->pe_att) {
-            free (context_xim->pe_att);
-        }
+    size_t attrsz = sizeof (HIME_PREEDIT_ATTR) * attrN;
 
-        context_xim->pe_att = NULL;
-        if (attN) {
-            context_xim->pe_att = malloc (attsz);
-        }
+    // pe_attr and attr hold different data
+    const gboolean different_attr = context_xim->pe_attr &&
+                                    (memcmp (context_xim->pe_attr, attr, attrsz) != 0);
 
-        if (context_xim->pe_att) {
-            memcpy (context_xim->pe_att, att, attsz);
-            //      printf("context_xim->pe_att %x\n", context_xim->pe_att);
-            //      preedit_changed = TRUE;
+    // update pe_attr
+    if (context_xim->pe_attrN != attrN || different_attr) {
+        context_xim->pe_attrN = attrN;
+
+        if (context_xim->pe_attr) {
+            free (context_xim->pe_attr);
+        }
+        context_xim->pe_attr = NULL;
+
+        if (attrsz) {
+            context_xim->pe_attr = malloc (attrsz);
+
+            if (context_xim->pe_attr) {
+                memcpy (context_xim->pe_attr, attr, attrsz);
+            }
         }
     }
 
+    // update pe_cursor
     if (context_xim->pe_cursor != cursor_pos) {
-#if DBG
-        printf ("cursor changed %d %d\n", context_xim->pe_cursor, cursor_pos);
-#endif
         context_xim->pe_cursor = cursor_pos;
-        //      preedit_changed = TRUE;
     }
 
-#if DBG
-    printf ("seq:%d rstr:%s result:%x num_bytes:%d %x\n", context_xim->hime_ch->seq, rstr, result, num_bytes, (unsigned int) buffer[0]);
-#endif
-    if (event->type == GDK_KEY_PRESS && !rstr && !result && num_bytes &&
-        buffer[0] >= 0x20 && buffer[0] != 0x7f && !(xevent.state & (Mod1Mask | ControlMask))) {
-        rstr = (char *) malloc (num_bytes + 1);
-        memcpy (rstr, buffer, num_bytes);
-        rstr[num_bytes] = 0;
+    const gboolean alt_or_control_pressed = event->state & (Mod1Mask | ControlMask);
+    // GDK_KEY_PRESS event
+    // hime_im_client_forward_key_press returns False
+    // result_str is empty
+    // buffer[0] is printable
+    // not alt_or_control_pressed
+    if (event->type == GDK_KEY_PRESS &&
+        !result &&
+        !result_str &&
+        num_bytes &&
+        isprint (buffer[0]) &&
+        !alt_or_control_pressed) {
+
+        // copy buffer into result_str
+        result_str = (char *) malloc (num_bytes + 1);
+        memcpy (result_str, buffer, num_bytes);
+        result_str[num_bytes] = 0;
         result = TRUE;
     }
 
     if (preedit_changed) {
-        g_signal_emit_by_name (context_xim, "preedit_changed");
+        g_signal_emit_by_name (context_xim, "preedit-changed");
     }
 
-    if (rstr) {
-        g_signal_emit_by_name (context, "commit", rstr);
-        free (rstr);
+    if (result_str) {
+        g_signal_emit_by_name (context, "commit", result_str);
+        free (result_str);
     }
 
-    if (!has_str && context_pe_started) {
+    if (!has_preedit_str && context_xim->pe_started) {
         clear_preedit (context_xim);
         context_xim->pe_started = FALSE;
         g_signal_emit_by_name (context, "preedit-end");
@@ -429,14 +450,14 @@ static void gtk_im_context_hime_focus_out (GtkIMContext *context) {
     GtkIMContextHIME *context_xim = GTK_IM_CONTEXT_HIME (context);
 
     if (context_xim->hime_ch) {
-        char *rstr = NULL;
-        hime_im_client_focus_out2 (context_xim->hime_ch, &rstr);
+        char *result_str = NULL;
+        hime_im_client_focus_out2 (context_xim->hime_ch, &result_str);
 
-        if (rstr) {
-            g_signal_emit_by_name (context, "commit", rstr);
+        if (result_str) {
+            g_signal_emit_by_name (context, "commit", result_str);
             clear_preedit (context_xim);
-            g_signal_emit_by_name (context, "preedit_changed");
-            free (rstr);
+            g_signal_emit_by_name (context, "preedit-changed");
+            free (result_str);
         }
     }
 }
@@ -486,7 +507,7 @@ static void gtk_im_context_hime_reset (GtkIMContext *context) {
     if (context_hime->hime_ch) {
         hime_im_client_reset (context_hime->hime_ch);
         clear_preedit (context_hime);
-        g_signal_emit_by_name (context, "preedit_changed");
+        g_signal_emit_by_name (context, "preedit-changed");
     }
 }
 
@@ -495,19 +516,19 @@ static void gtk_im_context_hime_reset (GtkIMContext *context) {
  */
 static void add_preedit_attr (PangoAttrList *attrs,
                               const gchar *str,
-                              HIME_PREEDIT_ATTR *att) {
+                              HIME_PREEDIT_ATTR *hime_attr) {
     PangoAttribute *attr = NULL;
-    gint start_index = g_utf8_offset_to_pointer (str, att->ofs0) - str;
-    gint end_index = g_utf8_offset_to_pointer (str, att->ofs1) - str;
+    gint start_index = g_utf8_offset_to_pointer (str, hime_attr->ofs0) - str;
+    gint end_index = g_utf8_offset_to_pointer (str, hime_attr->ofs1) - str;
 
-    if (att->flag & HIME_PREEDIT_ATTR_FLAG_UNDERLINE) {
+    if (hime_attr->flag & HIME_PREEDIT_ATTR_FLAG_UNDERLINE) {
         attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
         attr->start_index = start_index;
         attr->end_index = end_index;
         pango_attr_list_change (attrs, attr);
     }
 
-    if (att->flag & HIME_PREEDIT_ATTR_FLAG_REVERSE) {
+    if (hime_attr->flag & HIME_PREEDIT_ATTR_FLAG_REVERSE) {
         const guint16 rgb_min = 0x0000;
         const guint16 rgb_max = 0xffff;
 
