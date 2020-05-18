@@ -20,6 +20,7 @@ pacman -Syuu --noconfirm --needed \
 
 # dependencies
 pacman -Syuu --noconfirm --needed \
+    clang \
     libxtst \
     gtk2 \
     gtk3 \
