@@ -3,24 +3,24 @@
 
 set -e
 
-ua_remove () {
-	update-alternatives \
-        --remove xinput-$1 \
-        /etc/X11/xinit/xinput.d/$2 ;
+ua_remove() {
+    update-alternatives \
+        --remove xinput-"$1" \
+        /etc/X11/xinit/xinput.d/"$2"
 }
 
 case "$1" in
-    remove|upgrade|deconfigure)
+    remove | upgrade | deconfigure)
         ua_remove all_ALL hime
-        ua_remove zh_CN   hime
-        ua_remove zh_TW   hime
-	;;
-    failed-upgrade)
-	;;
+        ua_remove zh_CN hime
+        ua_remove zh_TW hime
+        ;;
+    failed-upgrade) ;;
+
     *)
-	echo "prerm called with unknown argument \`$1'" >&2
-	exit 1
-   ;;
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
 esac
 
 #DEBHELPER#

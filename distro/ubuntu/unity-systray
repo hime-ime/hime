@@ -1,21 +1,21 @@
 #!/bin/sh
 
-GSETTINGS=`whereis -b gsettings | awk '{print $2}'`
-SED=`whereis -b sed | awk '{print $2}'`
+GSETTINGS=$(whereis -b gsettings | awk '{print $2}')
+SED=$(whereis -b sed | awk '{print $2}')
 
 if [ -z "$GSETTINGS" ]; then
-	echo "Command 'gsettings' not found!"
-	exit 1
+    echo "Command 'gsettings' not found!"
+    exit 1
 fi
 
-RESOULT=`$GSETTINGS get com.canonical.Unity.Panel systray-whitelist || echo ""`
+RESOULT=$("$GSETTINGS" get com.canonical.Unity.Panel systray-whitelist || echo "")
 
 if [ -n "$RESOULT" ]; then
-	HIME=`echo "$RESOULT" | grep hime`
-	if [ -z "$HIME" ]; then
-		NEW_SCHEMA=`$GSETTINGS get com.canonical.Unity.Panel systray-whitelist | $SED -e "s/]$/, \'hime\']/"`
-		$GSETTINGS set com.canonical.Unity.Panel systray-whitelist "$NEW_SCHEMA"
-	else
-		echo "'hime' is already in the systray-whitelist of Unity Panel. exiting..."
-	fi
+    HIME=$(echo "$RESOULT" | grep hime)
+    if [ -z "$HIME" ]; then
+        NEW_SCHEMA=$("$GSETTINGS" get com.canonical.Unity.Panel systray-whitelist | "$SED" -e "s/]$/, \'hime\']/")
+        "$GSETTINGS" set com.canonical.Unity.Panel systray-whitelist "$NEW_SCHEMA"
+    else
+        echo "'hime' is already in the systray-whitelist of Unity Panel. exiting..."
+    fi
 fi

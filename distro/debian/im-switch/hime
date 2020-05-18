@@ -3,16 +3,16 @@ XIM_PROGRAM=/usr/bin/hime
 XIM_ARGS=
 GTK_IM_MODULE=hime
 
-if [ -n "$(dpkg-architecture  --query DEB_BUILD_MULTIARCH)" ]; then
-	MULTIARCH_PATH_DIFFERENCE=$(dpkg-architecture  --query DEB_BUILD_MULTIARCH)/
+if [ -n "$(dpkg-architecture --query DEB_BUILD_MULTIARCH)" ]; then
+    MULTIARCH_PATH_DIFFERENCE=$(dpkg-architecture --query DEB_BUILD_MULTIARCH)/
 fi
 
-if [ ! -e /usr/lib/${MULTIARCH_PATH_DIFFERENCE}qt3/plugins/inputmethods/im-hime.so ]; then
-  QT_IM_MODULE=xim
+if [ ! -e "/usr/lib/${MULTIARCH_PATH_DIFFERENCE}qt3/plugins/inputmethods/im-hime.so" ]; then
+    QT_IM_MODULE=xim
 else
-  QT_IM_MODULE=hime
+    QT_IM_MODULE=hime
 fi
-if [ -e /usr/lib/${MULTIARCH_PATH_DIFFERENCE}qt5/plugins/platforminputcontexts/im-hime.so ]; then
-  QT_IM_MODULE=hime
+if [ -e "/usr/lib/${MULTIARCH_PATH_DIFFERENCE}qt5/plugins/platforminputcontexts/im-hime.so" ]; then
+    QT_IM_MODULE=hime
 fi
 DEPENDS=
