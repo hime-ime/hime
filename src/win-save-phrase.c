@@ -144,7 +144,7 @@ void create_win_save_phrase (WSP_S *wsp, int wspN) {
     gtk_window_set_title (GTK_WINDOW (main_window), _ ("Add phrase to Tsin's database"));
 
 #if 0
-  g_signal_connect (G_OBJECT (main_window), "delete_event",
+  g_signal_connect (G_OBJECT (main_window), "delete-event",
                      G_CALLBACK (delete_event), sess);
 #endif
 

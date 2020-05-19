@@ -42,7 +42,7 @@ static GtkWidget *get_new_about_window (void) {
         G_CALLBACK (callback_close), NULL);
 
     g_signal_connect (
-        G_OBJECT (window), "delete_event",
+        G_OBJECT (window), "delete-event",
         G_CALLBACK (callback_close), NULL);
 
     return window;
