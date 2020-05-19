@@ -479,33 +479,56 @@ static gboolean  scroll_event(GtkWidget *widget,GdkEventScroll *event, gpointer 
 }
 #endif
 
-gboolean key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
-    if (last_row)
+static void prev_item (void) {
+    if (page_ofs > 0) {
+        page_ofs--;
+    }
+}
+
+static void next_item (void) {
+    if (page_ofs < tsN - 1) {
+        page_ofs++;
+    }
+}
+
+static void page_up (void) {
+    page_ofs -= PAGE_LEN;
+    if (page_ofs < 0) {
+        page_ofs = 0;
+    }
+}
+
+static void page_down (void) {
+    page_ofs += PAGE_LEN;
+    if (page_ofs >= tsN) {
+        page_ofs = tsN - 1;
+    }
+}
+
+gboolean key_press_event (GtkWidget *widget,
+                          GdkEventKey *event,
+                          gpointer user_data) {
+    if (last_row) {
         return FALSE;
-    //  dbg("key_press_event %x\n", event->keyval);
+    }
+
     switch (event->keyval) {
-    case GDK_Up:
-        if (page_ofs > 0)
-            page_ofs--;
+    case GDK_KEY_Up:
+        prev_item ();
         break;
-    case GDK_Down:
-        if (page_ofs < tsN - 1)
-            page_ofs++;
+    case GDK_KEY_Down:
+        next_item ();
         break;
-    case GDK_Page_Up:
-        page_ofs -= PAGE_LEN;
-        if (page_ofs < 0)
-            page_ofs = 0;
+    case GDK_KEY_Page_Up:
+        page_up ();
         break;
-    case GDK_Page_Down:
-        page_ofs += PAGE_LEN;
-        if (page_ofs >= tsN)
-            page_ofs = tsN - 1;
+    case GDK_KEY_Page_Down:
+        page_down ();
         break;
-    case GDK_Home:
+    case GDK_KEY_Home:
         page_ofs = 0;
         break;
-    case GDK_End:
+    case GDK_KEY_End:
         page_ofs = tsN - PAGE_LEN;
         break;
     }
