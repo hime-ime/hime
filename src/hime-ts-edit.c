@@ -643,7 +643,7 @@ int main (int argc, char **argv) {
     label_page_ofs = gtk_label_new (NULL);
     gtk_box_pack_start (GTK_BOX (hbox_buttons), label_page_ofs, FALSE, FALSE, 3);
 
-    g_signal_connect (G_OBJECT (mainwin), "delete_event",
+    g_signal_connect (G_OBJECT (mainwin), "delete-event",
                       G_CALLBACK (do_exit), NULL);
 
     gtk_widget_show_all (mainwin);

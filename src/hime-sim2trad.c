@@ -130,7 +130,7 @@ int main (int argc, char **argv) {
     g_signal_connect (G_OBJECT (button_exit), "clicked",
                       G_CALLBACK (do_exit), NULL);
 
-    g_signal_connect (G_OBJECT (mainwin), "delete_event",
+    g_signal_connect (G_OBJECT (mainwin), "delete-event",
                       G_CALLBACK (do_exit), NULL);
 
     gtk_widget_show_all (mainwin);

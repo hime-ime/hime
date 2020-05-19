@@ -99,7 +99,7 @@ void module_setup_window_create (GtkButton *button, gpointer data_hime_setup_win
                              GTK_WIN_POS_MOUSE);
     gtk_window_set_has_resize_grip (GTK_WINDOW (hime_chewing_window), FALSE);
 
-    g_signal_connect (G_OBJECT (hime_chewing_window), "delete_event",
+    g_signal_connect (G_OBJECT (hime_chewing_window), "delete-event",
                       G_CALLBACK (cb_close_window),
                       NULL);
 
