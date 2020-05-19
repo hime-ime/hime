@@ -76,55 +76,49 @@ void *get_ph_key_ptr (void *in, int idx) {
     if (ph_key_sz == 2) {
         phokey_t *pharr = (phokey_t *) in;
         return &pharr[idx];
-    } else if (ph_key_sz == 4) {
+    }
+
+    if (ph_key_sz == 4) {
         u_int32_t *pharr4 = (u_int32_t *) in;
         return &pharr4[idx];
-    } else {
-        u_int64_t *pharr8 = (u_int64_t *) in;
-        return &pharr8[idx];
     }
+
+    u_int64_t *pharr8 = (u_int64_t *) in;
+    return &pharr8[idx];
 }
 
 int lookup_gtab_key (char *ch, void *out) {
     int outN = 0;
     INMD *tinmd = &inmd[default_input_method];
 
-    int i;
-    for (i = 0; i < tinmd->DefChars; i++) {
+    for (int i = 0; i < tinmd->DefChars; i++) {
         char *chi = (char *) tblch2 (tinmd, i);
 
-        if (!(chi[0] & 0x80))
+        if (!(chi[0] & 0x80)) {
             continue;
-        if (!utf8_eq (chi, ch))
+        }
+        if (!utf8_eq (chi, ch)) {
             continue;
+        }
 
         u_int64_t key = CONVT2 (tinmd, i);
         if (ph_key_sz == 4) {
             u_int32_t key32 = (u_int32_t) key;
             memcpy (get_ph_key_ptr (out, outN), &key32, ph_key_sz);
-        } else
+        } else {
             memcpy (get_ph_key_ptr (out, outN), &key, ph_key_sz);
+        }
         outN++;
     }
 
     return outN;
 }
 
-#if 0
-static int qcmp_str(const void *aa, const void *bb)
-{
-  char *a = * (char **)aa, *b = * (char **)bb;
-
-  return strcmp(a,b);
-}
-#endif
-
 extern FILE *fph;
 
-void load_ts_phrase () {
+void load_ts_phrase (void) {
     FILE *fp = fph;
 
-    int i;
     dbg ("fname %s\n", current_tsin_fname);
 
     int ofs = is_gtab ? sizeof (TSIN_GTAB_HEAD) : 0;
@@ -132,36 +126,41 @@ void load_ts_phrase () {
 
     tsN = 0;
     free (ts_idx);
+    ts_idx = NULL;
 
     while (!feof (fp)) {
         ts_idx = trealloc (ts_idx, int, tsN);
         ts_idx[tsN] = ftell (fp);
         u_int64_t phbuf[MAX_PHRASE_LEN];
         char chbuf[MAX_PHRASE_LEN * CH_SZ + 1];
-        u_char clen;
-        usecount_t usecount;
-        clen = 0;
+        u_char clen = 0;
+        usecount_t usecount = 0;
 
         fread (&clen, 1, 1, fp);
 
-        if (clen > MAX_PHRASE_LEN)
-            p_err ("bad tsin db clen %d > MAX_PHRASE_LEN %d\n", clen, MAX_PHRASE_LEN);
+        if (clen > MAX_PHRASE_LEN) {
+            p_err ("bad tsin db clen %d > MAX_PHRASE_LEN %d\n",
+                   clen,
+                   MAX_PHRASE_LEN);
+        }
 
         fread (&usecount, sizeof (usecount_t), 1, fp);
         fread (phbuf, ph_key_sz, clen, fp);
         int tlen = 0;
 
-        for (i = 0; i < clen; i++) {
+        for (int i = 0; i < clen; i++) {
             int n = fread (&chbuf[tlen], 1, 1, fp);
-            if (n <= 0)
+            if (n <= 0) {
                 goto stop;
+            }
             int len = utf8_sz (&chbuf[tlen]);
             fread (&chbuf[tlen + 1], 1, len - 1, fp);
             tlen += len;
         }
 
-        if (clen < 2)
+        if (clen < 2) {
             continue;
+        }
 
         chbuf[tlen] = 0;
         tsN++;
@@ -177,21 +176,22 @@ stop:
 int gtab_key2name (INMD *tinmd, u_int64_t key, char *t, int *rtlen);
 void get_key_str (void *key, int idx, char *out_str) {
     char t[128];
-    char *phostr;
+    char *phostr = NULL;
 
     if (is_gtab) {
-        int tlen;
-        u_int64_t key64;
+        int tlen = 0;
+        u_int64_t key64 = 0;
         if (ph_key_sz == 4) {
-            u_int32_t key32;
+            u_int32_t key32 = 0;
             cp_ph_key (key, idx, &key32);
             key64 = key32;
-        } else
+        } else {
             cp_ph_key (key, idx, &key64);
+        }
         gtab_key2name (pinmd, key64, t, &tlen);
         phostr = t;
     } else {
-        phokey_t k;
+        phokey_t k = 0;
         cp_ph_key (key, idx, &k);
         phostr = b_pinyin ? phokey2pinyin (k) : phokey_to_str (k);
     }
@@ -201,18 +201,20 @@ void get_key_str (void *key, int idx, char *out_str) {
 
 void load_tsin_entry0 (char *len, usecount_t *usecount, void *pho, u_char *ch);
 
-void load_tsin_at_ts_idx (int ts_row, char *len, usecount_t *usecount, void *pho, u_char *ch) {
+void load_tsin_at_ts_idx (int ts_row,
+                          char *len,
+                          usecount_t *usecount,
+                          void *pho,
+                          u_char *ch) {
     int ofs = ts_idx[ts_row];
     fseek (fph, ofs, SEEK_SET);
 
     load_tsin_entry0 (len, usecount, pho, ch);
 }
 
-void disp_page () {
-    int li;
-    for (li = 0; li < PAGE_LEN; li++) {
+void disp_page (void) {
+    for (int li = 0; li < PAGE_LEN; li++) {
         char line[256];
-        /*line[0];*/
         int ts_row = page_ofs + li;
         if (ts_row >= tsN) {
             gtk_label_set_text (GTK_LABEL (labels[li]), "-");
@@ -222,20 +224,19 @@ void disp_page () {
 
         u_int64_t phbuf[MAX_PHRASE_LEN];
         char chbuf[MAX_PHRASE_LEN * CH_SZ + 1];
-        char clen;
-        usecount_t usecount;
-        int i;
+        char clen = 0;
+        usecount_t usecount = 0;
 
         load_tsin_at_ts_idx (ts_row, &clen, &usecount, phbuf, (u_char *) chbuf);
 
-        char *t;
-        strcpy (line, t = g_markup_escape_text (chbuf, -1));
+        char *t = g_markup_escape_text (chbuf, -1);
+        strcpy (line, t);
         g_free (t);
         strcat (line, " <span foreground=\"blue\">");
 
         char tt[512];
 
-        for (i = 0; i < clen; i++) {
+        for (int i = 0; i < clen; i++) {
             get_key_str (phbuf, i, tt);
             //      dbg("tt %s\n", tt);
             strcat (line, t = g_markup_escape_text (tt, -1));
@@ -258,11 +259,12 @@ void disp_page () {
 }
 
 static void cb_button_delete (GtkButton *button, gpointer user_data) {
-    int i;
-    for (i = 0; i < PAGE_LEN; i++) {
-        if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_check[i])))
+    for (int i = 0; i < PAGE_LEN; i++) {
+        if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_check[i]))) {
             continue;
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button_check[i]), FALSE);
+        }
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button_check[i]),
+                                      FALSE);
 
         del_ofs[del_ofsN++] = ts_idx[page_ofs + i];
         ts_idx[page_ofs + i] = -1;
@@ -270,9 +272,11 @@ static void cb_button_delete (GtkButton *button, gpointer user_data) {
 
     int ntsN = 0;
 
-    for (i = 0; i < tsN; i++)
-        if (ts_idx[i] >= 0)
+    for (int i = 0; i < tsN; i++) {
+        if (ts_idx[i] >= 0) {
             ts_idx[ntsN++] = ts_idx[i];
+        }
+    }
     tsN = ntsN;
 
     disp_page ();
@@ -283,22 +287,28 @@ static void cb_button_find_ok (GtkButton *button, gpointer user_data) {
     strcpy (txt, gtk_entry_get_text (GTK_ENTRY (find_textentry)));
     //  gtk_widget_destroy(last_row);
     //  last_row = NULL;
-    if (!txt[0])
+    if (!txt[0]) {
         return;
-    int row;
-    for (row = page_ofs + 1; row < tsN; row++) {
+    }
+    int row = page_ofs + 1;
+    for (; row < tsN; row++) {
         u_int64_t phbuf[MAX_PHRASE_LEN];
         char chbuf[MAX_PHRASE_LEN * CH_SZ + 1];
-        char clen;
-        usecount_t usecount;
+        char clen = 0;
+        usecount_t usecount = 0;
 
         load_tsin_at_ts_idx (row, &clen, &usecount, phbuf, (u_char *) chbuf);
-        if (strstr (chbuf, txt))
+        if (strstr (chbuf, txt)) {
             break;
+        }
     }
 
     if (row == tsN) {
-        GtkWidget *dia = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s not found",
+        GtkWidget *dia = gtk_message_dialog_new (NULL,
+                                                 GTK_DIALOG_MODAL,
+                                                 GTK_MESSAGE_INFO,
+                                                 GTK_BUTTONS_OK,
+                                                 "%s not found",
                                                  txt);
         gtk_dialog_run (GTK_DIALOG (dia));
         gtk_widget_destroy (dia);
@@ -309,14 +319,16 @@ static void cb_button_find_ok (GtkButton *button, gpointer user_data) {
 }
 
 static void cb_button_close (GtkButton *button, gpointer user_data) {
-    if (last_row)
+    if (last_row) {
         gtk_widget_destroy (last_row);
+    }
     last_row = NULL;
 }
 
 static void cb_button_find (GtkButton *button, gpointer user_data) {
-    if (last_row)
+    if (last_row) {
         gtk_widget_destroy (last_row);
+    }
     last_row = gtk_hbox_new (FALSE, 0);
     GtkWidget *lab = gtk_label_new ("Find");
     gtk_box_pack_start (GTK_BOX (last_row), lab, FALSE, FALSE, 0);
@@ -339,17 +351,10 @@ static void cb_button_find (GtkButton *button, gpointer user_data) {
     gtk_widget_show_all (last_row);
 }
 
-#if 0
-static void cb_button_edit(GtkButton *button, gpointer user_data)
-{
-}
-#endif
-
 static void cb_button_save (GtkButton *button, gpointer user_data) {
-    int i;
-    for (i = 0; i < del_ofsN; i++) {
+    for (int i = 0; i < del_ofsN; i++) {
         fseek (fph, del_ofs[i], SEEK_SET);
-        char clen;
+        signed char clen = 0;
         fread (&clen, 1, 1, fph);
         if (clen > 0) {
             clen = -clen;
@@ -377,15 +382,14 @@ static int bigphoN;
 
 static GtkWidget *hbox_pho_sel;
 
-void destroy_pho_sel_area () {
+void destroy_pho_sel_area (void) {
     gtk_widget_destroy (hbox_pho_sel);
 }
 
 static void cb_button_ok (GtkButton *button, gpointer user_data) {
     u_int64_t pharr8[MAX_PHRASE_LEN];
 
-    int i;
-    for (i = 0; i < bigphoN; i++) {
+    for (int i = 0; i < bigphoN; i++) {
         int idx = gtk_combo_box_get_active (GTK_COMBO_BOX (bigpho[i].opt_menu));
         void *dest = get_ph_key_ptr (pharr8, i);
 
@@ -400,36 +404,36 @@ static void cb_button_ok (GtkButton *button, gpointer user_data) {
 static void cb_button_cancel (GtkButton *button, gpointer user_data) {
 }
 
-int gtab_key2name (INMD *tinmd, u_int64_t key, char *t, int *rtlen);
-GtkWidget *create_pho_sel_area () {
+GtkWidget *create_pho_sel_area (void) {
     hbox_pho_sel = gtk_hbox_new (FALSE, 0);
 
-    int i;
-
-    for (i = 0; i < bigphoN; i++) {
+    for (int i = 0; i < bigphoN; i++) {
         bigpho[i].opt_menu = gtk_combo_box_text_new ();
-        gtk_box_pack_start (GTK_BOX (hbox_pho_sel), bigpho[i].opt_menu, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (hbox_pho_sel),
+                            bigpho[i].opt_menu,
+                            FALSE,
+                            FALSE,
+                            0);
 
-        int j;
-        for (j = 0; j < bigpho[i].phokeysN; j++) {
+        for (int j = 0; j < bigpho[i].phokeysN; j++) {
             char t[128];
-            char *phostr;
+            char *phostr = NULL;
 
             if (is_gtab) {
-                int tlen;
-                u_int64_t key64;
+                int tlen = 0;
+                u_int64_t key64 = 0;
                 if (ph_key_sz == 4) {
-                    u_int32_t key32;
+                    u_int32_t key32 = 0;
                     cp_ph_key (bigpho[i].phokeys, j, &key32);
                     key64 = key32;
-                } else
+                } else {
                     cp_ph_key (bigpho[i].phokeys, j, &key64);
+                }
 
                 gtab_key2name (pinmd, key64, t, &tlen);
-                //        dbg("%d,%d] %s\n", i,j, t);
                 phostr = t;
             } else {
-                phokey_t k;
+                phokey_t k = 0;
                 cp_ph_key (bigpho[i].phokeys, j, &k);
                 phostr = b_pinyin ? phokey2pinyin (k) : phokey_to_str (k);
             }
@@ -453,39 +457,9 @@ GtkWidget *create_pho_sel_area () {
     return hbox_pho_sel;
 }
 
-#if 0
-static void cb_button_add(GtkButton *button, gpointer user_data)
-{
-  bigphoN = 0;
-  char *p = current_str;
-  while (*p) {
-    char_pho *pbigpho = &bigpho[bigphoN++];
-
-    if (ph_key_sz==2) {
-      pbigpho->phokeysN = utf8_pho_keys(p, (phokey_t*)pbigpho->phokeys);
-    } else {
-      pbigpho->phokeysN = lookup_gtab_key(p, pbigpho->phokeys);
-    }
-
-    p+=utf8_sz(p);
-
-    if (!pbigpho->phokeysN) {
-      dbg(" no mapping to pho\n");
-      return;
-    }
-  }
-
-  GtkWidget *sel =  create_pho_sel_area();
-  gtk_box_pack_start (GTK_BOX (hbox_buttons), sel, FALSE, FALSE, 20);
-
-  gtk_widget_show_all(hbox_buttons);
-
-}
-#endif
-
 Display *dpy;
 
-void do_exit () {
+void do_exit (void) {
     send_hime_message (dpy, RELOAD_TSIN_DB);
     exit (0);
 }
@@ -574,9 +548,10 @@ int main (int argc, char **argv) {
         is_gtab = TRUE;
         init_tsin_table_fname (pinmd, gtab_tsin_fname);
         load_tsin_db0 (gtab_tsin_fname, TRUE);
-    } else
+    } else {
         p_err ("Your default input method %s doesn't use phrase database",
                pinmd->cname);
+    }
 
     dbg ("ph_key_sz: %d\n", ph_key_sz);
 
@@ -594,13 +569,12 @@ int main (int argc, char **argv) {
     set_window_hime_icon (mainwin);
 
     vbox_top = gtk_vbox_new (FALSE, 0);
-    gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
+    gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top),
+                                    GTK_ORIENTATION_VERTICAL);
     gtk_container_add (GTK_CONTAINER (mainwin), vbox_top);
 
-    int i;
-    for (i = 0; i < PAGE_LEN; i++) {
-        GtkWidget *hbox;
-        hbox = gtk_hbox_new (FALSE, 0);
+    for (int i = 0; i < PAGE_LEN; i++) {
+        GtkWidget *hbox = gtk_hbox_new (FALSE, 0);
         gtk_box_pack_start (GTK_BOX (vbox_top), hbox, FALSE, FALSE, 0);
         button_check[i] = gtk_check_button_new ();
         gtk_box_pack_start (GTK_BOX (hbox), button_check[i], FALSE, FALSE, 0);
