@@ -1,3 +1,24 @@
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation version 2.1
+ * of the License.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+#ifndef HIME_CONF_H
+#define HIME_CONF_H
+
 #define CHANGE_FONT_SIZE "change font size"
 #define GB_OUTPUT_TOGGLE "gb output toggle"
 #define SIM_OUTPUT_TOGGLE "gb output sim"
@@ -145,11 +166,22 @@ extern int hime_edit_display, hime_tray_display;
 extern char *pho_kbm_name, *pho_selkey, *hime_str_im_cycle;
 extern int pho_candidate_col_N, pho_candidate_R2L;
 
+// hime-conf.c
+void init_TableDir (void);
+void get_hime_dir (char *tt);
+void init_omni_config (void);
+void free_omni_config (void);
+void save_omni_config (void);
 gboolean get_hime_user_fname (char *name, char fname[]);
+void get_hime_conf_fname (char *name, char fname[]);
+void get_hime_user_or_sys_fname (char *name, char fname[]);
 void get_hime_conf_str (char *name, char **rstr, char *default_str);
 void get_hime_conf_fstr (char *name, char rstr[], char *default_str);
+int get_hime_conf_int (char *name, int default_value);
 void save_hime_conf_str (char *name, char *str);
 void save_hime_conf_int (char *name, int val);
-void load_settings ();
-void save_omni_config (void);
-void free_omni_config (void);
+void get_sys_table_file_name (char *name, char *fname);
+char *get_hime_xim_name (void);
+Atom get_hime_atom (Display *display);
+
+#endif /* HIME_CONF_H */

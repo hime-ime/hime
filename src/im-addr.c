@@ -17,76 +17,56 @@
 
 #include <string.h>
 
-#include <dirent.h>
-#include <pwd.h>
-
-#include <sys/stat.h>
-
 #include "hime.h"
 
-char *get_hime_xim_name ();
+#include "im-srv.h"
+
+Atom get_hime_addr_atom (Display *display) {
+    return get_atom_by_name (display, "HIME_ADDR_ATOM_%s");
+}
+
+Atom get_hime_sockpath_atom (Display *display) {
+    return get_atom_by_name (display, "HIME_SOCKPATH_ATOM_%s");
+}
 
 void get_hime_im_srv_sock_path (char *outstr, int outstrN) {
-    char *disp = getenv ("DISPLAY");
-    int my_uid = getuid ();
+    const char *display = getenv ("DISPLAY");
+    const int uid = getuid ();
 
-    if (!disp || !strcmp (disp, ":0"))
-        disp = ":0.0";
+    if (!display || (strcmp (display, ":0") == 0)) {
+        display = ":0.0";
+    }
 
-    char tdisp[64];
-    strcpy (tdisp, disp);
+    const int DISPLAY_NAME_SIZE = 64;
+    char tdisplay[DISPLAY_NAME_SIZE];
+    strncpy (tdisplay, display, sizeof (tdisplay));
 
-    if (!strchr (disp, ':'))
-        strcat (tdisp, ":0");
-    if (!strchr (disp, '.'))
-        strcat (tdisp, ".0");
+    if (!strchr (display, ':')) {
+        strcat (tdisplay, ":0");
+    }
+    if (!strchr (display, '.')) {
+        strcat (tdisplay, ".0");
+    }
 
-    char my_dir[128];
+    const int DIR_NAME_SIZE = 128;
+    char my_dir[DIR_NAME_SIZE];
 
-    struct passwd *pw = getpwuid (my_uid);
-    snprintf (my_dir, sizeof (my_dir), "%s/.hime-%s", g_get_tmp_dir (), pw->pw_name);
+    struct passwd *pw = getpwuid (uid);
+    const gchar *tmpdir = g_get_tmp_dir ();
+    snprintf (my_dir, sizeof (my_dir), "%s/.hime-%s", tmpdir, pw->pw_name);
     struct stat st;
 
-    if (stat (my_dir, &st) < 0)
+    // my_dir doesn't exist, create one
+    if (stat (my_dir, &st) == -1) {
         mkdir (my_dir, 0700);
-    else {
-        if (st.st_uid != my_uid) {
+    } else {
+        if (st.st_uid != uid) {
             fprintf (stderr, "please check the permission of dir %s\n", my_dir);
             return;
         }
     }
 
-    snprintf (outstr, outstrN, "%s/socket-%s-%s", my_dir, tdisp, get_hime_xim_name ());
-}
-
-Atom get_hime_addr_atom (Display *dpy) {
-    if (!dpy) {
-        dbg ("dpy is null\n");
-        return 0;
-    }
-
-    char *xim_name = get_hime_xim_name ();
-    char tt[128];
-
-    snprintf (tt, sizeof (tt), "HIME_ADDR_ATOM_%s", xim_name);
-
-    Atom atom = XInternAtom (dpy, tt, False);
-
-    return atom;
-}
-
-Atom get_hime_sockpath_atom (Display *dpy) {
-    if (!dpy) {
-        dbg ("dpy is null\n");
-        return 0;
-    }
-
-    char *xim_name = get_hime_xim_name ();
-    char tt[128];
-
-    snprintf (tt, sizeof (tt), "HIME_SOCKPATH_ATOM_%s", xim_name);
-
-    Atom atom = XInternAtom (dpy, tt, False);
-
-    return atom;
+    snprintf (outstr, outstrN,
+              "%s/socket-%s-%s",
+              my_dir, tdisplay, get_hime_xim_name ());
 }

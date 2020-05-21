@@ -130,7 +130,7 @@ gboolean inph_typ_pho_pinyin (int newkey) {
     return PHO_STATUS_OK_NEW | PHO_STATUS_PINYIN_LEFT;
 }
 
-void load_pin_juyin () {
+void load_pin_juyin (void) {
     text_pho_N = 6;
     char pinfname[128];
 

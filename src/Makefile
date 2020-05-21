@@ -16,74 +16,124 @@ CFLAGS= $(OPTFLAGS) $(GTKINC) \
 		-DFREEBSD=$(FREEBSD) \
 		-I./IMdkit/include -I./im-client
 
-OBJ_IMSRV = im-addr.o im-dispatch.o im-srv.o hime-crypt.o
+OBJ_IMSRV = hime-crypt.o im-addr.o im-dispatch.o im-srv.o
 
-hime_pho_o  = win-pho.o pho.o pho-util.o pho-sym.o table-update.o pho-dbg.o
-hime_gtab_o = gtab.o win-gtab.o gtab-util.o gtab-list.o gtab-buf.o
+hime_pho_o  = pho-dbg.o pho-sym.o pho-util.o pho.o \
+			table-update.o win-pho.o
+hime_gtab_o = gtab-buf.o gtab-list.o gtab-util.o gtab.o win-gtab.o
 
 
-OBJS      = hime.o eve.o util.o hime-conf.o hime-settings.o locale.o \
-	hime-icon.o about.o \
-	hime-exec-script.o pho-play.o cache.o gtk_bug_fix.o \
-	phrase-save-menu.o \
-	$(hime_pho_o) $(hime_gtab_o) \
-	hime-common.o phrase.o t2s-lookup.o gtab-use-count.o \
-	win-save-phrase.o unix-exec.o pho-kbm-name.o statistic.o tsin-scan.o \
-	hime-module.o lang.o \
-	hime-module-cb.o gtab-init.o fullchar.o gtab-tsin-fname.o \
-	win-message.o win-sym.o win-inmd-switch.o pinyin.o \
-	win-pho-near.o win-kbm.o pho2pinyin.o
+OBJS      = $(hime_pho_o) $(hime_gtab_o) hime.o \
+			about.o cache.o eve.o fullchar.o \
+			gtab-init.o gtab-tsin-fname.o gtab-use-count.o gtk_bug_fix.o \
+			hime-common.o hime-conf.o hime-exec-script.o hime-icon.o \
+			hime-module-cb.o hime-module.o hime-settings.o \
+			lang.o locale.o \
+			pho-kbm-name.o pho-play.o pho2pinyin.o \
+			phrase-save-menu.o phrase.o \
+			pinyin.o \
+			statistic.o t2s-lookup.o tsin-scan.o \
+			unix-exec.o util.o \
+			win-inmd-switch.o win-kbm.o win-message.o win-pho-near.o \
+			win-save-phrase.o win-sym.o
 
-OBJS_TSLEARN = hime-tslearn.o util.o hime-conf.o pho-util.o tsin-util.o \
-	pho-sym.o table-update.o locale.o \
-	hime-settings.o hime-common.o hime-icon.o pho-dbg.o \
-	pho2pinyin.o pinyin.o lang.o gtab-list.o gtab-init.o fullchar.o \
-	gtab-tsin-fname.o unix-exec.o gtab-util.o
+OBJS_TSLEARN = hime-tslearn.o \
+			fullchar.o \
+			gtab-init.o gtab-list.o gtab-tsin-fname.o gtab-util.o \
+			hime-common.o hime-conf.o hime-icon.o hime-settings.o \
+			lang.o locale.o \
+			pho-dbg.o pho-sym.o pho-util.o pho2pinyin.o \
+			pinyin.o \
+			table-update.o tsin-util.o unix-exec.o util.o
 
-OBJS_TS_EDIT = hime-ts-edit.o util.o hime-conf.o pho-util.o tsin-util.o \
-	pho-sym.o table-update.o locale.o \
-	hime-settings.o hime-common.o hime-icon.o pho-dbg.o \
-	pho2pinyin.o pinyin.o lang.o gtab-list.o gtab-init.o fullchar.o \
-	gtab-tsin-fname.o unix-exec.o gtab-util.o
+OBJS_TS_EDIT = hime-ts-edit.o \
+			fullchar.o \
+			gtab-init.o gtab-list.o gtab-tsin-fname.o gtab-util.o \
+			hime-common.o hime-conf.o hime-icon.o hime-settings.o \
+			lang.o locale.o \
+			pho-dbg.o pho-sym.o pho-util.o pho2pinyin.o \
+			pinyin.o \
+			table-update.o tsin-util.o unix-exec.o util.o
 
-OBJS_JUYIN_LEARN = hime-juyin-learn.o locale.o util.o pho-util.o pho-sym.o \
-	pho2pinyin.o hime-settings.o hime-conf.o table-update.o pinyin.o \
-	hime-icon.o pho-dbg.o
+OBJS_JUYIN_LEARN = hime-juyin-learn.o \
+			hime-common.o hime-conf.o hime-icon.o hime-settings.o \
+			locale.o \
+			pho-dbg.o pho-sym.o pho-util.o pho2pinyin.o \
+			pinyin.o \
+			table-update.o util.o
 
-OBJS_hime-sim2trad = hime-sim2trad.o util.o locale.o hime-conf.o hime-icon.o \
-	t2s-lookup.o hime-settings.o
+OBJS_hime-sim2trad = hime-sim2trad.o \
+			hime-common.o hime-conf.o hime-icon.o hime-settings.o \
+			locale.o \
+			pho2pinyin.o pinyin.o \
+			t2s-lookup.o util.o
 
-OBJS_hime-phod2a = hime-phod2a.o pho-util.o hime-conf.o pho-sym.o \
-	table-update.o pho-dbg.o locale.o hime-settings.o util.o
+OBJS_hime-phod2a = hime-phod2a.o \
+			hime-common.o hime-conf.o hime-settings.o \
+			locale.o \
+			pho-dbg.o pho-sym.o pho-util.o pho2pinyin.o \
+			pinyin.o \
+			table-update.o util.o
 
-OBJS_hime-tsa2d32 = hime-tsa2d32.o util.o pho-sym.o hime-conf.o \
-	locale.o pho-lookup.o pinyin.o pho2pinyin.o pho-dbg.o
+OBJS_hime-tsa2d32 = hime-tsa2d32.o \
+			hime-common.o hime-conf.o hime-settings.o \
+			locale.o \
+			pho-dbg.o pho-lookup.o pho-sym.o pho2pinyin.o \
+			pinyin.o \
+			util.o
 
-OBJS_hime-phoa2d = hime-phoa2d.o pho-sym.o hime-conf.o locale.o \
-	pho-lookup.o util.o pho-dbg.o
+OBJS_hime-phoa2d = hime-phoa2d.o \
+			hime-common.o hime-conf.o hime-settings.o \
+			locale.o \
+			pho-dbg.o pho-lookup.o pho-sym.o pho2pinyin.o \
+			pinyin.o \
+			util.o
 
-OBJS_kbmcv = kbmcv.o pho-sym.o util.o locale.o
+OBJS_kbmcv = kbmcv.o \
+			locale.o pho-sym.o util.o
 
-OBJS_hime-tsd2a32 = gtab-dbg.o \
-	hime-conf.o hime-tsd2a32.o \
-	locale.o util.o \
-	pho-dbg.o pho-sym.o pho2pinyin.o pinyin.o
+OBJS_hime-tsd2a32 = hime-tsd2a32.o \
+			gtab-dbg.o \
+			hime-common.o hime-conf.o hime-settings.o \
+			locale.o \
+			pho-dbg.o pho-sym.o pho2pinyin.o \
+			pinyin.o \
+			util.o
 
-OBJS_cin2gtab     = hime-cin2gtab.o gtab-util.o util.o locale.o
-OBJS_gtab2cin     = hime-gtab2cin.o gtab-util.o util.o locale.o
-OBJS_gtab_merge   = hime-gtab-merge.o gtab-util.o util.o locale.o
-OBJS_hime_setup   = hime-setup.o hime-conf.o util.o hime-settings.o \
-	hime-setup-list.o locale.o hime-setup-pho.o about.o \
-	lang.o hime-icon.o hime-setup-gtab.o hime-setup-appearance.o gtab-list.o \
-	hime-exec-script.o pho-kbm-name.o hime-module-cb.o
+OBJS_cin2gtab     = hime-cin2gtab.o gtab-util.o locale.o util.o
+OBJS_gtab2cin     = hime-gtab2cin.o gtab-util.o locale.o util.o
+OBJS_gtab_merge   = hime-gtab-merge.o gtab-util.o locale.o util.o
+OBJS_hime_setup   = hime-setup.o \
+					about.o \
+					gtab-list.o \
+					hime-common.o hime-conf.o hime-exec-script.o hime-icon.o \
+					hime-module-cb.o hime-settings.o hime-setup-appearance.o \
+					hime-setup-gtab.o hime-setup-list.o hime-setup-pho.o \
+					lang.o locale.o \
+					pho-kbm-name.o pho2pinyin.o pinyin.o \
+					util.o
 
-OBJS_hime_gb_toggle  = hime-gb-toggle.o  hime-conf.o util.o
-OBJS_hime_message    = hime-message.o    hime-conf.o util.o
+OBJS_hime_gb_toggle  = hime-gb-toggle.o \
+					hime-common.o hime-conf.o hime-settings.o \
+					locale.o \
+					pho2pinyin.o pinyin.o\
+					util.o
 
-OBJS_pin_juyin       = pin-juyin.o util.o pho-lookup.o locale.o pho-sym.o
+OBJS_hime_message    = hime-message.o \
+					hime-common.o hime-conf.o hime-settings.o \
+					locale.o \
+					pho2pinyin.o pinyin.o \
+					util.o
 
-OBJS_tsin2gtab_phrase = hime-tsin2gtab-phrase.o hime-conf.o util.o locale.o \
-	pho-dbg.o pho-sym.o gtab-dbg.o lang.o
+OBJS_pin_juyin       = pin-juyin.o locale.o pho-lookup.o pho-sym.o util.o
+
+OBJS_tsin2gtab_phrase = hime-tsin2gtab-phrase.o \
+						gtab-dbg.o \
+						hime-common.o hime-conf.o hime-settings.o \
+						lang.o locale.o \
+						pho-dbg.o pho-sym.o pho2pinyin.o \
+						pinyin.o \
+						util.o
 
 
 ifeq ($(USE_XIM),Y)

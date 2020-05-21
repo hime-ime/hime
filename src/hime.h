@@ -167,9 +167,6 @@ int utf8_str_N (char *str);
 void utf8cpyn (char *t, char *s, int n);
 void utf8cpy_bytes (char *t, char *s, int n);
 char *myfgets (char *buf, int bufN, FILE *fp);
-void get_hime_dir (char *tt);
-Atom get_hime_atom (Display *dpy);
-void get_sys_table_file_name (char *name, char *fname);
 char *half_char_to_full_char (KeySym xkey);
 void send_text (char *text);
 void send_utf8_ch (char *bchar);
@@ -190,8 +187,17 @@ GdkMonitor *get_primary_monitor (void);
 #endif
 GdkKeymap *get_keymap (void);
 gboolean get_caps_lock_state (void);
+Atom get_atom_by_name (Display *display, char *name);
 
+// hime-settings.c
+void load_settings (void);
+
+// pinyin.c
+void load_pin_juyin (void);
+
+// im-client/hime-send.c
 void send_hime_message (Display *dpy, char *s);
+
 void check_CS ();
 void get_win_size (GtkWidget *win, int *width, int *height);
 void change_win_fg_bg (GtkWidget *win, GtkWidget *label);

@@ -47,8 +47,6 @@ static int idx;
 
 extern char *TableDir;
 
-void get_hime_user_or_sys_fname (char *name, char fname[]);
-
 FILE *watch_fopen (char *filename, time_t *pfile_modify_time) {
     FILE *fp;
     char fname[256];

@@ -41,8 +41,6 @@ int ts_gtabN;
 
 static int a_phcount;
 
-void get_hime_user_or_sys_fname (char *name, char fname[]);
-
 void load_tsin_db0 (char *infname, gboolean is_gtab_i) {
     char tsidxfname[512];
     //  dbg("cur %s %s\n", infname, current_tsin_fname);

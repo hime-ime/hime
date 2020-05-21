@@ -23,8 +23,6 @@
 #include "pho.h"
 #include "tsin.h"
 
-void get_hime_user_or_sys_fname (char *name, char fname[]);
-
 gboolean init_tsin_table_fname (INMD *p, char *fname) {
     char fname_idx[256], gtab_phrase_src[256], gtabfname[256];
     if (p->filename_append) {

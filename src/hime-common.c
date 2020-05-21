@@ -27,6 +27,9 @@ gboolean b_use_full_space = TRUE;
 
 static char text_pho[6][CH_SZ];
 
+// initialized in hime.c
+Display *dpy;
+
 void bell (void) {
     if (hime_bell_off)
         return;
@@ -146,6 +149,23 @@ GdkKeymap *get_keymap (void) {
 
 gboolean get_caps_lock_state (void) {
     return gdk_keymap_get_caps_lock_state (get_keymap ());
+}
+
+Atom get_atom_by_name (Display *display, char *name) {
+    if (!display) {
+        dbg ("display is null\n");
+        return 0;
+    }
+
+    const char *xim_name = get_hime_xim_name ();
+    static const int ATOM_NAME_SIZE = 128;
+    char atom_name[ATOM_NAME_SIZE];
+
+    snprintf (atom_name, sizeof (atom_name), name, xim_name);
+
+    // get the atom identifier
+    // the atom is created if it does not exist
+    return XInternAtom (display, atom_name, False);
 }
 
 #if !USE_TSIN

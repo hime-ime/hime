@@ -24,12 +24,11 @@
 
 #include "hime.h"
 
-#if !CLIENT_LIB
 char *TableDir = HIME_TABLE_DIR;
 GKeyFile *hime_omni_config = NULL;
 #define HIME_CONF "/hime.conf"
 
-void init_TableDir () {
+void init_TableDir (void) {
     char *dname;
     if ((dname = getenv ("HIME_TABLE_DIR"))) {
         TableDir = dname;
@@ -192,9 +191,8 @@ void save_hime_conf_int (char *name, int val) {
 void get_sys_table_file_name (char *name, char *fname) {
     sprintf (fname, "%s/%s", TableDir, name);
 }
-#endif /* !CLIENT_LIB */
 
-char *get_hime_xim_name () {
+char *get_hime_xim_name (void) {
     char *xim_name;
 
     if ((xim_name = getenv ("XMODIFIERS"))) {
@@ -219,13 +217,6 @@ char *get_hime_xim_name () {
     return "hime";
 }
 
-Atom get_hime_atom (Display *dpy) {
-    char *xim_name = get_hime_xim_name ();
-    char tt[128];
-
-    snprintf (tt, sizeof (tt), "HIME_ATOM_%s", xim_name);
-
-    Atom atom = XInternAtom (dpy, tt, False);
-
-    return atom;
+Atom get_hime_atom (Display *display) {
+    return get_atom_by_name (display, "HIME_ATOM_%s");
 }
