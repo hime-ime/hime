@@ -31,7 +31,6 @@ typedef unsigned int u_int32_t;
 
 #define PAGE_LEN 20
 
-void init_TableDir ();
 void init_gtab (int inmdno);
 gboolean init_tsin_table_fname (INMD *p, char *fname);
 void load_tsin_db0 (char *infname, gboolean is_gtab_i);
@@ -457,10 +456,10 @@ GtkWidget *create_pho_sel_area (void) {
     return hbox_pho_sel;
 }
 
-Display *dpy;
+static Display *display;
 
 void do_exit (void) {
-    send_hime_message (dpy, RELOAD_TSIN_DB);
+    send_hime_message (display, RELOAD_TSIN_DB);
     exit (0);
 }
 
@@ -578,7 +577,7 @@ int main (int argc, char **argv) {
 
     dbg ("ph_key_sz: %d\n", ph_key_sz);
 
-    dpy = GDK_DISPLAY ();
+    display = GDK_DISPLAY ();
 
     mainwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_position (GTK_WINDOW (mainwin), GTK_WIN_POS_CENTER);

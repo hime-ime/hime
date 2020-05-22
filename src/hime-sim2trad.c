@@ -72,7 +72,7 @@ gboolean cb_button_fetch () {
 }
 
 void set_window_hime_icon (GtkWidget *window);
-void init_TableDir ();
+
 int main (int argc, char **argv) {
     init_TableDir ();
 

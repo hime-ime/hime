@@ -27,7 +27,6 @@ void get_keymap_str (u_int64_t k, char *keymap, int keybits, char tkey[]);
 char *phokey2pinyin (phokey_t k);
 gboolean is_pinyin_kbm ();
 char *sys_err_strA ();
-void init_TableDir ();
 
 int main (int argc, char **argv) {
     FILE *fp;

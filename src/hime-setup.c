@@ -408,7 +408,7 @@ static void run_dialog (void) {
     gtk_widget_show_all (dialog);
 }
 
-void init_TableDir (), exec_setup_scripts ();
+void exec_setup_scripts ();
 
 int main (int argc, char **argv) {
     set_is_chs ();

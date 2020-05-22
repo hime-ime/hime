@@ -62,8 +62,6 @@ char *phokey2pinyin (phokey_t k) {
     return tt;
 }
 
-void load_pin_juyin ();
-
 gboolean is_pinyin_kbm () {
     char kbm_str[32];
 

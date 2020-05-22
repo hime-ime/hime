@@ -14,7 +14,10 @@ CFLAGS+= $(OPTFLAGS) $(GTKINC) \
 		-DFREEBSD=$(FREEBSD) \
 		-I. -I.. -I../IMdkit/include \
 		-fPIC
-OBJS = hime-im-client.o hime-send.o im-addr.o hime-conf.o util.o hime-crypt-fpic.o
+
+DEPS = hime-common.o hime-conf.o hime-crypt.o hime-settings.o \
+		locale.o im-addr.o pho2pinyin.o pinyin.o util.o
+OBJS = hime-im-client.o hime-send.o $(DEPS)
 
 .cpp.E:
 	@echo "  $< -> $@"
@@ -57,11 +60,24 @@ uninstall:
 	cd $(himelibdir) && rm -f $(SOFILEVER) $(SOFILE) $(SOFILE).1
 	rmdir --ignore-fail-on-non-empty $(himelibdir)
 
+# rules to rebuild $(DEPS), rebuild with -fPIC
+hime-common.o: ../hime-common.c
+	@echo "  $^ -> $@"
+	$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
+
 hime-conf.o: ../hime-conf.c
 	@echo "  $^ -> $@"
 	$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
-util.o: ../util.c
+hime-crypt.o: ../hime-crypt.c
+	@echo "  $^ -> $@"
+	$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
+
+hime-settings.o: ../hime-settings.c
+	@echo "  $^ -> $@"
+	$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
+
+locale.o: ../locale.c
 	@echo "  $^ -> $@"
 	$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
@@ -69,9 +85,18 @@ im-addr.o: ../im-addr.c
 	@echo "  $^ -> $@"
 	$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
-hime-crypt-fpic.o: ../hime-crypt.c
+pho2pinyin.o: ../pho2pinyin.c
 	@echo "  $^ -> $@"
 	$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
+
+pinyin.o: ../pinyin.c
+	@echo "  $^ -> $@"
+	$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
+
+util.o: ../util.c
+	@echo "  $^ -> $@"
+	$(CCX) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
+
 
 .PHONY: clean
 clean:

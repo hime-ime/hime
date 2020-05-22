@@ -29,22 +29,17 @@
 #include <sys/types.h>
 #include <sys/un.h>
 
-#include <X11/Xatom.h>
-
 #include "hime.h"
 
-#include "hime-protocol.h"
 #include "im-srv.h"
 
 int im_sockfd, im_tcp_sockfd;
-Atom get_hime_sockpath_atom (Display *dpy);
 Server_IP_port srv_ip_port;
 static Window prop_win;
 static Atom addr_atom;
 
 void gdk_input_remove (gint tag);
 
-void get_hime_im_srv_sock_path (char *outstr, int outstrN);
 void process_client_req (int fd);
 
 static gboolean cb_read_hime_client_data (GIOChannel *source, GIOCondition condition, gpointer data) {
@@ -53,8 +48,6 @@ static gboolean cb_read_hime_client_data (GIOChannel *source, GIOCondition condi
     process_client_req (fd);
     return TRUE;
 }
-
-Atom get_hime_addr_atom (Display *dpy);
 
 static void gen_passwd_idx () {
     srv_ip_port.passwd.seed = (rand () >> 1) % __HIME_PASSWD_N_;

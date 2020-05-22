@@ -29,7 +29,6 @@
 #include "pho.h"
 #include "tsin.h"
 
-void load_pin_juyin ();
 phokey_t pinyin2phokey (char *s);
 
 static char *bf;
@@ -213,8 +212,6 @@ static int qcmp_usecount (const void *a, const void *b) {
 }
 
 void send_hime_message (Display *dpy, char *s);
-
-void init_TableDir ();
 
 int main (int argc, char **argv) {
     FILE *fp, *fw;

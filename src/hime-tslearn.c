@@ -27,7 +27,6 @@
 extern char *current_tsin_fname;
 typedef unsigned int u_int32_t;
 
-void init_TableDir ();
 void init_gtab (int inmdno);
 gboolean init_tsin_table_fname (INMD *p, char *fname);
 void load_tsin_db0 (char *infname, gboolean is_gtab_i);
@@ -376,10 +375,10 @@ static void cb_button_add (GtkButton *button, gpointer user_data) {
     gtk_widget_show_all (hbox_buttons);
 }
 
-Display *dpy;
+static Display *display;
 
 void do_exit () {
-    send_hime_message (dpy, RELOAD_TSIN_DB);
+    send_hime_message (display, RELOAD_TSIN_DB);
     exit (0);
 }
 
@@ -421,7 +420,7 @@ int main (int argc, char **argv) {
 
     dbg ("ph_key_sz: %d\n", ph_key_sz);
 
-    dpy = GDK_DISPLAY ();
+    display = GDK_DISPLAY ();
 
     mainwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_has_resize_grip (GTK_WINDOW (mainwin), FALSE);

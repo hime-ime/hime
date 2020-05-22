@@ -36,11 +36,11 @@
 
 #include "hime-im-client.h"
 #include "hime-protocol.h"
+#include "im-srv.h"
 
 #define DBG 0
 static int flags_backup;
 
-Atom get_hime_sockpath_atom (Display *dpy);
 static void save_old_sigaction_single (int signo, struct sigaction *act) {
     sigaction (signo, NULL, act);
 
@@ -53,8 +53,6 @@ static void restore_old_sigaction_single (int signo, struct sigaction *act) {
     if (act->sa_handler != SIG_IGN)
         signal (signo, act->sa_handler);
 }
-char *get_hime_im_srv_sock_path ();
-Atom get_hime_addr_atom (Display *dpy);
 
 Window find_hime_window (Display *dpy) {
     Atom hime_addr_atom = get_hime_addr_atom (dpy);
@@ -283,7 +281,6 @@ static void validate_handle (HIME_client_handle *hime_ch) {
 }
 
 HIME_client_handle *hime_im_client_open (Display *disp) {
-    //  dbg("hime_im_client_open\n");
     HIME_client_handle *handle = hime_im_client_reopen (NULL, disp);
     handle->disp = disp;
     return handle;

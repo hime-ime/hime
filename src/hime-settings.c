@@ -85,10 +85,9 @@ char *pho_kbm_name, *pho_selkey;
 int pho_candidate_col_N, pho_candidate_R2L;
 
 int get_hime_conf_int (char *name, int default_value);
-void init_omni_config (void);
 int is_kde5 (void);
 
-void load_settings () {
+void load_settings (void) {
 #if TRAY_UNITY
     const char *desktop = getenv ("XDG_CURRENT_DESKTOP");
 #endif

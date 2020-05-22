@@ -22,7 +22,6 @@
 #include "hime.h"
 
 Window root;
-Display *dpy;
 
 int win_xl, win_yl;
 int win_x, win_y;  // actual win x/y
@@ -35,7 +34,6 @@ Window xim_xwin;
 
 extern unich_t *fullchar[];
 gboolean win_kbm_inited;
-char *get_hime_xim_name ();
 
 char *half_char_to_full_char (KeySym xkey) {
     if (xkey < ' ' || xkey > 127)
@@ -521,7 +519,7 @@ void sig_do_exit (int sig) {
     do_exit ();
 }
 
-void load_phrase (), init_TableDir ();
+void load_phrase ();
 void init_tray (), exec_setup_scripts ();
 void init_hime_im_serv (Window win);
 void init_tray_double ();

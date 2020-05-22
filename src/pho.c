@@ -409,7 +409,6 @@ void putkey_pho (u_short key, int idx) {
         set_gtab_target_displayed ();
 }
 
-void load_pin_juyin ();
 void recreate_win1_if_nessary ();
 
 void load_tab_pho_file () {
