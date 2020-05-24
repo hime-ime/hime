@@ -187,7 +187,7 @@ GdkMonitor *get_primary_monitor (void);
 #endif
 GdkKeymap *get_keymap (void);
 gboolean get_caps_lock_state (void);
-Atom get_atom_by_name (Display *display, char *name);
+Atom get_atom_by_name (Display *display, const char *name);
 
 // hime-settings.c
 void load_settings (void);

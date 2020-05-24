@@ -215,7 +215,7 @@ static void gtk_im_context_hime_set_client_window (GtkIMContext *context,
     get_hime_im_client (context_xim);
     if (context_xim->hime_ch) {
         hime_im_client_set_client_window (context_xim->hime_ch,
-                                   GDK_WINDOW_XID (client_window));
+                                          GDK_WINDOW_XID (client_window));
     }
 }
 
