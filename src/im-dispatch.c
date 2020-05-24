@@ -190,39 +190,44 @@ void process_client_req (int fd) {
         {
             char tt[128];
 
-            if (req.keyeve.key < 127) {
-                snprintf (tt, sizeof (tt), "'%c'", req.keyeve.key);
+            if (req.key_event.key < 127) {
+                snprintf (tt, sizeof (tt), "'%c'", req.key_event.key);
             } else {
-                strcpy (tt, XKeysymToString (req.keyeve.key));
+                strcpy (tt, XKeysymToString (req.key_event.key));
             }
 
             dbg_time ("HIME_key_press  %x %s\n", cs, tt);
         }
 #endif
-        to_hime_endian_4 (&req.keyeve.key);
-        to_hime_endian_4 (&req.keyeve.state);
-
-        //	  dbg("serv key eve %x %x predit:%d\n",req.keyeve.key, req.keyeve.state, cs->use_preedit);
+        to_hime_endian_4 (&req.key_event.key);
+        to_hime_endian_4 (&req.key_event.state);
 
 #if DBG
-        char *typ;
-        typ = "press";
+        char *typed = NULL;
 #endif
 
-        if (req.req_no == HIME_req_key_press)
-            status = ProcessKeyPress (req.keyeve.key, req.keyeve.state);
-        else {
-            status = ProcessKeyRelease (req.keyeve.key, req.keyeve.state);
-
+        if (req.req_no == HIME_req_key_press) {
+            status = ProcessKeyPress (req.key_event.key, req.key_event.state);
 #if DBG
-            typ = "rele";
+            typed = "press";
+#endif
+        } else {
+            status = ProcessKeyRelease (req.key_event.key, req.key_event.state);
+#if DBG
+            typed = "release";
 #endif
         }
 
         if (status)
             reply.flag |= HIME_reply_key_processed;
 #if DBG
-        dbg ("%s srv flag:%x status:%d len:%d %x %c\n", typ, reply.flag, status, output_bufferN, req.keyeve.key, req.keyeve.key & 0x7f);
+        dbg ("%s srv flag:%x status:%d len:%d %x %c\n",
+             typed,
+             reply.flag,
+             status,
+             output_bufferN,
+             req.key_event.key,
+             req.key_event.key & 0x7f);
 #endif
         int datalen;
         datalen = reply.datalen =
