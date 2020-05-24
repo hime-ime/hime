@@ -196,7 +196,7 @@ void load_settings (void);
 void load_pin_juyin (void);
 
 // im-client/hime-send.c
-void send_hime_message (Display *dpy, char *s);
+void send_hime_message (Display *display, const char *message);
 
 void check_CS ();
 void get_win_size (GtkWidget *win, int *width, int *height);
