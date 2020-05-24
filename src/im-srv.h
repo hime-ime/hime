@@ -47,6 +47,6 @@ extern Server_IP_port srv_ip_port;
 // im-addr.c
 Atom get_hime_addr_atom (Display *display);
 Atom get_hime_sockpath_atom (Display *display);
-void get_hime_im_srv_sock_path (char *outstr, int outstrN);
+void get_hime_im_srv_sock_path (char *outstr, const int outstrN);
 
 #endif /* HIME_IM_SRV_H */
