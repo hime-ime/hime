@@ -21,6 +21,7 @@
 #define HIME_IM_CLIENT_H
 
 #include <stdint.h>
+#include <stdlib.h>
 
 #include "hime-im-client-attr.h"
 
