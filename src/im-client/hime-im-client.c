@@ -590,7 +590,7 @@ void hime_im_client_set_cursor_location (HIME_client_handle *handle, int x, int 
     }
 }
 
-void hime_im_client_set_window (HIME_client_handle *handle, Window win) {
+void hime_im_client_set_client_window (HIME_client_handle *handle, Window win) {
     if (!handle) {
         return;
     }

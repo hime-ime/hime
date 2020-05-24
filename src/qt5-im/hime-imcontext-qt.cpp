@@ -157,7 +157,7 @@ void QHimePlatformInputContext::setFocusObject (QObject *object) {
     focused_win = win;
 
     if (hime_ch) {
-        hime_im_client_set_window (hime_ch, win);
+        hime_im_client_set_client_window (hime_ch, win);
         hime_im_client_focus_in (hime_ch);
         cursorMoved ();
     }

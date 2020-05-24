@@ -57,7 +57,7 @@ void hime_im_client_close (HIME_client_handle *handle);
 void hime_im_client_focus_in (HIME_client_handle *handle);
 void hime_im_client_focus_out (HIME_client_handle *handle);
 void hime_im_client_focus_out2 (HIME_client_handle *handle, char **rstr);
-void hime_im_client_set_window (HIME_client_handle *handle, Window win);
+void hime_im_client_set_client_window (HIME_client_handle *handle, Window win);
 void hime_im_client_set_cursor_location (HIME_client_handle *handle,
                                          int x,
                                          int y);
