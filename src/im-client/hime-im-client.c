@@ -43,14 +43,6 @@
 // will be restored in hime_im_client_reopen
 static int flags_backup;
 
-Window find_hime_window (Display *display) {
-    const Atom hime_addr_atom = get_hime_addr_atom (display);
-    if (hime_addr_atom == None) {
-        return None;
-    }
-    return XGetSelectionOwner (display, hime_addr_atom);
-}
-
 int is_special_user;
 
 static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch,
@@ -280,26 +272,6 @@ static void validate_handle (HIME_client_handle *hime_ch) {
     hime_im_client_reopen (hime_ch, hime_ch->display);
 }
 
-HIME_client_handle *hime_im_client_open (Display *display) {
-    HIME_client_handle *handle = hime_im_client_reopen (NULL, display);
-    handle->display = display;
-    return handle;
-}
-
-void hime_im_client_close (HIME_client_handle *handle) {
-    if (!handle) {
-        return;
-    }
-
-    if (handle->fd > 0) {
-        close (handle->fd);
-    }
-    free (handle->passwd);
-    handle->passwd = NULL;
-    free (handle);
-    handle = NULL;
-}
-
 static int gen_req (HIME_client_handle *handle, uint32_t req_no, HIME_req *req) {
     validate_handle (handle);
 
@@ -414,6 +386,214 @@ static int handle_write (HIME_client_handle *handle,
     return r;
 }
 
+// public functions
+// APIs for Gtk+/Qt IM modules
+HIME_client_handle *hime_im_client_open (Display *display) {
+    HIME_client_handle *handle = hime_im_client_reopen (NULL, display);
+    handle->display = display;
+    return handle;
+}
+
+void hime_im_client_close (HIME_client_handle *handle) {
+    if (!handle) {
+        return;
+    }
+
+    if (handle->fd > 0) {
+        close (handle->fd);
+    }
+    free (handle->passwd);
+    handle->passwd = NULL;
+    free (handle);
+    handle = NULL;
+}
+
+void hime_im_client_set_client_window (HIME_client_handle *handle,
+                                       const Window win) {
+    if (!handle) {
+        return;
+    }
+
+    if (is_special_user) {
+        return;
+    }
+
+    if (!win) {
+        return;
+    }
+
+    handle->client_win = win;
+}
+
+int hime_im_client_get_preedit (HIME_client_handle *handle,
+                                char **str,
+                                HIME_PREEDIT_ATTR att[],
+                                int *cursor,
+                                int *sub_comp_len) {
+    *str = NULL;
+    if (!handle) {
+        return 0;
+    }
+
+    if (is_special_user) {
+        return 0;
+    }
+
+    int attN, tcursor, str_len;
+    HIME_req req;
+    if (!gen_req (handle, HIME_req_get_preedit, &req)) {
+    err_ret:
+        if (cursor) {
+            *cursor = 0;
+        }
+        *str = strdup ("");
+        return 0;
+    }
+
+    if (handle_write (handle, &req, sizeof (req)) <= 0) {
+        error_proc (handle, "hime_im_client_get_preedit error");
+        goto err_ret;
+    }
+
+    str_len = -1;  // str_len includes \0
+    if (handle_read (handle, &str_len, sizeof (str_len)) <= 0) {
+        goto err_ret;  // including \0
+    }
+
+    *str = (char *) malloc (str_len);
+
+    if (handle_read (handle, *str, str_len) <= 0) {
+        goto err_ret;
+    }
+#if DBG
+    dbg ("hime_im_client_get_preedit len:%d '%s' \n", str_len, *str);
+#endif
+    attN = -1;
+    if (handle_read (handle, &attN, sizeof (attN)) <= 0) {
+        goto err_ret;
+    }
+
+    //  dbg("attrN:%d\n", attN);
+
+    if (attN > 0 && handle_read (handle, att, sizeof (HIME_PREEDIT_ATTR) * attN) <= 0) {
+        goto err_ret;
+    }
+
+    tcursor = 0;
+    if (handle_read (handle, &tcursor, sizeof (tcursor)) <= 0) {
+        goto err_ret;
+    }
+
+    if (cursor) {
+        *cursor = tcursor;
+    }
+
+    int tsub_comp_len;
+    tsub_comp_len = 0;
+    if (handle_read (handle, &tsub_comp_len, sizeof (tsub_comp_len)) <= 0) {
+        goto err_ret;
+    }
+    if (sub_comp_len) {
+        *sub_comp_len = tsub_comp_len;
+    }
+
+    return attN;
+}
+
+static int hime_im_client_forward_key_event (HIME_client_handle *handle,
+                                             HIME_req_t event_type,
+                                             const KeySym key,
+                                             const uint32_t state,
+                                             char **rstr) {
+    HIME_reply reply;
+    HIME_req req;
+
+    *rstr = NULL;
+
+    if (is_special_user) {
+        return 0;
+    }
+
+    if (!gen_req (handle, event_type, &req)) {
+        return 0;
+    }
+
+    req.key_event.key = key;
+    req.key_event.state = state;
+    to_hime_endian_4 (&req.key_event.key);
+    to_hime_endian_4 (&req.key_event.state);
+
+    if (handle_write (handle, &req, sizeof (req)) <= 0) {
+        error_proc (handle, "cannot write to hime server");
+        return FALSE;
+    }
+
+    memset (&reply, 0, sizeof (reply));
+    if (handle_read (handle, &reply, sizeof (reply)) <= 0) {
+        error_proc (handle, "cannot read reply from hime server");
+        return FALSE;
+    }
+
+    to_hime_endian_4 (&reply.datalen);
+    to_hime_endian_4 (&reply.flag);
+
+    if (reply.datalen > 0) {
+        *rstr = (char *) malloc (reply.datalen);
+        if (handle_read (handle, *rstr, reply.datalen) <= 0) {
+            free (*rstr);
+            *rstr = NULL;
+            error_proc (handle, "cannot read reply str from hime server");
+            return FALSE;
+        }
+    }
+
+    //  dbg("hime_im_client_forward_key_event %x\n", reply.flag);
+
+    return reply.flag;
+}
+
+// return TRUE if the key is accepted
+int hime_im_client_forward_key_press (HIME_client_handle *handle,
+                                      const KeySym key,
+                                      const uint32_t state,
+                                      char **rstr) {
+    int flag;
+    if (!handle) {
+        return 0;
+    }
+
+    // in case client didn't send focus in event
+    if (!BITON (handle->flag, FLAG_HIME_client_handle_has_focus)) {
+        hime_im_client_focus_in (handle);
+        handle->flag |= FLAG_HIME_client_handle_has_focus;
+        hime_im_client_set_cursor_location (handle, handle->spot_location.x,
+                                            handle->spot_location.y);
+    }
+
+    //  dbg("hime_im_client_forward_key_press\n");
+    flag = hime_im_client_forward_key_event (
+        handle, HIME_req_key_press, key, state, rstr);
+
+    return ((flag & HIME_reply_key_processed) != 0);
+}
+
+// return TRUE if the key is accepted
+int hime_im_client_forward_key_release (HIME_client_handle *handle,
+                                        const KeySym key,
+                                        const uint32_t state,
+                                        char **rstr) {
+    int flag;
+    if (!handle) {
+        return 0;
+    }
+
+    handle->flag |= FLAG_HIME_client_handle_has_focus;
+    //  dbg("hime_im_client_forward_key_release\n");
+    flag = hime_im_client_forward_key_event (
+        handle, HIME_req_key_release, key, state, rstr);
+    return ((flag & HIME_reply_key_processed) != 0);
+}
+
 void hime_im_client_focus_in (HIME_client_handle *handle) {
     if (!handle) {
         return;
@@ -512,98 +692,24 @@ void hime_im_client_focus_out2 (HIME_client_handle *handle, char **rstr) {
     return;
 }
 
-static int hime_im_client_forward_key_event (HIME_client_handle *handle,
-                                             HIME_req_t event_type,
-                                             const KeySym key,
-                                             const uint32_t state,
-                                             char **rstr) {
-    HIME_reply reply;
+void hime_im_client_reset (HIME_client_handle *handle) {
+    if (!handle)
+        return;
+
+    if (is_special_user)
+        return;
+
     HIME_req req;
-
-    *rstr = NULL;
-
-    if (is_special_user) {
-        return 0;
+#if DBG
+    dbg ("hime_im_client_reset\n");
+#endif
+    if (!gen_req (handle, HIME_req_reset, &req)) {
+        return;
     }
-
-    if (!gen_req (handle, event_type, &req)) {
-        return 0;
-    }
-
-    req.key_event.key = key;
-    req.key_event.state = state;
-    to_hime_endian_4 (&req.key_event.key);
-    to_hime_endian_4 (&req.key_event.state);
 
     if (handle_write (handle, &req, sizeof (req)) <= 0) {
-        error_proc (handle, "cannot write to hime server");
-        return FALSE;
+        error_proc (handle, "hime_im_client_reset error");
     }
-
-    memset (&reply, 0, sizeof (reply));
-    if (handle_read (handle, &reply, sizeof (reply)) <= 0) {
-        error_proc (handle, "cannot read reply from hime server");
-        return FALSE;
-    }
-
-    to_hime_endian_4 (&reply.datalen);
-    to_hime_endian_4 (&reply.flag);
-
-    if (reply.datalen > 0) {
-        *rstr = (char *) malloc (reply.datalen);
-        if (handle_read (handle, *rstr, reply.datalen) <= 0) {
-            free (*rstr);
-            *rstr = NULL;
-            error_proc (handle, "cannot read reply str from hime server");
-            return FALSE;
-        }
-    }
-
-    //  dbg("hime_im_client_forward_key_event %x\n", reply.flag);
-
-    return reply.flag;
-}
-
-// return TRUE if the key is accepted
-int hime_im_client_forward_key_press (HIME_client_handle *handle,
-                                      const KeySym key,
-                                      const uint32_t state,
-                                      char **rstr) {
-    int flag;
-    if (!handle) {
-        return 0;
-    }
-
-    // in case client didn't send focus in event
-    if (!BITON (handle->flag, FLAG_HIME_client_handle_has_focus)) {
-        hime_im_client_focus_in (handle);
-        handle->flag |= FLAG_HIME_client_handle_has_focus;
-        hime_im_client_set_cursor_location (handle, handle->spot_location.x,
-                                            handle->spot_location.y);
-    }
-
-    //  dbg("hime_im_client_forward_key_press\n");
-    flag = hime_im_client_forward_key_event (
-        handle, HIME_req_key_press, key, state, rstr);
-
-    return ((flag & HIME_reply_key_processed) != 0);
-}
-
-// return TRUE if the key is accepted
-int hime_im_client_forward_key_release (HIME_client_handle *handle,
-                                        const KeySym key,
-                                        const uint32_t state,
-                                        char **rstr) {
-    int flag;
-    if (!handle) {
-        return 0;
-    }
-
-    handle->flag |= FLAG_HIME_client_handle_has_focus;
-    //  dbg("hime_im_client_forward_key_release\n");
-    flag = hime_im_client_forward_key_event (
-        handle, HIME_req_key_release, key, state, rstr);
-    return ((flag & HIME_reply_key_processed) != 0);
 }
 
 void hime_im_client_set_cursor_location (HIME_client_handle *handle,
@@ -634,23 +740,6 @@ void hime_im_client_set_cursor_location (HIME_client_handle *handle,
     if (handle_write (handle, &req, sizeof (req)) <= 0) {
         error_proc (handle, "hime_im_client_set_cursor_location error");
     }
-}
-
-void hime_im_client_set_client_window (HIME_client_handle *handle,
-                                       const Window win) {
-    if (!handle) {
-        return;
-    }
-
-    if (is_special_user) {
-        return;
-    }
-
-    if (!win) {
-        return;
-    }
-
-    handle->client_win = win;
 }
 
 void hime_im_client_set_flags (HIME_client_handle *handle,
@@ -725,100 +814,7 @@ void hime_im_client_clear_flags (HIME_client_handle *handle,
     }
 }
 
-int hime_im_client_get_preedit (HIME_client_handle *handle,
-                                char **str,
-                                HIME_PREEDIT_ATTR att[],
-                                int *cursor,
-                                int *sub_comp_len) {
-    *str = NULL;
-    if (!handle) {
-        return 0;
-    }
-
-    if (is_special_user) {
-        return 0;
-    }
-
-    int attN, tcursor, str_len;
-    HIME_req req;
-    if (!gen_req (handle, HIME_req_get_preedit, &req)) {
-    err_ret:
-        if (cursor) {
-            *cursor = 0;
-        }
-        *str = strdup ("");
-        return 0;
-    }
-
-    if (handle_write (handle, &req, sizeof (req)) <= 0) {
-        error_proc (handle, "hime_im_client_get_preedit error");
-        goto err_ret;
-    }
-
-    str_len = -1;  // str_len includes \0
-    if (handle_read (handle, &str_len, sizeof (str_len)) <= 0) {
-        goto err_ret;  // including \0
-    }
-
-    *str = (char *) malloc (str_len);
-
-    if (handle_read (handle, *str, str_len) <= 0) {
-        goto err_ret;
-    }
-#if DBG
-    dbg ("hime_im_client_get_preedit len:%d '%s' \n", str_len, *str);
-#endif
-    attN = -1;
-    if (handle_read (handle, &attN, sizeof (attN)) <= 0) {
-        goto err_ret;
-    }
-
-    //  dbg("attrN:%d\n", attN);
-
-    if (attN > 0 && handle_read (handle, att, sizeof (HIME_PREEDIT_ATTR) * attN) <= 0) {
-        goto err_ret;
-    }
-
-    tcursor = 0;
-    if (handle_read (handle, &tcursor, sizeof (tcursor)) <= 0) {
-        goto err_ret;
-    }
-
-    if (cursor) {
-        *cursor = tcursor;
-    }
-
-    int tsub_comp_len;
-    tsub_comp_len = 0;
-    if (handle_read (handle, &tsub_comp_len, sizeof (tsub_comp_len)) <= 0) {
-        goto err_ret;
-    }
-    if (sub_comp_len) {
-        *sub_comp_len = tsub_comp_len;
-    }
-
-    return attN;
-}
-
-void hime_im_client_reset (HIME_client_handle *handle) {
-    if (!handle)
-        return;
-
-    if (is_special_user)
-        return;
-
-    HIME_req req;
-#if DBG
-    dbg ("hime_im_client_reset\n");
-#endif
-    if (!gen_req (handle, HIME_req_reset, &req)) {
-        return;
-    }
-
-    if (handle_write (handle, &req, sizeof (req)) <= 0) {
-        error_proc (handle, "hime_im_client_reset error");
-    }
-}
+// other APIs
 
 void hime_im_client_send_message (HIME_client_handle *handle,
                                   const char *message) {
@@ -843,4 +839,12 @@ void hime_im_client_send_message (HIME_client_handle *handle,
     if (handle_write (handle, message, len) <= 0) {
         error_proc (handle, "hime_im_client_send_message error w message");
     }
+}
+
+Window find_hime_window (Display *display) {
+    const Atom hime_addr_atom = get_hime_addr_atom (display);
+    if (hime_addr_atom == None) {
+        return None;
+    }
+    return XGetSelectionOwner (display, hime_addr_atom);
 }
