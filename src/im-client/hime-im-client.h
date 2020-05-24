@@ -20,6 +20,10 @@
 #ifndef HIME_IM_CLIENT_H
 #define HIME_IM_CLIENT_H
 
+#include <stdint.h>
+
+#include "hime-im-client-attr.h"
+
 #ifndef _XSERVER64
 #define _XSERVER64
 #endif
@@ -31,9 +35,10 @@ typedef struct HIME_client_handle_S {
     Window client_win;    /* client window */
     uint32_t input_style; /* input style */
     XPoint spot_location; /* spot location */
-                          // below is private data, don't modify them.
+
+    // below is private data, don't modify them.
     uint32_t flag;
-    Display *disp; /* X Display, not a GdkDisplay */
+    Display *display; /* X Display, not a GdkDisplay */
     struct HIME_PASSWD *passwd;
     uint32_t seq;
 } HIME_client_handle;
@@ -52,7 +57,7 @@ enum {
 extern "C" {
 #endif
 
-HIME_client_handle *hime_im_client_open (Display *disp);
+HIME_client_handle *hime_im_client_open (Display *display);
 void hime_im_client_close (HIME_client_handle *handle);
 void hime_im_client_focus_in (HIME_client_handle *handle);
 void hime_im_client_focus_out (HIME_client_handle *handle);
@@ -86,12 +91,16 @@ void hime_im_client_set_flags (HIME_client_handle *handle, int flags, int *ret_f
 void hime_im_client_clear_flags (HIME_client_handle *handle, int flags, int *ret_flags);
 
 void hime_im_client_reset (HIME_client_handle *handle);
-void hime_im_client_send_message (HIME_client_handle *handle, const char *message);
 
-#include "hime-im-client-attr.h"
 int hime_im_client_get_preedit (HIME_client_handle *handle, char **str, HIME_PREEDIT_ATTR att[], int *cursor, int *sub_comp_len);
 
-Window find_hime_window (Display *dpy);
+// other APIs
+
+// write message to hime server
+void hime_im_client_send_message (HIME_client_handle *handle, const char *message);
+
+// return the X Window of the display
+Window find_hime_window (Display *display);
 
 #ifdef __cplusplus
 }

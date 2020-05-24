@@ -26,6 +26,7 @@
 
 #include "../hime-endian.h"
 
+// See /usr/include/linux/un.h
 #define UNIX_PATH_MAX 108
 
 typedef enum {
@@ -44,13 +45,13 @@ typedef enum {
 } HIME_req_t;
 
 typedef struct {
-#if 0
-    KeySym key;
-#else
+    // XXX(xatier): this should be KeySym
+    // but for some reason using KeySym would introcude noticible slowness,
+    // using uint32_t works though
+    //KeySym key;
     uint32_t key;
-#endif
     uint32_t state;
-} KeyEvent;
+} HIME_KeyEvent;
 
 typedef struct {
     short x, y;
@@ -62,9 +63,8 @@ typedef struct {
     uint32_t flag;
     uint32_t input_style;
     HIMEpoint spot_location;
-
     union {
-        KeyEvent keyeve;
+        HIME_KeyEvent keyeve;
         char dummy[32];  // for future expansion
     };
 } HIME_req;

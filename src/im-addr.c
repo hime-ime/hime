@@ -29,7 +29,8 @@ Atom get_hime_sockpath_atom (Display *display) {
     return get_atom_by_name (display, "HIME_SOCKPATH_ATOM_%s");
 }
 
-void get_hime_im_srv_sock_path (char *outstr, int outstrN) {
+// socket name: /tmp/.hime-$USER/socket-:0.0-hime
+void get_hime_im_srv_sock_path (char *outstr, const int outstrN) {
     const char *display = getenv ("DISPLAY");
     const int uid = getuid ();
 

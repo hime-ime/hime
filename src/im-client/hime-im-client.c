@@ -54,16 +54,16 @@ static void restore_old_sigaction_single (int signo, struct sigaction *act) {
         signal (signo, act->sa_handler);
 }
 
-Window find_hime_window (Display *dpy) {
-    Atom hime_addr_atom = get_hime_addr_atom (dpy);
+Window find_hime_window (Display *display) {
+    Atom hime_addr_atom = get_hime_addr_atom (display);
     if (!hime_addr_atom)
         return FALSE;
-    return XGetSelectionOwner (dpy, hime_addr_atom);
+    return XGetSelectionOwner (display, hime_addr_atom);
 }
 
 int is_special_user;
 
-static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch, Display *dpy) {
+static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch, Display *display) {
     //  dbg("hime_im_client_reopen\n");
     int dbg_msg = getenv ("HIME_CONNECT_MSG_ON") != NULL;
     int sockfd = 0;
@@ -84,12 +84,12 @@ static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch, D
     int rstatus;
 
     //  dbg("hime_im_client_reopen\n");
-    if (!dpy) {
+    if (!display) {
         dbg ("null disp %d\n", hime_ch->fd);
         goto next;
     }
 
-    Atom hime_addr_atom = get_hime_addr_atom (dpy);
+    Atom hime_addr_atom = get_hime_addr_atom (display);
     Window hime_win = None;
 
 #define MAX_TRY 3
@@ -97,7 +97,7 @@ static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch, D
 
     if (!is_special_user)
         for (loop = 0; loop < MAX_TRY; loop++) {
-            if ((hime_win = find_hime_window (dpy)) != None || getenv ("HIME_IM_CLIENT_NO_AUTO_EXEC"))
+            if ((hime_win = find_hime_window (display)) != None || getenv ("HIME_IM_CLIENT_NO_AUTO_EXEC"))
                 break;
             static time_t exec_time;
 
@@ -128,11 +128,11 @@ static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch, D
     int actual_format;
     u_long nitems, bytes_after;
     char *message_sock = NULL;
-    Atom hime_sockpath_atom = get_hime_sockpath_atom (dpy);
+    Atom hime_sockpath_atom = get_hime_sockpath_atom (display);
 
     //  printf("hime_sockpath_atom %d\n", hime_sockpath_atom);
 
-    if (!hime_sockpath_atom || XGetWindowProperty (dpy, hime_win, hime_sockpath_atom, 0, 64,
+    if (!hime_sockpath_atom || XGetWindowProperty (display, hime_win, hime_sockpath_atom, 0, 64,
                                                    False, AnyPropertyType, &actual_type, &actual_format,
                                                    &nitems, &bytes_after, (u_char **) &message_sock) != Success) {
 #if DBG || 1
@@ -188,7 +188,7 @@ static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch, D
 tcp:
     message = NULL;
 
-    if (!hime_addr_atom || XGetWindowProperty (dpy, hime_win, hime_addr_atom, 0, 64,
+    if (!hime_addr_atom || XGetWindowProperty (display, hime_win, hime_addr_atom, 0, 64,
                                                False, AnyPropertyType, &actual_type, &actual_format,
                                                &nitems, &bytes_after, (u_char **) &message) != Success) {
 #if DBG || 1
@@ -277,12 +277,12 @@ static void validate_handle (HIME_client_handle *hime_ch) {
     if (is_special_user)
         return;
 
-    hime_im_client_reopen (hime_ch, hime_ch->disp);
+    hime_im_client_reopen (hime_ch, hime_ch->display);
 }
 
-HIME_client_handle *hime_im_client_open (Display *disp) {
-    HIME_client_handle *handle = hime_im_client_reopen (NULL, disp);
-    handle->disp = disp;
+HIME_client_handle *hime_im_client_open (Display *display) {
+    HIME_client_handle *handle = hime_im_client_reopen (NULL, display);
+    handle->display = display;
     return handle;
 }
 
