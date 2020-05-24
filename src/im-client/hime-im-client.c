@@ -341,7 +341,7 @@ static void save_old_sigaction (SAVE_ACT *save_act) {
 static void restore_old_sigaction (SAVE_ACT *save_act) {
     restore_old_sigaction_single (SIGPIPE, &save_act->apipe);
 }
-static int handle_read (HIME_client_handle *handle, void *ptr, int n) {
+static int handle_read (HIME_client_handle *handle, void *ptr, const int n) {
     int fd = handle->fd;
 
     if (!fd)
@@ -365,7 +365,9 @@ static int handle_read (HIME_client_handle *handle, void *ptr, int n) {
     return r;
 }
 
-static int handle_write (HIME_client_handle *handle, void *ptr, int n) {
+static int handle_write (HIME_client_handle *handle,
+                         const void *ptr,
+                         const int n) {
     int fd = handle->fd;
 
     if (!fd)
@@ -760,25 +762,26 @@ void hime_im_client_reset (HIME_client_handle *handle) {
     }
 }
 
-void hime_im_client_message (HIME_client_handle *handle, char *message) {
+void hime_im_client_send_message (HIME_client_handle *handle,
+                                  const char *message) {
     HIME_req req;
     short len;
 #if DBG
-    dbg ("hime_im_client_message\n");
+    dbg ("hime_im_client_send_message\n");
 #endif
     if (!gen_req (handle, HIME_req_message, &req))
         return;
 
     if (handle_write (handle, &req, sizeof (req)) <= 0) {
-        error_proc (handle, "hime_im_client_message error 1");
+        error_proc (handle, "hime_im_client_send_message error w req");
     }
 
     len = strlen (message) + 1;
     if (handle_write (handle, &len, sizeof (len)) <= 0) {
-        error_proc (handle, "hime_im_client_message error 2");
+        error_proc (handle, "hime_im_client_send_message error w len");
     }
 
     if (handle_write (handle, message, len) <= 0) {
-        error_proc (handle, "hime_im_client_message error 2");
+        error_proc (handle, "hime_im_client_send_message error w message");
     }
 }

@@ -86,7 +86,7 @@ void hime_im_client_set_flags (HIME_client_handle *handle, int flags, int *ret_f
 void hime_im_client_clear_flags (HIME_client_handle *handle, int flags, int *ret_flags);
 
 void hime_im_client_reset (HIME_client_handle *handle);
-void hime_im_client_message (HIME_client_handle *handle, char *message);
+void hime_im_client_send_message (HIME_client_handle *handle, const char *message);
 
 #include "hime-im-client-attr.h"
 int hime_im_client_get_preedit (HIME_client_handle *handle, char **str, HIME_PREEDIT_ATTR att[], int *cursor, int *sub_comp_len);
