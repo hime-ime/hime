@@ -20,6 +20,8 @@
 #ifndef HIME_PROTOCOL_H
 #define HIME_PROTOCOL_H
 
+#include <stdint.h>
+
 #include <X11/Xlib.h>
 
 #include "../hime-endian.h"
@@ -93,6 +95,11 @@ typedef struct {
 typedef struct {
     char sock_path[UNIX_PATH_MAX];
 } Server_sock_path;
-void __hime_enc_mem (u_char *p, int n, HIME_PASSWD *passwd, u_int *seed);
+
+// hime-crypt.c
+void __hime_enc_mem (unsigned char *p,
+                     const int n,
+                     const HIME_PASSWD *passwd,
+                     uint32_t *seed);
 
 #endif /* HIME_PROTOCOL_H */
