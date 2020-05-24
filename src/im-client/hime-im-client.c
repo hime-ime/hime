@@ -41,19 +41,6 @@
 #define DBG 0
 static int flags_backup;
 
-static void save_old_sigaction_single (int signo, struct sigaction *act) {
-    sigaction (signo, NULL, act);
-
-    if (act->sa_handler != SIG_IGN) {
-        signal (signo, SIG_IGN);
-    }
-}
-
-static void restore_old_sigaction_single (int signo, struct sigaction *act) {
-    if (act->sa_handler != SIG_IGN)
-        signal (signo, act->sa_handler);
-}
-
 Window find_hime_window (Display *display) {
     Atom hime_addr_atom = get_hime_addr_atom (display);
     if (!hime_addr_atom)
@@ -333,14 +320,29 @@ static void error_proc (HIME_client_handle *handle, char *msg) {
 }
 
 typedef struct {
-    struct sigaction apipe;
+    struct sigaction pipe;
 } SAVE_ACT;
+
 static void save_old_sigaction (SAVE_ACT *save_act) {
-    save_old_sigaction_single (SIGPIPE, &save_act->apipe);
+    const int signo = SIGPIPE;
+    struct sigaction *act = &save_act->pipe;
+
+    sigaction (signo, NULL, act);
+
+    if (act->sa_handler != SIG_IGN) {
+        signal (signo, SIG_IGN);
+    }
 }
+
 static void restore_old_sigaction (SAVE_ACT *save_act) {
-    restore_old_sigaction_single (SIGPIPE, &save_act->apipe);
+    const int signo = SIGPIPE;
+    struct sigaction *act = &save_act->pipe;
+
+    if (act->sa_handler != SIG_IGN) {
+        signal (signo, act->sa_handler);
+    }
 }
+
 static int handle_read (HIME_client_handle *handle, void *ptr, const int n) {
     int fd = handle->fd;
 
