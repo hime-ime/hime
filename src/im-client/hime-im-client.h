@@ -36,7 +36,7 @@ typedef struct HIME_client_handle_S {
     uint32_t input_style; /* input style */
     XPoint spot_location; /* spot location */
 
-    // below is private data, don't modify them.
+    // below are private data, don't modify them.
     uint32_t flag;
     Display *display; /* X Display, not a GdkDisplay */
     struct HIME_PASSWD *passwd;
@@ -57,15 +57,25 @@ enum {
 extern "C" {
 #endif
 
+// APIs for Gtk+/Qt IM modules
 HIME_client_handle *hime_im_client_open (Display *display);
 void hime_im_client_close (HIME_client_handle *handle);
-void hime_im_client_focus_in (HIME_client_handle *handle);
-void hime_im_client_focus_out (HIME_client_handle *handle);
-void hime_im_client_focus_out2 (HIME_client_handle *handle, char **rstr);
-void hime_im_client_set_client_window (HIME_client_handle *handle, Window win);
-void hime_im_client_set_cursor_location (HIME_client_handle *handle,
-                                         int x,
-                                         int y);
+
+// set the client window
+void hime_im_client_set_client_window (HIME_client_handle *handle,
+                                       const Window win);
+
+// retrieve the current preedit string
+//   str: retrieved string, must be freed by caller
+//   attr: retrieved attribute list
+//   cursor: cursor location of the preedit string
+//   return: # of attr
+int hime_im_client_get_preedit (HIME_client_handle *handle,
+                                char **str,
+                                HIME_PREEDIT_ATTR att[],
+                                int *cursor,
+                                int *sub_comp_len);
+
 /*  rstr returns UTF-8 encoded string, you should use 'free()' to free the
     memory.
 
@@ -74,30 +84,36 @@ void hime_im_client_set_cursor_location (HIME_client_handle *handle,
       TRUE : the key is accepted, translated result is in rstr.
  */
 int hime_im_client_forward_key_press (HIME_client_handle *handle,
-                                      KeySym key,
-                                      uint32_t state,
+                                      const KeySym key,
+                                      const uint32_t state,
                                       char **rstr);
-// return some state bits instead of TRUE/FALSE
-int hime_im_client_forward_key_press2 (HIME_client_handle *handle,
-                                       KeySym key,
-                                       uint32_t state,
-                                       char **rstr);
 int hime_im_client_forward_key_release (HIME_client_handle *handle,
-                                        KeySym key,
-                                        uint32_t state,
+                                        const KeySym key,
+                                        const uint32_t state,
                                         char **rstr);
 
-void hime_im_client_set_flags (HIME_client_handle *handle, int flags, int *ret_flags);
-void hime_im_client_clear_flags (HIME_client_handle *handle, int flags, int *ret_flags);
-
+void hime_im_client_focus_in (HIME_client_handle *handle);
+void hime_im_client_focus_out (HIME_client_handle *handle);
+void hime_im_client_focus_out2 (HIME_client_handle *handle, char **rstr);
 void hime_im_client_reset (HIME_client_handle *handle);
 
-int hime_im_client_get_preedit (HIME_client_handle *handle, char **str, HIME_PREEDIT_ATTR att[], int *cursor, int *sub_comp_len);
+// set client window cursor location
+void hime_im_client_set_cursor_location (HIME_client_handle *handle,
+                                         const int x,
+                                         const int y);
+
+void hime_im_client_set_flags (HIME_client_handle *handle,
+                               const int flags,
+                               int *ret_flags);
+void hime_im_client_clear_flags (HIME_client_handle *handle,
+                                 const int flags,
+                                 int *ret_flags);
 
 // other APIs
 
 // write message to hime server
-void hime_im_client_send_message (HIME_client_handle *handle, const char *message);
+void hime_im_client_send_message (HIME_client_handle *handle,
+                                  const char *message);
 
 // return the X Window of the display
 Window find_hime_window (Display *display);
