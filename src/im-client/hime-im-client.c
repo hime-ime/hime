@@ -39,27 +39,27 @@
 #include "im-srv.h"
 
 #define DBG 0
+
+// will be restored in hime_im_client_reopen
 static int flags_backup;
 
 Window find_hime_window (Display *display) {
-    Atom hime_addr_atom = get_hime_addr_atom (display);
-    if (!hime_addr_atom)
-        return FALSE;
+    const Atom hime_addr_atom = get_hime_addr_atom (display);
+    if (hime_addr_atom == None) {
+        return None;
+    }
     return XGetSelectionOwner (display, hime_addr_atom);
 }
 
 int is_special_user;
 
-static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch, Display *display) {
-    //  dbg("hime_im_client_reopen\n");
-    int dbg_msg = getenv ("HIME_CONNECT_MSG_ON") != NULL;
+static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch,
+                                                  Display *display) {
+
+    const int dbg_msg = getenv ("HIME_CONNECT_MSG_ON") != NULL;
     int sockfd = 0;
-    int servlen;
     //  char *addr;
     Server_IP_port srv_ip_port;
-#if DEBUG
-    u_char *pp;
-#endif
 
     int uid = getuid ();
     if (uid > 0 && uid < 500) {
@@ -79,13 +79,15 @@ static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch, D
     Atom hime_addr_atom = get_hime_addr_atom (display);
     Window hime_win = None;
 
-#define MAX_TRY 3
-    int loop;
+    const int MAX_TRY = 3;
+    int loop = 0;
 
-    if (!is_special_user)
+    if (!is_special_user) {
         for (loop = 0; loop < MAX_TRY; loop++) {
-            if ((hime_win = find_hime_window (display)) != None || getenv ("HIME_IM_CLIENT_NO_AUTO_EXEC"))
+            if ((hime_win = find_hime_window (display)) != None ||
+                getenv ("HIME_IM_CLIENT_NO_AUTO_EXEC")) {
                 break;
+            }
             static time_t exec_time;
 
             if (time (NULL) - exec_time > 1 /* && count < 5 */) {
@@ -106,6 +108,7 @@ static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch, D
                 }
             }
         }
+    }
 
     if (loop == MAX_TRY || hime_win == None) {
         goto next;
@@ -149,10 +152,11 @@ static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch, D
 
     //  addr = sock_path;
     strcpy (serv_addr.sun_path, sock_path);
+
 #ifdef SUN_LEN
-    servlen = SUN_LEN (&serv_addr);
+    int servlen = SUN_LEN (&serv_addr);
 #else
-    servlen = strlen (serv_addr.sun_path) + sizeof (serv_addr.sun_family);
+    int servlen = strlen (serv_addr.sun_path) + sizeof (serv_addr.sun_family);
 #endif
 
     if ((sockfd = socket (AF_UNIX, SOCK_STREAM, 0)) < 0) {
@@ -166,8 +170,9 @@ static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch, D
         goto tcp;
     }
 
-    if (dbg_msg)
+    if (dbg_msg) {
         dbg ("connected to unix socket addr %s\n", sock_path);
+    }
     goto next;
 
     char *message;
@@ -187,8 +192,10 @@ tcp:
     if (message) {
         memcpy (&srv_ip_port, message, sizeof (srv_ip_port));
         XFree (message);
-    } else
+        message = NULL;
+    } else {
         goto next;
+    }
 
     //  dbg("im server tcp port %d\n", ntohs(srv_ip_port.port));
 
@@ -216,29 +223,32 @@ tcp:
     }
 
 #if DEBUG
-    pp = (u_char *) &srv_ip_port.ip;
-    if (dbg_msg)
+    unsigned char *pp = (unsigned char *) &srv_ip_port.ip;
+    if (dbg_msg) {
         dbg ("hime client connected to server %d.%d.%d.%d:%d\n",
              pp[0], pp[1], pp[2], pp[3], ntohs (srv_ip_port.port));
+    }
 #endif
 
     tcp = TRUE;
 
 next:
-    if (!hime_ch)
+    if (!hime_ch) {
         handle = tzmalloc (HIME_client_handle, 1);
-    else {
+    } else {
         handle = hime_ch;
     }
 
-    if (sockfd < 0)
+    if (sockfd < 0) {
         sockfd = 0;
+    }
 
     if (sockfd > 0) {
         handle->fd = sockfd;
         if (tcp) {
-            if (!handle->passwd)
+            if (!handle->passwd) {
                 handle->passwd = malloc (sizeof (HIME_PASSWD));
+            }
             memcpy (handle->passwd, &srv_ip_port.passwd, sizeof (srv_ip_port.passwd));
         } else {
             if (handle->passwd) {
@@ -249,8 +259,9 @@ next:
     }
 
     if (handle->fd) {
-        if (BITON (handle->flag, FLAG_HIME_client_handle_has_focus))
+        if (BITON (handle->flag, FLAG_HIME_client_handle_has_focus)) {
             hime_im_client_focus_in (handle);
+        }
 
         hime_im_client_set_flags (handle, flags_backup, &rstatus);
     }
@@ -259,10 +270,12 @@ next:
 }
 
 static void validate_handle (HIME_client_handle *hime_ch) {
-    if (hime_ch->fd > 0)
+    if (hime_ch->fd > 0) {
         return;
-    if (is_special_user)
+    }
+    if (is_special_user) {
         return;
+    }
 
     hime_im_client_reopen (hime_ch, hime_ch->display);
 }
@@ -274,19 +287,25 @@ HIME_client_handle *hime_im_client_open (Display *display) {
 }
 
 void hime_im_client_close (HIME_client_handle *handle) {
-    if (!handle)
+    if (!handle) {
         return;
-    if (handle->fd > 0)
+    }
+
+    if (handle->fd > 0) {
         close (handle->fd);
+    }
     free (handle->passwd);
+    handle->passwd = NULL;
     free (handle);
+    handle = NULL;
 }
 
 static int gen_req (HIME_client_handle *handle, uint32_t req_no, HIME_req *req) {
     validate_handle (handle);
 
-    if (!handle->fd)
+    if (!handle->fd) {
         return 0;
+    }
 
     handle->seq++;
 
@@ -310,8 +329,9 @@ static int gen_req (HIME_client_handle *handle, uint32_t req_no, HIME_req *req) 
 }
 
 static void error_proc (HIME_client_handle *handle, char *msg) {
-    if (!handle->fd)
+    if (!handle->fd) {
         return;
+    }
 
     perror (msg);
     close (handle->fd);
@@ -395,17 +415,20 @@ static int handle_write (HIME_client_handle *handle,
 }
 
 void hime_im_client_focus_in (HIME_client_handle *handle) {
-    if (!handle)
+    if (!handle) {
         return;
-    if (is_special_user)
+    }
+
+    if (is_special_user) {
         return;
+    }
 
     HIME_req req;
-    //  dbg("hime_im_client_focus_in\n");
     handle->flag |= FLAG_HIME_client_handle_has_focus;
 
-    if (!gen_req (handle, HIME_req_focus_in, &req))
+    if (!gen_req (handle, HIME_req_focus_in, &req)) {
         return;
+    }
 
     if (handle_write (handle, &req, sizeof (req)) <= 0) {
         error_proc (handle, "hime_im_client_focus_in error");
@@ -416,17 +439,20 @@ void hime_im_client_focus_in (HIME_client_handle *handle) {
 }
 
 void hime_im_client_focus_out (HIME_client_handle *handle) {
-    if (!handle)
+    if (!handle) {
         return;
-    if (is_special_user)
+    }
+
+    if (is_special_user) {
         return;
+    }
 
     HIME_req req;
-    //  dbg("hime_im_client_focus_out\n");
     handle->flag &= ~FLAG_HIME_client_handle_has_focus;
 
-    if (!gen_req (handle, HIME_req_focus_out, &req))
+    if (!gen_req (handle, HIME_req_focus_out, &req)) {
         return;
+    }
 
     if (handle_write (handle, &req, sizeof (req)) <= 0) {
         error_proc (handle, "hime_im_client_focus_out error");
@@ -437,22 +463,26 @@ void hime_im_client_focus_out2 (HIME_client_handle *handle, char **rstr) {
     HIME_req req;
     HIME_reply reply;
 
-    if (rstr)
+    if (rstr) {
         *rstr = NULL;
+    }
 
-    if (!handle)
+    if (!handle) {
         return;
+    }
 
-    if (is_special_user)
+    if (is_special_user) {
         return;
+    }
 
 #if DBG
     dbg ("hime_im_client_focus_out2\n");
 #endif
     handle->flag &= ~FLAG_HIME_client_handle_has_focus;
 
-    if (!gen_req (handle, HIME_req_focus_out2, &req))
+    if (!gen_req (handle, HIME_req_focus_out2, &req)) {
         return;
+    }
 
     if (handle_write (handle, &req, sizeof (req)) <= 0) {
         error_proc (handle, "hime_im_client_focus_out error");
@@ -496,8 +526,9 @@ static int hime_im_client_forward_key_event (HIME_client_handle *handle,
         return 0;
     }
 
-    if (!gen_req (handle, event_type, &req))
+    if (!gen_req (handle, event_type, &req)) {
         return 0;
+    }
 
     req.key_event.key = key;
     req.key_event.state = state;
@@ -539,8 +570,10 @@ int hime_im_client_forward_key_press (HIME_client_handle *handle,
                                       const uint32_t state,
                                       char **rstr) {
     int flag;
-    if (!handle)
+    if (!handle) {
         return 0;
+    }
+
     // in case client didn't send focus in event
     if (!BITON (handle->flag, FLAG_HIME_client_handle_has_focus)) {
         hime_im_client_focus_in (handle);
@@ -562,8 +595,10 @@ int hime_im_client_forward_key_release (HIME_client_handle *handle,
                                         const uint32_t state,
                                         char **rstr) {
     int flag;
-    if (!handle)
+    if (!handle) {
         return 0;
+    }
+
     handle->flag |= FLAG_HIME_client_handle_has_focus;
     //  dbg("hime_im_client_forward_key_release\n");
     flag = hime_im_client_forward_key_event (
@@ -574,10 +609,13 @@ int hime_im_client_forward_key_release (HIME_client_handle *handle,
 void hime_im_client_set_cursor_location (HIME_client_handle *handle,
                                          const int x,
                                          const int y) {
-    if (!handle)
+    if (!handle) {
         return;
-    if (is_special_user)
+    }
+
+    if (is_special_user) {
         return;
+    }
 
     //  dbg("hime_im_client_set_cursor_location %d   %d,%d\n", handle->flag, x, y);
 
@@ -585,11 +623,13 @@ void hime_im_client_set_cursor_location (HIME_client_handle *handle,
     handle->spot_location.x = x;
     handle->spot_location.y = y;
 
-    if (!BITON (handle->flag, FLAG_HIME_client_handle_has_focus))
+    if (!BITON (handle->flag, FLAG_HIME_client_handle_has_focus)) {
         return;
+    }
 
-    if (!gen_req (handle, HIME_req_set_cursor_location, &req))
+    if (!gen_req (handle, HIME_req_set_cursor_location, &req)) {
         return;
+    }
 
     if (handle_write (handle, &req, sizeof (req)) <= 0) {
         error_proc (handle, "hime_im_client_set_cursor_location error");
@@ -622,14 +662,17 @@ void hime_im_client_set_flags (HIME_client_handle *handle,
     dbg ("hime_im_client_set_flags\n");
 #endif
 
-    if (!handle)
+    if (!handle) {
         return;
+    }
 
-    if (is_special_user)
+    if (is_special_user) {
         return;
+    }
 
-    if (!gen_req (handle, HIME_req_set_flags, &req))
+    if (!gen_req (handle, HIME_req_set_flags, &req)) {
         return;
+    }
 
     req.flag |= flags;
 
@@ -657,14 +700,17 @@ void hime_im_client_clear_flags (HIME_client_handle *handle,
                                  int *ret_flag) {
     HIME_req req;
 
-    if (!handle)
+    if (!handle) {
         return;
+    }
 
-    if (is_special_user)
+    if (is_special_user) {
         return;
+    }
 
-    if (!gen_req (handle, HIME_req_set_flags, &req))
+    if (!gen_req (handle, HIME_req_set_flags, &req)) {
         return;
+    }
 
     req.flag &= ~flags;
 
@@ -685,24 +731,21 @@ int hime_im_client_get_preedit (HIME_client_handle *handle,
                                 int *cursor,
                                 int *sub_comp_len) {
     *str = NULL;
-    if (!handle)
+    if (!handle) {
         return 0;
+    }
 
-    if (is_special_user)
+    if (is_special_user) {
         return 0;
+    }
 
     int attN, tcursor, str_len;
-#if DBG
-    dbg ("hime_im_client_get_preedit\n");
-#endif
     HIME_req req;
     if (!gen_req (handle, HIME_req_get_preedit, &req)) {
     err_ret:
-#if DBG
-        dbg ("aaaaaaaaaaaaa %x\n", str);
-#endif
-        if (cursor)
+        if (cursor) {
             *cursor = 0;
+        }
         *str = strdup ("");
         return 0;
     }
@@ -713,13 +756,15 @@ int hime_im_client_get_preedit (HIME_client_handle *handle,
     }
 
     str_len = -1;  // str_len includes \0
-    if (handle_read (handle, &str_len, sizeof (str_len)) <= 0)
+    if (handle_read (handle, &str_len, sizeof (str_len)) <= 0) {
         goto err_ret;  // including \0
+    }
 
     *str = (char *) malloc (str_len);
 
-    if (handle_read (handle, *str, str_len) <= 0)
+    if (handle_read (handle, *str, str_len) <= 0) {
         goto err_ret;
+    }
 #if DBG
     dbg ("hime_im_client_get_preedit len:%d '%s' \n", str_len, *str);
 #endif
@@ -739,20 +784,19 @@ int hime_im_client_get_preedit (HIME_client_handle *handle,
         goto err_ret;
     }
 
-    if (cursor)
+    if (cursor) {
         *cursor = tcursor;
+    }
 
     int tsub_comp_len;
     tsub_comp_len = 0;
     if (handle_read (handle, &tsub_comp_len, sizeof (tsub_comp_len)) <= 0) {
         goto err_ret;
     }
-    if (sub_comp_len)
+    if (sub_comp_len) {
         *sub_comp_len = tsub_comp_len;
+    }
 
-#if DBG
-    dbg ("jjjjjjjjj %d tcursor:%d\n", attN, tcursor);
-#endif
     return attN;
 }
 
@@ -767,8 +811,9 @@ void hime_im_client_reset (HIME_client_handle *handle) {
 #if DBG
     dbg ("hime_im_client_reset\n");
 #endif
-    if (!gen_req (handle, HIME_req_reset, &req))
+    if (!gen_req (handle, HIME_req_reset, &req)) {
         return;
+    }
 
     if (handle_write (handle, &req, sizeof (req)) <= 0) {
         error_proc (handle, "hime_im_client_reset error");
@@ -782,8 +827,9 @@ void hime_im_client_send_message (HIME_client_handle *handle,
 #if DBG
     dbg ("hime_im_client_send_message\n");
 #endif
-    if (!gen_req (handle, HIME_req_message, &req))
+    if (!gen_req (handle, HIME_req_message, &req)) {
         return;
+    }
 
     if (handle_write (handle, &req, sizeof (req)) <= 0) {
         error_proc (handle, "hime_im_client_send_message error w req");
