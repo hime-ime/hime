@@ -497,10 +497,10 @@ static int hime_im_client_forward_key_event (HIME_client_handle *handle,
     if (!gen_req (handle, event_type, &req))
         return 0;
 
-    req.keyeve.key = key;
-    to_hime_endian_4 (&req.keyeve.key);
-    req.keyeve.state = state;
-    to_hime_endian_4 (&req.keyeve.state);
+    req.key_event.key = key;
+    req.key_event.state = state;
+    to_hime_endian_4 (&req.key_event.key);
+    to_hime_endian_4 (&req.key_event.state);
 
     if (handle_write (handle, &req, sizeof (req)) <= 0) {
         error_proc (handle, "cannot write to hime server");

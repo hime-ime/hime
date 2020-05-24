@@ -58,13 +58,13 @@ typedef struct {
 } HIMEpoint;
 
 typedef struct {
-    uint32_t req_no;  // to make the im server stateless, more is better
+    uint32_t req_no;
     uint32_t client_win;
     uint32_t flag;
     uint32_t input_style;
     HIMEpoint spot_location;
     union {
-        HIME_KeyEvent keyeve;
+        HIME_KeyEvent key_event;
         char dummy[32];  // for future expansion
     };
 } HIME_req;
