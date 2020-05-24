@@ -211,8 +211,6 @@ static int qcmp_usecount (const void *a, const void *b) {
     return usecountb - usecounta;
 }
 
-void send_hime_message (Display *dpy, char *s);
-
 int main (int argc, char **argv) {
     FILE *fp, *fw;
     char s[1024];

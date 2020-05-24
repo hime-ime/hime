@@ -59,8 +59,6 @@ int qcmp_key_del (const void *aa, const void *bb) {
     return memcmp (a->ch, b->ch, CH_SZ);
 }
 
-void send_hime_message (Display *dpy, char *s);
-
 int main (int argc, char **argv) {
     char *fname = "pho.tab2.src";
     FILE *fp;

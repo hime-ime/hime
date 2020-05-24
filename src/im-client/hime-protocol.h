@@ -47,9 +47,9 @@ typedef struct {
 #if 0
     KeySym key;
 #else
-    u_int key;
+    uint32_t key;
 #endif
-    u_int state;
+    uint32_t state;
 } KeyEvent;
 
 typedef struct {
@@ -57,10 +57,10 @@ typedef struct {
 } HIMEpoint;
 
 typedef struct {
-    u_int req_no;  // to make the im server stateless, more is better
-    u_int client_win;
-    u_int flag;
-    u_int input_style;
+    uint32_t req_no;  // to make the im server stateless, more is better
+    uint32_t client_win;
+    uint32_t flag;
+    uint32_t input_style;
     HIMEpoint spot_location;
 
     union {
@@ -75,19 +75,19 @@ enum {
 };
 
 typedef struct {
-    u_int flag;
-    u_int datalen;  // '\0' shoule be counted if data is string
+    uint32_t flag;
+    uint32_t datalen;  // '\0' shoule be counted if data is string
 } HIME_reply;
 
 #define __HIME_PASSWD_N_ (31)
 
 typedef struct HIME_PASSWD {
-    u_int seed;
+    uint32_t seed;
     u_char passwd[__HIME_PASSWD_N_];
 } HIME_PASSWD;
 
 typedef struct {
-    u_int ip;
+    uint32_t ip;
     u_short port;
     HIME_PASSWD passwd;
 } Server_IP_port;

@@ -43,10 +43,10 @@ int hime_clientsN;
 
 extern HIME_PASSWD my_passwd;
 
-gboolean ProcessKeyPress (KeySym keysym, u_int kev_state);
-gboolean ProcessTestKeyPress (KeySym keysym, u_int kev_state);
-gboolean ProcessKeyRelease (KeySym keysym, u_int kev_state);
-gboolean ProcessTestKeyRelease (KeySym keysym, u_int kev_state);
+gboolean ProcessKeyPress (KeySym keysym, uint32_t kev_state);
+gboolean ProcessTestKeyPress (KeySym keysym, uint32_t kev_state);
+gboolean ProcessKeyRelease (KeySym keysym, uint32_t kev_state);
+gboolean ProcessTestKeyRelease (KeySym keysym, uint32_t kev_state);
 int hime_FocusIn (ClientState *cs);
 int hime_FocusOut (ClientState *cs);
 void update_in_win_pos ();
