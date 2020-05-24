@@ -1,4 +1,6 @@
-/* Copyright (C) 2009 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2009 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,16 +19,17 @@
 
 #include "hime-protocol.h"
 
-static int __hime_rand__ (u_int *next) {
+static uint32_t __hime_rand__ (uint32_t *next) {
     *next = *next * 1103515245 + 12345;
-    return ((unsigned) (*next / 65536) % 32768);
+    return (*next / 65536) % 32768;
 }
 
-void __hime_enc_mem (u_char *p, int n, HIME_PASSWD *passwd, u_int *seed) {
-    int i;
-
-    for (i = 0; i < n; i++) {
-        int v = __hime_rand__ (seed) % __HIME_PASSWD_N_;
+void __hime_enc_mem (unsigned char *p,
+                     const int n,
+                     const HIME_PASSWD *passwd,
+                     uint32_t *seed) {
+    for (int i = 0; i < n; i++) {
+        uint32_t v = __hime_rand__ (seed) % __HIME_PASSWD_N_;
         p[i] ^= passwd->passwd[v];
     }
 }
