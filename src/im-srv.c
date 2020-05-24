@@ -112,7 +112,7 @@ static gboolean cb_new_hime_client (GIOChannel *source, GIOCondition condition, 
     return TRUE;
 }
 
-static int get_ip_address (u_int *ip) {
+static int get_ip_address (uint32_t *ip) {
 
 #if 0
   char hostname[64];

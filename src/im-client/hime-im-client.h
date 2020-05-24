@@ -29,13 +29,13 @@ struct HIME_PASSWD;
 typedef struct HIME_client_handle_S {
     int fd;
     Window client_win;    /* client window */
-    u_int input_style;    /* input style */
+    uint32_t input_style; /* input style */
     XPoint spot_location; /* spot location */
                           // below is private data, don't modify them.
-    u_int flag;
+    uint32_t flag;
     Display *disp; /* X Display, not a GdkDisplay */
     struct HIME_PASSWD *passwd;
-    u_int seq;
+    uint32_t seq;
 } HIME_client_handle;
 
 enum {
@@ -70,16 +70,16 @@ void hime_im_client_set_cursor_location (HIME_client_handle *handle,
  */
 int hime_im_client_forward_key_press (HIME_client_handle *handle,
                                       KeySym key,
-                                      u_int state,
+                                      uint32_t state,
                                       char **rstr);
 // return some state bits instead of TRUE/FALSE
 int hime_im_client_forward_key_press2 (HIME_client_handle *handle,
                                        KeySym key,
-                                       u_int state,
+                                       uint32_t state,
                                        char **rstr);
 int hime_im_client_forward_key_release (HIME_client_handle *handle,
                                         KeySym key,
-                                        u_int state,
+                                        uint32_t state,
                                         char **rstr);
 
 void hime_im_client_set_flags (HIME_client_handle *handle, int flags, int *ret_flags);

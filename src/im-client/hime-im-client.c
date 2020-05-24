@@ -295,7 +295,7 @@ void hime_im_client_close (HIME_client_handle *handle) {
     free (handle);
 }
 
-static int gen_req (HIME_client_handle *handle, u_int req_no, HIME_req *req) {
+static int gen_req (HIME_client_handle *handle, uint32_t req_no, HIME_req *req) {
     validate_handle (handle);
 
     if (!handle->fd)
@@ -483,7 +483,7 @@ void hime_im_client_focus_out2 (HIME_client_handle *handle, char **rstr) {
 static int hime_im_client_forward_key_event (HIME_client_handle *handle,
                                              HIME_req_t event_type,
                                              KeySym key,
-                                             u_int state,
+                                             uint32_t state,
                                              char **rstr) {
     HIME_reply reply;
     HIME_req req;
@@ -534,7 +534,7 @@ static int hime_im_client_forward_key_event (HIME_client_handle *handle,
 // return TRUE if the key is accepted
 int hime_im_client_forward_key_press (HIME_client_handle *handle,
                                       KeySym key,
-                                      u_int state,
+                                      uint32_t state,
                                       char **rstr) {
     int flag;
     if (!handle)
@@ -557,7 +557,7 @@ int hime_im_client_forward_key_press (HIME_client_handle *handle,
 // return TRUE if the key is accepted
 int hime_im_client_forward_key_release (HIME_client_handle *handle,
                                         KeySym key,
-                                        u_int state,
+                                        uint32_t state,
                                         char **rstr) {
     int flag;
     if (!handle)

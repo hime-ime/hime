@@ -35,7 +35,7 @@ typedef enum {
 typedef struct {
     ClientState *cs;
     int tag;
-    u_int seed;
+    uint32_t seed;
     Connection_type type;
     int fd;
 } HIME_ENT;
