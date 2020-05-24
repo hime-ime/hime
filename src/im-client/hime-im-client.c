@@ -482,8 +482,8 @@ void hime_im_client_focus_out2 (HIME_client_handle *handle, char **rstr) {
 
 static int hime_im_client_forward_key_event (HIME_client_handle *handle,
                                              HIME_req_t event_type,
-                                             KeySym key,
-                                             uint32_t state,
+                                             const KeySym key,
+                                             const uint32_t state,
                                              char **rstr) {
     HIME_reply reply;
     HIME_req req;
@@ -533,8 +533,8 @@ static int hime_im_client_forward_key_event (HIME_client_handle *handle,
 
 // return TRUE if the key is accepted
 int hime_im_client_forward_key_press (HIME_client_handle *handle,
-                                      KeySym key,
-                                      uint32_t state,
+                                      const KeySym key,
+                                      const uint32_t state,
                                       char **rstr) {
     int flag;
     if (!handle)
@@ -556,8 +556,8 @@ int hime_im_client_forward_key_press (HIME_client_handle *handle,
 
 // return TRUE if the key is accepted
 int hime_im_client_forward_key_release (HIME_client_handle *handle,
-                                        KeySym key,
-                                        uint32_t state,
+                                        const KeySym key,
+                                        const uint32_t state,
                                         char **rstr) {
     int flag;
     if (!handle)
@@ -569,7 +569,9 @@ int hime_im_client_forward_key_release (HIME_client_handle *handle,
     return ((flag & HIME_reply_key_processed) != 0);
 }
 
-void hime_im_client_set_cursor_location (HIME_client_handle *handle, int x, int y) {
+void hime_im_client_set_cursor_location (HIME_client_handle *handle,
+                                         const int x,
+                                         const int y) {
     if (!handle)
         return;
     if (is_special_user)
@@ -592,7 +594,8 @@ void hime_im_client_set_cursor_location (HIME_client_handle *handle, int x, int 
     }
 }
 
-void hime_im_client_set_client_window (HIME_client_handle *handle, Window win) {
+void hime_im_client_set_client_window (HIME_client_handle *handle,
+                                       const Window win) {
     if (!handle) {
         return;
     }
@@ -608,7 +611,9 @@ void hime_im_client_set_client_window (HIME_client_handle *handle, Window win) {
     handle->client_win = win;
 }
 
-void hime_im_client_set_flags (HIME_client_handle *handle, int flags, int *ret_flag) {
+void hime_im_client_set_flags (HIME_client_handle *handle,
+                               const int flags,
+                               int *ret_flag) {
     HIME_req req;
 
 #if DBG
@@ -645,7 +650,9 @@ void hime_im_client_set_flags (HIME_client_handle *handle, int flags, int *ret_f
     }
 }
 
-void hime_im_client_clear_flags (HIME_client_handle *handle, int flags, int *ret_flag) {
+void hime_im_client_clear_flags (HIME_client_handle *handle,
+                                 const int flags,
+                                 int *ret_flag) {
     HIME_req req;
 
     if (!handle)
@@ -670,7 +677,11 @@ void hime_im_client_clear_flags (HIME_client_handle *handle, int flags, int *ret
     }
 }
 
-int hime_im_client_get_preedit (HIME_client_handle *handle, char **str, HIME_PREEDIT_ATTR att[], int *cursor, int *sub_comp_len) {
+int hime_im_client_get_preedit (HIME_client_handle *handle,
+                                char **str,
+                                HIME_PREEDIT_ATTR att[],
+                                int *cursor,
+                                int *sub_comp_len) {
     *str = NULL;
     if (!handle)
         return 0;
