@@ -21,8 +21,6 @@
 
 #include "pho.h"
 
-extern PIN_JUYIN *pin_juyin;
-
 gboolean b_use_full_space = TRUE;
 
 static char text_pho[6][CH_SZ];
@@ -31,21 +29,25 @@ static char text_pho[6][CH_SZ];
 Display *dpy;
 
 void bell (void) {
-    if (hime_bell_off)
+    if (hime_bell_off) {
         return;
+    }
 
     XBell (dpy, hime_bell_volume);
 }
 
 void case_inverse (KeySym *xkey, int shift_m) {
-    if (*xkey > 0x7e)
+    if (*xkey > 0x7e) {
         return;
+    }
 
     if (shift_m) {
-        if (islower (*xkey))
+        if (islower (*xkey)) {
             *xkey -= 0x20;
-    } else if (isupper (*xkey))
+        }
+    } else if (isupper (*xkey)) {
         *xkey += 0x20;
+    }
 }
 
 gint64 current_time (void) {
@@ -56,11 +58,13 @@ gint64 current_time (void) {
 }
 
 void disp_pho_sub (GtkWidget *label, int index, char *pho) {
-    if (!label)
+    if (!label) {
         return;
+    }
 
-    if (index >= text_pho_N)
+    if (index >= text_pho_N) {
         return;
+    }
 
     if (pho[0] == ' ' && !pin_juyin) {
         u8cpy (text_pho[index], "　"); /* Full width space */
@@ -70,8 +74,7 @@ void disp_pho_sub (GtkWidget *label, int index, char *pho) {
     char s[text_pho_N * CH_SZ + 1];
 
     int tn = 0;
-    int i;
-    for (i = 0; i < text_pho_N; i++) {
+    for (int i = 0; i < text_pho_N; i++) {
         int n = utf8cpy (s + tn, text_pho[i]);
         tn += n;
     }
@@ -81,15 +84,17 @@ void disp_pho_sub (GtkWidget *label, int index, char *pho) {
 
 void exec_hime_setup (void) {
     dbg ("exec hime\n");
-    if (geteuid () < 100 || getegid () < 100)
+    if (geteuid () < 100 || getegid () < 100) {
         return;
+    }
 
     system (HIME_BIN_DIR "/hime-setup &");
 }
 
 void set_label_font_size (GtkWidget *label, int size) {
-    if (!GTK_IS_WIDGET (label))
+    if (!GTK_IS_WIDGET (label)) {
         return;
+    }
 
     PangoContext *pango_context = gtk_widget_get_pango_context (label);
     PangoFontDescription *font = pango_context_get_font_description (pango_context);
@@ -109,7 +114,6 @@ void set_label_font_size (GtkWidget *label, int size) {
 // the width of ascii space in firefly song
 void set_label_space (GtkWidget *label) {
     gtk_label_set_text (GTK_LABEL (label), "\xe3\x80\x80");
-    return;
 }
 
 void set_no_focus (GtkWidget *win) {
@@ -151,7 +155,7 @@ gboolean get_caps_lock_state (void) {
     return gdk_keymap_get_caps_lock_state (get_keymap ());
 }
 
-Atom get_atom_by_name (Display *display, char *name) {
+Atom get_atom_by_name (Display *display, const char *name) {
     if (!display) {
         dbg ("display is null\n");
         return 0;
