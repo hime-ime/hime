@@ -58,15 +58,92 @@ static int skip_processing (const HIME_client_handle *handle) {
     return !handle || is_special_user ();
 }
 
+static unsigned char *get_window_property (Display *display,
+                                           Window hime_win,
+                                           Atom atom) {
+    Atom actual_type_return;
+    int actual_format_return = 0;
+    unsigned long nitems_return = 0;
+    unsigned long bytes_after_return = 0;
+    unsigned char *prop_return = NULL;
+
+    int success = XGetWindowProperty (display,
+                                      hime_win,
+                                      atom,
+                                      0, 64, /* offset / length */
+                                      False, /* delete */
+                                      AnyPropertyType,
+                                      &actual_type_return,
+                                      &actual_format_return,
+                                      &nitems_return,
+                                      &bytes_after_return,
+                                      &prop_return);
+
+    if (success != Success) {
+        return NULL;
+    }
+
+    return prop_return;
+}
+
+static unsigned char *get_sockpath_atom (Display *display, Window hime_win) {
+
+    Atom hime_sockpath_atom = get_hime_sockpath_atom (display);
+
+    if (!hime_sockpath_atom) {
+        return NULL;
+    }
+
+    return get_window_property (display, hime_win, hime_sockpath_atom);
+}
+
+static unsigned char *get_addr_atom (Display *display, Window hime_win) {
+
+    Atom hime_addr_atom = get_hime_addr_atom (display);
+
+    if (!hime_addr_atom) {
+        return NULL;
+    }
+
+    return get_window_property (display, hime_win, hime_addr_atom);
+}
+
+static void init_unix_serv_addr (const unsigned char *message_sock,
+                                 struct sockaddr_un *serv_addr) {
+
+    memset (&serv_addr, 0, sizeof (serv_addr));
+
+    serv_addr->sun_family = AF_UNIX;
+
+    Server_sock_path srv_sock_path;
+    srv_sock_path.sock_path[0] = '\0';
+    memcpy (&srv_sock_path, message_sock, sizeof (srv_sock_path));
+
+    char sock_path[UNIX_PATH_MAX];
+    if (srv_sock_path.sock_path[0]) {
+        strncpy (sock_path, srv_sock_path.sock_path, UNIX_PATH_MAX);
+    } else {
+        get_hime_im_srv_sock_path (sock_path, sizeof (sock_path));
+    }
+
+    strcpy (serv_addr->sun_path, sock_path);
+}
+
+static void init_ipv4_serv_addr (const Server_IP_port *srv_ip_port,
+                                 struct sockaddr_in *serv_addr) {
+
+    memset (&serv_addr, 0, sizeof (serv_addr));
+
+    serv_addr->sin_family = AF_INET;
+
+    serv_addr->sin_addr.s_addr = srv_ip_port->ip;
+    serv_addr->sin_port = srv_ip_port->port;
+}
+
 static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch,
                                                   Display *display) {
 
     const int dbg_msg = getenv ("HIME_CONNECT_MSG_ON") != NULL;
-    int sockfd = 0;
-    Server_IP_port srv_ip_port;
-    int tcp = FALSE;
-    HIME_client_handle *handle;
-    int rstatus;
 
     init_is_special_user ();
 
@@ -75,12 +152,12 @@ static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch,
         goto next;
     }
 
-    Atom hime_addr_atom = get_hime_addr_atom (display);
     Window hime_win = None;
 
     const int MAX_TRY = 3;
     int loop = 0;
 
+    // obtain hime_win and fork
     if (!is_special_user ()) {
         for (loop = 0; loop < MAX_TRY; loop++) {
             if ((hime_win = find_hime_window (display)) != None ||
@@ -89,9 +166,11 @@ static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch,
             }
             static time_t exec_time;
 
-            if (time (NULL) - exec_time > 1 /* && count < 5 */) {
+            if (time (NULL) - exec_time > 1) {
                 time (&exec_time);
-                dbg ("XGetSelectionOwner: old version of hime or hime is not running ??\n");
+
+                dbg ("XGetSelectionOwner: old version of hime or hime is not running ?\n");
+
                 static char execbin[] = HIME_BIN_DIR "/hime";
                 dbg ("... try to start a new hime server %s\n", execbin);
 
@@ -113,130 +192,98 @@ static HIME_client_handle *hime_im_client_reopen (HIME_client_handle *hime_ch,
         goto next;
     }
 
-    Atom actual_type;
-    int actual_format;
-    u_long nitems, bytes_after;
-    char *message_sock = NULL;
-    Atom hime_sockpath_atom = get_hime_sockpath_atom (display);
+    // -----------------------------------------------------------------------
+    // The below logic tries to prepare a valid sockfd.
+    //
+    // we try to create UNIX domain socket first,
+    // (if failed,) we try to create a IPv4 socket (ipv4 flag will be set).
+    // -----------------------------------------------------------------------
 
-    //  printf("hime_sockpath_atom %d\n", hime_sockpath_atom);
+    int sockfd = 0;
+    int ipv4 = FALSE;
 
-    if (!hime_sockpath_atom || XGetWindowProperty (display, hime_win, hime_sockpath_atom, 0, 64,
-                                                   False, AnyPropertyType, &actual_type, &actual_format,
-                                                   &nitems, &bytes_after, (u_char **) &message_sock) != Success) {
-#if DBG || 1
-        dbg ("XGetWindowProperty 2: old version of hime or hime is not running ??\n");
-#endif
+    // -----------------------------------------------------------------------
+    // trying to create a UNIX domain socket (AF_UNIX) connection
+    // -----------------------------------------------------------------------
+
+    // get HIME socket path from X window (HIME_SOCKPATH_ATOM)
+    unsigned char *unix_message_sock = get_sockpath_atom (display, hime_win);
+    if (!unix_message_sock) {
+        dbg ("[UNIX] XGetWindowProperty: old version of hime or hime is not running ?\n");
         goto next;
     }
 
-    Server_sock_path srv_sock_path;
-    srv_sock_path.sock_path[0] = 0;
-    if (message_sock) {
-        memcpy (&srv_sock_path, message_sock, sizeof (srv_sock_path));
-        XFree (message_sock);
-    } else
-        goto next;
-
+    // UNIX domain socket (AF_UNIX)
     struct sockaddr_un serv_addr;
-    memset ((char *) &serv_addr, 0, sizeof (serv_addr));
-    serv_addr.sun_family = AF_UNIX;
-    char sock_path[UNIX_PATH_MAX];
-
-    if (srv_sock_path.sock_path[0]) {
-        strcpy (sock_path, srv_sock_path.sock_path);
-    } else {
-        get_hime_im_srv_sock_path (sock_path, sizeof (sock_path));
-    }
-
-    //  addr = sock_path;
-    strcpy (serv_addr.sun_path, sock_path);
-
-#ifdef SUN_LEN
-    int servlen = SUN_LEN (&serv_addr);
-#else
-    int servlen = strlen (serv_addr.sun_path) + sizeof (serv_addr.sun_family);
-#endif
+    init_unix_serv_addr (unix_message_sock, &serv_addr);
+    XFree (unix_message_sock);
+    unix_message_sock = NULL;
 
     if ((sockfd = socket (AF_UNIX, SOCK_STREAM, 0)) < 0) {
-        perror ("cannot open socket");
+        perror ("cannot open UNIX domain socket");
         goto tcp;
     }
 
-    if (connect (sockfd, (struct sockaddr *) &serv_addr, servlen) < 0) {
+    if (connect (sockfd, (struct sockaddr *) &serv_addr, SUN_LEN (&serv_addr)) < 0) {
+        perror ("cannot connect to UNIX domain socket");
         close (sockfd);
         sockfd = 0;
         goto tcp;
     }
 
     if (dbg_msg) {
-        dbg ("connected to unix socket addr %s\n", sock_path);
+        dbg ("connected to unix socket addr %s\n", serv_addr.sun_path);
     }
+
+    // we are now connected to a UNIX domain socket
     goto next;
 
-    char *message;
-
-tcp:
-    message = NULL;
-
-    if (!hime_addr_atom || XGetWindowProperty (display, hime_win, hime_addr_atom, 0, 64,
-                                               False, AnyPropertyType, &actual_type, &actual_format,
-                                               &nitems, &bytes_after, (u_char **) &message) != Success) {
-#if DBG || 1
-        dbg ("XGetWindowProperty: old version of hime or hime is not running ??\n");
-#endif
+tcp:;
+    // -----------------------------------------------------------------------
+    // trying to create a IPv4 socket (AF_INET) connection
+    // -----------------------------------------------------------------------
+    //
+    // get HIME address from X window (HIME_ADDR_ATOM)
+    unsigned char *ipv4_message_sock = get_addr_atom (display, hime_win);
+    if (!ipv4_message_sock) {
+        dbg ("[IPv4] XGetWindowProperty: old version of hime or hime is not running ?\n");
         goto next;
     }
 
-    if (message) {
-        memcpy (&srv_ip_port, message, sizeof (srv_ip_port));
-        XFree (message);
-        message = NULL;
-    } else {
-        goto next;
-    }
+    Server_IP_port srv_ip_port;
+    memcpy (&srv_ip_port, ipv4_message_sock, sizeof (srv_ip_port));
+    XFree (ipv4_message_sock);
+    ipv4_message_sock = NULL;
 
-    //  dbg("im server tcp port %d\n", ntohs(srv_ip_port.port));
-
+    // IPv4 socket (AF_INET)
     struct sockaddr_in in_serv_addr;
-    memset ((char *) &in_serv_addr, 0, sizeof (in_serv_addr));
-
-    in_serv_addr.sin_family = AF_INET;
-    in_serv_addr.sin_addr.s_addr = srv_ip_port.ip;
-    in_serv_addr.sin_port = srv_ip_port.port;
-    servlen = sizeof (in_serv_addr);
+    init_ipv4_serv_addr (&srv_ip_port, &in_serv_addr);
 
     if ((sockfd = socket (AF_INET, SOCK_STREAM, 0)) < 0) {
-        perror ("cannot open socket");
+        perror ("cannot open IPv4 socket");
         goto next;
     }
 
-    dbg ("sock %d\n", sockfd);
-
-    if (connect (sockfd, (struct sockaddr *) &in_serv_addr, servlen) < 0) {
-        dbg ("hime_im_client_open cannot open: ");
-        perror ("");
+    if (connect (sockfd, (struct sockaddr *) &in_serv_addr, sizeof (in_serv_addr)) < 0) {
+        perror ("cannot cannot connect to IPv4 socket");
         close (sockfd);
         sockfd = 0;
         goto next;
     }
 
-#if DEBUG
-    unsigned char *pp = (unsigned char *) &srv_ip_port.ip;
+    // debug message
     if (dbg_msg) {
+        unsigned char *pp = (unsigned char *) &srv_ip_port.ip;
         dbg ("hime client connected to server %d.%d.%d.%d:%d\n",
              pp[0], pp[1], pp[2], pp[3], ntohs (srv_ip_port.port));
     }
-#endif
 
-    tcp = TRUE;
+    // we are now connected to a IPv4 socket
+    ipv4 = TRUE;
+    goto next;
 
-next:
-    if (!hime_ch) {
-        handle = tzmalloc (HIME_client_handle, 1);
-    } else {
-        handle = hime_ch;
-    }
+next:;
+    HIME_client_handle *handle = hime_ch ? hime_ch : tzmalloc (HIME_client_handle, 1);
 
     if (sockfd < 0) {
         sockfd = 0;
@@ -244,7 +291,7 @@ next:
 
     if (sockfd > 0) {
         handle->fd = sockfd;
-        if (tcp) {
+        if (ipv4) {
             if (!handle->passwd) {
                 handle->passwd = malloc (sizeof (HIME_PASSWD));
             }
@@ -262,6 +309,7 @@ next:
             hime_im_client_focus_in (handle);
         }
 
+        int rstatus = 0;
         hime_im_client_set_flags (handle, flags_backup, &rstatus);
     }
 

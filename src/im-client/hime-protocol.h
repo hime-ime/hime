@@ -84,12 +84,14 @@ typedef struct HIME_PASSWD {
     u_char passwd[__HIME_PASSWD_N_];
 } HIME_PASSWD;
 
+// for IPv4 socket
 typedef struct {
     uint32_t ip;
     u_short port;
     HIME_PASSWD passwd;
 } Server_IP_port;
 
+// for UNIX domain socket
 typedef struct {
     char sock_path[UNIX_PATH_MAX];
 } Server_sock_path;
