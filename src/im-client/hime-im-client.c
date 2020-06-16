@@ -111,7 +111,7 @@ static unsigned char *get_addr_atom (Display *display, Window hime_win) {
 static void init_unix_serv_addr (const unsigned char *message_sock,
                                  struct sockaddr_un *serv_addr) {
 
-    memset (&serv_addr, 0, sizeof (serv_addr));
+    memset (serv_addr, 0, sizeof (*serv_addr));
 
     serv_addr->sun_family = AF_UNIX;
 
@@ -132,7 +132,7 @@ static void init_unix_serv_addr (const unsigned char *message_sock,
 static void init_ipv4_serv_addr (const Server_IP_port *srv_ip_port,
                                  struct sockaddr_in *serv_addr) {
 
-    memset (&serv_addr, 0, sizeof (serv_addr));
+    memset (serv_addr, 0, sizeof (*serv_addr));
 
     serv_addr->sin_family = AF_INET;
 
