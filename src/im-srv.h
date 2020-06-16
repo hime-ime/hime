@@ -1,4 +1,6 @@
-/* Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
+/*
+ * Copyright (C) 2020 The HIME team, Taiwan
+ * Copyright (C) 2011 Edward Der-Hua Liu, Hsin-Chu, Taiwan
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -40,13 +42,18 @@ typedef struct {
     int fd;
 } HIME_ENT;
 
-extern HIME_ENT *hime_clients;
-extern int hime_clientsN;
-extern Server_IP_port srv_ip_port;
-
 // im-addr.c
 Atom get_hime_addr_atom (Display *display);
 Atom get_hime_sockpath_atom (Display *display);
 void get_hime_im_srv_sock_path (char *outstr, const int outstrN);
+
+// im-dispatch.c
+extern HIME_ENT *hime_clients;
+extern int hime_clientsN;
+void process_client_req (int fd);
+
+// im-srv.c
+extern Server_IP_port srv_ip_port;
+void init_hime_im_serv (const Window window);
 
 #endif /* HIME_IM_SRV_H */

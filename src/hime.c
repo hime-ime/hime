@@ -21,6 +21,8 @@
 
 #include "hime.h"
 
+#include "im-srv.h"
+
 Window root;
 
 int win_xl, win_yl;
@@ -521,7 +523,6 @@ void sig_do_exit (int sig) {
 
 void load_phrase ();
 void init_tray (), exec_setup_scripts ();
-void init_hime_im_serv (Window win);
 void init_tray_double ();
 
 #if TRAY_UNITY
