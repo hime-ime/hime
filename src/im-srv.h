@@ -50,7 +50,7 @@ void get_hime_im_srv_sock_path (char *outstr, const int outstrN);
 // im-dispatch.c
 extern HIME_ENT *hime_clients;
 extern int hime_clientsN;
-void process_client_req (int fd);
+void process_client_req (const int fd);
 
 // im-srv.c
 extern Server_IP_port srv_ip_port;
