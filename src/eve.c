@@ -47,9 +47,9 @@ static char *callback_str_buffer;
 Window focus_win;
 static int timeout_handle;
 char *output_buffer;
-int output_bufferN;
+uint32_t output_bufferN;
 static char *output_buffer_raw, *output_buffer_raw_bak;
-static int output_buffer_rawN;
+static uint32_t output_buffer_rawN;
 void set_wselkey (char *s);
 void gtab_set_win1_cb ();
 void toggle_symbol_table ();
@@ -114,9 +114,10 @@ void output_buffer_call_back () {
 ClientState *current_CS;
 static ClientState temp_CS;
 
-void save_CS_current_to_temp () {
-    if (!hime_single_state)
+void save_CS_current_to_temp (void) {
+    if (!hime_single_state) {
         return;
+    }
 
     //  dbg("save_CS_current_to_temp\n");
     temp_CS.b_half_full_char = current_CS->b_half_full_char;
@@ -147,15 +148,19 @@ int current_shape_mode () {
 
 gboolean init_in_method (int in_no);
 
-void clear_output_buffer () {
-    if (output_buffer)
-        output_buffer[0] = 0;
+void clear_output_buffer (void) {
+    if (output_buffer) {
+        output_buffer[0] = '\0';
+    }
+
     output_bufferN = 0;
 
     swap_ptr (&output_buffer_raw, &output_buffer_raw_bak);
 
-    if (output_buffer_raw)
-        output_buffer_raw[0] = 0;
+    if (output_buffer_raw) {
+        output_buffer_raw[0] = '\0';
+    }
+
     output_buffer_rawN = 0;
 }
 
@@ -545,15 +550,13 @@ void move_IC_in_win (ClientState *cs) {
     move_in_win (cs, tx, ty + 1);
 }
 
-void update_in_win_pos () {
+void update_in_win_pos (void) {
     check_CS ();
-
-    //  dbg("update_in_win_pos %x %d\n", current_CS, current_CS->input_style);
 
     if (current_CS->input_style == InputStyleRoot) {
         Window r_root, r_child;
         int winx, winy, rootx, rooty;
-        u_int mask;
+        uint32_t mask;
 
         XQueryPointer (dpy, root, &r_root, &r_child, &rootx, &rooty, &winx, &winy, &mask);
 
@@ -561,9 +564,7 @@ void update_in_win_pos () {
         winy++;
 
         Window inpwin = current_CS->client_win;
-#if 0
-    dbg("update_in_win_pos\n");
-#endif
+
         if (inpwin) {
             int tx, ty;
             Window ow;
@@ -1126,7 +1127,7 @@ void toggle_symbol_table () {
 void destroy_phrase_save_menu ();
 int hime_switch_keys_lookup (int key);
 
-gboolean check_key_press (KeySym key, u_int kev_state, gboolean return_value) {
+gboolean check_key_press (KeySym key, uint32_t kev_state, gboolean return_value) {
     if ((key == XK_Shift_L || key == XK_Shift_R) && key_press_alt) {
         key_press_ctrl = FALSE;
     } else if ((key == XK_Control_L || key == XK_Control_R) && key_press_ctrl) {
@@ -1140,7 +1141,7 @@ gboolean check_key_press (KeySym key, u_int kev_state, gboolean return_value) {
 }
 
 // return TRUE if the key press is processed
-gboolean ProcessKeyPress (KeySym keysym, u_int kev_state) {
+gboolean ProcessKeyPress (KeySym keysym, uint32_t kev_state) {
 #if 0
   dbg("key press %x %x\n", keysym, kev_state);
 #endif
@@ -1283,7 +1284,7 @@ int feedkey_pp_release (KeySym xkey, int kbstate);
 int feedkey_gtab_release (KeySym xkey, int kbstate);
 
 // return TRUE if the key press is processed
-gboolean ProcessKeyRelease (KeySym keysym, u_int kev_state) {
+gboolean ProcessKeyRelease (KeySym keysym, uint32_t kev_state) {
     disp_win_kbm_capslock ();
 
     check_CS ();
@@ -1368,13 +1369,7 @@ int skip_window (Window win) {
 void hime_reset ();
 
 int hime_FocusIn (ClientState *cs) {
-    //  dbg("hime_FocusIn\n");
     Window win = cs->client_win;
-
-#if 0
-  if (skip_window(win))
-    return FALSE;
-#endif
 
     reset_current_in_win_xy ();
 
@@ -1382,9 +1377,7 @@ int hime_FocusIn (ClientState *cs) {
         Window win = cs->client_win;
 
         if (focus_win != win) {
-#if 1
             hime_reset ();
-#endif
             hide_in_win (current_CS);
             focus_win = win;
         }
@@ -1393,31 +1386,29 @@ int hime_FocusIn (ClientState *cs) {
     current_CS = cs;
     save_CS_temp_to_current ();
 
-    //  dbg("current_CS %x %d %d\n", cs, cs->im_state, current_CS->im_state);
-
     if (win == focus_win) {
         if (cs->im_state != HIME_STATE_DISABLED) {
             show_in_win (cs);
             move_IC_in_win (cs);
-        } else
+        } else {
             hide_in_win (cs);
+        }
     }
 
-    if (inmd[cs->in_method].selkey)
+    if (inmd[cs->in_method].selkey) {
         set_wselkey (inmd[cs->in_method].selkey);
-    else {
+    } else {
         set_wselkey (pho_selkey);
         gtab_set_win1_cb ();
         tsin_set_win1_cb ();
     }
 
     update_win_kbm ();
+
 #if TRAY_ENABLED
     disp_tray_icon ();
 #endif
-#if 0
-  dbg_time("hime_FocusIn %x %x\n",cs, current_CS);
-#endif
+
     return True;
 }
 
@@ -1448,16 +1439,11 @@ static gint64 last_focus_out_time;
 
 int hime_FocusOut (ClientState *cs) {
     gint64 t = current_time ();
-    //  dbg("hime_FocusOut\n");
 
-    if (cs != current_CS)
+    if (cs != current_CS) {
         return FALSE;
+    }
 
-#if 0
-//  dbg("hime_FocusOut\n");
-  if (skip_window(cs->client_win))
-    return FALSE;
-#endif
     if (t - last_focus_out_time < 100000) {
         last_focus_out_time = t;
         return FALSE;
@@ -1471,12 +1457,9 @@ int hime_FocusOut (ClientState *cs) {
 
     reset_current_in_win_xy ();
 
-    if (cs == current_CS)
+    if (cs == current_CS) {
         temp_CS = *current_CS;
-
-#if 0
-  dbg("focus out\n");
-#endif
+    }
 
     return True;
 }
@@ -1486,20 +1469,20 @@ int gtab_get_preedit (char *str, HIME_PREEDIT_ATTR attr[], int *pcursor, int *su
 int int_get_preedit (char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *sub_comp_len);
 int pho_get_preedit (char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *sub_comp_len);
 
-int hime_get_preedit (ClientState *cs, char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *comp_flag) {
-    //  dbg("hime_get_preedit %x\n", current_CS);
+int hime_get_preedit (ClientState *cs,
+                      char *str,
+                      HIME_PREEDIT_ATTR attr[],
+                      int *cursor,
+                      int *comp_flag) {
+
     if (!current_CS) {
-        //empty:
-        //    dbg("empty\n");
-        str[0] = 0;
+        str[0] = '\0';
         *cursor = 0;
         return 0;
     }
 
-    str[0] = 0;
+    str[0] = '\0';
     *comp_flag = 0;
-
-    //  cs->use_preedit = TRUE;
 
     switch (current_method_type ()) {
     case method_type_PHO:
@@ -1509,11 +1492,11 @@ int hime_get_preedit (ClientState *cs, char *str, HIME_PREEDIT_ATTR attr[], int 
         return tsin_get_preedit (str, attr, cursor, comp_flag);
 #endif
     case method_type_MODULE:
-        if (inmd[current_CS->in_method].mod_cb_funcs)
+        if (inmd[current_CS->in_method].mod_cb_funcs) {
             return module_cb ()->module_get_preedit (str, attr, cursor, comp_flag);
+        }
     default:
         return gtab_get_preedit (str, attr, cursor, comp_flag);
-        //      dbg("metho %d\n", current_CS->in_method);
     }
 
     return 0;
@@ -1523,30 +1506,28 @@ void pho_reset ();
 int tsin_reset ();
 void gtab_reset ();
 
-void hime_reset () {
-#if 1
-    if (!current_CS)
+void hime_reset (void) {
+    if (!current_CS) {
         return;
-    //  dbg("hime_reset\n");
+    }
 
     switch (current_method_type ()) {
     case method_type_PHO:
         pho_reset ();
-        return;
+        break;
 #if USE_TSIN
     case method_type_TSIN:
         tsin_reset ();
-        return;
+        break;
 #endif
     case method_type_MODULE:
-        if (inmd[current_CS->in_method].mod_cb_funcs)
+        if (inmd[current_CS->in_method].mod_cb_funcs) {
             module_cb ()->module_reset ();
-        return;
+        }
+        break;
     default:
         gtab_reset ();
-        //      dbg("metho %d\n", current_CS->in_method);
     }
-#endif
 }
 
 #if USE_XIM
@@ -1571,11 +1552,11 @@ gboolean hime_display_on_the_spot_key () {
     return hime_edit_display_ap_only () && hime_on_the_spot_key;
 }
 
-void flush_edit_buffer () {
-    //  dbg("flush_edit_buffer\n");
-    if (!current_CS)
+void flush_edit_buffer (void) {
+    if (!current_CS) {
         return;
-    //  dbg("hime_reset\n");
+    }
+
     switch (current_method_type ()) {
 #if USE_TSIN
     case method_type_TSIN:
@@ -1583,19 +1564,13 @@ void flush_edit_buffer () {
         break;
 #endif
     case method_type_MODULE:
-        if (inmd[current_CS->in_method].mod_cb_funcs)
+        if (inmd[current_CS->in_method].mod_cb_funcs) {
             module_cb ()->module_flush_input ();
+        }
         break;
     default:
         output_gbuf ();
-        //      dbg("metho %d\n", current_CS->in_method);
     }
-#if 0
-  dbg("output_bufferN:%d\n", output_bufferN);
-  if (output_bufferN) {
-    output_buffer_call_back();
-  }
-#endif
 }
 
 void change_module_font_size () {

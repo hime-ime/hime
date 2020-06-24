@@ -22,6 +22,7 @@
 
 #include <ctype.h>
 #include <stdarg.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -63,6 +64,7 @@ typedef enum {
 #include "IC.h"
 #include "gtab.h"
 #include "hime-gtk-compatible.h"
+#include "im-client/hime-im-client-attr.h"
 
 #if CLIENT_LIB
 #define p_err __hime_p_err
@@ -172,6 +174,9 @@ void send_text (char *text);
 void send_utf8_ch (char *bchar);
 void send_ascii (char key);
 
+// hime.c
+void message_cb (char *message);
+
 // hime-common.c
 void bell (void);
 void case_inverse (KeySym *xkey, int shift_m);
@@ -197,6 +202,23 @@ void load_pin_juyin (void);
 
 // im-client/hime-send.c
 void send_hime_message (Display *display, const char *message);
+
+// eve.c
+gboolean ProcessKeyPress (KeySym keysym, uint32_t kev_state);
+gboolean ProcessKeyRelease (KeySym keysym, uint32_t kev_state);
+int hime_FocusIn (ClientState *cs);
+int hime_FocusOut (ClientState *cs);
+int hime_get_preedit (ClientState *cs, char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *sub_comp_len);
+void clear_output_buffer (void);
+void flush_edit_buffer (void);
+void hide_in_win (ClientState *cs);
+void hime_reset (void);
+void init_state_chinese (ClientState *cs);
+void save_CS_temp_to_current (void);
+void update_in_win_pos (void);
+
+// util.c
+void dbg_time (char *fmt, ...);
 
 void check_CS ();
 void get_win_size (GtkWidget *win, int *width, int *height);
