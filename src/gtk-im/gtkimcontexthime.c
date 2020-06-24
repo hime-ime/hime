@@ -232,25 +232,23 @@ static void gtk_im_context_hime_get_preedit_string (
                                   FLAG_HIME_client_handle_use_preedit, &ret);
     }
 
-    // nowhere to send the out-string
-    if (!str) {
-        return;
-    }
-
-    if (!context_hime->hime_ch) {
-        *str = g_strdup ("");
-        return;
+    if (str) {
+        // hime client handle not present, return an empty string
+        if (!context_hime->hime_ch) {
+            *str = g_strdup ("");
+        } else {
+            // return preedit buffer if any,
+            // otherwise, return an empty string
+            if (context_hime->pe_str) {
+                *str = g_strdup (context_hime->pe_str);
+            } else {
+                *str = g_strdup ("");
+            }
+        }
     }
 
     if (cursor_pos) {
         *cursor_pos = context_hime->pe_cursor;
-    }
-
-    if (context_hime->pe_str) {
-        *str = g_strdup (context_hime->pe_str);
-    } else {
-        *str = g_strdup ("");
-        return;
     }
 
     if (attrs) {
