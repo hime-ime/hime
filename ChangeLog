@@ -1,3 +1,343 @@
+0.9.11
+
+  * Add the manual trigger for GitHub workflow
+  * Fix gtk3 crash
+  * Merge pull request #648 from xatier/master
+  * Refactor im-dispatch.c
+  * Merge pull request #647 from xatier/master
+  * Fix a pointer bug introduced in 522f406078e0158616092ed4aa29448d3d5c0bd0
+  * Merge pull request #646 from xatier/master
+  * Refactor im-srv.c
+  * Merge pull request #644 from xatier/master
+  * Refactor hime_im_client_reopen in hime-im-client.c
+  * Merge pull request #643 from xatier/master
+  * Cleanup hime-im-client.c
+  * Merge pull request #642 from xatier/master
+  * Refactor hime-im-client.c
+  * Reorganize hime-im-client.c to be same as hime-im-client.h
+  * Merge pull request #641 from xatier/master
+  * Cleanup hime-im-client.c
+  * Merge pull request #640 from xatier/master
+  * Embed save|restore_old_sigaction_single functions
+  * Merge pull request #639 from xatier/master
+  * Use XPoint from X window
+  * Merge pull request #638 from xatier/master
+  * Rename keyeve to key_event in hime-protocol.h
+  * Merge pull request #637 from xatier/master
+  * Reorganize hime-im-client.h
+  * Merge pull request #636 from xatier/master
+  * Cleanup im-client
+  * Merge pull request #635 from xatier/master
+  * Use standard uint32_t for src/im-*
+  * Rename hime_im_client_message to hime_im_client_send_message
+  * Use const for `send_hime_message`
+  * Merge pull request #634 from xatier/master
+  * Use standard uint32_t for hime-crypt.c
+  * Merge pull request #633 from xatier/master
+  * Fix clang-tidy warnings in hime-common.c
+  * Merge pull request #632 from xatier/master
+  * Rename hime_im_client_set_window to hime_im_client_set_client_window
+  * Merge pull request #631 from xatier/master
+  * Cleanup im-addr.c
+  * Merge pull request #630 from xatier/master
+  * Add Qt's moc_*.cpp to .gitignore
+  * Merge pull request #629 from xatier/master
+  * Replace GDK_<key> with  GDK_KEY_<key>
+  * Merge pull request #628 from xatier/master
+  * Cleanup hime-ts-edit.c
+  * Merge pull request #627 from xatier/master
+  * Fix incorrect signal name "delete-event"
+  * Merge pull request #625 from xatier/master
+  * Refactor gtk_im_context_hime_filter_keypress
+  * Merge pull request #626 from xatier/makepkg
+  * Add makepkg.sh to build Archlinux package
+  * Merge pull request #624 from xatier/master
+  * Update clang-format make target
+  * Merge pull request #623 from xatier/master
+  * Cleanup gtk imcontext module
+  * Merge pull request #622 from xatier/master
+  * Add missing dependency for clang-format
+  * Merge pull request #621 from xatier/master
+  * Add clang-format to ci script
+  * Merge pull request #620 from xatier/master
+  * Fix shell scripts in distro
+  * Merge pull request #619 from xatier/master
+  * Replace bzero with memset
+  * Merge pull request #618 from xatier/master
+  * Cleanup data scripts
+  * Merge pull request #616 from xatier/master
+  * Drop Qt4 code
+  * Merge pull request #617 from hime-ime/chewing_deprecation
+  * add missing chewing_bopomofo_Check
+  * Merge pull request #615 from xatier/master
+  * Add missing const qualifier for pszZuinStr (pull request #613)
+  * Merge pull request #614 from xatier/master
+  * Apply clang-format to chewing.c
+  * Add pre-commit hook
+  * Merge pull request #613 from hime-ime/chewing_deprecation
+  * fix chewing deprecataion warnings #518 #609 #612
+  * Merge pull request #612 from hime-ime/revert_8fd3c0c
+  * Revert "Use chewing_bopomofo_String_static API. Fix #518."
+  * Merge pull request #611 from hime-ime/debian_ci_qt5
+  * debian ci: install qt5 private lib
+  * Merge pull request #610 from xatier/master
+  * Add qt5-base to Archlinux CI dependency
+  * Merge pull request #609 from xatier/master
+  * Use chewing_bopomofo_String_static API. Fix #518.
+  * Merge pull request #608 from xatier/master
+  * Apply clang-format (2nd level)
+  * Apply clang-format
+  * Merge pull request #607 from xatier/gtk-im
+  * Fix Gtk issues
+  * Refactoring: remove unnecessary function declarations
+  * Organize includes
+  * Sync gdkpixbuf-drawable.c with upstream
+  * Use Debian testing to avoid unexpected CI failures
+  * Fix symbol linkage issues
+  * Use ALL_UPPERCASE for HIME_I18N_MESSAGE
+  * Cleanup Makefiles
+  * Gtk code cleanup
+  * Merge pull request #606 from xatier/master
+  * Fix misc warnings
+  * Merge pull request #605 from xatier/configure
+  * Fix GTK immodules flags
+  * Merge pull request #604 from xatier/configure
+  * Refactor lib selection flag to be consistent
+  * Merge pull request #603 from xatier/workflow
+  * Add build status badge to README.md
+  * Merge pull request #602 from xatier/workflow
+  * Add Debian workflow
+  * Merge pull request #601 from xatier/configure
+  * Refactor build system
+  * Merge pull request #600 from xatier/configure
+  * Drop QT3 support
+  * Merge pull request #599 from xatier/configure
+  * Refactor configure script (part 2)
+  * Merge pull request #598 from xatier/configure
+  * Drop MAC_OS support
+  * Merge pull request #597 from xatier/master
+  * Use git show -m in GitHub Actions to show merge contents
+  * Merge pull request #596 from xatier/workflow-test
+  * Add GitHub workflow
+  * Merge pull request #595 from xatier/master
+  * Fix configure bug introduced in 5177d47ffaa39d3089e77a56bb86ef2507560ac2
+  * Merge pull request #594 from xatier/scan-build
+  * Merge pull request #591 from xatier/master
+  * Merge branch 'master' into master
+  * Merge pull request #592 from xatier/about
+  * Add a script to invoke scan-build static analyzer
+  * update pkgbuild to use hook
+  * Break down create_about_window() into small functions
+  * Refactor and polish about.c
+  * Merge pull request #593 from Brli/update-archlinux-pkgbuild
+  * update pkgbuild to use hook
+  * Rewrite ls globs with find
+  * Refactor scripts to be prettier
+  * Merge pull request #590 from xatier/master
+  * Fix README.md with markdownlint
+  * Merge pull request #589 from xatier/master
+  * Bump PKGBUILD version
+  * Merge pull request #588 from xatier/master
+  * Revert "tsin: send out the buffer when changing the mode from Ch to En"
+  * Merge pull request #561 from Vdragon/patch-tried-to-fix-issue-558
+  * Merge pull request #587 from yanganto/esperanto
+  * Add Esperanto keyboard
+  * fix: Switch to latin letters input method without failure
+  * fix: Use the correct data type of in_cycle
+  * build: Detect necessary software pkg-config
+  * feat(tsin): Press space key without committing the preedit buffer
+  * UI(tsin): Hide the popup input window correctly
+  * docs: Update the link of gcin source code
+  * tsin feat: move the cursor backward after the phrase selection
+  * Merge pull request #578 from marktwtn/korean
+  * name the korean input method to hangul and hangul-roman
+  * update: add table reference and more character definitions
+  * update: add more character definitions
+  * feat: add korean input method
+  * change the file mode as the other .cin files
+  * fix typo
+  * fix: add the missing parentheses
+  * feat: change the msgid from Chinese to English
+  * update the strings to be translated in source code
+  * Make: add "--no-wrap" option for generating .pot and .po files
+  * feat: add 'make uninstall' in Makefile
+  * fix: a better way to solve the #161 issue
+  * fix: solve the switch input method problem of #161 issue
+  * fix: solve the search file problem of #537 issue
+  * fix: solve the full/half-shape problem of #47 issue
+  * change the code of controlling half/full-shape mode of TSIN
+  * refactor the source code related to 'b_half_full_char'
+  * Make: fix the dependency
+  * tsin: send out the buffer when changing the mode from Ch to En
+  * add more files into .gitignore
+  * fix the compiler warning of snprintf()
+  * change the default value of tsin_buffer_editing_mode
+  * security: change most sprintf() to snprintf()
+  * Merge pull request #563 from Vdragon/patch-im-switch-support-multiarch
+  * Merge pull request #577 from marktwtn/wm
+  * WM: the chewing setting window should not be covered
+  * Merge pull request #576 from marktwtn/uiux
+  * UI & UX: show candidate characters without being cut
+  * Add vim swapfile to gitignore
+  * Cleanup: fix compiler warnings
+  * Remove deprecated APIs
+  * update PKGBUILD for archlinux
+  * Merge branch 'master' of https://github.com/hime-ime/hime
+  * Fix include path for Qt on Archlinux (Fixed #568)
+  * Merge pull request #551 from czchen/bugfix/typo
+  * Merge pull request #552 from czchen/feature/reproducible-build
+  * 支援 Debian im-config，修正 #558
+  * im-switch - 支援 Multiarch 跟 Qt5
+  * Merge pull request #541 from Vdragon/patch-issue-539
+  * Avoid using locale-dependent shell glob
+  * Remove randomness
+  * Fix typo
+  * Merge pull request #548 from favonia/fix-warnings
+  * Remove dependency on Qt5PlatformSupport.pc (#545)
+  * Merge pull request #549 from favonia/fix-kbmcv
+  * Add missing brackets. Close #547.
+  * Fix various warnings.
+  * build system - Fix won't build in path with spaces(gtk2/gtk3 support), fixes #539
+  * Merge pull request #527 from legnaleurc/fix_popen
+  * fix popen error
+  * Merge pull request #525 from legnaleurc/fix_plasma5
+  * fix tray icon for plasma5
+  * Merge pull request #524 from kinabcd/master
+  * update PKGBUILD for archlinux
+  * add include path for moc of qt5
+  * use macro QGenericPluginFactoryInterface_iid
+  * Merge pull request #489 from czchen/feature/build
+  * Merge pull request #521 from Vdragon/fix_wont_build_in_path_with_spaces
+  * Merge pull request #522 from abev66/master
+  * fix stuck plasmashell problem
+  * Fix won't build in path with spaces(incomplete)
+  * Fix typo in commit 0cd3a84.
+  * Better compatible with newer version of GTK3+.
+  * remove inline from parse_client_req
+  * fix commit cea97dd199564f507a2aafdbebb46407eef94e5a
+  * add icon selector, fix #42
+  * add ed5 makefile
+  * qt5 immodule: move cursor right after focus in
+  * Merge pull request #516 from legnaleurc/qt5
+  * add qt5 im module
+  * refactor
+  * remove unused code
+  * beautify hime-setup
+  * Merge pull request #515 from hime-ime/hime-setup
+  * Merge pull request #514 from hime-ime/test-hime
+  * fix unresponsive hime-setup module window
+  * properly quit hime-setup (gtk_main_quit)
+  * setup module dir env in test-hime
+  * match the type of INMD->method_type with GTAB_LIST_S->method_type
+  * Merge pull request #513 from hime-ime/test-hime
+  * rename ttt -> filename in gtab-list.c
+  * improve test-hime
+  * fix #502
+  * make hime-env correctly detect immodule under debian/ubuntu, fix #502
+  * update package version in PKGBUILD
+  * Merge pull request #507 from czchen/bugfix/bashism
+  * Use bash instead of sh in nobopomofo
+  * Merge pull request #496 from czchen/bugfix/xserver64
+  * Defined _XSERVER64 in header
+  * Merge pull request #492 from xatier/anthy-pick
+  * Merge pull request #493 from hime-ime/issue#482#491
+  * fix issue #482
+  * Merge pull request #490 from xatier/master
+  * pick up modifications from gcin 2.8
+  * move README to markdown syntax
+  * update PKGBUILD
+  * Respect CFLAGS, CXXFLAGS, CPPFLAGS
+  * Do not hide compiling/linking commands
+  * Merge pull request #488 from czchen/bugfix/getenv
+  * Merge pull request #487 from medicalwei/patch-1
+  * Check return value of getenv("HOME")
+  * Do no treat GNU/kFreeBSD as a FreeBSD distro.
+  * Merge pull request #483 from xatier/master
+  * fix PKGBUILD problems
+  * Merge pull request #479 from Brli/patch-1
+  * Merge pull request #480 from Brli/patch-2
+  * Update and rename install to hime.install
+  * Update PKGBUILD
+  * Merge pull request #478 from hime-ime/configure2
+  * fix commit 9800a43
+  * Merge pull request #477 from hime-ime/configure
+  * show message when gtk+2.0 is used and appindicator3-0.1 is installed && appindicator-0.1 is not installed in configure close #475
+  * Fix the qt4 im-module installed path. close #453
+  * Merge pull request #466 from petercommand/appindicator
+  * ensure that the indicator will be created properly
+  * add a newline at the end of file
+  * Merge pull request #463 from xatier/master
+  * change the dependency package name qt -> qt4
+  * Merge pull request #450 from solomonhuang/distro
+  * change date format
+  * May output full width space in modules.
+  * s/cherk_key_press/check_key_press/g in src/eve.c
+  * May input full width numbers with 1-9.
+  * Treat asterisk key as a normal feed key in full character mode.
+  * [chewing] do not capture Ctrl/Alt + [a-Z], close #442
+  * Reload omni config after it is changed by another processes, e.g. hime-setup
+  * [chewing] code cleanup (09b0705a)
+  * [chewing] replace chewing_zuin_Check by chewing_zuin_String, fix & close #438
+  * Merge pull request #430 from solomonhuang/issue428
+  * issue #428 欸 pho table
+  * Merge pull request #427 from solomonhuang/omniconfig
+  * Respect to the en_pho_key_sel setting of the TSIN setup page. Thank saplayer for reporting this bug!
+  * Move hime.conf
+  * Correct save_omni_config() position
+  * Define HIME_CONF for hime.conf
+  * Rename hime.ini to hime.conf
+  * Single configuration file support
+  * remove strange key_press_time.
+  * Show a tiny [input method name] window when switching to anthy/libchewing if the tray icon is disabled.
+  * Remove all strange gtk_window_set_default_size().
+  * Remove all strange gtk_window_resize().
+  * Pull only a shallow repository in freebsd makefile
+  * Merge pull request #423 from hime-ime/vim
+  * Add vim input method
+  * Keep only the 'tabbed' mode.
+  * Add almost all remaining functions to tabbed setup
+  * Use 'OK' instead of 'Apply' in setup
+  * Tabbed setup (limited functionality)
+  * Factor out 'save' and 'destroy' functionality.
+  * Pull only a shallow repository in PKGBUILD.
+  * remove a useless \n from setup window.
+  * Better layout for wide setup window.
+  * Clean up residual caleb-/hime
+  * The main site is moved to https://github.com/hime-ime/hime.
+  * May show [Full]/[Eng][Full] informations when running under onthespot mode.
+  * Call create_win_gtab_gui_simple() before show input name on gtab selection area.
+  * Hide the whole input method window instead of resize it to 1x1 when it is empty.
+  * Clear some runtime warnings when running under onthespot mode.
+  * Better option descriptions in setup window.
+  * Fix: can't save the size of main font to settings.
+  * Using 3 columns style on the wide main setup window.
+  * Better compatible with GTK3+.
+  * Merge pull request #414 from caleb-/echo
+  * remove 'echo -e' from configure since it is having problem in dash
+  * Better setup window layouts.
+  * Added a new configure option: --use-wide-setup-window.
+  * Show the IM Name when using OnTheSpot mode.
+  * May use the <XK_KP_Enter> key to submit characters.
+  * Clear a runtime warning when running under onthespot mode.
+  * Respect to the pkg-config results from anthy.
+  * Merge pull request #411 from caleb-/readme
+  * Fix crash in intcode module, closes $410
+  * Add the pronounciation of Hime in README
+  * Add Hime Input Method Editor back to the front of the README
+  * Rewrite README
+  * Merge pull request #406 from favonia/shallow-arch
+  * Only make a shallow clone when packaging for Arch.
+  * Merge pull request #405 from caleb-/hime-env
+  * Add lsb_release in hime-env
+  * Merge pull request #401 from caleb-/array40
+  * Add licence info in array40
+  * Add array40 in Makefile
+  * Merge pull request #397 from favonia/master
+  * Merge pull request #398 from favonia/i-love-lib64
+  * Use --disable-lib64 in special distros.
+  * Clear 'LIB' in the beginning of configure.
+
+
 0.9.10
 
 [ Enhancement & Bugfix ]
