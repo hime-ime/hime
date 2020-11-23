@@ -1,0 +1,6 @@
+name: 'Build @CentOS8'
+description: 'Build hime with CentOS 8 container'
+
+runs:
+  using: 'docker'
+  image: '../../../distro/centos/ci/centos8/Dockerfile'
