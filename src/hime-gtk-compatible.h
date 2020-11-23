@@ -18,13 +18,13 @@
 
 // version check
 // GTK+3
-#if GTK_CHECK_VERSION(3, 0, 0) && !GTK_CHECK_VERSION(3, 24, 20)
-#error GTK+ 3.24.20 is required
+#if GTK_CHECK_VERSION(3, 0, 0) && !GTK_CHECK_VERSION(3, 22, 30)
+#error GTK+ 3.22.30 is required
 #endif
 
 // GTK+2
-#if !GTK_CHECK_VERSION(2, 24, 32)
-#error GTK+ 2.24.32 is required
+#if !GTK_CHECK_VERSION(2, 24, 31)
+#error GTK+ 2.24.31 is required
 #endif
 
 #ifndef HIME_GTK_COMPATIBLE_H
