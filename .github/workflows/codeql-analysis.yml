@@ -56,12 +56,15 @@ jobs:
 
     # workaround for ubuntu 20.04
     # See:https://github.com/actions/virtual-environments/issues/1605
-    - name: Purge grub packages
-      run: sudo apt-get purge grub\*
+    - name: Update system and purge grub packages
+      run: |
+        sudo apt update --yes
+        sudo apt-get purge grub\*
+        sudo apt-mark hold grub-common grub-gfxpayload-lists grub-pc grub-pc-bin grub2-common
+        sudo apt upgrade --yes
 
     - name: Install dependencies
       run: |
-        sudo apt update --yes && sudo apt upgrade --yes
         sudo apt install --yes build-essential locales fakeroot devscripts git
 
         # dependencies
