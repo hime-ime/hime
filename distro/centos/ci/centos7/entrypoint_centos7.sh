@@ -18,7 +18,7 @@ yum install -y \
     gtk2-devel\
     gtk3-devel \
     libXtst-devel \
-    libchewing \
+    libchewing-devel \
     qt5-qtbase-devel
 
 
