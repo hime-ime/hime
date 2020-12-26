@@ -56,8 +56,7 @@ use_unity_tray='Y'
 use_lib=''
 
 use_qt5='Y'
-
-use_gtk='Y'
+use_gtk2='Y'
 use_gtk3='Y'
 
 find_in_path_list_to_variable() {
@@ -82,6 +81,9 @@ for opt; do
     case "$opt" in
         --prefix=*)
             prefix=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --with_gtk2 | --with-gtk=2.0)
+            GTK=gtk+-2.0
             ;;
         --with_gtk3 | --with-gtk=3.0)
             GTK=gtk+-3.0
@@ -167,14 +169,14 @@ for opt; do
         --disable-qt5-immodule)
             use_qt5=N
             ;;
-        --use_gtk=*)
-            use_gtk=$(echo "$opt" | cut -d '=' -f 2)
+        --use_gtk2=*)
+            use_gtk2=$(echo "$opt" | cut -d '=' -f 2)
             ;;
         --enable-gtk2-im-module)
-            use_gtk=Y
+            use_gtk2=Y
             ;;
         --disable-gtk2-im-module)
-            use_gtk=N
+            use_gtk2=N
             ;;
         --use_gtk3=*)
             use_gtk3=$(echo "$opt" | cut -d '=' -f 2)
@@ -209,7 +211,7 @@ fi
 
 echo -n ".... Testing Xtst               :  "
 if ! pkg-config --exists xtst 2>/dev/null; then
-    echo "please install rpm/package xtest-devel. abort!"
+    echo "please install libxtst. abort!"
     exit 1
 else
     echo "Found: $(pkg-config --print-provides xtst)"
@@ -219,7 +221,7 @@ fi
 echo -n ".... Testing anthy              :  "
 if ! pkg-config --libs anthy >/dev/null 2>/dev/null; then
     echo "Not found, anthy module is turned off."
-    USE_ANTHY=N
+    USE_ANTHY='N'
 else
     if [ "$use_anthy" = "N" ]; then
         USE_ANTHY='N'
@@ -234,15 +236,15 @@ fi
 echo -n ".... Testing chewing            :  "
 if ! pkg-config --libs chewing >/dev/null 2>/dev/null; then
     echo Not found, chewing module is turned off.
-    USE_CHEWING=N
+    USE_CHEWING='N'
 else
     if [ "$use_chewing" = "N" ]; then
         USE_CHEWING='N'
         echo "Found, but disabled."
     else
-        if ! pkg-config --exists 'chewing >= 0.3.2' 2>/dev/null; then
+        if ! pkg-config --exists 'chewing >= 0.3.4' 2>/dev/null; then
             USE_CHEWING='N'
-            echo "Disabled. chewing > 0.3.2 is needed to enable chewing."
+            echo "Disabled. chewing >= 0.3.4 is needed to enable chewing."
         else
             USE_CHEWING='Y'
             echo "Found: $(pkg-config --print-provides chewing)"
@@ -253,13 +255,10 @@ fi
 GTK=${GTK:-gtk+-2.0}
 echo -n ".... Testing $GTK           :  "
 if ! pkg-config --exists "$GTK"; then
-    echo "Not found, trying gtk+-3.0..."
-    GTK=gtk+-3.0
-    if ! pkg-config --exists "$GTK"; then
-        echo "$GTK or above required --cflags. abort!"
-        rm -f config.mak
-        exit 1
-    fi
+    echo "$GTK Not found."
+    echo "$GTK or above required --cflags. abort!"
+    rm -f config.mak
+    exit 1
 fi
 echo "Found: $(pkg-config --print-provides $GTK)"
 
@@ -270,6 +269,7 @@ if [ "$GTK" = gtk+-2.0 ]; then
         rm -f config.mak
         exit 1
     fi
+    APPINDICATOR=appindicator-0.1
 fi
 if [ "$GTK" = gtk+-3.0 ]; then
     if ! pkg-config --exists 'gtk+-3.0 >= 3.22.30'; then
@@ -277,44 +277,22 @@ if [ "$GTK" = gtk+-3.0 ]; then
         rm -f config.mak
         exit 1
     fi
+    APPINDICATOR=appindicator3-0.1
 fi
 
-GTKINC=$(pkg-config --cflags "$GTK" 2>/dev/null)
-
-if pkg-config --libs >/dev/null 2>/dev/null; then
+if ! pkg-config --libs "$GTK" >/dev/null 2>/dev/null; then
     echo "$GTK or above required --libs"
     echo "please install rpm/package libgtk+2.0_0-devel/libgtk+3.0_0-devel. abort!"
     rm -f config.mak
     exit 1
 fi
+GTKINC=$(pkg-config --cflags "$GTK" 2>/dev/null)
 GTKLDFLAGS=$(pkg-config --libs "$GTK" 2>/dev/null)
-
-if [ "$GTK" = gtk+-2.0 ]; then
-    APPINDICATOR=appindicator-0.1
-    if ! pkg-config --exists 'gtk+-2.0 >= 2.10' 2>/dev/null; then
-        echo ".... Testing system-tray     :  Disabled. $GTK > 2.10 is needed to enable system-tray."
-        use_system_tray=N
-    fi
-fi
-
-if [ "$GTK" = "gtk+-3.0" ]; then
-    APPINDICATOR=appindicator3-0.1
-    if ! pkg-config --exists 'gtk+-3.0 > 3.9.8'; then
-        echo ".... Testing system-tray     :  Disabled. $GTK > 3.9.8 is needed to enable system-tray."
-        use_system_tray=N
-    fi
-fi
 
 if [ "$use_unity_tray" = "Y" ]; then
     echo -n ".... Testing appindicator       :  "
-    USE_UNITY_TRAY=$(pkg-config --libs "$APPINDICATOR" 2>/dev/null)
-    if [ $? != 0 ]; then
-        USE_UNITY_TRAY=$(pkg-config --libs appindicator3-0.1 2>/dev/null)
-        if [ $? = 0 ] && [ "$GTK" = "gtk+-2.0" ]; then
-            echo "Disabled. appindicator3-0.1 is found, but is using gtk+2.0. Add option \"--with-gtk=3.0\" to enable it."
-        else
-            echo "Not found, unity tray is turned off."
-        fi
+    if ! pkg-config --libs "$APPINDICATOR" >/dev/null 2>/dev/null; then
+        echo Not found, appindicator is disabled.
         USE_UNITY_TRAY=N
     else
         if [ "$use_unity_tray" = "N" ]; then
@@ -325,9 +303,8 @@ if [ "$use_unity_tray" = "Y" ]; then
                 echo "Disabled. appindicator > 0.4.0 is needed to enable appindicator."
                 USE_UNITY_TRAY='N'
             else
+                echo "Found: $(pkg-config --print-provides $APPINDICATOR)"
                 USE_UNITY_TRAY='Y'
-                echo "Found."
-                UNITY_INC="-I/usr/include/libappindicator-0.1"
                 GTKINC=$(pkg-config --cflags "$GTK" "$APPINDICATOR" 2>/dev/null)
                 GTKLDFLAGS=$(pkg-config --libs "$GTK" "$APPINDICATOR" 2>/dev/null)
             fi
@@ -412,7 +389,7 @@ if [ "$GTK" = "gtk+-2.0" ]; then
     fi
 
     if [ "$GTK_IM" = "Y" ]; then
-        if [ "$use_gtk" = "N" ]; then
+        if [ "$use_gtk2" = "N" ]; then
             GTK_IM='N'
             echo "Found, but disabled."
         else
