@@ -80,10 +80,6 @@
 #define GTK_COLOR_SELECTION GTK_COLOR_CHOOSER
 #endif
 
-#if GTK_CHECK_VERSION(3, 9, 8)
-#define gtk_image_menu_item_set_image(a, b) NULL
-#endif
-
 #if GTK_CHECK_VERSION(3, 9, 10)
 #define gtk_button_new_from_stock(x) gtk_button_new_from_icon_name (x, GTK_ICON_SIZE_BUTTON)
 #define GTK_STOCK_CANCEL "gtk-cancel"

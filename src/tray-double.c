@@ -147,13 +147,20 @@ GtkWidget *create_tray_menu (MITEM *mitems) {
             continue;
 
         if (mitems[i].stock_id) {
+#if GTK_CHECK_VERSION(3, 0, 0)
+            // TODO(xatier): use GtkMenuItem and pack a GtkBox with a GtkImage
+            // and a GtkLabel instead to display an icon in a menu item,
+            item = gtk_menu_item_new_with_label (_ (mitems[i].name));
+#else
             item = gtk_image_menu_item_new_with_label (_ (mitems[i].name));
             gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), gtk_image_new_from_stock (mitems[i].stock_id, GTK_ICON_SIZE_MENU));
+#endif
         } else if (mitems[i].check_dat) {
             item = gtk_check_menu_item_new_with_label (_ (mitems[i].name));
             gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), *mitems[i].check_dat);
-        } else
+        } else {
             item = gtk_menu_item_new_with_label (_ (mitems[i].name));
+        }
 
         mitems[i].handler = g_signal_connect (G_OBJECT (item), "activate",
                                               G_CALLBACK (mitems[i].cb), NULL);

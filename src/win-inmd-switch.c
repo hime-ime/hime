@@ -47,14 +47,19 @@ void create_inmd_switch () {
         char tt[64];
         snprintf (tt, sizeof (tt), "%s ctrl-alt-%c", inmd[i].cname, inmd[i].key_ch);
 
+#if GTK_CHECK_VERSION(3, 0, 0)
+        GtkWidget *item = gtk_menu_item_new_with_label (tt);
+#else
         GtkWidget *item = gtk_image_menu_item_new_with_label (tt);
         if (inmd[i].icon) {
             char fname[512];
             get_icon_path (inmd[i].icon, fname);
             GtkWidget *img = gtk_image_new_from_file (fname);
-            if (img)
+            if (img) {
                 gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), img);
+            }
         }
+#endif
 
         g_signal_connect (G_OBJECT (item), "activate",
                           G_CALLBACK (cb_update_menu_select), GINT_TO_POINTER (i));
