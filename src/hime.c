@@ -22,6 +22,7 @@
 #include "hime.h"
 
 #include "im-srv.h"
+#include "win-kbm.h"
 
 Window root;
 
@@ -389,7 +390,7 @@ void cb_trad_sim_toggle () {
     disp_tray_icon ();
 #endif
 }
-void execute_message (char *message), show_win_kbm (), hide_win_kbm ();
+void execute_message (char *message);
 void disp_win_kbm_capslock_init ();
 
 extern int hime_show_win_kbm;

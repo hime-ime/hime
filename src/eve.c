@@ -27,6 +27,7 @@
 #include "gtab.h"
 #include "hime-module-cb.h"
 #include "pho.h"
+#include "win-kbm.h"
 #include "win-sym.h"
 
 #define STRBUFLEN 64
@@ -39,9 +40,6 @@ static IMForwardEventStruct *current_forward_eve;
 extern gboolean win_kbm_inited;
 extern int hime_show_win_kbm;
 extern gboolean win_kbm_on;
-void show_win_kbm ();
-void hide_win_kbm ();
-void update_win_kbm ();
 
 static char *callback_str_buffer;
 Window focus_win;
@@ -180,7 +178,7 @@ void trad_output () {
     gb_output = FALSE;
 }
 
-static void append_str (char **buf, int *bufN, char *text, int len) {
+static void append_str (char **buf, uint32_t *bufN, char *text, int len) {
     int requiredN = len + 1 + *bufN;
     *buf = (char *) realloc (*buf, requiredN);
     (*buf)[*bufN] = 0;
