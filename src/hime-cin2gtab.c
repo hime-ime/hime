@@ -36,52 +36,55 @@ FILE *fr, *fw;
 int lineno;
 char tt[1024];
 
-char *skip_spc (char *s) {
-    while ((*s == ' ' || *s == '\t') && *s)
+static char *skip_space (char *s) {
+    while ((*s == ' ' || *s == '\t') && *s) {
         s++;
+    }
     return s;
 }
 
-char *to_spc (char *s) {
-    while (*s != ' ' && *s != '\t' && *s)
+static char *to_space (char *s) {
+    while (*s != ' ' && *s != '\t' && *s) {
         s++;
+    }
     return s;
 }
 
-void del_nl_spc (char *s) {
-    char *t;
-
-    int len = strlen (s);
-    if (!*s)
+static void del_newline_space (char *s) {
+    if (!*s) {
         return;
+    }
 
-    t = s + len - 1;
+    size_t len = strlen (s);
+    char *t = s + len - 1;
 
-    while (*t == '\n' || *t == ' ' || (*t == '\t' && t > s))
+    while (*t == '\n' || *t == ' ' || (*t == '\t' && t > s)) {
         t--;
+    }
 
     *(t + 1) = 0;
 }
 
-void get_line () {
+static void get_line (void) {
     while (!feof (fr)) {
         memset (tt, 0, sizeof (tt));
         myfgets (tt, sizeof (tt), fr);
+
         lineno++;
+        size_t len = strlen (tt);
 
-        int len = strlen (tt);
-        if (tt[len - 1] == '\n')
+        if (tt[len - 1] == '\n') {
             tt[len - 1] = 0;
+        }
 
-        if (tt[0] == '#' || strlen (tt) < 3)
+        if (tt[0] == '#' || strlen (tt) < 3) {
             continue;
-        else
-            break;
+        }
+        break;
     }
 }
 
-void cmd_arg (char **cmd, char **arg) {
-    char *t;
+static void cmd_arg (char **cmd, char **arg) {
 
     get_line ();
     char *s = tt;
@@ -91,8 +94,8 @@ void cmd_arg (char **cmd, char **arg) {
         return;
     }
 
-    s = skip_spc (s);
-    t = to_spc (s);
+    s = skip_space (s);
+    char *t = to_space (s);
     *cmd = s;
     if (!(*t)) {
         *arg = t;
@@ -102,112 +105,111 @@ void cmd_arg (char **cmd, char **arg) {
     *t = 0;
     t++;
 
-    t = skip_spc (t);
-    del_nl_spc (t);
+    t = skip_space (t);
+    del_newline_space (t);
 
-    char *p;
-    if ((p = strchr (t, '\t')))
+    char *p = NULL;
+    if ((p = strchr (t, '\t'))) {
         *p = 0;
+    }
 
     *arg = t;
 }
 
-int sequ (char *s, char *t) {
+static int str_eq (const char *s, const char *t) {
     return (!strcmp (s, t));
 }
 
 typedef struct {
-    u_int key;
-    u_char ch[CH_SZ];
+    u_int32_t key;
+    uint8_t ch[CH_SZ];
     int oseq;
 } ITEM2;
 
 typedef struct {
     u_int64_t key;
-    u_char ch[CH_SZ];
+    u_int8_t ch[CH_SZ];
     int oseq;
 } ITEM2_64;
 
 #define MAX_K (500000)
 
-ITEM2 itar[MAX_K];
-ITEM2_64 itar64[MAX_K];
+static ITEM2 itar[MAX_K];
+static ITEM2_64 itar64[MAX_K];
 
-ITEM itout[MAX_K];
-ITEM64 itout64[MAX_K];
+static ITEM itout[MAX_K];
+static ITEM64 itout64[MAX_K];
 
-int qcmp (const void *aa, const void *bb) {
-    ITEM2 *a = (ITEM2 *) aa, *b = (ITEM2 *) bb;
+static int qcmp (const void *aa, const void *bb) {
+    const ITEM2 *a = (ITEM2 *) aa;
+    const ITEM2 *b = (ITEM2 *) bb;
 
-    if (a->key > b->key)
+    if (a->key > b->key) {
         return 1;
-    if (a->key < b->key)
+    }
+    if (a->key < b->key) {
         return -1;
+    }
 
     return a->oseq - b->oseq;
 }
 
-int qcmp_64 (const void *aa, const void *bb) {
-    ITEM2_64 *a = (ITEM2_64 *) aa, *b = (ITEM2_64 *) bb;
+static int qcmp_64 (const void *aa, const void *bb) {
+    ITEM2_64 *a = (ITEM2_64 *) aa;
+    ITEM2_64 *b = (ITEM2_64 *) bb;
 
-    if (a->key > b->key)
+    if (a->key > b->key) {
         return 1;
-    if (a->key < b->key)
+    }
+    if (a->key < b->key) {
         return -1;
+    }
 
     return a->oseq - b->oseq;
 }
 
-#define mtolower(ch) (ch >= 'A' && ch <= 'Z' ? ch + 0x20 : ch)
+#define mtolower(ch) ((ch) >= 'A' && (ch) <= 'Z' ? (ch) + 0x20 : (ch))
 
 static char kno[128];
 
 int main (int argc, char **argv) {
-    int i;
-    char fname[64];
-    char fname_cin[64];
-    char fname_tab[64];
-    char *cmd, *arg;
-    struct TableHead th;
-    int KeyNum;
-    char kname[128][CH_SZ];
-    char keymap[128];
-    int chno;
-    gtab_idx1_t idx1[256];
-    char def1[256];
-    int quick_def;
-    int *phridx = NULL, phr_cou = 0;
-    char *phrbuf = NULL;
-    int prbf_cou = 0;
 
     printf ("-- hime-cin2gtab encoding UTF-8 --\n");
     printf ("--- please use iconv -f big5 -t utf-8 if your file is in big5 encoding\n");
 
+    char fname[64];
     if (argc <= 1) {
         printf ("Enter table file name [.cin] : ");
         scanf ("%s", fname);
-    } else
-        strcpy (fname, argv[1]);
+    } else {
+        strncpy (fname, argv[1], sizeof (fname));
+    }
 
     if (!strcmp (fname, "-v") || !strcmp (fname, "--version")) {
-        dbg ("hime-cin2gtab for hime " HIME_VERSION "\n");
+        p_err ("hime-cin2gtab for hime %s \n", HIME_VERSION);
         exit (0);
     }
 
-    char *p;
-    if ((p = strstr (fname, ".cin")))
+    char *p = NULL;
+    if ((p = strstr (fname, ".cin"))) {
         *p = 0;
+    }
 
-    strcpy (fname_cin, fname);
-    strcpy (fname_tab, fname);
-    strcat (fname_cin, ".cin");
-    strcat (fname_tab, ".gtab");
+    char fname_cin[64];
+    char fname_tab[64];
+    strncpy (fname_cin, fname, sizeof (fname_cin));
+    strncpy (fname_tab, fname, sizeof (fname_tab));
+    strncat (fname_cin, ".cin", 4);
+    strncat (fname_tab, ".gtab", 5);
 
-    if ((fr = fopen (fname_cin, "rb")) == NULL)
+    if ((fr = fopen (fname_cin, "rb")) == NULL) {
         p_err ("Cannot open %s\n", fname_cin);
+    }
 
     skip_utf8_sigature (fr);
 
+    struct TableHead th;
+    char keymap[128];
     memset (&th, 0, sizeof (th));
     memset (kno, 0, sizeof (kno));
     memset (keymap, 0, sizeof (keymap));
@@ -217,106 +219,118 @@ int main (int argc, char **argv) {
     memset (itar64, 0, sizeof (itar64));
     memset (itout64, 0, sizeof (itout64));
 
+    char *cmd = NULL;
+    char *arg = NULL;
     cmd_arg (&cmd, &arg);
-    if (sequ (cmd, "%gen_inp")) {
+    if (str_eq (cmd, "%gen_inp")) {
         dbg ("skip gen_inp\n");
         cmd_arg (&cmd, &arg);
     }
 
-    if (!sequ (cmd, "%ename") || !(*arg))
+    if (!str_eq (cmd, "%ename") || !(*arg)) {
         p_err ("%d:  %%ename english_name  expected", lineno);
+    }
     arg[15] = 0;
-    //  strcpy(th.ename,arg);
 
     cmd_arg (&cmd, &arg);
-    if (!(sequ (cmd, "%prompt") || sequ (cmd, "%cname")) || !(*arg))
+    if (!(str_eq (cmd, "%prompt") || str_eq (cmd, "%cname")) || !(*arg)) {
         p_err ("%d:  %%prompt prompt_name  expected", lineno);
+    }
     strncpy (th.cname, arg, MAX_CNAME);
     dbg ("cname %s\n", th.cname);
 
     cmd_arg (&cmd, &arg);
-    if (!sequ (cmd, "%selkey") || !(*arg))
+    if (!str_eq (cmd, "%selkey") || !(*arg)) {
         p_err ("%d:  %%selkey select_key_list expected", lineno);
+    }
 
     if (strlen (arg) >= sizeof (th.selkey)) {
         memcpy (th.selkey, arg, sizeof (th.selkey));
         strcpy (th.selkey2, arg + sizeof (th.selkey));
         dbg ("th.selkey2 %s\n", th.selkey2);
-    } else
+    } else {
         strcpy (th.selkey, arg);
+    }
 
     cmd_arg (&cmd, &arg);
-    if (!sequ (cmd, "%dupsel") || !(*arg)) {
-        if (th.selkey[sizeof (th.selkey) - 1])
+    if (!str_eq (cmd, "%dupsel") || !(*arg)) {
+        if (th.selkey[sizeof (th.selkey) - 1]) {
             th.M_DUP_SEL = sizeof (th.selkey) + strlen (th.selkey2);
-        else
+        } else {
             th.M_DUP_SEL = strlen (th.selkey);
+        }
     } else {
         th.M_DUP_SEL = atoi (arg);
         cmd_arg (&cmd, &arg);
     }
 
     for (;;) {
-        if (sequ (cmd, "%endkey")) {
+        if (str_eq (cmd, "%endkey")) {
             strcpy (th.endkey, arg);
             cmd_arg (&cmd, &arg);
-        } else if (sequ (cmd, "%space_style")) {
+        } else if (str_eq (cmd, "%space_style")) {
             th.space_style = (GTAB_space_pressed_E) atoi (arg);
             cmd_arg (&cmd, &arg);
-        } else if (sequ (cmd, "%keep_key_case")) {
+        } else if (str_eq (cmd, "%keep_key_case")) {
             th.flag |= FLAG_KEEP_KEY_CASE;
             cmd_arg (&cmd, &arg);
-        } else if (sequ (cmd, "%symbol_kbm")) {
+        } else if (str_eq (cmd, "%symbol_kbm")) {
             th.flag |= FLAG_GTAB_SYM_KBM;
             cmd_arg (&cmd, &arg);
-        } else if (sequ (cmd, "%phase_auto_skip_endkey")) {
+        } else if (str_eq (cmd, "%phase_auto_skip_endkey")) {
             th.flag |= FLAG_PHRASE_AUTO_SKIP_ENDKEY;
             cmd_arg (&cmd, &arg);
-        } else if (sequ (cmd, "%flag_auto_select_by_phrase")) {
+        } else if (str_eq (cmd, "%flag_auto_select_by_phrase")) {
             dbg ("flag_auto_select_by_phrase\n");
             th.flag |= FLAG_AUTO_SELECT_BY_PHRASE;
             cmd_arg (&cmd, &arg);
-        } else if (sequ (cmd, "%flag_disp_partial_match")) {
+        } else if (str_eq (cmd, "%flag_disp_partial_match")) {
             dbg ("flag_disp_partial_match\n");
             th.flag |= FLAG_GTAB_DISP_PARTIAL_MATCH;
             cmd_arg (&cmd, &arg);
-        } else if (sequ (cmd, "%flag_disp_full_match")) {
+        } else if (str_eq (cmd, "%flag_disp_full_match")) {
             dbg ("flag_disp_full_match\n");
             th.flag |= FLAG_GTAB_DISP_FULL_MATCH;
             cmd_arg (&cmd, &arg);
-        } else if (sequ (cmd, "%flag_vertical_selection")) {
+        } else if (str_eq (cmd, "%flag_vertical_selection")) {
             dbg ("flag_vertical_selection\n");
             th.flag |= FLAG_GTAB_VERTICAL_SELECTION;
             cmd_arg (&cmd, &arg);
-        } else if (sequ (cmd, "%flag_press_full_auto_send")) {
+        } else if (str_eq (cmd, "%flag_press_full_auto_send")) {
             dbg ("flag_press_full_auto_send\n");
             th.flag |= FLAG_GTAB_PRESS_FULL_AUTO_SEND;
             cmd_arg (&cmd, &arg);
-        } else if (sequ (cmd, "%flag_unique_auto_send")) {
+        } else if (str_eq (cmd, "%flag_unique_auto_send")) {
             dbg ("flag_unique_auto_send\n");
             th.flag |= FLAG_GTAB_UNIQUE_AUTO_SEND;
             cmd_arg (&cmd, &arg);
-        } else
+        } else {
             break;
+        }
     }
 
-    if (!sequ (cmd, "%keyname") || !sequ (arg, "begin")) {
+    if (!str_eq (cmd, "%keyname") || !str_eq (arg, "begin")) {
         p_err ("%d:  %%keyname begin   expected, instead of %s %s", lineno, cmd, arg);
     }
 
+    int KeyNum = 0;
+    char kname[128][CH_SZ];
     for (KeyNum = 0;;) {
-        char k;
+        char k = 0;
 
         cmd_arg (&cmd, &arg);
-        if (sequ (cmd, "%keyname"))
+        if (str_eq (cmd, "%keyname")) {
             break;
-        if (BITON (th.flag, FLAG_KEEP_KEY_CASE))
+        }
+        if (BITON (th.flag, FLAG_KEEP_KEY_CASE)) {
             k = cmd[0];
-        else
+        } else {
             k = mtolower (cmd[0]);
+        }
 
-        if (kno[(int) k])
+        if (kno[(int) k]) {
             p_err ("%d:  key %c is already used", lineno, k);
+        }
 
         kno[(int) k] = ++KeyNum;
         keymap[KeyNum] = k;
@@ -329,15 +343,16 @@ int main (int argc, char **argv) {
 
     cmd_arg (&cmd, &arg);
 
-    if (sequ (cmd, "%quick") && sequ (arg, "begin")) {
+    if (str_eq (cmd, "%quick") && str_eq (arg, "begin")) {
         dbg (".. quick keys defined\n");
-        for (quick_def = 0;;) {
-            char k;
+        for (int quick_def = 0;; quick_def++) {
 
             cmd_arg (&cmd, &arg);
-            if (sequ (cmd, "%quick"))
+            if (str_eq (cmd, "%quick")) {
                 break;
-            k = kno[mtolower (cmd[0])] - 1;
+            }
+
+            const char k = kno[mtolower (cmd[0])] - 1;
 
             int N = 0;
             char *p = arg;
@@ -348,7 +363,7 @@ int main (int argc, char **argv) {
                     p += len;
                 }
             } else if (strlen (cmd) == 2) {
-                int k1 = kno[mtolower (cmd[1])] - 1;
+                const int k1 = kno[mtolower (cmd[1])] - 1;
                 while (*p) {
                     char tp[4];
                     int len = u8cpy (tp, p);
@@ -359,36 +374,36 @@ int main (int argc, char **argv) {
                     u8cpy (th.qkeys.quick2[(int) k][(int) k1][N++], tp);
                     p += len;
                 }
-            } else
+            } else {
                 p_err ("%d:  %quick only 1&2 keys are allowed '%s'", lineno, cmd);
-
-            quick_def++;
+            }
         }
     }
 
-    long pos = ftell (fr);
-    int olineno = lineno;
+    const long pos = ftell (fr);
+    const int olineno = lineno;
     gboolean key64 = FALSE;
     int max_key_len = 0;
 
     while (!feof (fr)) {
-        int len;
 
         cmd_arg (&cmd, &arg);
         if (!cmd[0] || !arg[0])
             continue;
 
         if (!strcmp (cmd, "%chardef")) {
-            if (!strcmp (arg, "end"))
+            if (!strcmp (arg, "end")) {
                 break;
-            else
+            } else {
                 continue;
+            }
         }
 
-        len = strlen (cmd);
+        int len = strlen (cmd);
 
-        if (max_key_len < len)
+        if (max_key_len < len) {
             max_key_len = len;
+        }
     }
 
     fseek (fr, pos, SEEK_SET);
@@ -400,17 +415,19 @@ int main (int argc, char **argv) {
     cur_inmd->tbl64 = itout64;
     cur_inmd->tbl = itout;
 
-    if (KeyNum < 64)
+    if (KeyNum < 64) {
         cur_inmd->keybits = 6;
-    else
+    } else {
         cur_inmd->keybits = 7;
+    }
 
     if (cur_inmd->keybits * max_key_len > 32) {
         cur_inmd->key64 = key64 = TRUE;
     }
 
-    if (key64)
+    if (key64) {
         dbg ("key64\n");
+    }
 
     printf ("KeyNum:%d keybits:%d\n", KeyNum, cur_inmd->keybits);
 
@@ -418,11 +435,12 @@ int main (int argc, char **argv) {
     cur_inmd->last_k_bitn = (((cur_inmd->key64 ? 64 : 32) / cur_inmd->keybits) - 1) * cur_inmd->keybits;
 
     puts ("char def");
-    chno = 0;
+    int chno = 0;
+    int *phridx = NULL;
+    int phr_cou = 0;
+    char *phrbuf = NULL;
+    int prbf_cou = 0;
     while (!feof (fr)) {
-        int len;
-        u_int64_t kk;
-        int k;
 
         cmd_arg (&cmd, &arg);
         if (!cmd[0] || !arg[0])
@@ -435,8 +453,7 @@ int main (int argc, char **argv) {
                 continue;
         }
 
-        len = strlen (cmd);
-
+        int len = strlen (cmd);
         if (len > th.MaxPress) {
             th.MaxPress = len;
         }
@@ -444,14 +461,14 @@ int main (int argc, char **argv) {
         if (len > 10)
             p_err ("%d:  only <= 10 keys is allowed '%s'", lineno, cmd);
 
-        kk = 0;
-        for (i = 0; i < len; i++) {
+        u_int64_t kk = 0;
+        for (int i = 0; i < len; i++) {
             int key = BITON (th.flag, FLAG_KEEP_KEY_CASE) ? cmd[i] : mtolower (cmd[i]);
 
-            k = kno[key];
-
-            if (!k)
+            int k = kno[key];
+            if (!k) {
                 p_err ("%d: key undefined in keyname '%c'\n", lineno, cmd[i]);
+            }
 
             kk |= (u_int64_t) k << (LAST_K_bitN - i * th.keybits);
         }
@@ -462,8 +479,7 @@ int main (int argc, char **argv) {
             memcpy (&itar64[chno].key, &kk, 8);
             itar64[chno].oseq = chno;
         } else {
-            u_int key32 = (u_int) kk;
-
+            uint32_t key32 = (uint32_t) kk;
             memcpy (&itar[chno].key, &key32, 4);
             itar[chno].oseq = chno;
         }
@@ -518,18 +534,22 @@ int main (int argc, char **argv) {
         _sort (itar, chno, sizeof (ITEM2), qcmp);
 
     if (key64) {
-        for (i = 0; i < chno; i++)
+        for (int i = 0; i < chno; i++) {
             memcpy (&itout64[i], &itar64[i], sizeof (ITEM64));
+        }
     } else {
-        for (i = 0; i < chno; i++)
+        for (int i = 0; i < chno; i++) {
             memcpy (&itout[i], &itar[i], sizeof (ITEM));
+        }
     }
 
+    char def1[256];
+    gtab_idx1_t idx1[256];
     memset (def1, 0, sizeof (def1));
     memset (idx1, 0, sizeof (idx1));
 
     u_int64_t keymask = KEY_MASK;
-    for (i = 0; i < chno; i++) {
+    for (int i = 0; i < chno; i++) {
         u_int64_t key = CONVT2 (cur_inmd, i);
         int kk = (int) ((key >> LAST_K_bitN) & keymask);
 
@@ -540,12 +560,15 @@ int main (int argc, char **argv) {
     }
 
     idx1[KeyNum] = chno;
-    for (i = KeyNum - 1; i > 0; i--)
-        if (!def1[i])
+    for (int i = KeyNum - 1; i > 0; i--) {
+        if (!def1[i]) {
             idx1[i] = idx1[i + 1];
+        }
+    }
 
     if ((fw = fopen (fname_tab, "wb")) == NULL) {
-        p_err ("Cannot create");
+        p_err ("Cannot create: %s", fname_tab);
+        exit (1);
     }
 
     printf ("Defined Characters:%d\n", chno);

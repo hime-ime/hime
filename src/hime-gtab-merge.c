@@ -35,19 +35,19 @@
 FILE *fr, *fw;
 int lineno;
 
-char *skip_spc (char *s) {
+char *skip_space (char *s) {
     while ((*s == ' ' || *s == '\t') && *s)
         s++;
     return s;
 }
 
-char *to_spc (char *s) {
+char *to_space (char *s) {
     while (*s != ' ' && *s != '\t' && *s)
         s++;
     return s;
 }
 
-void del_nl_spc (char *s) {
+void del_newline_space (char *s) {
     char *t;
 
     int len = strlen (s);
@@ -88,8 +88,8 @@ void cmd_arg (char *s, char **cmd, char **arg) {
         return;
     }
 
-    s = skip_spc (s);
-    t = to_spc (s);
+    s = skip_space (s);
+    t = to_space (s);
     *cmd = s;
     if (!(*t)) {
         *arg = t;
@@ -99,8 +99,8 @@ void cmd_arg (char *s, char **cmd, char **arg) {
     *t = 0;
     t++;
 
-    t = skip_spc (t);
-    del_nl_spc (t);
+    t = skip_space (t);
+    del_newline_space (t);
 
     char *p;
     if ((p = strchr (t, '\t')))
