@@ -1363,7 +1363,7 @@ gboolean tsin_page_up () {
 
     tss.current_page = tss.current_page - phkbm.selkeyN;
     if (tss.current_page < 0)
-        tss.current_page = 0;
+        tss.current_page = phrase_count + pho_count - (phrase_count + pho_count) % phkbm.selkeyN;
 
     tss.pho_menu_idx = 0;
     disp_current_sel_page ();
