@@ -1,6 +1,4 @@
-FROM debian:testing
-
-RUN echo 'deb http://deb.debian.org/debian testing-backports main' > /etc/apt/sources.list.d/backports.list
+FROM ubuntu:latest
 
 COPY entrypoint.sh /app/entrypoint.sh
 
