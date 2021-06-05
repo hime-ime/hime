@@ -53,6 +53,7 @@ config.mak: $(VERSION_FILE) configure
 
 .PHONY: clang-format
 clang-format:
+	clang-format --version
 	clang-format -i {src,data}/*.[ch] \
 		src/{gtk-im,im-client,modules}/*.[ch] \
 		src/qt5-im/*.h \
