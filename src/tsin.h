@@ -54,6 +54,10 @@ char *get_chpho_pinyin_set (char *set_arr);
 
 #define TSIN_GTAB_KEY "!!!!gtab-keys"
 
+// For selection page display behavior
+#define SAME_PAGE TRUE
+#define NEW_PAGE  FALSE
+
 typedef struct {
     char signature[32];
     int version, flag;

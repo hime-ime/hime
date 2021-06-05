@@ -748,10 +748,11 @@ void set_sele_text (int tN, int i, char *text, int len);
 void disp_arrow_up (), disp_arrow_down ();
 void disp_tsin_select (int index);
 
-static void disp_current_sel_page () {
+static void disp_current_sel_page (gboolean page_type) {
     int i;
 
-    clear_sele ();
+    if (page_type == NEW_PAGE)
+        clear_sele ();
 
     for (i = 0; i < phkbm.selkeyN; i++) {
         int idx = tss.current_page + i;
@@ -1366,7 +1367,7 @@ gboolean tsin_page_up () {
         tss.current_page = phrase_count + pho_count - (phrase_count + pho_count) % phkbm.selkeyN;
 
     tss.pho_menu_idx = 0;
-    disp_current_sel_page ();
+    disp_current_sel_page (NEW_PAGE);
     return TRUE;
 }
 
@@ -1379,7 +1380,7 @@ gboolean tsin_page_down () {
     if (tss.current_page >= phrase_count + pho_count)
         tss.current_page = 0;
 
-    disp_current_sel_page ();
+    disp_current_sel_page (NEW_PAGE);
 
     return TRUE;
 }
@@ -1393,7 +1394,7 @@ void open_select_pho () {
     get_sel_pho ();
     tss.sel_pho = 1;
     tss.pho_menu_idx = tss.current_page = 0;
-    disp_current_sel_page ();
+    disp_current_sel_page (NEW_PAGE);
 }
 
 gboolean win_sym_page_up (), win_sym_page_down ();
@@ -1596,7 +1597,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
             tss.pho_menu_idx--;
             if (tss.pho_menu_idx < 0)
                 tss.pho_menu_idx = N - 1;
-            disp_current_sel_page ();
+            disp_current_sel_page (SAME_PAGE);
         }
         return 1;
     case XK_Prior:
@@ -1654,7 +1655,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
                 tsin_page_down ();
             else {
                 tss.pho_menu_idx = (tss.pho_menu_idx + 1) % N;
-                disp_current_sel_page ();
+                disp_current_sel_page (SAME_PAGE);
             }
         }
         return 1;
