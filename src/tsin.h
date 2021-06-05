@@ -56,7 +56,7 @@ char *get_chpho_pinyin_set (char *set_arr);
 
 // For selection page display behavior
 #define SAME_PAGE TRUE
-#define NEW_PAGE  FALSE
+#define NEW_PAGE FALSE
 
 typedef struct {
     char signature[32];
