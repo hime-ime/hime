@@ -13,7 +13,7 @@ rm -rf hime/ pkg/ src/
 
 makepkg -sf
 
-ls -ltr ./*.pkg.tar.xz
+ls -ltr ./*.pkg.tar.*
 
 set +x
 popd || exit 1
