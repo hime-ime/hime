@@ -59,7 +59,7 @@ yaourt hime-git
 # build from this repo
 cd distro/archlinux
 makepkg -s
-sudo pacman -U hime-git-{version}-{arch}.pkg.tar.xz
+sudo pacman -U hime-git-{version}-{arch}.pkg.tar.zst
 ```
 
 #### 自行編譯
@@ -81,6 +81,11 @@ sudo pacman -U hime-git-{version}-{arch}.pkg.tar.xz
 
 - Github issue tracker
 - #hime at irc.freenode.net
+
+## 開發
+
+- 歡迎發送 PR 協助改善 HIME
+- 發送 PR 前請先執行 `make clang-format` 以自動修正 coding style (`clang-format` 版本需 >= 10)
 
 ## 附錄
 
