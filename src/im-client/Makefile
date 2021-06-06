@@ -36,9 +36,9 @@ $(SOFILEVER):   $(OBJS)
 
 # TODO: Drop g_get_tmp_dir() and -lglib-2.0
 ifeq ($(FREEBSD), 0)
-	$(CC) $(SO_FLAGS) -Wl,-soname,libhime-im-client.so.1 $(OBJS) -lX11 -lglib-2.0 -o $@ -L/usr/X11R6/lib
+	$(CC) $(SO_FLAGS) -Wl,-soname,libhime-im-client.so.1 $(OBJS) -lX11 -lglib-2.0 -lgtk-x11-2.0 -o $@ -L/usr/X11R6/lib
 else
-	$(CC) $(SO_FLAGS) -Wl,-soname,libhime-im-client.so.1 $(OBJS) -lX11 -lglib-2.0 -o $@ -L/usr/local/lib
+	$(CC) $(SO_FLAGS) -Wl,-soname,libhime-im-client.so.1 $(OBJS) -lX11 -lglib-2.0 -lgtk-x11-2.0 -o $@ -L/usr/local/lib
 endif
 	ln -sf $(SOFILEVER) $(SOFILE)
 	ln -sf $(SOFILEVER) $(SOFILE).1

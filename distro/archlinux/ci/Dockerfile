@@ -1,4 +1,4 @@
-FROM archlinux/base:latest
+FROM archlinux:latest
 
 COPY entrypoint.sh /app/entrypoint.sh
 
