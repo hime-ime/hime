@@ -15,4 +15,4 @@ fi
 export DEB_CFLAGS_SET="-Wall -g -O0"
 export CFLAGS="$CFLAGS -Wall -g -O0"
 
-dpkg-buildpackage -b
+debuild --no-lintian --no-tgz-check -i -us -uc -b
