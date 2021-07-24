@@ -1,4 +1,4 @@
-FROM debian:testing
+FROM debian:unstable
 
 COPY entrypoint.sh /app/entrypoint.sh
 
