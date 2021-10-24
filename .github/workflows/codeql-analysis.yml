@@ -59,7 +59,7 @@ jobs:
     - name: Update system and purge grub packages
       run: |
         sudo apt update --yes
-        sudo apt-get purge grub\*
+        sudo apt-get purge grub\* --allow-remove-essential
         sudo apt-mark hold grub-common grub-gfxpayload-lists grub-pc grub-pc-bin grub2-common
         sudo apt upgrade --yes
 
