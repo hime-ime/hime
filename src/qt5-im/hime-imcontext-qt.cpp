@@ -11,9 +11,9 @@
 #include <QtGui/QWindow>
 
 // confliction of qt & x11
-typedef unsigned int KeySym;
-struct Display;
-typedef unsigned int Window;
+typedef unsigned long KeySym;
+typedef struct _XDisplay Display;
+typedef unsigned long Window;
 typedef struct {
     short x, y;
 } XPoint;
@@ -244,7 +244,7 @@ void QHimePlatformInputContext::update_preedit () {
     free (str);
 }
 
-void QHimePlatformInputContext::send_event (QInputMethodEvent e) {
+void QHimePlatformInputContext::send_event (QInputMethodEvent &e) {
     QObject *input = qApp->focusObject ();
     if (!input)
         return;

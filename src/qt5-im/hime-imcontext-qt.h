@@ -39,7 +39,7 @@ class QHimePlatformInputContext : public QPlatformInputContext {
 
   private:
     HIME_client_handle_S *hime_ch;
-    void send_event (QInputMethodEvent e);
+    void send_event (QInputMethodEvent &e);
     void update_preedit ();
     void cursorMoved ();
     bool send_key_press (quint32 keysym, quint32 state);
