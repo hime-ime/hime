@@ -580,7 +580,7 @@ echo "QT6_IM=$QT6_IM" >>config.mak
 if [ -z "$QT6_IM_DIR_CUSTOM" ]; then
     # echo "QT6_IM_DIR=$(pkg-config --define-variable=prefix=$\(DESTDIR\)/\$\(prefix\) --variable=libdir Qt6Core)$QT6_IM_DIR" >>config.mak
     # TODO(xatier): hardcode for now
-    echo "QT6_IM_DIR=/usr/lib/$QT6_IM_DIR" >>config.mak
+    echo "QT6_IM_DIR=\$(DESTDIR)/\$(prefix)/lib$QT6_IM_DIR" >>config.mak
 else
     echo "QT6_IM_DIR=\$(DESTDIR)$QT6_IM_DIR_CUSTOM" >>config.mak
 fi
