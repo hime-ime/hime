@@ -56,20 +56,20 @@ char *lc;
 
 static XIMStyle Styles[] = {
 #if 1
-    XIMPreeditCallbacks | XIMStatusCallbacks,  //OnTheSpot
-    XIMPreeditCallbacks | XIMStatusArea,       //OnTheSpot
-    XIMPreeditCallbacks | XIMStatusNothing,    //OnTheSpot
+    XIMPreeditCallbacks | XIMStatusCallbacks,  // OnTheSpot
+    XIMPreeditCallbacks | XIMStatusArea,       // OnTheSpot
+    XIMPreeditCallbacks | XIMStatusNothing,    // OnTheSpot
 #endif
-    XIMPreeditPosition | XIMStatusArea,     //OverTheSpot
-    XIMPreeditPosition | XIMStatusNothing,  //OverTheSpot
-    XIMPreeditPosition | XIMStatusNone,     //OverTheSpot
+    XIMPreeditPosition | XIMStatusArea,     // OverTheSpot
+    XIMPreeditPosition | XIMStatusNothing,  // OverTheSpot
+    XIMPreeditPosition | XIMStatusNone,     // OverTheSpot
 #if 1
-    XIMPreeditArea | XIMStatusArea,     //OffTheSpot
-    XIMPreeditArea | XIMStatusNothing,  //OffTheSpot
-    XIMPreeditArea | XIMStatusNone,     //OffTheSpot
+    XIMPreeditArea | XIMStatusArea,     // OffTheSpot
+    XIMPreeditArea | XIMStatusNothing,  // OffTheSpot
+    XIMPreeditArea | XIMStatusNone,     // OffTheSpot
 #endif
-    XIMPreeditNothing | XIMStatusNothing,  //Root
-    XIMPreeditNothing | XIMStatusNone,     //Root
+    XIMPreeditNothing | XIMStatusNothing,  // Root
+    XIMPreeditNothing | XIMStatusNone,     // Root
 };
 static XIMStyles im_styles;
 
@@ -235,12 +235,12 @@ void open_xim () {
     char *xim_name = get_hime_xim_name ();
 
     XIMS xims = IMOpenIM (dpy,
-                          IMServerWindow, xim_xwin,  //input window
-                          IMModifiers, "Xi18n",      //X11R6 protocol
-                          IMServerName, xim_name,    //XIM server name
+                          IMServerWindow, xim_xwin,  // input window
+                          IMModifiers, "Xi18n",      // X11R6 protocol
+                          IMServerName, xim_name,    // XIM server name
                           IMLocale, lc,
-                          IMServerTransport, "X/",    //Comm. protocol
-                          IMInputStyles, &im_styles,  //faked styles
+                          IMServerTransport, "X/",    // Comm. protocol
+                          IMInputStyles, &im_styles,  // faked styles
                           IMEncodingList, &encodings,
                           IMProtocolHandler, hime_ProtoHandler,
                           IMFilterEventMask, KeyPressMask | KeyReleaseMask,

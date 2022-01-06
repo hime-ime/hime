@@ -22,8 +22,8 @@
 
 extern int phcount;
 extern int hashidx[];
-//extern int *phidx;
-//extern FILE *fph;
+// extern int *phidx;
+// extern FILE *fph;
 
 typedef struct CHPHO {
     char *ch;

@@ -48,7 +48,7 @@ typedef struct {
     // XXX(xatier): this should be KeySym
     // but for some reason using KeySym would introcude noticible slowness,
     // using uint32_t works though
-    //KeySym key;
+    // KeySym key;
     uint32_t key;
     uint32_t state;
 } HIME_KeyEvent;

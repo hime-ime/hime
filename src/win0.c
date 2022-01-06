@@ -58,7 +58,7 @@ static GtkWidget *label_pho;
 extern char text_pho[];
 extern int text_pho_N;
 static GtkWidget *button_eng_ph;
-//static int max_yl;
+// static int max_yl;
 
 static void create_win0_gui ();
 

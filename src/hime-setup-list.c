@@ -299,8 +299,8 @@ void save_gtablist_conf () {
 
     save_omni_config ();
     /* caleb- did not found where "reload" is used.
-   * caleb- think the send_hime_message() here does nothing.
-   */
+     * caleb- think the send_hime_message() here does nothing.
+     */
     send_hime_message (GDK_DISPLAY (), "reload");
 }
 

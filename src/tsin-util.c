@@ -24,7 +24,7 @@
 #include "tsin.h"
 
 int hashidx[TSIN_HASH_N];
-//static int *phidx;
+// static int *phidx;
 static FILE *fp_phidx;
 FILE *fph;
 int phcount;
@@ -36,7 +36,7 @@ static int tsin_hash_shift;
 
 char *current_tsin_fname;
 int ts_gtabN;
-//static int *ts_gtab_hash;
+// static int *ts_gtab_hash;
 #define HASHN 256
 
 static int a_phcount;

@@ -40,7 +40,7 @@ static void exec_script (char *name) {
 
 void exec_setup_scripts () {
     /* Workaround to prevent hime-setup segfault, when hime/config/ is not exist.
-   */
+     */
     struct passwd *pw = getpwuid (getuid ());
     char hime_conf_dir[512];
     g_snprintf (hime_conf_dir, sizeof (hime_conf_dir), "mkdir -p %s/.config/hime/config", pw->pw_dir);

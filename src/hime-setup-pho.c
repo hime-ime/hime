@@ -100,7 +100,7 @@ void save_tsin_eng_pho_key () {
 static GtkWidget *kbm_widget = NULL;
 
 static int new_select_idx_tsin_space_opt;
-//static GdkColor tsin_phrase_line_gcolor;
+// static GdkColor tsin_phrase_line_gcolor;
 
 void save_kbm_conf () {
     if (kbm_widget == NULL) {
@@ -177,8 +177,8 @@ void save_kbm_conf () {
 
     save_omni_config ();
     /* caleb- does found where "reload kbm" is used.
-   * caleb- think the send_hime_message() here does nothing.
-   */
+     * caleb- think the send_hime_message() here does nothing.
+     */
     send_hime_message (GDK_DISPLAY (), "reload kbm");
 }
 
@@ -229,7 +229,7 @@ static int get_currnet_tsin_space_option_idx () {
     return -1;
 }
 
-//static GtkWidget *da_phrase_line;
+// static GtkWidget *da_phrase_line;
 
 #if 0
 static void cb_save_tsin_phrase_line_color(GtkWidget *widget, gpointer user_data)

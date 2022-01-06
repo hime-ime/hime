@@ -23,7 +23,7 @@ typedef struct {
 
 enum {
     FLAG_TSIN_PARSE_PHRASE = 1,
-    FLAG_TSIN_PARSE_PARTIAL = 2,  //partial phrase
+    FLAG_TSIN_PARSE_PARTIAL = 2,  // partial phrase
 };
 
 typedef struct {

@@ -1586,7 +1586,7 @@ shift_proc:
         return 1;
     }
 
-    //refill:
+    // refill:
 
     j = ggg.S1;
     while (CONVT2 (cur_inmd, j) == ggg.kval && j < oE1)

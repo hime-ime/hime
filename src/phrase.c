@@ -252,7 +252,7 @@ gboolean feed_phrase (KeySym ksym, int state) {
         str = ((state & LockMask) && tr[i].str_caps) ? tr[i].str_caps : tr[i].str;
 
         if (str) {
-//send_it:
+// send_it:
 #if USE_TSIN
             if (current_method_type () == method_type_TSIN && current_CS->im_state == HIME_STATE_CHINESE) {
                 add_to_tsin_buf_str (str);
