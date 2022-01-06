@@ -19,12 +19,15 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ "$1" = "-help" ]; then
     echo "  --disable-appindicator   : disable Ubuntu unity tray [default: auto-detect]"
     echo "  --disable-lib64          : disable the use of lib64 dir [default: auto-detect]"
     echo "  --disable-qt5-immodule   : disable QT5 im-module [default: auto-detect]"
+    echo "  --disable-qt6-immodule   : disable QT6 im-module [default: auto-detect]"
     echo "  --disable-gtk2-im-module : disable GTK+ 2.x im-module [default: auto-detect]"
     echo "  --disable-gtk3-im-module : disable GTK+ 3.x im-module [default: auto-detect]"
     echo ""
     echo "System Specific Pathes:"
     echo "  --qt5-moc-path=PATH       : specify the path of \"moc\" command for Qt 5.x"
     echo "  --qt5-im-module-path=PATH : specify the install path for Qt 5.x im-module."
+    echo "  --qt6-moc-path=PATH       : specify the path of \"moc\" command for Qt 6.x"
+    echo "  --qt6-im-module-path=PATH : specify the install path for Qt 6.x im-module."
     echo ""
     exit
 fi
@@ -56,6 +59,7 @@ use_unity_tray='Y'
 use_lib=''
 
 use_qt5='Y'
+use_qt6='Y'
 use_gtk2='Y'
 use_gtk3='Y'
 
@@ -75,8 +79,10 @@ find_in_path_list_to_variable() {
 
 #                  debian                 fedora               fedora           freebsd                slackware          arch
 qt5_moc_path_list="/usr/share/qt5/bin/moc /usr/lib/qt5/bin/moc /usr/bin/moc-qt5 /usr/local/bin/moc-qt5 /usr/local/bin/moc /usr/bin/moc"
+qt6_moc_path_list="/usr/share/qt6/bin/moc /usr/lib/qt6/bin/moc /usr/bin/moc-qt6 /usr/local/bin/moc-qt6 /usr/local/bin/moc /usr/lib/qt6/moc"
 
 QT5_IM_DIR_CUSTOM=
+QT6_IM_DIR_CUSTOM=
 for opt; do
     case "$opt" in
         --prefix=*)
@@ -169,6 +175,15 @@ for opt; do
         --disable-qt5-immodule)
             use_qt5=N
             ;;
+        --use_qt6=*)
+            use_qt6=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --enable-qt6-immodule)
+            use_qt6=Y
+            ;;
+        --disable-qt6-immodule)
+            use_qt6=N
+            ;;
         --use_gtk2=*)
             use_gtk2=$(echo "$opt" | cut -d '=' -f 2)
             ;;
@@ -192,6 +207,12 @@ for opt; do
             ;;
         --qt5-install-to=* | --qt5-im-module-path=*)
             QT5_IM_DIR_CUSTOM=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --qt6-moc-path=*)
+            QT6_MOC_PATH=$(echo "$opt" | cut -d '=' -f 2)
+            ;;
+        --qt6-install-to=* | --qt6-im-module-path=*)
+            QT6_IM_DIR_CUSTOM=$(echo "$opt" | cut -d '=' -f 2)
             ;;
     esac
 done
@@ -375,9 +396,45 @@ else
 fi
 # --- QT5 END ---
 
+# --- QT6 START ---
+QT6_IM='N'
+if [ -z "$QT6_IM_DIR" ]; then QT6_IM_DIR=/qt6/plugins/platforminputcontexts; fi
+
+echo -n ".... Testing Qt 6.x             :  "
+# TODO(xatier): Qt6 doesn't provide pkg-config, we need to hardcode things manually.
+# if pkg-config --libs Qt5Core Qt5Gui >/dev/null 2>/dev/null; then
+#     QT6_IM='Y'
+# fi
+QT6_IM='Y'
+
+if [ ! -x "$QT6_MOC_PATH" ]; then
+    # find_in_path_list_to_variable "$(pkg-config --variable=host_bins Qt6Core)/moc $qt6_moc_path_list" "QT6_MOC_PATH"
+    # TODO(xatier): hardcode moc path for now.
+    find_in_path_list_to_variable "/usr/lib/qt6/moc $qt6_moc_path_list" "QT6_MOC_PATH"
+fi
+
+if [ "$QT6_IM" = "Y" ]; then
+    if [ "$use_qt6" = "N" ]; then
+        QT6_IM='N'
+        echo "Found: $(pkg-config --print-provides Qt6Core), but disabled."
+    else
+        if [ ! -x "$QT6_MOC_PATH" ]; then
+            echo "Not found, cannot find \"moc\" tool for Qt 6.x."
+            echo "Hint: use the --qt6-moc-path option. abort!"
+            exit 1
+        fi
+        # echo "Found: $(pkg-config --print-provides Qt6Core)"
+        echo "Found: $(pacman -Q qt6-base)"
+    fi
+else
+    echo "Not found, Qt 6.x immodule is turned off."
+fi
+# --- QT6 END ---
+
 # --- MOC INFO START ---
 
 if [ "$QT5_IM" = "Y" ]; then echo ".... Path of Qt5 moc            :  $QT5_MOC_PATH"; fi
+if [ "$QT6_IM" = "Y" ]; then echo ".... Path of Qt6 moc            :  $QT6_MOC_PATH"; fi
 
 # --- MOC INFO END ---
 
@@ -518,6 +575,17 @@ else
 fi
 echo "QT5_MOC_PATH=$QT5_MOC_PATH" >>config.mak
 echo "QT5_QMAKE_PATH=$QT5_MOC_PATH" | sed 's/moc/qmake/' >>config.mak
+
+echo "QT6_IM=$QT6_IM" >>config.mak
+if [ -z "$QT6_IM_DIR_CUSTOM" ]; then
+    # echo "QT6_IM_DIR=$(pkg-config --define-variable=prefix=$\(DESTDIR\)/\$\(prefix\) --variable=libdir Qt6Core)$QT6_IM_DIR" >>config.mak
+    # TODO(xatier): hardcode for now
+    echo "QT6_IM_DIR=/usr/lib/$QT6_IM_DIR" >>config.mak
+else
+    echo "QT6_IM_DIR=\$(DESTDIR)$QT6_IM_DIR_CUSTOM" >>config.mak
+fi
+echo "QT6_MOC_PATH=$QT6_MOC_PATH" >>config.mak
+echo "QT6_QMAKE_PATH=$QT6_MOC_PATH" | sed 's/moc/qmake/' >>config.mak
 
 # GTK
 echo "GTK=$GTK" >>config.mak
