@@ -207,7 +207,7 @@ void send_text (char *text) {
         text = utf8_gbtext;
     }
 
-    //direct:
+    // direct:
     filter = getenv ("HIME_OUTPUT_FILTER");
     char filter_text[512];
 
@@ -594,7 +594,7 @@ extern void destroy_tray_double ();
 gboolean is_exist_tray_appindicator ();
 extern void destroy_tray_appindicator ();
 #endif
-#endif  //TRAY_ENABLED
+#endif  // TRAY_ENABLED
 
 #if TRAY_ENABLED
 void destroy_tray () {
@@ -665,7 +665,7 @@ void flush_tsin_buffer ();
 void reset_gtab_all ();
 void set_tsin_pho_mode0 (ClientState *cs);
 
-//static u_int orig_caps_state;
+// static u_int orig_caps_state;
 
 void init_state_chinese (ClientState *cs) {
     cs->im_state = HIME_STATE_CHINESE;

@@ -27,7 +27,7 @@ GtkWidget *gwin1;
 static GtkWidget *frame;
 static char wselkey[16];
 static int wselkeyN;
-//Window xwin1;
+// Window xwin1;
 
 #define SELEN (15)
 

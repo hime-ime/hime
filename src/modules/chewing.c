@@ -114,9 +114,9 @@ gtk_pango_font_pixel_size_get (int *pnFontWidth, int *pnFontHeight) {
     PangoFontDescription *pPangoFontDesc;
 
     pPangoLayout = gtk_widget_create_pango_layout (g_pWinChewing, "中");
-    //pPangoLayout = gtk_widget_create_pango_layout (
-    //                   g_pWinChewing,
-    //                   (char *)gtk_label_get_text (GTK_LABEL (g_pSeg[g_nCurrentCursorPos].label)));
+    // pPangoLayout = gtk_widget_create_pango_layout (
+    //                    g_pWinChewing,
+    //                    (char *)gtk_label_get_text (GTK_LABEL (g_pSeg[g_nCurrentCursorPos].label)));
     pPangoContext = gtk_widget_get_pango_context (g_pWinChewing);
     pPangoFontDesc = pango_context_get_font_description (pPangoContext);
 
@@ -479,7 +479,7 @@ int module_init_win (HIME_module_main_functions *pFuncs) {
     // TODO: not sure if we need the mouse CB or not...
     //        if we add the CB here, then it seems that we have to use gdk
     //        it seems not so important...? do it later
-    //g_signal_connect (G_OBJECT (g_pEvBoxChewing), "button-press-event",
+    // g_signal_connect (G_OBJECT (g_pEvBoxChewing), "button-press-event",
     //                  G_CALLBACK (mouse_button_callback), NULL);
 
     if (!g_pSeg) {

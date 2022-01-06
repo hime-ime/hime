@@ -32,7 +32,7 @@
 phokey_t pinyin2phokey (char *s);
 
 static char *bf;
-//static int bfN_a = 0;
+// static int bfN_a = 0;
 static gboolean b_pinyin;
 
 int *phidx, *sidx, phcount;

@@ -324,7 +324,7 @@ static void clear_tsin_buffer () {
     clear_ch_buf_sel_area ();
     close_selection_win ();
     tss.pre_selN = 0;
-    tss.tsin_buffer_editing = 0;  //buffer editing is finished
+    tss.tsin_buffer_editing = 0;  // buffer editing is finished
 }
 
 void clr_in_area_pho_tsin ();
@@ -1693,8 +1693,8 @@ int feedkey_pp (KeySym xkey, int kbstate) {
                     return 1;
                 } else
                     return 0;
-            } else if (tsin_buffer_editing_mode && xkey == 'e') {  //ctrl+e only works when user enabled tsin_buffer_editing_mode
-                //toggler
+            } else if (tsin_buffer_editing_mode && xkey == 'e') {  // ctrl+e only works when user enabled tsin_buffer_editing_mode
+                // toggler
                 tss.tsin_buffer_editing ^= 1;
                 return 1;
             } else if (xkey >= '1' && xkey <= '9') {

@@ -212,7 +212,7 @@ int main (int argc, char **argv) {
     kname = keymap + th->KeyS;
     fprintf (fw, "%%keyname begin\n");
     for (key_idx = 1; key_idx < th->KeyS; key_idx++) {
-        //prevent leading #
+        // prevent leading #
         if (*(keymap + key_idx) == '#')
             fprintf (fw, "%c", ' ');
         fprintf (fw, "%c ", *(keymap + key_idx));
