@@ -1,3 +1,8 @@
+0.10.1
+
+  * Qt6 support
+  * Other misc fixes
+
 0.9.11
 
   * Add the manual trigger for GitHub workflow
