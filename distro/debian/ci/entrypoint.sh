@@ -23,8 +23,6 @@ apt-get install --yes \
         libgtk-3-dev \
         libanthy-dev \
         libchewing3-dev \
-        libappindicator-dev \
-        libappindicator3-dev \
         qtbase5-private-dev
 
 echo 'en_US.UTF-8 UTF-8' >/etc/locale.gen && locale-gen
