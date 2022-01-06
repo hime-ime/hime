@@ -53,12 +53,9 @@ apt-get install hime
 #### Archlinux
 
 ```bash
-# install `hime-git` from AUR, thanks to @xatier
-yaourt hime-git
-
 # build from this repo
 cd distro/archlinux
-makepkg -s
+./makepkg.sh
 sudo pacman -U hime-git-{version}-{arch}.pkg.tar.zst
 ```
 
