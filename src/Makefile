@@ -210,6 +210,7 @@ all: $(PROGS) $(PROGS_SYM) $(DATA) $(PROGS_CV)
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im; fi
 	if [ $(QT5_IM) = 'Y' ]; then $(MAKE) -C qt5-im; fi
+	if [ $(QT6_IM) = 'Y' ]; then $(MAKE) -C qt6-im; fi
 
 $(IMdkitLIB):
 	@echo "building $@ ..."
@@ -341,6 +342,7 @@ install:
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im install; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im install; fi
 	if [ $(QT5_IM) = 'Y' ]; then $(MAKE) -C qt5-im install; fi
+	if [ $(QT6_IM) = 'Y' ]; then $(MAKE) -C qt6-im install; fi
 
 .PHONY: uninstall
 uninstall:
@@ -351,6 +353,7 @@ uninstall:
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im uninstall; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im uninstall; fi
 	if [ $(QT5_IM) = 'Y' ]; then $(MAKE) -C qt5-im uninstall; fi
+	if [ $(QT6_IM) = 'Y' ]; then $(MAKE) -C qt6-im uninstall; fi
 	rmdir --ignore-fail-on-non-empty $(bindir)
 	rmdir --ignore-fail-on-non-empty $(himelibdir)
 	rmdir --ignore-fail-on-non-empty $(includedir)
@@ -364,6 +367,7 @@ clean:
 	if [ $(GTK_IM) = 'Y' ]; then $(MAKE) -C gtk-im clean; fi
 	if [ $(GTK3_IM) = 'Y' ]; then $(MAKE) -C gtk3-im clean; fi
 	if [ $(QT5_IM) = 'Y' ]; then $(MAKE) -C qt5-im clean; fi
+	if [ $(QT6_IM) = 'Y' ]; then $(MAKE) -C qt6-im clean; fi
 	@rm -f *.o *.E *.db *.pico *.so tags $(PROGS) $(PROGS_CV) \
 		$(DATA) .depend $(PROGS_SYM) hime.log hime-fedora.spec
 	@find . '(' -name '.ted*' -o -name '*~' -o -name 'core.*' -o -name 'vgcore.*' ')' -exec rm {} \;
