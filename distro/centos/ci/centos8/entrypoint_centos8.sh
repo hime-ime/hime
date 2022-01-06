@@ -27,7 +27,10 @@ set +x; separator; separator; separator; set -x
 # enter GitHub workspace directory path
 cd "$GITHUB_WORKSPACE"
 
-./configure --disable-gtk2-im-module --disable-gtk3-im-module \
+./configure \
+    --disable-gtk2-im-module \
+    --disable-gtk3-im-module \
+    --disable-qt6-immodule \
     --prefix="$PWD/build" \
     --qt5-im-module-path=/usr/lib/qt/plugins/platforminputcontexts/
 
