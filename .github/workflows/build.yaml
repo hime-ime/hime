@@ -62,3 +62,18 @@ jobs:
 
       - name: Docker Action
         uses: ./.github/actions/centos8
+
+  build_almalinux:
+    name: Build with AlmaLinux container
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Change diff
+        run: git --no-pager show -m "$GITHUB_SHA" --color
+
+      - name: Docker Action
+        uses: ./.github/actions/almalinux

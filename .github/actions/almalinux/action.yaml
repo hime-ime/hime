@@ -1,0 +1,6 @@
+name: 'Build @AlmaLinux'
+description: 'Build hime with AlmaLinux container'
+
+runs:
+  using: 'docker'
+  image: '../../../distro/almalinux/ci/Dockerfile'
