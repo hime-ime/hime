@@ -28,7 +28,7 @@ LDFLAGS+=$(LDFLAGS_ENV) -L../im-client -lhime-im-client $(QTLIBS)
 .SUFFIXES:	.c .cpp .a .so .E .h
 
 .PHONY: all
-all:    im-hime.so
+all:    qt_info im-hime.so
 
 .cpp.E:
 	@echo "  $< -> $@"
@@ -40,17 +40,26 @@ all:    im-hime.so
 
 moc_hime-qt.cpp:	hime-qt.h
 	@echo "  $< -> $@"
-	@$(QT5_MOC_PATH) $(INCS) $< -o moc_hime-qt.cpp
+	$(QT5_MOC_PATH) $(INCS) $< -o moc_hime-qt.cpp
 
 moc_hime-imcontext-qt.cpp:	hime-imcontext-qt.h
 	@echo "  $< -> $@"
-	@$(QT5_MOC_PATH) $(INCS) $< -o moc_hime-imcontext-qt.cpp
+	$(QT5_MOC_PATH) $(INCS) $< -o moc_hime-imcontext-qt.cpp
 
 im-hime.so: $(OBJS)
 	@echo "linking $@ ..."
 	@export LD_RUN_PATH=$(himelibdir) ;\
 		$(CXX) $(gcc_ld_run_path) -fno-exceptions -shared -o $@ $(OBJS) $(LDFLAGS)
 	@rm -f core.*
+
+.PHONY: qt_info
+qt_info:
+	@echo "Qt toolchain info:"
+	@echo ""
+	@echo "Qt version: $(QTVER)"
+	@echo "include path: $(QTINC)"
+	@echo "full include path: $(INCS)"
+	@echo ""
 
 .PHONY: install
 install:
