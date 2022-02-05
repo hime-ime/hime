@@ -10,7 +10,7 @@ endif
 # QTINC=$(shell pkg-config --variable=includedir Qt6Core)
 # QTVER=$(shell pkg-config --modversion Qt6Core)
 QTINC=/usr/include/qt6
-QTVER=6.2.2
+QTVER=$(shell ls $(QTINC)/QtCore/ | grep ^6)
 
 # TODO(xatier): hardcode for now
 #INCS+=$(shell pkg-config Qt6Core Qt6Gui Qt6DBus --cflags)
@@ -34,7 +34,7 @@ LDFLAGS+=$(LDFLAGS_ENV) -L../im-client -lhime-im-client $(QTLIBS)
 .SUFFIXES:	.c .cpp .a .so .E .h
 
 .PHONY: all
-all:    im-hime.so
+all:    qt_info im-hime.so
 
 .cpp.E:
 	@echo "  $< -> $@"
@@ -46,17 +46,26 @@ all:    im-hime.so
 
 moc_hime-qt.cpp:	hime-qt.h
 	@echo "  $< -> $@"
-	@$(QT6_MOC_PATH) $(INCS) $< -o moc_hime-qt.cpp
+	$(QT6_MOC_PATH) $(INCS) $< -o moc_hime-qt.cpp
 
 moc_hime-imcontext-qt.cpp:	hime-imcontext-qt.h
 	@echo "  $< -> $@"
-	@$(QT6_MOC_PATH) $(INCS) $< -o moc_hime-imcontext-qt.cpp
+	$(QT6_MOC_PATH) $(INCS) $< -o moc_hime-imcontext-qt.cpp
 
 im-hime.so: $(OBJS)
 	@echo "linking $@ ..."
 	@export LD_RUN_PATH=$(himelibdir) ;\
 		$(CXX) $(gcc_ld_run_path) -fno-exceptions -shared -o $@ $(OBJS) $(LDFLAGS)
 	@rm -f core.*
+
+.PHONY: qt_info
+qt_info:
+	@echo "Qt toolchain info:"
+	@echo ""
+	@echo "Qt version: $(QTVER)"
+	@echo "include path: $(QTINC)"
+	@echo "full include path: $(INCS)"
+	@echo ""
 
 .PHONY: install
 install:
