@@ -805,7 +805,6 @@ gboolean win_is_visible () {
 }
 
 void disp_gtab_half_full (gboolean hf);
-void tsin_toggle_half_full ();
 
 // <Shift><Space> is pressed
 void toggle_half_full_char () {
@@ -819,30 +818,26 @@ void toggle_half_full_char () {
 
     //  dbg("toggle_half_full_char\n");
 
-    if (current_method_type () == method_type_TSIN && current_CS->im_state == HIME_STATE_CHINESE) {
-        tsin_toggle_half_full ();
-    } else {
-        switch (current_CS->im_state) {
-        case HIME_STATE_ENG_FULL:
-            current_CS->im_state = HIME_STATE_DISABLED;
-            hide_in_win (current_CS);
-            break;
-        case HIME_STATE_DISABLED: {
-            gint show_win_kbm = hime_show_win_kbm;
-            hime_show_win_kbm = FALSE;
-            toggle_im_enabled ();
-            current_CS->im_state = HIME_STATE_ENG_FULL;
-            hime_show_win_kbm = show_win_kbm;
-            break;
-        }
-        case HIME_STATE_CHINESE:
-            current_CS->b_half_full_char = !current_CS->b_half_full_char;
-            break;
-        }
-
-        //    dbg("current_CS->in_method %d\n", current_CS->in_method);
-        disp_im_half_full ();
+    switch (current_CS->im_state) {
+    case HIME_STATE_ENG_FULL:
+        current_CS->im_state = HIME_STATE_DISABLED;
+        hide_in_win (current_CS);
+        break;
+    case HIME_STATE_DISABLED: {
+        gint show_win_kbm = hime_show_win_kbm;
+        hime_show_win_kbm = FALSE;
+        toggle_im_enabled ();
+        current_CS->im_state = HIME_STATE_ENG_FULL;
+        hime_show_win_kbm = show_win_kbm;
+        break;
     }
+    case HIME_STATE_CHINESE:
+        current_CS->b_half_full_char = !current_CS->b_half_full_char;
+        break;
+    }
+
+    //    dbg("current_CS->in_method %d\n", current_CS->in_method);
+    disp_im_half_full ();
 
     save_CS_current_to_temp ();
     //  dbg("half full toggle\n");

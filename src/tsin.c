@@ -890,17 +890,6 @@ void tsin_toggle_eng_ch () {
     tsin_set_eng_ch (!tsin_pho_mode ());
 }
 
-#if USE_TSIN
-void tsin_toggle_half_full () {
-    current_CS->b_half_full_char ^= TRUE;
-    key_press_alt = FALSE;
-    drawcursor ();
-#if TRAY_ENABLED
-    disp_tray_icon ();
-#endif
-}
-#endif
-
 #if 0
 static char ochars[]="<,>.?/:;\"'{[}]_-+=|\\~`";
 #else
