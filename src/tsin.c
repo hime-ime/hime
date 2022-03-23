@@ -1334,14 +1334,11 @@ int tsin_pho_sel (int c) {
         tss.c_idx += len;
         prbuf ();
         tss.current_page = tss.sel_pho = poo.ityp3_pho = 0;
-        if (len == 1) {
-            hide_selections_win ();
-            tss.ph_sta = -1;
-            return 0;
-        } else
-            tss.ph_sta = -1;
-
+        tss.ph_sta = -1;
         hide_selections_win ();
+        if (len == 1) {
+            return 0;
+        }
     }
 
     return 1;
