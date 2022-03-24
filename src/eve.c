@@ -137,11 +137,14 @@ void save_CS_temp_to_current () {
     current_CS->tsin_pho_mode = temp_CS.tsin_pho_mode;
 }
 
+/**
+ * Return the half/full shape mode of current client state
+ * \retval 1 Full-shape mode
+ * \retval 0 Half-shape mode
+ * \todo When the current client state pointer is null, the return value would be 0.
+ */
 int current_shape_mode () {
-    // INFO: 1: Full 0: Half / Error: !current_CS
-    return current_CS &&
-           (current_CS->im_state == HIME_STATE_ENG_FULL ||
-            (current_CS->im_state != HIME_STATE_DISABLED && current_CS->b_half_full_char));
+    return current_CS && current_CS->b_half_full_char;
 }
 
 gboolean init_in_method (int in_no);
@@ -691,7 +694,6 @@ void toggle_im_enabled () {
     if (current_CS->im_state != HIME_STATE_DISABLED) {
         if (current_CS->im_state == HIME_STATE_ENG_FULL) {
             current_CS->im_state = HIME_STATE_CHINESE;
-            current_CS->b_half_full_char = TRUE;
             disp_im_half_full ();
             save_CS_current_to_temp ();
             return;
@@ -727,7 +729,6 @@ void toggle_im_enabled () {
             init_gtab (current_CS->in_method);
 
         init_state_chinese (current_CS);
-        current_CS->b_half_full_char = FALSE;
         reset_current_in_win_xy ();
 #if 1
         if ((inmd[current_CS->in_method].flag & FLAG_GTAB_SYM_KBM)) {
@@ -816,31 +817,9 @@ void toggle_half_full_char () {
         return;
     }
 
-    //  dbg("toggle_half_full_char\n");
-
-    switch (current_CS->im_state) {
-    case HIME_STATE_ENG_FULL:
-        current_CS->im_state = HIME_STATE_DISABLED;
-        hide_in_win (current_CS);
-        break;
-    case HIME_STATE_DISABLED: {
-        gint show_win_kbm = hime_show_win_kbm;
-        hime_show_win_kbm = FALSE;
-        toggle_im_enabled ();
-        current_CS->im_state = HIME_STATE_ENG_FULL;
-        hime_show_win_kbm = show_win_kbm;
-        break;
-    }
-    case HIME_STATE_CHINESE:
-        current_CS->b_half_full_char = !current_CS->b_half_full_char;
-        break;
-    }
-
-    //    dbg("current_CS->in_method %d\n", current_CS->in_method);
+    current_CS->b_half_full_char = !current_CS->b_half_full_char;
     disp_im_half_full ();
-
     save_CS_current_to_temp ();
-    //  dbg("half full toggle\n");
 }
 
 void init_tab_pp (gboolean init);
@@ -960,22 +939,8 @@ gboolean init_in_method (int in_no) {
         break;
     }
 
-    if (hime_init_full_mode) {
-        switch (current_method_type ()) {
-        case method_type_TSIN:
-            if (!current_CS->b_half_full_char)
-                toggle_half_full_char ();
-            break;
-        case method_type_MODULE:
-        case method_type_SYMBOL_TABLE:
-        case method_type_EN:
-            break;
-        default:
-            if (!current_CS->b_half_full_char)
-                toggle_half_full_char ();
-            break;
-        }
-    }
+    if (hime_init_full_mode && !current_CS->b_half_full_char)
+        toggle_half_full_char ();
 
 #if TRAY_ENABLED
     disp_tray_icon ();
@@ -1045,7 +1010,7 @@ gboolean full_char_proc (KeySym keysym) {
 
     utf8cpy (tt, s);
 
-    if (current_CS->im_state == HIME_STATE_ENG_FULL) {
+    if (current_CS->b_half_full_char) {
         send_text (tt);
         return 1;
     }
@@ -1222,7 +1187,7 @@ gboolean ProcessKeyPress (KeySym keysym, uint32_t kev_state) {
 
     last_keysym = keysym;
 
-    if (current_CS->im_state == HIME_STATE_ENG_FULL && !(kev_state & (ControlMask | Mod1Mask))) {
+    if (current_CS->b_half_full_char && current_CS->im_state != HIME_STATE_CHINESE && !(kev_state & (ControlMask | Mod1Mask))) {
         return check_key_press (keysym, kev_state, full_char_proc (keysym));
     }
 
