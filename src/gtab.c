@@ -1773,6 +1773,7 @@ int feedkey_gtab_release (KeySym xkey, int kbstate) {
              (tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR && xkey == XK_Shift_R)) &&
             key_press_alt) {
             if (!test_mode) {
+                ClrIn ();
                 tsin_toggle_eng_ch ();
             }
             key_press_alt = FALSE;
