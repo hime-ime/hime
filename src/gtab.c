@@ -909,7 +909,7 @@ gboolean feedkey_gtab (KeySym key, int kbstate) {
     char seltab_phrase[MAX_SELKEY];
     gboolean is_keypad = FALSE;
     gboolean shift_m = (kbstate & ShiftMask) > 0;
-    //  gboolean ctrl_m = (kbstate & ControlMask) > 0;
+    gboolean ctrl_m = (kbstate & ControlMask) > 0;
     gboolean capslock_on = (kbstate & LockMask);
 
     memset (seltab_phrase, 0, sizeof (seltab_phrase));
@@ -964,6 +964,12 @@ gboolean feedkey_gtab (KeySym key, int kbstate) {
         hide_win_pho ();
 
     if (!tsin_pho_mode ()) {
+        gboolean is_ascii = (key >= ' ' && key < 0x7f) && !ctrl_m;
+        if (current_CS->b_half_full_char && is_ascii) {
+            send_text (half_char_to_full_char (key));
+            return 1;
+        }
+
         if (key < 0x20 || key >= 0x7f)
             goto shift_proc;
 
