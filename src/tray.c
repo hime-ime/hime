@@ -78,13 +78,10 @@ static void get_text_w_h (char *s, int *w, int *h) {
 }
 
 static void draw_icon () {
-    gboolean tsin_pho_mode ();
-
     if (!tray_icon)
         return;
 
-    GdkPixbuf *pix = ((!current_CS) ||
-                      (current_CS->im_state != HIME_STATE_CHINESE))
+    GdkPixbuf *pix = (!current_CS || !current_CS->b_im_enabled)
                          ? pixbuf
                          : pixbuf_ch;
 
@@ -111,7 +108,7 @@ static void draw_icon () {
             cairo_move_to (cr, iw - w, ih - h);
             pango_cairo_show_layout (cr, pango);
         }
-        if (current_CS->im_state == HIME_STATE_CHINESE && !tsin_pho_mode ()) {
+        if (current_CS->b_im_enabled && !chinese_mode ()) {
             gdk_cairo_set_source_color (cr, &blue_color_fg);
             get_text_w_h (engst, &w, &h);
             cairo_move_to (cr, 0, 0);
@@ -158,7 +155,7 @@ void load_tray_icon () {
     char *iconame = HIME_TRAY_PNG;
     //  if (current_CS && current_CS->in_method && inmd)
     // Workaround due to issue #161
-    if (current_CS && current_CS->im_state != HIME_STATE_DISABLED && current_CS->im_state != HIME_STATE_ENG_FULL)
+    if (current_CS && current_CS->b_im_enabled)
         iconame = inmd[current_CS->in_method].icon;
     char fname[512];
     if (iconame)

@@ -651,8 +651,8 @@ GtkWidget *get_cname_label ();
 
 void show_input_method_name_on_gtab () {
     if (current_CS && (!hime_status_tray) && gtab_disp_im_name &&
-        (current_CS->im_state == HIME_STATE_CHINESE) && (!current_CS->b_half_full_char) &&
-        (current_CS->tsin_pho_mode)) {
+        current_CS->b_im_enabled && (!current_CS->b_half_full_char) &&
+        (chinese_mode ())) {
         if ((current_method_type () == method_type_MODULE) ||
             (gtab_hide_row2 && (hime_edit_display == HIME_EDIT_DISPLAY_ON_THE_SPOT)))
         // label_gtab = NULL under onthespot mode.
@@ -726,7 +726,7 @@ void show_win_gtab () {
         gtk_widget_show (gwin_gtab);
 
     if (current_CS) {
-        if (current_CS->tsin_pho_mode == 0)
+        if (!chinese_mode ())
             set_gtab_input_method_name (eng_half_str);
         else
             set_gtab_input_method_name (inmd[current_CS->in_method].cname);
@@ -810,30 +810,25 @@ static void set_disp_im_name () {
 }
 
 char *get_full_str () {
-    if (current_CS->tsin_pho_mode == 0) {
+    if (!chinese_mode ()) {
         if (hime_win_color_use)
             return eng_color_half_str;
         else
             return _ (eng_half_str);
     }
 
-    switch (current_CS->im_state) {
-    case HIME_STATE_CHINESE:
+    if (current_CS->b_im_enabled) {
         if (current_CS->b_half_full_char) {
             if (hime_win_color_use)
                 return cht_color_full_str;
             else
                 return _ (cht_full_str);
         }
-        break;
-    case HIME_STATE_ENG_FULL:
+    } else if (current_CS->b_half_full_char) {
         if (hime_win_color_use)
             return eng_color_full_str;
         else
             return _ (eng_full_str);
-        break;
-    default:
-        break;
     }
     return ("");
 }
@@ -842,14 +837,14 @@ void win_gtab_disp_half_full () {
     if (!gwin_gtab)
         return;
     if (label_full) {
-        if ((current_CS->im_state == HIME_STATE_CHINESE && (!current_CS->b_half_full_char)) ||
-            (current_CS->tsin_pho_mode == 0))
+        if ((current_CS->b_im_enabled && (!current_CS->b_half_full_char)) ||
+            (!chinese_mode ()))
             gtk_widget_hide (label_full);
         else
             gtk_widget_show (label_full);
     }
 
-    if (current_CS->tsin_pho_mode) {
+    if (chinese_mode ()) {
         if (label_gtab_sele)
             gtk_widget_show (label_gtab_sele);
         if (hime_status_tray || (!gtab_hide_row2))

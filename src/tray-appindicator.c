@@ -100,16 +100,14 @@ static gboolean tray_appindicator_load_icon (char fallback[], char iconfile[], c
     }
 }
 
-extern gboolean tsin_pho_mode ();
-
 static void tray_appindicator_update_icon () {
-    if (!current_CS || current_CS->im_state == HIME_STATE_DISABLED || current_CS->im_state == HIME_STATE_ENG_FULL) {
+    if (!current_CS || !current_CS->b_im_enabled) {
         strcpy (iconfile, HIME_TRAY_PNG);
     } else {
         strcpy (iconfile, inmd[current_CS->in_method].icon);
     }
 
-    if (current_CS && current_CS->im_state == HIME_STATE_CHINESE && !tsin_pho_mode ()) {
+    if (current_CS && current_CS->b_im_enabled && !chinese_mode ()) {
         char s[64];
         strcpy (s, "en-");
         strcat (s, iconfile);

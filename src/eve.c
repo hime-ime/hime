@@ -120,9 +120,9 @@ void save_CS_current_to_temp (void) {
     //  dbg("save_CS_current_to_temp\n");
     temp_CS.b_half_full_char = current_CS->b_half_full_char;
     temp_CS.in_method_switched = current_CS->in_method_switched;
-    temp_CS.im_state = current_CS->im_state;
+    temp_CS.b_im_enabled = current_CS->b_im_enabled;
     temp_CS.in_method = current_CS->in_method;
-    temp_CS.tsin_pho_mode = current_CS->tsin_pho_mode;
+    temp_CS.b_chinese_mode = current_CS->b_chinese_mode;
 }
 
 void save_CS_temp_to_current () {
@@ -132,9 +132,9 @@ void save_CS_temp_to_current () {
     //  dbg("save_CS_temp_to_current\n");
     current_CS->b_half_full_char = temp_CS.b_half_full_char;
     current_CS->in_method_switched = temp_CS.in_method_switched;
-    current_CS->im_state = temp_CS.im_state;
+    current_CS->b_im_enabled = temp_CS.b_im_enabled;
     current_CS->in_method = temp_CS.in_method;
-    current_CS->tsin_pho_mode = temp_CS.tsin_pho_mode;
+    current_CS->b_chinese_mode = temp_CS.b_chinese_mode;
 }
 
 /**
@@ -390,7 +390,6 @@ void check_CS () {
         //    dbg("!current_CS");
         current_CS = &temp_CS;
 //    temp_CS.input_style = InputStyleOverSpot;
-//    temp_CS.im_state = HIME_STATE_CHINESE;
 #if TRAY_ENABLED
         disp_tray_icon ();
 #endif
@@ -437,7 +436,7 @@ void show_in_win (ClientState *cs) {
     }
 
     if (hime_show_win_kbm &&
-        (current_CS->im_state == HIME_STATE_CHINESE) &&
+        (current_CS->b_im_enabled) &&
         (current_method_type () != method_type_MODULE) &&
         (current_method_type () != method_type_SYMBOL_TABLE)) {
         show_win_kbm ();
@@ -666,13 +665,12 @@ void disp_im_half_full () {
 
 void flush_tsin_buffer ();
 void reset_gtab_all ();
-void set_tsin_pho_mode0 (ClientState *cs);
 
 // static u_int orig_caps_state;
 
 void init_state_chinese (ClientState *cs) {
-    cs->im_state = HIME_STATE_CHINESE;
-    set_tsin_pho_mode0 (cs);
+    cs->b_im_enabled = TRUE;
+    set_chinese_mode0 (cs);
     if (!cs->in_method_switched) {
         init_in_method (default_input_method);
         cs->in_method_switched = TRUE;
@@ -691,12 +689,9 @@ void toggle_im_enabled () {
     if (current_CS->in_method < 0)
         p_err ("err found");
 
-    if (current_CS->im_state != HIME_STATE_DISABLED) {
-        if (current_CS->im_state == HIME_STATE_ENG_FULL) {
-            current_CS->im_state = HIME_STATE_CHINESE;
+    if (current_CS->b_im_enabled) {
+        if (current_CS->b_half_full_char) {
             disp_im_half_full ();
-            save_CS_current_to_temp ();
-            return;
         }
 
         if (current_method_type () == method_type_TSIN) {
@@ -716,15 +711,12 @@ void toggle_im_enabled () {
 #if 0
       hide_win_status();
 #endif
-        if (current_CS->b_half_full_char)
-            current_CS->im_state = HIME_STATE_ENG_FULL;
-        else
-            current_CS->im_state = HIME_STATE_DISABLED;
+        current_CS->b_im_enabled = FALSE;
 
 #if TRAY_ENABLED
         disp_tray_icon ();
 #endif
-    } else {  // current_CS->im_state = HIME_STATE_DISABLED
+    } else {
         if (!current_method_type ())
             init_gtab (current_CS->in_method);
 
@@ -822,6 +814,45 @@ void toggle_half_full_char () {
     save_CS_current_to_temp ();
 }
 
+/**
+ * Toggle the input method between Chinese/other language mode and English mode
+ */
+void toggle_eng_ch_mode (void) {
+    tsin_set_eng_ch (!current_CS->b_chinese_mode);
+    show_stat ();
+}
+
+void set_chinese_mode0 (ClientState *cs) {
+    if (!cs)
+        return;
+    cs->b_chinese_mode = True;
+    save_CS_current_to_temp ();
+}
+
+/**
+ * Set the input method mode to Chinese/other language mode
+ */
+void set_chinese_mode (void) {
+    set_chinese_mode0 (current_CS);
+    show_stat ();
+}
+
+/**
+ * Check the input method is in Chinese/other language mode or not
+ * \retval TRUE Chinese/Other language mode
+ * \retval FALSE English mode
+ * \todo When the current client state pointer is null, the return value would be FALSE.
+ */
+gboolean chinese_mode (void) {
+    return current_CS && current_CS->b_chinese_mode;
+}
+
+void show_stat (void) {
+#if TRAY_ENABLED
+    disp_tray_icon ();
+#endif
+}
+
 void init_tab_pp (gboolean init);
 void init_tab_pho ();
 
@@ -863,7 +894,7 @@ gboolean init_in_method (int in_no) {
     reset_current_in_win_xy ();
 
     //  dbg("switch init_in_method %x %d\n", current_CS, in_no);
-    set_tsin_pho_mode0 (current_CS);
+    set_chinese_mode0 (current_CS);
     tsin_set_win1_cb ();
 
     switch (inmd[in_no].method_type) {
@@ -904,7 +935,7 @@ gboolean init_in_method (int in_no) {
         break;
     }
     case method_type_EN: {
-        if (current_CS && current_CS->im_state == HIME_STATE_CHINESE)
+        if (current_CS && current_CS->b_im_enabled)
             toggle_im_enabled ();
         current_CS->in_method = in_no;
         hide_win_kbm ();
@@ -956,7 +987,7 @@ gboolean init_in_method (int in_no) {
     update_win_kbm_inited ();
 
     if (hime_show_win_kbm) {
-        if ((current_CS->im_state == HIME_STATE_ENG_FULL) ||
+        if ((!current_CS->b_im_enabled && current_CS->b_half_full_char) ||
             (current_method_type () == method_type_MODULE) ||
             (current_method_type () == method_type_SYMBOL_TABLE))
             hide_win_kbm ();
@@ -970,8 +1001,6 @@ gboolean init_in_method (int in_no) {
 }
 
 static void cycle_next_in_method () {
-    //  int im_state = current_CS->im_state;
-
     if (current_method_type () == method_type_SYMBOL_TABLE) {
         hide_win_sym ();
         win_sym_enabled = 0;
@@ -1015,8 +1044,7 @@ gboolean full_char_proc (KeySym keysym) {
         return 1;
     }
 
-    if ((current_method_type () == method_type_TSIN) &&
-        (current_CS->im_state == HIME_STATE_CHINESE))
+    if ((current_method_type () == method_type_TSIN) && current_CS->b_im_enabled)
         add_to_tsin_buf_str (tt);
     else if (gtab_phrase_on () && ggg.gbufN)
         insert_gbuf_nokey (tt);
@@ -1063,7 +1091,7 @@ void disp_win_kbm_capslock_init () {
 }
 
 void toggle_symbol_table () {
-    if (current_CS->im_state == HIME_STATE_CHINESE) {
+    if (current_CS->b_im_enabled) {
         if (!win_is_visible ())
             win_sym_enabled = 1;
         else
@@ -1074,7 +1102,7 @@ void toggle_symbol_table () {
     create_win_sym ();
     if (win_sym_enabled) {
         force_show = TRUE;
-        if (current_CS->im_state == HIME_STATE_CHINESE)
+        if (current_CS->b_im_enabled)
             show_in_win (current_CS);
         force_show = FALSE;
     }
@@ -1151,7 +1179,7 @@ gboolean ProcessKeyPress (KeySym keysym, uint32_t kev_state) {
     }
 
     if ((kev_state & (Mod1Mask | ShiftMask)) == (Mod1Mask | ShiftMask)) {
-        if (current_CS->im_state != HIME_STATE_DISABLED || hime_eng_phrase_enabled)
+        if (current_CS->b_im_enabled || hime_eng_phrase_enabled)
             return check_key_press (keysym, kev_state, feed_phrase (keysym, kev_state));
         else
             return check_key_press (keysym, kev_state, FALSE);
@@ -1179,7 +1207,7 @@ gboolean ProcessKeyPress (KeySym keysym, uint32_t kev_state) {
         if (!inmd[kidx].cname)
             return check_key_press (keysym, kev_state, FALSE);
 
-        current_CS->im_state = HIME_STATE_CHINESE;
+        current_CS->b_im_enabled = TRUE;
         init_in_method (kidx);
 
         return check_key_press (keysym, kev_state, TRUE);
@@ -1187,11 +1215,11 @@ gboolean ProcessKeyPress (KeySym keysym, uint32_t kev_state) {
 
     last_keysym = keysym;
 
-    if (current_CS->b_half_full_char && current_CS->im_state != HIME_STATE_CHINESE && !(kev_state & (ControlMask | Mod1Mask))) {
+    if (current_CS->b_half_full_char && !current_CS->b_im_enabled && !(kev_state & (ControlMask | Mod1Mask))) {
         return check_key_press (keysym, kev_state, full_char_proc (keysym));
     }
 
-    if (current_CS->im_state == HIME_STATE_DISABLED || current_CS->im_state == HIME_STATE_ENG_FULL) {
+    if (!current_CS->b_im_enabled) {
         return check_key_press (keysym, kev_state, FALSE);
     }
 
@@ -1250,7 +1278,7 @@ gboolean ProcessKeyRelease (KeySym keysym, uint32_t kev_state) {
   dbg_time("key release %x %x\n", keysym, kev_state);
 #endif
 
-    if (current_CS->im_state == HIME_STATE_DISABLED || current_CS->im_state == HIME_STATE_ENG_FULL)
+    if (!current_CS->b_im_enabled)
         return FALSE;
 
 #if 1
@@ -1345,7 +1373,7 @@ int hime_FocusIn (ClientState *cs) {
     save_CS_temp_to_current ();
 
     if (win == focus_win) {
-        if (cs->im_state != HIME_STATE_DISABLED) {
+        if (cs->b_im_enabled) {
             show_in_win (cs);
             move_IC_in_win (cs);
         } else {

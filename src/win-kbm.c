@@ -495,27 +495,25 @@ void update_win_kbm (void) {
 
     clear_kbm ();
 
-    if (current_CS->im_state != HIME_STATE_CHINESE) {
-        if (current_CS->im_state == HIME_STATE_DISABLED) {
-            for (int i = 0; i < keysN; i++) {
-                for (int j = 0; j < COLN; j++) {
-                    char kstr[2];
-                    kstr[0] = keys[i][j].shift_key;
-                    kstr[1] = 0;
+    if (!current_CS->b_im_enabled && !current_CS->b_half_full_char) {
+        for (int i = 0; i < keysN; i++) {
+            for (int j = 0; j < COLN; j++) {
+                char kstr[2];
+                kstr[0] = keys[i][j].shift_key;
+                kstr[1] = 0;
 
-                    if (keys[i][j].laben) {
-                        if (kstr[0]) {
-                            gtk_label_set_text (GTK_LABEL (keys[i][j].laben), kstr);
-                        }
-                        set_label_font_size (keys[i][j].laben, hime_font_size_win_kbm_en);
+                if (keys[i][j].laben) {
+                    if (kstr[0]) {
+                        gtk_label_set_text (GTK_LABEL (keys[i][j].laben), kstr);
                     }
+                    set_label_font_size (keys[i][j].laben, hime_font_size_win_kbm_en);
+                }
 
-                    if (keys[i][j].lab) {
-                        if (kstr[0]) {
-                            gtk_label_set_text (GTK_LABEL (keys[i][j].lab), _ (keys[i][j].enkey));
-                        }
-                        set_label_font_size (keys[i][j].lab, hime_font_size_win_kbm_en);
+                if (keys[i][j].lab) {
+                    if (kstr[0]) {
+                        gtk_label_set_text (GTK_LABEL (keys[i][j].lab), _ (keys[i][j].enkey));
                     }
+                    set_label_font_size (keys[i][j].lab, hime_font_size_win_kbm_en);
                 }
             }
         }

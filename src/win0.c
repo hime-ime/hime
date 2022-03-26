@@ -395,8 +395,6 @@ static void mouse_button_callback (GtkWidget *widget, GdkEventButton *event, gpo
     }
 }
 
-void tsin_toggle_eng_ch ();
-
 void create_win0 () {
     if (gwin0)
         return;
