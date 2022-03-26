@@ -42,8 +42,8 @@ typedef struct {
     void (*mf_set_win1_cb) (cb_selec_by_idx_t selc_by_idx, cb_page_ud_t cb_page_up, cb_page_ud_t cb_page_down);
 
     void (*mf_tsin_set_eng_ch) (int nmod);
-    void (*mf_set_tsin_pho_mode) ();
-    gboolean (*mf_tsin_pho_mode) ();
+    void (*mf_set_chinese_mode) (void);
+    gboolean (*mf_chinese_mode) (void);
 
     int (*mf_get_widget_xy) (GtkWidget *win, GtkWidget *widget, int *rx, int *ry);
     void (*mf_get_win_size) (GtkWidget *win, int *width, int *height);

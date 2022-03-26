@@ -924,11 +924,11 @@ gboolean feedkey_gtab (KeySym key, int kbstate) {
     if ((tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock) &&
         (key == XK_Caps_Lock)) {
         // The CapLock status may be incorrect when XK_Caps_Lock is pressed.
-        gboolean new_tsin_pho_mode = !get_caps_lock_state ();
-        if (current_CS->tsin_pho_mode != new_tsin_pho_mode) {
-            current_CS->tsin_pho_mode = new_tsin_pho_mode;
+        gboolean new_chinese_mode = !get_caps_lock_state ();
+        if (chinese_mode () != new_chinese_mode) {
+            current_CS->b_chinese_mode = new_chinese_mode;
             save_CS_current_to_temp ();
-            tsin_set_eng_ch (new_tsin_pho_mode);
+            tsin_set_eng_ch (new_chinese_mode);
         }
     }
 
@@ -963,7 +963,7 @@ gboolean feedkey_gtab (KeySym key, int kbstate) {
         gtk_widget_get_visible (gwin_pho))
         hide_win_pho ();
 
-    if (!tsin_pho_mode ()) {
+    if (!chinese_mode ()) {
         gboolean is_ascii = (key >= ' ' && key < 0x7f) && !ctrl_m;
         if (current_CS->b_half_full_char && is_ascii) {
             send_text (half_char_to_full_char (key));
@@ -1750,8 +1750,6 @@ Disp_opt:
     return 1;
 }
 
-void tsin_toggle_eng_ch ();
-
 int feedkey_gtab_release (KeySym xkey, int kbstate) {
     switch (xkey) {
     case XK_Control_L:
@@ -1774,7 +1772,7 @@ int feedkey_gtab_release (KeySym xkey, int kbstate) {
             key_press_alt) {
             if (!test_mode) {
                 ClrIn ();
-                tsin_toggle_eng_ch ();
+                toggle_eng_ch_mode ();
             }
             key_press_alt = FALSE;
             return 1;

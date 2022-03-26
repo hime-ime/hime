@@ -908,7 +908,7 @@ gboolean module_feedkey (int kv, int kvstate) {
         key_press_alt = TRUE;
     }
 
-    if (!gmf.mf_tsin_pho_mode ())
+    if (!gmf.mf_chinese_mode ())
         return 0;
 
     gboolean b_is_empty = is_empty ();
@@ -1183,7 +1183,7 @@ int module_init_win (HIME_module_main_functions *funcs) {
 
     //  dbg("module_init_win\n");
 
-    gmf.mf_set_tsin_pho_mode ();
+    gmf.mf_set_chinese_mode ();
     gmf.mf_set_win1_cb ((cb_selec_by_idx_t) select_idx, prev_page, next_page);
 
     if (win_anthy)
@@ -1340,7 +1340,7 @@ int module_feedkey_release (KeySym xkey, int kbstate) {
             module_flush_input ();
             key_press_alt = FALSE;
             gmf.mf_hide_selections_win ();
-            gmf.mf_tsin_set_eng_ch (!gmf.mf_tsin_pho_mode ());
+            gmf.mf_tsin_set_eng_ch (!gmf.mf_chinese_mode ());
             return 1;
         } else
             return 0;

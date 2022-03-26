@@ -130,17 +130,17 @@ void load_IC (IC *rec) {
     }
 
     if (win == focus_win) {
-        if (cs->im_state == HIME_STATE_DISABLED)
+        if (!cs->b_im_enabled)
             hide_in_win (cs);
-        else if (cs->im_state != HIME_STATE_DISABLED)
+        else if (cs->b_im_enabled)
             show_in_win (cs);
     }
 
     if (cs->input_style & InputStyleOnSpot) {
-        if (cs->im_state != HIME_STATE_DISABLED)
+        if (cs->b_im_enabled)
             move_IC_in_win (cs);
     } else if (cs->input_style & InputStyleOverSpot) {
-        if (cs->im_state != HIME_STATE_DISABLED)
+        if (cs->b_im_enabled)
             move_IC_in_win (cs);
     } else if (cs->input_style & InputStyleRoot) {
         move_IC_in_win (cs);

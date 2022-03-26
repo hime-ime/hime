@@ -51,16 +51,16 @@ typedef struct {
 } StatusAttributes;
 
 typedef struct {
-    Window client_win; /* client window */
-    INT32 input_style; /* input style */
-    HIME_STATE_E im_state;
+    Window client_win;          /* client window */
+    INT32 input_style;          /* input style */
+    gboolean b_im_enabled;      ///< TRUE: Input method enabled   FALSE: Input method disabled
     gboolean b_half_full_char;  ///< TRUE: full    FALSE: half
     gboolean fixed_pos;
     gboolean b_hime_protocol;  // TRUE : hime    FALSE: XIM
     gboolean b_raise_window;
     gboolean in_method_switched;  ///< TRUE: switch input method at least once    FALSE: never switch input method
     gboolean use_preedit;
-    gboolean tsin_pho_mode;
+    gboolean b_chinese_mode;  ///< TRUE: Chinese/Other language mode    FALSE: English mode
     short fixed_x, fixed_y;
     short in_method;
     XPoint spot_location; /* spot location, relative to client window */

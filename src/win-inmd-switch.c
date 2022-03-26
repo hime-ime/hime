@@ -28,8 +28,8 @@ void cb_update_menu_select (GtkWidget *item, gpointer data) {
 
     int idx = GPOINTER_TO_INT (data);
 
-    if (current_CS->im_state != HIME_STATE_CHINESE)
-        current_CS->im_state = HIME_STATE_CHINESE;
+    if (!current_CS->b_im_enabled)
+        current_CS->b_im_enabled = TRUE;
 
     init_in_method (idx);
 }

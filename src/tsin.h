@@ -49,7 +49,6 @@ void extract_pho (int chpho_idx, int plen, phokey_t *pho);
 gboolean tsin_seek (void *pho, int plen, int *r_sti, int *r_edi, char *tone_off);
 void load_tsin_entry (int idx, char *len, usecount_t *usecount, void *pho, u_char *ch);
 gboolean check_fixed_mismatch (int chpho_idx, char *mtch, int plen);
-gboolean tsin_pho_mode ();
 char *get_chpho_pinyin_set (char *set_arr);
 
 #define TSIN_GTAB_KEY "!!!!gtab-keys"

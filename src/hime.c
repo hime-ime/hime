@@ -296,21 +296,21 @@ static void reload_data () {
     dbg ("reload_data\n");
     //  Save input method state before reload
     char temp_inmd_filenames[hime_clientsN][128];
-    HIME_STATE_E temp_CS_im_states[hime_clientsN];
+    gboolean temp_CS_im_enabled[hime_clientsN];
     char temp_current_CS_inmd_filename[128] = "";
-    HIME_STATE_E temp_current_CS_im_state = 0;
+    gboolean temp_current_CS_im_enabled = FALSE;
     if (current_CS) {
-        temp_current_CS_im_state = current_CS->im_state;
+        temp_current_CS_im_enabled = current_CS->b_im_enabled;
         strcpy (temp_current_CS_inmd_filename, inmd[current_CS->in_method].filename);
     }
     int c;
     for (c = 0; c < hime_clientsN; c++) {
         strcpy (temp_inmd_filenames[c], "");
-        temp_CS_im_states[c] = HIME_STATE_DISABLED;
+        temp_CS_im_enabled[c] = FALSE;
         if (!hime_clients[c].cs)
             continue;
         ClientState *cs = hime_clients[c].cs;
-        temp_CS_im_states[c] = cs->im_state;
+        temp_CS_im_enabled[c] = cs->b_im_enabled;
         strcpy (temp_inmd_filenames[c], inmd[cs->in_method].filename);
     }
     free_omni_config ();
@@ -340,18 +340,18 @@ static void reload_data () {
     for (c = 0; c < hime_clientsN; c++) {
         if (!hime_clients[c].cs)
             continue;
-        hime_clients[c].cs->im_state = HIME_STATE_CHINESE;
+        hime_clients[c].cs->b_im_enabled = TRUE;
         hime_clients[c].cs->in_method = get_in_method_by_filename (temp_inmd_filenames[c]);
         init_in_method (hime_clients[c].cs->in_method);
-        if (temp_CS_im_states[c] == HIME_STATE_DISABLED)
+        if (!temp_CS_im_enabled[c])
             toggle_im_enabled ();
-        hime_clients[c].cs->im_state = temp_CS_im_states[c];
+        hime_clients[c].cs->b_im_enabled = temp_CS_im_enabled[c];
     }
-    current_CS->im_state = HIME_STATE_CHINESE;
+    current_CS->b_im_enabled = TRUE;
     init_in_method (get_in_method_by_filename (temp_current_CS_inmd_filename));
-    if (temp_current_CS_im_state == HIME_STATE_DISABLED)
+    if (!temp_current_CS_im_enabled)
         toggle_im_enabled ();
-    current_CS->im_state = temp_current_CS_im_state;
+    current_CS->b_im_enabled = temp_current_CS_im_enabled;
 }
 
 void change_tsin_font_size ();

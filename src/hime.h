@@ -50,12 +50,6 @@
 #include "Xi18n.h"
 #include "os-dep.h"
 
-typedef enum {
-    HIME_STATE_DISABLED = 0,
-    HIME_STATE_ENG_FULL = 1,
-    HIME_STATE_CHINESE = 2
-} HIME_STATE_E;
-
 /* change 3 to 4 if you want to use 4-byte UTF-8 characters, but you must
    regenerate *.gtab tsin
 */
@@ -216,6 +210,11 @@ void hime_reset (void);
 void init_state_chinese (ClientState *cs);
 void save_CS_temp_to_current (void);
 void update_in_win_pos (void);
+void toggle_eng_ch_mode (void);
+void set_chinese_mode0 (ClientState *cs);
+void set_chinese_mode (void);
+gboolean chinese_mode (void);
+void show_stat (void);
 
 // util.c
 void dbg_time (char *fmt, ...);

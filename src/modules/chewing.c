@@ -439,7 +439,7 @@ int module_init_win (HIME_module_main_functions *pFuncs) {
 
     g_himeModMainFuncs = *pFuncs;
 
-    g_himeModMainFuncs.mf_set_tsin_pho_mode ();
+    g_himeModMainFuncs.mf_set_chinese_mode ();
     g_himeModMainFuncs.mf_set_win1_cb ((cb_selec_by_idx_t) select_idx,
                                        prev_page,
                                        next_page);
@@ -581,7 +581,7 @@ module_feedkey (int nKeyVal, int nKeyState) {
     if (!g_pChewingCtx)
         return FALSE;
 
-    if (!g_himeModMainFuncs.mf_tsin_pho_mode ())
+    if (!g_himeModMainFuncs.mf_chinese_mode ())
         return FALSE;
 
     hime_label_clear (MAX_SEG_NUM);
