@@ -890,17 +890,6 @@ void tsin_toggle_eng_ch () {
     tsin_set_eng_ch (!tsin_pho_mode ());
 }
 
-#if USE_TSIN
-void tsin_toggle_half_full () {
-    current_CS->b_half_full_char ^= TRUE;
-    key_press_alt = FALSE;
-    drawcursor ();
-#if TRAY_ENABLED
-    disp_tray_icon ();
-#endif
-}
-#endif
-
 #if 0
 static char ochars[]="<,>.?/:;\"'{[}]_-+=|\\~`";
 #else
@@ -1345,14 +1334,11 @@ int tsin_pho_sel (int c) {
         tss.c_idx += len;
         prbuf ();
         tss.current_page = tss.sel_pho = poo.ityp3_pho = 0;
-        if (len == 1) {
-            hide_selections_win ();
-            tss.ph_sta = -1;
-            return 0;
-        } else
-            tss.ph_sta = -1;
-
+        tss.ph_sta = -1;
         hide_selections_win ();
+        if (len == 1) {
+            return 0;
+        }
     }
 
     return 1;

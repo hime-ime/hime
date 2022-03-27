@@ -182,5 +182,4 @@ void free_tsin () {}
 void load_tsin_db () {}
 void tsin_reset_in_pho () {}
 void tsin_reset_in_pho0 () {}
-void tsin_toggle_half_full () {}
 #endif
