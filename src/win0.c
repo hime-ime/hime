@@ -659,8 +659,6 @@ void win_tsin_disp_half_full () {
     compact_win0 ();
 }
 
-void drawcursor ();
-
 #if USE_TSIN
 void change_tsin_color () {
     create_cursor_attr ();
