@@ -1,3 +1,5 @@
+#!/bin/sh
+
 #
 # Copyright (C) 2011 Lu, Chao-Ming (Tetralet).  All rights reserved.
 # 
@@ -16,11 +18,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-#!/bin/sh
-
 export LC_ALL=zh_TW.UTF8
 
-CONVERT=`whereis -b convert | tr -d '\n' | sed 's/^convert: *//g'`
+CONVERT=$(whereis -b convert | tr -d '\n' | sed 's/^convert: *//g')
 if [ -z "$CONVERT" ]; then
 	echo "Command 'convert' is not find. Please install imagemagick package and try again!"
 	exit 0
@@ -31,7 +31,7 @@ print_help()
 	case $1 in
 		-h|--help)
 			echo "Usage: $0 SourceImage.png HalfCharImage.png FullCharImage.png Font_Patch Font_Color Mini_Color"
-			echo "Example: $0 HIME.png HIME_Half.png HIME_Full.png ~/.fonts/DroidSansFallback.ttf \"#1650b8\" \"c81bca\""
+			echo "Example: $0 HIME.png HIME_Half.png HIME_Full.png ~/.fonts/DroidSansFallback.ttf \"#1650b8\" \"#c81bca\""
 			exit 0
 			;;
 	esac
@@ -51,7 +51,7 @@ if [ "$2" == '' ]; then
 	print_help -h
 fi
 if [ ! -f "$2" ]; then
-	echo "ERROR: HalfChar Image file $1 Not find!"
+	echo "ERROR: HalfChar Image file $2 Not find!"
 	echo ""
 	print_help -h
 fi
@@ -61,7 +61,7 @@ if [ "$3" == '' ]; then
 	print_help -h
 fi
 if [ ! -f "$3" ]; then
-	echo "ERROR: FullChar Image file $1 Not find!"
+	echo "ERROR: FullChar Image file $3 Not find!"
 	echo ""
 	print_help -h
 fi
@@ -100,7 +100,7 @@ convert_word()
 		fi
 		shift
 
-		SIZE=`echo "$WORD" | wc -m`
+		SIZE=$(echo "$WORD" | wc -m)
 		if [ "$WORD" == "En" ]; then
 			SIZE=2
 		fi
@@ -118,24 +118,24 @@ convert_word()
 				TEMP_FILE=""
 			;;
 			3|4)
-				if [ "$FILE" == "half-simp" -o "$FILE" == "half-trad" ]; then
+				if [ "$FILE" == "half-simp" ] || [ "$FILE" == "half-trad" ]; then
 					WORK_IMAGE="$HALF_IMAGE"
 				fi
-				if [ "$FILE" == "full-simp" -o "$FILE" == "full-trad" ]; then
+				if [ "$FILE" == "full-simp" ] || [ "$FILE" == "full-trad" ]; then
 					WORK_IMAGE="$FULL_IMAGE"
 				fi
 				ORIGINAL_WORD="$WORD"
-				WORD=`echo $ORIGINAL_WORD | sed -e 's/\(.\)\(.\)/\1/g'`
+				WORD=$(echo "$ORIGINAL_WORD" | sed -e 's/\(.\)\(.\)/\1/g')
 				FONT_SIZE=14
 				DRAW_STR="text -4-4 '$WORD'"
 				TEMP_FILE="hime_temp"
-				convert -pointsize $FONT_SIZE \
-					-font $FONT_FILE \
-					-fill $COLOR \
+				convert -pointsize "$FONT_SIZE" \
+					-font "$FONT_FILE" \
+					-fill "$COLOR" \
 					-gravity center \
 					-draw "$DRAW_STR" \
-					$WORK_IMAGE "$TEMP_FILE.png"
-				WORD=`echo $ORIGINAL_WORD | sed -e 's/\(.\)\(.\)/\2/g'`
+					"$WORK_IMAGE" "$TEMP_FILE.png"
+				WORD=$(echo "$ORIGINAL_WORD" | sed -e 's/\(.\)\(.\)/\2/g')
 				FONT_SIZE=11
 				DRAW_STR="text +5+5 '$WORD'"
 			;;
@@ -144,17 +144,17 @@ convert_word()
 				exit 1
 			;;
 		esac
-		if [ "$TEMP_FILE" == '' -o ! -f "$TEMP_FILE.png" ]; then
-				convert -pointsize $FONT_SIZE \
-				-font $FONT_FILE \
-				-fill $COLOR \
+		if [ "$TEMP_FILE" == '' ] || [ ! -f "$TEMP_FILE.png" ]; then
+				convert -pointsize "$FONT_SIZE" \
+				-font "$FONT_FILE" \
+				-fill "$COLOR" \
 				-gravity center \
 				-draw "$DRAW_STR" \
-				$WORK_IMAGE "$FILE.png"
+				"$WORK_IMAGE" "$FILE.png"
 		else
-			convert -pointsize $FONT_SIZE \
-				-font $FONT_FILE \
-				-fill $MINI_COLOR \
+			convert -pointsize "$FONT_SIZE" \
+				-font "$FONT_FILE" \
+				-fill "$MINI_COLOR" \
 				-gravity center \
 				-draw "$DRAW_STR" \
 				"$TEMP_FILE.png" "$FILE.png"
