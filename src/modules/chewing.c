@@ -577,9 +577,14 @@ int module_get_preedit (char *pszStr, HIME_PREEDIT_ATTR himePreeditAttr[], int *
 }
 
 gboolean
-module_feedkey (int nKeyVal, int nKeyState) {
+module_feedkey (int xkey, int nKeyState) {
     if (!g_pChewingCtx)
         return FALSE;
+
+    if ((xkey == XK_Shift_L || xkey == XK_Shift_R) && !*g_himeModMainFuncs.mf_key_press_alt) {
+        *g_himeModMainFuncs.mf_key_press_alt = TRUE;
+        return FALSE;
+    }
 
     if (!g_himeModMainFuncs.mf_chinese_mode ())
         return FALSE;
@@ -591,7 +596,7 @@ module_feedkey (int nKeyVal, int nKeyState) {
     if (nKeyState & (Mod1Mask | Mod4Mask | Mod5Mask | ControlMask))
         return FALSE;
 
-    if (!hime_key_filter (&nKeyVal))
+    if (!hime_key_filter (&xkey))
         return FALSE;
 
     if (!hime_buffer_commit ())
@@ -610,6 +615,12 @@ module_feedkey (int nKeyVal, int nKeyState) {
 
 // FIXME: impl
 int module_feedkey_release (KeySym xkey, int nKbState) {
+    if ((xkey == XK_Shift_L || xkey == XK_Shift_R) && *g_himeModMainFuncs.mf_key_press_alt) {
+        g_himeModMainFuncs.mf_toggle_eng_ch_mode ();
+        *g_himeModMainFuncs.mf_key_press_alt = FALSE;
+        return 1;
+    }
+
     return 0;
 }
 

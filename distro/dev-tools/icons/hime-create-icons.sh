@@ -205,6 +205,7 @@ convert_word 'hime-tray' 'En' \
 	     'cj5' '倉五' \
 	     'cj-punc' '倉；' \
 	     'en-kana-nippon' 'あＥ' \
+	     'en-chewing' '酷Ｅ' \
 	     'en-tsin' '詞Ｅ' \
 	     'half-simp' '　简' \
 	     'half-trad' '　 ' \

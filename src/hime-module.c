@@ -55,6 +55,7 @@ void init_HIME_module_main_functions (HIME_module_main_functions *func) {
     func->mf_set_win1_cb = set_win1_cb;
 
     func->mf_tsin_set_eng_ch = tsin_set_eng_ch;
+    func->mf_toggle_eng_ch_mode = toggle_eng_ch_mode;
     func->mf_chinese_mode = chinese_mode;
     func->mf_set_chinese_mode = set_chinese_mode;
 
@@ -94,4 +95,5 @@ void init_HIME_module_main_functions (HIME_module_main_functions *func) {
     func->mf_dpy_xl = &dpy_xl;
     func->mf_dpy_yl = &dpy_yl;
     func->mf_pho_chars = pho_chars;
+    func->mf_key_press_alt = &key_press_alt;
 }

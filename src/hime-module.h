@@ -42,6 +42,7 @@ typedef struct {
     void (*mf_set_win1_cb) (cb_selec_by_idx_t selc_by_idx, cb_page_ud_t cb_page_up, cb_page_ud_t cb_page_down);
 
     void (*mf_tsin_set_eng_ch) (int nmod);
+    void (*mf_toggle_eng_ch_mode) (void);
     void (*mf_set_chinese_mode) (void);
     gboolean (*mf_chinese_mode) (void);
 
@@ -75,6 +76,7 @@ typedef struct {
     char **mf_hime_win_color_fg, **mf_pho_selkey, **mf_tsin_cursor_color;
     gboolean *mf_force_show;
     int *mf_win_x, *mf_win_y, *mf_win_xl, *mf_win_yl, *mf_dpy_xl, *mf_dpy_yl;
+    gboolean *mf_key_press_alt;
 } HIME_module_main_functions;
 #ifdef __cplusplus
 }
