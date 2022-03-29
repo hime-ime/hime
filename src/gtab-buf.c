@@ -41,7 +41,7 @@ char *htmlspecialchars (char *s, char out[]);
 void hide_gtab_pre_sel ();
 gboolean gtab_vertical_select_on ();
 
-extern gboolean key_press_alt, key_press_ctrl;
+extern gboolean key_press_ctrl;
 
 extern gboolean test_mode;
 

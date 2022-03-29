@@ -54,7 +54,6 @@ void toggle_symbol_table ();
 
 gboolean old_capslock_on;
 
-extern gboolean key_press_alt;
 extern gboolean key_press_ctrl;
 
 #if TRAY_ENABLED

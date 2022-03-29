@@ -32,7 +32,7 @@
 
 extern int ph_key_sz;
 extern GtkWidget *gwin1;
-gboolean key_press_alt, key_press_ctrl;
+gboolean key_press_ctrl;
 extern gboolean b_hsu_kbm;
 extern gboolean test_mode;
 

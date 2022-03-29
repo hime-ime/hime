@@ -38,7 +38,6 @@
 #endif
 
 static anthy_context_t ac;
-static gboolean key_press_alt;
 static GtkWidget *event_box_anthy;
 
 static HIME_module_main_functions gmf;

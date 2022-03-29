@@ -33,6 +33,8 @@ int win_x, win_y;  // actual win x/y
 // dpy_xl and dpy_yl are global variable shared across files
 int dpy_xl, dpy_yl;
 
+gboolean key_press_alt;
+
 Window xim_xwin;
 
 extern unich_t *fullchar[];

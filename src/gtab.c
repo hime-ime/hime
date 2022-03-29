@@ -36,7 +36,7 @@ gboolean gtab_phrase_on ();
 gboolean gtab_disp_partial_match_on (), gtab_vertical_select_on (), gtab_pre_select_on (), gtab_unique_auto_send_on (), gtab_press_full_auto_send_on ();
 void init_seltab (char ***p);
 
-extern gboolean key_press_alt, key_press_ctrl;
+extern gboolean key_press_ctrl;
 
 extern GtkWidget *gwin_gtab;
 void hide_gtab_pre_sel ();
