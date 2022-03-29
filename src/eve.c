@@ -1286,6 +1286,8 @@ gboolean ProcessKeyRelease (KeySym keysym, uint32_t kev_state) {
         if (((keysym == XK_Control_L || keysym == XK_Control_R) && (kev_state & ShiftMask)) ||
             ((keysym == XK_Shift_L || keysym == XK_Shift_R) && (kev_state & ControlMask))) {
             cycle_next_in_method ();
+            if (keysym == XK_Shift_L || keysym == XK_Shift_R)
+                key_press_alt = FALSE;
             return TRUE;
         }
     }
