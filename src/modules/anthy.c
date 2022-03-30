@@ -1339,7 +1339,7 @@ int module_feedkey_release (KeySym xkey, int kbstate) {
             module_flush_input ();
             key_press_alt = FALSE;
             gmf.mf_hide_selections_win ();
-            gmf.mf_tsin_set_eng_ch (!gmf.mf_chinese_mode ());
+            gmf.mf_set_eng_ch_mode (!gmf.mf_chinese_mode ());
             return 1;
         } else
             return 0;

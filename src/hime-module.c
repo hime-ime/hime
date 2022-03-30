@@ -30,7 +30,6 @@
 void init_tsin_selection_win (), disp_selections (int x, int y), hide_selections_win ();
 void disp_arrow_up (), disp_arrow_down ();
 void set_sele_text (int tN, int i, char *text, int len);
-void tsin_set_eng_ch (int nmod);
 int get_widget_xy (GtkWidget *win, GtkWidget *widget, int *rx, int *ry);
 void get_win_size (GtkWidget *win, int *width, int *height);
 void load_tab_pho_file ();
@@ -54,7 +53,7 @@ void init_HIME_module_main_functions (HIME_module_main_functions *func) {
     func->mf_set_sele_text = set_sele_text;
     func->mf_set_win1_cb = set_win1_cb;
 
-    func->mf_tsin_set_eng_ch = tsin_set_eng_ch;
+    func->mf_set_eng_ch_mode = set_eng_ch_mode;
     func->mf_toggle_eng_ch_mode = toggle_eng_ch_mode;
     func->mf_chinese_mode = chinese_mode;
     func->mf_set_chinese_mode = set_chinese_mode;

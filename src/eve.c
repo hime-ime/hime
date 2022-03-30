@@ -817,7 +817,26 @@ void toggle_half_full_char () {
  * Toggle the input method between Chinese/other language mode and English mode
  */
 void toggle_eng_ch_mode (void) {
-    tsin_set_eng_ch (!current_CS->b_chinese_mode);
+    set_eng_ch_mode (!current_CS->b_chinese_mode);
+    show_stat ();
+}
+
+void set_eng_ch_mode (gboolean mode) {
+    if (current_CS) {
+        current_CS->b_chinese_mode = mode;
+        save_CS_current_to_temp ();
+    }
+
+    if (current_method_type () == method_type_TSIN) {
+        drawcursor ();
+
+        if (!chinese_mode ())
+            clrin_pho_tsin ();
+
+        show_button_pho (chinese_mode ());
+    } else
+        show_win_gtab ();
+
     show_stat ();
 }
 
@@ -1057,7 +1076,6 @@ int feedkey_pho (KeySym xkey, int kbstate);
 int feedkey_pp (KeySym xkey, int state);
 int feedkey_gtab (KeySym key, int kbstate);
 int feed_phrase (KeySym ksym, int state);
-void tsin_set_eng_ch (int nmod);
 static KeySym last_keysym;
 
 gboolean timeout_raise_window (gpointer data) {
@@ -1160,7 +1178,7 @@ gboolean ProcessKeyPress (KeySym keysym, uint32_t kev_state) {
             ((kev_state & ShiftMask) && hime_im_toggle_keys == Shift_Space) ||
             ((kev_state & Mod4Mask) && hime_im_toggle_keys == Windows_Space)) {
             if (current_method_type () == method_type_TSIN) {
-                tsin_set_eng_ch (1);
+                set_eng_ch_mode (TRUE);
             }
 
             toggle_im_enabled ();

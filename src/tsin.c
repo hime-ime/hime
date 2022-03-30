@@ -57,7 +57,7 @@ gboolean tsin_cursor_end () {
 }
 
 gboolean tsin_has_input ();
-static void clrin_pho_tsin () {
+void clrin_pho_tsin () {
     clrin_pho ();
 
     if (!tsin_has_input () && hime_pop_up_win)
@@ -834,27 +834,6 @@ static void close_selection_win () {
 void show_button_pho (gboolean bshow);
 
 void show_win_gtab ();
-void tsin_set_eng_ch (int nmod) {
-    //  dbg("tsin_set_eng_ch %d\n", nmod);
-    if (current_CS) {
-        current_CS->b_chinese_mode = nmod;
-        save_CS_current_to_temp ();
-    }
-
-    if (current_method_type () == method_type_TSIN) {
-        show_stat ();
-        drawcursor ();
-
-        if (!chinese_mode ())
-            clrin_pho_tsin ();
-
-        show_button_pho (chinese_mode ());
-    } else
-        show_win_gtab ();
-
-    show_stat ();
-}
-
 #if 0
 static char ochars[]="<,>.?/:;\"'{[}]_-+=|\\~`";
 #else
@@ -1379,7 +1358,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
         gboolean new_chinese_mode = !get_caps_lock_state ();
         if (current_CS->b_chinese_mode != new_chinese_mode) {
             close_selection_win ();
-            tsin_set_eng_ch (new_chinese_mode);
+            set_eng_ch_mode (new_chinese_mode);
         }
     }
 

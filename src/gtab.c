@@ -899,7 +899,6 @@ gboolean win_sym_page_up (), win_sym_page_down ();
 u_int64_t vmaskci;
 gboolean gtab_pre_select_idx (int c);
 void save_CS_current_to_temp ();
-void tsin_set_eng_ch (int nmod);
 
 gboolean feedkey_gtab (KeySym key, int kbstate) {
     int i, j = 0;
@@ -928,7 +927,7 @@ gboolean feedkey_gtab (KeySym key, int kbstate) {
         if (chinese_mode () != new_chinese_mode) {
             current_CS->b_chinese_mode = new_chinese_mode;
             save_CS_current_to_temp ();
-            tsin_set_eng_ch (new_chinese_mode);
+            set_eng_ch_mode (new_chinese_mode);
         }
     }
 

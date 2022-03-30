@@ -212,6 +212,7 @@ void init_state_chinese (ClientState *cs);
 void save_CS_temp_to_current (void);
 void update_in_win_pos (void);
 void toggle_eng_ch_mode (void);
+void set_eng_ch_mode (gboolean);
 void set_chinese_mode0 (ClientState *cs);
 void set_chinese_mode (void);
 gboolean chinese_mode (void);

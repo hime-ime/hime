@@ -41,7 +41,7 @@ typedef struct {
     void (*mf_set_sele_text) (int selN, int sel_idx, char *text, int len);
     void (*mf_set_win1_cb) (cb_selec_by_idx_t selc_by_idx, cb_page_ud_t cb_page_up, cb_page_ud_t cb_page_down);
 
-    void (*mf_tsin_set_eng_ch) (int nmod);
+    void (*mf_set_eng_ch_mode) (gboolean mode);
     void (*mf_toggle_eng_ch_mode) (void);
     void (*mf_set_chinese_mode) (void);
     gboolean (*mf_chinese_mode) (void);
