@@ -616,6 +616,7 @@ module_feedkey (int xkey, int nKeyState) {
 // FIXME: impl
 int module_feedkey_release (KeySym xkey, int nKbState) {
     if ((xkey == XK_Shift_L || xkey == XK_Shift_R) && *g_himeModMainFuncs.mf_key_press_alt) {
+        module_flush_input ();
         g_himeModMainFuncs.mf_toggle_eng_ch_mode ();
         *g_himeModMainFuncs.mf_key_press_alt = FALSE;
         return 1;
