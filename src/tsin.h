@@ -30,7 +30,7 @@ typedef struct CHPHO {
     char cha[CH_SZ + 1];
     phokey_t pho;
     u_short flag;
-    char psta;  // phrase start index
+    char psta;  //< phrase start index
 } CHPHO;
 
 enum {

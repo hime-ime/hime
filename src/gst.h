@@ -25,21 +25,19 @@
 
 typedef struct {
     struct CHPHO *chpho;
-    int c_idx;   ///< the current cursor position
-    int c_len;   ///< the length of the preedit buffer
-    int ph_sta;  // phrase start
-    int sel_pho;
-    //  int save_frm, save_to;
-    int current_page;
+    int c_idx;         ///< the current cursor position
+    int c_len;         ///< the length of the preedit buffer
+    int ph_sta;        // phrase start
+    int sel_pho;       ///< indicating the selection window is being used or not
+    int current_page;  ///< the current index among all the selection candidates
     int startf;
     gboolean full_match;
-    gboolean tsin_buffer_editing;
+    gboolean tsin_buffer_editing;  ///< indicating a special mode of preedit buffer editing
     gboolean ctrl_pre_sel;
     struct PRE_SEL *pre_sel;
     int pre_selN;
     int last_cursor_idx;  ///< the last cursor position
-    int pho_menu_idx;
-    //  int pho_sel_menu_idx;
+    int pho_menu_idx;     ///< the current selected index of the candidates in a single selection window menu
 } TSIN_ST;
 extern TSIN_ST tss;
 
