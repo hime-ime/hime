@@ -550,11 +550,15 @@ static GtkWidget *create_im_toggle_keys () {
     return hbox;
 }
 
-static int get_currnet_eng_ch_sw_idx () {
-    int i;
-    for (i = 0; i < hime_eng_ch_swN; i++)
-        if (hime_eng_ch_sw[i].key == hime_chinese_english_toggle_key)
-            return i;
+/**
+ * Search the index of the current Chinese/English mode switching configuration among all the possible configuration
+ * \retval idx The index of the current Chinese/English mode switching configuration
+ * \retval -1 Can not find the index
+ */
+static int get_current_eng_ch_sw_idx () {
+    for (int idx = 0; idx < hime_eng_ch_swN; idx++)
+        if (hime_eng_ch_sw[idx].key == hime_chinese_english_toggle_key)
+            return idx;
 
     p_err ("hime-chinese-english-switch->%d is not valid", hime_chinese_english_toggle_key);
     return -1;
@@ -568,11 +572,9 @@ static GtkWidget *create_chinese_english_toggle_key () {
     opt_chinese_english_toggle_key = gtk_combo_box_text_new ();
     gtk_box_pack_start (GTK_BOX (hbox), opt_chinese_english_toggle_key, FALSE, FALSE, 0);
 
-    int current_idx = 0;
+    int current_idx = get_current_eng_ch_sw_idx ();
 
     for (int idx = 0; idx < hime_eng_ch_swN; idx++) {
-        if (hime_eng_ch_sw[idx].key == hime_chinese_english_toggle_key)
-            current_idx = idx;
         gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_chinese_english_toggle_key), _ (hime_eng_ch_sw[idx].name));
     }
 
