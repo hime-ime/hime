@@ -851,13 +851,6 @@ static void call_tsin_parse () {
     prbuf ();
 }
 
-void disp_ph_sta_idx (int idx) {
-}
-
-void disp_ph_sta () {
-    disp_ph_sta_idx (tss.ph_sta);
-}
-
 void ch_pho_cpy (CHPHO *pchpho, char *utf8, phokey_t *phos, int len) {
     int i;
 
@@ -922,7 +915,6 @@ gboolean add_to_tsin_buf (char *str, phokey_t *pho, int len) {
       tss.chpho[tss.c_idx].flag |= FLAG_CHPHO_PHRASE_HEAD;
 #endif
     drawcursor ();
-    disp_ph_sta ();
     hide_pre_sel ();
     tss.ph_sta = -1;
 
@@ -987,7 +979,6 @@ gboolean add_to_tsin_buf_phsta (char *str, phokey_t *pho, int len) {
     set_phrase_link (idx, len);
 #endif
     drawcursor ();
-    disp_ph_sta ();
     hide_pre_sel ();
     tss.ph_sta = -1;
     call_tsin_parse ();
@@ -1237,8 +1228,6 @@ static int cursor_backspace () {
     } else {
         tsin_scan_pre_select (TRUE);
     }
-
-    disp_ph_sta ();
 
     if (!tss.c_len && hime_pop_up_win)
         hide_win0 ();
@@ -1892,7 +1881,6 @@ llll2:
 
     call_tsin_parse ();
 
-    disp_ph_sta ();
     if (status & PHO_STATUS_PINYIN_LEFT) {
         poo.ityp3_pho = 0;
         disp_in_area_pho_tsin ();

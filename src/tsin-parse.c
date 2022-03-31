@@ -275,8 +275,6 @@ int tsin_parse_recur (int start, TSIN_PARSE *out, short *r_match_phr_N, short *r
     return bestusecount;
 }
 
-void disp_ph_sta_idx (int idx);
-
 void free_cache (), load_tsin_db ();
 void tsin_parse () {
     TSIN_PARSE out[MAX_PH_BF_EXT + 1];
@@ -335,10 +333,6 @@ void tsin_parse () {
     if (tss.chpho[tss.c_len - 1].psta >= 0 && tss.c_len - tss.chpho[tss.c_len - 1].psta > 1) {
         ph_sta_idx = tss.chpho[tss.c_len - 1].psta;
     }
-
-#if 1
-    disp_ph_sta_idx (ph_sta_idx);
-#endif
 
 #if 0
   for(i=0;i<tss.c_len;i++)
