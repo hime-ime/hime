@@ -68,7 +68,7 @@ typedef struct {
 
     PHOKBM *mf_phkbm;
     TSIN_ST *mf_tss;
-    int *mf_tsin_chinese_english_toggle_key;
+    int *mf_hime_chinese_english_toggle_key;
     char **mf_pho_chars;
 
     int *mf_hime_pop_up_win;

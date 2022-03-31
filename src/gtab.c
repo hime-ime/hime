@@ -920,7 +920,7 @@ gboolean feedkey_gtab (KeySym key, int kbstate) {
 
     gboolean is_dayi = !strncmp (cur_inmd->filename, "dayi", 4);
 
-    if ((tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock) &&
+    if ((hime_chinese_english_toggle_key == HIME_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock) &&
         (key == XK_Caps_Lock)) {
         // The CapLock status may be incorrect when XK_Caps_Lock is pressed.
         gboolean new_chinese_mode = !get_caps_lock_state ();
@@ -1765,9 +1765,9 @@ int feedkey_gtab_release (KeySym xkey, int kbstate) {
     case XK_Shift_L:
     case XK_Shift_R:
         // dbg("release xkey %x\n", xkey);
-        if (((tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Shift) ||
-             (tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftL && xkey == XK_Shift_L) ||
-             (tsin_chinese_english_toggle_key == TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR && xkey == XK_Shift_R)) &&
+        if (((hime_chinese_english_toggle_key == HIME_CHINESE_ENGLISH_TOGGLE_KEY_Shift) ||
+             (hime_chinese_english_toggle_key == HIME_CHINESE_ENGLISH_TOGGLE_KEY_ShiftL && xkey == XK_Shift_L) ||
+             (hime_chinese_english_toggle_key == HIME_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR && xkey == XK_Shift_R)) &&
             key_press_alt) {
             if (!test_mode) {
                 ClrIn ();

@@ -57,6 +57,7 @@
 #define HIME_PUNC_AUTO_SEND "hime-punc-auto-send"
 
 #define HIME_IM_TOGGLE_KEYS "hime-im-toggle-keys"
+#define HIME_CHINESE_ENGLISH_TOGGLE_KEY "hime-chinese-english-toggle-key"
 #define DEFAULT_INPUT_METHOD "default-input-method"
 // #define LEFT_RIGHT_BUTTON_TIPS "left-right-button-tips"
 #define HIME_STR_IM_CYCLE "hime-str-im-cycle"
@@ -94,7 +95,6 @@
 #define GTAB_IN_AREA_BUTTON "gtab-in-area-button"
 
 #define TSIN_PHRASE_PRE_SELECT "tsin-phrase-pre-select"
-#define TSIN_CHINESE_ENGLISH_TOGGLE_KEY "tsin-chinese-english-toggle_key"
 #define TSIN_SPACE_OPT "tsin-space-opt"
 #define TSIN_BUFFER_SIZE "tsin-buffer-size"
 #define TSIN_PHRASE_LINE_COLOR "tsin-phrase-line-color"
@@ -135,6 +135,7 @@ extern int gtab_dup_select_bell;
 extern int gtab_space_auto_first;
 extern int gtab_auto_select_by_phrase;
 extern int hime_im_toggle_keys;
+extern int hime_chinese_english_toggle_key;
 extern int gtab_pre_select, gtab_phrase_pre_select;
 extern int gtab_press_full_auto_send;
 extern int gtab_disp_partial_match;
@@ -146,7 +147,6 @@ extern int hime_status_tray, hime_show_win_kbm, hime_tray_hf_win_kbm;
 extern int hime_punc_auto_send;
 
 extern int tsin_phrase_pre_select;
-extern int tsin_chinese_english_toggle_key;
 extern int tsin_tab_phrase_end, tsin_tail_select_key;
 extern int tsin_buffer_editing_mode;
 extern int tsin_use_pho_near;

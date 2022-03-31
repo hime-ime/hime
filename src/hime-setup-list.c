@@ -34,6 +34,18 @@ struct {
     {NULL, 0},
 };
 
+static struct {
+    unich_t *name;
+    int key;
+} hime_eng_ch_sw[] = {
+    {N_ ("(Disable)"), HIME_CHINESE_ENGLISH_TOGGLE_KEY_None},
+    {N_ ("CapsLock"), HIME_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock},
+    {N_ ("Shift"), HIME_CHINESE_ENGLISH_TOGGLE_KEY_Shift},
+    {N_ ("Left Shift"), HIME_CHINESE_ENGLISH_TOGGLE_KEY_ShiftL},
+    {N_ ("Right Shift"), HIME_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR},
+};
+static int hime_eng_ch_swN = sizeof (hime_eng_ch_sw) / sizeof (hime_eng_ch_sw[0]);
+
 extern char *default_input_method_str;
 
 /* XXX UI states hold uncommited preference.
@@ -43,7 +55,7 @@ static GtkWidget *vbox;
 static GtkWidget *sw;
 static GtkWidget *treeview;
 static GtkWidget *check_button_phonetic_speak, *opt_speaker_opts, *check_button_hime_bell_off;
-static GtkWidget *opt_im_toggle_keys, *check_button_hime_remote_client,
+static GtkWidget *opt_im_toggle_keys, *opt_chinese_english_toggle_key, *check_button_hime_remote_client,
     *check_button_hime_shift_space_eng_full,
     *check_button_hime_init_im_enabled,
     *check_button_hime_init_full_mode,
@@ -246,6 +258,8 @@ void save_gtablist_conf () {
     int idx;
     idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_im_toggle_keys));
     save_hime_conf_int (HIME_IM_TOGGLE_KEYS, imkeys[idx].keynum);
+    idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_chinese_english_toggle_key));
+    save_hime_conf_int (HIME_CHINESE_ENGLISH_TOGGLE_KEY, hime_eng_ch_sw[idx].key);
 
     free (hime_str_im_cycle);
 
@@ -536,6 +550,37 @@ static GtkWidget *create_im_toggle_keys () {
     return hbox;
 }
 
+static int get_currnet_eng_ch_sw_idx () {
+    int i;
+    for (i = 0; i < hime_eng_ch_swN; i++)
+        if (hime_eng_ch_sw[i].key == hime_chinese_english_toggle_key)
+            return i;
+
+    p_err ("hime-chinese-english-switch->%d is not valid", hime_chinese_english_toggle_key);
+    return -1;
+}
+
+static GtkWidget *create_chinese_english_toggle_key () {
+    GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
+    GtkWidget *label = gtk_label_new (_ ("Toggle [中/英] input"));
+
+    gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+    opt_chinese_english_toggle_key = gtk_combo_box_text_new ();
+    gtk_box_pack_start (GTK_BOX (hbox), opt_chinese_english_toggle_key, FALSE, FALSE, 0);
+
+    int current_idx = 0;
+
+    for (int idx = 0; idx < hime_eng_ch_swN; idx++) {
+        if (hime_eng_ch_sw[idx].key == hime_chinese_english_toggle_key)
+            current_idx = idx;
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_chinese_english_toggle_key), _ (hime_eng_ch_sw[idx].name));
+    }
+
+    gtk_combo_box_set_active (GTK_COMBO_BOX (opt_chinese_english_toggle_key), current_idx);
+
+    return hbox;
+}
+
 int get_current_speaker_idx ();
 
 static GtkWidget *create_speaker_opts () {
@@ -615,6 +660,7 @@ GtkWidget *create_gtablist_widget () {
     gtk_box_pack_start (GTK_BOX (box), vbox, FALSE, FALSE, 0);
 
     gtk_box_pack_start (GTK_BOX (vbox), create_im_toggle_keys (), FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox), create_chinese_english_toggle_key (), FALSE, FALSE, 0);
 
     GtkWidget *hbox_hime_remote_client = gtk_hbox_new (FALSE, 10);
     gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_remote_client, FALSE, FALSE, 0);

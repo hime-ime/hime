@@ -50,21 +50,8 @@ static GtkWidget *check_button_tsin_phrase_pre_select,
 
 GtkWidget *check_button_hime_capslock_lower;
 
-static GtkWidget *opt_kbm_opts, *opt_selkeys, *opt_eng_ch_opts[2];
+static GtkWidget *opt_kbm_opts, *opt_selkeys;
 extern gboolean button_order;
-
-static struct {
-    unich_t *name;
-    int key;
-} tsin_eng_ch_sw[] = {
-    {N_ ("(Disable)"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_None},
-    {N_ ("CapsLock"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock},
-    //  {N_("Tab"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Tab},
-    {N_ ("Shift"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Shift},
-    {N_ ("Left Shift"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftL},
-    {N_ ("Right Shift"), TSIN_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR},
-};
-int tsin_eng_ch_swN = sizeof (tsin_eng_ch_sw) / sizeof (tsin_eng_ch_sw[0]);
 
 static struct {
     unich_t *name;
@@ -88,11 +75,6 @@ int get_current_speaker_idx () {
 }
 
 void save_tsin_eng_pho_key () {
-    int idx;
-    idx = gtk_combo_box_get_active (GTK_COMBO_BOX (opt_eng_ch_opts[0]));
-    save_hime_conf_int (TSIN_CHINESE_ENGLISH_TOGGLE_KEY,
-                        tsin_eng_ch_sw[idx].key);
-
     save_hime_conf_int (HIME_CAPSLOCK_LOWER,
                         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_hime_capslock_lower)));
 }
@@ -209,16 +191,6 @@ static int get_current_kbm_idx () {
     return 0;
 }
 
-static int get_currnet_eng_ch_sw_idx () {
-    int i;
-    for (i = 0; i < tsin_eng_ch_swN; i++)
-        if (tsin_eng_ch_sw[i].key == tsin_chinese_english_toggle_key)
-            return i;
-
-    p_err ("tsin-chinese-english-switch->%d is not valid", tsin_chinese_english_toggle_key);
-    return -1;
-}
-
 static int get_currnet_tsin_space_option_idx () {
     int i;
     for (i = 0; i < tsin_space_optionsN; i++)
@@ -283,44 +255,12 @@ static GtkWidget *create_kbm_opts () {
     return hbox;
 }
 
-static void update_eng_ch_opts (GtkComboBox *widget, gpointer user_data) {
-    gint i;
-    gint idx = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
-    for (i = 0; i < 2; i++) {
-        if ((opt_eng_ch_opts[i]) && (opt_eng_ch_opts[i] != (GtkWidget *) widget))
-            gtk_combo_box_set_active (GTK_COMBO_BOX (opt_eng_ch_opts[i]), idx);
-    }
-}
-
-static GtkWidget *create_eng_ch_opts (gint index) {
-
-    GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
-
-    opt_eng_ch_opts[index] = gtk_combo_box_text_new ();
-    g_signal_connect (G_OBJECT (opt_eng_ch_opts[index]), "changed", G_CALLBACK (update_eng_ch_opts), NULL);
-    gtk_box_pack_start (GTK_BOX (hbox), opt_eng_ch_opts[index], FALSE, FALSE, 0);
-
-    int i;
-    int current_idx = get_currnet_eng_ch_sw_idx ();
-
-    for (i = 0; i < tsin_eng_ch_swN; i++) {
-        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_eng_ch_opts[index]), _ (tsin_eng_ch_sw[i].name));
-    }
-
-    dbg ("current_idx:%d\n", current_idx);
-
-    gtk_combo_box_set_active (GTK_COMBO_BOX (opt_eng_ch_opts[index]), current_idx);
-
-    return hbox;
-}
-
 GtkWidget *create_en_pho_key_sel (char *s, gint index) {
     GtkWidget *frame_tsin_sw = gtk_frame_new (s);
     GtkWidget *vbox_tsin_sw = gtk_vbox_new (FALSE, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_tsin_sw), GTK_ORIENTATION_VERTICAL);
     gtk_container_add (GTK_CONTAINER (frame_tsin_sw), vbox_tsin_sw);
     gtk_container_set_border_width (GTK_CONTAINER (frame_tsin_sw), 1);
-    gtk_container_add (GTK_CONTAINER (vbox_tsin_sw), create_eng_ch_opts (index));
     GtkWidget *hbox_hime_capslock_lower = gtk_hbox_new (FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox_tsin_sw), hbox_hime_capslock_lower, FALSE, FALSE, 0);
     check_button_hime_capslock_lower = gtk_check_button_new_with_label (_ ("Lower case when CapsLock is on"));

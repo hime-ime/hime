@@ -59,7 +59,7 @@ int phonetic_char_dynamic_sequence;
 int phonetic_huge_tab;
 int phonetic_speak;
 char *phonetic_speak_sel, *hime_str_im_cycle;
-int tsin_chinese_english_toggle_key;
+int hime_chinese_english_toggle_key;
 int hime_font_size_tsin_pho_in;
 int tsin_space_opt;
 int tsin_buffer_size, tsin_tail_select_key;
@@ -135,6 +135,8 @@ void load_settings (void) {
 #endif
     //  left_right_button_tips = get_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 1);
     hime_im_toggle_keys = get_hime_conf_int (HIME_IM_TOGGLE_KEYS, 0);
+    hime_chinese_english_toggle_key = get_hime_conf_int (HIME_CHINESE_ENGLISH_TOGGLE_KEY,
+                                                         HIME_CHINESE_ENGLISH_TOGGLE_KEY_Shift);
     hime_win_sym_click_close = get_hime_conf_int (HIME_WIN_SYM_CLICK_CLOSE, 1);
 #if TRAY_ENABLED
     hime_status_tray = get_hime_conf_int (HIME_STATUS_TRAY, 1);
@@ -173,8 +175,6 @@ void load_settings (void) {
     gtab_in_area_button = get_hime_conf_int (GTAB_IN_AREA_BUTTON, 0);
 
     tsin_phrase_pre_select = get_hime_conf_int (TSIN_PHRASE_PRE_SELECT, 1);
-    tsin_chinese_english_toggle_key = get_hime_conf_int (TSIN_CHINESE_ENGLISH_TOGGLE_KEY,
-                                                         TSIN_CHINESE_ENGLISH_TOGGLE_KEY_Shift);
     tsin_tone_char_input = get_hime_conf_int (TSIN_TONE_CHAR_INPUT, 0);
 
     tsin_space_opt = get_hime_conf_int (TSIN_SPACE_OPT, TSIN_SPACE_OPT_SELECT_CHAR);
