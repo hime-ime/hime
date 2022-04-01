@@ -1361,6 +1361,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
         //	  dbg("feedkey_pp\n");
         key_press_shift = TRUE;
         key_press_ctrl = FALSE;
+        return TRUE;
     } else if ((xkey == XK_Control_L || xkey == XK_Control_R) && !key_press_ctrl && tss.pre_selN) {
         //	  dbg("feedkey_pp\n");
         key_press_ctrl = TRUE;

@@ -942,6 +942,7 @@ gboolean feedkey_gtab (KeySym key, int kbstate) {
     if ((key == XK_Shift_L || key == XK_Shift_R) && !key_press_shift) {
         key_press_shift = TRUE;
         key_press_ctrl = FALSE;
+        return TRUE;
     } else if ((key == XK_Control_L || key == XK_Control_R) && !key_press_ctrl && tss.pre_selN) {
         key_press_shift = FALSE;
         key_press_ctrl = TRUE;
