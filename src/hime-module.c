@@ -94,5 +94,5 @@ void init_HIME_module_main_functions (HIME_module_main_functions *func) {
     func->mf_dpy_xl = &dpy_xl;
     func->mf_dpy_yl = &dpy_yl;
     func->mf_pho_chars = pho_chars;
-    func->mf_key_press_alt = &key_press_alt;
+    func->mf_key_press_shift = &key_press_shift;
 }

@@ -1131,12 +1131,12 @@ void destroy_phrase_save_menu ();
 int hime_switch_keys_lookup (int key);
 
 gboolean check_key_press (KeySym key, uint32_t kev_state, gboolean return_value) {
-    if ((key == XK_Shift_L || key == XK_Shift_R) && key_press_alt) {
+    if ((key == XK_Shift_L || key == XK_Shift_R) && key_press_shift) {
         key_press_ctrl = FALSE;
     } else if ((key == XK_Control_L || key == XK_Control_R) && key_press_ctrl) {
-        key_press_alt = FALSE;
+        key_press_shift = FALSE;
     } else {
-        key_press_alt = FALSE;
+        key_press_shift = FALSE;
         key_press_ctrl = FALSE;
     }
 
@@ -1305,7 +1305,7 @@ gboolean ProcessKeyRelease (KeySym keysym, uint32_t kev_state) {
             ((keysym == XK_Shift_L || keysym == XK_Shift_R) && (kev_state & ControlMask))) {
             cycle_next_in_method ();
             if (keysym == XK_Shift_L || keysym == XK_Shift_R)
-                key_press_alt = FALSE;
+                key_press_shift = FALSE;
             return TRUE;
         }
     }

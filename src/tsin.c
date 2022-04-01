@@ -1357,17 +1357,17 @@ int feedkey_pp (KeySym xkey, int kbstate) {
     }
 
     // Shift has autorepeat on win32
-    if ((xkey == XK_Shift_L || xkey == XK_Shift_R) && !key_press_alt) {
+    if ((xkey == XK_Shift_L || xkey == XK_Shift_R) && !key_press_shift) {
         //	  dbg("feedkey_pp\n");
-        key_press_alt = TRUE;
+        key_press_shift = TRUE;
         key_press_ctrl = FALSE;
     } else if ((xkey == XK_Control_L || xkey == XK_Control_R) && !key_press_ctrl && tss.pre_selN) {
         //	  dbg("feedkey_pp\n");
         key_press_ctrl = TRUE;
-        key_press_alt = FALSE;
+        key_press_shift = FALSE;
         return TRUE;
     } else {
-        key_press_alt = FALSE;
+        key_press_shift = FALSE;
         key_press_ctrl = FALSE;
     }
 
@@ -1901,12 +1901,12 @@ int feedkey_pp_release (KeySym xkey, int kbstate) {
         if (((hime_chinese_english_toggle_key == HIME_CHINESE_ENGLISH_TOGGLE_KEY_Shift) ||
              (hime_chinese_english_toggle_key == HIME_CHINESE_ENGLISH_TOGGLE_KEY_ShiftL && xkey == XK_Shift_L) ||
              (hime_chinese_english_toggle_key == HIME_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR && xkey == XK_Shift_R)) &&
-            key_press_alt) {
+            key_press_shift) {
             if (!test_mode) {
                 close_selection_win ();
                 toggle_eng_ch_mode ();
             }
-            key_press_alt = FALSE;
+            key_press_shift = FALSE;
             return 1;
         } else
             return 0;

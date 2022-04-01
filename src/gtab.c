@@ -939,15 +939,15 @@ gboolean feedkey_gtab (KeySym key, int kbstate) {
     if (ggg.gbufN && key == XK_Tab)
         return 1;
 
-    if ((key == XK_Shift_L || key == XK_Shift_R) && !key_press_alt) {
-        key_press_alt = TRUE;
+    if ((key == XK_Shift_L || key == XK_Shift_R) && !key_press_shift) {
+        key_press_shift = TRUE;
         key_press_ctrl = FALSE;
     } else if ((key == XK_Control_L || key == XK_Control_R) && !key_press_ctrl && tss.pre_selN) {
-        key_press_alt = FALSE;
+        key_press_shift = FALSE;
         key_press_ctrl = TRUE;
         return TRUE;
     } else {
-        key_press_alt = FALSE;
+        key_press_shift = FALSE;
         key_press_ctrl = FALSE;
     }
 
@@ -1768,12 +1768,12 @@ int feedkey_gtab_release (KeySym xkey, int kbstate) {
         if (((hime_chinese_english_toggle_key == HIME_CHINESE_ENGLISH_TOGGLE_KEY_Shift) ||
              (hime_chinese_english_toggle_key == HIME_CHINESE_ENGLISH_TOGGLE_KEY_ShiftL && xkey == XK_Shift_L) ||
              (hime_chinese_english_toggle_key == HIME_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR && xkey == XK_Shift_R)) &&
-            key_press_alt) {
+            key_press_shift) {
             if (!test_mode) {
                 ClrIn ();
                 toggle_eng_ch_mode ();
             }
-            key_press_alt = FALSE;
+            key_press_shift = FALSE;
             return 1;
         } else
             return 0;

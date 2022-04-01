@@ -581,8 +581,8 @@ module_feedkey (int xkey, int nKeyState) {
     if (!g_pChewingCtx)
         return FALSE;
 
-    if ((xkey == XK_Shift_L || xkey == XK_Shift_R) && !*g_himeModMainFuncs.mf_key_press_alt) {
-        *g_himeModMainFuncs.mf_key_press_alt = TRUE;
+    if ((xkey == XK_Shift_L || xkey == XK_Shift_R) && !*g_himeModMainFuncs.mf_key_press_shift) {
+        *g_himeModMainFuncs.mf_key_press_shift = TRUE;
         return FALSE;
     }
 
@@ -615,10 +615,10 @@ module_feedkey (int xkey, int nKeyState) {
 
 // FIXME: impl
 int module_feedkey_release (KeySym xkey, int nKbState) {
-    if ((xkey == XK_Shift_L || xkey == XK_Shift_R) && *g_himeModMainFuncs.mf_key_press_alt) {
+    if ((xkey == XK_Shift_L || xkey == XK_Shift_R) && *g_himeModMainFuncs.mf_key_press_shift) {
         module_flush_input ();
         g_himeModMainFuncs.mf_toggle_eng_ch_mode ();
-        *g_himeModMainFuncs.mf_key_press_alt = FALSE;
+        *g_himeModMainFuncs.mf_key_press_shift = FALSE;
         return 1;
     }
 

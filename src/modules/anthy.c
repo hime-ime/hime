@@ -904,7 +904,7 @@ gboolean module_feedkey (int kv, int kvstate) {
         return FALSE;
 
     if (kv == XK_Shift_L || kv == XK_Shift_R) {
-        key_press_alt = TRUE;
+        key_press_shift = TRUE;
     }
 
     if (!gmf.mf_chinese_mode ())
@@ -1335,9 +1335,9 @@ int module_feedkey_release (KeySym xkey, int kbstate) {
             ((*gmf.mf_hime_chinese_english_toggle_key == HIME_CHINESE_ENGLISH_TOGGLE_KEY_Shift) ||
              (*gmf.mf_hime_chinese_english_toggle_key == HIME_CHINESE_ENGLISH_TOGGLE_KEY_ShiftL && xkey == XK_Shift_L) ||
              (*gmf.mf_hime_chinese_english_toggle_key == HIME_CHINESE_ENGLISH_TOGGLE_KEY_ShiftR && xkey == XK_Shift_R)) &&
-            key_press_alt) {
+            key_press_shift) {
             module_flush_input ();
-            key_press_alt = FALSE;
+            key_press_shift = FALSE;
             gmf.mf_hide_selections_win ();
             gmf.mf_set_eng_ch_mode (!gmf.mf_chinese_mode ());
             return 1;
