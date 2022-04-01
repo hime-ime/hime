@@ -79,7 +79,7 @@ void dbg_time (char *fmt, ...) {
 }
 #endif
 
-#if DEBUG
+#if !CLIENT_LIB && DEBUG
 void __hime_dbg_ (char *fmt, ...) {
     va_list args;
 
