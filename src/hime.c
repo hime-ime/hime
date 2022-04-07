@@ -559,7 +559,10 @@ static void get_dpy_xyl () {
     GdkRectangle work_area;
     gdk_monitor_get_workarea (get_primary_monitor (), &work_area);
 
-    dpy_xl = work_area.width;
+    // TODO:
+    // The workaround only fixes the wrong input window position bug when using multiple monitors with the same resolution.
+    // The different resolution scenario should be handled well in the future.
+    dpy_xl = work_area.width * gdk_display_get_n_monitors (get_default_display ());
     dpy_yl = work_area.height;
 #endif
 }
