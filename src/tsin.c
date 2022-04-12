@@ -52,6 +52,11 @@ extern int hashidx[TSIN_HASH_N];
 void clrin_pho (), hide_win0 ();
 void save_CS_current_to_temp ();
 
+/**
+ * Check whether the current cursor position is at the end of the preedit buffer or not
+ * \retval TRUE The current cursor position is at the end
+ * \retval FALSE The current cursor position is not at the end
+ */
 gboolean tsin_cursor_end () {
     return tss.c_idx == tss.c_len;
 }
@@ -104,7 +109,7 @@ void drawcursor () {
     if (!tss.c_len)
         return;
 
-    if (tss.c_idx == tss.c_len) {
+    if (tsin_cursor_end ()) {
         if (!chinese_mode ()) {
             if (current_CS->b_half_full_char) {
                 disp_char (tss.c_idx, "  ");
@@ -665,7 +670,7 @@ static void get_sel_phrase () {
 }
 
 static void get_sel_pho () {
-    int idx = tss.c_idx == tss.c_len ? tss.c_idx - 1 : tss.c_idx;
+    int idx = tsin_cursor_end () ? tss.c_idx - 1 : tss.c_idx;
     phokey_t key = tss.chpho[idx].pho;
 
     if (!key)
@@ -746,7 +751,7 @@ static void disp_current_sel_page (gboolean page_type) {
     if (tss.current_page > 0)
         disp_arrow_up ();
 
-    disp_tsin_select (tss.c_idx == tss.c_len ? tss.c_idx - 1 : tss.c_idx);
+    disp_tsin_select (tsin_cursor_end () ? tss.c_idx - 1 : tss.c_idx);
 }
 
 static int fetch_user_selection (int val, char **seltext, int *is_pho_phrase) {
@@ -894,7 +899,7 @@ gboolean add_to_tsin_buf (char *str, phokey_t *pho, int len) {
 
     ch_pho_cpy (&tss.chpho[tss.c_idx], str, pho, len);
 
-    if (tss.c_idx == tss.c_len)
+    if (tsin_cursor_end ())
         tss.c_idx += len;
 
     tss.c_len += len;
@@ -1249,7 +1254,7 @@ int tsin_pho_sel (int c) {
     int is_pho_phrase;
     int len = fetch_user_selection (c, &sel_text, &is_pho_phrase);
     int sel_idx = tss.c_idx;
-    if (tss.c_idx == tss.c_len)
+    if (tsin_cursor_end ())
         sel_idx = tss.c_len - len;
 
     set_chpho_ch (&tss.chpho[sel_idx], sel_text, len, is_pho_phrase);
@@ -1264,7 +1269,7 @@ int tsin_pho_sel (int c) {
     }
 
     if (len) {
-        tss.c_idx += len;
+        tss.c_idx = tsin_cursor_end () ? tss.c_idx : tss.c_idx + len;
         prbuf ();
         tss.current_page = tss.sel_pho = poo.ityp3_pho = 0;
         tss.ph_sta = -1;
@@ -1305,7 +1310,7 @@ gboolean tsin_page_down () {
 }
 
 void open_select_pho () {
-    if (tss.c_idx == tss.c_len) {
+    if (tsin_cursor_end ()) {
         get_sel_phrase_end ();
     } else
         get_sel_phrase ();
@@ -1412,7 +1417,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
             if (!tss.c_len)
                 return 0;
             int idx0 = tss.c_idx;
-            if (tss.c_len == tss.c_idx)
+            if (tsin_cursor_end ())
                 idx0 = 0;
             int len = tss.c_len - idx0;
             if (len > MAX_PHRASE_LEN)
@@ -1466,7 +1471,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
 
         if (tsin_tab_phrase_end && tss.c_len > 1) {
         tab_phrase_end:
-            if (tss.c_idx == tss.c_len)
+            if (tsin_cursor_end ())
                 tss.chpho[tss.c_idx - 1].flag |= FLAG_CHPHO_PHRASE_USER_HEAD;
             else
                 tss.chpho[tss.c_idx].flag |= FLAG_CHPHO_PHRASE_USER_HEAD;
@@ -1487,7 +1492,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
     case XK_Up:
     case XK_KP_Up:
         if (!tss.sel_pho) {
-            if (tsin_use_pho_near && tss.c_len && tss.c_idx == tss.c_len) {
+            if (tsin_use_pho_near && tss.c_len && tsin_cursor_end ()) {
                 int idx = tss.c_len - 1;
                 phokey_t pk = tss.chpho[idx].pho;
 
@@ -1556,7 +1561,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
         if (!tss.c_len)
             return 0;
 
-        idx = tss.c_idx == tss.c_len ? tss.c_idx - 1 : tss.c_idx;
+        idx = tsin_cursor_end () ? tss.c_idx - 1 : tss.c_idx;
         if (!tss.chpho[idx].pho)
             return 1;
 
@@ -1638,7 +1643,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
 
         if (tsin_buffer_editing_mode && xkey == '\\') {
             tss.tsin_buffer_editing ^= 1;
-            if (tss.tsin_buffer_editing && tss.c_idx == tss.c_len)
+            if (tss.tsin_buffer_editing && tsin_cursor_end ())
                 cursor_left ();
             return TRUE;
         }
