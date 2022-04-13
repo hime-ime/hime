@@ -591,7 +591,7 @@ module_feedkey (int xkey, int nKeyState) {
 
     hime_label_clear (MAX_SEG_NUM);
 
-    chewing_set_ShapeMode (g_pChewingCtx, g_himeModMainFuncs.mf_current_shape_mode ());
+    chewing_set_ShapeMode (g_pChewingCtx, g_himeModMainFuncs.mf_current_fullshape_mode ());
 
     if (nKeyState & (Mod1Mask | Mod4Mask | Mod5Mask | ControlMask))
         return FALSE;

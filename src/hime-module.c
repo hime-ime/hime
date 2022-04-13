@@ -36,7 +36,7 @@ void load_tab_pho_file ();
 void clear_sele ();
 void send_utf8_ch (char *s);
 extern gboolean force_show;
-int current_shape_mode ();
+int current_fullshape_mode ();
 
 void init_HIME_module_main_functions (HIME_module_main_functions *func) {
     func->mf_show_win_sym = show_win_sym;
@@ -64,7 +64,7 @@ void init_HIME_module_main_functions (HIME_module_main_functions *func) {
     func->mf_set_label_font_size = set_label_font_size;
     func->mf_set_no_focus = set_no_focus;
 
-    func->mf_current_shape_mode = current_shape_mode;
+    func->mf_current_fullshape_mode = current_fullshape_mode;
 
     func->mf_exec_hime_setup = exec_hime_setup;
     func->mf_hime_edit_display_ap_only = hime_edit_display_ap_only;

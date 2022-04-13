@@ -124,10 +124,10 @@ static void tray_appindicator_update_icon () {
 }
 
 static char st_gb[] = N_ ("/簡"), st_half[] = N_ ("半"), st_full[] = N_ ("全"), st_str[32];
-extern int current_shape_mode ();
+extern int current_fullshape_mode ();
 static char *tray_appindicator_label_create () {
     strcpy (st_str, "");
-    if (current_shape_mode ())
+    if (current_fullshape_mode ())
         strcat (st_str, st_full);
     else
         strcat (st_str, st_half);

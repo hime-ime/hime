@@ -117,7 +117,7 @@ void save_CS_current_to_temp (void) {
     }
 
     //  dbg("save_CS_current_to_temp\n");
-    temp_CS.b_half_full_char = current_CS->b_half_full_char;
+    temp_CS.b_half_full_char = current_fullshape_mode ();
     temp_CS.in_method_switched = current_CS->in_method_switched;
     temp_CS.b_im_enabled = current_CS->b_im_enabled;
     temp_CS.in_method = current_CS->in_method;
@@ -137,12 +137,12 @@ void save_CS_temp_to_current () {
 }
 
 /**
- * Return the half/full shape mode of current client state
- * \retval 1 Full-shape mode
- * \retval 0 Half-shape mode
+ * Check whether the current client state is in the fullshape mode or not
+ * \retval 1 Fullshape mode
+ * \retval 0 Halfshape mode
  * \todo When the current client state pointer is null, the return value would be 0.
  */
-int current_shape_mode () {
+int current_fullshape_mode () {
     return current_CS && current_CS->b_half_full_char;
 }
 
@@ -689,7 +689,7 @@ void toggle_im_enabled () {
         p_err ("err found");
 
     if (current_CS->b_im_enabled) {
-        if (current_CS->b_half_full_char) {
+        if (current_fullshape_mode ()) {
             disp_im_half_full ();
         }
 
@@ -808,7 +808,7 @@ void toggle_half_full_char () {
         return;
     }
 
-    current_CS->b_half_full_char = !current_CS->b_half_full_char;
+    current_CS->b_half_full_char = !current_fullshape_mode ();
     disp_im_half_full ();
     save_CS_current_to_temp ();
 }
@@ -988,7 +988,7 @@ gboolean init_in_method (int in_no) {
         break;
     }
 
-    if (hime_init_full_mode && !current_CS->b_half_full_char)
+    if (hime_init_full_mode && !current_fullshape_mode ())
         toggle_half_full_char ();
 
 #if TRAY_ENABLED
@@ -1005,7 +1005,7 @@ gboolean init_in_method (int in_no) {
     update_win_kbm_inited ();
 
     if (hime_show_win_kbm) {
-        if ((!current_CS->b_im_enabled && current_CS->b_half_full_char) ||
+        if ((!current_CS->b_im_enabled && current_fullshape_mode ()) ||
             (current_method_type () == method_type_MODULE) ||
             (current_method_type () == method_type_SYMBOL_TABLE))
             hide_win_kbm ();
@@ -1057,7 +1057,7 @@ gboolean full_char_proc (KeySym keysym) {
 
     utf8cpy (tt, s);
 
-    if (current_CS->b_half_full_char) {
+    if (current_fullshape_mode ()) {
         send_text (tt);
         return 1;
     }
@@ -1232,7 +1232,7 @@ gboolean ProcessKeyPress (KeySym keysym, uint32_t kev_state) {
 
     last_keysym = keysym;
 
-    if (current_CS->b_half_full_char && !current_CS->b_im_enabled && !(kev_state & (ControlMask | Mod1Mask))) {
+    if (current_fullshape_mode () && !current_CS->b_im_enabled && !(kev_state & (ControlMask | Mod1Mask))) {
         return check_key_press (keysym, kev_state, full_char_proc (keysym));
     }
 
@@ -1272,7 +1272,7 @@ gboolean ProcessKeyPress (KeySym keysym, uint32_t kev_state) {
         gboolean response = module_cb ()->module_feedkey (keysym, kev_state);
         if (response)
             hide_win_gtab ();
-        else if (current_CS->b_half_full_char)
+        else if (current_fullshape_mode ())
             return check_key_press (keysym, kev_state, full_char_proc (keysym));
         return check_key_press (keysym, kev_state, response);
     }

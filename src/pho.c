@@ -562,7 +562,7 @@ int feedkey_pho (KeySym xkey, int kbstate) {
         goto proc_state;
     case ' ':
         if (!poo.typ_pho[0] && !poo.typ_pho[1] && !poo.typ_pho[2]) {
-            if (current_CS->b_half_full_char)
+            if (current_fullshape_mode ())
                 return full_char_proc (xkey);
             return 0;
         }

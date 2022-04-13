@@ -651,7 +651,7 @@ GtkWidget *get_cname_label ();
 
 void show_input_method_name_on_gtab () {
     if (current_CS && (!hime_status_tray) && gtab_disp_im_name &&
-        current_CS->b_im_enabled && (!current_CS->b_half_full_char) &&
+        current_CS->b_im_enabled && !current_fullshape_mode () &&
         (chinese_mode ())) {
         if ((current_method_type () == method_type_MODULE) ||
             (gtab_hide_row2 && (hime_edit_display == HIME_EDIT_DISPLAY_ON_THE_SPOT)))
@@ -818,13 +818,13 @@ char *get_full_str () {
     }
 
     if (current_CS->b_im_enabled) {
-        if (current_CS->b_half_full_char) {
+        if (current_fullshape_mode ()) {
             if (hime_win_color_use)
                 return cht_color_full_str;
             else
                 return _ (cht_full_str);
         }
-    } else if (current_CS->b_half_full_char) {
+    } else if (current_fullshape_mode ()) {
         if (hime_win_color_use)
             return eng_color_full_str;
         else
@@ -837,7 +837,7 @@ void win_gtab_disp_half_full () {
     if (!gwin_gtab)
         return;
     if (label_full) {
-        if ((current_CS->b_im_enabled && (!current_CS->b_half_full_char)) ||
+        if ((current_CS->b_im_enabled && !current_fullshape_mode ()) ||
             (!chinese_mode ()))
             gtk_widget_hide (label_full);
         else

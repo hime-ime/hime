@@ -296,7 +296,7 @@ void win_pho_disp_half_full () {
     else
         gtk_label_set_text (GTK_LABEL (label_pho), get_full_str ());
 
-    if (current_CS->b_im_enabled && (!current_CS->b_half_full_char))
+    if (current_CS->b_im_enabled && !current_fullshape_mode ())
         gtk_widget_hide (label_full);
     else
         gtk_widget_show (label_full);

@@ -49,7 +49,7 @@ void toggle_gb_output ();
 extern gboolean gb_output;
 
 static char full[] = N_ ("全"), engst[] = N_ ("ABC"), sim[] = N_ ("简");
-extern int current_shape_mode ();
+extern int current_fullshape_mode ();
 
 void destroy_tray_icon () {
     if (tray_icon != NULL) {
@@ -103,7 +103,7 @@ static void draw_icon () {
 
     if (current_CS) {
         gdk_cairo_set_source_color (cr, &red_color_fg);
-        if (current_shape_mode ()) {
+        if (current_fullshape_mode ()) {
             get_text_w_h (full, &w, &h);
             cairo_move_to (cr, iw - w, ih - h);
             pango_cairo_show_layout (cr, pango);
