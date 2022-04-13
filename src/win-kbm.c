@@ -29,11 +29,7 @@
 static GtkWidget *gwin_kbm = NULL;
 static int kbm_timeout_handle;
 
-#if !GTK_CHECK_VERSION(2, 91, 6)
-static GdkColor red;
-#else
 static GdkRGBA red;
-#endif
 
 gboolean win_kbm_on = FALSE;
 
@@ -169,7 +165,7 @@ static KEY keys[ROWN][COLN] = {
 static int keysN = sizeof (keys) / sizeof (keys[0]);
 
 #if !GTK_CHECK_VERSION(3, 0, 0)
-static void mod_fg_all (GtkWidget *label, GdkColor *col) {
+static void mod_fg_all (GtkWidget *label, GdkRGBA *col) {
     if (!label) {
         return;
     }
@@ -273,11 +269,7 @@ static void cb_button_release (GtkWidget *wid, KEY *k) {
 }
 
 static void create_win_kbm (void) {
-#if !GTK_CHECK_VERSION(3, 0, 0)
-    gdk_color_parse ("red", &red);
-#else
     gdk_rgba_parse (&red, "red");
-#endif
 
     gwin_kbm = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_has_resize_grip (GTK_WINDOW (gwin_kbm), FALSE);

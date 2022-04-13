@@ -374,13 +374,8 @@ void change_win1_font (void) {
     if (!frame)
         return;
 
-    GdkColor fg;
-    gdk_color_parse (hime_win_color_fg, &fg);
-
-#if GTK_CHECK_VERSION(3, 0, 0)
-    GdkRGBA rgbfg;
-    gdk_rgba_parse (&rgbfg, gdk_color_to_string (&fg));
-#endif
+    GdkRGBA fg;
+    gdk_rgba_parse (&fg, hime_win_color_fg);
 
     for (int i = 0; i < wselkeyN; i++) {
         set_label_font_size (labels_sele[i], hime_font_size_tsin_presel);
@@ -393,9 +388,9 @@ void change_win1_font (void) {
             gtk_widget_modify_fg (labels_seleR[i], GTK_STATE_NORMAL, hime_win_color_use ? &fg : NULL);
 #else
         if (labels_sele[i])
-            gtk_widget_override_color (labels_sele[i], GTK_STATE_FLAG_NORMAL, hime_win_color_use ? &rgbfg : NULL);
+            gtk_widget_override_color (labels_sele[i], GTK_STATE_FLAG_NORMAL, hime_win_color_use ? &fg : NULL);
         if (labels_seleR[i])
-            gtk_widget_override_color (labels_seleR[i], GTK_STATE_FLAG_NORMAL, hime_win_color_use ? &rgbfg : NULL);
+            gtk_widget_override_color (labels_seleR[i], GTK_STATE_FLAG_NORMAL, hime_win_color_use ? &fg : NULL);
 #endif
         change_win_bg (eve_sele[i]);
         if (eve_seleR[i])

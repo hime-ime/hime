@@ -112,10 +112,10 @@ static void create_char (int index) {
     if (!hbox_edit)
         return;
 
-    GdkColor fg;
-    gdk_color_parse (hime_win_color_fg, &fg);
-    GdkColor color_bg;
-    gdk_color_parse (tsin_phrase_line_color, &color_bg);
+    GdkRGBA fg;
+    gdk_rgba_parse (&fg, hime_win_color_fg);
+    GdkRGBA color_bg;
+    gdk_rgba_parse (&color_bg, tsin_phrase_line_color);
 
     int i = index;
     {
@@ -144,9 +144,7 @@ static void create_char (int index) {
 #if !GTK_CHECK_VERSION(3, 0, 0)
             gtk_widget_modify_fg (label, GTK_STATE_NORMAL, &fg);
 #else
-            GdkRGBA rgbfg;
-            gdk_rgba_parse (&rgbfg, gdk_color_to_string (&fg));
-            gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &rgbfg);
+            gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &fg);
 #endif
         }
         gtk_widget_show_all (event_box);
@@ -414,27 +412,44 @@ static void create_cursor_attr () {
     if (attr_list)
         pango_attr_list_unref (attr_list);
 
-    GdkColor color_bg, color_fg;
+    GdkRGBA color_bg, color_fg;
     if (hime_win_color_use)
-        gdk_color_parse (tsin_cursor_color, &color_bg);
+        gdk_rgba_parse (&color_bg, tsin_cursor_color);
     else
-        gdk_color_parse (TSIN_CURSOR_COLOR_DEFAULT, &color_bg);
-    gdk_color_parse ("white", &color_fg);
+        gdk_rgba_parse (&color_bg, TSIN_CURSOR_COLOR_DEFAULT);
+    gdk_rgba_parse (&color_fg, "white");
+
+#if GTK_CHECK_VERSION(3, 0, 0)
+    // In GTK3, the color in GdkRGBA is recorded as gdouble (0.0 ~ 1.0).
+    // In GTK2, the color in GdkColor is recorded as guint16 (0 ~ 65535).
+    // pango_attr_background/foreground_new take guint16 as its input arguments.
+    guint16 red_bg = (guint16) (color_bg.red * G_MAXUINT16);
+    guint16 green_bg = (guint16) (color_bg.green * G_MAXUINT16);
+    guint16 blue_bg = (guint16) (color_bg.blue * G_MAXUINT16);
+    guint16 red_fg = (guint16) (color_fg.red * G_MAXUINT16);
+    guint16 green_fg = (guint16) (color_fg.green * G_MAXUINT16);
+    guint16 blue_fg = (guint16) (color_fg.blue * G_MAXUINT16);
+#else
+    guint16 red_bg = color_bg.red;
+    guint16 green_bg = color_bg.green;
+    guint16 blue_bg = color_bg.blue;
+    guint16 red_fg = color_fg.red;
+    guint16 green_fg = color_fg.green;
+    guint16 blue_fg = color_fg.blue;
+#endif
 
     attr_list = pango_attr_list_new ();
     attr_list_blank = pango_attr_list_new ();
 
-    PangoAttribute *blue_bg = pango_attr_background_new (
-        color_bg.red, color_bg.green, color_bg.blue);
-    blue_bg->start_index = 0;
-    blue_bg->end_index = 128;
-    pango_attr_list_insert (attr_list, blue_bg);
+    PangoAttribute *bg = pango_attr_background_new (red_bg, green_bg, blue_bg);
+    bg->start_index = 0;
+    bg->end_index = 128;
+    pango_attr_list_insert (attr_list, bg);
 
-    PangoAttribute *white_fg = pango_attr_foreground_new (
-        color_fg.red, color_fg.green, color_fg.blue);
-    white_fg->start_index = 0;
-    white_fg->end_index = 128;
-    pango_attr_list_insert (attr_list, white_fg);
+    PangoAttribute *fg = pango_attr_foreground_new (red_fg, green_fg, blue_fg);
+    fg->start_index = 0;
+    fg->end_index = 128;
+    pango_attr_list_insert (attr_list, fg);
 }
 
 void init_tsin_selection_win ();
@@ -604,8 +619,8 @@ void change_tsin_font_size () {
     if (!top_bin)
         return;
 
-    GdkColor fg;
-    gdk_color_parse (hime_win_color_fg, &fg);
+    GdkRGBA fg;
+    gdk_rgba_parse (&fg, hime_win_color_fg);
 
     set_label_font_size (label_pho, hime_font_size_tsin_pho_in);
 
@@ -621,9 +636,7 @@ void change_tsin_font_size () {
 #if !GTK_CHECK_VERSION(3, 0, 0)
             gtk_widget_modify_fg (label, GTK_STATE_NORMAL, &fg);
 #else
-            GdkRGBA rgbfg;
-            gdk_rgba_parse (&rgbfg, gdk_color_to_string (&fg));
-            gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &rgbfg);
+            gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &fg);
 #endif
         }
     }

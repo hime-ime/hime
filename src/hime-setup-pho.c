@@ -203,22 +203,6 @@ static int get_currnet_tsin_space_option_idx () {
 
 // static GtkWidget *da_phrase_line;
 
-#if 0
-static void cb_save_tsin_phrase_line_color(GtkWidget *widget, gpointer user_data)
-{
-  GtkColorSelectionDialog *color_selector = (GtkColorSelectionDialog *)user_data;
-  gtk_color_selection_get_current_color(GTK_COLOR_SELECTION(gtk_color_selection_dialog_get_color_selection(color_selector)), &tsin_phrase_line_gcolor);
-
-#if !GTK_CHECK_VERSION(2, 91, 6)
-  gtk_widget_modify_bg(da_phrase_line, GTK_STATE_NORMAL, &tsin_phrase_line_gcolor);
-#else
-  GdkRGBA rgbbg;
-  gdk_rgba_parse(&rgbbg, gdk_color_to_string(&tsin_phrase_line_gcolor));
-  gtk_widget_override_background_color(da_phrase_line, GTK_STATE_FLAG_NORMAL, &rgbbg);
-#endif
-}
-#endif
-
 static GtkWidget *create_kbm_opts () {
 
     GtkWidget *hbox = gtk_hbox_new (FALSE, 1);

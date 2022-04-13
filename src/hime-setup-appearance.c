@@ -44,14 +44,14 @@ static GtkWidget *check_button_root_style_use,
 static GtkWidget *appearance_widget;
 static GtkWidget *opt_hime_icon_dir_display;
 static GtkWidget *opt_hime_edit_display;
-static GdkColor hime_win_gcolor_fg, hime_win_gcolor_bg, hime_sel_key_gcolor, tsin_cursor_gcolor;
+static GdkRGBA hime_win_gcolor_fg, hime_win_gcolor_bg, hime_sel_key_gcolor, tsin_cursor_gcolor;
 gboolean button_order;
 #if TRAY_ENABLED
 static GtkWidget *opt_hime_tray_display;
 #endif
 
 typedef struct {
-    GdkColor *color;
+    GdkRGBA *color;
     char **color_str;
     GtkWidget *color_selector;
     unich_t *title;
@@ -207,8 +207,15 @@ void disp_win_sample ();
 static void cb_save_hime_win_color (GtkWidget *widget, gpointer user_data) {
     COLORSEL *sel = (COLORSEL *) user_data;
     GtkWidget *color_selector = sel->color_selector;
-    gtk_color_selection_get_current_color (GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (GTK_COLOR_SELECTION_DIALOG (color_selector))), sel->color);
+    gtk_color_selection_get_current_rgba (GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (GTK_COLOR_SELECTION_DIALOG (color_selector))), sel->color);
+#if GTK_CHECK_VERSION(3, 0, 0)
+    // GTK3 does not support function for transforming GdkRGBA data type to the string format like '#FF00FF'.
+    // Instead, it returns the format like 'rgb(r, g, b)' or 'rgb(r, g, b, a)'.
+    // The string should be transformed with the tricky self-written code.
+    snprintf (*sel->color_str, 8, "#%02X%02X%02X", (unsigned int) (sel->color->red * 255), (unsigned int) (sel->color->green * 255), (unsigned int) (sel->color->blue * 255));
+#else
     *sel->color_str = gtk_color_selection_palette_to_string (sel->color, 1);
+#endif
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_win_color_use), TRUE);
     disp_win_sample ();
 }
@@ -218,9 +225,9 @@ static gboolean cb_hime_win_color (GtkWidget *widget,
     COLORSEL *sel = (COLORSEL *) data;
     GtkWidget *color_selector = gtk_color_selection_dialog_new (_ (sel->title));
 
-    gdk_color_parse (*sel->color_str, sel->color);
+    gdk_rgba_parse (sel->color, *sel->color_str);
 
-    gtk_color_selection_set_current_color (
+    gtk_color_selection_set_current_rgba (
         GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (GTK_COLOR_SELECTION_DIALOG (color_selector))),
         sel->color);
 
@@ -242,9 +249,7 @@ void disp_win_sample () {
 #if !GTK_CHECK_VERSION(2, 91, 6)
         gtk_widget_modify_bg (event_box_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_bg);
 #else
-        GdkRGBA rgbbg;
-        gdk_rgba_parse (&rgbbg, gdk_color_to_string (&hime_win_gcolor_bg));
-        gtk_widget_override_background_color (event_box_win_color_test, GTK_STATE_FLAG_NORMAL, &rgbbg);
+        gtk_widget_override_background_color (event_box_win_color_test, GTK_STATE_FLAG_NORMAL, &hime_win_gcolor_bg);
 #endif
 
 #if PANGO_VERSION_CHECK(1, 22, 0)
@@ -560,9 +565,9 @@ GtkWidget *create_appearance_widget () {
     gtk_box_pack_start (GTK_BOX (hbox_win_color_fbg), button_fg, TRUE, TRUE, 0);
     g_signal_connect (G_OBJECT (button_fg), "clicked",
                       G_CALLBACK (cb_hime_win_color), &colorsel[0]);
-    gdk_color_parse (hime_win_color_fg, &hime_win_gcolor_fg);
+    gdk_rgba_parse (&hime_win_gcolor_fg, hime_win_color_fg);
     //  gtk_widget_modify_fg(label_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_fg);
-    gdk_color_parse (hime_win_color_bg, &hime_win_gcolor_bg);
+    gdk_rgba_parse (&hime_win_gcolor_bg, hime_win_color_bg);
     //  gtk_widget_modify_bg(event_box_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_bg);
 
     GtkWidget *button_bg = gtk_button_new_with_label (_ ("Background color"));
@@ -577,7 +582,7 @@ GtkWidget *create_appearance_widget () {
     gtk_widget_set_halign (button_hime_sel_key_color, GTK_ALIGN_FILL);
     g_signal_connect (G_OBJECT (button_hime_sel_key_color), "clicked",
                       G_CALLBACK (cb_hime_win_color), &colorsel[2]);
-    gdk_color_parse (hime_sel_key_color, &hime_sel_key_gcolor);
+    gdk_rgba_parse (&hime_sel_key_gcolor, hime_sel_key_color);
     gtk_box_pack_start (GTK_BOX (hbox_win_color_fbg), button_hime_sel_key_color, TRUE, TRUE, 0);
 
     GtkWidget *button_tsin_cursor_color = gtk_button_new_with_label (_ ("Cursor color"));
@@ -585,7 +590,7 @@ GtkWidget *create_appearance_widget () {
     gtk_widget_set_halign (button_tsin_cursor_color, GTK_ALIGN_FILL);
     g_signal_connect (G_OBJECT (button_tsin_cursor_color), "clicked",
                       G_CALLBACK (cb_hime_win_color), &colorsel[3]);
-    gdk_color_parse (tsin_cursor_color, &tsin_cursor_gcolor);
+    gdk_rgba_parse (&tsin_cursor_gcolor, tsin_cursor_color);
     gtk_box_pack_start (GTK_BOX (hbox_win_color_fbg), button_tsin_cursor_color, TRUE, TRUE, 0);
 
     disp_win_sample ();

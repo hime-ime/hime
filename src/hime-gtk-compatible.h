@@ -61,6 +61,12 @@
 #define gtk_grid_set_row_homogeneous(x, y) ;
 
 #define gtk_orientable_set_orientation(x, y) ;
+
+#define GdkRGBA GdkColor
+#define gdk_rgba_parse(rgba, spec) gdk_color_parse (spec, rgba)
+#define gdk_rgba_to_string(rgba) gdk_color_to_string (rgba)
+#define gtk_color_selection_get_current_rgba(colorsel, rgba) gtk_color_selection_get_current_color (colorsel, rgba)
+#define gtk_color_selection_set_current_rgba(colorsel, rgba) gtk_color_selection_set_current_color (colorsel, rgba)
 #endif
 
 // XXX(xatier): both gtk_widget_modify_font and gtk_widget_override_font are deprecated
@@ -73,11 +79,6 @@
 #define GTK_TABLE GTK_GRID
 #define gtk_table_attach_defaults(u, v, w, x, y, z) gtk_grid_attach (u, v, w, y, 1, 1)
 #define gtk_table_new(x, y, z) gtk_grid_new ()
-#endif
-
-#if GTK_CHECK_VERSION(3, 3, 18)
-#define GTK_COLOR_SELECTION_DIALOG GTK_COLOR_CHOOSER_DIALOG
-#define GTK_COLOR_SELECTION GTK_COLOR_CHOOSER
 #endif
 
 #if GTK_CHECK_VERSION(3, 9, 10)

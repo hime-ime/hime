@@ -40,7 +40,7 @@ static GtkWidget *box_gtab_im_name;
 static GtkWidget *hbox_row2;
 static GtkWidget *label_page;
 static GtkWidget *label_edit;
-static GdkColor better_color;
+static GdkRGBA better_color;
 gboolean last_cursor_off;
 
 gboolean win_size_exceed (GtkWidget *win), gtab_phrase_on ();
@@ -75,7 +75,7 @@ void disp_gtab (char *str) {
 }
 
 #if !GTK_CHECK_VERSION(3, 0, 0)
-void set_gtab_input_color (GdkColor *color) {
+void set_gtab_input_color (GdkRGBA *color) {
     if (label_gtab)
         gtk_widget_modify_fg (label_gtab, GTK_STATE_NORMAL, color);
 }
@@ -87,13 +87,8 @@ void set_gtab_input_color (GdkRGBA *rgbfg) {
 #endif
 
 void set_gtab_input_error_color () {
-#if !GTK_CHECK_VERSION(2, 91, 6)
-    GdkColor red;
-    gdk_color_parse ("red", &red);
-#else
     GdkRGBA red;
     gdk_rgba_parse (&red, "red");
-#endif
     set_gtab_input_color (&red);
 }
 
@@ -135,14 +130,12 @@ void change_win_bg (GtkWidget *win) {
         return;
     }
 
-    GdkColor col;
-    gdk_color_parse (hime_win_color_bg, &col);
+    GdkRGBA col;
+    gdk_rgba_parse (&col, hime_win_color_bg);
 #if !GTK_CHECK_VERSION(2, 91, 6)
     gtk_widget_modify_bg (win, GTK_STATE_NORMAL, &col);
 #else
-    GdkRGBA rgbbg;
-    gdk_rgba_parse (&rgbbg, gdk_color_to_string (&col));
-    gtk_widget_override_background_color (win, GTK_STATE_FLAG_NORMAL, &rgbbg);
+    gtk_widget_override_background_color (win, GTK_STATE_FLAG_NORMAL, &col);
 #endif
 }
 
@@ -169,8 +162,8 @@ void change_win_fg_bg (GtkWidget *win, GtkWidget *label) {
         return;
     }
 
-    GdkColor col;
-    gdk_color_parse (hime_win_color_fg, &col);
+    GdkRGBA col;
+    gdk_rgba_parse (&col, hime_win_color_fg);
 
 #if !GTK_CHECK_VERSION(3, 0, 0)
     if (label)
@@ -180,14 +173,12 @@ void change_win_fg_bg (GtkWidget *win, GtkWidget *label) {
     if (label_gtab_pre_sel)
         gtk_widget_modify_fg (label_gtab_pre_sel, GTK_STATE_NORMAL, &col);
 #else
-    GdkRGBA rgbfg;
-    gdk_rgba_parse (&rgbfg, gdk_color_to_string (&col));
     if (label)
-        gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &rgbfg);
+        gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &col);
     if (label_edit)
-        gtk_widget_override_color (label_edit, GTK_STATE_FLAG_NORMAL, &rgbfg);
+        gtk_widget_override_color (label_edit, GTK_STATE_FLAG_NORMAL, &col);
     if (label_gtab_pre_sel)
-        gtk_widget_override_color (label_gtab_pre_sel, GTK_STATE_FLAG_NORMAL, &rgbfg);
+        gtk_widget_override_color (label_gtab_pre_sel, GTK_STATE_FLAG_NORMAL, &col);
 #endif
 }
 
@@ -255,9 +246,7 @@ void set_key_codes_label (char *s, int better) {
 #if !GTK_CHECK_VERSION(3, 0, 0)
         gtk_widget_modify_fg (label_key_codes, GTK_STATE_NORMAL, &better_color);
 #else
-        GdkRGBA rgbfg;
-        gdk_rgba_parse (&rgbfg, gdk_color_to_string (&better_color));
-        gtk_widget_override_color (label_key_codes, GTK_STATE_FLAG_NORMAL, &rgbfg);
+        gtk_widget_override_color (label_key_codes, GTK_STATE_FLAG_NORMAL, &better_color);
 #endif
     } else {
 #if !GTK_CHECK_VERSION(3, 0, 0)
@@ -417,7 +406,7 @@ static void destroy_if_necessary () {
     hbox_row2 = NULL;
 }
 
-void mod_bg_all (GtkWidget *lab, GdkColor *col);
+void mod_bg_all (GtkWidget *lab, GdkRGBA *col);
 
 void create_win_gtab_gui_simple () {
     destroy_if_necessary ();
@@ -683,7 +672,7 @@ static void create_win_gtab_gui () {
     current_gtab_in_row1 = gtab_in_row1;
     current_gtab_vertical_select = gtab_vertical_select_on ();
     current_hime_inner_frame = hime_inner_frame;
-    gdk_color_parse ("red", &better_color);
+    gdk_rgba_parse (&better_color, "red");
 }
 
 void change_win_gtab_style () {

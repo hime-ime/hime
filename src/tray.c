@@ -39,8 +39,8 @@ static GtkWidget *tray_menu = NULL;
 
 static int iw, ih;
 
-static GdkColor red_color_fg;
-static GdkColor blue_color_fg;
+static GdkRGBA red_color_fg;
+static GdkRGBA blue_color_fg;
 
 #define HIME_TRAY_PNG "hime-tray.png"
 static char pixbuf_ch_fname[512];
@@ -297,8 +297,8 @@ gboolean create_tray (gpointer data) {
     pango = gtk_widget_create_pango_layout (wi, NULL);
     pango_layout_set_font_description (pango, desc);
 
-    gdk_color_parse ("red", &red_color_fg);
-    gdk_color_parse ("blue", &blue_color_fg);
+    gdk_rgba_parse (&red_color_fg, "red");
+    gdk_rgba_parse (&blue_color_fg, "blue");
 
     gtk_widget_destroy (wi);
 

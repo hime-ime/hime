@@ -649,14 +649,9 @@ void module_move_win (int nX, int nY) {
 }
 
 void module_change_font_size (void) {
-    GdkColor colorFG;
+    GdkRGBA colorFG;
 
-    gdk_color_parse (*g_himeModMainFuncs.mf_hime_win_color_fg, &colorFG);
-
-#if GTK_CHECK_VERSION(3, 0, 0)
-    GdkRGBA rgbfg;
-    gdk_rgba_parse (&rgbfg, gdk_color_to_string (&colorFG));
-#endif
+    gdk_rgba_parse (&colorFG, *g_himeModMainFuncs.mf_hime_win_color_fg);
 
     g_himeModMainFuncs.mf_change_win_bg (g_pWinChewing);
     g_himeModMainFuncs.mf_change_win_bg (g_pEvBoxChewing);
@@ -671,7 +666,7 @@ void module_change_font_size (void) {
 #if !GTK_CHECK_VERSION(3, 0, 0)
             gtk_widget_modify_fg (pLabel, GTK_STATE_NORMAL, &colorFG);
 #else
-            gtk_widget_override_color (pLabel, GTK_STATE_FLAG_NORMAL, &rgbfg);
+            gtk_widget_override_color (pLabel, GTK_STATE_FLAG_NORMAL, &colorFG);
 #endif
         }
     }
