@@ -37,6 +37,7 @@ set +x; separator; separator; separator; set -x
 
 # enter GitHub workspace directory path
 cd "$GITHUB_WORKSPACE"
+git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
 # check code formatting
 format_check
