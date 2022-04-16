@@ -40,10 +40,8 @@
 #define gtk_vseparator_new() gtk_separator_new (GTK_ORIENTATION_VERTICAL)
 #define GTK_OBJECT
 
-#define gtk_hbox_new(x, y) gtk_grid_new ()
-#define gtk_vbox_new(x, y) gtk_grid_new ()
-#define gtk_box_pack_end(v, w, x, y, z) gtk_container_add (GTK_CONTAINER (v), w)
-#define gtk_box_pack_start(v, w, x, y, z) gtk_container_add (GTK_CONTAINER (v), w)
+#define gtk_hbox_new(x, y) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, y)
+#define gtk_vbox_new(x, y) gtk_box_new (GTK_ORIENTATION_VERTICAL, y)
 
 #define GDK_WINDOW_XWINDOW GDK_WINDOW_XID
 #endif
