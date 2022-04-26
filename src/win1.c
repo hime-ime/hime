@@ -339,11 +339,10 @@ void disp_selections (int x, int y) {
     if (y + win1_yl > dpy_yl)
         y = win_y - win1_yl;
 
-    gtk_window_move (GTK_WINDOW (gwin1), x, y);
-
     if (!gtk_widget_get_visible (gwin1)) {
         gtk_widget_show (gwin1);
     }
+    gtk_window_move (GTK_WINDOW (gwin1), x, y);
 }
 
 void hide_selections_win () {
