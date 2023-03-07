@@ -37,7 +37,7 @@ static void create_win_message (char *icon, char *text, int duration) {
     gtk_widget_realize (gwin_message);
     set_no_focus (gwin_message);
 
-    GtkWidget *hbox = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_container_add (GTK_CONTAINER (gwin_message), hbox);
 
     if (icon[0] != '-') {

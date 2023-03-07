@@ -208,56 +208,56 @@ GtkWidget *create_gtab_widget () {
 
     load_settings ();
 
-    GtkWidget *vbox_top = gtk_vbox_new (FALSE, 10);
+    GtkWidget *vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
     gtab_widget = vbox_top;
 
-    GtkWidget *hbox_lr = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_lr = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_lr, FALSE, FALSE, 0);
 
     GtkWidget *frame_gtab_l = gtk_frame_new (_ ("Appearance Settings"));
     gtk_container_set_border_width (GTK_CONTAINER (frame_gtab_l), 10);
     gtk_box_pack_start (GTK_BOX (hbox_lr), frame_gtab_l, TRUE, TRUE, 0);
-    GtkWidget *vbox_gtab_l = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_gtab_l = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_gtab_l), GTK_ORIENTATION_VERTICAL);
     gtk_container_add (GTK_CONTAINER (frame_gtab_l), vbox_gtab_l);
 
     GtkWidget *frame_gtab_r = gtk_frame_new (_ ("Behavior Settings"));
     gtk_container_set_border_width (GTK_CONTAINER (frame_gtab_r), 10);
     gtk_box_pack_start (GTK_BOX (hbox_lr), frame_gtab_r, TRUE, TRUE, 0);
-    GtkWidget *vbox_gtab_r = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_gtab_r = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_gtab_r), GTK_ORIENTATION_VERTICAL);
 
     gtk_container_add (GTK_CONTAINER (frame_gtab_r), vbox_gtab_r);
 
 #define SPC 1
 
-    GtkWidget *hbox_gtab_pre_select = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_pre_select = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_pre_select, FALSE, FALSE, 0);
     opt_gtab_pre_select = gtk_label_new (_ ("Preview choices"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_pre_select), opt_gtab_pre_select, FALSE, FALSE, 0);
     gtk_box_pack_start (GTK_BOX (hbox_gtab_pre_select), create_auto_select_by_phrase_opts (&opt_gtab_pre_select, gtab_pre_select), FALSE, FALSE, 0);
 
-    GtkWidget *hbox_gtab_disp_partial_match = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_disp_partial_match = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_disp_partial_match, FALSE, FALSE, 0);
     opt_gtab_disp_partial_match = gtk_label_new (_ ("Preview keycode-partial-matched choices"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_partial_match), opt_gtab_disp_partial_match, FALSE, FALSE, 0);
     gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_partial_match), create_auto_select_by_phrase_opts (&opt_gtab_disp_partial_match, gtab_disp_partial_match), FALSE, FALSE, 0);
 
-    GtkWidget *hbox_gtab_vertical_select = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_vertical_select = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_vertical_select, FALSE, FALSE, 0);
     GtkWidget *label_gtab_vertical_select = gtk_label_new (_ ("Vertical selection window"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_vertical_select), label_gtab_vertical_select, FALSE, FALSE, 0);
     gtk_box_pack_start (GTK_BOX (hbox_gtab_vertical_select), create_auto_select_by_phrase_opts (&opt_gtab_vertical_select, gtab_vertical_select), FALSE, FALSE, 0);
 
-    GtkWidget *hbox_gtab_disp_key_codes = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_disp_key_codes = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_disp_key_codes, FALSE, FALSE, 0);
     check_button_gtab_disp_key_codes = gtk_check_button_new_with_label (_ ("顯示拆碼"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_key_codes), check_button_gtab_disp_key_codes, FALSE, FALSE, 0);
 
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_gtab_disp_key_codes),
                                   gtab_disp_key_codes);
-    GtkWidget *hbox_gtab_disp_im_name = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_disp_im_name = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_disp_im_name, FALSE, FALSE, 0);
     check_button_gtab_disp_im_name = gtk_check_button_new_with_label (_ ("Show input method names"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_disp_im_name), check_button_gtab_disp_im_name, FALSE, FALSE, 0);
@@ -265,27 +265,27 @@ GtkWidget *create_gtab_widget () {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_gtab_disp_im_name),
                                   gtab_disp_im_name);
 
-    GtkWidget *hbox_gtab_hide_row2 = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_hide_row2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_hide_row2, FALSE, FALSE, 0);
     check_button_gtab_hide_row2 = gtk_check_button_new_with_label (_ ("Hide second row of input window"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_hide_row2), check_button_gtab_hide_row2, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_gtab_hide_row2),
                                   gtab_hide_row2);
 
-    GtkWidget *hbox_gtab_in_row1 = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_in_row1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_l), hbox_gtab_in_row1, FALSE, FALSE, 0);
     check_button_gtab_in_row1 = gtk_check_button_new_with_label (_ ("Move word components to the first row"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_in_row1), check_button_gtab_in_row1, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_gtab_in_row1),
                                   gtab_in_row1);
 
-    GtkWidget *hbox_gtab_press_full_auto_send = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_press_full_auto_send = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_press_full_auto_send, FALSE, FALSE, 0);
     GtkWidget *label_gtab_gtab_press_full_auto_send = gtk_label_new (_ ("Auto-send when keycodes are filled"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_press_full_auto_send), label_gtab_gtab_press_full_auto_send, FALSE, FALSE, 0);
     gtk_box_pack_start (GTK_BOX (hbox_gtab_press_full_auto_send), create_auto_select_by_phrase_opts (&opt_gtab_press_full_auto_send, gtab_press_full_auto_send), FALSE, FALSE, 0);
 
-    GtkWidget *hbox_gtab_auto_select_by_phrase = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_auto_select_by_phrase = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_auto_select_by_phrase, FALSE, FALSE, 0);
     GtkWidget *label_gtab_auto_select = gtk_label_new (_ ("Auto-select by Tsin's database"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_auto_select_by_phrase), label_gtab_auto_select, FALSE, FALSE, 0);
@@ -294,7 +294,7 @@ GtkWidget *create_gtab_widget () {
     gtk_box_pack_start (GTK_BOX (hbox_gtab_auto_select_by_phrase), check_button_gtab_phrase_pre_select, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_gtab_phrase_pre_select), gtab_phrase_pre_select);
 
-    GtkWidget *hbox_gtab_dup_select_bell = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_dup_select_bell = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_dup_select_bell, FALSE, FALSE, 0);
     check_button_gtab_dup_select_bell = gtk_check_button_new_with_label (_ ("Beep on repeated word"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_dup_select_bell), check_button_gtab_dup_select_bell, FALSE, FALSE, 0);
@@ -303,7 +303,7 @@ GtkWidget *create_gtab_widget () {
 
     gtk_box_pack_start (GTK_BOX (vbox_gtab_r), create_spc_opts (), FALSE, FALSE, 0);
 
-    GtkWidget *hbox_gtab_invalid_key_in = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_invalid_key_in = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_invalid_key_in, FALSE, FALSE, 0);
     check_button_gtab_invalid_key_in = gtk_check_button_new_with_label (_ ("Allow typing mistake"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_invalid_key_in), check_button_gtab_invalid_key_in, FALSE, FALSE, 0);
@@ -311,7 +311,7 @@ GtkWidget *create_gtab_widget () {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_gtab_invalid_key_in),
                                   gtab_invalid_key_in);
 
-    GtkWidget *hbox_gtab_shift_phrase_key = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_shift_phrase_key = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_shift_phrase_key, FALSE, FALSE, 0);
     check_button_gtab_shift_phrase_key = gtk_check_button_new_with_label (_ ("Single Shift key to input Alt-Shift-phrases"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_shift_phrase_key), check_button_gtab_shift_phrase_key, FALSE, FALSE, 0);
@@ -321,7 +321,7 @@ GtkWidget *create_gtab_widget () {
     gtk_box_pack_start (GTK_BOX (vbox_gtab_r), create_en_pho_key_sel (_ ("Toggle [中/英] input"), 1), FALSE, FALSE, 0);
 
 #if 0
-  GtkWidget *hbox_hime_capslock_lower = gtk_hbox_new (FALSE, SPC);
+  GtkWidget *hbox_hime_capslock_lower = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, SPC);
   gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_hime_capslock_lower, FALSE, FALSE, 0);
   check_button_hime_capslock_lower = gtk_check_button_new_with_label (_("\tUse lower case letters"));
   gtk_box_pack_start (GTK_BOX (hbox_hime_capslock_lower), check_button_hime_capslock_lower,  FALSE, FALSE, 0);
@@ -329,27 +329,27 @@ GtkWidget *create_gtab_widget () {
      hime_capslock_lower);
 #endif
 
-    GtkWidget *hbox_gtab_unique_auto_send = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_unique_auto_send = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_unique_auto_send, FALSE, FALSE, 0);
     GtkWidget *label_gtab_unique_auto_send = gtk_label_new (_ ("Auto-send when only one choice matched"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_unique_auto_send), label_gtab_unique_auto_send, FALSE, FALSE, 0);
     gtk_box_pack_start (GTK_BOX (hbox_gtab_unique_auto_send), create_auto_select_by_phrase_opts (&opt_gtab_unique_auto_send, gtab_unique_auto_send), FALSE, FALSE, 0);
 
-    GtkWidget *hbox_gtab_que_wild_card = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_que_wild_card = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_que_wild_card, FALSE, FALSE, 0);
     check_button_gtab_que_wild_card = gtk_check_button_new_with_label (_ ("Use ? as wildcard"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_que_wild_card), check_button_gtab_que_wild_card, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_gtab_que_wild_card),
                                   gtab_que_wild_card);
 
-    GtkWidget *hbox_gtab_que_wild_card_asterisk = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_que_wild_card_asterisk = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_que_wild_card_asterisk, FALSE, FALSE, 0);
     check_button_gtab_que_wild_card_asterisk = gtk_check_button_new_with_label (_ ("Use * as wildcard"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_que_wild_card_asterisk), check_button_gtab_que_wild_card_asterisk, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_gtab_que_wild_card_asterisk),
                                   gtab_que_wild_card_asterisk);
 
-    GtkWidget *hbox_gtab_pho_query = gtk_hbox_new (FALSE, SPC);
+    GtkWidget *hbox_gtab_pho_query = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, SPC);
     gtk_box_pack_start (GTK_BOX (vbox_gtab_r), hbox_gtab_pho_query, FALSE, FALSE, 0);
     check_button_gtab_pho_query = gtk_check_button_new_with_label (_ ("Use ` to query same pronunciation word"));
     gtk_box_pack_start (GTK_BOX (hbox_gtab_pho_query), check_button_gtab_pho_query, FALSE, FALSE, 0);

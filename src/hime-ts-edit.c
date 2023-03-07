@@ -328,7 +328,7 @@ static void cb_button_find (GtkButton *button, gpointer user_data) {
     if (last_row) {
         gtk_widget_destroy (last_row);
     }
-    last_row = gtk_hbox_new (FALSE, 0);
+    last_row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     GtkWidget *lab = gtk_label_new ("Find");
     gtk_box_pack_start (GTK_BOX (last_row), lab, FALSE, FALSE, 0);
     find_textentry = gtk_entry_new ();
@@ -404,7 +404,7 @@ static void cb_button_cancel (GtkButton *button, gpointer user_data) {
 }
 
 GtkWidget *create_pho_sel_area (void) {
-    hbox_pho_sel = gtk_hbox_new (FALSE, 0);
+    hbox_pho_sel = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
     for (int i = 0; i < bigphoN; i++) {
         bigpho[i].opt_menu = gtk_combo_box_text_new ();
@@ -590,13 +590,13 @@ int main (int argc, char **argv) {
     //  gtk_window_set_default_size(GTK_WINDOW (mainwin), 640, 520);
     set_window_hime_icon (mainwin);
 
-    vbox_top = gtk_vbox_new (FALSE, 0);
+    vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top),
                                     GTK_ORIENTATION_VERTICAL);
     gtk_container_add (GTK_CONTAINER (mainwin), vbox_top);
 
     for (int i = 0; i < PAGE_LEN; i++) {
-        GtkWidget *hbox = gtk_hbox_new (FALSE, 0);
+        GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_box_pack_start (GTK_BOX (vbox_top), hbox, FALSE, FALSE, 0);
         button_check[i] = gtk_check_button_new ();
         gtk_box_pack_start (GTK_BOX (hbox), button_check[i], FALSE, FALSE, 0);
@@ -613,7 +613,7 @@ int main (int argc, char **argv) {
 #endif
     }
 
-    hbox_buttons = gtk_hbox_new (FALSE, 0);
+    hbox_buttons = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_buttons, FALSE, FALSE, 0);
 
     GtkWidget *button_delete = gtk_button_new_from_stock (GTK_STOCK_DELETE);

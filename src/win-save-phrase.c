@@ -148,7 +148,7 @@ void create_win_save_phrase (WSP_S *wsp, int wspN) {
                      G_CALLBACK (delete_event), sess);
 #endif
 
-    GtkWidget *vbox = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox), GTK_ORIENTATION_VERTICAL);
     gtk_container_add (GTK_CONTAINER (main_window), vbox);
 
@@ -171,7 +171,7 @@ void create_win_save_phrase (WSP_S *wsp, int wspN) {
     sess->mywsp = tmemdup (wsp, WSP_S, wspN);
     sess->mywspN = wspN;
 
-    GtkWidget *hbox_cancel_ok = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_cancel_ok = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox), hbox_cancel_ok, FALSE, FALSE, 5);
 
     GtkWidget *button_ok = gtk_button_new_from_stock (GTK_STOCK_OK);

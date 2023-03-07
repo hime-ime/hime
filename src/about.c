@@ -54,7 +54,7 @@ static GtkWidget *get_new_about_window (void) {
  * This is the container for the HIME icon image and the version label.
  */
 static GtkWidget *get_new_hbox (void) {
-    GtkWidget *hbox = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
     gtk_container_set_border_width (GTK_CONTAINER (hbox), 2);
 
@@ -67,7 +67,7 @@ static GtkWidget *get_new_hbox (void) {
  * This is the container for everthing under the about window.
  */
 static GtkWidget *get_new_vbox (void) {
-    GtkWidget *vbox = gtk_vbox_new (FALSE, 3);
+    GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_orientable_set_orientation (
         GTK_ORIENTABLE (vbox), GTK_ORIENTATION_VERTICAL);
 

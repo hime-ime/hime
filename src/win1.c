@@ -122,7 +122,7 @@ void create_win1_gui (void) {
     frame = gtk_frame_new (NULL);
     gtk_container_add (GTK_CONTAINER (gwin1), frame);
 
-    GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
     gtk_container_add (GTK_CONTAINER (frame), vbox_top);
 

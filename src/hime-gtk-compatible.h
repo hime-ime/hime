@@ -38,15 +38,14 @@
 #if GTK_CHECK_VERSION(3, 0, 0)
 #define GTK_OBJECT
 
-#define gtk_hbox_new(x, y) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, y)
-#define gtk_vbox_new(x, y) gtk_box_new (GTK_ORIENTATION_VERTICAL, y)
-
 #define GDK_WINDOW_XWINDOW GDK_WINDOW_XID
 #endif
 
 // only in Gtk+3, compat for Gtk+2
 #if !GTK_CHECK_VERSION(3, 0, 0)
 #define gtk_separator_new(orientation) (orientation == GTK_ORIENTATION_HORIZONTAL ? gtk_hseparator_new () : gtk_vseparator_new ())
+
+#define gtk_box_new(orientation, y) (orientation == GTK_ORIENTATION_HORIZONTAL ? gtk_hbox_new (FALSE, y) : gtk_vbox_new (FALSE, y))
 
 #define gtk_widget_get_preferred_size(x, y, z) gtk_widget_size_request (x, z)
 #define gtk_widget_set_halign(x, y) ;

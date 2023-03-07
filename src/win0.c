@@ -130,7 +130,7 @@ static void create_char (int index) {
             G_CALLBACK (mouse_char_callback), GINT_TO_POINTER (index));
 
         gtk_box_pack_start (GTK_BOX (hbox_edit), event_box, FALSE, FALSE, 0);
-        GtkWidget *vbox = gtk_vbox_new (FALSE, 0);
+        GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
         gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox), GTK_ORIENTATION_VERTICAL);
         gtk_container_add (GTK_CONTAINER (event_box), vbox);
 
@@ -466,7 +466,7 @@ static void create_win0_gui () {
     if (top_bin)
         return;
 
-    GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
     gtk_container_set_border_width (GTK_CONTAINER (gwin0), 0);
 
@@ -483,11 +483,11 @@ static void create_win0_gui () {
 
     memset (chars, 0, sizeof (chars));
 
-    GtkWidget *hbox_row1 = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_row1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     /* This packs the button into the gwin0 (a gtk container). */
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_row1, FALSE, FALSE, 0);
 
-    hbox_edit = gtk_hbox_new (FALSE, 0);
+    hbox_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_container_set_border_width (GTK_CONTAINER (hbox_edit), 0);
     /* This packs the button into the gwin0 (a gtk container). */
     gtk_box_pack_start (GTK_BOX (hbox_row1), hbox_edit, FALSE, FALSE, 0);

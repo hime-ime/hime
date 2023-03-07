@@ -100,7 +100,7 @@ void create_win_pho_near (phokey_t pho) {
     GtkWidget *frame = gtk_frame_new (NULL);
     gtk_container_add (GTK_CONTAINER (gwin_pho_near), frame);
 
-    GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
     gtk_container_add (GTK_CONTAINER (frame), vbox_top);
     gtk_container_set_border_width (GTK_CONTAINER (vbox_top), 0);
@@ -139,7 +139,7 @@ void create_win_pho_near (phokey_t pho) {
                     gtk_box_pack_start (GTK_BOX (vbox_top), separator, FALSE, FALSE, 0);
                 }
 
-                GtkWidget *hbox = gtk_hbox_new (FALSE, 0);
+                GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
                 gtk_box_pack_start (GTK_BOX (vbox_top), hbox, FALSE, FALSE, 0);
 
                 GtkWidget *label_pho = gtk_label_new (pho_str);

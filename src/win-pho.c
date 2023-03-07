@@ -135,7 +135,7 @@ void create_win_pho_gui_simple () {
     if (top_bin)
         return;
 
-    GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
 
     GtkWidget *event_box_pho;
@@ -175,7 +175,7 @@ void create_win_pho_gui_simple () {
         gtk_container_add (GTK_CONTAINER (align), label_pho_sele);
 #endif
     } else {
-        GtkWidget *hbox_row1 = gtk_hbox_new (FALSE, 0);
+        GtkWidget *hbox_row1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_box_pack_start (GTK_BOX (vbox_top), hbox_row1, FALSE, FALSE, 0);
         gtk_box_pack_start (GTK_BOX (hbox_row1), event_box_pho, FALSE, FALSE, 0);
 
@@ -189,7 +189,7 @@ void create_win_pho_gui_simple () {
 #endif
     }
 
-    hbox_row2 = gtk_hbox_new (FALSE, 0);
+    hbox_row2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     /* This packs the button into the gwin_pho (a gtk container). */
     gtk_container_add (GTK_CONTAINER (vbox_top), hbox_row2);
     label_full = gtk_label_new (_ ("全"));

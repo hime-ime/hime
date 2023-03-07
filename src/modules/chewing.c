@@ -471,7 +471,7 @@ int module_init_win (HIME_module_main_functions *pFuncs) {
         return FALSE;
     gtk_container_add (GTK_CONTAINER (g_pWinChewing), g_pEvBoxChewing);
 
-    g_pHBoxChewing = gtk_hbox_new (FALSE, 0);
+    g_pHBoxChewing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     if (!g_pHBoxChewing)
         return FALSE;
     gtk_container_add (GTK_CONTAINER (g_pEvBoxChewing), g_pHBoxChewing);

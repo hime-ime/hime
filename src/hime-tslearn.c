@@ -288,7 +288,7 @@ static void cb_button_cancel (GtkButton *button, gpointer user_data) {
 
 int gtab_key2name (INMD *tinmd, u_int64_t key, char *t, int *rtlen);
 GtkWidget *create_pho_sel_area () {
-    hbox_pho_sel = gtk_hbox_new (FALSE, 0);
+    hbox_pho_sel = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
     int i;
 
@@ -432,7 +432,7 @@ int main (int argc, char **argv) {
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
 
-    GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
     gtk_container_add (GTK_CONTAINER (mainwin), vbox_top);
 
@@ -455,7 +455,7 @@ int main (int argc, char **argv) {
     gtk_text_buffer_create_tag (buffer, "char_wrap",
                                 "wrap_mode", GTK_WRAP_CHAR, NULL);
 
-    hbox_buttons = gtk_hbox_new (FALSE, 0);
+    hbox_buttons = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_buttons, FALSE, FALSE, 0);
 
     GtkWidget *button_parse = gtk_button_new_with_label (_ ("Label known phrases"));

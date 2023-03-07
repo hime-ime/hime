@@ -241,7 +241,7 @@ static void pack_start_new_button_with_callback (
 }
 
 static GtkWidget *create_misc_widget (void) {
-    GtkWidget *top_widget = gtk_vbox_new (FALSE, 5);
+    GtkWidget *top_widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (top_widget), GTK_ORIENTATION_VERTICAL);
 
     pack_start_new_button_with_callback (GTK_BOX (top_widget),
@@ -266,7 +266,7 @@ static GtkWidget *create_misc_widget (void) {
 
     GtkWidget *frame_ts = gtk_frame_new (_ ("Options for Tsin's database"));
     gtk_box_pack_start (GTK_BOX (top_widget), frame_ts, FALSE, FALSE, 5);
-    GtkWidget *vbox_ts = gtk_vbox_new (FALSE, 5);
+    GtkWidget *vbox_ts = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_ts), GTK_ORIENTATION_VERTICAL);
     gtk_container_add (GTK_CONTAINER (frame_ts), vbox_ts);
 

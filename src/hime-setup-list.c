@@ -530,7 +530,7 @@ void set_selection_by_key (int key) {
 
 static GtkWidget *create_im_toggle_keys () {
 
-    GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
+    GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 1);
     GtkWidget *label = gtk_label_new (_ ("Toggle input window"));
     gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
@@ -565,7 +565,7 @@ static int get_current_eng_ch_sw_idx () {
 }
 
 static GtkWidget *create_chinese_english_toggle_key () {
-    GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
+    GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 1);
     GtkWidget *label = gtk_label_new (_ ("Toggle [中/英] input"));
 
     gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
@@ -586,7 +586,7 @@ static GtkWidget *create_chinese_english_toggle_key () {
 int get_current_speaker_idx ();
 
 static GtkWidget *create_speaker_opts () {
-    GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
+    GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 1);
 
     opt_speaker_opts = gtk_combo_box_text_new ();
     gtk_box_pack_start (GTK_BOX (hbox), opt_speaker_opts, FALSE, FALSE, 0);
@@ -613,11 +613,11 @@ GtkWidget *create_gtablist_widget () {
 
     load_settings ();
 
-    GtkWidget *box = gtk_vbox_new (FALSE, 0);
+    GtkWidget *box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (box), GTK_ORIENTATION_VERTICAL);
     gtablist_widget = box;
 
-    vbox = gtk_vbox_new (FALSE, 0);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox), GTK_ORIENTATION_VERTICAL);
     gtk_box_pack_start (GTK_BOX (box), vbox, TRUE, TRUE, 0);
 
@@ -657,77 +657,77 @@ GtkWidget *create_gtablist_widget () {
         gtk_widget_set_size_request (vbox, requisition.width, 240);
     }
 
-    vbox = gtk_vbox_new (FALSE, 0);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox), GTK_ORIENTATION_VERTICAL);
     gtk_box_pack_start (GTK_BOX (box), vbox, FALSE, FALSE, 0);
 
     gtk_box_pack_start (GTK_BOX (vbox), create_im_toggle_keys (), FALSE, FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox), create_chinese_english_toggle_key (), FALSE, FALSE, 0);
 
-    GtkWidget *hbox_hime_remote_client = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_remote_client = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_remote_client, FALSE, FALSE, 0);
     check_button_hime_remote_client = gtk_check_button_new_with_label (_ ("Remote client support (port 9999-)"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_remote_client), check_button_hime_remote_client, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_remote_client),
                                   hime_remote_client);
 
-    GtkWidget *hbox_hime_init_im_enabled = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_init_im_enabled = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_init_im_enabled, FALSE, FALSE, 0);
     check_button_hime_init_im_enabled = gtk_check_button_new_with_label (_ ("Toggle On inputing mode by default (non-XIM only)"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_init_im_enabled), check_button_hime_init_im_enabled, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_init_im_enabled),
                                   hime_init_im_enabled);
 
-    GtkWidget *hbox_hime_init_full_mode = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_init_full_mode = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_init_full_mode, FALSE, FALSE, 0);
     check_button_hime_init_full_mode = gtk_check_button_new_with_label (_ ("Toggle Full-shape mode by default"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_init_full_mode), check_button_hime_init_full_mode, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_init_full_mode),
                                   hime_init_full_mode);
 
-    GtkWidget *hbox_hime_shift_space_eng_full = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_shift_space_eng_full = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_shift_space_eng_full, FALSE, FALSE, 0);
     check_button_hime_shift_space_eng_full = gtk_check_button_new_with_label (_ ("Toggle half-/double-width with Shift-Space"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_shift_space_eng_full), check_button_hime_shift_space_eng_full, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_shift_space_eng_full),
                                   hime_shift_space_eng_full);
 
-    GtkWidget *hbox_hime_single_state = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_single_state = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_single_state, FALSE, FALSE, 0);
     check_button_hime_single_state = gtk_check_button_new_with_label (_ ("Share input method state for all processes"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_single_state), check_button_hime_single_state, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_single_state),
                                   hime_single_state);
 
-    GtkWidget *hbox_hime_eng_phrase_enabled = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_eng_phrase_enabled = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_eng_phrase_enabled, FALSE, FALSE, 0);
     check_button_hime_eng_phrase_enabled = gtk_check_button_new_with_label (_ ("Enable Alt-Shift phrases in alphabet-numeric mode"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_eng_phrase_enabled), check_button_hime_eng_phrase_enabled, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_eng_phrase_enabled),
                                   hime_eng_phrase_enabled);
 
-    GtkWidget *hbox_phonetic_speak = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_phonetic_speak = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox), hbox_phonetic_speak, FALSE, FALSE, 0);
     check_button_phonetic_speak = gtk_check_button_new_with_label (_ ("Enable text-to-speech"));
     gtk_box_pack_start (GTK_BOX (hbox_phonetic_speak), check_button_phonetic_speak, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (
         GTK_TOGGLE_BUTTON (check_button_phonetic_speak), phonetic_speak);
 
-    GtkWidget *hbox_hime_win_sym_click_close = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_win_sym_click_close = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_win_sym_click_close, FALSE, FALSE, 0);
     check_button_hime_win_sym_click_close = gtk_check_button_new_with_label (_ ("Close symbols window after selection"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_win_sym_click_close), check_button_hime_win_sym_click_close, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_win_sym_click_close),
                                   hime_win_sym_click_close);
 
-    GtkWidget *hbox_hime_bell_off = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_bell_off = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_bell_off, FALSE, FALSE, 0);
     check_button_hime_bell_off = gtk_check_button_new_with_label (_ ("Disable beep"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_bell_off), check_button_hime_bell_off, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_bell_off),
                                   hime_bell_off);
 
-    GtkWidget *hbox_hime_punc_auto_send = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_punc_auto_send = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox), hbox_hime_punc_auto_send, FALSE, FALSE, 0);
     check_button_hime_punc_auto_send = gtk_check_button_new_with_label (_ ("Auto-commit words ended with punctuation"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_punc_auto_send), check_button_hime_punc_auto_send, FALSE, FALSE, 0);

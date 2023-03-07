@@ -275,25 +275,25 @@ static void create_win_kbm (void) {
     gtk_window_set_has_resize_grip (GTK_WINDOW (gwin_kbm), FALSE);
     gtk_container_set_border_width (GTK_CONTAINER (gwin_kbm), 0);
 
-    GtkWidget *hbox_top = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_top = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_container_add (GTK_CONTAINER (gwin_kbm), hbox_top);
 
-    GtkWidget *vbox_l = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_l = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_l), GTK_ORIENTATION_VERTICAL);
     gtk_box_pack_start (GTK_BOX (hbox_top), vbox_l, FALSE, FALSE, 0);
     gtk_container_set_border_width (GTK_CONTAINER (vbox_l), 0);
 
-    GtkWidget *vbox_r = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_r = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_r), GTK_ORIENTATION_VERTICAL);
     gtk_box_pack_start (GTK_BOX (hbox_top), vbox_r, FALSE, FALSE, 0);
     gtk_container_set_border_width (GTK_CONTAINER (vbox_r), 0);
 
     for (int i = 0; i < keysN; i++) {
-        GtkWidget *hboxl = gtk_hbox_new (FALSE, 0);
+        GtkWidget *hboxl = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_container_set_border_width (GTK_CONTAINER (hboxl), 0);
         gtk_box_pack_start (GTK_BOX (vbox_l), hboxl, FALSE, FALSE, 0);
 
-        GtkWidget *hboxr = gtk_hbox_new (FALSE, 0);
+        GtkWidget *hboxr = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_container_set_border_width (GTK_CONTAINER (hboxr), 0);
         gtk_box_pack_start (GTK_BOX (vbox_r), hboxr, FALSE, FALSE, 0);
 
@@ -320,7 +320,7 @@ static void create_win_kbm (void) {
                 gtk_box_pack_start (GTK_BOX (hbox), but, FALSE, FALSE, 0);
             }
 
-            GtkWidget *v = gtk_vbox_new (FALSE, 0);
+            GtkWidget *v = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
             gtk_orientable_set_orientation (GTK_ORIENTABLE (v), GTK_ORIENTATION_VERTICAL);
             gtk_container_set_border_width (GTK_CONTAINER (v), 0);
             gtk_container_add (GTK_CONTAINER (but), v);

@@ -416,7 +416,7 @@ void create_win_gtab_gui_simple () {
 
     last_cursor_off = FALSE;
 
-    GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
 
     GtkWidget *event_box_gtab;
@@ -451,7 +451,7 @@ void create_win_gtab_gui_simple () {
     if (b_need_label_edit) {
         label_edit = gtk_label_new (NULL);
 
-        hbox_edit = gtk_hbox_new (FALSE, 0);
+        hbox_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_box_pack_start (GTK_BOX (vbox_top), hbox_edit, FALSE, FALSE, 0);
 
 #if GTK_CHECK_VERSION(3, 0, 0)
@@ -484,7 +484,7 @@ void create_win_gtab_gui_simple () {
 #endif
         }
     } else {
-        GtkWidget *hbox_row1 = gtk_hbox_new (FALSE, 0);
+        GtkWidget *hbox_row1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_box_pack_start (GTK_BOX (vbox_top), hbox_row1, FALSE, FALSE, 0);
 
         if (b_need_label_edit) {
@@ -511,7 +511,7 @@ void create_win_gtab_gui_simple () {
         gtk_box_pack_start (GTK_BOX (vbox_top), label_gtab_pre_sel, FALSE, FALSE, 0);
     }
 
-    hbox_row2 = gtk_hbox_new (FALSE, 0);
+    hbox_row2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_row2, FALSE, FALSE, 0);
 
     label_full = gtk_label_new (NULL);

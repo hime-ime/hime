@@ -1217,7 +1217,7 @@ int module_init_win (HIME_module_main_functions *funcs) {
 
     gtk_container_add (GTK_CONTAINER (win_anthy), event_box_anthy);
 
-    GtkWidget *hbox_top = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_top = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_container_add (GTK_CONTAINER (event_box_anthy), hbox_top);
 
     g_signal_connect (G_OBJECT (event_box_anthy), "button-press-event",

@@ -293,7 +293,7 @@ void combo_selected (GtkWidget *widget, gpointer window) {
 }
 
 static GtkWidget *create_hime_icon_dir_display () {
-    GtkWidget *hbox_hime_icon_dir = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_icon_dir = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE (hbox_hime_icon_dir), GTK_ORIENTATION_HORIZONTAL);
 
@@ -314,10 +314,10 @@ static GtkWidget *create_hime_icon_dir_display () {
 
 static GtkWidget *create_hime_edit_display () {
 
-    GtkWidget *box = gtk_vbox_new (FALSE, 1);
+    GtkWidget *box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 1);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (box), GTK_ORIENTATION_VERTICAL);
 
-    GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
+    GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 1);
     gtk_box_pack_start (GTK_BOX (box), hbox, FALSE, FALSE, 0);
     GtkWidget *label = gtk_label_new (_ ("Editing area"));
     gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
@@ -351,7 +351,7 @@ static GtkWidget *create_hime_edit_display () {
 #if TRAY_ENABLED
 static GtkWidget *create_hime_tray_display () {
 
-    GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
+    GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 1);
 
     check_button_hime_status_tray = gtk_check_button_new_with_label (_ ("Enable system tray icon"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_status_tray),
@@ -394,12 +394,12 @@ GtkWidget *create_appearance_widget () {
 
     load_settings ();
 
-    GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
     gtk_container_set_border_width (GTK_CONTAINER (vbox_top), 10);
     appearance_widget = vbox_top;
 
-    GtkWidget *hbox_hime_font_size = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_font_size = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size, FALSE, FALSE, 0);
 
     GtkWidget *label_hime_font_size = gtk_label_new (_ ("Main font"));
@@ -409,7 +409,7 @@ GtkWidget *create_appearance_widget () {
     font_sel = gtk_font_button_new_with_font (tt);
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size), font_sel, FALSE, FALSE, 0);
 
-    GtkWidget *hbox_hime_font_size_symbol = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_font_size_symbol = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_symbol, FALSE, FALSE, 0);
     GtkWidget *label_hime_font_size_symbol = gtk_label_new (_ ("Font size of symbols window"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_symbol), label_hime_font_size_symbol, FALSE, FALSE, 0);
@@ -418,7 +418,7 @@ GtkWidget *create_appearance_widget () {
     spinner_hime_font_size_symbol = gtk_spin_button_new (adj_hime_font_size_symbol, 0, 0);
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_symbol), spinner_hime_font_size_symbol, FALSE, FALSE, 0);
 
-    GtkWidget *hbox_hime_font_size_tsin_presel = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_font_size_tsin_presel = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_tsin_presel, FALSE, FALSE, 0);
     GtkWidget *label_hime_font_size_tsin_presel = gtk_label_new (_ ("Font size of Tsin's and gtab's preselection window"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_presel), label_hime_font_size_tsin_presel, FALSE, FALSE, 0);
@@ -427,7 +427,7 @@ GtkWidget *create_appearance_widget () {
     spinner_hime_font_size_tsin_presel = gtk_spin_button_new (adj_hime_font_size_tsin_presel, 0, 0);
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_presel), spinner_hime_font_size_tsin_presel, FALSE, FALSE, 0);
 
-    GtkWidget *hbox_hime_font_size_tsin_pho_in = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_font_size_tsin_pho_in = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
     GtkWidget *label_hime_font_size_tsin_pho_in = gtk_label_new (_ ("Font size of keycodes for Bopomofo and Tsin"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_pho_in), label_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
@@ -436,7 +436,7 @@ GtkWidget *create_appearance_widget () {
     spinner_hime_font_size_tsin_pho_in = gtk_spin_button_new (adj_hime_font_size_tsin_pho_in, 0, 0);
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_pho_in), spinner_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
 
-    GtkWidget *hbox_hime_font_size_pho_near = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_font_size_pho_near = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_pho_near, FALSE, FALSE, 0);
     GtkWidget *label_hime_font_size_pho_near = gtk_label_new (_ ("Font size of similar phonetic choices"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_pho_near), label_hime_font_size_pho_near, FALSE, FALSE, 0);
@@ -445,7 +445,7 @@ GtkWidget *create_appearance_widget () {
     spinner_hime_font_size_pho_near = gtk_spin_button_new (adj_hime_font_size_pho_near, 0, 0);
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_pho_near), spinner_hime_font_size_pho_near, FALSE, FALSE, 0);
 
-    GtkWidget *hbox_hime_font_size_gtab_in = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_font_size_gtab_in = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_gtab_in, FALSE, FALSE, 0);
     GtkWidget *label_hime_font_size_gtab_in = gtk_label_new (_ ("Font size of keycodes for gtab"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_gtab_in), label_hime_font_size_gtab_in, FALSE, FALSE, 0);
@@ -454,7 +454,7 @@ GtkWidget *create_appearance_widget () {
     spinner_hime_font_size_gtab_in = gtk_spin_button_new (adj_hime_font_size_gtab_in, 0, 0);
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_gtab_in), spinner_hime_font_size_gtab_in, FALSE, FALSE, 0);
 
-    GtkWidget *hbox_hime_font_size_win_kbm = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_font_size_win_kbm = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_win_kbm, FALSE, FALSE, 0);
     GtkWidget *label_hime_font_size_win_kbm = gtk_label_new (_ ("Font size of virtual keyboard"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), label_hime_font_size_win_kbm, FALSE, FALSE, 0);
@@ -469,7 +469,7 @@ GtkWidget *create_appearance_widget () {
     spinner_hime_font_size_win_kbm_en = gtk_spin_button_new (adj_hime_font_size_win_kbm_en, 0, 0);
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), spinner_hime_font_size_win_kbm_en, FALSE, FALSE, 0);
 
-    GtkWidget *hbox_hime_pop_up_win = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_pop_up_win = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_pop_up_win, FALSE, FALSE, 0);
     check_button_hime_pop_up_win = gtk_check_button_new_with_label (_ ("Popup input window when typing"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_pop_up_win),
@@ -490,11 +490,11 @@ GtkWidget *create_appearance_widget () {
     GtkWidget *frame_root_style = gtk_frame_new (_ ("Fixed input window"));
     gtk_box_pack_start (GTK_BOX (vbox_top), frame_root_style, FALSE, FALSE, 0);
     gtk_container_set_border_width (GTK_CONTAINER (frame_root_style), 3);
-    GtkWidget *vbox_root_style = gtk_vbox_new (FALSE, 10);
+    GtkWidget *vbox_root_style = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_root_style), GTK_ORIENTATION_VERTICAL);
     gtk_container_add (GTK_CONTAINER (frame_root_style), vbox_root_style);
 
-    GtkWidget *hbox_root_style_use = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_root_style_use = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_root_style), hbox_root_style_use, FALSE, FALSE, 0);
     check_button_root_style_use = gtk_check_button_new_with_label (_ ("Enable"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_root_style_use),
@@ -518,7 +518,7 @@ GtkWidget *create_appearance_widget () {
 
     gtk_box_pack_start (GTK_BOX (vbox_top), create_hime_edit_display (), FALSE, FALSE, 0);
 
-    GtkWidget *hbox_hime_inner_frame = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_hime_inner_frame = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_inner_frame, FALSE, FALSE, 0);
     check_button_hime_inner_frame = gtk_check_button_new_with_label (_ ("Show frame of input window"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_inner_frame),
@@ -537,11 +537,11 @@ GtkWidget *create_appearance_widget () {
     GtkWidget *frame_win_color = gtk_frame_new (_ ("Color selection"));
     gtk_box_pack_start (GTK_BOX (vbox_top), frame_win_color, FALSE, FALSE, 0);
     gtk_container_set_border_width (GTK_CONTAINER (frame_win_color), 1);
-    GtkWidget *vbox_win_color = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_win_color = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_win_color), GTK_ORIENTATION_VERTICAL);
     gtk_container_add (GTK_CONTAINER (frame_win_color), vbox_win_color);
 
-    GtkWidget *hbox_win_color_use = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_win_color_use = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_win_color), hbox_win_color_use, FALSE, FALSE, 0);
     check_button_hime_win_color_use = gtk_check_button_new_with_label (_ ("Custom theme color"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_win_color_use),
@@ -557,7 +557,7 @@ GtkWidget *create_appearance_widget () {
     gtk_box_pack_start (GTK_BOX (vbox_win_color), event_box_win_color_test, FALSE, FALSE, 0);
     label_win_color_test = gtk_label_new (NULL);
     gtk_container_add (GTK_CONTAINER (event_box_win_color_test), label_win_color_test);
-    GtkWidget *hbox_win_color_fbg = gtk_hbox_new (FALSE, 10);
+    GtkWidget *hbox_win_color_fbg = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_win_color), hbox_win_color_fbg, FALSE, FALSE, 0);
     GtkWidget *button_fg = gtk_button_new_with_label (_ ("Foreground color"));
     gtk_widget_set_hexpand (button_fg, TRUE);

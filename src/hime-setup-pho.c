@@ -205,7 +205,7 @@ static int get_currnet_tsin_space_option_idx () {
 
 static GtkWidget *create_kbm_opts () {
 
-    GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
+    GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 1);
 
     opt_kbm_opts = gtk_combo_box_text_new ();
     gtk_box_pack_start (GTK_BOX (hbox), opt_kbm_opts, FALSE, FALSE, 0);
@@ -241,11 +241,11 @@ static GtkWidget *create_kbm_opts () {
 
 GtkWidget *create_en_pho_key_sel (char *s, gint index) {
     GtkWidget *frame_tsin_sw = gtk_frame_new (s);
-    GtkWidget *vbox_tsin_sw = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_tsin_sw = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_tsin_sw), GTK_ORIENTATION_VERTICAL);
     gtk_container_add (GTK_CONTAINER (frame_tsin_sw), vbox_tsin_sw);
     gtk_container_set_border_width (GTK_CONTAINER (frame_tsin_sw), 1);
-    GtkWidget *hbox_hime_capslock_lower = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_hime_capslock_lower = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_tsin_sw), hbox_hime_capslock_lower, FALSE, FALSE, 0);
     check_button_hime_capslock_lower = gtk_check_button_new_with_label (_ ("Lower case when CapsLock is on"));
     gtk_box_pack_start (GTK_BOX (hbox_hime_capslock_lower), check_button_hime_capslock_lower, FALSE, FALSE, 0);
@@ -262,19 +262,19 @@ GtkWidget *create_kbm_widget () {
 
     load_settings ();
 
-    GtkWidget *vbox_top = gtk_vbox_new (FALSE, 3);
+    GtkWidget *vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
     kbm_widget = vbox_top;
 
-    GtkWidget *hbox_lr = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_lr = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_lr, FALSE, FALSE, 0);
 
-    GtkWidget *vbox_l = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_l = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_l), GTK_ORIENTATION_VERTICAL);
     gtk_container_set_border_width (GTK_CONTAINER (vbox_l), 10);
     gtk_box_pack_start (GTK_BOX (hbox_lr), vbox_l, TRUE, TRUE, 10);
 
-    GtkWidget *vbox_r = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_r = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_r), GTK_ORIENTATION_VERTICAL);
     gtk_container_set_border_width (GTK_CONTAINER (vbox_r), 10);
     gtk_box_pack_start (GTK_BOX (hbox_lr), vbox_r, TRUE, TRUE, 10);
@@ -290,7 +290,7 @@ GtkWidget *create_kbm_widget () {
     gtk_box_pack_start (GTK_BOX (vbox_l), frame_tsin_space_opt, FALSE, FALSE, 0);
     gtk_container_set_border_width (GTK_CONTAINER (frame_tsin_space_opt), 1);
 
-    GtkWidget *box_tsin_space_opt = gtk_vbox_new (FALSE, 0);
+    GtkWidget *box_tsin_space_opt = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (box_tsin_space_opt), GTK_ORIENTATION_VERTICAL);
     gtk_container_add (GTK_CONTAINER (frame_tsin_space_opt), box_tsin_space_opt);
     gtk_container_set_border_width (GTK_CONTAINER (box_tsin_space_opt), 1);
@@ -313,70 +313,70 @@ GtkWidget *create_kbm_widget () {
             gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
     }
 
-    GtkWidget *hbox_tsin_phrase_pre_select = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_tsin_phrase_pre_select = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_l), hbox_tsin_phrase_pre_select, FALSE, FALSE, 1);
     check_button_tsin_phrase_pre_select = gtk_check_button_new_with_label (_ ("Enable preselection window in Tsin"));
     gtk_box_pack_start (GTK_BOX (hbox_tsin_phrase_pre_select), check_button_tsin_phrase_pre_select, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (
         GTK_TOGGLE_BUTTON (check_button_tsin_phrase_pre_select), tsin_phrase_pre_select);
 
-    GtkWidget *hbox_phonetic_char_dynamic_sequence = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_phonetic_char_dynamic_sequence = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_l), hbox_phonetic_char_dynamic_sequence, FALSE, FALSE, 1);
     check_button_phonetic_char_dynamic_sequence = gtk_check_button_new_with_label (_ ("Resorting choices by user's usage frequency"));
     gtk_box_pack_start (GTK_BOX (hbox_phonetic_char_dynamic_sequence), check_button_phonetic_char_dynamic_sequence, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (
         GTK_TOGGLE_BUTTON (check_button_phonetic_char_dynamic_sequence), phonetic_char_dynamic_sequence);
 
-    GtkWidget *hbox_pho_hide_row2 = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_pho_hide_row2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_r), hbox_pho_hide_row2, FALSE, FALSE, 1);
     check_button_pho_hide_row2 = gtk_check_button_new_with_label (_ ("Hide second row of Bopomofo's window"));
     gtk_box_pack_start (GTK_BOX (hbox_pho_hide_row2), check_button_pho_hide_row2, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (
         GTK_TOGGLE_BUTTON (check_button_pho_hide_row2), pho_hide_row2);
 
-    GtkWidget *hbox_pho_in_row1 = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_pho_in_row1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_r), hbox_pho_in_row1, FALSE, FALSE, 1);
     check_button_pho_in_row1 = gtk_check_button_new_with_label (_ ("Move keycodes to first row of Bopomofo's window"));
     gtk_box_pack_start (GTK_BOX (hbox_pho_in_row1), check_button_pho_in_row1, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (
         GTK_TOGGLE_BUTTON (check_button_pho_in_row1), pho_in_row1);
 
-    GtkWidget *hbox_phonetic_huge_tab = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_phonetic_huge_tab = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_r), hbox_phonetic_huge_tab, FALSE, FALSE, 1);
     check_button_phonetic_huge_tab = gtk_check_button_new_with_label (_ ("Enable more UTF-8 characters"));
     gtk_box_pack_start (GTK_BOX (hbox_phonetic_huge_tab), check_button_phonetic_huge_tab, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (
         GTK_TOGGLE_BUTTON (check_button_phonetic_huge_tab), phonetic_huge_tab);
 
-    GtkWidget *hbox_tsin_tone_char_input = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_tsin_tone_char_input = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_r), hbox_tsin_tone_char_input, FALSE, FALSE, 1);
     check_button_tsin_tone_char_input = gtk_check_button_new_with_label (_ ("Enable tone symbols in Tsin"));
     gtk_box_pack_start (GTK_BOX (hbox_tsin_tone_char_input), check_button_tsin_tone_char_input, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (
         GTK_TOGGLE_BUTTON (check_button_tsin_tone_char_input), tsin_tone_char_input);
 
-    GtkWidget *hbox_tsin_tab_phrase_end = gtk_hbox_new (FALSE, 1);
+    GtkWidget *hbox_tsin_tab_phrase_end = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 1);
     gtk_box_pack_start (GTK_BOX (vbox_r), hbox_tsin_tab_phrase_end, FALSE, FALSE, 1);
     check_button_tsin_tab_phrase_end = gtk_check_button_new_with_label (_ ("Break sentence with Escape/Tab key"));
     gtk_box_pack_start (GTK_BOX (hbox_tsin_tab_phrase_end), check_button_tsin_tab_phrase_end, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (
         GTK_TOGGLE_BUTTON (check_button_tsin_tab_phrase_end), tsin_tab_phrase_end);
 
-    GtkWidget *hbox_tsin_tail_select_key = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_tsin_tail_select_key = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_r), hbox_tsin_tail_select_key, FALSE, FALSE, 1);
     check_button_tsin_tail_select_key = gtk_check_button_new_with_label (_ ("Show selection key behind choices"));
     gtk_box_pack_start (GTK_BOX (hbox_tsin_tail_select_key), check_button_tsin_tail_select_key, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (
         GTK_TOGGLE_BUTTON (check_button_tsin_tail_select_key), tsin_tail_select_key);
 
-    GtkWidget *hbox_tsin_buffer_editing_mode = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_tsin_buffer_editing_mode = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_r), hbox_tsin_buffer_editing_mode, FALSE, FALSE, 1);
     check_button_tsin_buffer_editing_mode = gtk_check_button_new_with_label (_ ("\\ key to toggle jkx keys editing mode"));
     gtk_box_pack_start (GTK_BOX (hbox_tsin_buffer_editing_mode), check_button_tsin_buffer_editing_mode, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (
         GTK_TOGGLE_BUTTON (check_button_tsin_buffer_editing_mode), tsin_buffer_editing_mode);
 
-    GtkWidget *hbox_tsin_use_pho_near = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_tsin_use_pho_near = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_r), hbox_tsin_use_pho_near, FALSE, FALSE, 1);
     check_button_tsin_use_pho_near = gtk_check_button_new_with_label (_ ("Press up-arrow to query similar pronunciation words"));
     gtk_box_pack_start (GTK_BOX (hbox_tsin_use_pho_near), check_button_tsin_use_pho_near, FALSE, FALSE, 0);

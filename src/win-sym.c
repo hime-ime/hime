@@ -416,10 +416,10 @@ void create_win_sym () {
 
     cur_in_method = current_CS->in_method;
 
-    GtkWidget *hbox_top = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_top = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_container_add (GTK_CONTAINER (gwin_sym), hbox_top);
 
-    GtkWidget *vbox_top = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
     gtk_box_pack_start (GTK_BOX (hbox_top), vbox_top, TRUE, TRUE, 0);
 
@@ -428,7 +428,7 @@ void create_win_sym () {
     int i;
     for (i = 0; i < symsN; i++) {
         SYM_ROW *psym = &syms[i];
-        GtkWidget *hbox_row = gtk_hbox_new (FALSE, 0);
+        GtkWidget *hbox_row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_box_pack_start (GTK_BOX (vbox_top), hbox_row, FALSE, FALSE, 0);
         gtk_container_set_border_width (GTK_CONTAINER (hbox_row), 0);
 
@@ -471,7 +471,8 @@ void create_win_sym () {
 
     gtk_box_pack_start (GTK_BOX (hbox_top), gtk_separator_new (GTK_ORIENTATION_VERTICAL), FALSE, FALSE, 0);
 
-    GtkWidget *vbox_arrow = gtk_vbox_new (TRUE, 0);
+    GtkWidget *vbox_arrow = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (vbox_arrow, TRUE);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_arrow), GTK_ORIENTATION_VERTICAL);
     gtk_box_pack_start (GTK_BOX (hbox_top), vbox_arrow, TRUE, TRUE, 0);
     GtkWidget *eve_up = gtk_event_box_new (), *eve_down = gtk_event_box_new ();

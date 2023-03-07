@@ -107,12 +107,12 @@ void module_setup_window_create (GtkButton *button, gpointer data_hime_setup_win
                           _ ("Settings for Chewing"));
     gtk_container_set_border_width (GTK_CONTAINER (hime_chewing_window), 1);
 
-    vbox_top = gtk_vbox_new (FALSE, 3);
+    vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
     gtk_container_add (GTK_CONTAINER (hime_chewing_window), vbox_top);
 
     // cand per page
-    g_pHBoxCandPerPage = gtk_hbox_new (FALSE, 0);
+    g_pHBoxCandPerPage = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), g_pHBoxCandPerPage, TRUE, TRUE, 1);
     g_pLabelCandPerPage = gtk_label_new (_ ("Candidates per page"));
     gtk_box_pack_start (GTK_BOX (g_pHBoxCandPerPage), g_pLabelCandPerPage, TRUE, TRUE, 0);
@@ -121,35 +121,35 @@ void module_setup_window_create (GtkButton *button, gpointer data_hime_setup_win
     gtk_box_pack_start (GTK_BOX (g_pHBoxCandPerPage), g_pSpinButtonCandPerPage, FALSE, FALSE, 0);
 
     // space as selection
-    g_pHBoxSpaceAsSelection = gtk_hbox_new (FALSE, 0);
+    g_pHBoxSpaceAsSelection = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), g_pHBoxSpaceAsSelection, TRUE, TRUE, 1);
     g_pCheckButtonSpaceAsSelection = gtk_check_button_new_with_label (_ ("Space key to select candidates"));
     gtk_box_pack_start (GTK_BOX (g_pHBoxSpaceAsSelection), g_pCheckButtonSpaceAsSelection, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (g_pCheckButtonSpaceAsSelection), g_chewingConfig.bSpaceAsSelection);
 
     // esc clean buf
-    g_pHBoxEscCleanAllBuf = gtk_hbox_new (FALSE, 0);
+    g_pHBoxEscCleanAllBuf = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), g_pHBoxEscCleanAllBuf, TRUE, TRUE, 1);
     g_pCheckButtonEscCleanAllBuf = gtk_check_button_new_with_label (_ ("Esc key to clear buffer"));
     gtk_box_pack_start (GTK_BOX (g_pHBoxEscCleanAllBuf), g_pCheckButtonEscCleanAllBuf, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (g_pCheckButtonEscCleanAllBuf), g_chewingConfig.bEscCleanAllBuf);
 
     // auto shift cursor
-    g_pHBoxAutoShiftCur = gtk_hbox_new (FALSE, 0);
+    g_pHBoxAutoShiftCur = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), g_pHBoxAutoShiftCur, TRUE, TRUE, 1);
     g_pCheckButtonAutoShiftCur = gtk_check_button_new_with_label (_ ("Move cursor automatically after selections"));
     gtk_box_pack_start (GTK_BOX (g_pHBoxAutoShiftCur), g_pCheckButtonAutoShiftCur, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (g_pCheckButtonAutoShiftCur), g_chewingConfig.bAutoShiftCur);
 
     // add phrase forward
-    g_pHBoxAddPhraseForward = gtk_hbox_new (FALSE, 0);
+    g_pHBoxAddPhraseForward = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start (GTK_BOX (vbox_top), g_pHBoxAddPhraseForward, TRUE, TRUE, 1);
     g_pCheckButtonAddPhraseForward = gtk_check_button_new_with_label (_ ("Add phrase backwards"));
     gtk_box_pack_start (GTK_BOX (g_pHBoxAddPhraseForward), g_pCheckButtonAddPhraseForward, FALSE, FALSE, 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (g_pCheckButtonAddPhraseForward), g_chewingConfig.bAddPhraseForward);
 
     // cancel & ok buttons
-    hbox_cancel_ok = gtk_hbox_new (FALSE, 10);
+    hbox_cancel_ok = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_cancel_ok, FALSE, FALSE, 5);
 
     button_cancel = gtk_button_new_from_stock (GTK_STOCK_CANCEL);

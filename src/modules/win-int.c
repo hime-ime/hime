@@ -63,7 +63,7 @@ static void cb_select (GtkWidget *widget, gpointer data) {
 
 static GtkWidget *create_int_opts () {
 
-    GtkWidget *hbox = gtk_hbox_new (FALSE, 1);
+    GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 1);
 
     opt_int_opts = gtk_combo_box_text_new ();
     gtk_box_pack_start (GTK_BOX (hbox), opt_int_opts, FALSE, FALSE, 0);
@@ -145,7 +145,7 @@ void create_win_intcode () {
     gtk_container_set_border_width (GTK_CONTAINER (frame), 0);
     gtk_container_add (GTK_CONTAINER (gwin_int), frame);
 
-    GtkWidget *hbox_top = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_top = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_container_add (GTK_CONTAINER (frame), hbox_top);
 
     GtkWidget *button_intcode = gtk_button_new_with_label (_ ("Encoding"));
@@ -156,7 +156,7 @@ void create_win_intcode () {
     button_int = gtk_button_new ();
     gtk_container_set_border_width (GTK_CONTAINER (button_int), 0);
     gtk_box_pack_start (GTK_BOX (hbox_top), button_int, FALSE, FALSE, 0);
-    GtkWidget *hbox_int = gtk_hbox_new (FALSE, 0);
+    GtkWidget *hbox_int = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_container_add (GTK_CONTAINER (button_int), hbox_int);
 
     int i;
