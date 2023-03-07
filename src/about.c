@@ -118,7 +118,7 @@ void create_about_window () {
 
     GtkWidget *hbox = get_new_hbox ();
     GtkWidget *vbox = get_new_vbox ();
-    GtkWidget *separator = gtk_hseparator_new ();
+    GtkWidget *separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
     GtkWidget *image = gtk_image_new_from_file (SYS_ICON_DIR "/hime.png");
     GtkWidget *version_label = get_version_label ();
     GtkWidget *close_button = get_close_button ();

@@ -135,7 +135,7 @@ void create_win_pho_near (phokey_t pho) {
                 if (b_first) {
                     b_first = FALSE;
                 } else {
-                    GtkWidget *separator = gtk_hseparator_new ();
+                    GtkWidget *separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
                     gtk_box_pack_start (GTK_BOX (vbox_top), separator, FALSE, FALSE, 0);
                 }
 
