@@ -588,9 +588,9 @@ char *htmlspecialchars (char *s, char out[]) {
     struct {
         char c;
         char *str;
-    } chs[] = { {'>', "gt"},
-                {'<', "lt"},
-                {'&', "amp"}
+    } chs[] = {{'>', "gt"},
+               {'<', "lt"},
+               {'&', "amp"}
 #if 0
   , {' ',"nbsp"}
 #endif
