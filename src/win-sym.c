@@ -472,7 +472,7 @@ void create_win_sym () {
     gtk_box_pack_start (GTK_BOX (hbox_top), gtk_separator_new (GTK_ORIENTATION_VERTICAL), FALSE, FALSE, 0);
 
     GtkWidget *vbox_arrow = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_set_homogeneous (vbox_arrow, TRUE);
+    gtk_box_set_homogeneous (GTK_BOX (vbox_arrow), TRUE);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_arrow), GTK_ORIENTATION_VERTICAL);
     gtk_box_pack_start (GTK_BOX (hbox_top), vbox_arrow, TRUE, TRUE, 0);
     GtkWidget *eve_up = gtk_event_box_new (), *eve_down = gtk_event_box_new ();
