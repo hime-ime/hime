@@ -298,15 +298,6 @@ void tsin_parse () {
     short smatch_phr_N, sno_match_ch_N;
     tsin_parse_recur (0, out, &smatch_phr_N, &sno_match_ch_N);
 
-#if 0
-  puts("vvvvvvvvvvvvvvvv");
-  for(i=0;  i < tss.c_len; i++) {
-    printf("%d:", out[i].len);
-    utf8_putcharn(out[i].str, out[i].len);
-  }
-  dbg("\n");
-#endif
-
     for (i = 0; i < tss.c_len; i++)
         tss.chpho[i].flag &= ~(FLAG_CHPHO_PHRASE_HEAD | FLAG_CHPHO_PHRASE_BODY);
 
@@ -319,7 +310,6 @@ void tsin_parse () {
 
         for (ofsj = j = 0; j < out[i].len; j++) {
             ofsj += utf8cpy (tss.chpho[ofsi].cha, (char *) &out[i].str[ofsj]);
-            //      tss.chpho[ofsi].ch = tss.chpho[ofsi].cha;
 
             tss.chpho[ofsi].flag |= FLAG_CHPHO_PHRASE_BODY;
             if (out[i].flag & FLAG_TSIN_PARSE_PHRASE)
@@ -328,17 +318,6 @@ void tsin_parse () {
             ofsi++;
         }
     }
-
-    int ph_sta_idx = tss.ph_sta;
-    if (tss.chpho[tss.c_len - 1].psta >= 0 && tss.c_len - tss.chpho[tss.c_len - 1].psta > 1) {
-        ph_sta_idx = tss.chpho[tss.c_len - 1].psta;
-    }
-
-#if 0
-  for(i=0;i<tss.c_len;i++)
-    utf8_putchar(tss.chpho[i].ch);
-  puts("");
-#endif
 
     free_cache ();
 }
