@@ -199,8 +199,8 @@ int main (int argc, char **argv) {
     char fname_tab[64];
     strncpy (fname_cin, fname, sizeof (fname_cin));
     strncpy (fname_tab, fname, sizeof (fname_tab));
-    strncat (fname_cin, ".cin", 4);
-    strncat (fname_tab, ".gtab", 5);
+    strcat (fname_cin, ".cin");
+    strcat (fname_tab, ".gtab");
 
     if ((fr = fopen (fname_cin, "rb")) == NULL) {
         p_err ("Cannot open %s\n", fname_cin);
