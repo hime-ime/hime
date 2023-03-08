@@ -38,6 +38,9 @@
 #if GTK_CHECK_VERSION(3, 0, 0)
 #define GTK_OBJECT
 
+#define GtkStatusIcon GObject
+#define gtk_status_icon_position_menu NULL
+
 #define GDK_WINDOW_XWINDOW GDK_WINDOW_XID
 #endif
 
