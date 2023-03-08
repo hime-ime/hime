@@ -91,6 +91,9 @@
 #define GTK_STOCK_CLOSE "gtk-close"
 #define GTK_STOCK_DELETE "gtk-delete"
 #define GTK_STOCK_FIND "gtk-find"
+#define GTK_STOCK_ABOUT "gtk-about"
+#define GTK_STOCK_PREFERENCES "gtk-preferences"
+#define GTK_STOCK_INDEX "gtk-index"
 #endif
 
 #if GTK_CHECK_VERSION(3, 13, 4)
