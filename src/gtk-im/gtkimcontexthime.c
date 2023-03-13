@@ -417,14 +417,14 @@ static gboolean gtk_im_context_hime_filter_keypress (GtkIMContext *context,
         result = TRUE;
     }
 
-    gboolean preedit_changed = different_str;
-    if (preedit_changed) {
-        g_signal_emit_by_name (context, "preedit-changed");
-    }
-
     if (result_str) {
         g_signal_emit_by_name (context, "commit", result_str);
         free (result_str);
+    }
+
+    gboolean preedit_changed = different_str;
+    if (preedit_changed) {
+        g_signal_emit_by_name (context, "preedit-changed");
     }
 
     if (!has_preedit_str && context_xim->pe_started) {
