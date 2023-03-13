@@ -41,6 +41,9 @@
 #define GtkStatusIcon GObject
 #define gtk_status_icon_position_menu NULL
 
+#define GTK_COLOR_SELECTION
+#define GTK_COLOR_SELECTION_DIALOG
+
 #define GDK_WINDOW_XWINDOW GDK_WINDOW_XID
 #endif
 
