@@ -429,7 +429,6 @@ static gboolean gtk_im_context_hime_filter_keypress (GtkIMContext *context,
 
     if (!has_preedit_str && context_xim->pe_started) {
         clear_preedit (context_xim);
-        context_xim->pe_started = FALSE;
         g_signal_emit_by_name (context, "preedit-end");
     }
 
