@@ -338,7 +338,6 @@ static gboolean gtk_im_context_hime_filter_keypress (GtkIMContext *context,
         result = hime_im_client_forward_key_release (context_xim->hime_ch,
                                                      keysym, event->state, &result_str);
     }
-    gboolean preedit_changed = result;
 
     char *preedit_str = NULL;
     HIME_PREEDIT_ATTR attr[HIME_PREEDIT_ATTR_MAX_N];
@@ -418,6 +417,7 @@ static gboolean gtk_im_context_hime_filter_keypress (GtkIMContext *context,
         result = TRUE;
     }
 
+    gboolean preedit_changed = different_str;
     if (preedit_changed) {
         g_signal_emit_by_name (context, "preedit-changed");
     }
