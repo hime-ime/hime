@@ -7,11 +7,6 @@ separator() {
     echo -e "\n\n\n\n\n"
 }
 
-format_check() {
-    make clang-format
-    git --no-pager diff --exit-code
-}
-
 # base
 pacman -Syuu --noconfirm --needed \
     base \
@@ -38,9 +33,6 @@ set +x; separator; separator; separator; set -x
 # enter GitHub workspace directory path
 cd "$GITHUB_WORKSPACE"
 git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-# check code formatting
-format_check
 
 # configure and build
 ./configure --prefix=/usr --qt5-im-module-path=/usr/lib/qt/plugins/platforminputcontexts/

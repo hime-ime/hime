@@ -93,7 +93,7 @@ sudo pacman -U hime-git-{version}-{arch}.pkg.tar.zst
 ## 開發
 
 - 歡迎發送 PR 協助改善 HIME
-- 發送 PR 前請先執行 `make clang-format` 以自動修正 coding style (`clang-format` 版本需 >= 10)
+- 發送 PR 前請先執行 `make clang-format` 以自動修正 coding style (需安裝 `clang-format` 版本 14 `(clang-format-14)`)
 
 ## 附錄
 
