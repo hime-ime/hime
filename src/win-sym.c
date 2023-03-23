@@ -479,9 +479,9 @@ void create_win_sym () {
     gtk_event_box_set_visible_window (GTK_EVENT_BOX (eve_up), FALSE);
     gtk_event_box_set_visible_window (GTK_EVENT_BOX (eve_down), FALSE);
     gtk_box_pack_start (GTK_BOX (vbox_arrow), eve_up, TRUE, TRUE, 0);
-    gtk_container_add (GTK_CONTAINER (eve_up), gtk_arrow_new (GTK_ARROW_UP, GTK_SHADOW_IN));
+    gtk_container_add (GTK_CONTAINER (eve_up), gtk_image_new_from_icon_name ("go-up", GTK_ICON_SIZE_BUTTON));
     gtk_box_pack_start (GTK_BOX (vbox_arrow), eve_down, TRUE, TRUE, 0);
-    gtk_container_add (GTK_CONTAINER (eve_down), gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_IN));
+    gtk_container_add (GTK_CONTAINER (eve_down), gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON));
 
     g_signal_connect (G_OBJECT (eve_up), "button-press-event", G_CALLBACK (mouse_button_callback_up_down), (gpointer) 1);
     g_signal_connect (G_OBJECT (eve_down), "button-press-event", G_CALLBACK (mouse_button_callback_up_down), NULL);

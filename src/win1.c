@@ -130,7 +130,7 @@ void create_win1_gui (void) {
 
     gtk_event_box_set_visible_window (GTK_EVENT_BOX (eve_box_up), FALSE);
     gtk_box_pack_start (GTK_BOX (vbox_top), eve_box_up, FALSE, FALSE, 0);
-    arrow_up = gtk_arrow_new (GTK_ARROW_UP, GTK_SHADOW_IN);
+    arrow_up = gtk_image_new_from_icon_name ("go-up", GTK_ICON_SIZE_BUTTON);
     gtk_container_add (GTK_CONTAINER (eve_box_up), arrow_up);
     g_signal_connect (
         G_OBJECT (eve_box_up), "button-press-event",
@@ -216,7 +216,7 @@ void create_win1_gui (void) {
     GtkWidget *eve_box_down = gtk_event_box_new ();
     gtk_event_box_set_visible_window (GTK_EVENT_BOX (eve_box_down), FALSE);
     gtk_box_pack_start (GTK_BOX (vbox_top), eve_box_down, FALSE, FALSE, 0);
-    arrow_down = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_IN);
+    arrow_down = gtk_image_new_from_icon_name ("go-down", GTK_ICON_SIZE_BUTTON);
     gtk_container_add (GTK_CONTAINER (eve_box_down), arrow_down);
     g_signal_connect (
         G_OBJECT (eve_box_down), "button-press-event",
