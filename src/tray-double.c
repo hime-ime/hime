@@ -386,10 +386,8 @@ void load_tray_icon_double () {
         //	dbg("icon %s %s\n", fname, fname_state);
     }
 
-#if GTK_CHECK_VERSION(2, 16, 0)
     if (icon_state)
         gtk_status_icon_set_tooltip_text (icon_state, _ (tip));
-#endif
 
     if (icon_main) {
         char tt[64];
@@ -398,9 +396,7 @@ void load_tray_icon_double () {
 
         if (!iconame || !strcmp (iconame, HIME_TRAY_PNG) || !chinese_mode ())
             strcpy (tt, "English");
-#if GTK_CHECK_VERSION(2, 16, 0)
         gtk_status_icon_set_tooltip_text (icon_main, tt);
-#endif
     }
 
     return;

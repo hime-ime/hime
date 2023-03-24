@@ -500,23 +500,8 @@ static void create_win0_gui () {
 
     g_signal_connect (G_OBJECT (button_pho), "button-press-event",
                       G_CALLBACK (mouse_button_callback), NULL);
-#if GTK_CHECK_VERSION(2, 18, 0)
     gtk_widget_set_can_focus (button_pho, FALSE);
     gtk_widget_set_can_default (button_pho, FALSE);
-#else
-    GTK_WIDGET_UNSET_FLAGS (button_pho, GTK_CAN_FOCUS | GTK_CAN_DEFAULT);
-#endif
-
-#if 0
-  if (left_right_button_tips) {
-#if GTK_CHECK_VERSION(2, 12, 0)
-    gtk_widget_set_tooltip_text (button_pho, _("Left:Symbol selection tables  Right:Preferences"));
-#else
-    GtkTooltips *button_pho_tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (GTK_TOOLTIPS (button_pho_tips), button_pho, _("Left:Symbol selection tables  Right:Preferences"),NULL);
-#endif
-  }
-#endif
 
     label_pho = gtk_label_new ("");
     set_label_font_size (label_pho, hime_font_size_tsin_pho_in);

@@ -282,12 +282,7 @@ gboolean create_tray (gpointer data) {
     g_signal_connect (G_OBJECT (tray_icon), "notify::embedded",
                       G_CALLBACK (tray_embedded_cb), NULL);
 
-#if GTK_CHECK_VERSION(2, 12, 0)
     gtk_status_icon_set_tooltip_text (tray_icon, _ ("Left:Toggle alphabet-numeric mode  Middle:Virtual Keyboard  Right:Preferences"));
-#else
-    GtkTooltips *tips = gtk_tooltips_new ();
-    gtk_status_icon_set_tooltip (GTK_TOOLTIPS (tips), tray_icon, _ ("Left:Toggle alphabet-numeric mode  Middle:Virtual Keyboard  Right:Preferences"), NULL);
-#endif
 
     // Initiate Pango for drawing texts from default setting
     GtkWidget *wi = gtk_label_new (NULL);  // for reference

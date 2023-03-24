@@ -456,12 +456,7 @@ void create_win_sym () {
                 int phos_len = strlen (phos);
 
                 if (phos_len) {
-#if GTK_CHECK_VERSION(2, 12, 0)
                     gtk_widget_set_tooltip_text (button, phos);
-#else
-                    GtkTooltips *button_pho_tips = gtk_tooltips_new ();
-                    gtk_tooltips_set_tip (GTK_TOOLTIPS (button_pho_tips), button, phos, NULL);
-#endif
                 }
             }
 
