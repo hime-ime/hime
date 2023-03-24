@@ -1522,17 +1522,11 @@ int feedkey_pp (KeySym xkey, int kbstate) {
         return 1;
     case XK_Prior:
     case XK_KP_Prior:
-    case XK_KP_Subtract:
-        if (!tss.sel_pho && tss.c_len && xkey == XK_KP_Subtract) {
-            add_to_tsin_buf_str ("-");
-            return TRUE;
-        } else {
-            if (tss.c_len && !tss.sel_pho)
-                return win_sym_page_up ();
-            if (tsin_page_up ())
-                return TRUE;
+        if (tss.c_len && !tss.sel_pho)
             return win_sym_page_up ();
-        }
+        if (tsin_page_up ())
+            return TRUE;
+        return win_sym_page_up ();
     case XK_space:
         if (!tss.c_len && !poo.ityp3_pho && !poo.typ_pho[0] && !poo.typ_pho[1] && !poo.typ_pho[2] && current_fullshape_mode ()) {
             send_text ("　"); /* Full width space */
@@ -1581,17 +1575,11 @@ int feedkey_pp (KeySym xkey, int kbstate) {
         return 1;
     case XK_Next:
     case XK_KP_Next:
-    case XK_KP_Add:
-        if (!tss.sel_pho && tss.c_len && xkey == XK_KP_Add) {
-            add_to_tsin_buf_str ("+");
-            return TRUE;
-        } else {
-            if (tss.c_len && !tss.sel_pho)
-                return win_sym_page_down ();
-            if (tsin_page_down ())
-                return TRUE;
+        if (tss.c_len && !tss.sel_pho)
             return win_sym_page_down ();
-        }
+        if (tsin_page_down ())
+            return TRUE;
+        return win_sym_page_down ();
     case '\'':  // single quote
         if (phkbm.phokbm[xkey][0].num && !pin_juyin)
             goto other_keys;
