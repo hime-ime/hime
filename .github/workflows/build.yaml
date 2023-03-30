@@ -17,38 +17,11 @@ jobs:
           sudo apt update
           sudo apt install \
             clang-format-14 \
-            build-essential \
-            locales \
-            fakeroot \
-            devscripts \
-            git \
-            libxtst-dev \
-            libgtk2.0-dev \
-            libgtk-3-dev \
-            libanthy-dev \
-            libchewing3-dev \
-            qtbase5-private-dev
+            git
 
       - name: Check with clang-format
-        # TODO:
-        # The clang-format-14 command should be replaced with make clang-format.
-        # However, shell like bash and Github action interpret curly braces differently.
-        # This should be fixed with container in the future.
         run: |
-          ./configure --disable-qt6-immodule
-          clang-format-14 -i \
-            src/*.c \
-            src/*.h \
-            data/*.c \
-            src/gtk-im/*.c \
-            src/gtk-im/*.h \
-            src/im-client/*.c \
-            src/im-client/*.h \
-            src/modules/*.c \
-            src/modules/*.h \
-            src/qt5-im/*.h \
-            src/qt5-im/*.cpp \
-            --verbose
+          ./scripts/format_code.py
           git --no-pager diff --exit-code
 
   build_archlinux:

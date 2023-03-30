@@ -53,8 +53,4 @@ config.mak: $(VERSION_FILE) configure
 
 .PHONY: clang-format
 clang-format:
-	clang-format-14 -i {src,data}/*.[ch] \
-		src/{gtk-im,im-client,modules}/*.[ch] \
-		src/qt5-im/*.h \
-		src/qt5-im/*.cpp \
-		--verbose
+	./scripts/format_code.py
