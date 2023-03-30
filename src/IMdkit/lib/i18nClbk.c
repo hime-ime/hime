@@ -1,8 +1,8 @@
 /******************************************************************
- 
+
          Copyright 1994, 1995 by Sun Microsystems, Inc.
          Copyright 1993, 1994 by Hewlett-Packard Company
- 
+
 Permission to use, copy, modify, distribute, and sell this software
 and its documentation for any purpose is hereby granted without fee,
 provided that the above copyright notice appear in all copies and
@@ -13,7 +13,7 @@ distribution of the software without specific, written prior permission.
 Sun Microsystems, Inc. and Hewlett-Packard make no representations about
 the suitability of this software for any purpose.  It is provided "as is"
 without express or implied warranty.
- 
+
 SUN MICROSYSTEMS INC. AND HEWLETT-PACKARD COMPANY DISCLAIMS ALL
 WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
@@ -22,21 +22,21 @@ SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
 CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
 IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- 
+
   Author: Hidetoshi Tajima(tajima@Eng.Sun.COM) Sun Microsystems, Inc.
 
     This version tidied and debugged by Steve Underwood May 1999
- 
+
 ******************************************************************/
 
 #include <X11/Xlib.h>
+
+#include "FrameMgr.h"
 #include "IMdkit.h"
 #include "Xi18n.h"
-#include "FrameMgr.h"
 #include "XimFunc.h"
 
-int _Xi18nGeometryCallback (XIMS ims, IMProtocol *call_data)
-{
+int _Xi18nGeometryCallback (XIMS ims, IMProtocol *call_data) {
     Xi18n i18n_core = ims->protocol;
     FrameMgr fm;
     extern XimFrameRec geometry_fr[];
@@ -52,8 +52,7 @@ int _Xi18nGeometryCallback (XIMS ims, IMProtocol *call_data)
 
     total_size = FrameMgrGetTotalSize (fm);
     reply = (unsigned char *) malloc (total_size);
-    if (!reply)
-    {
+    if (!reply) {
         _Xi18nSendMessage (ims, connect_id, XIM_ERROR, 0, 0, 0);
         return False;
     }
@@ -78,15 +77,14 @@ int _Xi18nGeometryCallback (XIMS ims, IMProtocol *call_data)
     return True;
 }
 
-int _Xi18nPreeditStartCallback (XIMS ims, IMProtocol *call_data)
-{
+int _Xi18nPreeditStartCallback (XIMS ims, IMProtocol *call_data) {
     Xi18n i18n_core = ims->protocol;
     FrameMgr fm;
     extern XimFrameRec preedit_start_fr[];
     register int total_size;
     unsigned char *reply = NULL;
     IMPreeditCBStruct *preedit_CB =
-        (IMPreeditCBStruct*) &call_data->preedit_callback;
+        (IMPreeditCBStruct *) &call_data->preedit_callback;
     CARD16 connect_id = call_data->any.connect_id;
 
     fm = FrameMgrInit (preedit_start_fr,
@@ -94,9 +92,8 @@ int _Xi18nPreeditStartCallback (XIMS ims, IMProtocol *call_data)
                        _Xi18nNeedSwap (i18n_core, connect_id));
     total_size = FrameMgrGetTotalSize (fm);
     reply = (unsigned char *) malloc (total_size);
-    if (!reply)
-    {
-        _Xi18nSendMessage(ims, connect_id, XIM_ERROR, 0, 0, 0);
+    if (!reply) {
+        _Xi18nSendMessage (ims, connect_id, XIM_ERROR, 0, 0, 0);
         return False;
     }
     /*endif*/
@@ -118,8 +115,7 @@ int _Xi18nPreeditStartCallback (XIMS ims, IMProtocol *call_data)
     return True;
 }
 
-int _Xi18nPreeditDrawCallback (XIMS ims, IMProtocol *call_data)
-{
+int _Xi18nPreeditDrawCallback (XIMS ims, IMProtocol *call_data) {
     Xi18n i18n_core = ims->protocol;
     FrameMgr fm;
     extern XimFrameRec preedit_draw_fr[];
@@ -148,7 +144,7 @@ int _Xi18nPreeditDrawCallback (XIMS ims, IMProtocol *call_data)
     FrameMgrSetSize (fm, draw->text->length);
 
     /* set iteration count for list of feedback */
-    for (i = 0;  draw->text->feedback[i] != 0;  i++)
+    for (i = 0; draw->text->feedback[i] != 0; i++)
         ;
     /*endfor*/
     feedback_count = i;
@@ -156,8 +152,7 @@ int _Xi18nPreeditDrawCallback (XIMS ims, IMProtocol *call_data)
 
     total_size = FrameMgrGetTotalSize (fm);
     reply = (unsigned char *) malloc (total_size);
-    if (!reply)
-    {
+    if (!reply) {
         _Xi18nSendMessage (ims, connect_id, XIM_ERROR, 0, 0, 0);
         return False;
     }
@@ -173,10 +168,10 @@ int _Xi18nPreeditDrawCallback (XIMS ims, IMProtocol *call_data)
     FrameMgrPutToken (fm, status);
     FrameMgrPutToken (fm, draw->text->length);
     FrameMgrPutToken (fm, draw->text->string);
-    for (i = 0;  i < feedback_count;  i++)
+    for (i = 0; i < feedback_count; i++)
         FrameMgrPutToken (fm, draw->text->feedback[i]);
     /*endfor*/
-    
+
     _Xi18nSendMessage (ims,
                        connect_id,
                        XIM_PREEDIT_DRAW,
@@ -190,15 +185,14 @@ int _Xi18nPreeditDrawCallback (XIMS ims, IMProtocol *call_data)
     return True;
 }
 
-int _Xi18nPreeditCaretCallback (XIMS ims, IMProtocol *call_data)
-{
+int _Xi18nPreeditCaretCallback (XIMS ims, IMProtocol *call_data) {
     Xi18n i18n_core = ims->protocol;
     FrameMgr fm;
     extern XimFrameRec preedit_caret_fr[];
     register int total_size;
     unsigned char *reply = NULL;
     IMPreeditCBStruct *preedit_CB =
-        (IMPreeditCBStruct*) &call_data->preedit_callback;
+        (IMPreeditCBStruct *) &call_data->preedit_callback;
     XIMPreeditCaretCallbackStruct *caret =
         (XIMPreeditCaretCallbackStruct *) &preedit_CB->todo.caret;
     CARD16 connect_id = call_data->any.connect_id;
@@ -209,8 +203,7 @@ int _Xi18nPreeditCaretCallback (XIMS ims, IMProtocol *call_data)
 
     total_size = FrameMgrGetTotalSize (fm);
     reply = (unsigned char *) malloc (total_size);
-    if (!reply)
-    {
+    if (!reply) {
         _Xi18nSendMessage (ims, connect_id, XIM_ERROR, 0, 0, 0);
         return False;
     }
@@ -236,8 +229,7 @@ int _Xi18nPreeditCaretCallback (XIMS ims, IMProtocol *call_data)
     return True;
 }
 
-int _Xi18nPreeditDoneCallback (XIMS ims, IMProtocol *call_data)
-{
+int _Xi18nPreeditDoneCallback (XIMS ims, IMProtocol *call_data) {
     Xi18n i18n_core = ims->protocol;
     FrameMgr fm;
     extern XimFrameRec preedit_done_fr[];
@@ -253,8 +245,7 @@ int _Xi18nPreeditDoneCallback (XIMS ims, IMProtocol *call_data)
 
     total_size = FrameMgrGetTotalSize (fm);
     reply = (unsigned char *) malloc (total_size);
-    if (!reply)
-    {
+    if (!reply) {
         _Xi18nSendMessage (ims, connect_id, XIM_ERROR, 0, 0, 0);
         return False;
     }
@@ -278,15 +269,14 @@ int _Xi18nPreeditDoneCallback (XIMS ims, IMProtocol *call_data)
     return True;
 }
 
-int _Xi18nStatusStartCallback (XIMS ims, IMProtocol *call_data)
-{
+int _Xi18nStatusStartCallback (XIMS ims, IMProtocol *call_data) {
     Xi18n i18n_core = ims->protocol;
     FrameMgr fm;
     extern XimFrameRec status_start_fr[];
     register int total_size;
     unsigned char *reply = NULL;
     IMStatusCBStruct *status_CB =
-        (IMStatusCBStruct*) &call_data->status_callback;
+        (IMStatusCBStruct *) &call_data->status_callback;
     CARD16 connect_id = call_data->any.connect_id;
 
     fm = FrameMgrInit (status_start_fr,
@@ -294,8 +284,7 @@ int _Xi18nStatusStartCallback (XIMS ims, IMProtocol *call_data)
                        _Xi18nNeedSwap (i18n_core, connect_id));
     total_size = FrameMgrGetTotalSize (fm);
     reply = (unsigned char *) malloc (total_size);
-    if (!reply)
-    {
+    if (!reply) {
         _Xi18nSendMessage (ims, connect_id, XIM_ERROR, 0, 0, 0);
         return False;
     }
@@ -319,10 +308,9 @@ int _Xi18nStatusStartCallback (XIMS ims, IMProtocol *call_data)
     return True;
 }
 
-int _Xi18nStatusDrawCallback (XIMS ims, IMProtocol *call_data)
-{
+int _Xi18nStatusDrawCallback (XIMS ims, IMProtocol *call_data) {
     Xi18n i18n_core = ims->protocol;
-    FrameMgr fm = (FrameMgr)0;
+    FrameMgr fm = (FrameMgr) 0;
     extern XimFrameRec status_draw_text_fr[];
     extern XimFrameRec status_draw_bitmap_fr[];
     register int total_size = 0;
@@ -336,8 +324,7 @@ int _Xi18nStatusDrawCallback (XIMS ims, IMProtocol *call_data)
     register int i;
     BITMASK32 status = 0x0;
 
-    switch (draw->type)
-    {
+    switch (draw->type) {
     case XIMTextType:
         fm = FrameMgrInit (status_draw_text_fr,
                            NULL,
@@ -348,11 +335,11 @@ int _Xi18nStatusDrawCallback (XIMS ims, IMProtocol *call_data)
         else if (draw->data.text->feedback[0] == 0)
             status = 0x00000002;
         /*endif*/
-        
+
         /* set length of status string */
-        FrameMgrSetSize(fm, draw->data.text->length);
+        FrameMgrSetSize (fm, draw->data.text->length);
         /* set iteration count for list of feedback */
-        for (i = 0;  draw->data.text->feedback[i] != 0;  i++)
+        for (i = 0; draw->data.text->feedback[i] != 0; i++)
             ;
         /*endfor*/
         feedback_count = i;
@@ -360,8 +347,7 @@ int _Xi18nStatusDrawCallback (XIMS ims, IMProtocol *call_data)
 
         total_size = FrameMgrGetTotalSize (fm);
         reply = (unsigned char *) malloc (total_size);
-        if (!reply)
-        {
+        if (!reply) {
             _Xi18nSendMessage (ims, connect_id, XIM_ERROR, 0, 0, 0);
             return False;
         }
@@ -375,7 +361,7 @@ int _Xi18nStatusDrawCallback (XIMS ims, IMProtocol *call_data)
         FrameMgrPutToken (fm, status);
         FrameMgrPutToken (fm, draw->data.text->length);
         FrameMgrPutToken (fm, draw->data.text->string);
-        for (i = 0;  i < feedback_count;  i++)
+        for (i = 0; i < feedback_count; i++)
             FrameMgrPutToken (fm, draw->data.text->feedback[i]);
         /*endfor*/
         break;
@@ -387,8 +373,7 @@ int _Xi18nStatusDrawCallback (XIMS ims, IMProtocol *call_data)
 
         total_size = FrameMgrGetTotalSize (fm);
         reply = (unsigned char *) malloc (total_size);
-        if (!reply)
-        {
+        if (!reply) {
             _Xi18nSendMessage (ims, connect_id, XIM_ERROR, 0, 0, 0);
             return False;
         }
@@ -415,8 +400,7 @@ int _Xi18nStatusDrawCallback (XIMS ims, IMProtocol *call_data)
     return True;
 }
 
-int _Xi18nStatusDoneCallback (XIMS ims, IMProtocol *call_data)
-{
+int _Xi18nStatusDoneCallback (XIMS ims, IMProtocol *call_data) {
     Xi18n i18n_core = ims->protocol;
     FrameMgr fm;
     extern XimFrameRec status_done_fr[];
@@ -432,8 +416,7 @@ int _Xi18nStatusDoneCallback (XIMS ims, IMProtocol *call_data)
 
     total_size = FrameMgrGetTotalSize (fm);
     reply = (unsigned char *) malloc (total_size);
-    if (!reply)
-    {
+    if (!reply) {
         _Xi18nSendMessage (ims, connect_id, XIM_ERROR, 0, 0, 0);
         return False;
     }
@@ -457,8 +440,7 @@ int _Xi18nStatusDoneCallback (XIMS ims, IMProtocol *call_data)
     return True;
 }
 
-int _Xi18nStringConversionCallback (XIMS ims, IMProtocol *call_data)
-{
+int _Xi18nStringConversionCallback (XIMS ims, IMProtocol *call_data) {
     Xi18n i18n_core = ims->protocol;
     FrameMgr fm;
     extern XimFrameRec str_conversion_fr[];
@@ -472,12 +454,11 @@ int _Xi18nStringConversionCallback (XIMS ims, IMProtocol *call_data)
 
     fm = FrameMgrInit (str_conversion_fr,
                        NULL,
-                      _Xi18nNeedSwap (i18n_core, connect_id));
+                       _Xi18nNeedSwap (i18n_core, connect_id));
 
     total_size = FrameMgrGetTotalSize (fm);
     reply = (unsigned char *) malloc (total_size);
-    if (!reply)
-    {
+    if (!reply) {
         _Xi18nSendMessage (ims, connect_id, XIM_ERROR, 0, 0, 0);
         return False;
     }
@@ -504,8 +485,7 @@ int _Xi18nStringConversionCallback (XIMS ims, IMProtocol *call_data)
     if (i18n_core->methods.wait (ims,
                                  connect_id,
                                  XIM_STR_CONVERSION_REPLY,
-                                 0) == False)
-    {
+                                 0) == False) {
         return False;
     }
     /*endif*/

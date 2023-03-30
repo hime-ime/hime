@@ -1,8 +1,8 @@
 /******************************************************************
- 
+
          Copyright 1994, 1995 by Sun Microsystems, Inc.
          Copyright 1993, 1994 by Hewlett-Packard Company
- 
+
 Permission to use, copy, modify, distribute, and sell this software
 and its documentation for any purpose is hereby granted without fee,
 provided that the above copyright notice appear in all copies and
@@ -13,7 +13,7 @@ distribution of the software without specific, written prior permission.
 Sun Microsystems, Inc. and Hewlett-Packard make no representations about
 the suitability of this software for any purpose.  It is provided "as is"
 without express or implied warranty.
- 
+
 SUN MICROSYSTEMS INC. AND HEWLETT-PACKARD COMPANY DISCLAIMS ALL
 WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
@@ -22,30 +22,29 @@ SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
 CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
 IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- 
+
   Author: Hidetoshi Tajima(tajima@Eng.Sun.COM) Sun Microsystems, Inc.
 
     This version tidied and debugged by Steve Underwood May 1999
- 
+
 ******************************************************************/
 
-#include <X11/Xlib.h>
 #include <X11/Xatom.h>
+#include <X11/Xlib.h>
+
 #include "FrameMgr.h"
 #include "IMdkit.h"
 #include "Xi18n.h"
 #include "Xi18nX.h"
 #include "XimFunc.h"
 
-extern Xi18nClient *_Xi18nFindClient(Xi18n, CARD16);
-extern Xi18nClient *_Xi18nNewClient(Xi18n);
-extern void _Xi18nDeleteClient(Xi18n, CARD16);
-static Bool WaitXConnectMessage(Display*, Window,
-                                XEvent*, XPointer);
-static Bool WaitXIMProtocol(Display*, Window, XEvent*, XPointer);
+extern Xi18nClient *_Xi18nFindClient (Xi18n, CARD16);
+extern Xi18nClient *_Xi18nNewClient (Xi18n);
+extern void _Xi18nDeleteClient (Xi18n, CARD16);
+static Bool WaitXConnectMessage (Display *, Window, XEvent *, XPointer);
+static Bool WaitXIMProtocol (Display *, Window, XEvent *, XPointer);
 
-static XClient *NewXClient (Xi18n i18n_core, Window new_client)
-{
+static XClient *NewXClient (Xi18n i18n_core, Window new_client) {
     Display *dpy = i18n_core->address.dpy;
     Xi18nClient *client = _Xi18nNewClient (i18n_core);
     XClient *x_client;
@@ -53,7 +52,7 @@ static XClient *NewXClient (Xi18n i18n_core, Window new_client)
     x_client = (XClient *) malloc (sizeof (XClient));
     x_client->client_win = new_client;
     x_client->accept_win = XCreateSimpleWindow (dpy,
-                                                DefaultRootWindow(dpy),
+                                                DefaultRootWindow (dpy),
                                                 0,
                                                 0,
                                                 1,
@@ -67,8 +66,7 @@ static XClient *NewXClient (Xi18n i18n_core, Window new_client)
 
 static unsigned char *ReadXIMMessage (XIMS ims,
                                       XClientMessageEvent *ev,
-                                      int *connect_id)
-{
+                                      int *connect_id) {
     Xi18n i18n_core = ims->protocol;
     Xi18nClient *client = i18n_core->address.clients;
     XClient *x_client = NULL;
@@ -96,10 +94,9 @@ static unsigned char *ReadXIMMessage (XIMS ims,
         CARD16 length;
         extern int _Xi18nNeedSwap (Xi18n, CARD16);
 
-        if (client->byte_order == '?')
-        {
+        if (client->byte_order == '?') {
             if (hdr->major_opcode != XIM_CONNECT)
-                return (unsigned char *) NULL; 	/* can do nothing */
+                return (unsigned char *) NULL; /* can do nothing */
             client->byte_order = (CARD8) rec[0];
         }
 
@@ -124,14 +121,13 @@ static unsigned char *ReadXIMMessage (XIMS ims,
         memmove (p1, &length, sizeof (CARD16));
         p1 += sizeof (CARD16);
         memmove (p1, rec, length * 4);
-    }
-    else if (ev->format == 32) {
+    } else if (ev->format == 32) {
         /* ClientMessage and WindowProperty */
         unsigned long length = (unsigned long) ev->data.l[0];
         Atom atom = (Atom) ev->data.l[1];
-        int	return_code;
-        Atom	actual_type_ret;
-        int	actual_format_ret;
+        int return_code;
+        Atom actual_type_ret;
+        int actual_format_ret;
         unsigned long bytes_after_ret;
         unsigned char *prop;
         unsigned long nitems;
@@ -155,10 +151,10 @@ static unsigned char *ReadXIMMessage (XIMS ims,
         }
         if (length != nitems)
             length = nitems;
-	if (actual_format_ret == 16)
-	    length *= 2;
-	else if (actual_format_ret == 32)
-	    length *= 4;
+        if (actual_format_ret == 16)
+            length *= 2;
+        else if (actual_format_ret == 32)
+            length *= 4;
 
         /* if hit, it might be an error */
         if ((p = (unsigned char *) malloc (length)) == NULL)
@@ -170,8 +166,7 @@ static unsigned char *ReadXIMMessage (XIMS ims,
     return (unsigned char *) p;
 }
 
-static void ReadXConnectMessage (XIMS ims, XClientMessageEvent *ev)
-{
+static void ReadXConnectMessage (XIMS ims, XClientMessageEvent *ev) {
     Xi18n i18n_core = ims->protocol;
     XSpecRec *spec = (XSpecRec *) i18n_core->address.connect_addr;
     XEvent event;
@@ -182,12 +177,11 @@ static void ReadXConnectMessage (XIMS ims, XClientMessageEvent *ev)
     XClient *x_client = NewXClient (i18n_core, new_client);
 
     if (ev->window != i18n_core->address.im_window)
-        return; 			/* incorrect connection request */
+        return; /* incorrect connection request */
     /*endif*/
-    if (major_version != 0  ||  minor_version != 0)
-    {
+    if (major_version != 0 || minor_version != 0) {
         major_version =
-        minor_version = 0;
+            minor_version = 0;
         /* Only supporting only-CM & Property-with-CM method */
     }
     /*endif*/
@@ -196,7 +190,7 @@ static void ReadXConnectMessage (XIMS ims, XClientMessageEvent *ev)
                             ClientMessage,
                             ClientMessage,
                             WaitXIMProtocol,
-                            (XPointer)ims);
+                            (XPointer) ims);
     event.xclient.type = ClientMessage;
     event.xclient.display = dpy;
     event.xclient.window = new_client;
@@ -215,8 +209,7 @@ static void ReadXConnectMessage (XIMS ims, XClientMessageEvent *ev)
     XFlush (dpy);
 }
 
-static Bool Xi18nXBegin (XIMS ims)
-{
+static Bool Xi18nXBegin (XIMS ims) {
     Xi18n i18n_core = ims->protocol;
     Display *dpy = i18n_core->address.dpy;
     XSpecRec *spec = (XSpecRec *) i18n_core->address.connect_addr;
@@ -233,38 +226,35 @@ static Bool Xi18nXBegin (XIMS ims)
                             ClientMessage,
                             ClientMessage,
                             WaitXConnectMessage,
-                            (XPointer)ims);
+                            (XPointer) ims);
     return True;
 }
 
-static Bool Xi18nXEnd(XIMS ims)
-{
+static Bool Xi18nXEnd (XIMS ims) {
     Xi18n i18n_core = ims->protocol;
     Display *dpy = i18n_core->address.dpy;
 
     _XUnregisterFilter (dpy,
                         i18n_core->address.im_window,
                         WaitXConnectMessage,
-                        (XPointer)ims);
+                        (XPointer) ims);
     return True;
 }
 
-static char *MakeNewAtom (CARD16 connect_id, char *atomName)
-{
+static char *MakeNewAtom (CARD16 connect_id, char *atomName) {
     static int sequence = 0;
-    
+
     sprintf (atomName,
              "_server%d_%d",
              connect_id,
-             ((sequence > 20)  ?  (sequence = 0)  :  sequence++));
+             ((sequence > 20) ? (sequence = 0) : sequence++));
     return atomName;
 }
 
 static Bool Xi18nXSend (XIMS ims,
                         CARD16 connect_id,
                         unsigned char *reply,
-                        long length)
-{
+                        long length) {
     Xi18n i18n_core = ims->protocol;
     Xi18nClient *client = _Xi18nFindClient (i18n_core, connect_id);
     XSpecRec *spec = (XSpecRec *) i18n_core->address.connect_addr;
@@ -275,8 +265,7 @@ static Bool Xi18nXSend (XIMS ims,
     event.xclient.window = x_client->client_win;
     event.xclient.message_type = spec->xim_request;
 
-    if (length > XCM_DATA_LIMIT)
-    {
+    if (length > XCM_DATA_LIMIT) {
         Atom atom;
         char atomName[16];
         Atom actual_type_ret;
@@ -318,16 +307,14 @@ static Bool Xi18nXSend (XIMS ims,
                          length);
         event.xclient.data.l[0] = length;
         event.xclient.data.l[1] = atom;
-    }
-    else
-    {
+    } else {
         unsigned char buffer[XCM_DATA_LIMIT];
         int i;
 
         event.xclient.format = 8;
 
         /* Clear unused field with NULL */
-        memmove(buffer, reply, length);
+        memmove (buffer, reply, length);
         for (i = length; i < XCM_DATA_LIMIT; i++)
             buffer[i] = (char) 0;
         /*endfor*/
@@ -343,33 +330,28 @@ static Bool Xi18nXSend (XIMS ims,
     return True;
 }
 
-static Bool CheckCMEvent (Display *display, XEvent *event, XPointer xi18n_core)
-{
+static Bool CheckCMEvent (Display *display, XEvent *event, XPointer xi18n_core) {
     Xi18n i18n_core = (Xi18n) ((void *) xi18n_core);
     XSpecRec *spec = (XSpecRec *) i18n_core->address.connect_addr;
 
-    if ((event->type == ClientMessage)
-        &&
-        (event->xclient.message_type == spec->xim_request))
-    {
-        return  True;
+    if ((event->type == ClientMessage) &&
+        (event->xclient.message_type == spec->xim_request)) {
+        return True;
     }
     /*endif*/
-    return  False;
+    return False;
 }
 
 static Bool Xi18nXWait (XIMS ims,
                         CARD16 connect_id,
                         CARD8 major_opcode,
-                        CARD8 minor_opcode)
-{
+                        CARD8 minor_opcode) {
     Xi18n i18n_core = ims->protocol;
     XEvent event;
     Xi18nClient *client = _Xi18nFindClient (i18n_core, connect_id);
     XClient *x_client = (XClient *) client->trans_rec;
 
-    for (;;)
-    {
+    for (;;) {
         unsigned char *packet;
         XimProtoHdr *hdr;
         int connect_id_ret;
@@ -378,26 +360,19 @@ static Bool Xi18nXWait (XIMS ims,
                   &event,
                   CheckCMEvent,
                   (XPointer) i18n_core);
-        if (event.xclient.window == x_client->accept_win)
-        {
+        if (event.xclient.window == x_client->accept_win) {
             if ((packet = ReadXIMMessage (ims,
-                                          (XClientMessageEvent *) & event,
-                                          &connect_id_ret))
-                == (unsigned char*) NULL)
-            {
+                                          (XClientMessageEvent *) &event,
+                                          &connect_id_ret)) == (unsigned char *) NULL) {
                 return False;
             }
             /*endif*/
-            hdr = (XimProtoHdr *)packet;
+            hdr = (XimProtoHdr *) packet;
 
-            if ((hdr->major_opcode == major_opcode)
-                &&
-                (hdr->minor_opcode == minor_opcode))
-            {
+            if ((hdr->major_opcode == major_opcode) &&
+                (hdr->minor_opcode == minor_opcode)) {
                 return True;
-            }
-            else if (hdr->major_opcode == XIM_ERROR)
-            {
+            } else if (hdr->major_opcode == XIM_ERROR) {
                 return False;
             }
             /*endif*/
@@ -407,8 +382,7 @@ static Bool Xi18nXWait (XIMS ims,
     /*endfor*/
 }
 
-static Bool Xi18nXDisconnect (XIMS ims, CARD16 connect_id)
-{
+static Bool Xi18nXDisconnect (XIMS ims, CARD16 connect_id) {
     Xi18n i18n_core = ims->protocol;
     Display *dpy = i18n_core->address.dpy;
     Xi18nClient *client = _Xi18nFindClient (i18n_core, connect_id);
@@ -416,9 +390,9 @@ static Bool Xi18nXDisconnect (XIMS ims, CARD16 connect_id)
 
     XDestroyWindow (dpy, x_client->accept_win);
     _XUnregisterFilter (dpy,
-		        x_client->accept_win,
+                        x_client->accept_win,
                         WaitXIMProtocol,
-		        (XPointer)ims);
+                        (XPointer) ims);
     XFree (x_client);
     _Xi18nDeleteClient (i18n_core, connect_id);
     return True;
@@ -426,14 +400,13 @@ static Bool Xi18nXDisconnect (XIMS ims, CARD16 connect_id)
 
 Bool _Xi18nCheckXAddress (Xi18n i18n_core,
                           TransportSW *transSW,
-                          char *address)
-{
+                          char *address) {
     XSpecRec *spec;
 
     if (!(spec = (XSpecRec *) malloc (sizeof (XSpecRec))))
         return False;
     /*endif*/
-    
+
     i18n_core->address.connect_addr = (XSpecRec *) spec;
     i18n_core->methods.begin = Xi18nXBegin;
     i18n_core->methods.end = Xi18nXEnd;
@@ -446,15 +419,12 @@ Bool _Xi18nCheckXAddress (Xi18n i18n_core,
 static Bool WaitXConnectMessage (Display *dpy,
                                  Window win,
                                  XEvent *ev,
-                                 XPointer client_data)
-{
-    XIMS ims = (XIMS)client_data;
+                                 XPointer client_data) {
+    XIMS ims = (XIMS) client_data;
     Xi18n i18n_core = ims->protocol;
     XSpecRec *spec = (XSpecRec *) i18n_core->address.connect_addr;
 
-    if (((XClientMessageEvent *) ev)->message_type
-        == spec->connect_request)
-    {
+    if (((XClientMessageEvent *) ev)->message_type == spec->connect_request) {
         ReadXConnectMessage (ims, (XClientMessageEvent *) ev);
         return True;
     }
@@ -465,8 +435,7 @@ static Bool WaitXConnectMessage (Display *dpy,
 static Bool WaitXIMProtocol (Display *dpy,
                              Window win,
                              XEvent *ev,
-                             XPointer client_data)
-{
+                             XPointer client_data) {
     extern void _Xi18nMessageHandler (XIMS, CARD16, unsigned char *, Bool *);
     XIMS ims = (XIMS) client_data;
     Xi18n i18n_core = ims->protocol;
@@ -475,14 +444,10 @@ static Bool WaitXIMProtocol (Display *dpy,
     unsigned char *packet;
     int connect_id;
 
-    if (((XClientMessageEvent *) ev)->message_type
-        == spec->xim_request)
-    {
+    if (((XClientMessageEvent *) ev)->message_type == spec->xim_request) {
         if ((packet = ReadXIMMessage (ims,
                                       (XClientMessageEvent *) ev,
-                                      &connect_id))
-            == (unsigned char *)  NULL)
-        {
+                                      &connect_id)) == (unsigned char *) NULL) {
             return False;
         }
         /*endif*/
