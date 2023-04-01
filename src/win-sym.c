@@ -192,7 +192,6 @@ static void cb_button_sym (GtkButton *button, GtkWidget *label) {
     //  dbg("cb_button_sym\n");
     char *str = (char *) gtk_label_get_text (GTK_LABEL (label));
 
-#if USE_TSIN
     if (current_method_type () == method_type_TSIN && current_CS->b_im_enabled) {
         add_to_tsin_buf_str (str);
         if (hime_punc_auto_send && tsin_cursor_end ()) {
@@ -201,9 +200,7 @@ static void cb_button_sym (GtkButton *button, GtkWidget *label) {
         } else {
             force_preedit_shift ();
         }
-    } else
-#endif
-        if (gtab_phrase_on ()) {
+    } else if (gtab_phrase_on ()) {
         insert_gbuf_nokey (str);
         if (hime_punc_auto_send && gtab_cursor_end ()) {
             output_gbuf ();
@@ -218,11 +215,9 @@ static void cb_button_sym (GtkButton *button, GtkWidget *label) {
     case method_type_PHO:
         clr_in_area_pho ();
         break;
-#if USE_TSIN
     case method_type_TSIN:
         tsin_reset_in_pho ();
         break;
-#endif
     case method_type_MODULE:
         break;
     default:

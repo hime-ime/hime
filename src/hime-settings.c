@@ -127,12 +127,7 @@ void load_settings (void) {
     hime_shift_space_eng_full = get_hime_conf_int (HIME_SHIFT_SPACE_ENG_FULL, 1);
     hime_capslock_lower = get_hime_conf_int (HIME_CAPSLOCK_LOWER, 1);
 
-#if USE_TSIN
     get_hime_conf_str (DEFAULT_INPUT_METHOD, &default_input_method_str, "6"); /* "6" usually is Tsin */
-#endif
-#if !USE_TSIN
-    get_hime_conf_str (DEFAULT_INPUT_METHOD, &default_input_method_str, "3"); /* "3" usually is Bopomofo */
-#endif
     //  left_right_button_tips = get_hime_conf_int(LEFT_RIGHT_BUTTON_TIPS, 1);
     hime_im_toggle_keys = get_hime_conf_int (HIME_IM_TOGGLE_KEYS, 0);
     hime_chinese_english_toggle_key = get_hime_conf_int (HIME_CHINESE_ENGLISH_TOGGLE_KEY,

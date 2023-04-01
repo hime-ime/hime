@@ -69,7 +69,6 @@ static void recreate_win0 () {
     create_win0_gui ();
 }
 
-#if USE_TSIN
 void change_win0_style () {
     if (!top_bin || current_hime_inner_frame == hime_inner_frame)
         return;
@@ -80,7 +79,6 @@ void change_win0_style () {
     current_hime_inner_frame = hime_inner_frame;
     recreate_win0 ();
 }
-#endif
 
 /* there is a bug in gtk, if the widget is created and hasn't been processed by
    gtk_main(), the coodinate of the widget is sometimes invalid.
@@ -532,7 +530,6 @@ static void destroy_top_bin () {
     memset (chars, 0, sizeof (chars));
 }
 
-#if USE_TSIN
 void destroy_win0 () {
     if (!gwin0)
         return;
@@ -540,7 +537,6 @@ void destroy_win0 () {
     gtk_widget_destroy (gwin0);
     gwin0 = NULL;
 }
-#endif
 
 void get_win0_geom () {
     if (!gwin0)
@@ -599,7 +595,6 @@ void hide_win0 () {
 
 void bell ();
 
-#if USE_TSIN
 void change_tsin_font_size () {
     if (!top_bin)
         return;
@@ -630,7 +625,6 @@ void change_tsin_font_size () {
 
     set_win0_bg ();
 }
-#endif  // USE_TSIN
 
 void show_button_pho (gboolean bshow) {
     if (!button_pho)
@@ -657,10 +651,8 @@ void win_tsin_disp_half_full () {
     compact_win0 ();
 }
 
-#if USE_TSIN
 void change_tsin_color () {
     create_cursor_attr ();
 
     drawcursor ();
 }
-#endif

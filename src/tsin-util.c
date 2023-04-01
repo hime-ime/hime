@@ -96,7 +96,6 @@ void load_tsin_db0 (char *infname, gboolean is_gtab_i) {
     tsin_is_gtab = is_gtab_i;
 }
 
-#if USE_TSIN
 void free_tsin () {
     free (current_tsin_fname);
     current_tsin_fname = NULL;
@@ -111,9 +110,7 @@ void free_tsin () {
         fp_phidx = NULL;
     }
 }
-#endif
 
-#if USE_TSIN
 void load_tsin_db () {
     char tsfname[512];
     char *fname = tsin32_f;
@@ -121,7 +118,6 @@ void load_tsin_db () {
     get_hime_user_or_sys_fname (fname, tsfname);
     load_tsin_db0 (tsfname, FALSE);
 }
-#endif
 
 static void seek_fp_phidx (int i) {
     fseek (fp_phidx, PHIDX_SKIP + i * sizeof (int), SEEK_SET);

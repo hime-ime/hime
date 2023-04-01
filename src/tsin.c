@@ -319,7 +319,6 @@ void clr_in_area_pho_tsin ();
 void close_win_pho_near ();
 void compact_win0 ();
 
-#if USE_TSIN
 void tsin_reset_in_pho0 () {
     //  prbuf();
     clr_in_area_pho_tsin ();
@@ -329,14 +328,11 @@ void tsin_reset_in_pho0 () {
     drawcursor ();
     close_win_pho_near ();
 }
-#endif
 
-#if USE_TSIN
 void tsin_reset_in_pho () {
     clrin_pho_tsin ();
     tsin_reset_in_pho0 ();
 }
-#endif
 
 void flush_tsin_buffer () {
     tsin_reset_in_pho ();

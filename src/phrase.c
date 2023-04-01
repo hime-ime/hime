@@ -252,15 +252,12 @@ gboolean feed_phrase (KeySym ksym, int state) {
         str = ((state & LockMask) && tr[i].str_caps) ? tr[i].str_caps : tr[i].str;
 
         if (str) {
-// send_it:
-#if USE_TSIN
+            // send_it:
             if (current_method_type () == method_type_TSIN && current_CS->b_im_enabled) {
                 add_to_tsin_buf_str (str);
                 if (hime_punc_auto_send && tsin_cursor_end ())
                     flush_tsin_buffer ();
-            } else
-#endif
-                if (gtab_phrase_on ()) {
+            } else if (gtab_phrase_on ()) {
                 insert_gbuf_nokey (str);
                 if (hime_punc_auto_send && gtab_cursor_end ())
                     output_gbuf ();

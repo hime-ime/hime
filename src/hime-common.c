@@ -171,15 +171,3 @@ Atom get_atom_by_name (Display *display, const char *name) {
     // the atom is created if it does not exist
     return XInternAtom (display, atom_name, False);
 }
-
-#if !USE_TSIN
-void change_tsin_color () {}
-void change_tsin_font_size () {}
-void change_win0_style () {}
-void destroy_win0 () {}
-void destroy_win1 () {}
-void free_tsin () {}
-void load_tsin_db () {}
-void tsin_reset_in_pho () {}
-void tsin_reset_in_pho0 () {}
-#endif

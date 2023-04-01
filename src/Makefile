@@ -158,16 +158,8 @@ ifeq ($(USE_I18N),Y)
 CFLAGS     += -DHIME_I18N_MESSAGE=1
 endif
 
-ifeq ($(USE_TSIN),Y)
 hime_tsin_o = tsin.o tsin-util.o win0.o win1.o tsin-parse.o
-CFLAGS     += -DUSE_TSIN=1
 OBJS       += $(hime_tsin_o)
-endif
-
-# Temporary workaround to turn off Tsin, will be fixed later
-ifeq ($(USE_TSIN),N)
-OBJS       += tsin.o tsin-util.o win0.o win1.o tsin-parse.o
-endif
 
 ifeq ($(GIT_HAVE),Y)
 CFLAGS     += -DGIT_HASH=\"$(GIT_HASH)\" -DGIT_HAVE=1

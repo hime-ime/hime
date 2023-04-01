@@ -72,15 +72,6 @@ CIN2GTAB   = $(SRC_DIR)/hime-cin2gtab
 KBMCV      = $(SRC_DIR)/kbmcv
 PIN_JUYIN  = $(SRC_DIR)/pin-juyin
 
-ifeq ($(USE_TSIN),Y)
-REMOVE_TSIN = keep_tsin
-endif
-
-ifeq ($(USE_TSIN),N)
-REMOVE_TSIN = remove_tsin
-endif
-
-
 .PHONY: all
 all: $(DATA)
 
@@ -145,13 +136,10 @@ tsin-1.src: extr1
 .kbmsrc.kbm: $(KBMCV)
 	$(KBMCV) $<
 
-keep_tsin: gtab.list.in
+cp_gtab_list: gtab.list.in
 	cp gtab.list.in gtab.list
 
-remove_tsin: gtab.list.in
-	grep -v TSIN gtab.list.in > gtab.list
-
-gtab.list: $(REMOVE_TSIN)
+gtab.list: cp_gtab_list
 	touch gtab.list
 
 .PHONY: install

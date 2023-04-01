@@ -560,7 +560,6 @@ echo "USE_XIM=$use_xim" >>config.mak
 echo "USE_SYSTEM_TRAY=$use_system_tray" >>config.mak
 echo "USE_UNITY_TRAY=$USE_UNITY_TRAY" >>config.mak
 echo "USE_I18N=$use_i18n" >>config.mak
-echo "USE_TSIN=$use_tsin" >>config.mak
 echo "USE_ANTHY=$USE_ANTHY" >>config.mak
 echo "ANTHY_INC=$ANTHY_INC" >>config.mak
 echo "USE_CHEWING=$USE_CHEWING" >>config.mak

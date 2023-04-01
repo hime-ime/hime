@@ -358,13 +358,11 @@ void hide_in_win (ClientState *cs) {
         hide_win_kbm ();
         hide_win_pho ();
         break;
-#if USE_TSIN
     case method_type_TSIN:
         //      flush_tsin_buffer();
         hide_win_kbm ();
         hide_win0 ();
         break;
-#endif
     case method_type_MODULE:
         if (inmd[cs->in_method].mod_cb_funcs)
             module_cb1 (cs)->module_hide_win ();
@@ -417,11 +415,9 @@ void show_in_win (ClientState *cs) {
     case method_type_PHO:
         show_win_pho ();
         break;
-#if USE_TSIN
     case method_type_TSIN:
         show_win0 ();
         break;
-#endif
     case method_type_MODULE:
         if (!module_cb1 (cs))
             return;
@@ -476,11 +472,9 @@ void move_in_win (ClientState *cs, int x, int y) {
     case method_type_PHO:
         move_win_pho (x, y);
         break;
-#if USE_TSIN
     case method_type_TSIN:
         move_win0 (x, y);
         break;
-#endif
     case method_type_MODULE:
         if (inmd[cs->in_method].mod_cb_funcs)
             module_cb1 (cs)->module_move_win (x, y);
@@ -651,11 +645,9 @@ void disp_im_half_full () {
     case method_type_PHO:
         win_pho_disp_half_full ();
         break;
-#if USE_TSIN
     case method_type_TSIN:
         win_tsin_disp_half_full ();
         break;
-#endif
     default:
         win_gtab_disp_half_full ();
         break;
@@ -694,9 +686,7 @@ void toggle_im_enabled () {
         }
 
         if (current_method_type () == method_type_TSIN) {
-#if USE_TSIN
             flush_tsin_buffer ();
-#endif
         } else if (current_method_type () == method_type_MODULE) {
             HIME_module_callback_functions *mod_cbs = module_cb ();
             if (mod_cbs)
@@ -753,11 +743,9 @@ void update_active_in_win_geom () {
     case method_type_PHO:
         get_win_pho_geom ();
         break;
-#if USE_TSIN
     case method_type_TSIN:
         get_win0_geom ();
         break;
-#endif
     case method_type_MODULE:
         mod_cbs = module_cb ();
         if (mod_cbs && mod_cbs->module_get_win_geom)
@@ -777,10 +765,8 @@ gboolean win_is_visible () {
     switch (current_method_type ()) {
     case method_type_PHO:
         return gwin_pho && gtk_widget_get_visible (gwin_pho);
-#if USE_TSIN
     case method_type_TSIN:
         return gwin0 && gtk_widget_get_visible (gwin0);
-#endif
     case method_type_MODULE:
         if (!module_cb ())
             return FALSE;
@@ -1262,10 +1248,8 @@ gboolean ProcessKeyPress (KeySym keysym, uint32_t kev_state) {
     switch (current_method_type ()) {
     case method_type_PHO:
         return check_key_press (keysym, kev_state, feedkey_pho (keysym, kev_state));
-#if USE_TSIN
     case method_type_TSIN:
         return check_key_press (keysym, kev_state, feedkey_pp (keysym, kev_state));
-#endif
     case method_type_MODULE: {
         if (!module_cb ())
             return check_key_press (keysym, kev_state, FALSE);
@@ -1492,10 +1476,8 @@ int hime_get_preedit (ClientState *cs,
     switch (current_method_type ()) {
     case method_type_PHO:
         return pho_get_preedit (str, attr, cursor, comp_flag);
-#if USE_TSIN
     case method_type_TSIN:
         return tsin_get_preedit (str, attr, cursor, comp_flag);
-#endif
     case method_type_MODULE:
         if (inmd[current_CS->in_method].mod_cb_funcs) {
             return module_cb ()->module_get_preedit (str, attr, cursor, comp_flag);
@@ -1520,11 +1502,9 @@ void hime_reset (void) {
     case method_type_PHO:
         pho_reset ();
         break;
-#if USE_TSIN
     case method_type_TSIN:
         tsin_reset ();
         break;
-#endif
     case method_type_MODULE:
         if (inmd[current_CS->in_method].mod_cb_funcs) {
             module_cb ()->module_reset ();
@@ -1563,11 +1543,9 @@ void flush_edit_buffer (void) {
     }
 
     switch (current_method_type ()) {
-#if USE_TSIN
     case method_type_TSIN:
         flush_tsin_buffer ();
         break;
-#endif
     case method_type_MODULE:
         if (inmd[current_CS->in_method].mod_cb_funcs) {
             module_cb ()->module_flush_input ();
