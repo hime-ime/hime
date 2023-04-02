@@ -814,7 +814,7 @@ void set_eng_ch_mode (gboolean mode) {
     }
 
     if (current_method_type () == method_type_TSIN) {
-        drawcursor ();
+        draw_tsin_cursor ();
 
         if (!chinese_mode ())
             clrin_pho_tsin ();

@@ -21,6 +21,7 @@
 
 #include "gst.h"
 #include "pho.h"
+#include "tsin.h"
 #include "win-sym.h"
 
 /* "destroy_window = FALSE" should be ok with both GTK+ 2.x and 3.x
@@ -85,13 +86,12 @@ void change_win0_style () {
    We use pre-create to overcome this bug.
 */
 
-void drawcursor ();
 void open_select_pho ();
 void create_phrase_save_menu (GdkEventButton *event);
 
 static void mouse_char_callback (GtkWidget *widget, GdkEventButton *event, gpointer data) {
     tss.c_idx = GPOINTER_TO_INT (data);
-    drawcursor ();
+    draw_tsin_cursor ();
 
     switch (event->button) {
     case 1:
@@ -654,5 +654,5 @@ void win_tsin_disp_half_full () {
 void change_tsin_color () {
     create_cursor_attr ();
 
-    drawcursor ();
+    draw_tsin_cursor ();
 }

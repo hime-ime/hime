@@ -50,6 +50,7 @@ gboolean tsin_seek (void *pho, int plen, int *r_sti, int *r_edi, char *tone_off)
 void load_tsin_entry (int idx, char *len, usecount_t *usecount, void *pho, u_char *ch);
 gboolean check_fixed_mismatch (int chpho_idx, char *mtch, int plen);
 char *get_chpho_pinyin_set (char *set_arr);
+void draw_tsin_cursor ();
 
 #define TSIN_GTAB_KEY "!!!!gtab-keys"
 

@@ -102,7 +102,7 @@ static void clrcursor () {
 
 void set_cursor_tsin (int index);
 
-void drawcursor () {
+void draw_tsin_cursor () {
     clr_tsin_cursor (tss.last_cursor_idx);
     tss.last_cursor_idx = tss.c_idx;
 
@@ -242,7 +242,7 @@ static void prbuf () {
         hide_char (i);
     }
 
-    drawcursor ();
+    draw_tsin_cursor ();
 }
 
 void disp_tsin_pho (int index, char *pho);
@@ -303,7 +303,7 @@ static void clear_ch_buf_sel_area () {
     tss.ph_sta = -1;
     tss.full_match = FALSE;
     clr_ch_buf ();
-    drawcursor ();
+    draw_tsin_cursor ();
 }
 
 static void close_selection_win ();
@@ -325,7 +325,7 @@ void tsin_reset_in_pho0 () {
     close_selection_win ();
     tss.pre_selN = 0;
     //  tss.pho_menu_idx = 0;
-    drawcursor ();
+    draw_tsin_cursor ();
     close_win_pho_near ();
 }
 
@@ -436,7 +436,7 @@ void init_tab_pp (gboolean init) {
 static void move_cursor_end () {
     clrcursor ();
     tss.c_idx = tss.c_len;
-    drawcursor ();
+    draw_tsin_cursor ();
 }
 
 gboolean save_phrase_to_db2 (CHPHO *chph, int len);
@@ -915,7 +915,7 @@ gboolean add_to_tsin_buf (char *str, phokey_t *pho, int len) {
     if (len > 0)
       tss.chpho[tss.c_idx].flag |= FLAG_CHPHO_PHRASE_HEAD;
 #endif
-    drawcursor ();
+    draw_tsin_cursor ();
     hide_pre_sel ();
     tss.ph_sta = -1;
 
@@ -979,7 +979,7 @@ gboolean add_to_tsin_buf_phsta (char *str, phokey_t *pho, int len) {
 #if 1
     set_phrase_link (idx, len);
 #endif
-    drawcursor ();
+    draw_tsin_cursor ();
     hide_pre_sel ();
     tss.ph_sta = -1;
     call_tsin_parse ();
@@ -1143,7 +1143,7 @@ static int cursor_left () {
     if (tss.c_idx) {
         clrcursor ();
         tss.c_idx--;
-        drawcursor ();
+        draw_tsin_cursor ();
         return 1;
     }
     // Thanks to PCMan.bbs@bbs.sayya.org for the suggestion
@@ -1155,7 +1155,7 @@ static int cursor_right () {
     if (tss.c_idx < tss.c_len) {
         clrcursor ();
         tss.c_idx++;
-        drawcursor ();
+        draw_tsin_cursor ();
         return 1;
     }
 
@@ -1439,7 +1439,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
             return 0;
         clrcursor ();
         tss.c_idx = 0;
-        drawcursor ();
+        draw_tsin_cursor ();
         return 1;
     case XK_End:
     case XK_KP_End:
@@ -1751,7 +1751,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
         if (hime_pop_up_win)
             show_win0 ();
 
-        drawcursor ();
+        draw_tsin_cursor ();
         return 1;
     }
 
@@ -1874,7 +1874,7 @@ llll2:
         clrin_pho_tsin ();
         clr_in_area_pho_tsin ();
     }
-    drawcursor ();
+    draw_tsin_cursor ();
     hide_pre_sel ();
 
 scan_it:
