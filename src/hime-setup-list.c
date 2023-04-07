@@ -312,9 +312,8 @@ void save_gtablist_conf () {
                         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_phonetic_speak)));
 
     save_omni_config ();
-    /* caleb- did not found where "reload" is used.
-     * caleb- think the send_hime_message() here does nothing.
-     */
+
+    // For activating the reload_data() function
     send_hime_message (GDK_DISPLAY (), "reload");
 }
 

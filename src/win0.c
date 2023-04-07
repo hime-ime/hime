@@ -653,6 +653,4 @@ void win_tsin_disp_half_full () {
 
 void change_tsin_color () {
     create_cursor_attr ();
-
-    draw_tsin_cursor ();
 }
