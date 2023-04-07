@@ -130,10 +130,10 @@ t2s-file: t2s-file.c $(SRC_DIR)/util.o $(SRC_DIR)/locale.o
 tsin-1.src: extr1
 	./extr1 > $@
 
-.cin.gtab: $(CIN2GTAB)
+%.gtab: %.cin $(CIN2GTAB)
 	$(CIN2GTAB) $<
 
-.kbmsrc.kbm: $(KBMCV)
+%.kbm: %.kbmsrc $(KBMCV)
 	$(KBMCV) $<
 
 cp_gtab_list: gtab.list.in
