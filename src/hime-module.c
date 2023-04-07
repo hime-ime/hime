@@ -36,7 +36,6 @@ void load_tab_pho_file ();
 void clear_sele ();
 void send_utf8_ch (char *s);
 extern gboolean force_show;
-int current_fullshape_mode ();
 
 void init_HIME_module_main_functions (HIME_module_main_functions *func) {
     func->mf_show_win_sym = show_win_sym;

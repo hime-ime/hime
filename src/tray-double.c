@@ -306,7 +306,6 @@ static void cb_popup_state (GtkStatusIcon *status_icon, guint button, guint acti
 }
 
 #define HIME_TRAY_PNG "hime-tray.png"
-extern int current_fullshape_mode ();
 
 void load_tray_icon_double () {
     if (!hime_status_tray)

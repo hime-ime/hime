@@ -49,7 +49,6 @@ void toggle_gb_output ();
 extern gboolean gb_output;
 
 static char full[] = N_ ("全"), engst[] = N_ ("ABC"), sim[] = N_ ("简");
-extern int current_fullshape_mode ();
 
 void destroy_tray_icon () {
     if (tray_icon != NULL) {

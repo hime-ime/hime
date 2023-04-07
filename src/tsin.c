@@ -832,8 +832,6 @@ static void close_selection_win () {
     tss.pre_selN = 0;
 }
 
-void show_button_pho (gboolean bshow);
-
 void show_win_gtab ();
 #if 0
 static char ochars[]="<,>.?/:;\"'{[}]_-+=|\\~`";
