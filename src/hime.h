@@ -125,7 +125,7 @@ enum {
 #endif
 
 #define HIME_SEL_KEY_COLOR_DEFAULT "blue"
-#define TSIN_CURSOR_COLOR_DEFAULT "blue"
+#define HIME_CURSOR_COLOR_DEFAULT "blue"
 
 #define ROW_ROW_SPACING (2)
 

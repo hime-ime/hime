@@ -412,9 +412,9 @@ static void create_cursor_attr () {
 
     GdkRGBA color_bg, color_fg;
     if (hime_win_color_use)
-        gdk_rgba_parse (&color_bg, tsin_cursor_color);
+        gdk_rgba_parse (&color_bg, hime_cursor_color);
     else
-        gdk_rgba_parse (&color_bg, TSIN_CURSOR_COLOR_DEFAULT);
+        gdk_rgba_parse (&color_bg, HIME_CURSOR_COLOR_DEFAULT);
     gdk_rgba_parse (&color_fg, "white");
 
 #if GTK_CHECK_VERSION(3, 0, 0)

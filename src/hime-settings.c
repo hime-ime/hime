@@ -66,7 +66,7 @@ int tsin_buffer_size, tsin_tail_select_key;
 int tsin_buffer_editing_mode;
 int hime_shift_space_eng_full;
 char *tsin_phrase_line_color;
-char *tsin_cursor_color, *hime_sel_key_color;
+char *hime_cursor_color, *hime_sel_key_color;
 unich_t eng_full_str[] = N_ ("[英/全]");
 unich_t eng_half_str[] = N_ ("[英]");
 unich_t cht_full_str[] = N_ ("[全]");
@@ -188,7 +188,7 @@ void load_settings (void) {
     pho_in_row1 = get_hime_conf_int (PHO_IN_ROW1, 1);
 
     get_hime_conf_str (TSIN_PHRASE_LINE_COLOR, &tsin_phrase_line_color, "blue");
-    get_hime_conf_str (TSIN_CURSOR_COLOR, &tsin_cursor_color, TSIN_CURSOR_COLOR_DEFAULT);
+    get_hime_conf_str (HIME_CURSOR_COLOR, &hime_cursor_color, HIME_CURSOR_COLOR_DEFAULT);
     get_hime_conf_str (HIME_SEL_KEY_COLOR, &hime_sel_key_color, HIME_SEL_KEY_COLOR_DEFAULT);
 
     if (eng_color_full_str) {

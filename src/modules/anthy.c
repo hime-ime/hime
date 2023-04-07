@@ -628,9 +628,9 @@ static void cursor_markup (int idx, char *s) {
     char cur[256];
     GtkWidget *lab = seg[idx].label;
     if (*gmf.mf_hime_win_color_use)
-        snprintf (cur, sizeof (cur), "<span foreground=\"white\" background=\"%s\">%s</span>", *gmf.mf_tsin_cursor_color, s);
+        snprintf (cur, sizeof (cur), "<span foreground=\"white\" background=\"%s\">%s</span>", *gmf.mf_hime_cursor_color, s);
     else
-        snprintf (cur, sizeof (cur), "<span foreground=\"white\" background=\"" TSIN_CURSOR_COLOR_DEFAULT "\">%s</span>", s);
+        snprintf (cur, sizeof (cur), "<span foreground=\"white\" background=\"" HIME_CURSOR_COLOR_DEFAULT "\">%s</span>", s);
     gtk_label_set_markup (GTK_LABEL (lab), cur);
 }
 

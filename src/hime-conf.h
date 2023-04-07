@@ -71,6 +71,7 @@
 #define HIME_ENG_PHRASE_ENABLED "hime-eng-phrase-enabled"
 #define HIME_WIN_SYM_CLICK_CLOSE "hime-win-sym-click-close"
 #define HIME_SEL_KEY_COLOR "hime-sel-key-color"
+#define HIME_CURSOR_COLOR "hime-cursor-color"
 #define HIME_TRAY_DISPLAY "hime-tray-display"
 
 #define GTAB_DUP_SELECT_BELL "gtab-dup-select-bell"
@@ -98,7 +99,6 @@
 #define TSIN_SPACE_OPT "tsin-space-opt"
 #define TSIN_BUFFER_SIZE "tsin-buffer-size"
 #define TSIN_PHRASE_LINE_COLOR "tsin-phrase-line-color"
-#define TSIN_CURSOR_COLOR "tsin-cursor-color"
 #define TSIN_TONE_CHAR_INPUT "tsin-tone-char-input"
 #define TSIN_TAB_PHRASE_END "tsin-tab-phrase-end"
 #define TSIN_TAIL_SELECT_KEY "tsin-tail-select-key"
@@ -156,7 +156,7 @@ extern int phonetic_huge_tab, phonetic_speak;
 extern char *phonetic_speak_sel;
 extern int tsin_space_opt, tsin_tone_char_input;
 
-extern char *tsin_phrase_line_color, *tsin_cursor_color, *hime_font_name, *hime_sel_key_color, *hime_icon_dir;
+extern char *tsin_phrase_line_color, *hime_cursor_color, *hime_font_name, *hime_sel_key_color, *hime_icon_dir;
 extern unich_t eng_full_str[], eng_half_str[], cht_full_str[];
 extern char *eng_color_full_str, *eng_color_half_str, *cht_color_full_str;
 extern char *hime_win_color_fg, *hime_win_color_bg;

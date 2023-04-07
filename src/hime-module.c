@@ -84,7 +84,7 @@ void init_HIME_module_main_functions (HIME_module_main_functions *func) {
     func->mf_hime_win_color_fg = &hime_win_color_fg;
 
     func->mf_hime_win_color_use = &hime_win_color_use;
-    func->mf_tsin_cursor_color = &tsin_cursor_color;
+    func->mf_hime_cursor_color = &hime_cursor_color;
     func->mf_pho_selkey = &pho_selkey;
     func->mf_force_show = &force_show;
     func->mf_win_x = &win_x;
