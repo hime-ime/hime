@@ -266,7 +266,7 @@ void set_sele_text (int tN, int i, char *text, int len) {
     char cc[2];
     cc[0] = wselkey[i];
     cc[1] = 0;
-    char ul[128];
+    char ul[64];
     ul[0] = 0;
 
 #if 0

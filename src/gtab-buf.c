@@ -188,7 +188,7 @@ static char *gen_buf_str_disp () {
         htmlspecialchars (addspc, spec);
         //    dbg("addspc '%s'  spec:%s out:%s\n", addspc, spec, out);
 
-        char www[MAX_CIN_PHR * 2 + 2];
+        char www[MAX_CIN_PHR * 3 + 2];
         char *t = spec;
 
         if (i == ggg.gbuf_cursor) {
@@ -985,7 +985,7 @@ void gtab_scan_pre_select (gboolean b_incr) {
     int i;
 
     for (i = 0; i < tss.pre_selN; i++) {
-        char ts[(MAX_PHRASE_LEN + 3) * CH_SZ + 1];
+        char ts[MAX_PHRASE_LEN * CH_SZ + 64 /* for attributed text */ + 1];
         char *br = (i < tss.pre_selN - 1 && gtab_vertical_select_on ()) ? "\n" : "";
         if (hime_win_color_use)
             snprintf (ts, sizeof (ts), "<span foreground=\"%s\">%c</span>%s%s", hime_sel_key_color, cur_inmd->selkey[i], tss.pre_sel[i].str, br);
