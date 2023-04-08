@@ -663,11 +663,7 @@ void module_change_font_size (void) {
             *g_himeModMainFuncs.mf_hime_font_size);
 
         if (*g_himeModMainFuncs.mf_hime_win_color_use) {
-#if !GTK_CHECK_VERSION(3, 0, 0)
-            gtk_widget_modify_fg (pLabel, GTK_STATE_NORMAL, &colorFG);
-#else
             gtk_widget_override_color (pLabel, GTK_STATE_FLAG_NORMAL, &colorFG);
-#endif
         }
     }
 }

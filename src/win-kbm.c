@@ -164,18 +164,6 @@ static KEY keys[ROWN][COLN] = {
 
 static int keysN = sizeof (keys) / sizeof (keys[0]);
 
-#if !GTK_CHECK_VERSION(3, 0, 0)
-static void mod_fg_all (GtkWidget *label, GdkRGBA *col) {
-    if (!label) {
-        return;
-    }
-
-    gtk_widget_modify_fg (label, GTK_STATE_NORMAL, col);
-    gtk_widget_modify_fg (label, GTK_STATE_ACTIVE, col);
-    gtk_widget_modify_fg (label, GTK_STATE_SELECTED, col);
-    gtk_widget_modify_fg (label, GTK_STATE_PRELIGHT, col);
-}
-#else
 static void mod_fg_all (GtkWidget *label, GdkRGBA *rgbfg) {
     if (!label) {
         return;
@@ -186,7 +174,6 @@ static void mod_fg_all (GtkWidget *label, GdkRGBA *rgbfg) {
     gtk_widget_override_color (label, GTK_STATE_FLAG_SELECTED, rgbfg);
     gtk_widget_override_color (label, GTK_STATE_FLAG_PRELIGHT, rgbfg);
 }
-#endif
 
 static void send_fake_key_eve2 (const KeySym key, const gboolean press) {
     const KeyCode kc = XKeysymToKeycode (dpy, key);

@@ -566,9 +566,7 @@ GtkWidget *create_appearance_widget () {
     g_signal_connect (G_OBJECT (button_fg), "clicked",
                       G_CALLBACK (cb_hime_win_color), &colorsel[0]);
     gdk_rgba_parse (&hime_win_gcolor_fg, hime_win_color_fg);
-    //  gtk_widget_modify_fg(label_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_fg);
     gdk_rgba_parse (&hime_win_gcolor_bg, hime_win_color_bg);
-    //  gtk_widget_modify_bg(event_box_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_bg);
 
     GtkWidget *button_bg = gtk_button_new_with_label (_ ("Background color"));
     gtk_widget_set_hexpand (button_bg, TRUE);

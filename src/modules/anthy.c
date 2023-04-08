@@ -1289,11 +1289,7 @@ void module_change_font_size (void) {
         gmf.mf_set_label_font_size (label, *gmf.mf_hime_font_size);
 
         if (*gmf.mf_hime_win_color_use) {
-#if !GTK_CHECK_VERSION(3, 0, 0)
-            gtk_widget_modify_fg (label, GTK_STATE_NORMAL, &fg);
-#else
             gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &fg);
-#endif
         }
     }
 }

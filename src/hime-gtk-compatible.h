@@ -70,6 +70,11 @@
 #define gdk_rgba_to_string(rgba) gdk_color_to_string (rgba)
 #define gtk_color_selection_get_current_rgba(colorsel, rgba) gtk_color_selection_get_current_color (colorsel, rgba)
 #define gtk_color_selection_set_current_rgba(colorsel, rgba) gtk_color_selection_set_current_color (colorsel, rgba)
+#define gtk_widget_override_color(widget, state, color) gtk_widget_modify_fg (widget, state, color)
+#define GTK_STATE_FLAG_NORMAL GTK_STATE_NORMAL
+#define GTK_STATE_FLAG_ACTIVE GTK_STATE_ACTIVE
+#define GTK_STATE_FLAG_PRELIGHT GTK_STATE_PRELIGHT
+#define GTK_STATE_FLAG_SELECTED GTK_STATE_SELECTED
 #endif
 
 // XXX(xatier): both gtk_widget_modify_font and gtk_widget_override_font are deprecated

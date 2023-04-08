@@ -74,17 +74,10 @@ void disp_gtab (char *str) {
     adj_gtab_win_pos ();
 }
 
-#if !GTK_CHECK_VERSION(3, 0, 0)
-void set_gtab_input_color (GdkRGBA *color) {
-    if (label_gtab)
-        gtk_widget_modify_fg (label_gtab, GTK_STATE_NORMAL, color);
-}
-#else
 void set_gtab_input_color (GdkRGBA *rgbfg) {
     if (label_gtab)
         gtk_widget_override_color (label_gtab, GTK_STATE_FLAG_NORMAL, rgbfg);
 }
-#endif
 
 void set_gtab_input_error_color () {
     GdkRGBA red;
@@ -144,42 +137,24 @@ void change_win_fg_bg (GtkWidget *win, GtkWidget *label) {
         change_win_bg (win);
 
     if (!hime_win_color_use) {
-#if !GTK_CHECK_VERSION(3, 0, 0)
-        if (label)
-            gtk_widget_modify_fg (label, GTK_STATE_NORMAL, NULL);
-        if (label_edit)
-            gtk_widget_modify_fg (label_edit, GTK_STATE_NORMAL, NULL);
-        if (GTK_IS_WIDGET (label_gtab_pre_sel))
-            gtk_widget_modify_fg (label_gtab_pre_sel, GTK_STATE_NORMAL, NULL);
-#else
         if (label)
             gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, NULL);
         if (label_edit)
             gtk_widget_override_color (label_edit, GTK_STATE_FLAG_NORMAL, NULL);
         if (GTK_IS_WIDGET (label_gtab_pre_sel))
             gtk_widget_override_color (label_gtab_pre_sel, GTK_STATE_FLAG_NORMAL, NULL);
-#endif
         return;
     }
 
     GdkRGBA col;
     gdk_rgba_parse (&col, hime_win_color_fg);
 
-#if !GTK_CHECK_VERSION(3, 0, 0)
-    if (label)
-        gtk_widget_modify_fg (label, GTK_STATE_NORMAL, &col);
-    if (label_edit)
-        gtk_widget_modify_fg (label_edit, GTK_STATE_NORMAL, &col);
-    if (label_gtab_pre_sel)
-        gtk_widget_modify_fg (label_gtab_pre_sel, GTK_STATE_NORMAL, &col);
-#else
     if (label)
         gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &col);
     if (label_edit)
         gtk_widget_override_color (label_edit, GTK_STATE_FLAG_NORMAL, &col);
     if (label_gtab_pre_sel)
         gtk_widget_override_color (label_gtab_pre_sel, GTK_STATE_FLAG_NORMAL, &col);
-#endif
 }
 
 void change_gtab_font_size () {
@@ -243,17 +218,9 @@ void set_key_codes_label (char *s, int better) {
     }
 
     if (better) {
-#if !GTK_CHECK_VERSION(3, 0, 0)
-        gtk_widget_modify_fg (label_key_codes, GTK_STATE_NORMAL, &better_color);
-#else
         gtk_widget_override_color (label_key_codes, GTK_STATE_FLAG_NORMAL, &better_color);
-#endif
     } else {
-#if !GTK_CHECK_VERSION(3, 0, 0)
-        gtk_widget_modify_fg (label_key_codes, GTK_STATE_NORMAL, NULL);
-#else
         gtk_widget_override_color (label_key_codes, GTK_STATE_FLAG_NORMAL, NULL);
-#endif
     }
 
     gtk_label_set_text (GTK_LABEL (label_key_codes), s);
