@@ -603,8 +603,6 @@ void show_input_method_name (GtkWidget *label, gchar *cname) {
         gtk_label_set_text (GTK_LABEL (label), cname);
 }
 
-GtkWidget *get_cname_label ();
-
 void show_input_method_name_on_gtab () {
     if (current_CS && (!hime_status_tray) && gtab_disp_im_name &&
         current_CS->b_im_enabled && !current_fullshape_mode () &&
