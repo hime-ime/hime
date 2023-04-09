@@ -86,7 +86,13 @@ void set_gtab_input_error_color () {
 }
 
 void clear_gtab_input_error_color () {
-    set_gtab_input_color (NULL);
+    if (hime_win_color_use) {
+        GdkRGBA color;
+        gdk_rgba_parse (&color, hime_win_color_fg);
+        set_gtab_input_color (&color);
+    } else {
+        set_gtab_input_color (NULL);
+    }
 }
 
 static gboolean need_label_edit ();
@@ -133,8 +139,12 @@ void change_win_fg_bg (GtkWidget *win, GtkWidget *label) {
             gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, NULL);
         if (label_edit)
             gtk_widget_override_color (label_edit, GTK_STATE_FLAG_NORMAL, NULL);
-        if (GTK_IS_WIDGET (label_gtab_pre_sel))
+        if (label_gtab_pre_sel)
             gtk_widget_override_color (label_gtab_pre_sel, GTK_STATE_FLAG_NORMAL, NULL);
+        if (label_input_method_name)
+            gtk_widget_override_color (label_input_method_name, GTK_STATE_FLAG_NORMAL, NULL);
+        if (label_gtab)
+            gtk_widget_override_color (label_gtab, GTK_STATE_FLAG_NORMAL, NULL);
         return;
     }
 
@@ -147,6 +157,10 @@ void change_win_fg_bg (GtkWidget *win, GtkWidget *label) {
         gtk_widget_override_color (label_edit, GTK_STATE_FLAG_NORMAL, &col);
     if (label_gtab_pre_sel)
         gtk_widget_override_color (label_gtab_pre_sel, GTK_STATE_FLAG_NORMAL, &col);
+    if (label_input_method_name)
+        gtk_widget_override_color (label_input_method_name, GTK_STATE_FLAG_NORMAL, &col);
+    if (label_gtab)
+        gtk_widget_override_color (label_gtab, GTK_STATE_FLAG_NORMAL, &col);
 }
 
 void change_gtab_font_size () {
