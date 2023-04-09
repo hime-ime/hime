@@ -115,21 +115,13 @@ static void set_disp_im_name ();
 
 void change_win_bg (GtkWidget *win) {
     if (!hime_win_color_use) {
-#if !GTK_CHECK_VERSION(2, 91, 6)
-        gtk_widget_modify_bg (win, GTK_STATE_NORMAL, NULL);
-#else
         gtk_widget_override_background_color (win, GTK_STATE_FLAG_NORMAL, NULL);
-#endif
         return;
     }
 
     GdkRGBA col;
     gdk_rgba_parse (&col, hime_win_color_bg);
-#if !GTK_CHECK_VERSION(2, 91, 6)
-    gtk_widget_modify_bg (win, GTK_STATE_NORMAL, &col);
-#else
     gtk_widget_override_background_color (win, GTK_STATE_FLAG_NORMAL, &col);
-#endif
 }
 
 void change_win_fg_bg (GtkWidget *win, GtkWidget *label) {

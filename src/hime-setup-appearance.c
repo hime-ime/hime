@@ -246,11 +246,7 @@ void disp_win_sample () {
     dbg ("disp_win_sample\n");
     unich_t tt[512];
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_hime_win_color_use))) {
-#if !GTK_CHECK_VERSION(2, 91, 6)
-        gtk_widget_modify_bg (event_box_win_color_test, GTK_STATE_NORMAL, &hime_win_gcolor_bg);
-#else
         gtk_widget_override_background_color (event_box_win_color_test, GTK_STATE_FLAG_NORMAL, &hime_win_gcolor_bg);
-#endif
 
 #if PANGO_VERSION_CHECK(1, 22, 0)
         snprintf (tt, sizeof (tt), _ ("<span foreground=\"%s\" font=\"%d\">7</span><span foreground=\"%s\" font=\"%d\">測</span><span font=\"%d\" foreground=\"white\" background=\"%s\">試</span>"), hime_sel_key_color,
@@ -260,11 +256,7 @@ void disp_win_sample () {
                   hime_font_size_tsin_presel, hime_win_color_fg, hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_cursor_color);
 #endif
     } else {
-#if !GTK_CHECK_VERSION(2, 91, 6)
-        gtk_widget_modify_bg (event_box_win_color_test, GTK_STATE_NORMAL, NULL);
-#else
         gtk_widget_override_background_color (event_box_win_color_test, GTK_STATE_FLAG_NORMAL, NULL);
-#endif
 
 #if PANGO_VERSION_CHECK(1, 22, 0)
         snprintf (tt, sizeof (tt), _ ("<span foreground=\"blue\" font=\"%d\">7</span><span font=\"%d\">測</span><span font=\"%d\" foreground=\"white\" background=\"blue\">試</span>"), hime_font_size_tsin_presel, hime_font_size_tsin_presel, hime_font_size_tsin_presel);

@@ -71,6 +71,7 @@
 #define gtk_color_selection_get_current_rgba(colorsel, rgba) gtk_color_selection_get_current_color (colorsel, rgba)
 #define gtk_color_selection_set_current_rgba(colorsel, rgba) gtk_color_selection_set_current_color (colorsel, rgba)
 #define gtk_widget_override_color(widget, state, color) gtk_widget_modify_fg (widget, state, color)
+#define gtk_widget_override_background_color(widget, state, color) gtk_widget_modify_bg (widget, state, color)
 #define GTK_STATE_FLAG_NORMAL GTK_STATE_NORMAL
 #define GTK_STATE_FLAG_ACTIVE GTK_STATE_ACTIVE
 #define GTK_STATE_FLAG_PRELIGHT GTK_STATE_PRELIGHT
