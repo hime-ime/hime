@@ -61,16 +61,12 @@ gboolean tsin_cursor_end () {
     return tss.c_idx == tss.c_len;
 }
 
-gboolean tsin_has_input ();
 void clrin_pho_tsin () {
     clrin_pho ();
 
     if (!tsin_has_input () && hime_pop_up_win)
         hide_win0 ();
 }
-
-gboolean pho_has_input ();
-gboolean hime_edit_display_ap_only ();
 
 gboolean tsin_has_input () {
     gboolean v = (!hime_edit_display_ap_only () && tss.c_len) || pho_has_input ();
@@ -832,7 +828,6 @@ static void close_selection_win () {
     tss.pre_selN = 0;
 }
 
-void show_win_gtab ();
 #if 0
 static char ochars[]="<,>.?/:;\"'{[}]_-+=|\\~`";
 #else

@@ -449,12 +449,8 @@ static void create_cursor_attr () {
 void init_tsin_selection_win ();
 
 static void set_win0_bg () {
-#if 1
     change_win_bg (gwin0);
-#endif
 }
-
-void change_win1_font ();
 
 static void create_win0_gui () {
     if (top_bin)
@@ -510,8 +506,6 @@ static void create_win0_gui () {
     init_tsin_selection_win ();
 
     set_win0_bg ();
-
-    //  change_win1_font();
 }
 
 static void destroy_top_bin () {
@@ -588,8 +582,6 @@ void hide_win0 () {
     hide_selections_win ();
     hide_win_sym ();
 }
-
-void bell ();
 
 void change_tsin_font_size () {
     if (!top_bin)
