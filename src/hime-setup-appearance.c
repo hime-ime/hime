@@ -295,7 +295,7 @@ static GtkWidget *create_hime_icon_dir_display () {
     gtk_box_pack_start (GTK_BOX (hbox_hime_icon_dir), opt_hime_icon_dir_display, FALSE, FALSE, 0);
     int i, current_idx = 0;
     for (i = 0; i < sizeof (icon_dir_sel) / sizeof (icon_dir_sel[0]); i++) {
-        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_hime_icon_dir_display), icon_dir_sel[i].name);
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (opt_hime_icon_dir_display), _ (icon_dir_sel[i].name));
         if (!strcmp (hime_icon_dir, icon_dir_sel[i].path)) {
             current_idx = i;
         }
