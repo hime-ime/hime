@@ -220,6 +220,8 @@ void create_win_pho_gui_simple () {
     gtk_box_pack_start (GTK_BOX (hbox_row2), label_key_codes, FALSE, FALSE, 2);
 
     change_pho_font_size ();
+    apply_widget_fg_color (label_pho);
+    apply_widget_bg_color (label_pho);
 
     gtk_widget_show_all (gwin_pho);
 
