@@ -133,7 +133,6 @@ msgid "Editing area"
 msgstr "編輯區顯示"
 
 #: ../src/hime-setup-appearance.c:351
-#, fuzzy
 msgid "Show keycodes on application window (OnTheSpot)"
 msgstr "顯示字根於應用程式中 (OnTheSpot)"
 
@@ -270,12 +269,10 @@ msgid "Show input method names"
 msgstr "顯示輸入法名稱"
 
 #: ../src/hime-setup-gtab.c:279
-#, fuzzy
 msgid "Hide second row of input window"
 msgstr "隱藏第二列 (輸入鍵…)"
 
 #: ../src/hime-setup-gtab.c:287
-#, fuzzy
 msgid "Move word components to the first row"
 msgstr "將字根移至第一列"
 
