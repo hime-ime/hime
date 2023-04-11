@@ -653,8 +653,8 @@ void module_change_font_size (void) {
 
     gdk_rgba_parse (&colorFG, *g_himeModMainFuncs.mf_hime_win_color_fg);
 
-    g_himeModMainFuncs.mf_change_win_bg (g_pWinChewing);
-    g_himeModMainFuncs.mf_change_win_bg (g_pEvBoxChewing);
+    g_himeModMainFuncs.mf_apply_widget_bg_color (g_pWinChewing);
+    g_himeModMainFuncs.mf_apply_widget_bg_color (g_pEvBoxChewing);
 
     for (int i = 0; i < MAX_SEG_NUM; i++) {
         GtkWidget *pLabel = g_pSeg[i].label;

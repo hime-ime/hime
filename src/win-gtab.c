@@ -119,48 +119,14 @@ void clear_gtab_in_area () {
 
 static void set_disp_im_name ();
 
-void change_win_bg (GtkWidget *win) {
-    if (!hime_win_color_use) {
-        gtk_widget_override_background_color (win, GTK_STATE_FLAG_NORMAL, NULL);
-        return;
-    }
-
-    GdkRGBA col;
-    gdk_rgba_parse (&col, hime_win_color_bg);
-    gtk_widget_override_background_color (win, GTK_STATE_FLAG_NORMAL, &col);
-}
-
 void change_win_fg_bg (GtkWidget *win, GtkWidget *label) {
-    if (win)
-        change_win_bg (win);
+    apply_widget_bg_color (win);
 
-    if (!hime_win_color_use) {
-        if (label)
-            gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, NULL);
-        if (label_edit)
-            gtk_widget_override_color (label_edit, GTK_STATE_FLAG_NORMAL, NULL);
-        if (label_gtab_pre_sel)
-            gtk_widget_override_color (label_gtab_pre_sel, GTK_STATE_FLAG_NORMAL, NULL);
-        if (label_input_method_name)
-            gtk_widget_override_color (label_input_method_name, GTK_STATE_FLAG_NORMAL, NULL);
-        if (label_gtab)
-            gtk_widget_override_color (label_gtab, GTK_STATE_FLAG_NORMAL, NULL);
-        return;
-    }
-
-    GdkRGBA col;
-    gdk_rgba_parse (&col, hime_win_color_fg);
-
-    if (label)
-        gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &col);
-    if (label_edit)
-        gtk_widget_override_color (label_edit, GTK_STATE_FLAG_NORMAL, &col);
-    if (label_gtab_pre_sel)
-        gtk_widget_override_color (label_gtab_pre_sel, GTK_STATE_FLAG_NORMAL, &col);
-    if (label_input_method_name)
-        gtk_widget_override_color (label_input_method_name, GTK_STATE_FLAG_NORMAL, &col);
-    if (label_gtab)
-        gtk_widget_override_color (label_gtab, GTK_STATE_FLAG_NORMAL, &col);
+    apply_widget_fg_color (label);
+    apply_widget_fg_color (label_edit);
+    apply_widget_fg_color (label_gtab_pre_sel);
+    apply_widget_fg_color (label_input_method_name);
+    apply_widget_fg_color (label_gtab);
 }
 
 void change_gtab_font_size () {

@@ -110,8 +110,6 @@ static void create_char (int index) {
     if (!hbox_edit)
         return;
 
-    GdkRGBA fg;
-    gdk_rgba_parse (&fg, hime_win_color_fg);
     GdkRGBA color_bg;
     gdk_rgba_parse (&color_bg, tsin_phrase_line_color);
 
@@ -138,9 +136,7 @@ static void create_char (int index) {
         set_label_font_size (label, hime_font_size);
         chars[i].label = label;
 
-        if (hime_win_color_use) {
-            gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &fg);
-        }
+        apply_widget_fg_color (label);
         gtk_widget_show_all (event_box);
     }
 }
@@ -449,7 +445,7 @@ static void create_cursor_attr () {
 void init_tsin_selection_win ();
 
 static void set_win0_bg () {
-    change_win_bg (gwin0);
+    apply_widget_bg_color (gwin0);
 }
 
 static void create_win0_gui () {
@@ -587,9 +583,6 @@ void change_tsin_font_size () {
     if (!top_bin)
         return;
 
-    GdkRGBA fg;
-    gdk_rgba_parse (&fg, hime_win_color_fg);
-
     set_label_font_size (label_pho, hime_font_size_tsin_pho_in);
 
     int i;
@@ -600,9 +593,7 @@ void change_tsin_font_size () {
 
         set_label_font_size (label, hime_font_size);
 
-        if (hime_win_color_use) {
-            gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &fg);
-        }
+        apply_widget_fg_color (label);
     }
 
     compact_win0 ();

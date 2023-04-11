@@ -48,7 +48,7 @@ typedef struct {
 
     int (*mf_get_widget_xy) (GtkWidget *win, GtkWidget *widget, int *rx, int *ry);
     void (*mf_get_win_size) (GtkWidget *win, int *width, int *height);
-    void (*mf_change_win_bg) (GtkWidget *win);
+    void (*mf_apply_widget_bg_color) (GtkWidget *win);
     void (*mf_set_label_font_size) (GtkWidget *label, int size);
     void (*mf_set_no_focus) (GtkWidget *win);
 

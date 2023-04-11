@@ -1281,8 +1281,8 @@ void module_change_font_size (void) {
     GdkRGBA fg;
     gdk_rgba_parse (&fg, *gmf.mf_hime_win_color_fg);
 
-    gmf.mf_change_win_bg (win_anthy);
-    gmf.mf_change_win_bg (event_box_anthy);
+    gmf.mf_apply_widget_bg_color (win_anthy);
+    gmf.mf_apply_widget_bg_color (event_box_anthy);
 
     for (int i = 0; i < MAX_SEG_N; i++) {
         GtkWidget *label = seg[i].label;

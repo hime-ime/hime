@@ -371,23 +371,16 @@ void change_win1_font (void) {
     if (!frame)
         return;
 
-    GdkRGBA fg;
-    gdk_rgba_parse (&fg, hime_win_color_fg);
-
     for (int i = 0; i < wselkeyN; i++) {
         set_label_font_size (labels_sele[i], hime_font_size_tsin_presel);
         set_label_font_size (labels_seleR[i], hime_font_size_tsin_presel);
-
-        if (labels_sele[i])
-            gtk_widget_override_color (labels_sele[i], GTK_STATE_FLAG_NORMAL, hime_win_color_use ? &fg : NULL);
-        if (labels_seleR[i])
-            gtk_widget_override_color (labels_seleR[i], GTK_STATE_FLAG_NORMAL, hime_win_color_use ? &fg : NULL);
-        change_win_bg (eve_sele[i]);
-        if (eve_seleR[i])
-            change_win_bg (eve_seleR[i]);
+        apply_widget_fg_color (labels_sele[i]);
+        apply_widget_fg_color (labels_seleR[i]);
+        apply_widget_bg_color (eve_sele[i]);
+        apply_widget_bg_color (eve_seleR[i]);
     }
 
-    change_win_bg (gwin1);
+    apply_widget_bg_color (gwin1);
 }
 
 void recreate_win1_if_nessary () {

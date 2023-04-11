@@ -113,7 +113,7 @@ void create_win_pho () {
     gtk_container_set_border_width (GTK_CONTAINER (gwin_pho), 0);
     gtk_widget_realize (gwin_pho);
     set_no_focus (gwin_pho);
-    change_win_bg (gwin_pho);
+    apply_widget_bg_color (gwin_pho);
 }
 
 static void mouse_button_callback (GtkWidget *widget, GdkEventButton *event, gpointer data) {

@@ -59,7 +59,7 @@ void init_HIME_module_main_functions (HIME_module_main_functions *func) {
 
     func->mf_get_widget_xy = get_widget_xy;
     func->mf_get_win_size = get_win_size;
-    func->mf_change_win_bg = change_win_bg;
+    func->mf_apply_widget_bg_color = apply_widget_bg_color;
     func->mf_set_label_font_size = set_label_font_size;
     func->mf_set_no_focus = set_no_focus;
 

@@ -91,6 +91,34 @@ void exec_hime_setup (void) {
     system (HIME_BIN_DIR "/hime-setup &");
 }
 
+void apply_widget_bg_color (GtkWidget *widget) {
+    if (!GTK_IS_WIDGET (widget))
+        return;
+
+    if (hime_win_color_use) {
+        GdkRGBA color;
+        gdk_rgba_parse (&color, hime_win_color_bg);
+        gtk_widget_override_background_color (widget, GTK_STATE_FLAG_NORMAL, &color);
+        return;
+    }
+
+    gtk_widget_override_background_color (widget, GTK_STATE_FLAG_NORMAL, NULL);
+}
+
+void apply_widget_fg_color (GtkWidget *widget) {
+    if (!GTK_IS_WIDGET (widget))
+        return;
+
+    if (hime_win_color_use) {
+        GdkRGBA color;
+        gdk_rgba_parse (&color, hime_win_color_fg);
+        gtk_widget_override_color (widget, GTK_STATE_FLAG_NORMAL, &color);
+        return;
+    }
+
+    gtk_widget_override_color (widget, GTK_STATE_FLAG_NORMAL, NULL);
+}
+
 void set_label_font_size (GtkWidget *label, int size) {
     if (!GTK_IS_WIDGET (label)) {
         return;
