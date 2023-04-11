@@ -38,7 +38,7 @@ static GtkWidget *check_button_root_style_use,
     *check_button_hime_status_tray,
     *check_button_hime_tray_hf_win_kbm,
 #endif
-    *check_button_hime_win_color_use,
+    *check_button_hime_use_custom_theme,
     *check_button_hime_on_the_spot_key;
 
 static GtkWidget *appearance_widget;
@@ -165,7 +165,7 @@ void save_appearance_conf () {
     save_hime_conf_int (HIME_STATUS_TRAY, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_hime_status_tray)));
 #endif
 
-    save_hime_conf_int (HIME_WIN_COLOR_USE, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_hime_win_color_use)));
+    save_hime_conf_int (HIME_USE_CUSTOM_THEME, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_hime_use_custom_theme)));
     save_hime_conf_str (HIME_WIN_COLOR_FG, hime_win_color_fg);
     save_hime_conf_str (HIME_WIN_COLOR_BG, hime_win_color_bg);
     save_hime_conf_str (HIME_SEL_KEY_COLOR, hime_sel_key_color);
@@ -216,7 +216,7 @@ static void cb_save_hime_win_color (GtkWidget *widget, gpointer user_data) {
 #else
     *sel->color_str = gtk_color_selection_palette_to_string (sel->color, 1);
 #endif
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_win_color_use), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_use_custom_theme), TRUE);
     disp_win_sample ();
 }
 
@@ -245,7 +245,7 @@ static gboolean cb_hime_win_color (GtkWidget *widget,
 void disp_win_sample () {
     dbg ("disp_win_sample\n");
     unich_t tt[512];
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_hime_win_color_use))) {
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_button_hime_use_custom_theme))) {
         gtk_widget_override_background_color (event_box_win_color_test, GTK_STATE_FLAG_NORMAL, &hime_win_gcolor_bg);
 
 #if PANGO_VERSION_CHECK(1, 22, 0)
@@ -374,8 +374,8 @@ static GtkWidget *create_hime_tray_display () {
 }
 #endif
 
-static gboolean cb_hime_win_color_use (GtkToggleButton *togglebutton, gpointer user_data) {
-    dbg ("cb_hime_win_color_use\n");
+static gboolean cb_hime_use_custom_theme (GtkToggleButton *togglebutton, gpointer user_data) {
+    dbg ("cb_hime_use_custom_theme\n");
     disp_win_sample ();
     return TRUE;
 }
@@ -535,14 +535,14 @@ GtkWidget *create_appearance_widget () {
 
     GtkWidget *hbox_win_color_use = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_win_color), hbox_win_color_use, FALSE, FALSE, 0);
-    check_button_hime_win_color_use = gtk_check_button_new_with_label (_ ("Custom theme color"));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_win_color_use),
-                                  hime_win_color_use);
+    check_button_hime_use_custom_theme = gtk_check_button_new_with_label (_ ("Custom theme color"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button_hime_use_custom_theme),
+                                  hime_use_custom_theme);
 
-    g_signal_connect (G_OBJECT (check_button_hime_win_color_use), "clicked",
-                      G_CALLBACK (cb_hime_win_color_use), NULL);
+    g_signal_connect (G_OBJECT (check_button_hime_use_custom_theme), "clicked",
+                      G_CALLBACK (cb_hime_use_custom_theme), NULL);
 
-    gtk_box_pack_start (GTK_BOX (hbox_win_color_use), check_button_hime_win_color_use, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_win_color_use), check_button_hime_use_custom_theme, FALSE, FALSE, 0);
     event_box_win_color_test = gtk_event_box_new ();
     // this will make the color test failed
     //  gtk_event_box_set_visible_window (GTK_EVENT_BOX(event_box_win_color_test), FALSE);

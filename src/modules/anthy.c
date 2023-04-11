@@ -627,7 +627,7 @@ static void clear_seg_label () {
 static void cursor_markup (int idx, char *s) {
     char cur[256];
     GtkWidget *lab = seg[idx].label;
-    if (*gmf.mf_hime_win_color_use)
+    if (*gmf.mf_hime_use_custom_theme)
         snprintf (cur, sizeof (cur), "<span foreground=\"white\" background=\"%s\">%s</span>", *gmf.mf_hime_cursor_color, s);
     else
         snprintf (cur, sizeof (cur), "<span foreground=\"white\" background=\"" HIME_CURSOR_COLOR_DEFAULT "\">%s</span>", s);
@@ -1288,7 +1288,7 @@ void module_change_font_size (void) {
         GtkWidget *label = seg[i].label;
         gmf.mf_set_label_font_size (label, *gmf.mf_hime_font_size);
 
-        if (*gmf.mf_hime_win_color_use) {
+        if (*gmf.mf_hime_use_custom_theme) {
             gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &fg);
         }
     }

@@ -72,7 +72,7 @@ typedef struct {
     char **mf_pho_chars;
 
     int *mf_hime_pop_up_win;
-    int *mf_hime_font_size, *mf_hime_win_color_use;
+    int *mf_hime_font_size, *mf_hime_use_custom_theme;
     char **mf_hime_win_color_fg, **mf_pho_selkey, **mf_hime_cursor_color;
     gboolean *mf_force_show;
     int *mf_win_x, *mf_win_y, *mf_win_xl, *mf_win_yl, *mf_dpy_xl, *mf_dpy_yl;

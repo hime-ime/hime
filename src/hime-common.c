@@ -95,7 +95,7 @@ void apply_widget_bg_color (GtkWidget *widget) {
     if (!GTK_IS_WIDGET (widget))
         return;
 
-    if (hime_win_color_use) {
+    if (hime_use_custom_theme) {
         GdkRGBA color;
         gdk_rgba_parse (&color, hime_win_color_bg);
         gtk_widget_override_background_color (widget, GTK_STATE_FLAG_NORMAL, &color);
@@ -109,7 +109,7 @@ void apply_widget_fg_color (GtkWidget *widget) {
     if (!GTK_IS_WIDGET (widget))
         return;
 
-    if (hime_win_color_use) {
+    if (hime_use_custom_theme) {
         GdkRGBA color;
         gdk_rgba_parse (&color, hime_win_color_fg);
         gtk_widget_override_color (widget, GTK_STATE_FLAG_NORMAL, &color);

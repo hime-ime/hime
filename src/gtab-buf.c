@@ -192,7 +192,7 @@ static char *gen_buf_str_disp () {
         char *t = spec;
 
         if (i == ggg.gbuf_cursor) {
-            if (hime_win_color_use)
+            if (hime_use_custom_theme)
                 snprintf (www, sizeof (www), "<span foreground=\"white\" background=\"%s\">%s</span>", hime_cursor_color, spec);
             else
                 snprintf (www, sizeof (www), "<span foreground=\"white\" background=\"" HIME_CURSOR_COLOR_DEFAULT "\">%s</span>", spec);
@@ -987,7 +987,7 @@ void gtab_scan_pre_select (gboolean b_incr) {
     for (i = 0; i < tss.pre_selN; i++) {
         char ts[MAX_PHRASE_LEN * CH_SZ + 64 /* for attributed text */ + 1];
         char *br = (i < tss.pre_selN - 1 && gtab_vertical_select_on ()) ? "\n" : "";
-        if (hime_win_color_use)
+        if (hime_use_custom_theme)
             snprintf (ts, sizeof (ts), "<span foreground=\"%s\">%c</span>%s%s", hime_sel_key_color, cur_inmd->selkey[i], tss.pre_sel[i].str, br);
         else
             snprintf (ts, sizeof (ts), "<span foreground=\"" HIME_SEL_KEY_COLOR_DEFAULT "\">%c</span>%s%s", cur_inmd->selkey[i], tss.pre_sel[i].str, br);

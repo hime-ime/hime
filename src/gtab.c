@@ -663,7 +663,7 @@ void disp_selection0 (gboolean phrase_selected, gboolean force_disp) {
             utf8cpy (uu, &cur_inmd->selkey[i - ofs]);
             char vvv[16];
             char www[1024];
-            if (hime_win_color_use)
+            if (hime_use_custom_theme)
                 snprintf (www, sizeof (www), "<span foreground=\"%s\">%s</span>", hime_sel_key_color, htmlspecialchars (uu, vvv));
             else
                 snprintf (www, sizeof (www), "<span foreground=\"" HIME_SEL_KEY_COLOR_DEFAULT "\">%s</span>", htmlspecialchars (uu, vvv));

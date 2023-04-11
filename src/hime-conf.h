@@ -66,7 +66,7 @@
 #define HIME_STATUS_TRAY "hime-status-tray"
 #define HIME_WIN_COLOR_FG "hime-win-color-fg"
 #define HIME_WIN_COLOR_BG "hime-win-color-bg"
-#define HIME_WIN_COLOR_USE "hime-win-color-use"
+#define HIME_USE_CUSTOM_THEME "hime-use-custom-theme"
 #define HIME_CAPSLOCK_LOWER "hime-capslock-lower"
 #define HIME_ENG_PHRASE_ENABLED "hime-eng-phrase-enabled"
 #define HIME_WIN_SYM_CLICK_CLOSE "hime-win-sym-click-close"
@@ -160,7 +160,7 @@ extern char *tsin_phrase_line_color, *hime_cursor_color, *hime_font_name, *hime_
 extern unich_t eng_full_str[], eng_half_str[], cht_full_str[];
 extern char *eng_color_full_str, *eng_color_half_str, *cht_color_full_str;
 extern char *hime_win_color_fg, *hime_win_color_bg;
-extern int hime_win_color_use, hime_bell_off;
+extern int hime_use_custom_theme, hime_bell_off;
 extern int hime_init_im_enabled, hime_init_full_mode;
 extern int hime_edit_display, hime_tray_display;
 extern char *pho_kbm_name, *pho_selkey, *hime_str_im_cycle;

@@ -23,7 +23,7 @@ int hime_setup_window_type_utility;
 
 int hime_font_size, hime_font_size_tsin_presel, hime_font_size_symbol;
 int hime_font_size_pho_near, hime_font_size_gtab_in, hime_font_size_win_kbm, hime_font_size_win_kbm_en, hime_show_win_kbm;
-int hime_win_color_use, hime_single_state;
+int hime_use_custom_theme, hime_single_state;
 int hime_remote_client;
 char *default_input_method_str;
 int default_input_method;
@@ -203,7 +203,7 @@ void load_settings (void) {
 
     get_hime_conf_str (HIME_WIN_COLOR_FG, &hime_win_color_fg, "black");
     get_hime_conf_str (HIME_WIN_COLOR_BG, &hime_win_color_bg, "#DADCD5");
-    hime_win_color_use = get_hime_conf_int (HIME_WIN_COLOR_USE, 0);
+    hime_use_custom_theme = get_hime_conf_int (HIME_USE_CUSTOM_THEME, 0);
     hime_bell_off = get_hime_conf_int (HIME_BELL_OFF, 0);
 
     hime_bell_volume = get_hime_conf_int (HIME_BELL_VOLUME, -97);

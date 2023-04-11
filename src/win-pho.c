@@ -291,7 +291,7 @@ void init_gtab_pho_query_win () {
 char *get_full_str ();
 
 void win_pho_disp_half_full () {
-    if (hime_win_color_use)
+    if (hime_use_custom_theme)
         gtk_label_set_markup (GTK_LABEL (label_pho), get_full_str ());
     else
         gtk_label_set_text (GTK_LABEL (label_pho), get_full_str ());

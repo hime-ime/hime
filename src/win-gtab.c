@@ -86,7 +86,7 @@ void set_gtab_input_error_color () {
 }
 
 void clear_gtab_input_error_color () {
-    if (hime_win_color_use) {
+    if (hime_use_custom_theme) {
         GdkRGBA color;
         gdk_rgba_parse (&color, hime_win_color_fg);
         set_gtab_input_color (&color);
@@ -566,7 +566,7 @@ void disp_gtab_pre_sel (char *s) {
 }
 
 void show_input_method_name (GtkWidget *label, gchar *cname) {
-    if (hime_win_color_use) {
+    if (hime_use_custom_theme) {
         gchar *color_cname = g_strdup_printf ("<span foreground=\"%s\">[%s]</span>",
                                               hime_sel_key_color, cname);
         gtk_label_set_markup (GTK_LABEL (label), color_cname);
@@ -737,7 +737,7 @@ static void set_disp_im_name () {
 
 char *get_full_str () {
     if (!chinese_mode ()) {
-        if (hime_win_color_use)
+        if (hime_use_custom_theme)
             return eng_color_half_str;
         else
             return _ (eng_half_str);
@@ -745,13 +745,13 @@ char *get_full_str () {
 
     if (current_CS->b_im_enabled) {
         if (current_fullshape_mode ()) {
-            if (hime_win_color_use)
+            if (hime_use_custom_theme)
                 return cht_color_full_str;
             else
                 return _ (cht_full_str);
         }
     } else if (current_fullshape_mode ()) {
-        if (hime_win_color_use)
+        if (hime_use_custom_theme)
             return eng_color_full_str;
         else
             return _ (eng_full_str);
@@ -786,7 +786,7 @@ void win_gtab_disp_half_full () {
 
     if (gtab_hide_row2) {
         if (GTK_IS_WIDGET (label_gtab)) {
-            if (hime_win_color_use)
+            if (hime_use_custom_theme)
                 gtk_label_set_markup (GTK_LABEL (label_gtab), get_full_str ());
             else
                 gtk_label_set_text (GTK_LABEL (label_gtab), get_full_str ());

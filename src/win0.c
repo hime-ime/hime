@@ -403,7 +403,7 @@ static void create_cursor_attr () {
         pango_attr_list_unref (attr_list);
 
     GdkRGBA color_bg, color_fg;
-    if (hime_win_color_use)
+    if (hime_use_custom_theme)
         gdk_rgba_parse (&color_bg, hime_cursor_color);
     else
         gdk_rgba_parse (&color_bg, HIME_CURSOR_COLOR_DEFAULT);
@@ -619,7 +619,7 @@ void win_tsin_disp_half_full () {
     if (label_pho == NULL)
         show_win0 ();
 
-    if (hime_win_color_use)
+    if (hime_use_custom_theme)
         gtk_label_set_markup (GTK_LABEL (label_pho), get_full_str ());
     else
         gtk_label_set_text (GTK_LABEL (label_pho), get_full_str ());

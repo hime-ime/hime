@@ -85,7 +85,7 @@ hime_label_show (char *pszPho, int nPos) {
 
     memset (szTmp, 0x00, 128);
 
-    if (*g_himeModMainFuncs.mf_hime_win_color_use)
+    if (*g_himeModMainFuncs.mf_hime_use_custom_theme)
         snprintf (szTmp, sizeof (szTmp), "<span background=\"%s\" foreground=\"white\">%s</span>",
                   *g_himeModMainFuncs.mf_hime_cursor_color,
                   pszPho);
@@ -662,7 +662,7 @@ void module_change_font_size (void) {
             pLabel,
             *g_himeModMainFuncs.mf_hime_font_size);
 
-        if (*g_himeModMainFuncs.mf_hime_win_color_use) {
+        if (*g_himeModMainFuncs.mf_hime_use_custom_theme) {
             gtk_widget_override_color (pLabel, GTK_STATE_FLAG_NORMAL, &colorFG);
         }
     }

@@ -276,12 +276,12 @@ void set_sele_text (int tN, int i, char *text, int len) {
     snprintf(ul, sizeof(ul), "foreground=\"%s\"", hime_sel_key_color);
 #endif
     if (tss.sel_pho && i == tss.pho_menu_idx) {
-        if (hime_win_color_use)
+        if (hime_use_custom_theme)
             snprintf (ul, sizeof (ul), "foreground=\"white\" background=\"%s\"", hime_cursor_color);
         else
             strcpy (ul, "foreground=\"white\" background=\"" HIME_CURSOR_COLOR_DEFAULT "\"");
     } else {
-        if (hime_win_color_use)
+        if (hime_use_custom_theme)
             snprintf (ul, sizeof (ul), "foreground=\"%s\"", hime_sel_key_color);
         else
             strcpy (ul, "foreground=\"" HIME_SEL_KEY_COLOR_DEFAULT "\"");
