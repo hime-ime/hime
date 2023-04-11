@@ -99,18 +99,18 @@ msgstr "Cursor color"
 
 # "輸入視窗"
 #: ../src/hime-setup-appearance.c:82
-msgid "Input window"
-msgstr "Input window"
+msgid "On input window"
+msgstr "On input window"
 
 # "應用程式編輯區"
 #: ../src/hime-setup-appearance.c:83
-msgid "on application window"
-msgstr "on application window"
+msgid "On application window"
+msgstr "On application window"
 
 # "同時顯示"
 #: ../src/hime-setup-appearance.c:84
-msgid "on both windows"
-msgstr "on both windows"
+msgid "On both windows"
+msgstr "On both windows"
 
 # "單圖示"
 #: ../src/hime-setup-appearance.c:93

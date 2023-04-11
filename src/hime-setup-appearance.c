@@ -79,9 +79,9 @@ struct {
     unich_t *keystr;
     int keynum;
 } edit_disp[] = {
-    {N_ ("Input window"), HIME_EDIT_DISPLAY_OVER_THE_SPOT},
-    {N_ ("on application window"), HIME_EDIT_DISPLAY_ON_THE_SPOT},
-    {N_ ("on both windows"), HIME_EDIT_DISPLAY_BOTH},
+    {N_ ("On input window"), HIME_EDIT_DISPLAY_OVER_THE_SPOT},
+    {N_ ("On application window"), HIME_EDIT_DISPLAY_ON_THE_SPOT},
+    {N_ ("On both windows"), HIME_EDIT_DISPLAY_BOTH},
     {NULL, 0},
 };
 

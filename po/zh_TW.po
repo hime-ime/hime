@@ -30,7 +30,7 @@ msgstr "輸入要查的同音字，接著在注音視窗選字"
 
 #: ../src/hime-juyin-learn.c:163 ../src/hime-sim2trad.c:135
 msgid "Update data from clipboard"
-msgstr "自剪貼區更新"
+msgstr "自剪貼簿更新"
 
 #: ../src/hime-settings.c:69
 msgid "[英/全]"
@@ -81,15 +81,15 @@ msgid "Cursor color"
 msgstr "游標顏色"
 
 #: ../src/hime-setup-appearance.c:82
-msgid "Input window"
+msgid "On input window"
 msgstr "輸入視窗"
 
 #: ../src/hime-setup-appearance.c:83
-msgid "on application window"
+msgid "On application window"
 msgstr "應用程式編輯區"
 
 #: ../src/hime-setup-appearance.c:84
-msgid "on both windows"
+msgid "On both windows"
 msgstr "同時顯示"
 
 #: ../src/hime-setup-appearance.c:93
@@ -146,27 +146,27 @@ msgstr "主要字型"
 
 #: ../src/hime-setup-appearance.c:430
 msgid "Font size of symbols window"
-msgstr "符號選擇視窗字型大小"
+msgstr "符號選擇視窗的字型大小"
 
 #: ../src/hime-setup-appearance.c:440
 msgid "Font size of Tsin's and gtab's preselection window"
-msgstr "詞音&gtab預選詞視窗字型大小"
+msgstr "詞音&gtab預選詞視窗的字型大小"
 
 #: ../src/hime-setup-appearance.c:450
 msgid "Font size of keycodes for Bopomofo and Tsin"
-msgstr "詞音注音輸入區字型大小"
+msgstr "詞音注音輸入區的字型大小"
 
 #: ../src/hime-setup-appearance.c:460
 msgid "Font size of similar phonetic choices"
-msgstr "詞音近似音顯示字型大小"
+msgstr "詞音近似音顯示的字型大小"
 
 #: ../src/hime-setup-appearance.c:470
 msgid "Font size of keycodes for gtab"
-msgstr "gtab(倉頡…)輸入區字型大小"
+msgstr "gtab(倉頡…)輸入區的字型大小"
 
 #: ../src/hime-setup-appearance.c:479
 msgid "Font size of virtual keyboard"
-msgstr "小鍵盤字型大小"
+msgstr "螢幕小鍵盤的字型大小"
 
 #: ../src/hime-setup-appearance.c:485
 msgid "Alphabet-numeric"
@@ -230,7 +230,7 @@ msgstr "按滿按空白不送出第一字(倉頡, 行列)"
 
 #: ../src/hime-setup-gtab.c:61
 msgid "Enable all"
-msgstr "全部開啟"
+msgstr "全部啟用"
 
 #: ../src/hime-setup-gtab.c:62
 msgid "Disable all"
@@ -238,7 +238,7 @@ msgstr "全部關閉"
 
 #: ../src/hime-setup-gtab.c:173
 msgid "Behavior of Space key"
-msgstr "空白鍵選項"
+msgstr "空白鍵行為"
 
 #: ../src/hime-setup-gtab.c:225 ../src/hime-setup.c:344
 msgid "Appearance Settings"
@@ -246,7 +246,7 @@ msgstr "外觀設定"
 
 #: ../src/hime-setup-gtab.c:232
 msgid "Behavior Settings"
-msgstr "行為"
+msgstr "行為設定"
 
 #: ../src/hime-setup-gtab.c:245
 msgid "Preview choices"
@@ -270,7 +270,7 @@ msgstr "顯示輸入法名稱"
 
 #: ../src/hime-setup-gtab.c:279
 msgid "Hide second row of input window"
-msgstr "隱藏第二列 (輸入鍵…)"
+msgstr "隱藏輸入視窗的第二列"
 
 #: ../src/hime-setup-gtab.c:287
 msgid "Move word components to the first row"
@@ -286,7 +286,7 @@ msgstr "由詞庫自動選字"
 
 #: ../src/hime-setup-gtab.c:303
 msgid "Enable preselection"
-msgstr "使用預選詞"
+msgstr "啟用預選詞功能"
 
 #: ../src/hime-setup-gtab.c:310
 msgid "Beep on repeated word"
@@ -334,7 +334,7 @@ msgstr "名稱"
 
 #: ../src/hime-setup-list.c:447
 msgid "Ctrl-Alt-Toggle Key"
-msgstr "Ctrl-Alt-鍵"
+msgstr "Ctrl-Alt-切換鍵"
 
 #: ../src/hime-setup-list.c:460
 msgid "Ctrl-Shift selections"
@@ -362,7 +362,7 @@ msgstr "直接進入全型輸入狀態"
 
 #: ../src/hime-setup-list.c:659
 msgid "Toggle half-/double-width with Shift-Space"
-msgstr "按下 shift-space 進入全形英文模式"
+msgstr "按下 shift-space 切換半形/全形模式"
 
 #: ../src/hime-setup-list.c:666
 msgid "Share input method state for all processes"
@@ -438,7 +438,7 @@ msgstr "(詞音) 鍵入空白鍵"
 
 #: ../src/hime-setup-pho.c:422
 msgid "Enable preselection window in Tsin"
-msgstr "詞音輸入預選詞視窗"
+msgstr "啟用詞音輸入預選詞視窗"
 
 #: ../src/hime-setup-pho.c:430
 msgid "Resorting choices by user's usage frequency"
@@ -510,7 +510,7 @@ msgstr "啟用/關閉簡體字輸出"
 
 #: ../src/hime-setup.c:276
 msgid "Toggle virtual keyboard"
-msgstr "顯示/隱藏輸入法鍵盤"
+msgstr "顯示/隱藏螢幕小鍵盤"
 
 #: ../src/hime-setup.c:280
 msgid "Convert clipboard's Simplified Chinese to Traditional Chinese"
@@ -670,7 +670,7 @@ msgstr "選擇輸入法"
 
 #: ../src/tray-appindicator.c:70 ../src/tray-double.c:112 ../src/tray.c:197
 msgid "Virtual keyboard"
-msgstr "小鍵盤"
+msgstr "螢幕小鍵盤"
 
 #: ../src/tray-appindicator.c:71 ../src/tray-double.c:139 ../src/tray.c:198
 msgid "Simplified Chinese output"
@@ -722,7 +722,7 @@ msgstr "简"
 
 #: ../src/tray.c:288 ../src/tray.c:291
 msgid "Left:Toggle alphabet-numeric mode  Middle:Virtual Keyboard  Right:Preferences"
-msgstr "左:中英切換 中:小鍵盤 右:選項"
+msgstr "左:中英切換 中:螢幕小鍵盤 右:選項"
 
 #: ../src/win-gtab.c:589 ../src/win-gtab.c:592 ../src/win-pho.c:223
 #: ../src/win-pho.c:226 ../src/win0.c:537 ../src/win0.c:540
