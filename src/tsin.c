@@ -40,7 +40,6 @@ extern char *pho_chars[];
 
 TSIN_ST tss;
 
-gboolean typ_pho_empty ();
 void mask_tone (phokey_t *pho, int plen, char *tone_off);
 
 extern u_short hash_pho[];
