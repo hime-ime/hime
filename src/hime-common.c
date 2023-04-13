@@ -58,7 +58,7 @@ gint64 current_time (void) {
 }
 
 void disp_pho_sub (GtkWidget *label, int index, char *pho) {
-    if (!label) {
+    if (!GTK_IS_LABEL (label)) {
         return;
     }
 
