@@ -392,74 +392,111 @@ GtkWidget *create_appearance_widget () {
     appearance_widget = vbox_top;
 
     GtkWidget *hbox_hime_font_size = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+    gtk_box_set_homogeneous (hbox_hime_font_size, TRUE);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size, FALSE, FALSE, 0);
+    GtkWidget *hbox_hime_font_size_left = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    GtkWidget *hbox_hime_font_size_right = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size), hbox_hime_font_size_left, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size), hbox_hime_font_size_right, TRUE, TRUE, 0);
 
     GtkWidget *label_hime_font_size = gtk_label_new (_ ("Main font"));
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size), label_hime_font_size, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_left), label_hime_font_size, FALSE, FALSE, 0);
     char tt[128];
     snprintf (tt, sizeof (tt), "%s %d", hime_font_name, hime_font_size);
     font_sel = gtk_font_button_new_with_font (tt);
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size), font_sel, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_right), font_sel, FALSE, FALSE, 0);
 
     GtkWidget *hbox_hime_font_size_symbol = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+    gtk_box_set_homogeneous (hbox_hime_font_size_symbol, TRUE);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_symbol, FALSE, FALSE, 0);
+    GtkWidget *hbox_hime_font_size_symbol_left = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    GtkWidget *hbox_hime_font_size_symbol_right = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_symbol), hbox_hime_font_size_symbol_left, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_symbol), hbox_hime_font_size_symbol_right, TRUE, TRUE, 0);
     GtkWidget *label_hime_font_size_symbol = gtk_label_new (_ ("Font size of symbols window"));
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_symbol), label_hime_font_size_symbol, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_symbol_left), label_hime_font_size_symbol, FALSE, FALSE, 0);
     GtkAdjustment *adj_hime_font_size_symbol =
         (GtkAdjustment *) gtk_adjustment_new (hime_font_size_symbol, 8.0, 32.0, 1.0, 1.0, 0.0);
     spinner_hime_font_size_symbol = gtk_spin_button_new (adj_hime_font_size_symbol, 0, 0);
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_symbol), spinner_hime_font_size_symbol, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_symbol_right), spinner_hime_font_size_symbol, FALSE, FALSE, 0);
 
     GtkWidget *hbox_hime_font_size_tsin_presel = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+    gtk_box_set_homogeneous (hbox_hime_font_size_tsin_presel, TRUE);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_tsin_presel, FALSE, FALSE, 0);
+    GtkWidget *hbox_hime_font_size_tsin_presel_left = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    GtkWidget *hbox_hime_font_size_tsin_presel_right = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_presel), hbox_hime_font_size_tsin_presel_left, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_presel), hbox_hime_font_size_tsin_presel_right, TRUE, TRUE, 0);
     GtkWidget *label_hime_font_size_tsin_presel = gtk_label_new (_ ("Font size of Tsin's and gtab's preselection window"));
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_presel), label_hime_font_size_tsin_presel, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_presel_left), label_hime_font_size_tsin_presel, FALSE, FALSE, 0);
     GtkAdjustment *adj_hime_font_size_tsin_presel =
         (GtkAdjustment *) gtk_adjustment_new (hime_font_size_tsin_presel, 8.0, 32.0, 1.0, 1.0, 0.0);
     spinner_hime_font_size_tsin_presel = gtk_spin_button_new (adj_hime_font_size_tsin_presel, 0, 0);
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_presel), spinner_hime_font_size_tsin_presel, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_presel_right), spinner_hime_font_size_tsin_presel, FALSE, FALSE, 0);
 
     GtkWidget *hbox_hime_font_size_tsin_pho_in = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+    gtk_box_set_homogeneous (hbox_hime_font_size_tsin_pho_in, TRUE);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
+    GtkWidget *hbox_hime_font_size_tsin_pho_in_left = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    GtkWidget *hbox_hime_font_size_tsin_pho_in_right = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_pho_in), hbox_hime_font_size_tsin_pho_in_left, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_pho_in), hbox_hime_font_size_tsin_pho_in_right, TRUE, TRUE, 0);
     GtkWidget *label_hime_font_size_tsin_pho_in = gtk_label_new (_ ("Font size of keycodes for Bopomofo and Tsin"));
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_pho_in), label_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_pho_in_left), label_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
     GtkAdjustment *adj_hime_font_size_tsin_pho_in =
         (GtkAdjustment *) gtk_adjustment_new (hime_font_size_tsin_pho_in, 8.0, 32.0, 1.0, 1.0, 0.0);
     spinner_hime_font_size_tsin_pho_in = gtk_spin_button_new (adj_hime_font_size_tsin_pho_in, 0, 0);
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_pho_in), spinner_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_pho_in_right), spinner_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
 
     GtkWidget *hbox_hime_font_size_pho_near = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+    gtk_box_set_homogeneous (hbox_hime_font_size_pho_near, TRUE);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_pho_near, FALSE, FALSE, 0);
+    GtkWidget *hbox_hime_font_size_pho_near_left = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    GtkWidget *hbox_hime_font_size_pho_near_right = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_pho_near), hbox_hime_font_size_pho_near_left, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_pho_near), hbox_hime_font_size_pho_near_right, TRUE, TRUE, 0);
     GtkWidget *label_hime_font_size_pho_near = gtk_label_new (_ ("Font size of similar phonetic choices"));
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_pho_near), label_hime_font_size_pho_near, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_pho_near_left), label_hime_font_size_pho_near, FALSE, FALSE, 0);
     GtkAdjustment *adj_hime_font_size_pho_near =
         (GtkAdjustment *) gtk_adjustment_new (hime_font_size_pho_near, 8.0, 32.0, 1.0, 1.0, 0.0);
     spinner_hime_font_size_pho_near = gtk_spin_button_new (adj_hime_font_size_pho_near, 0, 0);
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_pho_near), spinner_hime_font_size_pho_near, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_pho_near_right), spinner_hime_font_size_pho_near, FALSE, FALSE, 0);
 
     GtkWidget *hbox_hime_font_size_gtab_in = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+    gtk_box_set_homogeneous (hbox_hime_font_size_gtab_in, TRUE);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_gtab_in, FALSE, FALSE, 0);
+    GtkWidget *hbox_hime_font_size_gtab_in_left = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    GtkWidget *hbox_hime_font_size_gtab_in_right = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_gtab_in), hbox_hime_font_size_gtab_in_left, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_gtab_in), hbox_hime_font_size_gtab_in_right, TRUE, TRUE, 0);
     GtkWidget *label_hime_font_size_gtab_in = gtk_label_new (_ ("Font size of keycodes for gtab"));
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_gtab_in), label_hime_font_size_gtab_in, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_gtab_in_left), label_hime_font_size_gtab_in, FALSE, FALSE, 0);
     GtkAdjustment *adj_hime_font_size_gtab_in =
         (GtkAdjustment *) gtk_adjustment_new (hime_font_size_gtab_in, 8.0, 32.0, 1.0, 1.0, 0.0);
     spinner_hime_font_size_gtab_in = gtk_spin_button_new (adj_hime_font_size_gtab_in, 0, 0);
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_gtab_in), spinner_hime_font_size_gtab_in, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_gtab_in_right), spinner_hime_font_size_gtab_in, FALSE, FALSE, 0);
 
     GtkWidget *hbox_hime_font_size_win_kbm = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+    gtk_box_set_homogeneous (hbox_hime_font_size_win_kbm, TRUE);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_win_kbm, FALSE, FALSE, 0);
+    GtkWidget *hbox_hime_font_size_win_kbm_left = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    GtkWidget *hbox_hime_font_size_win_kbm_right = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), hbox_hime_font_size_win_kbm_left, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), hbox_hime_font_size_win_kbm_right, TRUE, TRUE, 0);
     GtkWidget *label_hime_font_size_win_kbm = gtk_label_new (_ ("Font size of virtual keyboard"));
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), label_hime_font_size_win_kbm, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm_left), label_hime_font_size_win_kbm, FALSE, FALSE, 0);
     GtkAdjustment *adj_hime_font_size_win_kbm =
         (GtkAdjustment *) gtk_adjustment_new (hime_font_size_win_kbm, 8.0, 32.0, 1.0, 1.0, 0.0);
     spinner_hime_font_size_win_kbm = gtk_spin_button_new (adj_hime_font_size_win_kbm, 0, 0);
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), spinner_hime_font_size_win_kbm, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm_left), gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0), TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm_left), spinner_hime_font_size_win_kbm, FALSE, FALSE, 0);
     GtkWidget *label_hime_font_size_win_kbm_en = gtk_label_new (_ ("Alphabet-numeric"));
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), label_hime_font_size_win_kbm_en, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm_right), label_hime_font_size_win_kbm_en, FALSE, FALSE, 0);
     GtkAdjustment *adj_hime_font_size_win_kbm_en =
         (GtkAdjustment *) gtk_adjustment_new (hime_font_size_win_kbm_en, 8.0, 32.0, 1.0, 1.0, 0.0);
     spinner_hime_font_size_win_kbm_en = gtk_spin_button_new (adj_hime_font_size_win_kbm_en, 0, 0);
-    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm), spinner_hime_font_size_win_kbm_en, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm_right), gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0), TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_win_kbm_right), spinner_hime_font_size_win_kbm_en, FALSE, FALSE, 0);
 
     GtkWidget *hbox_hime_pop_up_win = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_pop_up_win, FALSE, FALSE, 0);
