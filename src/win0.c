@@ -25,15 +25,6 @@
 #include "win-sym.h"
 #include "win0.h"
 
-/* "destroy_window = FALSE" should be ok with both GTK+ 2.x and 3.x
- * gcin use TRUE for GTK+ 3.x, but caleb- always patch it to FALSE
- */
-#if 0
-int destroy_window = TRUE;
-#else
-int destroy_window = FALSE;
-#endif
-
 GtkWidget *gwin0 = NULL;
 extern GtkWidget *gwin1;
 extern Display *dpy;
@@ -107,10 +98,7 @@ void hide_win0 () {
         return;
 
     gtk_widget_hide (gwin0);
-    if (destroy_window)
-        destroy_win0 ();
-    else
-        destroy_top_bin ();
+    destroy_top_bin ();
 
     hide_selections_win ();
     hide_win_sym ();

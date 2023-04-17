@@ -26,7 +26,6 @@
 static int current_hime_inner_frame;
 static int current_gtab_in_row1;
 static int current_gtab_vertical_select;
-extern int destroy_window;
 
 GtkWidget *gwin_gtab;
 static GtkWidget *top_bin;
@@ -703,12 +702,8 @@ void hide_win_gtab () {
 
     //  dbg("hide_win_gtab\n");
     if (gwin_gtab) {
-        if (destroy_window)
-            destroy_win_gtab ();
-        else {
-            gtk_widget_hide (gwin_gtab);
-            destroy_top_bin ();
-        }
+        gtk_widget_hide (gwin_gtab);
+        destroy_top_bin ();
     }
 
     close_gtab_pho_win ();

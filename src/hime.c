@@ -573,14 +573,7 @@ static void screen_size_changed (GdkScreen *screen, gpointer user_data) {
 
 #include "lang.h"
 
-extern int destroy_window;
-
 int main (int argc, char **argv) {
-    char *destroy = getenv ("HIME_DESTROY_WINDOW");
-    if (destroy)
-        destroy_window = atoi (destroy);
-    //  printf("HIME_DESTROY_WINDOW=%d\n",destroy_window);
-
     gtk_init (&argc, &argv);
 
     signal (SIGCHLD, SIG_IGN);
