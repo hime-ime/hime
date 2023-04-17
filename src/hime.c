@@ -486,7 +486,6 @@ void init_atom_property () {
     XSetSelectionOwner (dpy, hime_atom, xim_xwin, CurrentTime);
 }
 
-void hide_win0 ();
 void destroy_win0 ();
 void destroy_win1 ();
 void destroy_win_gtab ();
