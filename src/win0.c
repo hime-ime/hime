@@ -23,6 +23,7 @@
 #include "pho.h"
 #include "tsin.h"
 #include "win-sym.h"
+#include "win0.h"
 
 /* "destroy_window = FALSE" should be ok with both GTK+ 2.x and 3.x
  * gcin use TRUE for GTK+ 3.x, but caleb- always patch it to FALSE
@@ -44,7 +45,6 @@ static PangoAttrList *attr_list, *attr_list_blank;
 extern gboolean test_mode;
 
 void compact_win0 ();
-void move_win0 (int x, int y);
 void get_win0_geom ();
 
 static struct {
@@ -60,8 +60,61 @@ extern char text_pho[];
 extern int text_pho_N;
 static GtkWidget *button_eng_ph;
 // static int max_yl;
+extern gboolean force_show;
 
-static void create_win0_gui ();
+void init_win0 () {
+}
+
+void destroy_win0 () {
+    if (!gwin0)
+        return;
+    destroy_top_bin ();
+    gtk_widget_destroy (gwin0);
+    gwin0 = NULL;
+}
+
+void show_win0 () {
+#if _DEBUG && 1
+    dbg ("show_win0 pop:%d in:%d for:%d \n", hime_pop_up_win, tsin_has_input (), force_show);
+#endif
+    create_win0 ();
+    create_win0_gui ();
+
+    if (hime_pop_up_win && !tsin_has_input () && !force_show) {
+        //    dbg("show ret\n");
+        return;
+    }
+
+#if 0
+  if (!gtk_widget_get_visible(gwin0))
+#endif
+    {
+        //    dbg("gtk_widget_show %x\n", gwin0);
+        move_win0 (win_x, win_y);
+        gtk_widget_show (gwin0);
+    }
+
+    show_win_sym ();
+
+    if (current_CS->b_raise_window) {
+        gtk_window_present (GTK_WINDOW (gwin0));
+        raise_tsin_selection_win ();
+    }
+}
+
+void hide_win0 () {
+    if (!gwin0)
+        return;
+
+    gtk_widget_hide (gwin0);
+    if (destroy_window)
+        destroy_win0 ();
+    else
+        destroy_top_bin ();
+
+    hide_selections_win ();
+    hide_win_sym ();
+}
 
 static void recreate_win0 () {
     memset (chars, 0, sizeof (chars));
@@ -143,8 +196,6 @@ static void create_char (int index) {
 
 extern gboolean b_use_full_space;
 
-void show_win0 ();
-
 void disp_char (int index, char *ch) {
     if (hime_edit_display_ap_only ())
         return;
@@ -205,8 +256,6 @@ void clr_tsin_cursor (int index) {
         return;
     gtk_label_set_attributes (GTK_LABEL (label), attr_list_blank);
 }
-
-void hide_win0 ();
 
 void disp_tsin_pho (int index, char *pho) {
     if (hime_display_on_the_spot_key ()) {
@@ -516,14 +565,6 @@ static void destroy_top_bin () {
     memset (chars, 0, sizeof (chars));
 }
 
-void destroy_win0 () {
-    if (!gwin0)
-        return;
-    destroy_top_bin ();
-    gtk_widget_destroy (gwin0);
-    gwin0 = NULL;
-}
-
 void get_win0_geom () {
     if (!gwin0)
         return;
@@ -532,52 +573,9 @@ void get_win0_geom () {
 }
 
 gboolean tsin_has_input ();
-extern gboolean force_show;
 void raise_tsin_selection_win ();
 
-void show_win0 () {
-#if _DEBUG && 1
-    dbg ("show_win0 pop:%d in:%d for:%d \n", hime_pop_up_win, tsin_has_input (), force_show);
-#endif
-    create_win0 ();
-    create_win0_gui ();
-
-    if (hime_pop_up_win && !tsin_has_input () && !force_show) {
-        //    dbg("show ret\n");
-        return;
-    }
-
-#if 0
-  if (!gtk_widget_get_visible(gwin0))
-#endif
-    {
-        //    dbg("gtk_widget_show %x\n", gwin0);
-        move_win0 (win_x, win_y);
-        gtk_widget_show (gwin0);
-    }
-
-    show_win_sym ();
-
-    if (current_CS->b_raise_window) {
-        gtk_window_present (GTK_WINDOW (gwin0));
-        raise_tsin_selection_win ();
-    }
-}
-
 void hide_selections_win ();
-void hide_win0 () {
-    if (!gwin0)
-        return;
-
-    gtk_widget_hide (gwin0);
-    if (destroy_window)
-        destroy_win0 ();
-    else
-        destroy_top_bin ();
-
-    hide_selections_win ();
-    hide_win_sym ();
-}
 
 void change_tsin_font_size () {
     if (!top_bin)
