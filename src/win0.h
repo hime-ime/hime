@@ -27,7 +27,6 @@ void hide_win0 (void);
 
 void create_win0 ();
 static void create_win0_gui ();
-static void destroy_top_bin ();
 void move_win0 (int x, int y);
 
 #endif

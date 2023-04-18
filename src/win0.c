@@ -59,9 +59,14 @@ void init_win0 () {
 void destroy_win0 () {
     if (!gwin0)
         return;
-    destroy_top_bin ();
     gtk_widget_destroy (gwin0);
     gwin0 = NULL;
+    top_bin = NULL;
+    label_pho = NULL;
+    button_pho = NULL;
+    button_eng_ph = NULL;
+    hbox_edit = NULL;
+    memset (chars, 0, sizeof (chars));
 }
 
 void show_win0 () {
@@ -98,7 +103,6 @@ void hide_win0 () {
         return;
 
     gtk_widget_hide (gwin0);
-    destroy_top_bin ();
 
     hide_selections_win ();
     hide_win_sym ();
@@ -539,18 +543,6 @@ static void create_win0_gui () {
     init_tsin_selection_win ();
 
     set_win0_bg ();
-}
-
-static void destroy_top_bin () {
-    if (!top_bin)
-        return;
-    gtk_widget_destroy (top_bin);
-    top_bin = NULL;
-    label_pho = NULL;
-    button_pho = NULL;
-    button_eng_ph = NULL;
-    hbox_edit = NULL;
-    memset (chars, 0, sizeof (chars));
 }
 
 void get_win0_geom () {
