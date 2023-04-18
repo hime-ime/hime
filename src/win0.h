@@ -24,6 +24,7 @@ void init_win0 (void);
 void destroy_win0 (void);
 void show_win0 (void);
 void hide_win0 (void);
+void reset_content (void);
 
 void create_win0 ();
 static void create_win0_gui ();

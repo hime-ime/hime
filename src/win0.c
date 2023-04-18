@@ -64,7 +64,7 @@ void destroy_win0 () {
     label_pho = NULL;
     button_pho = NULL;
     hbox_edit = NULL;
-    memset (chars, 0, sizeof (chars));
+    reset_content ();
 }
 
 void show_win0 () {
@@ -106,8 +106,12 @@ void hide_win0 () {
     hide_win_sym ();
 }
 
-static void recreate_win0 () {
+void reset_content () {
     memset (chars, 0, sizeof (chars));
+}
+
+static void recreate_win0 () {
+    reset_content ();
     label_pho = NULL;
 
     create_win0_gui ();
@@ -497,7 +501,7 @@ static void create_win0_gui () {
         gtk_container_add (GTK_CONTAINER (win0), vbox_top);
     }
 
-    memset (chars, 0, sizeof (chars));
+    reset_content ();
 
     GtkWidget *hbox_row1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     /* This packs the button into the win0 (a gtk container). */
