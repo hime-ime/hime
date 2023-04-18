@@ -1983,7 +1983,7 @@ fin:
 
 int tsin_reset () {
     //  dbg("tsin_reset\n");
-    if (!gwin0)
+    if (!win0)
         return 0;
     int v = tss.c_len > 0;
     tsin_reset_in_pho0 ();
