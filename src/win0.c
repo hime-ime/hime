@@ -49,7 +49,6 @@ static GtkWidget *button_pho;
 static GtkWidget *label_pho;
 extern char text_pho[];
 extern int text_pho_N;
-static GtkWidget *button_eng_ph;
 // static int max_yl;
 extern gboolean force_show;
 
@@ -64,7 +63,6 @@ void destroy_win0 () {
     top_bin = NULL;
     label_pho = NULL;
     button_pho = NULL;
-    button_eng_ph = NULL;
     hbox_edit = NULL;
     memset (chars, 0, sizeof (chars));
 }
@@ -398,15 +396,6 @@ void move_win0 (int x, int y) {
     win_y = y;
 
     move_win_sym ();
-}
-
-void disp_tsin_eng_pho (int eng_pho) {
-    static unich_t *eng_pho_strs[] = {N_ ("英"), N_ ("注")};
-
-    if (!button_eng_ph)
-        return;
-
-    gtk_button_set_label (GTK_BUTTON (button_eng_ph), _ (eng_pho_strs[eng_pho]));
 }
 
 static void mouse_button_callback (GtkWidget *widget, GdkEventButton *event, gpointer data) {
