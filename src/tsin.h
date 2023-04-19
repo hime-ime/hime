@@ -52,7 +52,7 @@ gboolean check_fixed_mismatch (int chpho_idx, char *mtch, int plen);
 char *get_chpho_pinyin_set (char *set_arr);
 void draw_tsin_cursor ();
 void clrin_pho_tsin ();
-void show_button_pho (gboolean bshow);
+void show_button_pho (gboolean show);
 gboolean tsin_has_input ();
 
 #define TSIN_GTAB_KEY "!!!!gtab-keys"

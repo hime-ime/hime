@@ -567,11 +567,11 @@ void change_tsin_font_size () {
     set_win0_bg ();
 }
 
-void show_button_pho (gboolean bshow) {
+void show_button_pho (gboolean show) {
     if (!button_pho)
         return;
 
-    if (bshow)
+    if (show)
         gtk_widget_show (button_pho);
     else {
         gtk_widget_hide (button_pho);
