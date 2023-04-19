@@ -33,7 +33,6 @@ int current_hime_inner_frame;
 
 static GtkWidget *hbox_edit;
 static PangoAttrList *attr_list, *attr_list_blank;
-extern gboolean test_mode;
 
 void compact_win0 ();
 void get_win0_geom ();
@@ -47,7 +46,6 @@ static struct {
 
 static GtkWidget *button_pho;
 static GtkWidget *label_pho;
-extern char text_pho[];
 extern int text_pho_N;
 // static int max_yl;
 extern gboolean force_show;
