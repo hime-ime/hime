@@ -20,6 +20,7 @@
 #ifndef WIN_COMMON_H
 #define WIN_COMMON_H
 
+char *get_full_str (void);
 void get_win_geom (GtkWidget *win);
 
 #endif

@@ -582,8 +582,6 @@ void change_tsin_font_size () {
     set_win0_bg ();
 }
 
-char *get_full_str ();
-
 void win_tsin_disp_half_full () {
     if (label_pho == NULL)
         show_win0 ();

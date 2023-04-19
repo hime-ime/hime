@@ -19,6 +19,7 @@
 
 #include "hime.h"
 
+#include "win-common.h"
 #include "win-sym.h"
 
 static int current_hime_inner_frame;
@@ -289,8 +290,6 @@ void init_gtab_pho_query_win () {
     init_tab_pho ();
     move_gtab_pho_query_win ();
 }
-
-char *get_full_str ();
 
 void win_pho_disp_half_full () {
     if (hime_use_custom_theme)

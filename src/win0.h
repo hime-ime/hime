@@ -20,6 +20,8 @@
 #ifndef WIN0_H
 #define WIN0_H
 
+#include "win-common.h"
+
 void init_win0 (void);
 void destroy_win0 (void);
 void show_win0 (void);

@@ -21,6 +21,30 @@
 
 #include "win-common.h"
 
+char *get_full_str () {
+    if (!chinese_mode ()) {
+        if (hime_use_custom_theme)
+            return eng_color_half_str;
+        else
+            return _ (eng_half_str);
+    }
+
+    if (current_CS->b_im_enabled) {
+        if (current_fullshape_mode ()) {
+            if (hime_use_custom_theme)
+                return cht_color_full_str;
+            else
+                return _ (cht_full_str);
+        }
+    } else if (current_fullshape_mode ()) {
+        if (hime_use_custom_theme)
+            return eng_color_full_str;
+        else
+            return _ (eng_full_str);
+    }
+    return ("");
+}
+
 void get_win_geom (GtkWidget *win) {
     if (!win)
         return;

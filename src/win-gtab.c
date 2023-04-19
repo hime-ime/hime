@@ -21,6 +21,7 @@
 
 #include "gst.h"
 #include "gtab.h"
+#include "win-common.h"
 #include "win-sym.h"
 
 static int current_hime_inner_frame;
@@ -723,30 +724,6 @@ static void set_disp_im_name () {
         gtk_widget_show (box_gtab_im_name);
     else
         gtk_widget_hide (box_gtab_im_name);
-}
-
-char *get_full_str () {
-    if (!chinese_mode ()) {
-        if (hime_use_custom_theme)
-            return eng_color_half_str;
-        else
-            return _ (eng_half_str);
-    }
-
-    if (current_CS->b_im_enabled) {
-        if (current_fullshape_mode ()) {
-            if (hime_use_custom_theme)
-                return cht_color_full_str;
-            else
-                return _ (cht_full_str);
-        }
-    } else if (current_fullshape_mode ()) {
-        if (hime_use_custom_theme)
-            return eng_color_full_str;
-        else
-            return _ (eng_full_str);
-    }
-    return ("");
 }
 
 void win_gtab_disp_half_full () {
