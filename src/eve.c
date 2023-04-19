@@ -27,6 +27,7 @@
 #include "gtab.h"
 #include "hime-module-cb.h"
 #include "pho.h"
+#include "tsin.h"
 #include "win-kbm.h"
 #include "win-sym.h"
 
@@ -816,10 +817,12 @@ void set_eng_ch_mode (gboolean mode) {
     if (current_method_type () == method_type_TSIN) {
         draw_tsin_cursor ();
 
-        if (!chinese_mode ())
+        if (chinese_mode ()) {
+            show_button_pho ();
+        } else {
             clrin_pho_tsin ();
-
-        show_button_pho (chinese_mode ());
+            hide_button_pho ();
+        }
     } else
         show_win_gtab ();
 

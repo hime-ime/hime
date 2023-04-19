@@ -106,6 +106,21 @@ void hide_win0 () {
     hide_win_sym ();
 }
 
+void show_button_pho () {
+    if (!button_pho)
+        return;
+
+    gtk_widget_show (button_pho);
+}
+
+void hide_button_pho () {
+    if (!button_pho)
+        return;
+
+    gtk_widget_hide (button_pho);
+    compact_win0 ();
+}
+
 void reset_content () {
     memset (chars, 0, sizeof (chars));
 }
@@ -565,18 +580,6 @@ void change_tsin_font_size () {
     compact_win0 ();
 
     set_win0_bg ();
-}
-
-void show_button_pho (gboolean show) {
-    if (!button_pho)
-        return;
-
-    if (show)
-        gtk_widget_show (button_pho);
-    else {
-        gtk_widget_hide (button_pho);
-        compact_win0 ();
-    }
 }
 
 char *get_full_str ();

@@ -20,6 +20,8 @@
 #ifndef HIME_TSIN_H
 #define HIME_TSIN_H
 
+#include "win0.h"
+
 extern int phcount;
 extern int hashidx[];
 // extern int *phidx;
@@ -52,7 +54,6 @@ gboolean check_fixed_mismatch (int chpho_idx, char *mtch, int plen);
 char *get_chpho_pinyin_set (char *set_arr);
 void draw_tsin_cursor ();
 void clrin_pho_tsin ();
-void show_button_pho (gboolean show);
 gboolean tsin_has_input ();
 
 #define TSIN_GTAB_KEY "!!!!gtab-keys"
