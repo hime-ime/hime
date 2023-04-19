@@ -278,7 +278,6 @@ void disp_tsin_pho (int index, char *pho) {
     disp_pho_sub (label_pho, index, pho);
 }
 
-void disp_tsin_pho (int index, char *pho);
 void clr_in_area_pho_tsin () {
     int i;
     for (i = 0; i < text_pho_N; i++)
@@ -382,7 +381,6 @@ void compact_win0 () {
     raw_move (best_win_x, best_win_y);
 }
 
-gboolean tsin_has_input ();
 GtkWidget *gwin_sym;
 
 void move_win0 (int x, int y) {
@@ -555,7 +553,6 @@ void get_win0_geom () {
     get_win_geom (win0);
 }
 
-gboolean tsin_has_input ();
 void raise_tsin_selection_win ();
 
 void hide_selections_win ();
