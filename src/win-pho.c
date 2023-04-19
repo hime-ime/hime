@@ -305,12 +305,7 @@ void win_pho_disp_half_full () {
 }
 
 void get_win_pho_geom () {
-    if (!gwin_pho)
-        return;
-
-    gtk_window_get_position (GTK_WINDOW (gwin_pho), &win_x, &win_y);
-
-    get_win_size (gwin_pho, &win_xl, &win_yl);
+    get_win_geom (gwin_pho);
 }
 
 void change_pho_font_size () {

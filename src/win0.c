@@ -539,10 +539,7 @@ static void create_win0_gui () {
 }
 
 void get_win0_geom () {
-    if (!win0)
-        return;
-    gtk_window_get_position (GTK_WINDOW (win0), &win_x, &win_y);
-    get_win_size (win0, &win_xl, &win_yl);
+    get_win_geom (win0);
 }
 
 gboolean tsin_has_input ();

@@ -712,12 +712,7 @@ void hide_win_gtab () {
 }
 
 void get_win_gtab_geom () {
-    if (!gwin_gtab)
-        return;
-
-    gtk_window_get_position (GTK_WINDOW (gwin_gtab), &win_x, &win_y);
-
-    get_win_size (gwin_gtab, &win_xl, &win_yl);
+    get_win_geom (gwin_gtab);
 }
 
 static void set_disp_im_name () {

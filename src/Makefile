@@ -34,8 +34,8 @@ OBJS      = $(hime_pho_o) $(hime_gtab_o) hime.o \
 			pinyin.o \
 			statistic.o t2s-lookup.o tsin-scan.o \
 			unix-exec.o util.o \
-			win-inmd-switch.o win-kbm.o win-message.o win-pho-near.o \
-			win-save-phrase.o win-sym.o
+			win-common.o win-inmd-switch.o win-kbm.o win-message.o \
+			win-pho-near.o win-save-phrase.o win-sym.o
 
 OBJS_TSLEARN = hime-tslearn.o \
 			fullchar.o \
