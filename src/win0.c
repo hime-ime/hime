@@ -161,31 +161,29 @@ static void create_char (int index) {
     gdk_rgba_parse (&color_bg, tsin_phrase_line_color);
 
     int i = index;
-    {
-        if (chars[i].vbox)
-            return;
+    if (chars[i].vbox)
+        return;
 
-        GtkWidget *event_box = gtk_event_box_new ();
-        gtk_event_box_set_visible_window (GTK_EVENT_BOX (event_box), FALSE);
-        chars[i].vbox = event_box;
-        g_signal_connect (
-            G_OBJECT (event_box), "button-press-event",
-            G_CALLBACK (mouse_char_callback), GINT_TO_POINTER (index));
+    GtkWidget *event_box = gtk_event_box_new ();
+    gtk_event_box_set_visible_window (GTK_EVENT_BOX (event_box), FALSE);
+    chars[i].vbox = event_box;
+    g_signal_connect (
+        G_OBJECT (event_box), "button-press-event",
+        G_CALLBACK (mouse_char_callback), GINT_TO_POINTER (index));
 
-        gtk_box_pack_start (GTK_BOX (hbox_edit), event_box, FALSE, FALSE, 0);
-        GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox), GTK_ORIENTATION_VERTICAL);
-        gtk_container_add (GTK_CONTAINER (event_box), vbox);
+    gtk_box_pack_start (GTK_BOX (hbox_edit), event_box, FALSE, FALSE, 0);
+    GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox), GTK_ORIENTATION_VERTICAL);
+    gtk_container_add (GTK_CONTAINER (event_box), vbox);
 
-        GtkWidget *label = gtk_label_new (NULL);
-        gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+    GtkWidget *label = gtk_label_new (NULL);
+    gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
-        set_label_font_size (label, hime_font_size);
-        chars[i].label = label;
+    set_label_font_size (label, hime_font_size);
+    chars[i].label = label;
 
-        apply_widget_fg_color (label);
-        gtk_widget_show_all (event_box);
-    }
+    apply_widget_fg_color (label);
+    gtk_widget_show_all (event_box);
 }
 
 extern gboolean b_use_full_space;
