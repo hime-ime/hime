@@ -26,7 +26,6 @@
 #include "win0.h"
 
 GtkWidget *win0 = NULL;
-extern GtkWidget *gwin1;
 extern Display *dpy;
 static GtkWidget *top_bin;
 int current_hime_inner_frame;
@@ -40,14 +39,12 @@ void get_win0_geom ();
 static struct {
     GtkWidget *vbox;
     GtkWidget *label;
-    //  GtkWidget *line;
     int x;
 } chars[MAX_PH_BF_EXT];
 
 static GtkWidget *button_pho;
 static GtkWidget *label_pho;
 extern int text_pho_N;
-// static int max_yl;
 extern gboolean force_show;
 
 void init_win0 () {
@@ -375,7 +372,6 @@ void compact_win0 () {
     if (!win0)
         return;
 
-    //  max_yl = 0;
     raw_move (best_win_x, best_win_y);
 }
 
