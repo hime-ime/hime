@@ -275,7 +275,7 @@ void disp_tsin_pho (int index, char *pho) {
     disp_pho_sub (label_pho, index, pho);
 }
 
-void clr_in_area_pho_tsin () {
+void clear_phonemes () {
     int i;
     for (i = 0; i < text_pho_N; i++)
         disp_tsin_pho (i, " ");
@@ -532,7 +532,7 @@ static void create_win0_gui () {
     set_label_font_size (label_pho, hime_font_size_tsin_pho_in);
     gtk_container_add (GTK_CONTAINER (button_pho), label_pho);
 
-    clr_in_area_pho_tsin ();
+    clear_phonemes ();
 
     gtk_widget_show_all (win0);
     //  gdk_flush();

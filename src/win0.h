@@ -36,5 +36,6 @@ void clear_cursor (int index);
 void create_win0 ();
 static void create_win0_gui ();
 void move_win0 (int x, int y);
+void clear_phonemes ();
 
 #endif

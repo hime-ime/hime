@@ -306,13 +306,12 @@ static void clear_tsin_buffer () {
     tss.tsin_buffer_editing = 0;  // buffer editing is finished
 }
 
-void clr_in_area_pho_tsin ();
 void close_win_pho_near ();
 void compact_win0 ();
 
 void tsin_reset_in_pho0 () {
     //  prbuf();
-    clr_in_area_pho_tsin ();
+    clear_phonemes ();
     close_selection_win ();
     tss.pre_selN = 0;
     //  tss.pho_menu_idx = 0;
@@ -1860,7 +1859,7 @@ llll2:
         disp_in_area_pho_tsin ();
     } else {
         clrin_pho_tsin ();
-        clr_in_area_pho_tsin ();
+        clear_phonemes ();
     }
     draw_tsin_cursor ();
     hide_pre_sel ();
