@@ -1188,7 +1188,7 @@ static int cursor_backspace () {
         disp_in_area_pho_tsin ();
         tsin_scan_pre_select (TRUE);
 
-        if (hime_pop_up_win && typ_pho_empty ())
+        if (hime_pop_up_win && typ_pho_empty () && !tsin_has_input ())
             hide_win0 ();
         return 1;
     }
