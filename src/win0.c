@@ -176,13 +176,12 @@ static void create_char (int index) {
     GdkRGBA color_bg;
     gdk_rgba_parse (&color_bg, tsin_phrase_line_color);
 
-    int i = index;
-    if (chars[i].vbox)
+    if (chars[index].vbox)
         return;
 
     GtkWidget *event_box = gtk_event_box_new ();
     gtk_event_box_set_visible_window (GTK_EVENT_BOX (event_box), FALSE);
-    chars[i].vbox = event_box;
+    chars[index].vbox = event_box;
     g_signal_connect (
         G_OBJECT (event_box), "button-press-event",
         G_CALLBACK (mouse_char_callback), GINT_TO_POINTER (index));
@@ -196,7 +195,7 @@ static void create_char (int index) {
     gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
     set_label_font_size (label, hime_font_size);
-    chars[i].label = label;
+    chars[index].label = label;
 
     apply_widget_fg_color (label);
     gtk_widget_show_all (event_box);
