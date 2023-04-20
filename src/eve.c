@@ -734,7 +734,6 @@ void toggle_im_enabled () {
 }
 
 void get_win_gtab_geom ();
-void get_win0_geom ();
 void get_win_pho_geom ();
 
 void update_active_in_win_geom () {

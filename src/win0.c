@@ -34,7 +34,6 @@ static GtkWidget *hbox_edit;
 static PangoAttrList *attr_list, *attr_list_blank;
 
 void compact_win0 ();
-void get_win0_geom ();
 
 static struct {
     GtkWidget *vbox;
@@ -114,6 +113,10 @@ void hide_button_pho () {
 
     gtk_widget_hide (button_pho);
     compact_win0 ();
+}
+
+void get_win0_geom () {
+    get_win_geom (win0);
 }
 
 void reset_content () {
@@ -542,10 +545,6 @@ static void create_win0_gui () {
     init_tsin_selection_win ();
 
     set_win0_bg ();
-}
-
-void get_win0_geom () {
-    get_win_geom (win0);
 }
 
 void raise_tsin_selection_win ();

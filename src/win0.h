@@ -28,6 +28,7 @@ void show_win0 (void);
 void hide_win0 (void);
 void show_button_pho ();
 void hide_button_pho ();
+void get_win0_geom ();
 void reset_content (void);
 void set_cursor (int index);
 void clear_cursor (int index);
