@@ -89,16 +89,12 @@ static void init_chpho_i (int i) {
     tss.chpho[i].psta = -1;
 }
 
-void clr_tsin_cursor (int index);
-
 static void clrcursor () {
-    clr_tsin_cursor (tss.c_idx);
+    clear_cursor (tss.c_idx);
 }
 
-void set_cursor_tsin (int index);
-
 void draw_tsin_cursor () {
-    clr_tsin_cursor (tss.last_cursor_idx);
+    clear_cursor (tss.last_cursor_idx);
     tss.last_cursor_idx = tss.c_idx;
 
     if (!tss.c_len)
@@ -108,14 +104,14 @@ void draw_tsin_cursor () {
         if (!chinese_mode ()) {
             if (current_fullshape_mode ()) {
                 disp_char (tss.c_idx, "  ");
-                set_cursor_tsin (tss.c_idx);
+                set_cursor (tss.c_idx);
             } else {
                 disp_char (tss.c_idx, " ");
-                set_cursor_tsin (tss.c_idx);
+                set_cursor (tss.c_idx);
             }
         }
     } else {
-        set_cursor_tsin (tss.c_idx);
+        set_cursor (tss.c_idx);
     }
 }
 

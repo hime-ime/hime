@@ -239,7 +239,7 @@ void clear_chars_all () {
     compact_win0 ();
 }
 
-void set_cursor_tsin (int index) {
+void set_cursor (int index) {
     GtkWidget *label = chars[index].label;
 
     if (!label)
@@ -251,7 +251,7 @@ void set_cursor_tsin (int index) {
     gtk_label_set_attributes (GTK_LABEL (label), attr_list);
 }
 
-void clr_tsin_cursor (int index) {
+void clear_cursor (int index) {
     GtkWidget *label = chars[index].label;
 
     if (!label)
