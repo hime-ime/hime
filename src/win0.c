@@ -26,7 +26,6 @@
 #include "win0.h"
 
 GtkWidget *win0 = NULL;
-extern Display *dpy;
 static GtkWidget *top_bin;
 int current_hime_inner_frame;
 
@@ -200,8 +199,6 @@ static void create_char (int index) {
     apply_widget_fg_color (label);
     gtk_widget_show_all (event_box);
 }
-
-extern gboolean b_use_full_space;
 
 void disp_char (int index, char *ch) {
     if (hime_edit_display_ap_only ())
