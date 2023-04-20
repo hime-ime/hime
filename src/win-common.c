@@ -51,3 +51,11 @@ void get_win_geom (GtkWidget *win) {
     gtk_window_get_position (GTK_WINDOW (win), &win_x, &win_y);
     get_win_size (win, &win_xl, &win_yl);
 }
+
+void get_win_size (GtkWidget *win, int *width, int *height) {
+    GtkRequisition sz;
+    sz.width = sz.height = 0;
+    gtk_widget_get_preferred_size (GTK_WIDGET (win), NULL, &sz);
+    *width = sz.width;
+    *height = sz.height;
+}

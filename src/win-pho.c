@@ -41,14 +41,6 @@ void disp_pho (int index, char *phochar) {
 
 void move_win_pho (int x, int y);
 
-void get_win_size (GtkWidget *win, int *width, int *height) {
-    GtkRequisition sz;
-    sz.width = sz.height = 0;
-    gtk_widget_get_preferred_size (GTK_WIDGET (win), NULL, &sz);
-    *width = sz.width;
-    *height = sz.height;
-}
-
 gboolean win_size_exceed (GtkWidget *win) {
     int width, height;
 
