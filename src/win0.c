@@ -352,8 +352,6 @@ void disp_tsin_select (int index) {
     disp_selections (x, y);
 }
 
-#define MIN_X_SIZE 32
-
 static int best_win_x, best_win_y;
 
 static void raw_move (int x, int y) {
