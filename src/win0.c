@@ -147,8 +147,9 @@ void open_select_pho ();
 void create_phrase_save_menu (GdkEventButton *event);
 
 static void mouse_char_callback (GtkWidget *widget, GdkEventButton *event, gpointer data) {
-    tss.c_idx = GPOINTER_TO_INT (data);
-    draw_tsin_cursor ();
+    int index = GPOINTER_TO_INT (data);
+    tss.c_idx = index;
+    set_cursor (index);
 
     switch (event->button) {
     case 1:
