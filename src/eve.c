@@ -318,7 +318,6 @@ static void bounce_back_key () {
 }
 #endif
 
-void hide_win0 ();
 void hide_win_gtab ();
 void hide_win_pho ();
 

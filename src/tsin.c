@@ -48,7 +48,7 @@ extern PHOKBM phkbm;
 extern int hashidx[TSIN_HASH_N];
 // gboolean eng_ph=TRUE;  // english(FALSE) <-> pho(juyin, TRUE)
 
-void clrin_pho (), hide_win0 ();
+void clrin_pho ();
 void save_CS_current_to_temp ();
 
 /**
