@@ -152,6 +152,8 @@ void create_phrase_save_menu (GdkEventButton *event);
 static void mouse_char_callback (GtkWidget *widget, GdkEventButton *event, gpointer data) {
     int index = GPOINTER_TO_INT (data);
     tss.c_idx = index;
+    clear_cursor (tss.last_cursor_idx);
+    tss.last_cursor_idx = index;
     set_cursor (index);
 
     switch (event->button) {
