@@ -121,18 +121,13 @@ void reset_content () {
 }
 
 static void recreate_win0 () {
-    reset_content ();
-    label_pho = NULL;
-
-    create_win0_gui ();
+    destroy_win0 ();
+    init_win0 ();
 }
 
 void change_win0_style () {
-    if (!top_bin || current_hime_inner_frame == hime_inner_frame)
+    if (!win0 || current_hime_inner_frame == hime_inner_frame)
         return;
-
-    gtk_widget_destroy (top_bin);
-    top_bin = NULL;
 
     current_hime_inner_frame = hime_inner_frame;
     recreate_win0 ();
@@ -201,7 +196,7 @@ static void create_char (int index) {
 void disp_char (int index, char *ch) {
     if (hime_edit_display_ap_only ())
         return;
-    if (!top_bin)
+    if (!win0)
         show_win0 ();
 
     //  dbg("disp_char %d %s\n", index, ch);
@@ -519,7 +514,7 @@ void raise_tsin_selection_win ();
 void hide_selections_win ();
 
 void change_tsin_font_size () {
-    if (!top_bin)
+    if (!win0)
         return;
 
     set_label_font_size (label_pho, hime_font_size_tsin_pho_in);
