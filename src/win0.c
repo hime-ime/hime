@@ -349,60 +349,38 @@ void disp_tsin_select (int index) {
     disp_selections (x, y);
 }
 
-static int best_win_x, best_win_y;
-
-static void raw_move (int x, int y) {
-    int xl, yl;
-
-    if (!win0)
-        return;
-
-    get_win_size (win0, &xl, &yl);
-
-    if (x + xl > dpy_xl)
-        x = dpy_xl - xl;
-    if (y + yl > dpy_yl)
-        y = dpy_yl - yl;
-
-    gtk_window_move (GTK_WINDOW (win0), x, y);
-    //  dbg("win0:%x raw_move %d,%d\n", win0, x, y);
-}
-
 void compact_win0 () {
     if (!win0)
         return;
 
-    raw_move (best_win_x, best_win_y);
+    move_win0 (win_x, win_y);
 }
 
 GtkWidget *gwin_sym;
 
 void move_win0 (int x, int y) {
-    //  dbg("--- win0:%x move_win0 %d,%d\n", win0, x,y);
-    best_win_x = x;
-    best_win_y = y;
+    if (!win0)
+        return;
 
-    if (win0)
-        gtk_window_get_size (GTK_WINDOW (win0), &win_xl, &win_yl);
+    int best_win_x = x;
+    int best_win_y = y;
+
+    get_win_size (win0, &win_xl, &win_yl);
 
     if (x + win_xl > dpy_xl)
-        x = dpy_xl - win_xl;
+        best_win_x = dpy_xl - win_xl;
     if (x < 0)
-        x = 0;
+        best_win_x = 0;
 
     if (y + win_yl > dpy_yl)
-        y = dpy_yl - win_yl;
+        best_win_y = dpy_yl - win_yl;
     if (y < 0)
-        y = 0;
+        best_win_y = 0;
 
-    //  dbg("move_win0 %d,%d\n",x, y);
+    gtk_window_move (GTK_WINDOW (win0), best_win_x, best_win_y);
 
-    if (win0)
-        gtk_window_move (GTK_WINDOW (win0), x, y);
-
-    //  dbg("move_win0 %d %d\n",x,y);
-    win_x = x;
-    win_y = y;
+    win_x = best_win_x;
+    win_y = best_win_y;
 
     move_win_sym ();
 }

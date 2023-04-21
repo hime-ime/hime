@@ -29,13 +29,13 @@ void hide_win0 (void);
 void show_button_pho ();
 void hide_button_pho ();
 void get_win0_geom ();
+void move_win0 (int x, int y);
 void reset_content (void);
 void set_cursor (int index);
 void clear_cursor (int index);
 
 void create_win0 ();
 static void create_win0_gui ();
-void move_win0 (int x, int y);
 void clear_phonemes ();
 
 #endif
