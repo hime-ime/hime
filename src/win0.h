@@ -34,8 +34,6 @@ void reset_content (void);
 void set_cursor (int index);
 void clear_cursor (int index);
 
-void create_win0 ();
-static void create_win0_gui ();
 void clear_phonemes ();
 
 #endif

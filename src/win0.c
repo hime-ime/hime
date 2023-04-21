@@ -45,9 +45,69 @@ static GtkWidget *label_pho;
 extern int text_pho_N;
 extern gboolean force_show;
 
+static void set_win0_bg ();
+static void create_cursor_attr ();
+static void mouse_button_callback (GtkWidget *widget, GdkEventButton *event, gpointer data);
+
 void init_win0 () {
-    create_win0 ();
-    create_win0_gui ();
+    if (win0)
+        return;
+    win0 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_has_resize_grip (GTK_WINDOW (win0), FALSE);
+    gtk_container_set_border_width (GTK_CONTAINER (win0), 0);
+    gtk_widget_realize (win0);
+    set_no_focus (win0);
+
+    GtkWidget *vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
+    gtk_container_set_border_width (GTK_CONTAINER (win0), 0);
+
+    if (hime_inner_frame) {
+        GtkWidget *frame;
+        top_bin = frame = gtk_frame_new (NULL);
+        gtk_container_set_border_width (GTK_CONTAINER (frame), 0);
+        gtk_container_add (GTK_CONTAINER (win0), frame);
+        gtk_container_add (GTK_CONTAINER (frame), vbox_top);
+    } else {
+        top_bin = vbox_top;
+        gtk_container_add (GTK_CONTAINER (win0), vbox_top);
+    }
+
+    reset_content ();
+
+    GtkWidget *hbox_row1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    /* This packs the button into the win0 (a gtk container). */
+    gtk_box_pack_start (GTK_BOX (vbox_top), hbox_row1, FALSE, FALSE, 0);
+
+    hbox_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_container_set_border_width (GTK_CONTAINER (hbox_edit), 0);
+    /* This packs the button into the win0 (a gtk container). */
+    gtk_box_pack_start (GTK_BOX (hbox_row1), hbox_edit, FALSE, FALSE, 0);
+
+    create_cursor_attr ();
+
+    button_pho = gtk_button_new ();
+    gtk_container_set_border_width (GTK_CONTAINER (button_pho), 0);
+    gtk_box_pack_start (GTK_BOX (hbox_row1), button_pho, FALSE, FALSE, 0);
+
+    g_signal_connect (G_OBJECT (button_pho), "button-press-event",
+                      G_CALLBACK (mouse_button_callback), NULL);
+    gtk_widget_set_can_focus (button_pho, FALSE);
+    gtk_widget_set_can_default (button_pho, FALSE);
+
+    label_pho = gtk_label_new ("");
+    set_label_font_size (label_pho, hime_font_size_tsin_pho_in);
+    gtk_container_add (GTK_CONTAINER (button_pho), label_pho);
+
+    clear_phonemes ();
+
+    gtk_widget_show_all (win0);
+    //  gdk_flush();
+    gtk_widget_hide (win0);
+
+    init_tsin_selection_win ();
+
+    set_win0_bg ();
 }
 
 void destroy_win0 () {
@@ -393,16 +453,6 @@ static void mouse_button_callback (GtkWidget *widget, GdkEventButton *event, gpo
     }
 }
 
-void create_win0 () {
-    if (win0)
-        return;
-    win0 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_has_resize_grip (GTK_WINDOW (win0), FALSE);
-    gtk_container_set_border_width (GTK_CONTAINER (win0), 0);
-    gtk_widget_realize (win0);
-    set_no_focus (win0);
-}
-
 static void create_cursor_attr () {
     if (attr_list)
         pango_attr_list_unref (attr_list);
@@ -451,62 +501,6 @@ void init_tsin_selection_win ();
 
 static void set_win0_bg () {
     apply_widget_bg_color (win0);
-}
-
-static void create_win0_gui () {
-    if (top_bin)
-        return;
-
-    GtkWidget *vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
-    gtk_container_set_border_width (GTK_CONTAINER (win0), 0);
-
-    if (hime_inner_frame) {
-        GtkWidget *frame;
-        top_bin = frame = gtk_frame_new (NULL);
-        gtk_container_set_border_width (GTK_CONTAINER (frame), 0);
-        gtk_container_add (GTK_CONTAINER (win0), frame);
-        gtk_container_add (GTK_CONTAINER (frame), vbox_top);
-    } else {
-        top_bin = vbox_top;
-        gtk_container_add (GTK_CONTAINER (win0), vbox_top);
-    }
-
-    reset_content ();
-
-    GtkWidget *hbox_row1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-    /* This packs the button into the win0 (a gtk container). */
-    gtk_box_pack_start (GTK_BOX (vbox_top), hbox_row1, FALSE, FALSE, 0);
-
-    hbox_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_container_set_border_width (GTK_CONTAINER (hbox_edit), 0);
-    /* This packs the button into the win0 (a gtk container). */
-    gtk_box_pack_start (GTK_BOX (hbox_row1), hbox_edit, FALSE, FALSE, 0);
-
-    create_cursor_attr ();
-
-    button_pho = gtk_button_new ();
-    gtk_container_set_border_width (GTK_CONTAINER (button_pho), 0);
-    gtk_box_pack_start (GTK_BOX (hbox_row1), button_pho, FALSE, FALSE, 0);
-
-    g_signal_connect (G_OBJECT (button_pho), "button-press-event",
-                      G_CALLBACK (mouse_button_callback), NULL);
-    gtk_widget_set_can_focus (button_pho, FALSE);
-    gtk_widget_set_can_default (button_pho, FALSE);
-
-    label_pho = gtk_label_new ("");
-    set_label_font_size (label_pho, hime_font_size_tsin_pho_in);
-    gtk_container_add (GTK_CONTAINER (button_pho), label_pho);
-
-    clear_phonemes ();
-
-    gtk_widget_show_all (win0);
-    //  gdk_flush();
-    gtk_widget_hide (win0);
-
-    init_tsin_selection_win ();
-
-    set_win0_bg ();
 }
 
 void raise_tsin_selection_win ();
