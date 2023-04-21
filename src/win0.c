@@ -46,6 +46,8 @@ extern int text_pho_N;
 extern gboolean force_show;
 
 void init_win0 () {
+    create_win0 ();
+    create_win0_gui ();
 }
 
 void destroy_win0 () {
@@ -61,11 +63,7 @@ void destroy_win0 () {
 }
 
 void show_win0 () {
-#if _DEBUG && 1
-    dbg ("show_win0 pop:%d in:%d for:%d \n", hime_pop_up_win, tsin_has_input (), force_show);
-#endif
-    create_win0 ();
-    create_win0_gui ();
+    init_win0 ();
 
     if (hime_pop_up_win && !tsin_has_input () && !force_show) {
         //    dbg("show ret\n");
@@ -403,17 +401,12 @@ static void mouse_button_callback (GtkWidget *widget, GdkEventButton *event, gpo
 void create_win0 () {
     if (win0)
         return;
-#if _DEBUG && 0
-    dbg ("create_win0\n");
-#endif
     win0 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_has_resize_grip (GTK_WINDOW (win0), FALSE);
     gtk_container_set_border_width (GTK_CONTAINER (win0), 0);
     gtk_widget_realize (win0);
     set_no_focus (win0);
 }
-
-void create_win1 ();
 
 static void create_cursor_attr () {
     if (attr_list)
