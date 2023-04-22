@@ -24,7 +24,7 @@
 #include "pho.h"
 #include "win-sym.h"
 
-static GtkWidget *gwin_sym = NULL;
+GtkWidget *gwin_sym = NULL;
 static int cur_in_method;
 gboolean win_sym_enabled = 0;
 

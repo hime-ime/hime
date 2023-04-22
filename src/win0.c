@@ -450,8 +450,6 @@ static void mouse_char_callback (GtkWidget *widget, GdkEventButton *event, gpoin
     }
 }
 
-GtkWidget *gwin_sym;
-
 static void mouse_button_callback (GtkWidget *widget, GdkEventButton *event, gpointer data) {
     //  dbg("mouse_button_callback %d\n", event->button);
     switch (event->button) {
