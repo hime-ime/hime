@@ -315,6 +315,10 @@ void hide_button_pho () {
     move_win0_auto ();
 }
 
+gboolean is_win0_visible (void) {
+    return win0 && gtk_widget_get_visible (win0);
+}
+
 void get_win0_geom () {
     get_win_geom (win0);
 }

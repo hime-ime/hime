@@ -755,7 +755,7 @@ void update_active_in_win_geom () {
     }
 }
 
-extern GtkWidget *gwin_pho, *win0, *gwin_gtab, *gwin_sym;
+extern GtkWidget *gwin_pho, *gwin_gtab, *gwin_sym;
 
 gboolean win_is_visible () {
     if (!current_CS)
@@ -764,7 +764,7 @@ gboolean win_is_visible () {
     case method_type_PHO:
         return gwin_pho && gtk_widget_get_visible (gwin_pho);
     case method_type_TSIN:
-        return win0 && gtk_widget_get_visible (win0);
+        return is_win0_visible ();
     case method_type_MODULE:
         if (!module_cb ())
             return FALSE;
