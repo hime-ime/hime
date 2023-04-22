@@ -26,10 +26,13 @@
 #include "win0.h"
 
 GtkWidget *win0 = NULL;
-static GtkWidget *top_bin;
+static GtkWidget *top_bin = NULL;
+static GtkWidget *hbox_edit = NULL;
+static GtkWidget *button_pho = NULL;
+static GtkWidget *label_pho = NULL;
+
 int current_hime_inner_frame;
 
-static GtkWidget *hbox_edit;
 static PangoAttrList *attr_list, *attr_list_blank;
 
 static struct {
@@ -38,8 +41,6 @@ static struct {
     int x;
 } chars[MAX_PH_BF_EXT];
 
-static GtkWidget *button_pho;
-static GtkWidget *label_pho;
 extern int text_pho_N;
 extern gboolean force_show;
 
