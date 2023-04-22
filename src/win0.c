@@ -22,6 +22,7 @@
 #include "gst.h"
 #include "pho.h"
 #include "tsin.h"
+#include "win-common.h"
 #include "win-sym.h"
 #include "win0.h"
 
