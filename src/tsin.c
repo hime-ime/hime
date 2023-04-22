@@ -391,7 +391,6 @@ static void dump_tsidx_all()
 #endif
 
 void load_tab_pho_file ();
-void show_win0 ();
 
 void init_pre_sel () {
     if (!tss.pre_sel)

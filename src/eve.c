@@ -376,7 +376,6 @@ void hide_in_win (ClientState *cs) {
 }
 
 void show_win_pho ();
-void show_win0 ();
 void show_win_gtab ();
 #if TRAY_ENABLED
 void disp_tray_icon ();
