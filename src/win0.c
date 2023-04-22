@@ -32,8 +32,6 @@ int current_hime_inner_frame;
 static GtkWidget *hbox_edit;
 static PangoAttrList *attr_list, *attr_list_blank;
 
-void compact_win0 ();
-
 static struct {
     GtkWidget *vbox;
     GtkWidget *label;
@@ -169,7 +167,7 @@ void hide_button_pho () {
         return;
 
     gtk_widget_hide (button_pho);
-    compact_win0 ();
+    move_win0_auto ();
 }
 
 void get_win0_geom () {
@@ -291,7 +289,7 @@ void clear_chars_all () {
         hide_char (i);
     }
 
-    compact_win0 ();
+    move_win0_auto ();
 }
 
 void set_cursor (int index) {
@@ -402,7 +400,7 @@ void disp_tsin_select (int index) {
     disp_selections (x, y);
 }
 
-void compact_win0 () {
+void move_win0_auto () {
     if (!win0)
         return;
 
@@ -524,7 +522,7 @@ void change_tsin_font_size () {
         apply_widget_fg_color (label);
     }
 
-    compact_win0 ();
+    move_win0_auto ();
 
     set_win0_bg ();
 }
@@ -537,7 +535,7 @@ void win_tsin_disp_half_full () {
         gtk_label_set_markup (GTK_LABEL (label_pho), get_full_str ());
     else
         gtk_label_set_text (GTK_LABEL (label_pho), get_full_str ());
-    compact_win0 ();
+    move_win0_auto ();
 }
 
 void change_tsin_color () {

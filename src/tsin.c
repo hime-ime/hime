@@ -307,7 +307,6 @@ static void clear_tsin_buffer () {
 }
 
 void close_win_pho_near ();
-void compact_win0 ();
 
 void tsin_reset_in_pho0 () {
     //  prbuf();
@@ -332,7 +331,7 @@ void flush_tsin_buffer () {
 
     if (tss.c_len) {
         putbuf (tss.c_len);
-        compact_win0 ();
+        move_win0_auto ();
         clear_ch_buf_sel_area ();
         clear_tsin_buffer ();
         return;
@@ -516,7 +515,7 @@ static void shift_ins () {
     }
 
     tss.c_len++;
-    compact_win0 ();
+    move_win0_auto ();
 
 #if 0
    prbuf();
@@ -1209,7 +1208,7 @@ static int cursor_backspace () {
     tss.c_len--;
     init_chpho_i (tss.c_len);
     call_tsin_parse ();
-    compact_win0 ();
+    move_win0_auto ();
 
     if (!tss.c_idx) {
         clear_match ();
