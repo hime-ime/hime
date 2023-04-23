@@ -261,7 +261,7 @@ void load_tsin_db ();
 void load_tsin_conf (), load_settings (), load_tab_pho_file ();
 
 void disp_hide_tsin_status_row (), update_win_kbm_inited ();
-void change_tsin_line_color (), change_win0_style (), change_tsin_color ();
+void change_tsin_line_color (), change_win0_style ();
 void change_win_gtab_style ();
 #if TRAY_ENABLED
 void update_item_active_all ();
@@ -327,7 +327,6 @@ static void reload_data () {
     change_win_gtab_style ();
     //  change_win_pho_style();
     load_tab_pho_file ();
-    change_tsin_color ();
     update_win_kbm_inited ();
 
     destroy_inmd_menu ();

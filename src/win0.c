@@ -542,7 +542,3 @@ void change_tsin_font_size () {
 
     set_win0_bg ();
 }
-
-void change_tsin_color () {
-    create_cursor_attr ();
-}
