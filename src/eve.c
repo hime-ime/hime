@@ -65,13 +65,10 @@ extern int hime_tray_display;
 #endif
 void init_gtab (int inmdno);
 
-char current_method_type () {
-    //  dbg("default_input_method %d\n",default_input_method);
-    if (!current_CS)
-        return inmd[default_input_method].method_type;
+INMD *current_input_method ();
 
-    //  dbg("current_CS->in_method %d\n", current_CS->in_method);
-    return inmd[current_CS->in_method].method_type;
+char current_method_type () {
+    return current_input_method ()->method_type;
 }
 
 INMD *current_input_method () {
