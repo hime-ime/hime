@@ -338,7 +338,7 @@ HIME_module_callback_functions *module_cb1 (ClientState *cs) {
     return inmd[cs->in_method].mod_cb_funcs;
 }
 
-HIME_module_callback_functions *get_module_callback () {
+HIME_module_callback_functions *get_module_callbacks () {
     if (!current_CS)
         return NULL;
     return module_cb1 (current_CS);
@@ -371,8 +371,9 @@ void hide_in_win (ClientState *cs) {
         hide_win0 ();
         break;
     case method_type_MODULE:
-        if (inmd[cs->in_method].mod_cb_funcs)
-            module_cb1 (cs)->module_hide_win ();
+        HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
+        if (module_callbacks)
+            module_callbacks->module_hide_win ();
         hide_win_gtab ();
         break;
     default:
@@ -425,9 +426,9 @@ void show_in_win (ClientState *cs) {
         show_win0 ();
         break;
     case method_type_MODULE:
-        if (!module_cb1 (cs))
-            return;
-        module_cb1 (cs)->module_show_win ();
+        HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
+        if (module_callbacks)
+            module_callbacks->module_show_win ();
         show_input_method_name_on_gtab ();
         break;
     default:
@@ -481,8 +482,9 @@ void move_in_win (ClientState *cs, int x, int y) {
         move_win0 (x, y);
         break;
     case method_type_MODULE:
-        if (inmd[cs->in_method].mod_cb_funcs)
-            module_cb1 (cs)->module_move_win (x, y);
+        HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
+        if (module_callbacks)
+            module_callbacks->module_move_win (x, y);
         move_win_gtab (x, y);
         break;
     default:
@@ -693,9 +695,9 @@ void toggle_im_enabled () {
         if (current_method_type () == method_type_TSIN) {
             flush_tsin_buffer ();
         } else if (current_method_type () == method_type_MODULE) {
-            HIME_module_callback_functions *mod_cbs = get_module_callback ();
-            if (mod_cbs)
-                mod_cbs->module_flush_input ();
+            HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
+            if (module_callbacks)
+                module_callbacks->module_flush_input ();
         } else {
             output_gbuf ();
             reset_gtab_all ();
@@ -741,7 +743,6 @@ void get_win_gtab_geom ();
 void get_win_pho_geom ();
 
 void update_active_in_win_geom () {
-    HIME_module_callback_functions *mod_cbs;
     //  dbg("update_active_in_win_geom\n");
     switch (current_method_type ()) {
     case method_type_PHO:
@@ -751,9 +752,9 @@ void update_active_in_win_geom () {
         get_win0_geom ();
         break;
     case method_type_MODULE:
-        mod_cbs = get_module_callback ();
-        if (mod_cbs && mod_cbs->module_get_win_geom)
-            mod_cbs->module_get_win_geom ();
+        HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
+        if (module_callbacks)
+            module_callbacks->module_get_win_geom ();
         break;
     default:
         get_win_gtab_geom ();
@@ -924,14 +925,14 @@ gboolean init_in_method (int in_no) {
 
         if (inmd[in_no].mod_cb_funcs->module_init_win (&gmf)) {
             current_CS->in_method = in_no;
-            get_module_callback ()->module_show_win ();
+            get_module_callbacks ()->module_show_win ();
             set_wselkey (pho_selkey);
         } else {
             return FALSE;
         }
         show_input_method_name_on_gtab ();
-        if (get_module_callback ()) {
-            inmd[in_no].is_win_visible = get_module_callback ()->module_win_visible ();
+        if (get_module_callbacks ()) {
+            inmd[in_no].is_win_visible = get_module_callbacks ()->module_win_visible ();
         } else {
             inmd[in_no].is_win_visible = NULL;
         }
@@ -1252,9 +1253,9 @@ gboolean ProcessKeyPress (KeySym keysym, uint32_t kev_state) {
     case method_type_TSIN:
         return check_key_press (keysym, kev_state, feedkey_pp (keysym, kev_state));
     case method_type_MODULE: {
-        if (!get_module_callback ())
+        if (!get_module_callbacks ())
             return check_key_press (keysym, kev_state, FALSE);
-        gboolean response = get_module_callback ()->module_feedkey (keysym, kev_state);
+        gboolean response = get_module_callbacks ()->module_feedkey (keysym, kev_state);
         if (response)
             hide_win_gtab ();
         else if (current_fullshape_mode ())
@@ -1300,9 +1301,9 @@ gboolean ProcessKeyRelease (KeySym keysym, uint32_t kev_state) {
     case method_type_TSIN:
         return feedkey_pp_release (keysym, kev_state);
     case method_type_MODULE:
-        if (!get_module_callback ())
+        if (!get_module_callbacks ())
             return FALSE;
-        return get_module_callback ()->module_feedkey_release (keysym, kev_state);
+        return get_module_callbacks ()->module_feedkey_release (keysym, kev_state);
     default:
         return feedkey_gtab_release (keysym, kev_state);
     }
@@ -1480,9 +1481,9 @@ int hime_get_preedit (ClientState *cs,
     case method_type_TSIN:
         return tsin_get_preedit (str, attr, cursor, comp_flag);
     case method_type_MODULE:
-        if (inmd[current_CS->in_method].mod_cb_funcs) {
-            return get_module_callback ()->module_get_preedit (str, attr, cursor, comp_flag);
-        }
+        HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
+        if (module_callbacks)
+            return module_callbacks->module_get_preedit (str, attr, cursor, comp_flag);
     default:
         return gtab_get_preedit (str, attr, cursor, comp_flag);
     }
@@ -1507,9 +1508,9 @@ void hime_reset (void) {
         tsin_reset ();
         break;
     case method_type_MODULE:
-        if (inmd[current_CS->in_method].mod_cb_funcs) {
-            get_module_callback ()->module_reset ();
-        }
+        HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
+        if (module_callbacks)
+            return module_callbacks->module_reset ();
         break;
     default:
         gtab_reset ();
@@ -1548,9 +1549,9 @@ void flush_edit_buffer (void) {
         flush_tsin_buffer ();
         break;
     case method_type_MODULE:
-        if (inmd[current_CS->in_method].mod_cb_funcs) {
-            get_module_callback ()->module_flush_input ();
-        }
+        HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
+        if (module_callbacks)
+            return module_callbacks->module_flush_input ();
         break;
     default:
         output_gbuf ();
