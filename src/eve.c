@@ -370,12 +370,13 @@ void hide_in_win (ClientState *cs) {
         hide_win_kbm ();
         hide_win0 ();
         break;
-    case method_type_MODULE:
+    case method_type_MODULE: {
         HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
         if (module_callbacks)
             module_callbacks->module_hide_win ();
         hide_win_gtab ();
         break;
+    }
     default:
         hide_win_gtab ();
     }
@@ -425,12 +426,13 @@ void show_in_win (ClientState *cs) {
     case method_type_TSIN:
         show_win0 ();
         break;
-    case method_type_MODULE:
+    case method_type_MODULE: {
         HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
         if (module_callbacks)
             module_callbacks->module_show_win ();
         show_input_method_name_on_gtab ();
         break;
+    }
     default:
         show_win_gtab ();
         show_input_method_name_on_gtab ();
@@ -481,12 +483,13 @@ void move_in_win (ClientState *cs, int x, int y) {
     case method_type_TSIN:
         move_win0 (x, y);
         break;
-    case method_type_MODULE:
+    case method_type_MODULE: {
         HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
         if (module_callbacks)
             module_callbacks->module_move_win (x, y);
         move_win_gtab (x, y);
         break;
+    }
     default:
         if (!cs->in_method)
             return;
@@ -751,11 +754,12 @@ void update_active_in_win_geom () {
     case method_type_TSIN:
         get_win0_geom ();
         break;
-    case method_type_MODULE:
+    case method_type_MODULE: {
         HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
         if (module_callbacks)
             module_callbacks->module_get_win_geom ();
         break;
+    }
     default:
         get_win_gtab_geom ();
         break;
@@ -1480,10 +1484,11 @@ int hime_get_preedit (ClientState *cs,
         return pho_get_preedit (str, attr, cursor, comp_flag);
     case method_type_TSIN:
         return tsin_get_preedit (str, attr, cursor, comp_flag);
-    case method_type_MODULE:
+    case method_type_MODULE: {
         HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
         if (module_callbacks)
             return module_callbacks->module_get_preedit (str, attr, cursor, comp_flag);
+    }
     default:
         return gtab_get_preedit (str, attr, cursor, comp_flag);
     }
@@ -1507,11 +1512,12 @@ void hime_reset (void) {
     case method_type_TSIN:
         tsin_reset ();
         break;
-    case method_type_MODULE:
+    case method_type_MODULE: {
         HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
         if (module_callbacks)
             return module_callbacks->module_reset ();
         break;
+    }
     default:
         gtab_reset ();
     }
@@ -1548,11 +1554,12 @@ void flush_edit_buffer (void) {
     case method_type_TSIN:
         flush_tsin_buffer ();
         break;
-    case method_type_MODULE:
+    case method_type_MODULE: {
         HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
         if (module_callbacks)
             return module_callbacks->module_flush_input ();
         break;
+    }
     default:
         output_gbuf ();
     }
