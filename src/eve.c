@@ -28,8 +28,11 @@
 #include "hime-module-cb.h"
 #include "pho.h"
 #include "tsin.h"
+#include "win-gtab.h"
 #include "win-kbm.h"
+#include "win-pho.h"
 #include "win-sym.h"
+#include "win0.h"
 
 #define STRBUFLEN 64
 
@@ -69,6 +72,13 @@ char current_method_type () {
 
     //  dbg("current_CS->in_method %d\n", current_CS->in_method);
     return inmd[current_CS->in_method].method_type;
+}
+
+INMD *current_input_method () {
+    if (!current_CS)
+        return &inmd[default_input_method];
+
+    return &inmd[current_CS->in_method];
 }
 
 void send_fake_key_eve (KeySym key) {
@@ -754,27 +764,12 @@ void update_active_in_win_geom () {
     }
 }
 
-extern GtkWidget *gwin_pho, *gwin_gtab, *gwin_sym;
-
 gboolean win_is_visible () {
     if (!current_CS)
         return FALSE;
-    switch (current_method_type ()) {
-    case method_type_PHO:
-        return gwin_pho && gtk_widget_get_visible (gwin_pho);
-    case method_type_TSIN:
-        return is_win0_visible ();
-    case method_type_MODULE:
-        if (!module_cb ())
-            return FALSE;
-        return module_cb ()->module_win_visible ();
-    case method_type_SYMBOL_TABLE:
-        return gwin_sym && gtk_widget_get_visible (gwin_sym);
-    default:
-        if (!gwin_gtab)
-            return FALSE;
-        return gwin_gtab && gtk_widget_get_visible (gwin_gtab);
-    }
+    INMD *input_method = current_input_method ();
+    if (input_method->is_win_visible)
+        return input_method->is_win_visible ();
 
     return FALSE;
 }
@@ -904,14 +899,17 @@ gboolean init_in_method (int in_no) {
     case method_type_PHO:
         current_CS->in_method = in_no;
         init_tab_pho ();
+        inmd[in_no].is_win_visible = is_win_pho_visible;
         break;
     case method_type_TSIN:
         set_wselkey (pho_selkey);
         current_CS->in_method = in_no;
         init_tab_pp (init_im);
+        inmd[in_no].is_win_visible = is_win0_visible;
         break;
     case method_type_SYMBOL_TABLE:
         toggle_symbol_table ();
+        inmd[in_no].is_win_visible = is_win_sym_visible;
         break;
     case method_type_MODULE: {
         HIME_module_main_functions gmf;
@@ -935,6 +933,11 @@ gboolean init_in_method (int in_no) {
             return FALSE;
         }
         show_input_method_name_on_gtab ();
+        if (module_cb ()) {
+            inmd[in_no].is_win_visible = module_cb ()->module_win_visible ();
+        } else {
+            inmd[in_no].is_win_visible = NULL;
+        }
         break;
     }
     case method_type_EN: {
@@ -942,6 +945,7 @@ gboolean init_in_method (int in_no) {
             toggle_im_enabled ();
         current_CS->in_method = in_no;
         hide_win_kbm ();
+        inmd[in_no].is_win_visible = NULL;
         return TRUE;
     }
     default:
@@ -968,6 +972,7 @@ gboolean init_in_method (int in_no) {
             show_win_gtab ();
             show_input_method_name_on_gtab ();
         }
+        inmd[in_no].is_win_visible = is_win_gtab_visible;
 
         // set_gtab_input_method_name(inmd[in_no].cname);
         break;

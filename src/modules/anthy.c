@@ -1255,7 +1255,7 @@ int module_init_win (HIME_module_main_functions *funcs) {
 }
 
 int module_win_visible () {
-    return gtk_widget_get_visible (win_anthy);
+    return win_anthy && gtk_widget_get_visible (win_anthy);
 }
 
 void module_show_win () {

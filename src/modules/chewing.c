@@ -689,9 +689,8 @@ void module_hide_win (void) {
     g_himeModMainFuncs.mf_hide_win_sym ();
 }
 
-// FIXME: chk
 int module_win_visible (void) {
-    return gtk_widget_get_visible (g_pWinChewing);
+    return g_pWinChewing && gtk_widget_get_visible (g_pWinChewing);
 }
 
 void module_win_geom (void) {

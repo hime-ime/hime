@@ -17,15 +17,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef WIN_SYM_H
-#define WIN_SYM_H
+#ifndef WIN_PHO_H
+#define WIN_PHO_H
 
-void create_win_sym ();
-void hide_win_sym ();
-void show_win_sym ();
-gboolean is_win_sym_visible (void);
-void move_win_sym ();
-void toggle_win_sym ();
-extern gboolean win_sym_enabled;
+gboolean is_win_pho_visible (void);
 
 #endif

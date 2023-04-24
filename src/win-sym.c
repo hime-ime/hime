@@ -297,6 +297,10 @@ void show_win_sym () {
     move_win_sym ();
 }
 
+gboolean is_win_sym_visible (void) {
+    return gwin_sym && gtk_widget_get_visible (gwin_sym);
+}
+
 void lookup_gtab_out (char *ch, char *out);
 void str_to_all_phokey_chars (char *b5_str, char *out);
 

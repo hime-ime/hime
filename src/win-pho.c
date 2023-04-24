@@ -20,6 +20,7 @@
 #include "hime.h"
 
 #include "win-common.h"
+#include "win-pho.h"
 #include "win-sym.h"
 
 static int current_hime_inner_frame;
@@ -33,6 +34,10 @@ static GtkWidget *label_full;
 static GtkWidget *label_key_codes;
 
 void change_pho_font_size ();
+
+gboolean is_win_pho_visible () {
+    return !gwin_pho && gtk_widget_get_visible (gwin_pho);
+}
 
 void disp_pho (int index, char *phochar) {
     //  dbg("%d '", index); utf8_putchar(phochar); dbg("'\n");

@@ -22,6 +22,7 @@
 #include "gst.h"
 #include "gtab.h"
 #include "win-common.h"
+#include "win-gtab.h"
 #include "win-sym.h"
 
 static int current_hime_inner_frame;
@@ -48,6 +49,10 @@ void move_win_gtab (int x, int y);
 int win_gtab_max_key_press;
 
 void move_gtab_pho_query_win ();
+
+gboolean is_win_gtab_visible (void) {
+    return gwin_gtab && gtk_widget_get_visible (gwin_gtab);
+}
 
 static void adj_gtab_win_pos () {
     if (!gwin_gtab)
