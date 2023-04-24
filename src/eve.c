@@ -338,7 +338,7 @@ HIME_module_callback_functions *module_cb1 (ClientState *cs) {
     return inmd[cs->in_method].mod_cb_funcs;
 }
 
-HIME_module_callback_functions *module_cb () {
+HIME_module_callback_functions *get_module_callback () {
     if (!current_CS)
         return NULL;
     return module_cb1 (current_CS);
@@ -693,7 +693,7 @@ void toggle_im_enabled () {
         if (current_method_type () == method_type_TSIN) {
             flush_tsin_buffer ();
         } else if (current_method_type () == method_type_MODULE) {
-            HIME_module_callback_functions *mod_cbs = module_cb ();
+            HIME_module_callback_functions *mod_cbs = get_module_callback ();
             if (mod_cbs)
                 mod_cbs->module_flush_input ();
         } else {
@@ -751,7 +751,7 @@ void update_active_in_win_geom () {
         get_win0_geom ();
         break;
     case method_type_MODULE:
-        mod_cbs = module_cb ();
+        mod_cbs = get_module_callback ();
         if (mod_cbs && mod_cbs->module_get_win_geom)
             mod_cbs->module_get_win_geom ();
         break;
@@ -924,14 +924,14 @@ gboolean init_in_method (int in_no) {
 
         if (inmd[in_no].mod_cb_funcs->module_init_win (&gmf)) {
             current_CS->in_method = in_no;
-            module_cb ()->module_show_win ();
+            get_module_callback ()->module_show_win ();
             set_wselkey (pho_selkey);
         } else {
             return FALSE;
         }
         show_input_method_name_on_gtab ();
-        if (module_cb ()) {
-            inmd[in_no].is_win_visible = module_cb ()->module_win_visible ();
+        if (get_module_callback ()) {
+            inmd[in_no].is_win_visible = get_module_callback ()->module_win_visible ();
         } else {
             inmd[in_no].is_win_visible = NULL;
         }
@@ -1252,9 +1252,9 @@ gboolean ProcessKeyPress (KeySym keysym, uint32_t kev_state) {
     case method_type_TSIN:
         return check_key_press (keysym, kev_state, feedkey_pp (keysym, kev_state));
     case method_type_MODULE: {
-        if (!module_cb ())
+        if (!get_module_callback ())
             return check_key_press (keysym, kev_state, FALSE);
-        gboolean response = module_cb ()->module_feedkey (keysym, kev_state);
+        gboolean response = get_module_callback ()->module_feedkey (keysym, kev_state);
         if (response)
             hide_win_gtab ();
         else if (current_fullshape_mode ())
@@ -1300,9 +1300,9 @@ gboolean ProcessKeyRelease (KeySym keysym, uint32_t kev_state) {
     case method_type_TSIN:
         return feedkey_pp_release (keysym, kev_state);
     case method_type_MODULE:
-        if (!module_cb ())
+        if (!get_module_callback ())
             return FALSE;
-        return module_cb ()->module_feedkey_release (keysym, kev_state);
+        return get_module_callback ()->module_feedkey_release (keysym, kev_state);
     default:
         return feedkey_gtab_release (keysym, kev_state);
     }
@@ -1481,7 +1481,7 @@ int hime_get_preedit (ClientState *cs,
         return tsin_get_preedit (str, attr, cursor, comp_flag);
     case method_type_MODULE:
         if (inmd[current_CS->in_method].mod_cb_funcs) {
-            return module_cb ()->module_get_preedit (str, attr, cursor, comp_flag);
+            return get_module_callback ()->module_get_preedit (str, attr, cursor, comp_flag);
         }
     default:
         return gtab_get_preedit (str, attr, cursor, comp_flag);
@@ -1508,7 +1508,7 @@ void hime_reset (void) {
         break;
     case method_type_MODULE:
         if (inmd[current_CS->in_method].mod_cb_funcs) {
-            module_cb ()->module_reset ();
+            get_module_callback ()->module_reset ();
         }
         break;
     default:
@@ -1549,7 +1549,7 @@ void flush_edit_buffer (void) {
         break;
     case method_type_MODULE:
         if (inmd[current_CS->in_method].mod_cb_funcs) {
-            module_cb ()->module_flush_input ();
+            get_module_callback ()->module_flush_input ();
         }
         break;
     default:
