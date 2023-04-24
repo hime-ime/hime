@@ -155,7 +155,6 @@ extern int inmdN;
 u_int64_t CONVT2 (INMD *inmd, int i);
 extern INMD *cur_inmd;
 void load_gtab_list (gboolean);
-char current_method_type ();
 
 #define LAST_K_bitN (cur_inmd->last_k_bitn)
 
