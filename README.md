@@ -107,6 +107,12 @@ sudo pacman -U hime-git-{version}-{arch}.pkg.tar.zst
 
 - 目前輸入法的設計並不會更新存放於使用者家目錄的詞庫資料，未來的版本可能會改善，細節請見 issue #136
 
+### 不相容應用程式
+
+目前仍有應用程式無法與 HIME 進行很好的搭配
+
+[不相容列表](https://github.com/hime-ime/hime/wiki/List-of-software-incompatible-with-H.I.M.E.)
+
 ### 按鍵功能一覽表
 
 ```text
