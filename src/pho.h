@@ -78,6 +78,7 @@ char *pho_idx_str (int idx);
 char *pho_idx_str2 (int idx, int *is_phrase);
 gboolean pho_has_input ();
 gboolean typ_pho_empty ();
+void pho_reset ();
 
 #define MAX_PH_BF (90)
 

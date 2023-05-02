@@ -1974,13 +1974,11 @@ fin:
     return attrN;
 }
 
-int tsin_reset () {
+void tsin_reset () {
     //  dbg("tsin_reset\n");
     if (!win0)
-        return 0;
+        return;
     int v = tss.c_len > 0;
     tsin_reset_in_pho0 ();
     clear_tsin_buffer ();
-
-    return v;
 }

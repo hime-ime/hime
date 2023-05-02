@@ -138,6 +138,7 @@ typedef struct {
     struct _HIME_module_callback_functions *mod_cb_funcs;
     char key_ch;
     gboolean (*is_win_visible) (void);
+    void (*reset) ();
 } INMD;
 
 enum {
@@ -171,5 +172,7 @@ void load_gtab_list (gboolean);
 #define tblch2(inm, i) (inm->key64 ? inm->tbl64[i].ch : inm->tbl[i].ch)
 #define Max_tab_key_num1(inm) (inm->key64 ? MAX_TAB_KEY_NUM641 (inm) : MAX_TAB_KEY_NUM1 (inm))
 #define Max_tab_key_num Max_tab_key_num1 (cur_inmd)
+
+void gtab_reset ();
 
 #endif /* GTAB_H */

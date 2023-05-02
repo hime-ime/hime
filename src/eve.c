@@ -901,16 +901,19 @@ gboolean init_in_method (int in_no) {
     case method_type_PHO:
         current_CS->in_method = in_no;
         init_tab_pho ();
+        inmd[in_no].reset = pho_reset;
         inmd[in_no].is_win_visible = is_win_pho_visible;
         break;
     case method_type_TSIN:
         set_wselkey (pho_selkey);
         current_CS->in_method = in_no;
         init_tab_pp (init_im);
+        inmd[in_no].reset = tsin_reset;
         inmd[in_no].is_win_visible = is_win0_visible;
         break;
     case method_type_SYMBOL_TABLE:
         toggle_symbol_table ();
+        inmd[in_no].reset = NULL;
         inmd[in_no].is_win_visible = is_win_sym_visible;
         break;
     case method_type_MODULE: {
@@ -936,8 +939,10 @@ gboolean init_in_method (int in_no) {
         }
         show_input_method_name_on_gtab ();
         if (get_module_callbacks ()) {
+            inmd[in_no].reset = get_module_callbacks ()->module_reset;
             inmd[in_no].is_win_visible = get_module_callbacks ()->module_win_visible ();
         } else {
+            inmd[in_no].reset = NULL;
             inmd[in_no].is_win_visible = NULL;
         }
         break;
@@ -947,6 +952,7 @@ gboolean init_in_method (int in_no) {
             toggle_im_enabled ();
         current_CS->in_method = in_no;
         hide_win_kbm ();
+        inmd[in_no].reset = NULL;
         inmd[in_no].is_win_visible = NULL;
         return TRUE;
     }
@@ -974,6 +980,7 @@ gboolean init_in_method (int in_no) {
             show_win_gtab ();
             show_input_method_name_on_gtab ();
         }
+        inmd[in_no].reset = gtab_reset;
         inmd[in_no].is_win_visible = is_win_gtab_visible;
 
         // set_gtab_input_method_name(inmd[in_no].cname);
@@ -1496,31 +1503,14 @@ int hime_get_preedit (ClientState *cs,
     return 0;
 }
 
-void pho_reset ();
-int tsin_reset ();
-void gtab_reset ();
-
 void hime_reset (void) {
     if (!current_CS) {
         return;
     }
 
-    switch (current_method_type ()) {
-    case method_type_PHO:
-        pho_reset ();
-        break;
-    case method_type_TSIN:
-        tsin_reset ();
-        break;
-    case method_type_MODULE: {
-        HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
-        if (module_callbacks)
-            return module_callbacks->module_reset ();
-        break;
-    }
-    default:
-        gtab_reset ();
-    }
+    INMD *input_method = current_input_method ();
+    if (input_method->reset)
+        return input_method->reset ();
 }
 
 #if USE_XIM

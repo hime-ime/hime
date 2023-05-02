@@ -55,6 +55,7 @@ char *get_chpho_pinyin_set (char *set_arr);
 void draw_tsin_cursor ();
 void clrin_pho_tsin ();
 gboolean tsin_has_input ();
+void tsin_reset ();
 
 #define TSIN_GTAB_KEY "!!!!gtab-keys"
 
