@@ -20,6 +20,7 @@
 #ifndef WIN_GTAB_H
 #define WIN_GTAB_H
 
+void show_win_gtab (void);
 gboolean is_win_gtab_visible (void);
 
 #endif

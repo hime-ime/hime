@@ -20,6 +20,7 @@
 #ifndef WIN_PHO_H
 #define WIN_PHO_H
 
+void show_win_pho (void);
 gboolean is_win_pho_visible (void);
 
 #endif

@@ -137,6 +137,7 @@ typedef struct {
     char WILD_QUES, WILD_STAR;
     struct _HIME_module_callback_functions *mod_cb_funcs;
     char key_ch;
+    void (*show_input_window) (void);
     gboolean (*is_win_visible) (void);
     void (*reset) ();
 } INMD;
