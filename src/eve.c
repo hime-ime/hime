@@ -940,7 +940,7 @@ gboolean init_in_method (int in_no) {
         show_input_method_name_on_gtab ();
         if (get_module_callbacks ()) {
             inmd[in_no].reset = get_module_callbacks ()->module_reset;
-            inmd[in_no].is_win_visible = get_module_callbacks ()->module_win_visible ();
+            inmd[in_no].is_win_visible = get_module_callbacks ()->module_win_visible;
         } else {
             inmd[in_no].reset = NULL;
             inmd[in_no].is_win_visible = NULL;
