@@ -393,7 +393,7 @@ void move_win0 (int x, int y) {
 
 void disp_tsin_pho (int index, char *pho) {
     if (hime_display_on_the_spot_key ()) {
-        if (win0 && gtk_widget_get_visible (win0))
+        if (is_win0_visible ())
             hide_win0 ();
         return;
     }
