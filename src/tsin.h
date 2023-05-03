@@ -20,8 +20,6 @@
 #ifndef HIME_TSIN_H
 #define HIME_TSIN_H
 
-#include "win0.h"
-
 extern int phcount;
 extern int hashidx[];
 // extern int *phidx;

@@ -29,6 +29,7 @@
 #include "tsin-parse.h"
 #include "tsin.h"
 #include "win-save-phrase.h"
+#include "win0.h"
 
 extern int ph_key_sz;
 extern GtkWidget *gwin1;
