@@ -53,7 +53,7 @@ static void mouse_button_callback (GtkWidget *widget, GdkEventButton *event, gpo
 static void mouse_char_callback (GtkWidget *widget, GdkEventButton *event, gpointer data);
 
 // External function
-void raise_tsin_selection_win ();
+void show_selections_win ();
 void hide_selections_win ();
 void init_tsin_selection_win ();
 void getRootXY (Window win, int wx, int wy, int *tx, int *ty);
@@ -193,7 +193,7 @@ void show_win0 () {
 
     if (current_CS->b_raise_window) {
         gtk_window_present (GTK_WINDOW (win0));
-        raise_tsin_selection_win ();
+        show_selections_win ();
     }
 }
 

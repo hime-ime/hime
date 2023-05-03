@@ -306,7 +306,7 @@ void set_sele_text (int tN, int i, char *text, int len) {
     gtk_label_set_markup (GTK_LABEL (labels_sele[i]), tt);
 }
 
-void raise_tsin_selection_win () {
+void show_selections_win () {
     if (gwin1 && gtk_widget_get_visible (gwin1))
         gtk_window_present (GTK_WINDOW (gwin1));
 }
