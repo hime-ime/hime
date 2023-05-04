@@ -433,8 +433,7 @@ void clear_phonemes () {
 
 static void mouse_char_callback (GtkWidget *widget, GdkEventButton *event, gpointer data) {
     int index = GPOINTER_TO_INT (data);
-    tss.last_cursor_idx = tss.c_idx;
-    tss.c_idx = index;
+    update_tsin_cursor_index (index);
     clear_cursor (tss.last_cursor_idx);
     set_cursor (tss.c_idx);
 

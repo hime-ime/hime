@@ -105,11 +105,10 @@ void draw_tsin_cursor () {
         if (!chinese_mode ()) {
             if (current_fullshape_mode ()) {
                 disp_char (tss.c_idx, "  ");
-                set_cursor (tss.c_idx);
             } else {
                 disp_char (tss.c_idx, " ");
-                set_cursor (tss.c_idx);
             }
+            set_cursor (tss.c_idx);
         }
     } else {
         set_cursor (tss.c_idx);
@@ -1982,4 +1981,9 @@ void tsin_reset () {
     int v = tss.c_len > 0;
     tsin_reset_in_pho0 ();
     clear_tsin_buffer ();
+}
+
+void update_tsin_cursor_index (int index) {
+    tss.last_cursor_idx = tss.c_idx;
+    tss.c_idx = index;
 }

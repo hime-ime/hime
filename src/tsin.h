@@ -54,6 +54,7 @@ void draw_tsin_cursor ();
 void clrin_pho_tsin ();
 gboolean tsin_has_input ();
 void tsin_reset ();
+void update_tsin_cursor_index (int index);
 
 #define TSIN_GTAB_KEY "!!!!gtab-keys"
 
