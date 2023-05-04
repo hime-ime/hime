@@ -90,13 +90,8 @@ static void init_chpho_i (int i) {
     tss.chpho[i].psta = -1;
 }
 
-static void clrcursor () {
-    clear_cursor (tss.c_idx);
-}
-
 void draw_tsin_cursor () {
     clear_cursor (tss.last_cursor_idx);
-    tss.last_cursor_idx = tss.c_idx;
 
     if (!tss.c_len)
         return;
@@ -290,7 +285,8 @@ static void clr_ch_buf () {
 
 static void clear_ch_buf_sel_area () {
     clear_chars_all ();
-    tss.c_len = tss.c_idx = 0;
+    tss.c_len = 0;
+    update_tsin_cursor_index (0);
     tss.ph_sta = -1;
     tss.full_match = FALSE;
     clr_ch_buf ();
@@ -422,8 +418,7 @@ void init_tab_pp (gboolean init) {
 }
 
 static void move_cursor_end () {
-    clrcursor ();
-    tss.c_idx = tss.c_len;
+    update_tsin_cursor_index (tss.c_len);
     draw_tsin_cursor ();
 }
 
@@ -881,7 +876,7 @@ gboolean add_to_tsin_buf (char *str, phokey_t *pho, int len) {
     ch_pho_cpy (&tss.chpho[tss.c_idx], str, pho, len);
 
     if (tsin_cursor_end ())
-        tss.c_idx += len;
+        update_tsin_cursor_index (tss.c_idx + len);
 
     tss.c_len += len;
 
@@ -954,7 +949,7 @@ gboolean add_to_tsin_buf_phsta (char *str, phokey_t *pho, int len) {
     set_chpho_ch (&tss.chpho[idx], str, len, FALSE);
     set_fixed (idx, len);
     tss.chpho[idx].flag |= FLAG_CHPHO_PHRASE_USER_HEAD;
-    tss.c_idx = idx + len;
+    update_tsin_cursor_index (idx + len);
     tss.chpho[tss.c_idx - 1].flag |= FLAG_CHPHO_PHRASE_TAIL;
 
     clrin_pho_tsin ();
@@ -1126,8 +1121,7 @@ static int cursor_left () {
     //  dbg("cursor left %d %d\n", tss.c_idx, tss.c_len);
     close_selection_win ();
     if (tss.c_idx) {
-        clrcursor ();
-        tss.c_idx--;
+        update_tsin_cursor_index (tss.c_idx - 1);
         draw_tsin_cursor ();
         return 1;
     }
@@ -1138,8 +1132,7 @@ static int cursor_right () {
     //  dbg("cursor right %d %d\n", tss.c_idx, tss.c_len);
     close_selection_win ();
     if (tss.c_idx < tss.c_len) {
-        clrcursor ();
-        tss.c_idx++;
+        update_tsin_cursor_index (tss.c_idx + 1);
         draw_tsin_cursor ();
         return 1;
     }
@@ -1193,7 +1186,7 @@ static int cursor_backspace () {
     if (!tss.c_idx)
         return 0;
 
-    clrcursor ();
+    clear_cursor (tss.c_idx);
     tss.c_idx--;
     //        pst=k=tss.chpho[tss.c_idx].psta;
 
@@ -1422,8 +1415,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
         close_selection_win ();
         if (!tss.c_len)
             return 0;
-        clrcursor ();
-        tss.c_idx = 0;
+        update_tsin_cursor_index (0);
         draw_tsin_cursor ();
         return 1;
     case XK_End:
@@ -1729,7 +1721,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
 
         disp_char_chbuf (tss.c_idx);
         tss.chpho[tss.c_idx].pho = tphokeys[0];
-        tss.c_idx++;
+        update_tsin_cursor_index (tss.c_idx + 1);
         if (tss.c_idx < tss.c_len)
             prbuf ();
 
