@@ -294,11 +294,8 @@ static void clear_tsin_buffer () {
 void close_win_pho_near ();
 
 void tsin_reset_in_pho0 () {
-    //  prbuf();
     clear_phonemes ();
     close_selection_win ();
-    tss.pre_selN = 0;
-    //  tss.pho_menu_idx = 0;
     draw_tsin_cursor ();
     close_win_pho_near ();
 }
