@@ -96,18 +96,7 @@ void draw_tsin_cursor () {
     if (!tss.c_len)
         return;
 
-    if (tsin_cursor_end ()) {
-        if (!chinese_mode ()) {
-            if (current_fullshape_mode ()) {
-                disp_char (tss.c_idx, "  ");
-            } else {
-                disp_char (tss.c_idx, " ");
-            }
-            set_cursor (tss.c_idx);
-        }
-    } else {
-        set_cursor (tss.c_idx);
-    }
+    set_cursor (tss.c_idx);
 }
 
 void chpho_extract (CHPHO *chph, int len, phokey_t *pho, char *ch) {
