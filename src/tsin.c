@@ -50,7 +50,6 @@ extern int hashidx[TSIN_HASH_N];
 // gboolean eng_ph=TRUE;  // english(FALSE) <-> pho(juyin, TRUE)
 
 void clrin_pho ();
-void save_CS_current_to_temp ();
 
 /**
  * Check whether the current cursor position is at the end of the preedit buffer or not
