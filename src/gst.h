@@ -48,7 +48,7 @@ typedef enum {
 } SAME_PHO_QUERY;
 
 typedef struct {
-    int ityp3_pho;
+    gboolean ityp3_pho;
     int cpg, maxi;
     int start_idx, stop_idx;
     char typ_pho[4];

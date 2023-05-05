@@ -1130,7 +1130,7 @@ void tsin_scan_pre_select (gboolean b_incr);
 
 static int cursor_backspace () {
     close_selection_win ();
-    poo.ityp3_pho = 0;
+    poo.ityp3_pho = FALSE;
     tss.pre_selN = 0;
     gboolean pho_cleared;
     pho_cleared = FALSE;
@@ -1231,7 +1231,8 @@ int tsin_pho_sel (int c) {
     if (len) {
         tss.c_idx = tsin_cursor_end () ? tss.c_idx : tss.c_idx + len;
         prbuf ();
-        tss.current_page = tss.sel_pho = poo.ityp3_pho = 0;
+        tss.current_page = tss.sel_pho = 0;
+        poo.ityp3_pho = FALSE;
         tss.ph_sta = -1;
         hide_selections_win ();
         if (len == 1) {
@@ -1740,7 +1741,7 @@ llll1:
     kk = 1;
 llll2:
     if (ctyp == 3) {
-        poo.ityp3_pho = 1; /* last key is entered */
+        poo.ityp3_pho = TRUE; /* last key is entered */
 
         if (!tsin_tone_char_input && !poo.typ_pho[0] && !poo.typ_pho[1] && !poo.typ_pho[2]) {
             clrin_pho_tsin ();
@@ -1798,14 +1799,15 @@ llll2:
         }
 
         bell ();
-        poo.ityp3_pho = poo.typ_pho[3] = 0;
+        poo.ityp3_pho = FALSE;
+        poo.typ_pho[3] = 0;
         disp_in_area_pho_tsin ();
         //       dbg("not found ...\n");
         return 1;
     }
 
     if (poo.typ_pho[0] == L_BRACKET_NO || poo.typ_pho[0] == R_BRACKET_NO || (poo.typ_pho[0] == BACK_QUOTE_NO && poo.typ_pho[1]))
-        poo.ityp3_pho = 1;
+        poo.ityp3_pho = TRUE;
 
     if (key == 0 || !poo.ityp3_pho) {
         if (key)
@@ -1831,7 +1833,7 @@ llll2:
     call_tsin_parse ();
 
     if (status & PHO_STATUS_PINYIN_LEFT) {
-        poo.ityp3_pho = 0;
+        poo.ityp3_pho = FALSE;
         disp_in_area_pho_tsin ();
     } else {
         clrin_pho_tsin ();

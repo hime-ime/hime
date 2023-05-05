@@ -256,7 +256,8 @@ int inph_typ_pho (KeySym newkey) {
 void clrin_pho () {
     memset (poo.typ_pho, 0, sizeof (poo.typ_pho));
     memset (poo.inph, 0, sizeof (poo.inph));
-    poo.maxi = poo.ityp3_pho = 0;
+    poo.ityp3_pho = FALSE;
+    poo.maxi = 0;
     poo.cpg = 0;
 
     if (hime_pop_up_win && !same_query_show_pho_win ())
@@ -537,7 +538,7 @@ int feedkey_pho (KeySym xkey, int kbstate) {
             close_gtab_pho_win ();
         return 1;
     case XK_BackSpace:
-        poo.ityp3_pho = 0;
+        poo.ityp3_pho = FALSE;
         for (j = 3; j >= 0; j--)
             if (poo.typ_pho[j]) {
                 poo.typ_pho[j] = 0;
@@ -567,7 +568,6 @@ int feedkey_pho (KeySym xkey, int kbstate) {
             return 0;
         }
 
-        //      dbg("poo.ityp3_pho %d\n", poo.ityp3_pho);
         if (!poo.ityp3_pho) {
             poo.ityp3_pho = TRUE;
             goto lll1;
@@ -633,7 +633,7 @@ lll1:
     kk = 1;
 llll2:
     if (ctyp == 3) {
-        poo.ityp3_pho = 1; /* last key is entered */
+        poo.ityp3_pho = TRUE; /* last key is entered */
     }
 llll3:
 
@@ -687,7 +687,8 @@ llll3:
         }
 
         bell ();
-        poo.ityp3_pho = poo.typ_pho[3] = 0;
+        poo.ityp3_pho = FALSE;
+        poo.typ_pho[3] = 0;
         disp_in_area_pho ();
         return 1;
     }
@@ -700,13 +701,14 @@ proc_state:
     //  dbg("poo.start_idx: %d %d\n", poo.start_idx, poo.stop_idx);
 
     if (poo.typ_pho[0] == L_BRACKET_NO || poo.typ_pho[0] == R_BRACKET_NO || (poo.typ_pho[0] == BACK_QUOTE_NO && poo.typ_pho[1]))
-        poo.ityp3_pho = 1;
+        poo.ityp3_pho = TRUE;
 
     ii += poo.cpg;
 
     if (poo.ityp3_pho && poo.stop_idx - poo.start_idx == 1) {
         putkey_pho (key, ii);
-        poo.maxi = poo.ityp3_pho = 0;
+        poo.ityp3_pho = FALSE;
+        poo.maxi = 0;
         return 1;
     }
 
