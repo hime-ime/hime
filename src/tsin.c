@@ -1958,7 +1958,6 @@ void tsin_reset () {
     //  dbg("tsin_reset\n");
     if (!win0)
         return;
-    int v = tss.c_len > 0;
     tsin_reset_in_pho0 ();
     clear_tsin_buffer ();
 }
