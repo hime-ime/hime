@@ -215,20 +215,18 @@ static void prbuf () {
     draw_tsin_cursor ();
 }
 
-void disp_tsin_pho (int index, char *pho);
-
 static void disp_in_area_pho_tsin () {
     int i;
 
     if (pin_juyin) {
         for (i = 0; i < 6; i++) {
-            disp_tsin_pho (i, &poo.inph[i]);
+            set_and_show_tsin_phoneme_at_index (i, &poo.inph[i]);
         }
     } else {
         for (i = 0; i < 4; i++) {
             if (poo.typ_pho[0] == BACK_QUOTE_NO && i == 1)
                 break;
-            disp_tsin_pho (i, &pho_chars[i][poo.typ_pho[i] * PHO_CHAR_LEN]);
+            set_and_show_tsin_phoneme_at_index (i, &pho_chars[i][poo.typ_pho[i] * PHO_CHAR_LEN]);
         }
     }
 }

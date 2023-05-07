@@ -175,7 +175,7 @@ void message_cb (char *message);
 void bell (void);
 void case_inverse (KeySym *xkey, int shift_m);
 gint64 current_time (void);
-void disp_pho_sub (GtkWidget *label, int index, char *pho);
+void set_phoneme_at_index_in_label (GtkWidget *label, int index, char *pho);
 void exec_hime_setup (void);
 void apply_widget_bg_color (GtkWidget *widget);
 void apply_widget_fg_color (GtkWidget *widget);

@@ -57,7 +57,7 @@ gint64 current_time (void) {
     return (gint64) tval.tv_sec * 1000000 + tval.tv_usec;
 }
 
-void disp_pho_sub (GtkWidget *label, int index, char *pho) {
+void set_phoneme_at_index_in_label (GtkWidget *label, int index, char *pho) {
     if (!GTK_IS_LABEL (label)) {
         return;
     }

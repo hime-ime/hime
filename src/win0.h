@@ -36,6 +36,7 @@ void clear_cursor (int index);
 void clear_and_hide_chars_all (void);
 void clear_and_hide_char (int index);
 void set_and_show_char (int index, char *ch);
+void set_and_show_tsin_phoneme_at_index (int index, char *pho);
 void clear_phonemes ();
 
 #endif

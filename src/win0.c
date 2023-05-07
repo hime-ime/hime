@@ -389,7 +389,7 @@ void move_win0 (int x, int y) {
     move_win_sym ();
 }
 
-void disp_tsin_pho (int index, char *pho) {
+void set_and_show_tsin_phoneme_at_index (int index, char *pho) {
     if (hime_display_on_the_spot_key ()) {
         if (is_win0_visible ())
             hide_win0 ();
@@ -400,7 +400,7 @@ void disp_tsin_pho (int index, char *pho) {
         gtk_widget_show (button_pho);
 
     text_pho_N = pin_juyin ? 6 : 3;
-    disp_pho_sub (label_pho, index, pho);
+    set_phoneme_at_index_in_label (label_pho, index, pho);
 }
 
 void win_tsin_disp_half_full () {
@@ -421,7 +421,7 @@ void reset_content () {
 void clear_phonemes () {
     int i;
     for (i = 0; i < text_pho_N; i++)
-        disp_tsin_pho (i, " ");
+        set_and_show_tsin_phoneme_at_index (i, " ");
 }
 
 /* there is a bug in gtk, if the widget is created and hasn't been processed by

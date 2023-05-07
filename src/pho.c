@@ -27,6 +27,7 @@
 #include "gtab.h"
 #include "pho-status.h"
 #include "pho.h"
+#include "win-pho.h"
 
 extern PHO_ST poo;
 
@@ -264,13 +265,12 @@ void clrin_pho () {
         hide_win_pho ();
 }
 
-void disp_pho (int index, char *phochar);
 void clr_in_area_pho () {
     int i;
 
     clrin_pho ();
     for (i = 0; i < text_pho_N; i++)
-        disp_pho (i, "  ");
+        set_phoneme_at_index (i, "  ");
 }
 
 static void disp_in_area_pho () {
@@ -279,14 +279,14 @@ static void disp_in_area_pho () {
     text_pho_N = pin_juyin ? 7 : 4;
     if (pin_juyin) {
         for (i = 0; i < text_pho_N; i++) {
-            disp_pho (i, &poo.inph[i]);
+            set_phoneme_at_index (i, &poo.inph[i]);
         }
     } else {
         for (i = 0; i < 4; i++) {
             if (i == 1 && poo.typ_pho[0] == BACK_QUOTE_NO) {
-                disp_pho (i, &poo.inph[1]);
+                set_phoneme_at_index (i, &poo.inph[1]);
             } else
-                disp_pho (i, &pho_chars[i][poo.typ_pho[i] * 3]);
+                set_phoneme_at_index (i, &pho_chars[i][poo.typ_pho[i] * 3]);
         }
     }
 }

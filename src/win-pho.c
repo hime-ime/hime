@@ -39,9 +39,9 @@ gboolean is_win_pho_visible () {
     return !gwin_pho && gtk_widget_get_visible (gwin_pho);
 }
 
-void disp_pho (int index, char *phochar) {
+void set_phoneme_at_index (int index, char *phochar) {
     //  dbg("%d '", index); utf8_putchar(phochar); dbg("'\n");
-    disp_pho_sub (label_pho, index, phochar);
+    set_phoneme_at_index_in_label (label_pho, index, phochar);
 }
 
 void move_win_pho (int x, int y);
