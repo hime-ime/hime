@@ -35,6 +35,7 @@ void set_cursor (int index);
 void clear_cursor (int index);
 void clear_and_hide_chars_all (void);
 void clear_and_hide_char (int index);
+void set_and_show_char (int index, char *ch);
 void clear_phonemes ();
 
 #endif

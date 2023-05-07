@@ -73,11 +73,9 @@ gboolean tsin_has_input () {
     return v;
 }
 
-void disp_char (int index, char *ch);
-
 static void disp_char_chbuf (int idx) {
     //  dbg("disp_char_chbuf %d '%s' '%s'\n", idx, tss.chpho[idx].ch, tss.chpho[idx].cha);
-    disp_char (idx, tss.chpho[idx].ch);
+    set_and_show_char (idx, tss.chpho[idx].ch);
 }
 
 static void init_chpho_i (int i) {

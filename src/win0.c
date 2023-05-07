@@ -138,7 +138,7 @@ void destroy_win0 () {
     reset_content ();
 }
 
-static void create_char (int index) {
+static void create_char_widgets (int index) {
 
     if (!hbox_edit)
         return;
@@ -238,14 +238,13 @@ void disp_tsin_select (int index) {
     disp_selections (x, y);
 }
 
-void disp_char (int index, char *ch) {
+void set_and_show_char (int index, char *ch) {
     if (hime_edit_display_ap_only ())
         return;
     if (!win0)
         show_win0 ();
 
-    //  dbg("disp_char %d %s\n", index, ch);
-    create_char (index);
+    create_char_widgets (index);
     GtkWidget *label = chars[index].label;
 
     if (label) {
