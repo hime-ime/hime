@@ -199,8 +199,6 @@ static void putbuf (int len) {
     lookup_gtabn ((char *) tt, NULL);
 }
 
-void hide_char (int index);
-
 static void prbuf () {
     int i;
 
@@ -213,7 +211,7 @@ static void prbuf () {
         disp_char_chbuf (i);
 
     for (i = tss.c_len; i < MAX_PH_BF_EXT; i++) {
-        hide_char (i);
+        clear_and_hide_char (i);
     }
 
     draw_tsin_cursor ();
@@ -256,8 +254,6 @@ static int get_in_area_pho_tsin_str (char *out) {
     return outN;
 }
 
-void clear_chars_all ();
-
 static void clear_match () {
     tss.ph_sta = -1;
 }
@@ -272,7 +268,7 @@ static void clr_ch_buf () {
 }
 
 static void clear_ch_buf_sel_area () {
-    clear_chars_all ();
+    clear_and_hide_chars_all ();
     tss.c_len = 0;
     update_tsin_cursor_index (0);
     tss.ph_sta = -1;

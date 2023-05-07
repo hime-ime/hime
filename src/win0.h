@@ -33,7 +33,8 @@ void move_win0 (int x, int y);
 void reset_content (void);
 void set_cursor (int index);
 void clear_cursor (int index);
-
+void clear_and_hide_chars_all (void);
+void clear_and_hide_char (int index);
 void clear_phonemes ();
 
 #endif

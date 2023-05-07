@@ -45,7 +45,6 @@ static struct {
 extern int text_pho_N;
 extern gboolean force_show;
 
-void hide_char (int index);
 int get_widget_xy (GtkWidget *win, GtkWidget *widget, int *rx, int *ry);
 static void set_win0_bg ();
 static void create_cursor_attr ();
@@ -264,16 +263,16 @@ void disp_char (int index, char *ch) {
     gtk_widget_show_all (chars[index].vbox);
 }
 
-void clear_chars_all () {
+void clear_and_hide_chars_all () {
     int i;
     for (i = 0; i < MAX_PH_BF_EXT; i++) {
-        hide_char (i);
+        clear_and_hide_char (i);
     }
 
     move_win0_auto ();
 }
 
-void hide_char (int index) {
+void clear_and_hide_char (int index) {
     if (!chars[index].vbox)
         return;
     gtk_label_set_text (GTK_LABEL (chars[index].label), "");
