@@ -520,7 +520,7 @@ static void put_u8_char (int pho_idx, phokey_t key, gboolean b_tone) {
     disp_char_chbuf (tss.c_idx);
 
     tss.chpho[tss.c_idx].pho = key;
-    tss.c_idx++;
+    update_tsin_cursor_index (tss.c_idx + 1);
 
 #if 0
    if (tss.c_idx < tss.c_len) {
@@ -1220,7 +1220,8 @@ int tsin_pho_sel (int c) {
     }
 
     if (len) {
-        tss.c_idx = tsin_cursor_end () ? tss.c_idx : tss.c_idx + len;
+        int index = tsin_cursor_end () ? tss.c_idx : tss.c_idx + len;
+        update_tsin_cursor_index (index);
         prbuf ();
         tss.current_page = tss.sel_pho = 0;
         poo.ityp3_pho = FALSE;
@@ -1874,7 +1875,7 @@ void tsin_remove_last () {
     if (!tss.c_len)
         return;
     tss.c_len--;
-    tss.c_idx--;
+    update_tsin_cursor_index (tss.c_idx - 1);
 }
 
 gboolean save_phrase_to_db2 (CHPHO *chph, int len) {
