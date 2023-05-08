@@ -22,6 +22,7 @@
 #include "gtab-buf.h"
 #include "gtab.h"
 #include "pho.h"
+#include "tsin.h"
 #include "win-sym.h"
 
 GtkWidget *gwin_sym = NULL;
@@ -177,7 +178,7 @@ static gboolean read_syms () {
 
 gboolean add_to_tsin_buf (char *str, phokey_t *pho, int len);
 void send_text_call_back (char *text);
-void tsin_reset_in_pho (), reset_gtab_all (), clr_in_area_pho ();
+void reset_gtab_all (), clr_in_area_pho ();
 void force_preedit_shift ();
 gboolean output_gbuf ();
 void output_buffer_call_back ();
@@ -216,7 +217,7 @@ static void cb_button_sym (GtkButton *button, GtkWidget *label) {
         clr_in_area_pho ();
         break;
     case method_type_TSIN:
-        tsin_reset_in_pho ();
+        reset_phonemes_in_tsin ();
         break;
     case method_type_MODULE:
         break;

@@ -55,6 +55,7 @@ void clrin_pho_tsin ();
 gboolean tsin_has_input ();
 void tsin_reset ();
 void update_tsin_cursor_index (int index);
+void reset_phonemes_in_tsin (void);
 
 #define TSIN_GTAB_KEY "!!!!gtab-keys"
 

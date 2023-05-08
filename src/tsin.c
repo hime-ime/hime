@@ -289,13 +289,13 @@ void tsin_reset_in_pho0 () {
     close_win_pho_near ();
 }
 
-void tsin_reset_in_pho () {
+void reset_phonemes_in_tsin () {
     clrin_pho_tsin ();
     tsin_reset_in_pho0 ();
 }
 
 void flush_tsin_buffer () {
-    tsin_reset_in_pho ();
+    reset_phonemes_in_tsin ();
 
     if (hime_pop_up_win)
         hide_win0 ();
@@ -1360,7 +1360,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
                 goto tab_phrase_end;
             }
         }
-        tsin_reset_in_pho ();
+        reset_phonemes_in_tsin ();
         return 1;
     case XK_Return:
     case XK_KP_Enter:
