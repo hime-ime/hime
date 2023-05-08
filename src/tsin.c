@@ -49,8 +49,6 @@ extern PHOKBM phkbm;
 extern int hashidx[TSIN_HASH_N];
 // gboolean eng_ph=TRUE;  // english(FALSE) <-> pho(juyin, TRUE)
 
-void clrin_pho ();
-
 /**
  * Check whether the current cursor position is at the end of the preedit buffer or not
  * \retval TRUE The current cursor position is at the end
@@ -61,7 +59,7 @@ gboolean tsin_cursor_end () {
 }
 
 void clrin_pho_tsin () {
-    clrin_pho ();
+    reset_pho_structure ();
 
     if (!tsin_has_input () && hime_pop_up_win)
         hide_win0 ();
@@ -1133,7 +1131,7 @@ static int cursor_backspace () {
                 poo.inph[j] = 0;
                 pho_cleared = TRUE;
                 if (j == 0)
-                    clrin_pho ();
+                    reset_pho_structure ();
                 break;
             }
         }

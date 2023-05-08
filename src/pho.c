@@ -254,7 +254,7 @@ int inph_typ_pho (KeySym newkey) {
     return PHO_STATUS_REJECT;
 }
 
-void clrin_pho () {
+void reset_pho_structure () {
     memset (poo.typ_pho, 0, sizeof (poo.typ_pho));
     memset (poo.inph, 0, sizeof (poo.inph));
     poo.ityp3_pho = FALSE;
@@ -266,9 +266,8 @@ void clrin_pho () {
 }
 
 void clr_in_area_pho () {
+    reset_pho_structure ();
     int i;
-
-    clrin_pho ();
     for (i = 0; i < text_pho_N; i++)
         set_phoneme_at_index (i, "  ");
 }
