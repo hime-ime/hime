@@ -1344,7 +1344,6 @@ int feedkey_pp (KeySym xkey, int kbstate) {
         }
     }
 
-    int o_sel_pho = tss.sel_pho;
     close_win_pho_near ();
 
     switch (xkey) {
@@ -1356,7 +1355,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
         if (typ_pho_empty ()) {
             if (!tss.c_len)
                 return 0;
-            if (!o_sel_pho && tsin_tab_phrase_end) {
+            if (!tss.sel_pho && tsin_tab_phrase_end) {
                 goto tab_phrase_end;
             }
         }
