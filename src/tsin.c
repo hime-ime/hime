@@ -271,7 +271,7 @@ static void clear_ch_buf_sel_area () {
 
 static void close_selection_win ();
 
-static void clear_tsin_buffer () {
+static void reset_buffer_in_tsin () {
     clear_ch_buf_sel_area ();
     close_selection_win ();
     tss.pre_selN = 0;
@@ -299,7 +299,7 @@ void flush_tsin_buffer () {
         putbuf (tss.c_len);
         move_win0_auto ();
         clear_ch_buf_sel_area ();
-        clear_tsin_buffer ();
+        reset_buffer_in_tsin ();
         return;
     }
 
@@ -1545,7 +1545,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
         if ((kbstate & ControlMask)) {
             if (xkey == 'u') {
                 if (tss.c_len) {
-                    clear_tsin_buffer ();
+                    reset_buffer_in_tsin ();
                     if (hime_pop_up_win)
                         hide_win0 ();
                     return 1;
@@ -1947,14 +1947,10 @@ fin:
 }
 
 void tsin_reset () {
-    //  dbg("tsin_reset\n");
     if (!win0)
         return;
-    clear_phonemes ();
-    close_selection_win ();
-    draw_tsin_cursor ();
-    close_win_pho_near ();
-    clear_tsin_buffer ();
+    reset_phonemes_in_tsin ();
+    reset_buffer_in_tsin ();
 }
 
 void update_tsin_cursor_index (int index) {
