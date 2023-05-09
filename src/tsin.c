@@ -300,10 +300,7 @@ void flush_tsin_buffer () {
         move_win0_auto ();
         clear_ch_buf_sel_area ();
         reset_buffer_in_tsin ();
-        return;
     }
-
-    return;
 }
 
 void load_tsin_db ();
