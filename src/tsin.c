@@ -211,7 +211,7 @@ static void prbuf () {
     draw_tsin_cursor ();
 }
 
-static void disp_in_area_pho_tsin () {
+static void display_phonemes_in_tsin () {
     int i;
 
     if (pin_juyin) {
@@ -852,7 +852,7 @@ gboolean add_to_tsin_buf (char *str, phokey_t *pho, int len) {
 
     reset_pho_structure ();
     hide_win0_if_empty ();
-    disp_in_area_pho_tsin ();
+    display_phonemes_in_tsin ();
 
     prbuf ();
 
@@ -925,7 +925,7 @@ gboolean add_to_tsin_buf_phsta (char *str, phokey_t *pho, int len) {
 
     reset_pho_structure ();
     hide_win0_if_empty ();
-    disp_in_area_pho_tsin ();
+    display_phonemes_in_tsin ();
 
     prbuf ();
 #if 1
@@ -1147,7 +1147,7 @@ static int cursor_backspace () {
         if (typ_pho_empty ())
             memset (poo.inph, 0, sizeof (poo.inph));
 
-        disp_in_area_pho_tsin ();
+        display_phonemes_in_tsin ();
         tsin_scan_pre_select (TRUE);
 
         if (hime_pop_up_win && typ_pho_empty () && !tsin_has_input ())
@@ -1740,7 +1740,7 @@ llll2:
         }
     }
 
-    disp_in_area_pho_tsin ();
+    display_phonemes_in_tsin ();
 
     key = pho2key (poo.typ_pho);
 
@@ -1791,7 +1791,7 @@ llll2:
         bell ();
         poo.ityp3_pho = FALSE;
         poo.typ_pho[3] = 0;
-        disp_in_area_pho_tsin ();
+        display_phonemes_in_tsin ();
         //       dbg("not found ...\n");
         return 1;
     }
@@ -1824,7 +1824,7 @@ llll2:
 
     if (status & PHO_STATUS_PINYIN_LEFT) {
         poo.ityp3_pho = FALSE;
-        disp_in_area_pho_tsin ();
+        display_phonemes_in_tsin ();
     } else {
         reset_pho_structure ();
         hide_win0_if_empty ();
