@@ -280,17 +280,13 @@ static void clear_tsin_buffer () {
 
 void close_win_pho_near ();
 
-void tsin_reset_in_pho0 () {
+void reset_phonemes_in_tsin () {
+    reset_pho_structure ();
+    hide_win0_if_empty ();
     clear_phonemes ();
     close_selection_win ();
     draw_tsin_cursor ();
     close_win_pho_near ();
-}
-
-void reset_phonemes_in_tsin () {
-    reset_pho_structure ();
-    hide_win0_if_empty ();
-    tsin_reset_in_pho0 ();
 }
 
 void flush_tsin_buffer () {
@@ -1353,7 +1349,10 @@ int feedkey_pp (KeySym xkey, int kbstate) {
 
     switch (xkey) {
     case XK_Escape:
-        tsin_reset_in_pho0 ();
+        clear_phonemes ();
+        close_selection_win ();
+        draw_tsin_cursor ();
+        close_win_pho_near ();
         if (typ_pho_empty ()) {
             if (!tss.c_len)
                 return 0;
@@ -1951,7 +1950,10 @@ void tsin_reset () {
     //  dbg("tsin_reset\n");
     if (!win0)
         return;
-    tsin_reset_in_pho0 ();
+    clear_phonemes ();
+    close_selection_win ();
+    draw_tsin_cursor ();
+    close_win_pho_near ();
     clear_tsin_buffer ();
 }
 
