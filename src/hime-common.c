@@ -36,12 +36,12 @@ void bell (void) {
     XBell (dpy, hime_bell_volume);
 }
 
-void case_inverse (KeySym *xkey, int shift_m) {
+void case_inverse (KeySym *xkey, gboolean shift_is_pressed) {
     if (*xkey > 0x7e) {
         return;
     }
 
-    if (shift_m) {
+    if (shift_is_pressed) {
         if (islower (*xkey)) {
             *xkey -= 0x20;
         }

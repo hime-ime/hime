@@ -509,17 +509,17 @@ int feedkey_pho (KeySym xkey, int kbstate) {
     int i, j, jj = 0, kk = 0;
     char out_buffer[512];
     int out_bufferN;
-    int shift_m = kbstate & ShiftMask;
-    int ctrl_m = kbstate & ControlMask;
+    gboolean shift_is_pressed = (kbstate & ShiftMask) > 0;
+    gboolean ctrl_is_pressed = (kbstate & ControlMask) > 0;
 
-    if (ctrl_m)
+    if (ctrl_is_pressed)
         return 0;
 
     if (kbstate & LockMask) {
         if (xkey >= 0x7e || xkey < ' ')
             return FALSE;
         if (hime_capslock_lower)
-            case_inverse (&xkey, shift_m);
+            case_inverse (&xkey, shift_is_pressed);
         send_ascii (xkey);
         return 1;
     }
@@ -592,7 +592,7 @@ int feedkey_pho (KeySym xkey, int kbstate) {
         if (xkey >= 127 || xkey < ' ')
             return 0;
 
-        if (shift_m) {
+        if (shift_is_pressed) {
             //        return shift_char_proc(xkey, kbstate);
             if (pre_punctuation (xkey))
                 return 1;

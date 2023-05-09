@@ -895,8 +895,7 @@ static gboolean select_idx (int c) {
 
 gboolean module_feedkey (int kv, int kvstate) {
     int lkv = tolower (kv);
-    int shift_m = (kvstate & ShiftMask) > 0;
-    // printf("module_feedkey(): kv=%x(%c), shift_m=%d\n", kv, kv, shift_m);
+    gboolean shift_is_pressed = (kvstate & ShiftMask) > 0;
 
     if (kvstate & ControlMask)
         return FALSE;
@@ -1036,7 +1035,7 @@ gboolean module_feedkey (int kv, int kvstate) {
             }
             disp_input ();
         } else if (state & STATE_CONVERT) {
-            if (shift_m) {
+            if (shift_is_pressed) {
                 anthy_resize_segment (ac, cursor, -1);
                 load_seg ();
             } else {
@@ -1058,7 +1057,7 @@ gboolean module_feedkey (int kv, int kvstate) {
             }
             disp_input ();
         } else if (state & STATE_CONVERT) {
-            if (shift_m) {
+            if (shift_is_pressed) {
                 anthy_resize_segment (ac, cursor, 1);
                 load_seg ();
             } else {

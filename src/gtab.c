@@ -907,13 +907,11 @@ gboolean feedkey_gtab (KeySym key, int kbstate) {
     gboolean phrase_selected = FALSE;
     char seltab_phrase[MAX_SELKEY];
     gboolean is_keypad = FALSE;
-    gboolean shift_m = (kbstate & ShiftMask) > 0;
-    gboolean ctrl_m = (kbstate & ControlMask) > 0;
+    gboolean shift_is_pressed = (kbstate & ShiftMask) > 0;
+    gboolean ctrl_is_pressed = (kbstate & ControlMask) > 0;
     gboolean capslock_on = (kbstate & LockMask);
 
     memset (seltab_phrase, 0, sizeof (seltab_phrase));
-
-    //  dbg("uuuuu %x %x   shift,ctrl:%d,%d\n", key, kbstate, shift_m, ctrl_m);
 
     if (!cur_inmd)
         return 0;
@@ -964,7 +962,7 @@ gboolean feedkey_gtab (KeySym key, int kbstate) {
         hide_win_pho ();
 
     if (!chinese_mode ()) {
-        gboolean is_ascii = (key >= ' ' && key < 0x7f) && !ctrl_m;
+        gboolean is_ascii = (key >= ' ' && key < 0x7f) && !ctrl_is_pressed;
         if (current_fullshape_mode () && is_ascii) {
             send_text (half_char_to_full_char (key));
             return 1;
@@ -974,7 +972,7 @@ gboolean feedkey_gtab (KeySym key, int kbstate) {
             goto shift_proc;
 
         if (capslock_on && hime_capslock_lower)
-            case_inverse ((KeySym *) &key, shift_m);
+            case_inverse ((KeySym *) &key, shift_is_pressed);
 
         if (ggg.gbufN)
             insert_gbuf_cursor_char (key);
@@ -996,7 +994,7 @@ gboolean feedkey_gtab (KeySym key, int kbstate) {
     }
 
 shift_proc:
-    if (shift_m && !strchr (cur_inmd->selkey, key) && !ggg.more_pg && key >= ' ' && key < 0x7e &&
+    if (shift_is_pressed && !strchr (cur_inmd->selkey, key) && !ggg.more_pg && key >= ' ' && key < 0x7e &&
         key != '*' && (key != '?' || (gtab_shift_phrase_key && !ggg.ci))) {
         if (gtab_shift_phrase_key) {
             if (tss.pre_selN && shift_char_proc (key, kbstate))
@@ -1063,7 +1061,7 @@ shift_proc:
     case XK_Return:
         if (AUTO_SELECT_BY_PHRASE) {
             hide_gtab_pre_sel ();
-            if (shift_m) {
+            if (shift_is_pressed) {
                 return save_gtab_buf_shift_enter ();
             } else
                 return output_gbuf ();
@@ -1312,7 +1310,7 @@ shift_proc:
         else
             inkey = 0;
 
-        if (shift_m && !inkey && !tss.ctrl_pre_sel &&
+        if (shift_is_pressed && !inkey && !tss.ctrl_pre_sel &&
             tss.pre_selN && shift_char_proc (key, kbstate))
             return TRUE;
 

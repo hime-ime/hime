@@ -173,7 +173,7 @@ void message_cb (char *message);
 
 // hime-common.c
 void bell (void);
-void case_inverse (KeySym *xkey, int shift_m);
+void case_inverse (KeySym *xkey, gboolean shift_is_pressed);
 gint64 current_time (void);
 void set_phoneme_at_index_in_label (GtkWidget *label, int index, char *pho);
 void exec_hime_setup (void);

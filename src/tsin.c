@@ -1285,8 +1285,8 @@ int feedkey_pp (KeySym xkey, int kbstate) {
     char ctyp = 0;
     static u_int ii;
     static u_short key;
-    int shift_m = kbstate & ShiftMask;
-    int ctrl_m = kbstate & ControlMask;
+    gboolean shift_is_pressed = (kbstate & ShiftMask) > 0;
+    gboolean ctrl_is_pressed = (kbstate & ControlMask) > 0;
     int jj, kk, idx;
     char kno;
     int caps_eng_tog = hime_chinese_english_toggle_key == HIME_CHINESE_ENGLISH_TOGGLE_KEY_CapsLock;
@@ -1327,11 +1327,11 @@ int feedkey_pp (KeySym xkey, int kbstate) {
 
     if (!chinese_mode () && !tss.c_len && hime_pop_up_win && xkey != XK_Caps_Lock) {
         hide_win0 ();
-        gboolean is_ascii = (xkey >= ' ' && xkey < 0x7f) && !ctrl_m;
+        gboolean is_ascii = (xkey >= ' ' && xkey < 0x7f) && !ctrl_is_pressed;
 
         if (caps_eng_tog && is_ascii) {
             if (hime_capslock_lower)
-                case_inverse (&xkey, shift_m);
+                case_inverse (&xkey, shift_is_pressed);
             send_ascii (xkey);
             return 1;
         } else {
@@ -1363,7 +1363,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
         return 1;
     case XK_Return:
     case XK_KP_Enter:
-        if (shift_m) {
+        if (shift_is_pressed) {
             if (!tss.c_len)
                 return 0;
             int idx0 = tss.c_idx;
@@ -1636,9 +1636,9 @@ int feedkey_pp (KeySym xkey, int kbstate) {
     if (key_pad && !tss.c_len && !current_fullshape_mode ())
         return 0;
 
-    if (!chinese_mode () || (poo.typ_pho[0] != BACK_QUOTE_NO && (shift_m || key_pad ||
+    if (!chinese_mode () || (poo.typ_pho[0] != BACK_QUOTE_NO && (shift_is_pressed || key_pad ||
                                                                  (!phkbm.phokbm[xkey][0].num && !phkbm.phokbm[xkey][0].typ)))) {
-        if (chinese_mode () && !shift_m && strchr (hsu_punc, xkey) && !phkbm.phokbm[xkey][0].num) {
+        if (chinese_mode () && !shift_is_pressed && strchr (hsu_punc, xkey) && !phkbm.phokbm[xkey][0].num) {
             if (pre_punctuation_hsu (xkey))
                 return 1;
         }
@@ -1646,7 +1646,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
         if (key_pad)
             xkey = key_pad;
     asc_char:
-        if (shift_m) {
+        if (shift_is_pressed) {
             if (pre_sel_handler (xkey)) {
                 call_tsin_parse ();
                 return 1;
@@ -1656,7 +1656,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
                 return 1;
         }
 
-        if (shift_m && chinese_mode ()) {
+        if (shift_is_pressed && chinese_mode ()) {
             char *ppp = strchr (ochars, xkey);
 
             if (!(kbstate & LockMask) && ppp && !((ppp - ochars) & 1))
@@ -1664,7 +1664,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
 
         } else {
             if (!chinese_mode () && caps_eng_tog && hime_capslock_lower) {
-                case_inverse (&xkey, shift_m);
+                case_inverse (&xkey, shift_is_pressed);
             }
         }
 
