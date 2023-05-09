@@ -58,9 +58,7 @@ gboolean tsin_cursor_end () {
     return tss.c_idx == tss.c_len;
 }
 
-void clrin_pho_tsin () {
-    reset_pho_structure ();
-
+void hide_win0_if_empty () {
     if (!tsin_has_input () && hime_pop_up_win)
         hide_win0 ();
 }
@@ -290,7 +288,8 @@ void tsin_reset_in_pho0 () {
 }
 
 void reset_phonemes_in_tsin () {
-    clrin_pho_tsin ();
+    reset_pho_structure ();
+    hide_win0_if_empty ();
     tsin_reset_in_pho0 ();
 }
 
@@ -855,7 +854,8 @@ gboolean add_to_tsin_buf (char *str, phokey_t *pho, int len) {
 
     tss.c_len += len;
 
-    clrin_pho_tsin ();
+    reset_pho_structure ();
+    hide_win0_if_empty ();
     disp_in_area_pho_tsin ();
 
     prbuf ();
@@ -927,7 +927,8 @@ gboolean add_to_tsin_buf_phsta (char *str, phokey_t *pho, int len) {
     update_tsin_cursor_index (idx + len);
     tss.chpho[tss.c_idx - 1].flag |= FLAG_CHPHO_PHRASE_TAIL;
 
-    clrin_pho_tsin ();
+    reset_pho_structure ();
+    hide_win0_if_empty ();
     disp_in_area_pho_tsin ();
 
     prbuf ();
@@ -1734,7 +1735,8 @@ llll2:
         poo.ityp3_pho = TRUE; /* last key is entered */
 
         if (!tsin_tone_char_input && !poo.typ_pho[0] && !poo.typ_pho[1] && !poo.typ_pho[2]) {
-            clrin_pho_tsin ();
+            reset_pho_structure ();
+            hide_win0_if_empty ();
             dbg ("no pho input\n");
             return TRUE;
         }
@@ -1826,7 +1828,8 @@ llll2:
         poo.ityp3_pho = FALSE;
         disp_in_area_pho_tsin ();
     } else {
-        clrin_pho_tsin ();
+        reset_pho_structure ();
+        hide_win0_if_empty ();
         clear_phonemes ();
     }
     draw_tsin_cursor ();

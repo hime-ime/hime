@@ -51,11 +51,11 @@ void load_tsin_entry (int idx, char *len, usecount_t *usecount, void *pho, u_cha
 gboolean check_fixed_mismatch (int chpho_idx, char *mtch, int plen);
 char *get_chpho_pinyin_set (char *set_arr);
 void draw_tsin_cursor ();
-void clrin_pho_tsin ();
 gboolean tsin_has_input ();
 void tsin_reset ();
 void update_tsin_cursor_index (int index);
 void reset_phonemes_in_tsin (void);
+void hide_win0_if_empty (void);
 
 #define TSIN_GTAB_KEY "!!!!gtab-keys"
 

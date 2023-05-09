@@ -788,7 +788,8 @@ void set_eng_ch_mode (gboolean mode) {
         if (chinese_mode ()) {
             show_button_pho ();
         } else {
-            clrin_pho_tsin ();
+            reset_pho_structure ();
+            hide_win0_if_empty ();
             hide_button_pho ();
         }
     } else
