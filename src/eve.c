@@ -789,6 +789,7 @@ void set_eng_ch_mode (gboolean mode) {
             show_button_pho ();
         } else {
             reset_pho_structure ();
+            clear_phonemes ();
             hide_win0_if_empty ();
             hide_button_pho ();
         }
