@@ -69,8 +69,7 @@ gboolean tsin_has_input () {
     return v;
 }
 
-static void disp_char_chbuf (int idx) {
-    //  dbg("disp_char_chbuf %d '%s' '%s'\n", idx, tss.chpho[idx].ch, tss.chpho[idx].cha);
+static void display_char_in_buffer (int idx) {
     set_and_show_char (idx, tss.chpho[idx].ch);
 }
 
@@ -202,7 +201,7 @@ static void prbuf () {
             tss.chpho[i].ch = tss.chpho[i].cha;
 
     for (i = 0; i < tss.c_len; i++)
-        disp_char_chbuf (i);
+        display_char_in_buffer (i);
 
     for (i = tss.c_len; i < MAX_PH_BF_EXT; i++) {
         clear_and_hide_char (i);
@@ -507,7 +506,7 @@ static void put_u8_char (int pho_idx, phokey_t key, gboolean b_tone) {
     if (b_tone)
         tss.chpho[tss.c_idx].flag |= FLAG_CHPHO_PINYIN_TONE;
 
-    disp_char_chbuf (tss.c_idx);
+    display_char_in_buffer (tss.c_idx);
 
     tss.chpho[tss.c_idx].pho = key;
     update_tsin_cursor_index (tss.c_idx + 1);
@@ -1692,7 +1691,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
         tphokeys[0] = 0;
         utf8_pho_keys (tss.chpho[tss.c_idx].ch, tphokeys);
 
-        disp_char_chbuf (tss.c_idx);
+        display_char_in_buffer (tss.c_idx);
         tss.chpho[tss.c_idx].pho = tphokeys[0];
         update_tsin_cursor_index (tss.c_idx + 1);
         if (tss.c_idx < tss.c_len)
