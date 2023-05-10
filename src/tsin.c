@@ -297,7 +297,6 @@ void flush_tsin_buffer () {
     if (tss.c_len) {
         putbuf (tss.c_len);
         move_win0_auto ();
-        clear_ch_buf_sel_area ();
         reset_buffer_in_tsin ();
     }
 }
