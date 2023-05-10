@@ -407,10 +407,14 @@ void win_tsin_disp_half_full () {
     if (label_pho == NULL)
         show_win0 ();
 
-    if (hime_use_custom_theme)
-        gtk_label_set_markup (GTK_LABEL (label_pho), get_full_str ());
-    else
-        gtk_label_set_text (GTK_LABEL (label_pho), get_full_str ());
+    if (current_fullwidth_mode ()) {
+        if (hime_use_custom_theme)
+            gtk_label_set_markup (GTK_LABEL (label_pho), get_full_str ());
+        else
+            gtk_label_set_text (GTK_LABEL (label_pho), get_full_str ());
+    } else {
+        clear_phonemes ();
+    }
     move_win0_auto ();
 }
 
