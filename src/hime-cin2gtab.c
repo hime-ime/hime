@@ -375,7 +375,7 @@ int main (int argc, char **argv) {
                     p += len;
                 }
             } else {
-                p_err ("%d:  %quick only 1&2 keys are allowed '%s'", lineno, cmd);
+                p_err ("%d:  %%quick only 1&2 keys are allowed '%s'", lineno, cmd);
             }
         }
     }
