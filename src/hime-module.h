@@ -53,7 +53,7 @@ typedef struct {
     void (*mf_set_no_focus) (GtkWidget *win);
 
     gint64 (*mf_current_time) ();
-    int (*mf_current_fullshape_mode) ();
+    int (*mf_current_fullwidth_mode) ();
 
     void (*mf_exec_hime_setup) ();
     gboolean (*mf_hime_edit_display_ap_only) ();

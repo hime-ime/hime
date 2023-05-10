@@ -142,7 +142,6 @@ void init_gtab (int inmdno) {
     ggg.sel1st_i = MAX_SELKEY - 1;
     init_seltab (&seltab);
 
-    //  current_CS->b_half_full_char = FALSE;
     if (!inmd[inmdno].filename || !strcmp (inmd[inmdno].filename, "-")) {
         //    dbg("filename is empty\n");
         return;

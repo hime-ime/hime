@@ -102,7 +102,7 @@ static void draw_icon () {
 
     if (current_CS) {
         gdk_cairo_set_source_color (cr, &red_color_fg);
-        if (current_fullshape_mode ()) {
+        if (current_fullwidth_mode ()) {
             get_text_w_h (full, &w, &h);
             cairo_move_to (cr, iw - w, ih - h);
             pango_cairo_show_layout (cr, pango);

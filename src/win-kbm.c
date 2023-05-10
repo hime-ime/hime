@@ -474,7 +474,7 @@ void update_win_kbm (void) {
 
     clear_kbm ();
 
-    if (!current_CS->b_im_enabled && !current_fullshape_mode ()) {
+    if (!current_CS->b_im_enabled && !current_fullwidth_mode ()) {
         for (int i = 0; i < keysN; i++) {
             for (int j = 0; j < COLN; j++) {
                 char kstr[2];

@@ -1332,7 +1332,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
             send_ascii (xkey);
             return 1;
         } else {
-            if (current_fullshape_mode () && is_ascii) {
+            if (current_fullwidth_mode () && is_ascii) {
                 send_text (half_char_to_full_char (xkey));
                 return 1;
             } else {
@@ -1474,7 +1474,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
             return TRUE;
         return win_sym_page_up ();
     case XK_space:
-        if (!tss.c_len && !poo.ityp3_pho && !poo.typ_pho[0] && !poo.typ_pho[1] && !poo.typ_pho[2] && current_fullshape_mode ()) {
+        if (!tss.c_len && !poo.ityp3_pho && !poo.typ_pho[0] && !poo.typ_pho[1] && !poo.typ_pho[2] && current_fullwidth_mode ()) {
             send_text ("　"); /* Full width space */
             return 1;
         }
@@ -1630,7 +1630,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
     if (!xkey || (xkey > 0x7e && !key_pad))
         return 0;
 
-    if (key_pad && !tss.c_len && !current_fullshape_mode ())
+    if (key_pad && !tss.c_len && !current_fullwidth_mode ())
         return 0;
 
     if (!chinese_mode () || (poo.typ_pho[0] != BACK_QUOTE_NO && (shift_is_pressed || key_pad ||
@@ -1672,7 +1672,7 @@ int feedkey_pp (KeySym xkey, int kbstate) {
 
         u_char tt = xkey;
 
-        if (current_fullshape_mode ()) {
+        if (current_fullwidth_mode ()) {
             strcpy (tstr, half_char_to_full_char (xkey));
         } else {
             tstr[0] = tt;

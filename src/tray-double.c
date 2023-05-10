@@ -343,9 +343,7 @@ void load_tray_icon_double () {
     char *icon_st = NULL;
     char fname_state[128];
 
-    //  dbg("%d %d\n",current_CS->im_state,current_fullshape_mode());
-
-    if (current_fullshape_mode ()) {
+    if (current_fullwidth_mode ()) {
         if (gb_output) {
             icon_st = "full-simp.png";
             tip = _ ("Double-width / Simplified Chinese output");

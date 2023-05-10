@@ -867,7 +867,7 @@ gboolean shift_char_proc (KeySym key, int kbstate) {
     if (gtab_pre_select_shift (key, kbstate))
         return TRUE;
 
-    if (current_fullshape_mode ())
+    if (current_fullwidth_mode ())
         return full_char_proc (key);
 
     if (ggg.gbufN)
@@ -963,7 +963,7 @@ gboolean feedkey_gtab (KeySym key, int kbstate) {
 
     if (!chinese_mode ()) {
         gboolean is_ascii = (key >= ' ' && key < 0x7f) && !ctrl_is_pressed;
-        if (current_fullshape_mode () && is_ascii) {
+        if (current_fullwidth_mode () && is_ascii) {
             send_text (half_char_to_full_char (key));
             return 1;
         }
@@ -1184,7 +1184,7 @@ shift_proc:
             } else
                 goto next_page;
         } else if (ggg.ci == 0) {
-            if (current_fullshape_mode ())
+            if (current_fullwidth_mode ())
                 return full_char_proc (key);
 
             if (ggg.gbufN) {
@@ -1237,7 +1237,7 @@ shift_proc:
                 insert_gbuf_cursor_char (key);
                 return 1;
             } else {
-                if (current_fullshape_mode ())
+                if (current_fullwidth_mode ())
                     return full_char_proc (key);
                 else
                     return 0;
@@ -1245,9 +1245,6 @@ shift_proc:
         }
         if (tss.pre_selN && shift_char_proc (key, kbstate))
             return TRUE;
-
-        // if (current_fullshape_mode())
-        //  return full_char_proc(key);
 
         inkey = cur_inmd->keymap[key];
         if ((inkey && (inkey != cur_inmd->WILD_STAR && inkey != cur_inmd->WILD_QUES)) || ptr_selkey (key)) {
@@ -1411,7 +1408,7 @@ shift_proc:
 
         // for cj & boshiamy to input digits
         if (!ggg.ci && !inkey) {
-            if (current_fullshape_mode ())
+            if (current_fullwidth_mode ())
                 return full_char_proc (key);
             else {
                 if (ggg.gbufN && poo.same_pho_query_state != SAME_PHO_QUERY_gtab_input) {
@@ -1478,7 +1475,7 @@ shift_proc:
                 }
         } else {
             if (!pselkey) {
-                if (current_fullshape_mode ())
+                if (current_fullwidth_mode ())
                     return full_char_proc (key);
                 else {
                     if (key >= ' ' && key < 0x7f && AUTO_SELECT_BY_PHRASE && ggg.gbufN)

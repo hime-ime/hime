@@ -51,10 +51,10 @@ typedef struct {
 } StatusAttributes;
 
 typedef struct {
-    Window client_win;          /* client window */
-    INT32 input_style;          /* input style */
-    gboolean b_im_enabled;      ///< TRUE: Input method enabled   FALSE: Input method disabled
-    gboolean b_half_full_char;  ///< TRUE: full    FALSE: half
+    Window client_win;      /* client window */
+    INT32 input_style;      /* input style */
+    gboolean b_im_enabled;  ///< TRUE: Input method enabled   FALSE: Input method disabled
+    gboolean is_fullwidth;  ///< TRUE: fullwidth    FALSE: halfwidth
     gboolean fixed_pos;
     gboolean b_hime_protocol;  // TRUE : hime    FALSE: XIM
     gboolean b_raise_window;

@@ -30,13 +30,13 @@ char *get_full_str () {
     }
 
     if (current_CS->b_im_enabled) {
-        if (current_fullshape_mode ()) {
+        if (current_fullwidth_mode ()) {
             if (hime_use_custom_theme)
                 return cht_color_full_str;
             else
                 return _ (cht_full_str);
         }
-    } else if (current_fullshape_mode ()) {
+    } else if (current_fullwidth_mode ()) {
         if (hime_use_custom_theme)
             return eng_color_full_str;
         else
