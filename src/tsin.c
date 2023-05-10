@@ -262,7 +262,7 @@ static void clear_ch_buf_sel_area () {
     clear_and_hide_chars_all ();
     tss.c_len = 0;
     update_tsin_cursor_index (0);
-    tss.ph_sta = -1;
+    clear_match ();
     tss.full_match = FALSE;
     clr_ch_buf ();
     draw_tsin_cursor ();
@@ -414,7 +414,7 @@ void save_phrase (int save_frm, int len) {
         bell ();
     }
 
-    tss.ph_sta = -1;
+    clear_match ();
     move_cursor_end ();
     return;
 }
@@ -864,7 +864,7 @@ gboolean add_to_tsin_buf (char *str, phokey_t *pho, int len) {
 #endif
     draw_tsin_cursor ();
     hide_pre_sel ();
-    tss.ph_sta = -1;
+    clear_match ();
 
     if (hime_pop_up_win)
         show_win0 ();
@@ -929,7 +929,7 @@ gboolean add_to_tsin_buf_phsta (char *str, phokey_t *pho, int len) {
 #endif
     draw_tsin_cursor ();
     hide_pre_sel ();
-    tss.ph_sta = -1;
+    clear_match ();
     call_tsin_parse ();
 
     return 1;
@@ -1206,7 +1206,7 @@ int tsin_pho_sel (int c) {
     call_tsin_parse ();
 
     if (tss.c_idx + len == tss.c_len) {
-        tss.ph_sta = -1;
+        clear_match ();
         //    draw_ul(tss.c_idx, tss.c_len);
     }
 
@@ -1216,7 +1216,7 @@ int tsin_pho_sel (int c) {
         prbuf ();
         tss.current_page = tss.sel_pho = 0;
         poo.ityp3_pho = FALSE;
-        tss.ph_sta = -1;
+        clear_match ();
         hide_selections_win ();
         if (len == 1) {
             return 0;
