@@ -103,6 +103,11 @@ struct _HIME_module_callback_functions;
 typedef u_int gtab_idx1_t;
 
 typedef struct {
+    void (*show_input_window) (void);
+    gboolean (*is_win_visible) (void);
+} WINDOW_FUNCTIONS;
+
+typedef struct {
     ITEM *tbl;
     ITEM64 *tbl64;
     QUICK_KEYS *qkeys;
@@ -137,8 +142,7 @@ typedef struct {
     char WILD_QUES, WILD_STAR;
     struct _HIME_module_callback_functions *mod_cb_funcs;
     char key_ch;
-    void (*show_input_window) (void);
-    gboolean (*is_win_visible) (void);
+    WINDOW_FUNCTIONS win_funcs;
     void (*reset) ();
 } INMD;
 

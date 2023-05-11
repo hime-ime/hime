@@ -412,8 +412,8 @@ void show_in_win (ClientState *cs) {
     }
 
     INMD *input_method = current_input_method ();
-    if (input_method->show_input_window)
-        return input_method->show_input_window ();
+    if ((input_method->win_funcs).show_input_window)
+        return (input_method->win_funcs).show_input_window ();
 
     if (hime_show_win_kbm &&
         (current_CS->b_im_enabled) &&
@@ -742,8 +742,8 @@ gboolean win_is_visible () {
     if (!current_CS)
         return FALSE;
     INMD *input_method = current_input_method ();
-    if (input_method->is_win_visible)
-        return input_method->is_win_visible ();
+    if ((input_method->win_funcs).is_win_visible)
+        return (input_method->win_funcs).is_win_visible ();
 
     return FALSE;
 }
@@ -876,22 +876,22 @@ gboolean init_in_method (int in_no) {
         current_CS->in_method = in_no;
         init_tab_pho ();
         inmd[in_no].reset = pho_reset;
-        inmd[in_no].show_input_window = show_win_pho;
-        inmd[in_no].is_win_visible = is_win_pho_visible;
+        inmd[in_no].win_funcs.show_input_window = show_win_pho;
+        inmd[in_no].win_funcs.is_win_visible = is_win_pho_visible;
         break;
     case method_type_TSIN:
         set_wselkey (pho_selkey);
         current_CS->in_method = in_no;
         init_tab_pp (init_im);
         inmd[in_no].reset = tsin_reset;
-        inmd[in_no].show_input_window = show_win0;
-        inmd[in_no].is_win_visible = is_win0_visible;
+        inmd[in_no].win_funcs.show_input_window = show_win0;
+        inmd[in_no].win_funcs.is_win_visible = is_win0_visible;
         break;
     case method_type_SYMBOL_TABLE:
         toggle_symbol_table ();
         inmd[in_no].reset = NULL;
-        inmd[in_no].show_input_window = NULL;
-        inmd[in_no].is_win_visible = is_win_sym_visible;
+        inmd[in_no].win_funcs.show_input_window = NULL;
+        inmd[in_no].win_funcs.is_win_visible = is_win_sym_visible;
         break;
     case method_type_MODULE: {
         HIME_module_main_functions gmf;
@@ -917,12 +917,12 @@ gboolean init_in_method (int in_no) {
         show_input_method_name_on_gtab ();
         if (get_module_callbacks ()) {
             inmd[in_no].reset = get_module_callbacks ()->module_reset;
-            inmd[in_no].show_input_window = get_module_callbacks ()->module_show_win;
-            inmd[in_no].is_win_visible = get_module_callbacks ()->module_win_visible;
+            inmd[in_no].win_funcs.show_input_window = get_module_callbacks ()->module_show_win;
+            inmd[in_no].win_funcs.is_win_visible = get_module_callbacks ()->module_win_visible;
         } else {
             inmd[in_no].reset = NULL;
-            inmd[in_no].show_input_window = NULL;
-            inmd[in_no].is_win_visible = NULL;
+            inmd[in_no].win_funcs.show_input_window = NULL;
+            inmd[in_no].win_funcs.is_win_visible = NULL;
         }
         break;
     }
@@ -932,8 +932,8 @@ gboolean init_in_method (int in_no) {
         current_CS->in_method = in_no;
         hide_win_kbm ();
         inmd[in_no].reset = NULL;
-        inmd[in_no].show_input_window = NULL;
-        inmd[in_no].is_win_visible = NULL;
+        inmd[in_no].win_funcs.show_input_window = NULL;
+        inmd[in_no].win_funcs.is_win_visible = NULL;
         return TRUE;
     }
     default:
@@ -960,9 +960,9 @@ gboolean init_in_method (int in_no) {
             show_win_gtab ();
             show_input_method_name_on_gtab ();
         }
-        inmd[in_no].show_input_window = show_win_gtab;
         inmd[in_no].reset = gtab_reset;
-        inmd[in_no].is_win_visible = is_win_gtab_visible;
+        inmd[in_no].win_funcs.show_input_window = show_win_gtab;
+        inmd[in_no].win_funcs.is_win_visible = is_win_gtab_visible;
 
         // set_gtab_input_method_name(inmd[in_no].cname);
         break;
