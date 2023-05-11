@@ -391,7 +391,7 @@ void show_in_win (ClientState *cs) {
 
     INMD *input_method = current_input_method ();
     if ((input_method->win_funcs).show_input_window)
-        return (input_method->win_funcs).show_input_window ();
+        (input_method->win_funcs).show_input_window ();
 
     if (hime_show_win_kbm &&
         (current_CS->b_im_enabled) &&
@@ -1455,7 +1455,7 @@ void hime_reset (void) {
 
     INMD *input_method = current_input_method ();
     if ((input_method->im_funcs).reset)
-        return (input_method->im_funcs).reset ();
+        (input_method->im_funcs).reset ();
 }
 
 #if USE_XIM
