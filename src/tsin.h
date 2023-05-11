@@ -56,6 +56,7 @@ void tsin_reset ();
 void update_tsin_cursor_index (int index);
 void reset_phonemes_in_tsin (void);
 void hide_win0_if_empty (void);
+int tsin_get_preedit (char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *sub_comp_len);
 
 #define TSIN_GTAB_KEY "!!!!gtab-keys"
 

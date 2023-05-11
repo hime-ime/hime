@@ -80,6 +80,7 @@ gboolean pho_has_input ();
 gboolean typ_pho_empty ();
 void pho_reset ();
 void reset_pho_structure ();
+int pho_get_preedit (char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *sub_comp_len);
 
 #define MAX_PH_BF (90)
 

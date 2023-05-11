@@ -657,28 +657,10 @@ void toggle_im_enabled () {
     save_CS_current_to_temp ();
 }
 
-void get_win_gtab_geom ();
-void get_win_pho_geom ();
-
 void update_active_in_win_geom () {
-    //  dbg("update_active_in_win_geom\n");
-    switch (current_method_type ()) {
-    case method_type_PHO:
-        get_win_pho_geom ();
-        break;
-    case method_type_TSIN:
-        get_win0_geom ();
-        break;
-    case method_type_MODULE: {
-        HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
-        if (module_callbacks)
-            module_callbacks->module_get_win_geom ();
-        break;
-    }
-    default:
-        get_win_gtab_geom ();
-        break;
-    }
+    INMD *input_method = current_input_method ();
+    if ((input_method->win_funcs).get_input_window_geom)
+        (input_method->win_funcs).get_input_window_geom ();
 }
 
 gboolean win_is_visible () {
@@ -819,9 +801,11 @@ gboolean init_in_method (int in_no) {
         current_CS->in_method = in_no;
         init_tab_pho ();
         inmd[in_no].im_funcs.reset = pho_reset;
+        inmd[in_no].im_funcs.get_preedit_buffer = pho_get_preedit;
         inmd[in_no].win_funcs.show_input_window = show_win_pho;
         inmd[in_no].win_funcs.hide_input_window = hide_win_pho;
         inmd[in_no].win_funcs.is_win_visible = is_win_pho_visible;
+        inmd[in_no].win_funcs.get_input_window_geom = get_win_pho_geom;
         inmd[in_no].win_funcs.move_input_window = move_win_pho;
         inmd[in_no].win_funcs.display_half_full = win_pho_disp_half_full;
         break;
@@ -830,18 +814,22 @@ gboolean init_in_method (int in_no) {
         current_CS->in_method = in_no;
         init_tab_pp (init_im);
         inmd[in_no].im_funcs.reset = tsin_reset;
+        inmd[in_no].im_funcs.get_preedit_buffer = tsin_get_preedit;
         inmd[in_no].win_funcs.show_input_window = show_win0;
         inmd[in_no].win_funcs.hide_input_window = hide_win0;
         inmd[in_no].win_funcs.is_win_visible = is_win0_visible;
+        inmd[in_no].win_funcs.get_input_window_geom = get_win0_geom;
         inmd[in_no].win_funcs.move_input_window = move_win0;
         inmd[in_no].win_funcs.display_half_full = win_tsin_disp_half_full;
         break;
     case method_type_SYMBOL_TABLE:
         toggle_symbol_table ();
         inmd[in_no].im_funcs.reset = NULL;
+        inmd[in_no].im_funcs.get_preedit_buffer = NULL;
         inmd[in_no].win_funcs.show_input_window = NULL;
         inmd[in_no].win_funcs.hide_input_window = NULL;
         inmd[in_no].win_funcs.is_win_visible = is_win_sym_visible;
+        inmd[in_no].win_funcs.get_input_window_geom = NULL;
         inmd[in_no].win_funcs.move_input_window = NULL;
         inmd[in_no].win_funcs.display_half_full = NULL;
         break;
@@ -869,16 +857,20 @@ gboolean init_in_method (int in_no) {
         show_input_method_name_on_gtab ();
         if (get_module_callbacks ()) {
             inmd[in_no].im_funcs.reset = get_module_callbacks ()->module_reset;
+            inmd[in_no].im_funcs.get_preedit_buffer = get_module_callbacks ()->module_get_preedit;
             inmd[in_no].win_funcs.show_input_window = get_module_callbacks ()->module_show_win;
             inmd[in_no].win_funcs.hide_input_window = get_module_callbacks ()->module_hide_win;
             inmd[in_no].win_funcs.is_win_visible = get_module_callbacks ()->module_win_visible;
+            inmd[in_no].win_funcs.get_input_window_geom = get_module_callbacks ()->module_get_win_geom;
             inmd[in_no].win_funcs.move_input_window = get_module_callbacks ()->module_move_win;
             inmd[in_no].win_funcs.display_half_full = NULL;
         } else {
             inmd[in_no].im_funcs.reset = NULL;
+            inmd[in_no].im_funcs.get_preedit_buffer = NULL;
             inmd[in_no].win_funcs.show_input_window = NULL;
             inmd[in_no].win_funcs.hide_input_window = NULL;
             inmd[in_no].win_funcs.is_win_visible = NULL;
+            inmd[in_no].win_funcs.get_input_window_geom = NULL;
             inmd[in_no].win_funcs.move_input_window = NULL;
             inmd[in_no].win_funcs.display_half_full = NULL;
         }
@@ -890,9 +882,11 @@ gboolean init_in_method (int in_no) {
         current_CS->in_method = in_no;
         hide_win_kbm ();
         inmd[in_no].im_funcs.reset = NULL;
+        inmd[in_no].im_funcs.get_preedit_buffer = NULL;
         inmd[in_no].win_funcs.show_input_window = NULL;
         inmd[in_no].win_funcs.hide_input_window = NULL;
         inmd[in_no].win_funcs.is_win_visible = NULL;
+        inmd[in_no].win_funcs.get_input_window_geom = NULL;
         inmd[in_no].win_funcs.move_input_window = NULL;
         inmd[in_no].win_funcs.display_half_full = NULL;
         return TRUE;
@@ -922,9 +916,11 @@ gboolean init_in_method (int in_no) {
             show_input_method_name_on_gtab ();
         }
         inmd[in_no].im_funcs.reset = gtab_reset;
+        inmd[in_no].im_funcs.get_preedit_buffer = gtab_get_preedit;
         inmd[in_no].win_funcs.show_input_window = show_win_gtab;
         inmd[in_no].win_funcs.hide_input_window = hide_win_gtab;
         inmd[in_no].win_funcs.is_win_visible = is_win_gtab_visible;
+        inmd[in_no].win_funcs.get_input_window_geom = get_win_gtab_geom;
         inmd[in_no].win_funcs.move_input_window = move_win_gtab;
         inmd[in_no].win_funcs.display_half_full = win_gtab_disp_half_full;
 
@@ -1411,11 +1407,6 @@ int hime_FocusOut (ClientState *cs) {
     return True;
 }
 
-int tsin_get_preedit (char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *sub_comp_len);
-int gtab_get_preedit (char *str, HIME_PREEDIT_ATTR attr[], int *pcursor, int *sub_comp_len);
-int int_get_preedit (char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *sub_comp_len);
-int pho_get_preedit (char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *sub_comp_len);
-
 int hime_get_preedit (ClientState *cs,
                       char *str,
                       HIME_PREEDIT_ATTR attr[],
@@ -1431,20 +1422,9 @@ int hime_get_preedit (ClientState *cs,
     str[0] = '\0';
     *comp_flag = 0;
 
-    switch (current_method_type ()) {
-    case method_type_PHO:
-        return pho_get_preedit (str, attr, cursor, comp_flag);
-    case method_type_TSIN:
-        return tsin_get_preedit (str, attr, cursor, comp_flag);
-    case method_type_MODULE: {
-        HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
-        if (module_callbacks)
-            return module_callbacks->module_get_preedit (str, attr, cursor, comp_flag);
-    }
-    default:
-        return gtab_get_preedit (str, attr, cursor, comp_flag);
-    }
-
+    INMD *input_method = current_input_method ();
+    if ((input_method->im_funcs).get_preedit_buffer)
+        return (input_method->im_funcs).get_preedit_buffer (str, attr, cursor, comp_flag);
     return 0;
 }
 

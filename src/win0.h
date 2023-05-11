@@ -27,7 +27,7 @@ void hide_win0 (void);
 void show_button_pho ();
 void hide_button_pho ();
 gboolean is_win0_visible (void);
-void get_win0_geom ();
+void get_win0_geom (void);
 void move_win0_auto (void);
 void move_win0 (int x, int y);
 void reset_content (void);

@@ -23,6 +23,7 @@
 void show_win_gtab (void);
 void hide_win_gtab (void);
 gboolean is_win_gtab_visible (void);
+void get_win_gtab_geom (void);
 void win_gtab_disp_half_full (void);
 
 #endif

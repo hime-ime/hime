@@ -22,6 +22,8 @@
 
 #include "hime.h"
 
+#include "im-client/hime-im-client-attr.h"
+
 typedef enum {
     GTAB_space_auto_first_none = 0,    // use the value set by .cin
     GTAB_space_auto_first_any = 1,     // boshiamy, dayi
@@ -106,12 +108,14 @@ typedef struct {
     void (*show_input_window) (void);
     void (*hide_input_window) (void);
     gboolean (*is_win_visible) (void);
+    void (*get_input_window_geom) (void);
     void (*move_input_window) (int x, int y);
     void (*display_half_full) (void);
 } WINDOW_FUNCTIONS;
 
 typedef struct {
     void (*reset) ();
+    int (*get_preedit_buffer) (char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *sub_comp_len);
 } INPUT_METHOD_FUNCTIONS;
 
 typedef struct {
@@ -186,5 +190,6 @@ void load_gtab_list (gboolean);
 #define Max_tab_key_num Max_tab_key_num1 (cur_inmd)
 
 void gtab_reset ();
+int gtab_get_preedit (char *str, HIME_PREEDIT_ATTR attr[], int *pcursor, int *sub_comp_len);
 
 #endif /* GTAB_H */
