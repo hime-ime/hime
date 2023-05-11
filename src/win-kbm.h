@@ -20,8 +20,8 @@
 #ifndef WIN_KBM_H
 #define WIN_KBM_H
 
-void hide_win_kbm (void);
 void show_win_kbm (void);
+void hide_win_kbm (void);
 void update_win_kbm (void);
 
 #endif /* WIN_KBM_H */

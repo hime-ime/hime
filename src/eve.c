@@ -325,9 +325,6 @@ static void bounce_back_key () {
 }
 #endif
 
-void hide_win_gtab ();
-void hide_win_pho ();
-
 int current_in_win_x = -1, current_in_win_y = -1;  // request x/y
 
 void reset_current_in_win_xy () {

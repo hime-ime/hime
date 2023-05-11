@@ -21,8 +21,8 @@
 #define WIN_SYM_H
 
 void create_win_sym ();
-void hide_win_sym ();
-void show_win_sym ();
+void show_win_sym (void);
+void hide_win_sym (void);
 gboolean is_win_sym_visible (void);
 void move_win_sym ();
 void toggle_win_sym ();
