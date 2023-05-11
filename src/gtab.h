@@ -109,6 +109,10 @@ typedef struct {
 } WINDOW_FUNCTIONS;
 
 typedef struct {
+    void (*reset) ();
+} INPUT_METHOD_FUNCTIONS;
+
+typedef struct {
     ITEM *tbl;
     ITEM64 *tbl64;
     QUICK_KEYS *qkeys;
@@ -143,8 +147,8 @@ typedef struct {
     char WILD_QUES, WILD_STAR;
     struct _HIME_module_callback_functions *mod_cb_funcs;
     char key_ch;
+    INPUT_METHOD_FUNCTIONS im_funcs;
     WINDOW_FUNCTIONS win_funcs;
-    void (*reset) ();
 } INMD;
 
 enum {
