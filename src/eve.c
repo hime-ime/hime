@@ -343,40 +343,18 @@ HIME_module_callback_functions *get_module_callbacks () {
 
 void hide_in_win (ClientState *cs) {
     if (!cs) {
-#if 0
-    dbg("hide_in_win: ic is null\n");
-#endif
         return;
     }
-#if 0
-  dbg("hide_in_win %d\n", ic->in_method);
-#endif
 
     if (timeout_handle) {
         g_source_remove (timeout_handle);
         timeout_handle = 0;
     }
 
-    switch (current_method_type ()) {
-    case method_type_PHO:
-        hide_win_kbm ();
-        hide_win_pho ();
-        break;
-    case method_type_TSIN:
-        //      flush_tsin_buffer();
-        hide_win_kbm ();
-        hide_win0 ();
-        break;
-    case method_type_MODULE: {
-        HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
-        if (module_callbacks)
-            module_callbacks->module_hide_win ();
-        hide_win_gtab ();
-        break;
-    }
-    default:
-        hide_win_gtab ();
-    }
+    hide_win_kbm ();
+    INMD *input_method = current_input_method ();
+    if ((input_method->win_funcs).hide_input_window)
+        (input_method->win_funcs).hide_input_window ();
 
     reset_current_in_win_xy ();
 }
@@ -877,6 +855,7 @@ gboolean init_in_method (int in_no) {
         init_tab_pho ();
         inmd[in_no].reset = pho_reset;
         inmd[in_no].win_funcs.show_input_window = show_win_pho;
+        inmd[in_no].win_funcs.hide_input_window = hide_win_pho;
         inmd[in_no].win_funcs.is_win_visible = is_win_pho_visible;
         break;
     case method_type_TSIN:
@@ -885,12 +864,14 @@ gboolean init_in_method (int in_no) {
         init_tab_pp (init_im);
         inmd[in_no].reset = tsin_reset;
         inmd[in_no].win_funcs.show_input_window = show_win0;
+        inmd[in_no].win_funcs.hide_input_window = hide_win0;
         inmd[in_no].win_funcs.is_win_visible = is_win0_visible;
         break;
     case method_type_SYMBOL_TABLE:
         toggle_symbol_table ();
         inmd[in_no].reset = NULL;
         inmd[in_no].win_funcs.show_input_window = NULL;
+        inmd[in_no].win_funcs.hide_input_window = NULL;
         inmd[in_no].win_funcs.is_win_visible = is_win_sym_visible;
         break;
     case method_type_MODULE: {
@@ -918,10 +899,12 @@ gboolean init_in_method (int in_no) {
         if (get_module_callbacks ()) {
             inmd[in_no].reset = get_module_callbacks ()->module_reset;
             inmd[in_no].win_funcs.show_input_window = get_module_callbacks ()->module_show_win;
+            inmd[in_no].win_funcs.hide_input_window = get_module_callbacks ()->module_hide_win;
             inmd[in_no].win_funcs.is_win_visible = get_module_callbacks ()->module_win_visible;
         } else {
             inmd[in_no].reset = NULL;
             inmd[in_no].win_funcs.show_input_window = NULL;
+            inmd[in_no].win_funcs.hide_input_window = NULL;
             inmd[in_no].win_funcs.is_win_visible = NULL;
         }
         break;
@@ -933,6 +916,7 @@ gboolean init_in_method (int in_no) {
         hide_win_kbm ();
         inmd[in_no].reset = NULL;
         inmd[in_no].win_funcs.show_input_window = NULL;
+        inmd[in_no].win_funcs.hide_input_window = NULL;
         inmd[in_no].win_funcs.is_win_visible = NULL;
         return TRUE;
     }
@@ -962,6 +946,7 @@ gboolean init_in_method (int in_no) {
         }
         inmd[in_no].reset = gtab_reset;
         inmd[in_no].win_funcs.show_input_window = show_win_gtab;
+        inmd[in_no].win_funcs.hide_input_window = hide_win_gtab;
         inmd[in_no].win_funcs.is_win_visible = is_win_gtab_visible;
 
         // set_gtab_input_method_name(inmd[in_no].cname);

@@ -104,6 +104,7 @@ typedef u_int gtab_idx1_t;
 
 typedef struct {
     void (*show_input_window) (void);
+    void (*hide_input_window) (void);
     gboolean (*is_win_visible) (void);
 } WINDOW_FUNCTIONS;
 
