@@ -510,9 +510,6 @@ void update_in_win_pos (void) {
     }
 }
 
-void win_pho_disp_half_full ();
-void win_tsin_disp_half_full ();
-void win_gtab_disp_half_full ();
 #if TRAY_ENABLED
 void load_tray_icon (), load_tray_icon_double ();
 #if TRAY_UNITY
@@ -573,22 +570,13 @@ void disp_tray_icon () {
 #endif
 
 void disp_im_half_full () {
-//  dbg("disp_im_half_full\n");
 #if TRAY_ENABLED
     disp_tray_icon ();
 #endif
 
-    switch (current_method_type ()) {
-    case method_type_PHO:
-        win_pho_disp_half_full ();
-        break;
-    case method_type_TSIN:
-        win_tsin_disp_half_full ();
-        break;
-    default:
-        win_gtab_disp_half_full ();
-        break;
-    }
+    INMD *input_method = current_input_method ();
+    if ((input_method->win_funcs).display_half_full)
+        (input_method->win_funcs).display_half_full ();
 }
 
 void flush_tsin_buffer ();
@@ -835,6 +823,7 @@ gboolean init_in_method (int in_no) {
         inmd[in_no].win_funcs.hide_input_window = hide_win_pho;
         inmd[in_no].win_funcs.is_win_visible = is_win_pho_visible;
         inmd[in_no].win_funcs.move_input_window = move_win_pho;
+        inmd[in_no].win_funcs.display_half_full = win_pho_disp_half_full;
         break;
     case method_type_TSIN:
         set_wselkey (pho_selkey);
@@ -845,6 +834,7 @@ gboolean init_in_method (int in_no) {
         inmd[in_no].win_funcs.hide_input_window = hide_win0;
         inmd[in_no].win_funcs.is_win_visible = is_win0_visible;
         inmd[in_no].win_funcs.move_input_window = move_win0;
+        inmd[in_no].win_funcs.display_half_full = win_tsin_disp_half_full;
         break;
     case method_type_SYMBOL_TABLE:
         toggle_symbol_table ();
@@ -853,6 +843,7 @@ gboolean init_in_method (int in_no) {
         inmd[in_no].win_funcs.hide_input_window = NULL;
         inmd[in_no].win_funcs.is_win_visible = is_win_sym_visible;
         inmd[in_no].win_funcs.move_input_window = NULL;
+        inmd[in_no].win_funcs.display_half_full = NULL;
         break;
     case method_type_MODULE: {
         HIME_module_main_functions gmf;
@@ -882,12 +873,14 @@ gboolean init_in_method (int in_no) {
             inmd[in_no].win_funcs.hide_input_window = get_module_callbacks ()->module_hide_win;
             inmd[in_no].win_funcs.is_win_visible = get_module_callbacks ()->module_win_visible;
             inmd[in_no].win_funcs.move_input_window = get_module_callbacks ()->module_move_win;
+            inmd[in_no].win_funcs.display_half_full = NULL;
         } else {
             inmd[in_no].im_funcs.reset = NULL;
             inmd[in_no].win_funcs.show_input_window = NULL;
             inmd[in_no].win_funcs.hide_input_window = NULL;
             inmd[in_no].win_funcs.is_win_visible = NULL;
             inmd[in_no].win_funcs.move_input_window = NULL;
+            inmd[in_no].win_funcs.display_half_full = NULL;
         }
         break;
     }
@@ -901,6 +894,7 @@ gboolean init_in_method (int in_no) {
         inmd[in_no].win_funcs.hide_input_window = NULL;
         inmd[in_no].win_funcs.is_win_visible = NULL;
         inmd[in_no].win_funcs.move_input_window = NULL;
+        inmd[in_no].win_funcs.display_half_full = NULL;
         return TRUE;
     }
     default:
@@ -932,6 +926,7 @@ gboolean init_in_method (int in_no) {
         inmd[in_no].win_funcs.hide_input_window = hide_win_gtab;
         inmd[in_no].win_funcs.is_win_visible = is_win_gtab_visible;
         inmd[in_no].win_funcs.move_input_window = move_win_gtab;
+        inmd[in_no].win_funcs.display_half_full = win_gtab_disp_half_full;
 
         // set_gtab_input_method_name(inmd[in_no].cname);
         break;

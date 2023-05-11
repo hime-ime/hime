@@ -107,6 +107,7 @@ typedef struct {
     void (*hide_input_window) (void);
     gboolean (*is_win_visible) (void);
     void (*move_input_window) (int x, int y);
+    void (*display_half_full) (void);
 } WINDOW_FUNCTIONS;
 
 typedef struct {

@@ -24,5 +24,6 @@ void show_win_pho (void);
 void hide_win_pho (void);
 gboolean is_win_pho_visible (void);
 void set_phoneme_at_index (int index, char *phochar);
+void win_pho_disp_half_full (void);
 
 #endif

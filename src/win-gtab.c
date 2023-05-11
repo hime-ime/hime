@@ -61,8 +61,6 @@ static void adj_gtab_win_pos () {
         move_win_gtab (current_in_win_x, current_in_win_y);
 }
 
-void win_gtab_disp_half_full ();
-
 void disp_gtab (char *str) {
     if (!label_gtab)
         return;
