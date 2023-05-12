@@ -781,11 +781,8 @@ gboolean init_in_method (int in_no) {
 
     if (current_CS->in_method != in_no) {
         if (!(inmd[in_no].flag & FLAG_GTAB_SYM_KBM)) {
-            if (current_method_type () == method_type_TSIN) {
-                flush_tsin_buffer ();
-            } else
-                output_gbuf ();
-
+            flush_edit_buffer ();
+            hime_reset ();
             hide_in_win (current_CS);
         }
     }
