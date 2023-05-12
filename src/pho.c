@@ -812,6 +812,7 @@ void start_gtab_pho_query (char *utf8) {
 }
 
 void pho_reset () {
+    clr_in_area_pho ();
 }
 
 #include "im-client/hime-im-client-attr.h"
