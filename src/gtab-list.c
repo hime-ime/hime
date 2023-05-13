@@ -121,6 +121,8 @@ void load_gtab_list (gboolean skip_disabled) {
         if (strstr (file, ".so") || strstr (file, ".dll")) {
             pinmd->method_type = method_type_MODULE;
             dbg ("%s is module file\n", file);
+        } else if (strstr (file, ".gtab")) {
+            pinmd->method_type = method_type_GTAB;
         } else {
             int i;
             for (i = 0; method_codes[i].id; i++)
