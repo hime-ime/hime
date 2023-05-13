@@ -873,21 +873,6 @@ gboolean init_in_method (int in_no) {
         }
         break;
     }
-    case method_type_EN: {
-        if (current_CS && current_CS->b_im_enabled)
-            toggle_im_enabled ();
-        current_CS->in_method = in_no;
-        hide_win_kbm ();
-        inmd[in_no].im_funcs.reset = NULL;
-        inmd[in_no].im_funcs.get_preedit_buffer = NULL;
-        inmd[in_no].win_funcs.show_input_window = NULL;
-        inmd[in_no].win_funcs.hide_input_window = NULL;
-        inmd[in_no].win_funcs.is_win_visible = NULL;
-        inmd[in_no].win_funcs.get_input_window_geom = NULL;
-        inmd[in_no].win_funcs.move_input_window = NULL;
-        inmd[in_no].win_funcs.display_half_full = NULL;
-        return TRUE;
-    }
     default:
         init_gtab (in_no);
         if (!inmd[in_no].DefChars)
