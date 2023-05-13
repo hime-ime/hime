@@ -256,8 +256,7 @@ void set_and_show_char (int index, char *ch) {
     }
 
     get_win0_geom ();
-    if (win_x + win_xl >= dpy_xl)
-        move_win0 (dpy_xl - win_xl, win_y);
+    move_win0 (win_x, win_y);
 
     gtk_widget_show_all (chars[index].vbox);
 }
@@ -371,13 +370,13 @@ void move_win0 (int x, int y) {
 
     get_win_size (win0, &win_xl, &win_yl);
 
-    if (x + win_xl > dpy_xl)
-        best_win_x = dpy_xl - win_xl;
+    if (x + win_xl > display_width)
+        best_win_x = display_width - win_xl;
     if (x < 0)
         best_win_x = 0;
 
-    if (y + win_yl > dpy_yl)
-        best_win_y = dpy_yl - win_yl;
+    if (y + win_yl > display_height)
+        best_win_y = display_height - win_yl;
     if (y < 0)
         best_win_y = 0;
 

@@ -99,11 +99,11 @@ void create_phrase_save_menu (GdkEventButton *event) {
 
     get_win_size (phrase_save_win, &w_xl, &w_yl);
     x = win_x;
-    if (x + w_xl > dpy_xl)
-        x = dpy_xl - w_xl;
+    if (x + w_xl > display_width)
+        x = display_width - w_xl;
 
     y = win_y + win_yl;
-    if (y + w_yl > dpy_yl)
+    if (y + w_yl > display_height)
         y = win_y - w_yl;
 
     gtk_window_move (GTK_WINDOW (phrase_save_win), x, y);

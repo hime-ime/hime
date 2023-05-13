@@ -1300,13 +1300,13 @@ void module_move_win (int x, int y) {
 #endif
     gtk_window_get_size (GTK_WINDOW (win_anthy), gmf.mf_win_xl, gmf.mf_win_yl);
 
-    if (x + *gmf.mf_win_xl > *gmf.mf_dpy_xl)
-        x = *gmf.mf_dpy_xl - *gmf.mf_win_xl;
+    if (x + *gmf.mf_win_xl > *gmf.mf_display_width)
+        x = *gmf.mf_display_width - *gmf.mf_win_xl;
     if (x < 0)
         x = 0;
 
-    if (y + *gmf.mf_win_yl > *gmf.mf_dpy_yl)
-        y = *gmf.mf_dpy_yl - *gmf.mf_win_yl;
+    if (y + *gmf.mf_win_yl > *gmf.mf_display_height)
+        y = *gmf.mf_display_height - *gmf.mf_win_yl;
     if (y < 0)
         y = 0;
 

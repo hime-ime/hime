@@ -30,8 +30,8 @@ int win_xl, win_yl;
 int win_x, win_y;  // actual win x/y
 
 // display width/height in pixels
-// dpy_xl and dpy_yl are global variable shared across files
-int dpy_xl, dpy_yl;
+// display_width and display_height are global variable shared across files
+int display_width, display_height;
 
 gboolean key_press_shift;
 
@@ -549,10 +549,10 @@ gboolean delayed_start_cb (gpointer data) {
     return FALSE;
 }
 
-static void get_dpy_xyl () {
+static void get_display_size () {
 #if !GTK_CHECK_VERSION(3, 0, 0)
-    dpy_xl = gdk_screen_width ();
-    dpy_yl = gdk_screen_height ();
+    display_width = gdk_screen_width ();
+    display_height = gdk_screen_height ();
 #else
     GdkRectangle work_area;
     gdk_monitor_get_workarea (get_primary_monitor (), &work_area);
@@ -560,13 +560,13 @@ static void get_dpy_xyl () {
     // TODO:
     // The workaround only fixes the wrong input window position bug when using multiple monitors with the same resolution.
     // The different resolution scenario should be handled well in the future.
-    dpy_xl = work_area.width * gdk_display_get_n_monitors (get_default_display ());
-    dpy_yl = work_area.height;
+    display_width = work_area.width * gdk_display_get_n_monitors (get_default_display ());
+    display_height = work_area.height;
 #endif
 }
 
 static void screen_size_changed (GdkScreen *screen, gpointer user_data) {
-    get_dpy_xyl ();
+    get_display_size ();
 }
 
 #include "lang.h"
@@ -639,14 +639,14 @@ int main (int argc, char **argv) {
     dpy = GDK_DISPLAY ();
     root = DefaultRootWindow (dpy);
 
-    get_dpy_xyl ();
+    get_display_size ();
 
-    // update dpy_xl/dpy_yl on screen size-changed events
+    // update display_width/display_height on screen size-changed events
     g_signal_connect (
         gdk_screen_get_default (), "size-changed",
         G_CALLBACK (screen_size_changed), NULL);
 
-    dbg ("display width:%d height:%d\n", dpy_xl, dpy_yl);
+    dbg ("display width:%d height:%d\n", display_width, display_height);
 
     start_inmd_window ();
 

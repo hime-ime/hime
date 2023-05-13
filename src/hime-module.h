@@ -75,7 +75,7 @@ typedef struct {
     int *mf_hime_font_size, *mf_hime_use_custom_theme;
     char **mf_hime_win_color_fg, **mf_pho_selkey, **mf_hime_cursor_color;
     gboolean *mf_force_show;
-    int *mf_win_x, *mf_win_y, *mf_win_xl, *mf_win_yl, *mf_dpy_xl, *mf_dpy_yl;
+    int *mf_win_x, *mf_win_y, *mf_win_xl, *mf_win_yl, *mf_display_width, *mf_display_height;
     gboolean *mf_key_press_shift;
 } HIME_module_main_functions;
 #ifdef __cplusplus

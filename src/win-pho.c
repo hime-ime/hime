@@ -51,7 +51,7 @@ gboolean win_size_exceed (GtkWidget *win) {
 
     get_win_size (win, &width, &height);
 
-    return (width + current_in_win_x > dpy_xl || height + current_in_win_y > dpy_yl);
+    return (width + current_in_win_x > display_width || height + current_in_win_y > display_height);
 }
 
 void disp_pho_sel (char *s) {
@@ -88,13 +88,13 @@ void move_win_pho (int x, int y) {
 
     get_win_size (gwin_pho, &twin_xl, &twin_yl);
 
-    if (x + twin_xl > dpy_xl)
-        x = dpy_xl - twin_xl;
+    if (x + twin_xl > display_width)
+        x = display_width - twin_xl;
     if (x < 0)
         x = 0;
 
-    if (y + twin_yl > dpy_yl)
-        y = dpy_yl - twin_yl;
+    if (y + twin_yl > display_height)
+        y = display_height - twin_yl;
     if (y < 0)
         y = 0;
 

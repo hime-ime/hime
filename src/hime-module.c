@@ -90,8 +90,8 @@ void init_HIME_module_main_functions (HIME_module_main_functions *func) {
     func->mf_win_y = &win_y;
     func->mf_win_xl = &win_xl;
     func->mf_win_yl = &win_yl;
-    func->mf_dpy_xl = &dpy_xl;
-    func->mf_dpy_yl = &dpy_yl;
+    func->mf_display_width = &display_width;
+    func->mf_display_height = &display_height;
     func->mf_pho_chars = pho_chars;
     func->mf_key_press_shift = &key_press_shift;
 }

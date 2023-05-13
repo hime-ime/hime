@@ -107,8 +107,8 @@ static void create_win_message (char *icon, char *text, int duration) {
     }
 #endif
     if (ox < 0) {
-        ox = dpy_xl - width;
-        oy = dpy_yl - height;
+        ox = display_width - width;
+        oy = display_height - height;
     }
 
     gtk_window_move (GTK_WINDOW (gwin_message), ox, oy);

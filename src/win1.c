@@ -333,10 +333,10 @@ void disp_selections (int x, int y) {
             x = win_x;
     }
 
-    if (x + win1_xl > dpy_xl)
-        x = dpy_xl - win1_xl;
+    if (x + win1_xl > display_width)
+        x = display_width - win1_xl;
 
-    if (y + win1_yl > dpy_yl)
+    if (y + win1_yl > display_height)
         y = win_y - win1_yl;
 
     if (!gtk_widget_get_visible (gwin1)) {

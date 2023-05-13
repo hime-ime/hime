@@ -223,13 +223,13 @@ void move_win_gtab (int x, int y) {
     //  dbg("move_win_gtab %d %d\n", x, y);
     get_win_size (gwin_gtab, &win_xl, &win_yl);
 
-    if (x + win_xl > dpy_xl)
-        x = dpy_xl - win_xl;
+    if (x + win_xl > display_width)
+        x = display_width - win_xl;
     if (x < 0)
         x = 0;
 
-    if (y + win_yl > dpy_yl)
-        y = dpy_yl - win_yl;
+    if (y + win_yl > display_height)
+        y = display_height - win_yl;
     if (y < 0)
         y = 0;
 

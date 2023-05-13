@@ -351,8 +351,8 @@ static void move_win_kbm (void) {
         (is_exist_tray () && gtk_status_icon_get_geometry (tray_icon, NULL, &r, &ori)) ||
         (is_exist_tray_double () && gtk_status_icon_get_geometry (icon_main, NULL, &r, &ori))) {
         ox = r.x;
-        if (ox + width > dpy_xl) {
-            ox = dpy_xl - width;
+        if (ox + width > display_width) {
+            ox = display_width - width;
         }
 
         if (r.y < 100) {
@@ -363,8 +363,8 @@ static void move_win_kbm (void) {
     } else
 #endif
     {
-        ox = dpy_xl - width;
-        oy = dpy_yl - height - 16;
+        ox = display_width - width;
+        oy = display_height - height - 16;
     }
 
     gtk_window_move (GTK_WINDOW (gwin_kbm), ox, oy);

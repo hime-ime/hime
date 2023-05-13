@@ -245,7 +245,7 @@ void move_win_sym () {
     int wx, wy;
 #if 0
   if (hime_pop_up_win) {
-    wx = dpy_xl;
+    wx = display_width;
   } else
 #endif
     {
@@ -259,8 +259,8 @@ void move_win_sym () {
     int winsym_xl, winsym_yl;
     get_win_size (gwin_sym, &winsym_xl, &winsym_yl);
 
-    if (wx + winsym_xl > dpy_xl)
-        wx = dpy_xl - winsym_xl;
+    if (wx + winsym_xl > display_width)
+        wx = display_width - winsym_xl;
     if (wx < 0)
         wx = 0;
 
@@ -270,7 +270,7 @@ void move_win_sym () {
   } else
 #endif
     {
-        if (wy + winsym_yl > dpy_yl)
+        if (wy + winsym_yl > display_height)
             wy = win_y - winsym_yl;
         if (wy < 0)
             wy = 0;

@@ -136,7 +136,7 @@ enum {
 extern int win_xl, win_yl;
 extern int win_x, win_y;                        // actual win x/y
 extern int current_in_win_x, current_in_win_y;  // request x/y
-extern int dpy_xl, dpy_yl;
+extern int display_width, display_height;
 extern gboolean key_press_shift;
 
 extern int hime_font_size;
