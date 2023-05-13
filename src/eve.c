@@ -853,13 +853,14 @@ gboolean init_in_method (int in_no) {
         }
         show_input_method_name_on_gtab ();
         if (get_module_callbacks ()) {
-            inmd[in_no].im_funcs.reset = get_module_callbacks ()->module_reset;
-            inmd[in_no].im_funcs.get_preedit_buffer = get_module_callbacks ()->module_get_preedit;
-            inmd[in_no].win_funcs.show_input_window = get_module_callbacks ()->module_show_win;
-            inmd[in_no].win_funcs.hide_input_window = get_module_callbacks ()->module_hide_win;
-            inmd[in_no].win_funcs.is_win_visible = get_module_callbacks ()->module_win_visible;
-            inmd[in_no].win_funcs.get_input_window_geom = get_module_callbacks ()->module_get_win_geom;
-            inmd[in_no].win_funcs.move_input_window = get_module_callbacks ()->module_move_win;
+            HIME_module_callback_functions *callbacks = get_module_callbacks ();
+            inmd[in_no].im_funcs.reset = callbacks->module_reset;
+            inmd[in_no].im_funcs.get_preedit_buffer = callbacks->module_get_preedit;
+            inmd[in_no].win_funcs.show_input_window = callbacks->module_show_win;
+            inmd[in_no].win_funcs.hide_input_window = callbacks->module_hide_win;
+            inmd[in_no].win_funcs.is_win_visible = callbacks->module_win_visible;
+            inmd[in_no].win_funcs.get_input_window_geom = callbacks->module_get_win_geom;
+            inmd[in_no].win_funcs.move_input_window = callbacks->module_move_win;
             inmd[in_no].win_funcs.display_half_full = NULL;
         } else {
             inmd[in_no].im_funcs.reset = NULL;
