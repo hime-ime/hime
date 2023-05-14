@@ -50,6 +50,11 @@ int win_gtab_max_key_press;
 
 void move_gtab_pho_query_win ();
 
+void init_win_gtab (void) {
+    create_win_gtab ();
+    create_win_gtab_gui ();
+}
+
 gboolean is_win_gtab_visible (void) {
     return gwin_gtab && gtk_widget_get_visible (gwin_gtab);
 }
@@ -607,7 +612,7 @@ void show_input_method_name_on_gtab () {
     }
 }
 
-static void create_win_gtab_gui () {
+void create_win_gtab_gui () {
     create_win_gtab_gui_simple ();
     current_gtab_in_row1 = gtab_in_row1;
     current_gtab_vertical_select = gtab_vertical_select_on ();
@@ -625,8 +630,7 @@ gboolean gtab_has_input ();
 extern gboolean force_show;
 
 void show_win_gtab () {
-    create_win_gtab ();
-    create_win_gtab_gui ();
+    init_win_gtab ();
     // window was destroyed
     if (hime_pop_up_win)
         set_key_codes_label (str_key_codes, better_key_codes);

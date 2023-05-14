@@ -35,6 +35,11 @@ static GtkWidget *label_key_codes;
 
 void change_pho_font_size ();
 
+void init_win_pho (void) {
+    create_win_pho ();
+    create_win_pho_gui ();
+}
+
 gboolean is_win_pho_visible () {
     return !gwin_pho && gtk_widget_get_visible (gwin_pho);
 }
@@ -242,9 +247,7 @@ void create_win_pho_gui () {
 gboolean pho_has_input ();
 
 void show_win_pho () {
-    //  dbg("show_win_pho\n");
-    create_win_pho ();
-    create_win_pho_gui ();
+    init_win_pho ();
 
     if (hime_pop_up_win && !pho_has_input ())
         return;
