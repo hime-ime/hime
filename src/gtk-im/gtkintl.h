@@ -16,8 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef HIME_GTKINTL_H
-#define HIME_GTKINTL_H
+#ifndef GTKINTL_H
+#define GTKINTL_H
 
 /* To get GETTEXT_PACKAGE */
 #include "../config.h"

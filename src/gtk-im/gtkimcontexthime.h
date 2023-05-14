@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef HIME_GTKIMCONTEXTHIME_H
-#define HIME_GTKIMCONTEXTHIME_H
+#ifndef GTKIMCONTEXTHIME_H
+#define GTKIMCONTEXTHIME_H
 
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>

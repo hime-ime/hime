@@ -17,8 +17,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef HIME_IM_SRV_H
-#define HIME_IM_SRV_H
+#ifndef IM_SRV_H
+#define IM_SRV_H
 
 #include <pwd.h>
 

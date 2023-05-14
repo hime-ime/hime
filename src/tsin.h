@@ -17,8 +17,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef HIME_TSIN_H
-#define HIME_TSIN_H
+#ifndef TSIN_H
+#define TSIN_H
 
 extern int phcount;
 extern int hashidx[];

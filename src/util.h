@@ -16,8 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef HIME_UTIL_H
-#define HIME_UTIL_H
+#ifndef UTIL_H
+#define UTIL_H
 
 void p_err (char *fmt, ...);
 

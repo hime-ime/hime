@@ -16,8 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef HIME_LANG_H
-#define HIME_LANG_H
+#ifndef LANG_H
+#define LANG_H
 
 extern gboolean is_chs;
 extern char *tsin32_f;

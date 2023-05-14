@@ -17,8 +17,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef HIME_GST_H
-#define HIME_GST_H
+#ifndef GST_H
+#define GST_H
 
 #include <X11/Xlib.h>
 #include <gtk/gtk.h>

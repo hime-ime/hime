@@ -16,8 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef HIME_T2S_FILE_H
-#define HIME_T2S_FILE_H
+#ifndef T2S_FILE_H
+#define T2S_FILE_H
 
 typedef struct {
     unsigned int a, b;  // a is sorted skey

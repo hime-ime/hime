@@ -29,8 +29,8 @@ PERFORMANCE OF THIS SOFTWARE.
 
 ******************************************************************/
 
-#ifndef _XIMPROTO_H
-#define _XIMPROTO_H
+#ifndef XIMPROTO_H
+#define XIMPROTO_H
 
 /*
  * Default Preconnection selection target
