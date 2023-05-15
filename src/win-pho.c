@@ -48,7 +48,7 @@ void destroy_win_pho () {
 }
 
 gboolean is_win_pho_visible () {
-    return !gwin_pho && gtk_widget_get_visible (gwin_pho);
+    return gwin_pho && gtk_widget_get_visible (gwin_pho);
 }
 
 void set_phoneme_at_index (int index, char *phochar) {
