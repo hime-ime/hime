@@ -247,8 +247,6 @@ void create_win_pho_gui () {
 gboolean pho_has_input ();
 
 void show_win_pho () {
-    init_win_pho ();
-
     if (hime_pop_up_win && !pho_has_input ())
         return;
 

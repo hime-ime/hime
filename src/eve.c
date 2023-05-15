@@ -795,6 +795,7 @@ gboolean init_in_method (int in_no) {
 
     switch (inmd[in_no].method_type) {
     case method_type_PHO:
+        init_win_pho ();
         current_CS->in_method = in_no;
         init_tab_pho ();
         inmd[in_no].im_funcs.reset = pho_reset;
@@ -807,6 +808,7 @@ gboolean init_in_method (int in_no) {
         inmd[in_no].win_funcs.display_half_full = win_pho_disp_half_full;
         break;
     case method_type_TSIN:
+        init_win0 ();
         set_wselkey (pho_selkey);
         current_CS->in_method = in_no;
         init_tab_pp (init_im);
@@ -875,6 +877,7 @@ gboolean init_in_method (int in_no) {
         break;
     }
     default:
+        init_win_gtab ();
         init_gtab (in_no);
         if (!inmd[in_no].DefChars)
             return FALSE;

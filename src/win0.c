@@ -172,8 +172,6 @@ static void create_char_widgets (int index) {
 }
 
 void show_win0 () {
-    init_win0 ();
-
     if (hime_pop_up_win && !tsin_has_input () && !force_show) {
         //    dbg("show ret\n");
         return;

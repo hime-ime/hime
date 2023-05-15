@@ -630,7 +630,6 @@ gboolean gtab_has_input ();
 extern gboolean force_show;
 
 void show_win_gtab () {
-    init_win_gtab ();
     // window was destroyed
     if (hime_pop_up_win)
         set_key_codes_label (str_key_codes, better_key_codes);
