@@ -402,9 +402,6 @@ void show_in_win (ClientState *cs) {
     }
 }
 
-void move_win_gtab (int x, int y);
-void move_win_pho (int x, int y);
-
 void move_in_win (ClientState *cs, int x, int y) {
     check_CS ();
 

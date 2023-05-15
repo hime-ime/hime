@@ -26,6 +26,7 @@ void show_win_pho (void);
 void hide_win_pho (void);
 gboolean is_win_pho_visible (void);
 void get_win_pho_geom (void);
+void move_win_pho (int x, int y);
 void set_phoneme_at_index (int index, char *phochar);
 void win_pho_disp_half_full (void);
 

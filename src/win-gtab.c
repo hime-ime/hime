@@ -45,7 +45,6 @@ static GdkRGBA better_color;
 gboolean last_cursor_off;
 
 gboolean win_size_exceed (GtkWidget *win), gtab_phrase_on ();
-void move_win_gtab (int x, int y);
 int win_gtab_max_key_press;
 
 void move_gtab_pho_query_win ();
@@ -153,8 +152,6 @@ void change_gtab_font_size () {
 
     change_win_fg_bg (gwin_gtab, label_gtab_sele);
 }
-
-void show_win_gtab ();
 
 void disp_gtab_sel (char *s) {
     //  dbg("disp_gtab_sel '%s' %x\n", s, label_gtab_sele);

@@ -56,8 +56,6 @@ void set_phoneme_at_index (int index, char *phochar) {
     set_phoneme_at_index_in_label (label_pho, index, phochar);
 }
 
-void move_win_pho (int x, int y);
-
 gboolean win_size_exceed (GtkWidget *win) {
     int width, height;
 
