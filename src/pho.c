@@ -820,8 +820,7 @@ extern GtkWidget *gwin_pho;
 
 int pho_get_preedit (char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *sub_comp_len) {
     *sub_comp_len = !typ_pho_empty ();
-    ;
-    if (gwin_pho && gtk_widget_get_visible (gwin_pho))
+    if (is_win_pho_visible ())
         *sub_comp_len |= 2;
     *cursor = 0;
     str[0] = 0;
