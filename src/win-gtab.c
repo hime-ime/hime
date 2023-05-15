@@ -707,12 +707,7 @@ void hide_win_gtab () {
     if (!gwin_gtab)
         return;
 
-    //  dbg("hide_win_gtab\n");
-    if (gwin_gtab) {
-        gtk_widget_hide (gwin_gtab);
-        destroy_top_bin ();
-    }
-
+    gtk_widget_hide (gwin_gtab);
     close_gtab_pho_win ();
     hide_win_sym ();
     hide_win_kbm ();
