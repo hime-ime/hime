@@ -485,9 +485,6 @@ void init_atom_property () {
     XSetSelectionOwner (dpy, hime_atom, xim_xwin, CurrentTime);
 }
 
-void destroy_win0 ();
-void destroy_win1 ();
-void destroy_win_gtab ();
 void free_pho_mem (), free_tsin (), free_all_IC (), free_gtab (), free_phrase ();
 #if TRAY_ENABLED
 void destroy_tray ();
@@ -507,6 +504,7 @@ void do_exit () {
 #if 1
     destroy_win0 ();
     destroy_win1 ();
+    destroy_win_pho ();
     destroy_win_gtab ();
 #endif
 

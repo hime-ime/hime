@@ -21,6 +21,7 @@
 #define WIN_PHO_H
 
 void init_win_pho (void);
+void destroy_win_pho (void);
 void show_win_pho (void);
 void hide_win_pho (void);
 gboolean is_win_pho_visible (void);

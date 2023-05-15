@@ -40,6 +40,13 @@ void init_win_pho (void) {
     create_win_pho_gui ();
 }
 
+void destroy_win_pho () {
+    if (!gwin_pho)
+        return;
+    gtk_widget_destroy (gwin_pho);
+    gwin_pho = NULL;
+}
+
 gboolean is_win_pho_visible () {
     return !gwin_pho && gtk_widget_get_visible (gwin_pho);
 }
