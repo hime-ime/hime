@@ -1487,7 +1487,6 @@ int feedkey_pp (KeySym xkey, int kbstate) {
     case XK_Down:
     case XK_KP_Down:
         if (xkey == XK_space && !poo.ityp3_pho && (poo.typ_pho[0] || poo.typ_pho[1] || poo.typ_pho[2])) {
-            kno = 0;
 #if 1
             ctyp = 3;
 //         status = inph_typ_pho(xkey);
