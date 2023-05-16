@@ -220,25 +220,7 @@ void set_page_label (char *s) {
 }
 
 void move_win_gtab (int x, int y) {
-    if (!gwin_gtab)
-        return;
-    //  dbg("move_win_gtab %d %d\n", x, y);
-    get_win_size (gwin_gtab, &win_xl, &win_yl);
-
-    if (x + win_xl > display_width)
-        x = display_width - win_xl;
-    if (x < 0)
-        x = 0;
-
-    if (y + win_yl > display_height)
-        y = display_height - win_yl;
-    if (y < 0)
-        y = 0;
-
-    gtk_window_move (GTK_WINDOW (gwin_gtab), x, y);
-    win_x = x;
-    win_y = y;
-
+    move_win (gwin_gtab, x, y);
     move_win_sym ();
     if (poo.same_pho_query_state != SAME_PHO_QUERY_none)
         move_gtab_pho_query_win ();

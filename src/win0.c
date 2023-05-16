@@ -360,29 +360,7 @@ void move_win0_auto () {
 }
 
 void move_win0 (int x, int y) {
-    if (!win0)
-        return;
-
-    int best_win_x = x;
-    int best_win_y = y;
-
-    get_win_size (win0, &win_xl, &win_yl);
-
-    if (x + win_xl > display_width)
-        best_win_x = display_width - win_xl;
-    if (x < 0)
-        best_win_x = 0;
-
-    if (y + win_yl > display_height)
-        best_win_y = display_height - win_yl;
-    if (y < 0)
-        best_win_y = 0;
-
-    gtk_window_move (GTK_WINDOW (win0), best_win_x, best_win_y);
-
-    win_x = best_win_x;
-    win_y = best_win_y;
-
+    move_win (win0, x, y);
     move_win_sym ();
 }
 

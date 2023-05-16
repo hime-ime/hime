@@ -88,27 +88,7 @@ void set_key_codes_label_pho (char *s) {
 }
 
 void move_win_pho (int x, int y) {
-    int twin_xl, twin_yl;
-
-    win_x = x;
-    win_y = y;
-
-    if (!gwin_pho)
-        return;
-
-    get_win_size (gwin_pho, &twin_xl, &twin_yl);
-
-    if (x + twin_xl > display_width)
-        x = display_width - twin_xl;
-    if (x < 0)
-        x = 0;
-
-    if (y + twin_yl > display_height)
-        y = display_height - twin_yl;
-    if (y < 0)
-        y = 0;
-
-    gtk_window_move (GTK_WINDOW (gwin_pho), x, y);
+    move_win (gwin_pho, x, y);
     move_win_sym ();
 }
 

@@ -22,5 +22,6 @@
 
 char *get_full_str (void);
 void get_win_geom (GtkWidget *win);
+void move_win (GtkWidget *win, int x, int y);
 
 #endif
