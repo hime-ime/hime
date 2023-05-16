@@ -392,7 +392,7 @@ GtkWidget *create_appearance_widget () {
     appearance_widget = vbox_top;
 
     GtkWidget *hbox_hime_font_size = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-    gtk_box_set_homogeneous (hbox_hime_font_size, TRUE);
+    gtk_box_set_homogeneous (GTK_BOX (hbox_hime_font_size), TRUE);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size, FALSE, FALSE, 0);
     GtkWidget *hbox_hime_font_size_left = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     GtkWidget *hbox_hime_font_size_right = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -407,7 +407,7 @@ GtkWidget *create_appearance_widget () {
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_right), font_sel, FALSE, FALSE, 0);
 
     GtkWidget *hbox_hime_font_size_symbol = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-    gtk_box_set_homogeneous (hbox_hime_font_size_symbol, TRUE);
+    gtk_box_set_homogeneous (GTK_BOX (hbox_hime_font_size_symbol), TRUE);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_symbol, FALSE, FALSE, 0);
     GtkWidget *hbox_hime_font_size_symbol_left = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     GtkWidget *hbox_hime_font_size_symbol_right = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -421,7 +421,7 @@ GtkWidget *create_appearance_widget () {
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_symbol_right), spinner_hime_font_size_symbol, FALSE, FALSE, 0);
 
     GtkWidget *hbox_hime_font_size_tsin_presel = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-    gtk_box_set_homogeneous (hbox_hime_font_size_tsin_presel, TRUE);
+    gtk_box_set_homogeneous (GTK_BOX (hbox_hime_font_size_tsin_presel), TRUE);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_tsin_presel, FALSE, FALSE, 0);
     GtkWidget *hbox_hime_font_size_tsin_presel_left = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     GtkWidget *hbox_hime_font_size_tsin_presel_right = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -435,7 +435,7 @@ GtkWidget *create_appearance_widget () {
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_presel_right), spinner_hime_font_size_tsin_presel, FALSE, FALSE, 0);
 
     GtkWidget *hbox_hime_font_size_tsin_pho_in = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-    gtk_box_set_homogeneous (hbox_hime_font_size_tsin_pho_in, TRUE);
+    gtk_box_set_homogeneous (GTK_BOX (hbox_hime_font_size_tsin_pho_in), TRUE);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
     GtkWidget *hbox_hime_font_size_tsin_pho_in_left = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     GtkWidget *hbox_hime_font_size_tsin_pho_in_right = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -449,7 +449,7 @@ GtkWidget *create_appearance_widget () {
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_tsin_pho_in_right), spinner_hime_font_size_tsin_pho_in, FALSE, FALSE, 0);
 
     GtkWidget *hbox_hime_font_size_pho_near = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-    gtk_box_set_homogeneous (hbox_hime_font_size_pho_near, TRUE);
+    gtk_box_set_homogeneous (GTK_BOX (hbox_hime_font_size_pho_near), TRUE);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_pho_near, FALSE, FALSE, 0);
     GtkWidget *hbox_hime_font_size_pho_near_left = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     GtkWidget *hbox_hime_font_size_pho_near_right = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -463,7 +463,7 @@ GtkWidget *create_appearance_widget () {
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_pho_near_right), spinner_hime_font_size_pho_near, FALSE, FALSE, 0);
 
     GtkWidget *hbox_hime_font_size_gtab_in = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-    gtk_box_set_homogeneous (hbox_hime_font_size_gtab_in, TRUE);
+    gtk_box_set_homogeneous (GTK_BOX (hbox_hime_font_size_gtab_in), TRUE);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_gtab_in, FALSE, FALSE, 0);
     GtkWidget *hbox_hime_font_size_gtab_in_left = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     GtkWidget *hbox_hime_font_size_gtab_in_right = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -477,7 +477,7 @@ GtkWidget *create_appearance_widget () {
     gtk_box_pack_start (GTK_BOX (hbox_hime_font_size_gtab_in_right), spinner_hime_font_size_gtab_in, FALSE, FALSE, 0);
 
     GtkWidget *hbox_hime_font_size_win_kbm = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-    gtk_box_set_homogeneous (hbox_hime_font_size_win_kbm, TRUE);
+    gtk_box_set_homogeneous (GTK_BOX (hbox_hime_font_size_win_kbm), TRUE);
     gtk_box_pack_start (GTK_BOX (vbox_top), hbox_hime_font_size_win_kbm, FALSE, FALSE, 0);
     GtkWidget *hbox_hime_font_size_win_kbm_left = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     GtkWidget *hbox_hime_font_size_win_kbm_right = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
