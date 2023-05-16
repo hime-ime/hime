@@ -35,45 +35,53 @@ LGPLv2.1 (Qt immodules are GPLv2)
 
 如果您尚未取得 Hime, 可依下列方法取得 Hime:
 
-#### 最新開發版
+#### 穩定版本
+
+##### Debian/Ubuntu 等衍生系統
+
+```bash
+apt update
+apt install hime
+```
+
+#### 最新開發版本
+
+##### 下載原始碼
 
 ```bash
 git clone https://github.com/hime-ime/hime.git
 cd hime
 ```
 
-#### deb系
+以下列出4種不同安裝方式
+
+##### dpkg 安裝 (Debian/Ubuntu)
 
 ```bash
 distro/debian/gen-deb
+sudo dpkg -i ../hime_{version}+git{date}-1_{arch}.deb
 ```
 
-#### rpm系
+##### rpm 安裝 (RedHat/Fedora/CentOS)
 
 ```bash
 distro/fedora/gen-rpm
 ```
 
-#### Debian/Ubuntu
+##### pacman 安裝 (Arch Linux)
 
 ```bash
-apt-get update
-apt-get install hime
-```
-
-#### Archlinux
-
-```bash
-# build from this repo
 cd distro/archlinux
 ./makepkg.sh
 sudo pacman -U hime-git-{version}-{arch}.pkg.tar.zst
 ```
 
-#### 自行編譯
+##### 自行編譯安裝
 
 ```bash
-./configure && make && make install
+./configure
+make
+make install
 ```
 
 ## 開始使用 Hime
