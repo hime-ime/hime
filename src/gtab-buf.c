@@ -826,9 +826,9 @@ int gtab_get_preedit (char *str, HIME_PREEDIT_ATTR attr[], int *pcursor, int *su
     return attrN;
 }
 
-extern GtkWidget *gwin_gtab;
+extern GtkWidget *win_gtab;
 void gtab_reset () {
-    if (!gwin_gtab)
+    if (!win_gtab)
         return;
     clear_gtab_buf_all ();
     clear_gbuf_sel ();

@@ -26,7 +26,7 @@
 #include "gtab.h"
 #include "win-kbm.h"
 
-static GtkWidget *gwin_kbm = NULL;
+static GtkWidget *win_kbm = NULL;
 static int kbm_timeout_handle;
 
 static GdkRGBA red;
@@ -258,12 +258,12 @@ static void cb_button_release (GtkWidget *wid, KEY *k) {
 static void create_win_kbm (void) {
     gdk_rgba_parse (&red, "red");
 
-    gwin_kbm = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_has_resize_grip (GTK_WINDOW (gwin_kbm), FALSE);
-    gtk_container_set_border_width (GTK_CONTAINER (gwin_kbm), 0);
+    win_kbm = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_has_resize_grip (GTK_WINDOW (win_kbm), FALSE);
+    gtk_container_set_border_width (GTK_CONTAINER (win_kbm), 0);
 
     GtkWidget *hbox_top = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_container_add (GTK_CONTAINER (gwin_kbm), hbox_top);
+    gtk_container_add (GTK_CONTAINER (win_kbm), hbox_top);
 
     GtkWidget *vbox_l = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_l), GTK_ORIENTATION_VERTICAL);
@@ -323,8 +323,8 @@ static void create_win_kbm (void) {
         }
     }
 
-    gtk_widget_realize (gwin_kbm);
-    set_no_focus (gwin_kbm);
+    gtk_widget_realize (win_kbm);
+    set_no_focus (win_kbm);
 }
 
 #if TRAY_ENABLED
@@ -338,7 +338,7 @@ extern gboolean is_exist_tray_double ();
 static void move_win_kbm (void) {
     int width = 0;
     int height = 0;
-    get_win_size (gwin_kbm, &width, &height);
+    get_win_size (win_kbm, &width, &height);
 
     int ox = 0;
     int oy = 0;
@@ -367,16 +367,16 @@ static void move_win_kbm (void) {
         oy = display_height - height - 16;
     }
 
-    gtk_window_move (GTK_WINDOW (gwin_kbm), ox, oy);
+    gtk_window_move (GTK_WINDOW (win_kbm), ox, oy);
 }
 
 void show_win_kbm (void) {
-    if (!gwin_kbm) {
+    if (!win_kbm) {
         create_win_kbm ();
         update_win_kbm ();
     }
 
-    gtk_widget_show_all (gwin_kbm);
+    gtk_widget_show_all (win_kbm);
     win_kbm_on = TRUE;
 
 #if TRAY_ENABLED
@@ -412,7 +412,7 @@ static KEY *get_keys_ent (KeySym keysym) {
 }
 
 static void set_kbm_key (const KeySym keysym, char *str) {
-    if (!gwin_kbm) {
+    if (!win_kbm) {
         return;
     }
 
@@ -468,7 +468,7 @@ static void display_shift_keys (void) {
 }
 
 void update_win_kbm (void) {
-    if (!current_CS || !gwin_kbm) {
+    if (!current_CS || !win_kbm) {
         return;
     }
 
@@ -580,7 +580,7 @@ ret:
 }
 
 void hide_win_kbm (void) {
-    if (!gwin_kbm) {
+    if (!win_kbm) {
         return;
     }
 
@@ -592,7 +592,7 @@ void hide_win_kbm (void) {
     update_item_active_all ();
 #endif
 
-    gtk_widget_hide (gwin_kbm);
+    gtk_widget_hide (win_kbm);
 }
 
 extern gboolean old_capslock_on;

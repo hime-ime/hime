@@ -816,7 +816,7 @@ void pho_reset () {
 }
 
 #include "im-client/hime-im-client-attr.h"
-extern GtkWidget *gwin_pho;
+extern GtkWidget *win_pho;
 
 int pho_get_preedit (char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *sub_comp_len) {
     *sub_comp_len = !typ_pho_empty ();

@@ -38,7 +38,7 @@ void init_seltab (char ***p);
 
 extern gboolean key_press_ctrl;
 
-extern GtkWidget *gwin_gtab;
+extern GtkWidget *win_gtab;
 void hide_gtab_pre_sel ();
 void gtab_scan_pre_select (gboolean);
 
@@ -327,7 +327,7 @@ static void DispInArea () {
 
     //  dbg("sel1st:%d\n", ggg.sel1st_i);
     if (hime_display_on_the_spot_key ()) {
-        if (hime_pop_up_win && gwin_gtab && gtk_widget_get_visible (gwin_gtab) && poo.same_pho_query_state == SAME_PHO_QUERY_none)
+        if (hime_pop_up_win && win_gtab && gtk_widget_get_visible (win_gtab) && poo.same_pho_query_state == SAME_PHO_QUERY_none)
             hide_win_gtab ();
         return;
     }
@@ -878,7 +878,7 @@ gboolean shift_char_proc (KeySym key, int kbstate) {
     return TRUE;
 }
 
-extern GtkWidget *gwin_pho;
+extern GtkWidget *win_pho;
 gboolean feed_phrase (KeySym ksym, int state);
 int gtab_buf_backspace ();
 gboolean output_gbuf ();
@@ -957,8 +957,8 @@ gboolean feedkey_gtab (KeySym key, int kbstate) {
     if (poo.same_pho_query_state == SAME_PHO_QUERY_pho_select)
         return feedkey_pho (key, 0);
 
-    if (poo.same_pho_query_state == SAME_PHO_QUERY_none && gwin_pho &&
-        gtk_widget_get_visible (gwin_pho))
+    if (poo.same_pho_query_state == SAME_PHO_QUERY_none && win_pho &&
+        gtk_widget_get_visible (win_pho))
         hide_win_pho ();
 
     if (!chinese_mode ()) {

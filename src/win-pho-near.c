@@ -22,7 +22,7 @@
 #include "gtab.h"
 #include "pho.h"
 
-static GtkWidget *gwin_pho_near = NULL;
+static GtkWidget *win_pho_near = NULL;
 
 static struct {
     int type;
@@ -89,16 +89,16 @@ static void cb_sel (GtkWidget *button, gpointer user_data) {
 char *phokey2pinyin (phokey_t k);
 
 void create_win_pho_near (phokey_t pho) {
-    if (gwin_pho_near)
+    if (win_pho_near)
         close_win_pho_near ();
 
-    gwin_pho_near = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_has_resize_grip (GTK_WINDOW (gwin_pho_near), FALSE);
-    gtk_widget_realize (gwin_pho_near);
-    set_no_focus (gwin_pho_near);
+    win_pho_near = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_has_resize_grip (GTK_WINDOW (win_pho_near), FALSE);
+    gtk_widget_realize (win_pho_near);
+    set_no_focus (win_pho_near);
 
     GtkWidget *frame = gtk_frame_new (NULL);
-    gtk_container_add (GTK_CONTAINER (gwin_pho_near), frame);
+    gtk_container_add (GTK_CONTAINER (win_pho_near), frame);
 
     GtkWidget *vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
@@ -171,15 +171,15 @@ void create_win_pho_near (phokey_t pho) {
         }
     }
 
-    gtk_widget_show_all (gwin_pho_near);
+    gtk_widget_show_all (win_pho_near);
 }
 
 void close_win_pho_near () {
-    if (!gwin_pho_near)
+    if (!win_pho_near)
         return;
 
-    gtk_widget_destroy (gwin_pho_near);
-    gwin_pho_near = NULL;
+    gtk_widget_destroy (win_pho_near);
+    win_pho_near = NULL;
 
     free (near_entries);
     near_entriesN = 0;

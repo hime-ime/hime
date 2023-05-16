@@ -25,7 +25,7 @@
 #include "tsin.h"
 #include "win-sym.h"
 
-GtkWidget *gwin_sym = NULL;
+GtkWidget *win_sym = NULL;
 static int cur_in_method;
 gboolean win_sym_enabled = 0;
 
@@ -239,7 +239,7 @@ void move_win_sym () {
 #if 0
   dbg("move_win_sym %d\n", current_CS->in_method);
 #endif
-    if (!gwin_sym)
+    if (!win_sym)
         return;
 
     int wx, wy;
@@ -257,7 +257,7 @@ void move_win_sym () {
     }
 
     int winsym_xl, winsym_yl;
-    get_win_size (gwin_sym, &winsym_xl, &winsym_yl);
+    get_win_size (win_sym, &winsym_xl, &winsym_yl);
 
     if (wx + winsym_xl > display_width)
         wx = display_width - winsym_xl;
@@ -276,30 +276,30 @@ void move_win_sym () {
             wy = 0;
     }
 
-    gtk_window_move (GTK_WINDOW (gwin_sym), wx, wy);
+    gtk_window_move (GTK_WINDOW (win_sym), wx, wy);
 }
 
 void hide_win_sym () {
-    if (!gwin_sym)
+    if (!win_sym)
         return;
-    gtk_widget_hide (gwin_sym);
+    gtk_widget_hide (win_sym);
 }
 
 void show_win_sym () {
     if (!current_CS)
         return;
 
-    if (!gwin_sym || !win_sym_enabled || !current_CS->b_im_enabled)
+    if (!win_sym || !win_sym_enabled || !current_CS->b_im_enabled)
         return;
 #if 0
   dbg("show_win_sym\n");
 #endif
-    gtk_widget_show_all (gwin_sym);
+    gtk_widget_show_all (win_sym);
     move_win_sym ();
 }
 
 gboolean is_win_sym_visible (void) {
-    return gwin_sym && gtk_widget_get_visible (gwin_sym);
+    return win_sym && gtk_widget_get_visible (win_sym);
 }
 
 void lookup_gtab_out (char *ch, char *out);
@@ -326,9 +326,9 @@ static void sym_lookup_key (char *instr, char *outstr) {
 }
 
 static void destory_win () {
-    if (gwin_sym)
-        gtk_widget_destroy (gwin_sym);
-    gwin_sym = NULL;
+    if (win_sym)
+        gtk_widget_destroy (win_sym);
+    win_sym = NULL;
 }
 
 static void disp_win_sym () {
@@ -402,7 +402,7 @@ void create_win_sym () {
             return;
     }
 
-    if (gwin_sym) {
+    if (win_sym) {
         if (win_sym_enabled)
             show_win_sym ();
         else
@@ -411,13 +411,13 @@ void create_win_sym () {
         return;
     }
 
-    gwin_sym = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_has_resize_grip (GTK_WINDOW (gwin_sym), FALSE);
+    win_sym = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_has_resize_grip (GTK_WINDOW (win_sym), FALSE);
 
     cur_in_method = current_CS->in_method;
 
     GtkWidget *hbox_top = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_container_add (GTK_CONTAINER (gwin_sym), hbox_top);
+    gtk_container_add (GTK_CONTAINER (win_sym), hbox_top);
 
     GtkWidget *vbox_top = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox_top), GTK_ORIENTATION_VERTICAL);
@@ -481,13 +481,13 @@ void create_win_sym () {
     g_signal_connect (G_OBJECT (eve_up), "button-press-event", G_CALLBACK (mouse_button_callback_up_down), (gpointer) 1);
     g_signal_connect (G_OBJECT (eve_down), "button-press-event", G_CALLBACK (mouse_button_callback_up_down), NULL);
 
-    gtk_widget_realize (gwin_sym);
-    set_no_focus (gwin_sym);
+    gtk_widget_realize (win_sym);
+    set_no_focus (win_sym);
 
     if (win_sym_enabled)
-        gtk_widget_show_all (gwin_sym);
+        gtk_widget_show_all (win_sym);
 
-    g_signal_connect (G_OBJECT (gwin_sym), "scroll-event", G_CALLBACK (button_scroll_event), NULL);
+    g_signal_connect (G_OBJECT (win_sym), "scroll-event", G_CALLBACK (button_scroll_event), NULL);
 
     move_win_sym ();
 #if 0

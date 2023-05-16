@@ -29,7 +29,7 @@ static int current_hime_inner_frame;
 static int current_gtab_in_row1;
 static int current_gtab_vertical_select;
 
-GtkWidget *gwin_gtab;
+GtkWidget *win_gtab;
 static GtkWidget *top_bin;
 static GtkWidget *label_full, *label_gtab_sele, *label_gtab_pre_sel;
 static GtkWidget *label_gtab = NULL;
@@ -57,13 +57,13 @@ void init_win_gtab (void) {
 }
 
 gboolean is_win_gtab_visible (void) {
-    return gwin_gtab && gtk_widget_get_visible (gwin_gtab);
+    return win_gtab && gtk_widget_get_visible (win_gtab);
 }
 
 static void adj_gtab_win_pos () {
-    if (!gwin_gtab)
+    if (!win_gtab)
         return;
-    if (win_size_exceed (gwin_gtab))
+    if (win_size_exceed (win_gtab))
         move_win_gtab (current_in_win_x, current_in_win_y);
 }
 
@@ -152,7 +152,7 @@ void change_gtab_font_size () {
 
     set_disp_im_name ();
 
-    change_win_fg_bg (gwin_gtab, label_gtab_sele);
+    change_win_fg_bg (win_gtab, label_gtab_sele);
 }
 
 void disp_gtab_sel (char *s) {
@@ -166,9 +166,9 @@ void disp_gtab_sel (char *s) {
     }
 
     if (s && (!s[0]) && (hime_edit_display == HIME_EDIT_DISPLAY_ON_THE_SPOT) && gtab_hide_row2 && (hime_on_the_spot_key || (!gtab_in_row1)))
-        gtk_widget_hide (gwin_gtab);
+        gtk_widget_hide (win_gtab);
     else {
-        if (gwin_gtab && !gtk_widget_get_visible (gwin_gtab))
+        if (win_gtab && !gtk_widget_get_visible (win_gtab))
             show_win_gtab ();
         gtk_widget_show (label_gtab_sele);
     }
@@ -222,7 +222,7 @@ void set_page_label (char *s) {
 }
 
 void move_win_gtab (int x, int y) {
-    move_win (gwin_gtab, x, y);
+    move_win (win_gtab, x, y);
     move_win_sym ();
     if (poo.same_pho_query_state != SAME_PHO_QUERY_none)
         move_gtab_pho_query_win ();
@@ -243,15 +243,15 @@ gboolean use_tsin_sel_win ();
 void init_tsin_selection_win ();
 
 void create_win_gtab () {
-    if (gwin_gtab)
+    if (win_gtab)
         return;
 
-    gwin_gtab = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_has_resize_grip (GTK_WINDOW (gwin_gtab), FALSE);
-    gtk_container_set_border_width (GTK_CONTAINER (gwin_gtab), 0);
-    gtk_widget_realize (gwin_gtab);
+    win_gtab = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_has_resize_grip (GTK_WINDOW (win_gtab), FALSE);
+    gtk_container_set_border_width (GTK_CONTAINER (win_gtab), 0);
+    gtk_widget_realize (win_gtab);
 
-    set_no_focus (gwin_gtab);
+    set_no_focus (win_gtab);
 
     if (use_tsin_sel_win ())
         init_tsin_selection_win ();
@@ -357,18 +357,18 @@ void create_win_gtab_gui_simple () {
 
     gtk_container_set_border_width (GTK_CONTAINER (event_box_gtab), 0);
 
-    if (gwin_gtab == NULL)
+    if (win_gtab == NULL)
         create_win_gtab ();
 
     if (hime_inner_frame) {
         GtkWidget *frame = top_bin = gtk_frame_new (NULL);
         gtk_container_set_border_width (GTK_CONTAINER (frame), 0);
-        gtk_container_add (GTK_CONTAINER (gwin_gtab), frame);
-        gtk_container_set_border_width (GTK_CONTAINER (gwin_gtab), 0);
+        gtk_container_add (GTK_CONTAINER (win_gtab), frame);
+        gtk_container_set_border_width (GTK_CONTAINER (win_gtab), 0);
         gtk_container_add (GTK_CONTAINER (frame), vbox_top);
         gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_ETCHED_OUT);
     } else {
-        gtk_container_add (GTK_CONTAINER (gwin_gtab), vbox_top);
+        gtk_container_add (GTK_CONTAINER (win_gtab), vbox_top);
         top_bin = vbox_top;
     }
 
@@ -522,9 +522,9 @@ void create_win_gtab_gui_simple () {
     if (
         (current_method_type () != method_type_PHO) &&
         (current_method_type () != method_type_PHO)) {
-        gtk_widget_show_all (gwin_gtab);
+        gtk_widget_show_all (win_gtab);
     }
-    gtk_widget_hide (gwin_gtab);
+    gtk_widget_hide (win_gtab);
     gtk_widget_hide (label_gtab_sele);
     gtk_widget_hide (label_key_codes);
     gtk_widget_hide (label_page);
@@ -631,12 +631,12 @@ void show_win_gtab () {
 #if 0
   if (current_CS->b_raise_window)
 #endif
-    gtk_window_present (GTK_WINDOW (gwin_gtab));
+    gtk_window_present (GTK_WINDOW (win_gtab));
 
     move_win_gtab (current_in_win_x, current_in_win_y);
 
     if ((current_method_type () != method_type_PHO) && (current_method_type () != method_type_PHO))
-        gtk_widget_show (gwin_gtab);
+        gtk_widget_show (win_gtab);
 
     if (current_CS) {
         if (!chinese_mode ())
@@ -673,11 +673,11 @@ static void destroy_top_bin () {
 }
 
 void destroy_win_gtab () {
-    if (!gwin_gtab)
+    if (!win_gtab)
         return;
     destroy_top_bin ();
-    gtk_widget_destroy (gwin_gtab);
-    gwin_gtab = NULL;
+    gtk_widget_destroy (win_gtab);
+    win_gtab = NULL;
 }
 
 void hide_win_kbm ();
@@ -685,17 +685,17 @@ void hide_win_kbm ();
 void hide_win_gtab () {
     win_gtab_max_key_press = 0;
 
-    if (!gwin_gtab)
+    if (!win_gtab)
         return;
 
-    gtk_widget_hide (gwin_gtab);
+    gtk_widget_hide (win_gtab);
     close_gtab_pho_win ();
     hide_win_sym ();
     hide_win_kbm ();
 }
 
 void get_win_gtab_geom () {
-    get_win_geom (gwin_gtab);
+    get_win_geom (win_gtab);
 }
 
 static void set_disp_im_name () {
@@ -709,7 +709,7 @@ static void set_disp_im_name () {
 }
 
 void win_gtab_disp_half_full () {
-    if (!gwin_gtab)
+    if (!win_gtab)
         return;
     if (label_full) {
         if ((current_CS->b_im_enabled && !current_fullwidth_mode ()) ||
