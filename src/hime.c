@@ -274,7 +274,6 @@ void destroy_inmd_menu ();
 void load_gtab_list (gboolean);
 void change_win1_font ();
 void set_wselkey (char *s);
-void create_win_gtab ();
 
 #if TRAY_ENABLED
 void disp_tray_icon ();
@@ -327,7 +326,6 @@ static void reload_data () {
     //  load_tsin_db();
     change_win0_style ();
     change_win1_font ();
-    create_win_gtab ();
     change_win_gtab_style ();
     //  change_win_pho_style();
     load_tab_pho_file ();
