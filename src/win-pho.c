@@ -33,6 +33,8 @@ static GtkWidget *label_pho;
 static GtkWidget *label_full;
 static GtkWidget *label_key_codes;
 
+void create_win_pho (void);
+void create_win_pho_gui (void);
 void change_pho_font_size ();
 
 void init_win_pho (void) {

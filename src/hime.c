@@ -22,7 +22,11 @@
 #include "hime.h"
 
 #include "im-srv.h"
+#include "win-gtab.h"
 #include "win-kbm.h"
+#include "win-pho.h"
+#include "win0.h"
+#include "win1.h"
 
 Window root;
 

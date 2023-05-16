@@ -47,6 +47,8 @@ gboolean last_cursor_off;
 gboolean win_size_exceed (GtkWidget *win), gtab_phrase_on ();
 int win_gtab_max_key_press;
 
+void create_win_gtab (void);
+void create_win_gtab_gui (void);
 void move_gtab_pho_query_win ();
 
 void init_win_gtab (void) {
