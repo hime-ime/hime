@@ -26,7 +26,7 @@
 
 Window root;
 
-int win_xl, win_yl;
+int input_window_width, input_window_height;
 int win_x, win_y;  // actual win x/y
 
 // display width/height in pixels

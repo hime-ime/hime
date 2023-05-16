@@ -249,11 +249,11 @@ void move_win_sym () {
   } else
 #endif
     {
-        //  dbg("win_y: %d  %d\n", win_y, win_yl);
+        //  dbg("win_y: %d  %d\n", win_y, input_window_height);
         update_active_in_win_geom ();
 
         wx = win_x;
-        wy = win_y + win_yl;
+        wy = win_y + input_window_height;
     }
 
     int winsym_xl, winsym_yl;

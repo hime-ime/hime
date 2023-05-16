@@ -102,7 +102,7 @@ void create_phrase_save_menu (GdkEventButton *event) {
     if (x + w_xl > display_width)
         x = display_width - w_xl;
 
-    y = win_y + win_yl;
+    y = win_y + input_window_height;
     if (y + w_yl > display_height)
         y = win_y - w_yl;
 

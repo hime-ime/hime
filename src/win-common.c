@@ -49,7 +49,7 @@ void get_win_geom (GtkWidget *win) {
     if (!win)
         return;
     gtk_window_get_position (GTK_WINDOW (win), &win_x, &win_y);
-    get_win_size (win, &win_xl, &win_yl);
+    get_win_size (win, &input_window_width, &input_window_height);
 }
 
 void move_win (GtkWidget *win, int x, int y) {
@@ -59,15 +59,15 @@ void move_win (GtkWidget *win, int x, int y) {
     int best_win_x = x;
     int best_win_y = y;
 
-    get_win_size (win, &win_xl, &win_yl);
+    get_win_size (win, &input_window_width, &input_window_height);
 
-    if (x + win_xl > display_width)
-        best_win_x = display_width - win_xl;
+    if (x + input_window_width > display_width)
+        best_win_x = display_width - input_window_width;
     if (x < 0)
         best_win_x = 0;
 
-    if (y + win_yl > display_height)
-        best_win_y = display_height - win_yl;
+    if (y + input_window_height > display_height)
+        best_win_y = display_height - input_window_height;
     if (y < 0)
         best_win_y = 0;
 

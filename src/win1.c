@@ -321,14 +321,14 @@ void disp_selections (int x, int y) {
         if (hime_edit_display_ap_only ())
             getRootXY (current_CS->client_win, current_CS->spot_location.x, current_CS->spot_location.y, &tx, &y);
         else
-            y = win_y + win_yl;
+            y = win_y + input_window_height;
     }
 
     int win1_xl, win1_yl;
     get_win_size (gwin1, &win1_xl, &win1_yl);
 
     if (x < 0) {
-        x = win_x + win_xl - win1_xl;
+        x = win_x + input_window_width - win1_xl;
         if (x < win_x)
             x = win_x;
     }

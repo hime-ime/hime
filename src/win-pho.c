@@ -266,7 +266,7 @@ void get_win_gtab_geom ();
 
 void move_gtab_pho_query_win () {
     get_win_gtab_geom ();
-    move_win_pho (win_x, win_y + win_yl);
+    move_win_pho (win_x, win_y + input_window_height);
 }
 
 void init_gtab_pho_query_win () {

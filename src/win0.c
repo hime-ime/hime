@@ -341,11 +341,11 @@ int get_widget_xy (GtkWidget *win, GtkWidget *widget, int *rx, int *ry) {
     int win_x, win_y;
 
     gtk_window_get_position (GTK_WINDOW (win), &win_x, &win_y);
-    int win_xl, win_yl;
-    get_win_size (win, &win_xl, &win_yl);
+    int input_window_width, input_window_height;
+    get_win_size (win, &input_window_width, &input_window_height);
 
-    if (wx > win_xl)
-        wx = win_xl;
+    if (wx > input_window_width)
+        wx = input_window_width;
 
     *rx = win_x + wx;
     *ry = win_y + wy;

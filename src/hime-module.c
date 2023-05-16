@@ -88,8 +88,8 @@ void init_HIME_module_main_functions (HIME_module_main_functions *func) {
     func->mf_force_show = &force_show;
     func->mf_win_x = &win_x;
     func->mf_win_y = &win_y;
-    func->mf_win_xl = &win_xl;
-    func->mf_win_yl = &win_yl;
+    func->mf_input_window_width = &input_window_width;
+    func->mf_input_window_height = &input_window_height;
     func->mf_display_width = &display_width;
     func->mf_display_height = &display_height;
     func->mf_pho_chars = pho_chars;

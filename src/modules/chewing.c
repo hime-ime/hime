@@ -146,7 +146,7 @@ hime_label_cand_show (char *pszWord, int nIdx) {
     gtk_pango_font_pixel_size_get (&nFontWidth, &nFontHeight);
     nX += g_nCurrentCursorPos * nFontWidth;
 
-    nY = g_himeModMainFuncs.mf_hime_edit_display_ap_only () ? *g_himeModMainFuncs.mf_win_y : *g_himeModMainFuncs.mf_win_y + *g_himeModMainFuncs.mf_win_yl;
+    nY = g_himeModMainFuncs.mf_hime_edit_display_ap_only () ? *g_himeModMainFuncs.mf_win_y : *g_himeModMainFuncs.mf_win_y + *g_himeModMainFuncs.mf_input_window_height;
 
     g_himeModMainFuncs.mf_disp_selections (nX, nY);
 
@@ -627,16 +627,16 @@ int module_feedkey_release (KeySym xkey, int nKbState) {
 
 void module_move_win (int nX, int nY) {
     gtk_window_get_size (GTK_WINDOW (g_pWinChewing),
-                         g_himeModMainFuncs.mf_win_xl,
-                         g_himeModMainFuncs.mf_win_yl);
+                         g_himeModMainFuncs.mf_input_window_width,
+                         g_himeModMainFuncs.mf_input_window_height);
 
-    if (nX + *g_himeModMainFuncs.mf_win_xl > *g_himeModMainFuncs.mf_display_width)
-        nX = *g_himeModMainFuncs.mf_display_width - *g_himeModMainFuncs.mf_win_xl;
+    if (nX + *g_himeModMainFuncs.mf_input_window_width > *g_himeModMainFuncs.mf_display_width)
+        nX = *g_himeModMainFuncs.mf_display_width - *g_himeModMainFuncs.mf_input_window_width;
     if (nX < 0)
         nX = 0;
 
-    if (nY + *g_himeModMainFuncs.mf_win_yl > *g_himeModMainFuncs.mf_display_height)
-        nY = *g_himeModMainFuncs.mf_display_height - *g_himeModMainFuncs.mf_win_yl;
+    if (nY + *g_himeModMainFuncs.mf_input_window_height > *g_himeModMainFuncs.mf_display_height)
+        nY = *g_himeModMainFuncs.mf_display_height - *g_himeModMainFuncs.mf_input_window_height;
     if (nY < 0)
         nY = 0;
 
@@ -702,8 +702,8 @@ void module_win_geom (void) {
                              g_himeModMainFuncs.mf_win_y);
 
     g_himeModMainFuncs.mf_get_win_size (g_pWinChewing,
-                                        g_himeModMainFuncs.mf_win_xl,
-                                        g_himeModMainFuncs.mf_win_yl);
+                                        g_himeModMainFuncs.mf_input_window_width,
+                                        g_himeModMainFuncs.mf_input_window_height);
 }
 
 int module_flush_input (void) {

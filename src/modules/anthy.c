@@ -764,7 +764,7 @@ static void disp_select () {
     int x, y;
     gmf.mf_get_widget_xy (win_anthy, seg[cursor].label, &x, &y);
     dbg ("%x cusor %d %d\n", win_anthy, cursor, x);
-    y = gmf.mf_hime_edit_display_ap_only () ? *gmf.mf_win_y : *gmf.mf_win_y + *gmf.mf_win_yl;
+    y = gmf.mf_hime_edit_display_ap_only () ? *gmf.mf_win_y : *gmf.mf_win_y + *gmf.mf_input_window_height;
     gmf.mf_disp_selections (x, y);
 }
 
@@ -1298,15 +1298,15 @@ void module_move_win (int x, int y) {
   best_win_x = x;
   best_win_y = y;
 #endif
-    gtk_window_get_size (GTK_WINDOW (win_anthy), gmf.mf_win_xl, gmf.mf_win_yl);
+    gtk_window_get_size (GTK_WINDOW (win_anthy), gmf.mf_input_window_width, gmf.mf_input_window_height);
 
-    if (x + *gmf.mf_win_xl > *gmf.mf_display_width)
-        x = *gmf.mf_display_width - *gmf.mf_win_xl;
+    if (x + *gmf.mf_input_window_width > *gmf.mf_display_width)
+        x = *gmf.mf_display_width - *gmf.mf_input_window_width;
     if (x < 0)
         x = 0;
 
-    if (y + *gmf.mf_win_yl > *gmf.mf_display_height)
-        y = *gmf.mf_display_height - *gmf.mf_win_yl;
+    if (y + *gmf.mf_input_window_height > *gmf.mf_display_height)
+        y = *gmf.mf_display_height - *gmf.mf_input_window_height;
     if (y < 0)
         y = 0;
 
@@ -1429,5 +1429,5 @@ void module_win_geom () {
         return;
     gtk_window_get_position (GTK_WINDOW (win_anthy), gmf.mf_win_x, gmf.mf_win_y);
 
-    gmf.mf_get_win_size (win_anthy, gmf.mf_win_xl, gmf.mf_win_yl);
+    gmf.mf_get_win_size (win_anthy, gmf.mf_input_window_width, gmf.mf_input_window_height);
 }
