@@ -1455,7 +1455,7 @@ void flush_edit_buffer (void) {
     case method_type_MODULE: {
         HIME_module_callback_functions *module_callbacks = get_module_callbacks ();
         if (module_callbacks)
-            return module_callbacks->module_flush_input ();
+            module_callbacks->module_flush_input ();
         break;
     }
     default:
