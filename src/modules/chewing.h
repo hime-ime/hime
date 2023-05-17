@@ -64,7 +64,7 @@ typedef struct KB_MAPPING {
 // hime module callbacks
 int module_init_win (HIME_module_main_functions *pFuncs);
 void module_get_win_geom (void);
-int module_reset (void);
+void module_reset (void);
 int module_get_preedit (char *pszStr, HIME_PREEDIT_ATTR attr[], int *pnCursor, int *pCompFlag);
 gboolean module_feedkey (int nKeyVal, int nKeyState);
 int module_feedkey_release (KeySym xkey, int nKbState);

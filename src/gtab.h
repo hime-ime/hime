@@ -114,7 +114,7 @@ typedef struct {
 } WINDOW_FUNCTIONS;
 
 typedef struct {
-    void (*reset) ();
+    void (*reset) (void);
     int (*get_preedit_buffer) (char *str, HIME_PREEDIT_ATTR attr[], int *cursor, int *sub_comp_len);
 } INPUT_METHOD_FUNCTIONS;
 

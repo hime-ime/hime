@@ -1415,13 +1415,11 @@ int module_get_preedit (char *str, HIME_PREEDIT_ATTR attr[], int *pcursor, int *
     return attrN;
 }
 
-int module_reset () {
+void module_reset (void) {
     if (!win_anthy)
-        return 0;
-    int v = !is_empty ();
+        return;
 
     clear_all ();
-    return v;
 }
 
 void module_win_geom () {

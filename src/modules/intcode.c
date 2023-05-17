@@ -189,6 +189,5 @@ int module_flush_input () {
     return FALSE;
 }
 
-int module_reset () {
-    return TRUE;
+void module_reset (void) {
 }

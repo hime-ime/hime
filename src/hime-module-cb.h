@@ -34,7 +34,7 @@ extern "C" {
 #endif
 int module_init_win (HIME_module_main_functions *funcs);
 void module_win_geom ();
-int module_reset ();
+void module_reset (void);
 int module_get_preedit (char *str, HIME_PREEDIT_ATTR attr[], int *pcursor, int *compose_flag);
 gboolean module_feedkey (int kv, int kvstate);
 int module_feedkey_release (KeySym xkey, int kbstate);
@@ -52,7 +52,7 @@ int module_flush_input ();
 typedef struct _HIME_module_callback_functions {
     int (*module_init_win) (HIME_module_main_functions *funcs);
     void (*module_get_win_geom) ();
-    int (*module_reset) ();
+    void (*module_reset) (void);
     int (*module_get_preedit) (char *str, HIME_PREEDIT_ATTR attr[], int *pcursor, int *compose_flag);
     gboolean (*module_feedkey) (int kv, int kvstate);
     int (*module_feedkey_release) (KeySym xkey, int kbstate);

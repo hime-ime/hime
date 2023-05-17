@@ -517,11 +517,8 @@ void module_get_win_geom (void) {
     return;
 }
 
-// FIXME: chk
-int module_reset (void) {
-    if (!g_pWinChewing)
-        return 0;
-    return 1;
+// FIXME: impl
+void module_reset (void) {
 }
 
 // FIXME: refine and chk
