@@ -54,7 +54,6 @@ static char *output_buffer_raw, *output_buffer_raw_bak;
 static uint32_t output_buffer_rawN;
 void set_wselkey (char *s);
 void gtab_set_win1_cb ();
-void toggle_symbol_table ();
 
 gboolean old_capslock_on;
 
@@ -381,7 +380,6 @@ void check_CS () {
     }
 }
 
-gboolean force_show;
 void show_input_method_name_on_gtab ();
 
 void show_in_win (ClientState *cs) {
@@ -395,8 +393,7 @@ void show_in_win (ClientState *cs) {
 
     if (hime_show_win_kbm &&
         (current_CS->b_im_enabled) &&
-        (current_method_type () != method_type_MODULE) &&
-        (current_method_type () != method_type_SYMBOL_TABLE)) {
+        (current_method_type () != method_type_MODULE)) {
         show_win_kbm ();
         update_win_kbm ();
     }
@@ -818,17 +815,6 @@ gboolean init_in_method (int in_no) {
         inmd[in_no].win_funcs.move_input_window = move_win0;
         inmd[in_no].win_funcs.display_half_full = win_tsin_disp_half_full;
         break;
-    case method_type_SYMBOL_TABLE:
-        toggle_symbol_table ();
-        inmd[in_no].im_funcs.reset = NULL;
-        inmd[in_no].im_funcs.get_preedit_buffer = NULL;
-        inmd[in_no].win_funcs.show_input_window = NULL;
-        inmd[in_no].win_funcs.hide_input_window = NULL;
-        inmd[in_no].win_funcs.is_win_visible = is_win_sym_visible;
-        inmd[in_no].win_funcs.get_input_window_geom = NULL;
-        inmd[in_no].win_funcs.move_input_window = NULL;
-        inmd[in_no].win_funcs.display_half_full = NULL;
-        break;
     case method_type_MODULE: {
         HIME_module_main_functions gmf;
         init_HIME_module_main_functions (&gmf);
@@ -892,9 +878,6 @@ gboolean init_in_method (int in_no) {
         } else {
             // in case WIN_SYN and SYM_KBM show at the same time.
             current_CS->in_method = in_no;
-            hide_win_sym ();
-            win_sym_enabled = 0;
-
             show_win_gtab ();
             show_input_method_name_on_gtab ();
         }
@@ -929,8 +912,7 @@ gboolean init_in_method (int in_no) {
 
     if (hime_show_win_kbm) {
         if ((!current_CS->b_im_enabled && current_fullwidth_mode ()) ||
-            (current_method_type () == method_type_MODULE) ||
-            (current_method_type () == method_type_SYMBOL_TABLE))
+            (current_method_type () == method_type_MODULE))
             hide_win_kbm ();
         else {
             show_win_kbm ();
@@ -942,16 +924,9 @@ gboolean init_in_method (int in_no) {
 }
 
 static void cycle_next_in_method () {
-    if (current_method_type () == method_type_SYMBOL_TABLE) {
-        hide_win_sym ();
-        win_sym_enabled = 0;
-    }
-
     int i;
     for (i = 0; i < inmdN; i++) {
         int v = (current_CS->in_method + 1 + i) % inmdN;
-        if (win_sym_enabled && inmd[v].method_type == method_type_SYMBOL_TABLE)
-            continue;
 
         if (!inmd[v].in_cycle)
             continue;
@@ -1028,26 +1003,6 @@ void disp_win_kbm_capslock_init () {
 
     if (hime_show_win_kbm)
         win_kbm_disp_caplock ();
-}
-
-void toggle_symbol_table () {
-    if (current_CS->b_im_enabled) {
-        if (!win_is_visible ())
-            win_sym_enabled = 1;
-        else
-            win_sym_enabled ^= 1;
-    } else
-        win_sym_enabled = 0;
-
-    create_win_sym ();
-    if (win_sym_enabled) {
-        force_show = TRUE;
-        if (current_CS->b_im_enabled)
-            show_in_win (current_CS);
-        force_show = FALSE;
-    }
-
-    hide_win_kbm ();
 }
 
 void destroy_phrase_save_menu ();
@@ -1138,11 +1093,6 @@ gboolean ProcessKeyPress (KeySym keysym, uint32_t kev_state) {
         int kidx = hime_switch_keys_lookup (keysym);
         if (kidx < 0)
             return check_key_press (keysym, kev_state, FALSE);
-
-        if (inmd[kidx].method_type == method_type_SYMBOL_TABLE) {
-            toggle_symbol_table ();
-            return check_key_press (keysym, kev_state, TRUE);
-        }
 
         if (!inmd[kidx].cname)
             return check_key_press (keysym, kev_state, FALSE);

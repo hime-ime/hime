@@ -186,8 +186,6 @@ void show_win0 () {
         gtk_widget_show (win0);
     }
 
-    show_win_sym ();
-
     if (current_CS->b_raise_window) {
         gtk_window_present (GTK_WINDOW (win0));
         show_selections_win ();
@@ -201,7 +199,6 @@ void hide_win0 () {
     gtk_widget_hide (win0);
 
     hide_selections_win ();
-    hide_win_sym ();
 }
 
 void disp_tsin_select (int index) {
@@ -430,7 +427,7 @@ static void mouse_button_callback (GtkWidget *widget, GdkEventButton *event, gpo
     //  dbg("mouse_button_callback %d\n", event->button);
     switch (event->button) {
     case 1:
-        toggle_win_sym ();
+        toggle_symbol_table ();
         break;
     case 2:
         inmd_switch_popup_handler (widget, (GdkEvent *) event);

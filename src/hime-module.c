@@ -38,10 +38,8 @@ void send_utf8_ch (char *s);
 extern gboolean force_show;
 
 void init_HIME_module_main_functions (HIME_module_main_functions *func) {
-    func->mf_show_win_sym = show_win_sym;
-    func->mf_hide_win_sym = hide_win_sym;
     func->mf_move_win_sym = move_win_sym;
-    func->mf_toggle_win_sym = toggle_win_sym;
+    func->mf_toggle_symbol_table = toggle_symbol_table;
 
     func->mf_init_tsin_selection_win = init_tsin_selection_win;
     func->mf_clear_sele = clear_sele;

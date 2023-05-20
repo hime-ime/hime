@@ -26,10 +26,8 @@
 extern "C" {
 #endif
 typedef struct {
-    void (*mf_show_win_sym) ();
-    void (*mf_hide_win_sym) ();
     void (*mf_move_win_sym) ();
-    void (*mf_toggle_win_sym) ();
+    void (*mf_toggle_symbol_table) ();
 
     // display in tsin's selection window
     void (*mf_init_tsin_selection_win) ();

@@ -26,8 +26,8 @@
 #include "win-sym.h"
 
 GtkWidget *win_sym = NULL;
-static int cur_in_method;
-gboolean win_sym_enabled = 0;
+gboolean win_sym_enabled = FALSE;
+gboolean force_show;
 
 typedef struct {
     char **sym;
@@ -227,8 +227,7 @@ static void cb_button_sym (GtkButton *button, GtkWidget *label) {
     }
 
     if (hime_win_sym_click_close) {
-        win_sym_enabled = 0;
-        hide_win_sym ();
+        toggle_symbol_table ();
     }
 }
 
@@ -289,7 +288,7 @@ void show_win_sym () {
     if (!current_CS)
         return;
 
-    if (!win_sym || !win_sym_enabled || !current_CS->b_im_enabled)
+    if (!win_sym || !win_sym_enabled)
         return;
 #if 0
   dbg("show_win_sym\n");
@@ -335,7 +334,6 @@ static void disp_win_sym () {
     syms = pages[idx].syms;
     symsN = pages[idx].symsN;
     destory_win ();
-    //  win_sym_enabled = 0;
     create_win_sym ();
 }
 
@@ -395,7 +393,7 @@ void create_win_sym () {
     if (current_method_type () != method_type_PHO && current_method_type () != method_type_TSIN && current_method_type () != method_type_MODULE && !cur_inmd)
         return;
 
-    if (read_syms () || cur_in_method != current_CS->in_method) {
+    if (read_syms ()) {
         destory_win ();
     } else {
         if (!syms)
@@ -413,8 +411,6 @@ void create_win_sym () {
 
     win_sym = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_has_resize_grip (GTK_WINDOW (win_sym), FALSE);
-
-    cur_in_method = current_CS->in_method;
 
     GtkWidget *hbox_top = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_container_add (GTK_CONTAINER (win_sym), hbox_top);
@@ -496,9 +492,15 @@ void create_win_sym () {
     return;
 }
 
-void toggle_win_sym () {
-    win_sym_enabled ^= 1;
+void toggle_symbol_table () {
+    win_sym_enabled ^= TRUE;
     create_win_sym ();
+    if (win_sym_enabled) {
+        force_show = TRUE;
+        if (current_CS->b_im_enabled)
+            show_in_win (current_CS);
+        force_show = FALSE;
+    }
 }
 
 void change_win_sym_font_size () {

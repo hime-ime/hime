@@ -7,8 +7,6 @@
 注音 3 !PHO juyin.png
 小鍵盤 , symbols.gtab symbols.png
 #標點倉頡 4 cj-punc.gtab cj-punc.png
-# You can copy 符號表 from system symbol-table and put your own version in $HOME/.config/hime/
-符號表 4 !SYMBOL_TABLE symbols.png
 # 5 現在居然沒人用耶？
 #拼音 5 pinyin.gtab pinyin.png
 詞音 6 !TSIN tsin.png

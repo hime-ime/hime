@@ -84,6 +84,11 @@ void kbm_toggle_ (GtkCheckMenuItem *checkmenuitem, gpointer dat) {
     kbm_open_close (NULL, gtk_check_menu_item_get_active (checkmenuitem));
 }
 
+extern void toggle_symbol_table (void);
+void toggle_symbol_table_cb (GtkCheckMenuItem *checkmenuitem, gpointer dat) {
+    toggle_symbol_table ();
+}
+
 /* src/about.c */
 void create_about_window ();
 
@@ -96,6 +101,7 @@ extern gboolean win_kbm_inited;
 
 #include "mitem.h"
 extern gboolean win_kbm_on;
+extern gboolean win_sym_enabled;
 
 static MITEM mitems_main[] = {
     {N_ ("About hime"), GTK_STOCK_ABOUT, cb_about_window},
@@ -103,6 +109,7 @@ static MITEM mitems_main[] = {
     {N_ ("Exit"), GTK_STOCK_QUIT, quit_hime},
     {N_ ("Text-to-speech"), NULL, cb_tog_phospeak, &phonetic_speak},
     {N_ ("Virtual keyboard"), NULL, kbm_toggle_, &hime_show_win_kbm},
+    {N_ ("Symbol table"), NULL, toggle_symbol_table_cb, &win_sym_enabled},
     {N_ ("Select input methods"), GTK_STOCK_INDEX, cb_inmd_menu, NULL},
     {NULL}};
 
@@ -230,6 +237,7 @@ static void cb_popup (GtkStatusIcon *status_icon, guint button, guint activate_t
         if (!tray_menu)
             tray_menu = create_tray_menu (mitems_main);
 #if 1
+        update_item_active_all ();
         gtk_menu_popup (GTK_MENU (tray_menu), NULL, NULL, gtk_status_icon_position_menu, status_icon, button, activate_time);
 #else
         gtk_menu_popup (GTK_MENU (tray_menu), NULL, NULL, NULL, NULL, button, activate_time);
@@ -294,6 +302,7 @@ static void cb_popup_state (GtkStatusIcon *status_icon, guint button, guint acti
             tray_menu_state = create_tray_menu (mitems_state);
 
 #if 1
+        update_item_active_all ();
         gtk_menu_popup (GTK_MENU (tray_menu_state), NULL, NULL, gtk_status_icon_position_menu, status_icon, button, activate_time);
 #else
         gtk_menu_popup (GTK_MENU (tray_menu_state), NULL, NULL, NULL, NULL, button, activate_time);

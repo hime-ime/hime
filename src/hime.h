@@ -220,6 +220,7 @@ void set_chinese_mode (void);
 gboolean chinese_mode (void);
 void show_stat (void);
 char current_method_type ();
+void show_in_win (ClientState *cs);
 
 // util.c
 void dbg_time (char *fmt, ...);

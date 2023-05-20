@@ -1162,7 +1162,7 @@ static void mouse_button_callback (GtkWidget *widget, GdkEventButton *event, gpo
     //  dbg("mouse_button_callback %d\n", event->button);
     switch (event->button) {
     case 1:
-        gmf.mf_toggle_win_sym ();
+        gmf.mf_toggle_symbol_table ();
         break;
     case 2:
         gmf.mf_inmd_switch_popup_handler (widget, (GdkEvent *) event);
@@ -1263,7 +1263,6 @@ void module_show_win () {
     if (!*gmf.mf_hime_pop_up_win || !is_empty () || *gmf.mf_force_show) {
         if (!module_win_visible ())
             gtk_widget_show (win_anthy);
-        gmf.mf_show_win_sym ();
     }
 }
 
@@ -1273,7 +1272,6 @@ void module_hide_win () {
         gmf.mf_hide_selections_win ();
     }
     gtk_widget_hide (win_anthy);
-    gmf.mf_hide_win_sym ();
 }
 
 void module_change_font_size (void) {

@@ -676,14 +676,11 @@ void module_show_win (void) {
                        32 * (chewing_buffer_Check (g_pChewingCtx) + 1),
                        12);
     gtk_widget_show (g_pWinChewing);
-
-    g_himeModMainFuncs.mf_show_win_sym ();
 }
 
 void module_hide_win (void) {
     gtk_widget_hide (g_pWinChewing);
     g_himeModMainFuncs.mf_hide_selections_win ();
-    g_himeModMainFuncs.mf_hide_win_sym ();
 }
 
 int module_win_visible (void) {

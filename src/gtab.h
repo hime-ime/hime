@@ -162,7 +162,6 @@ enum {
     method_type_PHO = 3,
     method_type_TSIN = 6,
     method_type_MODULE = 12,
-    method_type_SYMBOL_TABLE = 13,
 };
 
 extern INMD *inmd;

@@ -29,7 +29,6 @@ char gtab_list[] = GTAB_LIST;
 GTAB_LIST_S method_codes[] = {
     {"!PHO", method_type_PHO},
     {"!TSIN", method_type_TSIN},
-    {"!SYMBOL_TABLE", method_type_SYMBOL_TABLE},
     {NULL}};
 
 extern char *default_input_method_str;
