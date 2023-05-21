@@ -288,7 +288,7 @@ void show_win_sym () {
     if (!current_CS)
         return;
 
-    if (!win_sym || !win_sym_enabled)
+    if (is_win_sym_visible () || !win_sym_enabled)
         return;
 #if 0
   dbg("show_win_sym\n");
