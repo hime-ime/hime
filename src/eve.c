@@ -1269,6 +1269,7 @@ int hime_FocusIn (ClientState *cs) {
         } else {
             hide_in_win (cs);
         }
+        show_win_sym ();
     }
 
     if (inmd[cs->in_method].selkey) {
@@ -1331,6 +1332,7 @@ int hime_FocusOut (ClientState *cs) {
         hide_in_win (cs);
     }
 
+    hide_win_sym ();
     reset_current_in_win_xy ();
 
     if (cs == current_CS) {
