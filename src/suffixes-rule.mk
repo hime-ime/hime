@@ -1,21 +1,19 @@
-.SUFFIXES:	.c .o .E .pico .cpp
-
-.cpp.o:
+%.o: %.cpp
 	@echo "  $< -> $@"
 	$(CCX) $(CPPFLAGS) $(CFLAGS) -c $<
-.c.o:
+%.o: %.c
 	@echo "  $< -> $@"
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
-.c.pico:
+%.pico: %.c
 	@echo "  $< -> $@"
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
-.cpp.pico:
+%.pico: %.cpp
 	@echo "  $< -> $@"
 	$(CCX) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
-.c.E:
+%.E: %.c
 	@echo "  $< -> $@"
 	$(CC) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
-.cpp.E:
+%.E: %.cpp
 	@echo "  $< -> $@"
 	$(CCX) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
 

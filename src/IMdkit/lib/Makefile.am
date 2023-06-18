@@ -1,11 +1,9 @@
-include ../../../config.mak
-
 CFLAGS +=  -c $(OPTFLAGS) -fno-strength-reduce -DXIM_t -DTRANS_SERVER
 
-ifeq ($(FREEBSD), 0)
-  INC = -I../include -I/usr/X11R6/include
+if FREEBSD
+  INC = -I../include -I/usr/local/include
 else
-  INC = -I../include -I/usr/local/include/
+  INC = -I../include -I/usr/X11R6/include/
 endif
 
 SRC = IMConn.c IMMethod.c FrameMgr.c i18nIMProto.c i18nAttr.c i18nMethod.c i18nUtil.c i18nPtHdr.c i18nIc.c i18nClbk.c i18nX.c

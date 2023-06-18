@@ -1,6 +1,4 @@
-include ../config.mak
-
-CFLAGS= $(OPTFLAGS) $(GTKINC) \
+CFLAGS = $(OPTFLAGS) $(GTKINC) \
 		-DGDK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED \
 		-DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED \
 		-DG_DISABLE_SINGLE_INCLUDES \
@@ -62,27 +60,27 @@ OBJS_JUYIN_LEARN = hime-juyin-learn.o \
 			pinyin.o \
 			table-update.o util.o
 
-OBJS_hime-sim2trad = hime-sim2trad.o \
+OBJS_hime_sim2trad = hime-sim2trad.o \
 			hime-common.o hime-conf.o hime-icon.o hime-settings.o \
 			locale.o \
 			pho2pinyin.o pinyin.o \
 			t2s-lookup.o util.o
 
-OBJS_hime-phod2a = hime-phod2a.o \
+OBJS_hime_phod2a = hime-phod2a.o \
 			hime-common.o hime-conf.o hime-settings.o \
 			locale.o \
 			pho-dbg.o pho-sym.o pho-util.o pho2pinyin.o \
 			pinyin.o \
 			table-update.o util.o
 
-OBJS_hime-tsa2d32 = hime-tsa2d32.o \
+OBJS_hime_tsa2d32 = hime-tsa2d32.o \
 			hime-common.o hime-conf.o hime-settings.o \
 			locale.o \
 			pho-dbg.o pho-lookup.o pho-sym.o pho2pinyin.o \
 			pinyin.o \
 			util.o
 
-OBJS_hime-phoa2d = hime-phoa2d.o \
+OBJS_hime_phoa2d = hime-phoa2d.o \
 			hime-common.o hime-conf.o hime-settings.o \
 			locale.o \
 			pho-dbg.o pho-lookup.o pho-sym.o pho2pinyin.o \
@@ -92,7 +90,7 @@ OBJS_hime-phoa2d = hime-phoa2d.o \
 OBJS_kbmcv = kbmcv.o \
 			locale.o pho-sym.o util.o
 
-OBJS_hime-tsd2a32 = hime-tsd2a32.o \
+OBJS_hime_tsd2a32 = hime-tsd2a32.o \
 			gtab-dbg.o \
 			hime-common.o hime-conf.o hime-settings.o \
 			locale.o \
@@ -136,32 +134,30 @@ OBJS_tsin2gtab_phrase = hime-tsin2gtab-phrase.o \
 						util.o
 
 
-ifeq ($(USE_XIM),Y)
+if USE_XIM
 IMdkitLIB   = IMdkit/lib/libXimd.a
 CFLAGS     += -DUSE_XIM=1
 OBJS       += IC.o
 endif
 
-ifeq ($(USE_SYSTEM_TRAY),Y)
+if USE_SYSTEM_TRAY
 CFLAGS     += -DTRAY_ENABLED=1
 OBJS       += tray.o tray-double.o
-ifeq ($(GTK),gtk+-2.0)
+if GTK2
 OBJS       += gdkpixbuf-drawable.o
 endif
-ifeq ($(USE_UNITY_TRAY),Y)
+if USE_UNITY_TRAY
 CFLAGS     += -DTRAY_UNITY=1
 OBJS       += tray-appindicator.o
 endif
 endif
 
-ifeq ($(USE_I18N),Y)
 CFLAGS     += -DHIME_I18N_MESSAGE=1
-endif
 
 hime_tsin_o = tsin.o tsin-util.o win0.o win1.o tsin-parse.o
 OBJS       += $(hime_tsin_o)
 
-ifeq ($(GIT_HAVE),Y)
+if GIT_HAVE
 CFLAGS     += -DGIT_HASH=\"$(GIT_HASH)\" -DGIT_HAVE=1
 endif
 
@@ -175,24 +171,22 @@ PROGS_SYM = hime-trad2sim hime-exit hime-sim hime-trad hime-kbm-toggle
 
 PROGS_CV  = kbmcv pin-juyin
 
-.SUFFIXES:  .c .o .E .pico .cpp
-
-.cpp.o:
+%.o: %.cpp
 	@echo "  $< -> $@"
 	$(CCX) $(CPPFLAGS) $(CFLAGS) -c $<
-.c.o:
+%.o: %.c
 	@echo "  $< -> $@"
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
-.c.pico:
+%.pico: %.c
 	@echo "  $< -> $@"
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
-.cpp.pico:
+%.pico: %.cpp
 	@echo "  $< -> $@"
 	$(CCX) $(CPPFLAGS) $(CFLAGS) -c -fpic -o $@ $<
-.c.E:
+%.E: %.c
 	@echo "  $< -> $@"
 	$(CC) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
-.cpp.E:
+%.E: %.cpp
 	@echo "  $< -> $@"
 	$(CCX) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
 
@@ -214,12 +208,12 @@ im-client/libhime-im-client.so:
 
 hime: $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV)
 	@echo "linking $@ ..."
-ifeq ($(FREEBSD), 0)
-	$(CCLD) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) \
-		-lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
-else
+if FREEBSD
 	$(CCLD) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) \
 		-lXtst $(LDFLAGS) -L/usr/local/$(LIB)
+else
+	$(CCLD) $(gcc_ld_run_path) -o $@ $(OBJS) $(IMdkitLIB) $(OBJ_IMSRV) \
+		-lXtst $(LDFLAGS) -L/usr/X11R6/$(LIB)
 endif
 	@rm -f core.* vgcore.*
 
@@ -238,7 +232,7 @@ hime-juyin-learn: $(OBJS_JUYIN_LEARN)
 	$(CCLD) -o $@ $^ $(LDFLAGS)
 	@rm -f core.*
 
-hime-sim2trad: $(OBJS_hime-sim2trad)
+hime-sim2trad: $(OBJS_hime_sim2trad)
 	@echo "linking $@ ..."
 	$(CC) $(gcc_ld_run_path) -o $@ $^ $(LDFLAGS)
 	@rm -f core.*
@@ -252,21 +246,21 @@ hime-setup: $(OBJS_hime_setup) im-client/libhime-im-client.so
 	$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client \
 		$(LDFLAGS)
 
-hime-phoa2d: $(OBJS_hime-phoa2d) im-client/libhime-im-client.so
+hime-phoa2d: $(OBJS_hime_phoa2d) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
 	$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client \
 		$(LDFLAGS)
 
-hime-phod2a: $(OBJS_hime-phod2a)
+hime-phod2a: $(OBJS_hime_phod2a)
 	@echo "linking $@ ..."
 	$(CCLD) -lX11 -o $@ $^ $(LDFLAGS)
 
-hime-tsa2d32:  $(OBJS_hime-tsa2d32) im-client/libhime-im-client.so
+hime-tsa2d32:  $(OBJS_hime_tsa2d32) im-client/libhime-im-client.so
 	@echo "linking $@ ..."
 	$(CCLD) $(gcc_ld_run_path) -o $@ $^ -L./im-client -lhime-im-client \
 		$(LDFLAGS)
 
-hime-tsd2a32: $(OBJS_hime-tsd2a32)
+hime-tsd2a32: $(OBJS_hime_tsd2a32)
 	@echo "linking $@ ..."
 	$(CCLD) -o $@ $^ $(LDFLAGS)
 
@@ -363,10 +357,3 @@ clean:
 	@rm -f *.o *.E *.db *.pico *.so tags $(PROGS) $(PROGS_CV) \
 		$(DATA) .depend $(PROGS_SYM) hime.log hime-fedora.spec
 	@find . '(' -name '.ted*' -o -name '*~' -o -name 'core.*' -o -name 'vgcore.*' ')' -exec rm {} \;
-
-.depend:
-	@echo "building $@ ..."
-	$(CCX) $(CPPFLAGS) $(CFLAGS) -MM *.c > $@
-
-
-include .depend

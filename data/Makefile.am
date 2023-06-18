@@ -1,10 +1,7 @@
-include ../config.mak
-
-SRC_DIR       = ../src
+SRC_DIR = ../src
 IM_CLIENT_DIR = $(SRC_DIR)/im-client
 
-.SUFFIXES: .kbmsrc .kbm .cin .gtab
-CFLAGS+= $(OPTFLAGS) $(GTKINC) \
+CFLAGS += $(OPTFLAGS) $(GTKINC) \
 		-DGDK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED \
 		-DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED \
 		-DG_DISABLE_SINGLE_INCLUDES \
@@ -14,13 +11,14 @@ CFLAGS+= $(OPTFLAGS) $(GTKINC) \
 
 export HIME_NO_RELOAD=
 
-GTAB_DATA = ar30-big.gtab \
+gtab_data = ar30-big.gtab \
 	ar30.gtab \
 	array40.gtab \
 	cj-punc.gtab \
 	cj.gtab \
 	cj5.gtab \
 	cj543.gtab \
+	dayi3.gtab \
 	esperanto.gtab \
 	greek.gtab \
 	hangul-roman.gtab \
@@ -34,7 +32,7 @@ GTAB_DATA = ar30-big.gtab \
 	symbols.gtab \
 	vims.gtab
 
-KBM_DATA = colemak.kbm \
+kbm_data = colemak.kbm \
 	dvorak.kbm \
 	et.kbm \
 	et26.kbm \
@@ -45,11 +43,7 @@ KBM_DATA = colemak.kbm \
 	pinyin.kbm \
 	zo.kbm
 
-ifeq ($(INSTALL_DFSG_INCOMPATIBLE),Y)
-GTAB_DATA += dayi3.gtab
-endif
-
-DATA = $(GTAB_DATA) $(KBM_DATA) \
+hime_data = $(gtab_data) $(kbm_data) \
 	tsin32 \
 	tsin32.idx \
 	s-tsin32 \
@@ -63,6 +57,7 @@ DATA = $(GTAB_DATA) $(KBM_DATA) \
 	pin-juyin.xlt \
 	tsin-1.src \
 	gtab.list
+HIMEdir = $(HIME_TABLE_DIR)
 
 DATAKEEP = symbol-table phrase.table phrase-ctrl.table
 
@@ -73,7 +68,7 @@ KBMCV      = $(SRC_DIR)/kbmcv
 PIN_JUYIN  = $(SRC_DIR)/pin-juyin
 
 .PHONY: all
-all: $(DATA)
+all: $(hime_data)
 
 $(PHO_A2D):
 	$(MAKE) -C $(SRC_DIR) hime-phoa2d
@@ -145,14 +140,14 @@ gtab.list: cp_gtab_list
 .PHONY: install
 install:
 	install -d "$(HIME_TABLE_DIR)"
-	install -m 644 $(DATA) $(DATAKEEP) "$(HIME_TABLE_DIR)"
+	install -m 644 $(hime_data) $(DATAKEEP) "$(HIME_TABLE_DIR)"
 
 .PHONY: uninstall
 uninstall:
-	cd $(HIME_TABLE_DIR) && rm -f $(DATA) $(DATAKEEP)
+	cd $(HIME_TABLE_DIR) && rm -f $(hime_data) $(DATAKEEP)
 	rmdir --ignore-fail-on-non-empty $(HIME_TABLE_DIR)
 
 .PHONY: clean
 clean:
 	@echo "clean up"
-	@rm -f *~ tags core.* $(DATA) *.gtab extr1 t2s-file tsin-1.src tsin-gtabidx* tsin-ch-idx gtab.list
+	@rm -f *~ tags core.* $(hime_data) *.gtab extr1 t2s-file tsin-1.src tsin-gtabidx* tsin-ch-idx gtab.list

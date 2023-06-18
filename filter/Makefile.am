@@ -1,5 +1,3 @@
-include ../config.mak
-
 FILTER_LIST=$(shell ls|grep -v Makefile)
 
 .PHONY: all

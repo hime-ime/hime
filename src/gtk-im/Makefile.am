@@ -1,19 +1,14 @@
-include ../../config.mak
-
 OBJS = imhime.o gtkimcontexthime.o
-GTK3IM=gtk-3.0/immodules
-GTKINC=$(shell pkg-config --cflags gtk+-3.0)
-LDFLAGS=$(shell pkg-config --libs gtk+-3.0)
-GTK3_LIBDIR=$(shell pkg-config --variable=libdir gtk+-3.0)
-GTK3_BINARY_VERSION=$(shell pkg-config --variable=gtk_binary_version gtk+-3.0)
-MODULEDIR=$(DESTDIR)/$(GTK3_LIBDIR)/gtk-3.0/$(GTK3_BINARY_VERSION)/immodules
-IMMODULES=$(libdir)/$(GTK3IM)
-IMMODULES_LOCAL=/usr/$(LIB)/$(GTK3IM)
-IMMODULES_QUERY=$(GTK3_LIBDIR)/libgtk-3-0/gtk-query-immodules-3.0
-IMMODULES_CACHE=$(DESTDIR)/$(GTK3_LIBDIR)/gtk-3.0/$(GTK3_BINARY_VERSION)/immodules.cache
+GTK2IM=gtk-2.0/immodules
+GTKINC=$(shell pkg-config --cflags gtk+-2.0)
+LDFLAGS=$(shell pkg-config --libs gtk+-2.0)
+GTK_LIBDIR=$(shell pkg-config --variable=libdir gtk+-2.0)
+GTK_BINARY_VERSION=$(shell pkg-config --variable=gtk_binary_version gtk+-2.0)
+MODULEDIR=$(DESTDIR)/$(GTK_LIBDIR)/gtk-2.0/$(GTK_BINARY_VERSION)/immodules
+IMMODULES=$(libdir)/$(GTK2IM)
+IMMODULES_LOCAL=/usr/$(LIB)/$(GTK2IM)
+IMMODULES_QUERY=$(GTK_LIBDIR)/libgtk2.0-0/gtk-query-immodules-2.0
 
-
-.SUFFIXES:	.c .o .E
 CFLAGS = $(OPTFLAGS) $(GTKINC) \
 		-DGDK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED \
 		-DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED \
@@ -23,11 +18,11 @@ CFLAGS = $(OPTFLAGS) $(GTKINC) \
 		-I../im-client -I.. \
 		-I../IMdkit/include
 
-.c.o:
+%.o: %.c
 	@echo "  $< -> $@"
 	$(CC) -c -fPIC $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
-.c.E:
+%.E: %.c
 	@echo "  $< -> $@"
 	$(CC) -E $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
@@ -50,8 +45,8 @@ install:
 		install -d "$(MODULEDIR)"; \
 		install -m 755 im-hime.so "$(MODULEDIR)"; \
 		if [ "$(prefix)" = "/usr/local" ]; then \
-			if [ -f "$(IMMODULES_QUERY)" -a -x "$(IMMODULES_QUERY)" ]; then \
-				GTK_IM_MODULE_FILE=$(IMMODULES_CACHE) $(IMMODULES_QUERY) --update-cache; \
+			if [ -d "$(DESTDIR)/etc/gtk-2.0" ]; then \
+				cd "$(DESTDIR)/etc/gtk-2.0"; $(IMMODULES_QUERY) > gtk.immodules; \
 			fi \
 		fi \
 	else \
@@ -73,4 +68,3 @@ uninstall:
 	@echo "building $@ ..."
 	$(CC) $(CPPFLAGS) $(CFLAGS) -MM *.c > $@
 
-include .depend

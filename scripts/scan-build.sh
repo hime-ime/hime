@@ -11,5 +11,5 @@ set -ueo pipefail
 
 make distclean
 
-scan-build ./configure --prefix=/usr --disable-lib64 --qt5-im-module-path=/usr/lib/qt/plugins/platforminputcontexts/
+scan-build ./configure --prefix=/usr --disable-lib64 --with-qt5-im-module-path=/usr/lib/qt/plugins/platforminputcontexts/
 scan-build -V make -j "$(nproc)"

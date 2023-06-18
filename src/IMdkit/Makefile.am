@@ -1,5 +1,3 @@
-include ../../config.mak
-
 all: libXimd.a
 
 libXimd.a:

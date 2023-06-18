@@ -1,13 +1,4 @@
-include ../config.mak
-
-DIR    = black dark gray pink
-
-ifeq ($(ECHO),)
-ECHO  := $(shell whereis -b echo|sed 's/^echo: *\([^ ]\+\).*/\1/')
-ifeq ($(ECHO),)
-ECHO   = echo
-endif
-endif
+DIR = black dark gray pink
 
 .PHONY: all
 all:

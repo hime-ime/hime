@@ -1,19 +1,6 @@
-include config.mak
-
 VERSION_FILE = ChangeLog
 
-DIRS    = src data filter icons man menu scripts
-
-ifeq ($(ECHO),)
-ECHO  := $(shell whereis -b echo | awk '{print $$2}')
-ifeq ($(ECHO),)
-ECHO   = echo
-endif
-endif
-
-ifeq ($(USE_I18N),Y)
-DIRS   += po
-endif
+DIRS    = src data filter icons man menu po scripts
 
 .PHONY: all
 all:
@@ -46,10 +33,6 @@ clean:
 distclean:
 	@$(MAKE) clean
 	@rm -f config.mak
-
-config.mak: $(VERSION_FILE) configure
-	@$(ECHO) "regenerate $@ ..."
-	./configure
 
 .PHONY: clang-format
 clang-format:

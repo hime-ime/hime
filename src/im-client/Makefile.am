@@ -1,9 +1,6 @@
-include ../../config.mak
-
 SOFILE=libhime-im-client.so
 SOFILEVER=libhime-im-client.so.1.2.4
 
-.SUFFIXES:      .c .o .E .cpp
 CFLAGS+= $(OPTFLAGS) $(GTKINC) \
 		-DGDK_DISABLE_SINGLE_INCLUDES -DGDK_DISABLE_DEPRECATED \
 		-DGTK_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_DEPRECATED \
@@ -19,22 +16,24 @@ DEPS = hime-common.o hime-conf.o hime-crypt.o hime-settings.o \
 		locale.o im-addr.o pho2pinyin.o pinyin.o util.o
 OBJS = hime-im-client.o hime-send.o $(DEPS)
 
-.cpp.E:
+%.E: %.cpp
 	@echo "  $< -> $@"
 	$(CC) $(CPPFLAGS) $(CFLAGS) -E -o $@ $<
 
-.c.o:
+%.o: %.c
 	@echo "  $< -> $@"
 	$(CC) -c $(CPPFLAGS) $(CFLAGS) $<
 
-.cpp.o:
+.o: %.cpp
 	@echo "  $< -> $@"
 	$(CC) -x c -c $(CPPFLAGS) $(CFLAGS) $<
+
+all: $(SOFILEVER)
 
 $(SOFILEVER):   $(OBJS)
 	@echo "linking $@ ..."
 
-ifeq ($(FREEBSD), 0)
+if FREEBSD
 	$(CC) $(SO_FLAGS) -Wl,-soname,libhime-im-client.so.1 $(OBJS) $(LDFLAGS+) -o $@ -L/usr/X11R6/lib
 else
 	$(CC) $(SO_FLAGS) -Wl,-soname,libhime-im-client.so.1 $(OBJS) $(LDFLAGS+) -o $@ -L/usr/local/lib
@@ -107,4 +106,3 @@ clean:
 	@echo "building $@ ..."
 	$(CCX) $(CPPFLAGS) $(CFLAGS) -MM *.c > $@
 
-include .depend

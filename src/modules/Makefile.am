@@ -1,15 +1,14 @@
-include ../../config.mak
 include ../suffixes-rule.mk
 
 CFLAGS+=-I.. -I../IMdkit/include
 HIME_MODULES=intcode-module.so
 
-ifeq ($(USE_ANTHY),Y)
+if USE_ANTHY
 HIME_MODULES+=anthy-module.so
 CFLAGS += $(ANTHY_INC)
 endif
 
-ifeq ($(USE_CHEWING),Y)
+if USE_CHEWING
 HIME_MODULES+=chewing-module.so
 CHEWING_DATADIR=$(shell pkg-config --variable=datadir chewing)
 CFLAGS += -DCHEWING_DATADIR=\"$(CHEWING_DATADIR)\" $(shell pkg-config --cflags chewing)

@@ -1,5 +1,3 @@
-include ../config.mak
-
 .PHONY: all
 all:
 

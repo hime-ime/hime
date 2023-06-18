@@ -1,13 +1,4 @@
-include ../config.mak
-
 LANG_FILE = $(shell ls -d *.po | sed 's/\.po//g')
-
-ifeq ($(ECHO),)
-ECHO  := $(shell whereis -b echo | awk '{print $$2}')
-ifeq ($(ECHO),)
-ECHO   = echo
-endif
-endif
 
 .PHONY: all
 all: gmo

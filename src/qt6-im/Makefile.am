@@ -1,50 +1,52 @@
-include ../../config.mak
-
-ifeq ($(FREEBSD), 0)
-  INCS=-I../im-client -I/usr/include/X11
-else
+if FREEBSD
   INCS=-I../im-client -I/usr/local/include
+else
+  INCS=-I../im-client -I/usr/include/X11
 endif
 
-QTINC=$(shell pkg-config --variable=includedir Qt5Core)
-QTVER=$(shell pkg-config --modversion Qt5Core)
+# TODO(xatier): hardcode for now
+# QTINC=$(shell pkg-config --variable=includedir Qt6Core)
+# QTVER=$(shell pkg-config --modversion Qt6Core)
+QTINC=/usr/include/qt6
+QTVER=$(shell ls $(QTINC)/QtCore/ | grep ^6)
 
-INCS+=$(shell pkg-config Qt5Core Qt5Gui Qt5DBus --cflags)
+# TODO(xatier): hardcode for now
+#INCS+=$(shell pkg-config Qt6Core Qt6Gui Qt6DBus --cflags)
+INCS+=-I/usr/include/qt6/QtCore -I/usr/include/qt6 -DQT_GUI_LIB -I/usr/include/qt6/QtGui -DQT_DBUS_LIB -I/usr/include/qt6/QtDBus -DQT_CORE_LIB
 INCS+=-I$(QTINC)/QtGui/$(QTVER)
 INCS+=-I$(QTINC)/QtCore/$(QTVER)
 
 CXXFLAGS+=$(OPTFLAGS) $(INCS) \
 		-D_REENTRANT \
-		-DQT5 \
+		-DQT6 \
 		-DQT_SHARED \
 		-DQT_IMMODULE \
 		-DPIC -fPIC
 
 OBJS= moc_hime-qt.o hime-qt.o hime-imcontext-qt.o moc_hime-imcontext-qt.o
 
-QTLIBS=$(shell pkg-config Qt5Core Qt5Gui Qt5DBus --libs)
+#QTLIBS=$(shell pkg-config Qt6Core Qt6Gui Qt6DBus --libs)
+QTLIBS=-lQt6Gui -lQt6DBus -lQt6Core
 LDFLAGS+=$(LDFLAGS_ENV) -L../im-client -lhime-im-client $(QTLIBS)
-
-.SUFFIXES:	.c .cpp .a .so .E .h
 
 .PHONY: all
 all:    qt_info im-hime.so
 
-.cpp.E:
+%.E: %.cpp
 	@echo "  $< -> $@"
 	@$(CXX) -E $(CFLAGS) $(INCS) $< > $@
 
-.cpp.o:
+%.o: %.cpp
 	@echo "  $< -> $@"
 	@$(CXX) -c -o $@ $(CXXFLAGS) $<
 
 moc_hime-qt.cpp:	hime-qt.h
 	@echo "  $< -> $@"
-	$(QT5_MOC_PATH) $(INCS) $< -o moc_hime-qt.cpp
+	$(QT6_MOC_PATH) $(INCS) $< -o moc_hime-qt.cpp
 
 moc_hime-imcontext-qt.cpp:	hime-imcontext-qt.h
 	@echo "  $< -> $@"
-	$(QT5_MOC_PATH) $(INCS) $< -o moc_hime-imcontext-qt.cpp
+	$(QT6_MOC_PATH) $(INCS) $< -o moc_hime-imcontext-qt.cpp
 
 im-hime.so: $(OBJS)
 	@echo "linking $@ ..."
@@ -63,13 +65,13 @@ qt_info:
 
 .PHONY: install
 install:
-	install -d "$(QT5_IM_DIR)"; \
-	install -m 755 im-hime.so "$(QT5_IM_DIR)"
+	install -d "$(QT6_IM_DIR)"; \
+	install -m 755 im-hime.so "$(QT6_IM_DIR)"
 
 .PHONY: uninstall
 uninstall:
-	rm -f $(QT5_IM_DIR)/im-hime.so
-	rmdir --ignore-fail-on-non-empty $(QT5_IM_DIR)
+	rm -f $(QT6_IM_DIR)/im-hime.so
+	rmdir --ignore-fail-on-non-empty $(QT6_IM_DIR)
 
 .PHONY: clean
 clean:
@@ -81,4 +83,3 @@ clean:
 	@echo "building $@ ..."
 	@$(CXX) $(CXXFLAGS) -MM *.cpp > $@
 
-include .depend
