@@ -28,10 +28,8 @@ set +x; separator; separator; separator; set -x
 cd "$GITHUB_WORKSPACE"
 
 ./configure \
-    --disable-gtk2-im-module \
-    --disable-gtk3-im-module \
     --disable-qt6-immodule \
     --prefix="$PWD/build" \
-    --qt5-im-module-path=/usr/lib/qt/plugins/platforminputcontexts/
+    --with-qt5-im-module-path=/usr/lib/qt/plugins/platforminputcontexts/
 
 make
