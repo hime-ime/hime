@@ -30,6 +30,7 @@ cd "$GITHUB_WORKSPACE"
 export CFLAGS="-std=gnu11"
 export CXXFLAGS="-std=gnu++11"
 
+autoreconf -i
 ./configure \
     --disable-qt6-immodule \
     --prefix="$PWD/build" \

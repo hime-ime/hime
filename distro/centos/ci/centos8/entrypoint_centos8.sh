@@ -30,6 +30,7 @@ set +x; separator; separator; separator; set -x
 # enter GitHub workspace directory path
 cd "$GITHUB_WORKSPACE"
 
+autoreconf -i
 ./configure \
     --disable-qt6-immodule \
     --prefix="$PWD/build" \

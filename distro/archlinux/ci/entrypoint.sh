@@ -35,5 +35,6 @@ cd "$GITHUB_WORKSPACE"
 git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
 # configure and build
+autoreconf -i
 ./configure --prefix=/usr --with-qt5-im-module-path=/usr/lib/qt/plugins/platforminputcontexts/
 make -j "$(nproc)"
