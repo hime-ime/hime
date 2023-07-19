@@ -79,6 +79,7 @@ sudo pacman -U hime-git-{version}-{arch}.pkg.tar.zst
 ##### 自行編譯安裝
 
 ```bash
+autoreconf -i
 ./configure
 make
 make install

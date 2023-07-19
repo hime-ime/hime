@@ -27,6 +27,7 @@ pkgver() {
 
 build() {
     cd "${srcdir}/${_pkgname}"
+    autoreconf -i
     ./configure --prefix=/usr --with-qt5-im-module-path=/usr/lib/qt/plugins/platforminputcontexts/
     make
 }
