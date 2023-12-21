@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ -z "$1" ] || [ -z "$2" ]; then
     echo "please specify hime_table_dir hime_bin_dir"
